@@ -116,7 +116,6 @@
     /* Skip type checking all .d.ts files. */
   },
   "include" : [
-    "*.ts",
     "src/**/*.ts"
   ]
 }

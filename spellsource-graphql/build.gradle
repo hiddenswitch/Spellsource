@@ -5,6 +5,7 @@ plugins {
   id "base"
   id "docker"
   id "java"
+  id "next"
   id "io.github.kobylynskyi.graphql.codegen" version "5.9.0"
 }
 
@@ -67,4 +68,10 @@ tasks.register("generateAll") {
   inputs.file("schema.graphql")
   inputs.dir("graphql")
   dependsOn yarnRunCodegen, yarnRunStrawberryShake, graphqlCodegen
+}
+
+tasks.named("createDist").configure {
+  outputs.dir("docker/spellsource/graphql")
+
+  group "spellsource"
 }

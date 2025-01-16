@@ -1,8 +1,0 @@
-mutation setCardsInDeck($deckId: String!, $cardIds: [String!]) {
-  setCardsInDeck(input: {deck: $deckId, cardIds: $cardIds }) {
-    cardsInDecks {
-      id
-      cardId
-    }
-  }
-}

@@ -1,8 +1,0 @@
-mutation renameDeck($deckId: String!, $deckName: String!) {
-  updateDeckById(input: {id: $deckId, deckPatch: {name: $deckName}}) {
-    deck {
-      id
-      name
-    }
-  }
-}

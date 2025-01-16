@@ -29,6 +29,7 @@ public class StandaloneApplication extends Application {
 	protected static final String PGPASSWORD = "password";
 	protected static final String PGHOST = "postgres";
 	protected static final String GRAPHQL_HOST = "graphql";
+	protected static final String KEYCLOAK_HOST = "keycloak";
 	private static final Logger LOGGER = LoggerFactory.getLogger(StandaloneApplication.class);
 	public static RedisContainer REDIS = new RedisContainer()
 			.withNetwork(Network.SHARED)
@@ -42,13 +43,15 @@ public class StandaloneApplication extends Application {
 			.withReuse(true)
 			.dependsOn(POSTGRES)
 			.withNetwork(Network.SHARED)
+			.withNetworkAliases(KEYCLOAK_HOST)
 			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD);
 	public static GraphQLContainer GRAPHQL = new GraphQLContainer()
 			.withReuse(true)
 			.dependsOn(POSTGRES)
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(GRAPHQL_HOST)
-			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD);
+			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD)
+			.withKeycloak(KEYCLOAK_HOST, KeycloakContainer.KEYCLOAK_PORT_HTTP);
 	protected static AtomicBoolean STARTED = new AtomicBoolean(false);
 
 	public static boolean defaultConfigurationAndServices() {
@@ -105,11 +108,16 @@ public class StandaloneApplication extends Application {
 REDIS_URI=\{REDIS.getRedisUrl()}
 PG_PORT=\{POSTGRES.getMappedPort(PostgresContainer.POSTGRESQL_PORT)}
 KEYCLOAK_PORT=\{KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP)}
-GRAPHQL_PORT=\{GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT)}
+NEXT_PUBLIC_GRAPHQL_PORT=\{GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT)}
 """;
-
 			FileUtils.writeStringToFile(envFile, contents, StandardCharsets.UTF_8);
 
+			var envFile2 = new File("../spellsource-graphql/.env.local");
+			var contents2 = STR."""
+KEYCLOAK_ISSUER=http://localhost:\{KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP)}/realms/hiddenswitch
+""";
+			FileUtils.writeStringToFile(envFile2, contents2, StandardCharsets.UTF_8);
+			
 		} catch (IOException e) {
 			LOGGER.error("Error occurred while writing the environment file for the website.");
 		}

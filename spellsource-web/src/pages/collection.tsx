@@ -1,13 +1,7 @@
 import Layout from "../components/creative-layout";
-import {
-  DeckFragment,
-  useCreateDeckMutation,
-  useGetClassesQuery,
-  useGetDeckQuery,
-  useGetDecksQuery,
-} from "../__generated__/client";
+import { DeckFragment, useCreateDeckMutation, useGetClassesQuery, useGetDeckQuery, useGetDecksQuery } from "../__generated__/client";
 import React, { createContext, FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import Collection, { textDecorationStyle } from "../components/collection/collection";
 import Head from "next/head";
 import { Button, Col, Container, Dropdown, Offcanvas, OffcanvasBody, Row } from "react-bootstrap";
@@ -23,10 +17,10 @@ import { useList } from "react-use";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Deck } from "../components/collection/deck";
+import { GetServerSideProps } from "next";
 
-// Makes the query state stick around
-export const getServerSideProps = async () => ({
-  props: {},
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+  props: { session: await getSession(context) },
 });
 
 export const CardCache = createContext<Record<string, CardDef>>({});
@@ -73,10 +67,7 @@ export default () => {
   );
 
   const getDecks = useGetDecksQuery({ variables: { user } });
-  const allDecks = [
-    ...(getDecks.data?.allDecks?.nodes ?? []),
-    ...(getDecks.data?.allDeckShares?.nodes?.map((node) => node!.deckByDeckId) ?? []),
-  ];
+  const allDecks = [...(getDecks.data?.allDecks?.nodes ?? []), ...(getDecks.data?.allDeckShares?.nodes?.map((node) => node!.deckByDeckId) ?? [])];
   const decksById = useMemo(() => _.keyBy(allDecks, (value) => value!.id), [allDecks]);
   const selectedDeck = decksById[deckId];
 
@@ -85,11 +76,7 @@ export default () => {
   }> = ({ deck }) => (
     <li className={"d-flex flex-row align-items-baseline gap-2"}>
       <Link draggable={false} href={{ query: { ...router.query, deckId: deck.id, heroClass: "ALLOWED" } }}>
-        <Button
-          variant={"light"}
-          className={""}
-          style={{ borderColor: deck.heroClass! in classColors ? classColors[deck.heroClass!] : "initial" }}
-        >
+        <Button variant={"light"} className={""} style={{ borderColor: deck.heroClass! in classColors ? classColors[deck.heroClass!] : "initial" }}>
           {deck.name}
         </Button>
       </Link>
@@ -98,10 +85,7 @@ export default () => {
 
   const getDeck = useGetDeckQuery({
     variables: { deckId },
-    onCompleted: (data) =>
-      data.deckById?.cardsInDecksByDeckId?.nodes?.forEach(
-        (node) => (cache[node!.cardId] = node?.publishedCardByCardId?.cardBySuccession?.cardScript)
-      ),
+    onCompleted: (data) => data.deckById?.cardsInDecksByDeckId?.nodes?.forEach((node) => (cache[node!.cardId] = node?.publishedCardByCardId?.cardBySuccession?.cardScript)),
   });
   const deck = getDeck?.data?.deckById ?? getDeck?.previousData?.deckById;
 
@@ -155,42 +139,13 @@ export default () => {
           <Container className={"p-0"}>
             <Row id={"Collection"} className={"pe-lg-2 mt-2 flex-grow-1"}>
               <Col id={"CardsList"} xs={12} lg={9}>
-                <Collection
-                  user={user}
-                  classes={classes}
-                  classColors={classColors}
-                  heroClass={heroClass}
-                  setHeroClass={setHeroClass}
-                  offset={offset}
-                  setOffset={setOffset}
-                  mainHeroClass={deck?.heroClass}
-                  addToDeck={myDeck ? addCardToDeck : undefined}
-                  removeFromDeck={myDeck ? removeCardFromDeck : undefined}
-                />
+                <Collection user={user} classes={classes} classColors={classColors} heroClass={heroClass} setHeroClass={setHeroClass} offset={offset} setOffset={setOffset} mainHeroClass={deck?.heroClass} addToDeck={myDeck ? addCardToDeck : undefined} removeFromDeck={myDeck ? removeCardFromDeck : undefined} />
               </Col>
               <Col id={"DecksList"} xs={12} lg={3}>
-                <Offcanvas
-                  responsive={"lg"}
-                  show={show}
-                  onHide={() => setShow(false)}
-                  placement={"bottom"}
-                  scroll={true}
-                  backdrop={false}
-                >
+                <Offcanvas responsive={"lg"} show={show} onHide={() => setShow(false)} placement={"bottom"} scroll={true} backdrop={false}>
                   <OffcanvasBody>
                     {selectedDeck ? (
-                      <Deck
-                        user={user}
-                        deck={deck}
-                        myDeck={!!myDeck}
-                        cardIds={deckCards}
-                        cardActions={deckActions}
-                        getDecks={getDecks}
-                        getDeck={getDeck}
-                        classColors={classColors}
-                        setDeckId={setDeckId}
-                        realCards={realCards}
-                      />
+                      <Deck user={user} deck={deck} myDeck={!!myDeck} cardIds={deckCards} cardActions={deckActions} getDecks={getDecks} getDeck={getDeck} classColors={classColors} setDeckId={setDeckId} realCards={realCards} />
                     ) : (
                       <div className={"w-100"}>
                         {user && (
@@ -201,11 +156,7 @@ export default () => {
                                 <DropdownToggle>Create</DropdownToggle>
                                 <DropdownMenu>
                                   {Object.entries(classes).map(([heroClass, className]) => (
-                                    <DropdownItem
-                                      key={heroClass}
-                                      onClick={async () => await createNewDeck(heroClass, className)}
-                                      style={textDecorationStyle(heroClass, classColors)}
-                                    >
+                                    <DropdownItem key={heroClass} onClick={async () => await createNewDeck(heroClass, className)} style={textDecorationStyle(heroClass, classColors)}>
                                       {className}
                                     </DropdownItem>
                                   ))}
@@ -232,11 +183,7 @@ export default () => {
                       </div>
                     )}
                     {show && (
-                      <Button
-                        className={"position-absolute w-auto top-0 end-0 me-2 d-block d-lg-none"}
-                        style={{ transform: "translate(0%, -110%)" }}
-                        onClick={() => setShow(!show)}
-                      >
+                      <Button className={"position-absolute w-auto top-0 end-0 me-2 d-block d-lg-none"} style={{ transform: "translate(0%, -110%)" }} onClick={() => setShow(!show)}>
                         Close
                       </Button>
                     )}

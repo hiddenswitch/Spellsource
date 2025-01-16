@@ -9,7 +9,7 @@ import { SSRProvider } from "react-bootstrap";
 
 export default ({ Component, pageProps }: AppProps) => {
   return (
-    <SessionProvider refetchInterval={5 * 60}>
+    <SessionProvider refetchInterval={5 * 60} session={pageProps?.session}>
       <ApolloClientProvider>
         <Head>
           <link rel="shortcut icon" href="/static/assets/icon.png" />

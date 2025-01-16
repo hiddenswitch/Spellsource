@@ -1,7 +1,0 @@
-mutation saveGeneratedArt($hash: String!, $urls: [String!]!, $info: JSON) {
-  saveGeneratedArt(input: {digest: $hash, links: $urls, extraInfo: $info}) {
-    generatedArt {
-      ...generatedArt
-    }
-  }
-}

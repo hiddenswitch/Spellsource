@@ -1,5 +1,0 @@
-query getArt($id: String!) {
-  artById(id: $id) {
-    ...image
-  }
-}

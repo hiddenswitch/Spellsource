@@ -27,4 +27,10 @@ public class GraphQLContainer extends GenericContainer<GraphQLContainer> {
 
 		return this;
 	}
+	
+	public GraphQLContainer withKeycloak(String keycloakHost, int keycloakPort) {
+		addEnv("KEYCLOAK_URL", "http://" + keycloakHost + ":" + keycloakPort);
+
+		return this;
+	}
 }

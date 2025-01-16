@@ -1,5 +1,0 @@
-query getAllArt {
-  allArt {
-    ...image
-  }
-}

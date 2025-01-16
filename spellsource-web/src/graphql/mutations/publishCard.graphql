@@ -1,5 +1,0 @@
-mutation publishCard($cardId: String!) {
-  publishCard(input: {cardId: $cardId}) {
-    bigInt
-  }
-}
