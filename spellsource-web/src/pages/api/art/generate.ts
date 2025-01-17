@@ -101,7 +101,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  const result = await generateArt(req.body);
+  const result = await generateArt(JSON.parse(req.body));
 
   res.status(200).json(result);
 };

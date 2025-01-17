@@ -80,8 +80,11 @@ export const generateArt = async (p1: any) => {
     }),
   })
     .then(async (res) => {
-      if (isArray(res.body)) {
-        await onGenerateArt(block, res.body);
+      const body = await res.json();
+      if (isArray(body)) {
+        await onGenerateArt(block, body);
+      } else {
+        console.error(body);
       }
     })
     .finally(() => onRequestStop(block));

@@ -2,19 +2,18 @@ import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@ap
 import { setContext } from "@apollo/client/link/context";
 import { FunctionComponent, PropsWithChildren, RefObject, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
-import { usePrevious } from "react-use";
 import { graphqlHost } from "./config";
 
 export const ApolloClientProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const { data: session, status } = useSession();
-  const prevStatus = usePrevious(status);
   const tokenRef = useRef<string | null>(session?.token?.accessToken ?? null);
   const [apolloClient] = useState(() => createApolloClient(tokenRef));
 
   useEffect(() => {
-    if (prevStatus === "authenticated" && status === "unauthenticated") {
-      console.log("Clearing the cache");
+    if (status === "authenticated") {
       apolloClient.resetStore();
+    } else {
+      apolloClient.clearStore();
     }
   }, [status]);
 
