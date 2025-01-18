@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy-website:
-    runs-on: [ self-hosted, linux, x64 ]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:

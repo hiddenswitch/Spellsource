@@ -4,7 +4,7 @@ on:
   pull_request: { }
 jobs:
   build:
-    runs-on: [ self-hosted, linux, x64 ]
+    runs-on: ubuntu-latest
     env:
       DOTNET_INSTALL_DIR: ~/.dotnet
     steps:
