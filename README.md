@@ -130,6 +130,19 @@ Now, toggle connectivity:
 toxiproxy-cli toggle myserver
 ```
 
+##### Using `ktunnel`
+
+Testing the local server on a URL can be performed with:
+
+```shell
+kubectl delete deployments/proxy svc/proxy -n spellsource || true && ./bin/darwin/arm64/ktunnel expose proxy --node-selector-tags kubernetes.io/os=linux 8081:8081 --namespace=spellsource --server-image=docker.io/appmana/ktunnel:v2.0.0
+```
+
+Then, place a file in `spellsource-client/src/unity/Assets/Resources/Url.txt`:
+
+```text
+https://spellsource-proxy.appmana.com:443
+```
 
 ##### Configure your IDE for Python development:
 
@@ -278,6 +291,10 @@ In IntelliJ, visit the Help > Edit Custom Properties... menu, then add the follo
 # custom IntelliJ IDEA properties
 idea.max.intellisense.filesize=99999
 ```
+
+> I see an error message that reads, in part, "all predefined address pools have been fully subnetted", from docker
+
+Open Docker Desktop, stop all the containers related to Spellsource. Then run `docker system prune`.
 
 ### Special Thanks
 

@@ -66,7 +66,9 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 				UnauthenticatedCardsGrpc.SERVICE_NAME,
 				UnauthenticatedGrpc.SERVICE_NAME,
 		}) {
-			router.route("/" + serviceName + "/*")
+			router
+					.route()
+					.path("/" + serviceName + "/*")
 					.handler(rc -> {
 						((GrpcServerImpl) server).handle(rc.request(), rc);
 					});
@@ -78,7 +80,9 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 				GamesGrpc.SERVICE_NAME,
 				AuthenticatedCardsGrpc.SERVICE_NAME
 		}) {
-			router.route("/" + serviceName + "/*")
+			router
+					.route()
+					.path("/" + serviceName + "/*")
 					.handler(JWTAuthHandler.create(jwtAuth, realm.toRepresentation().getRealm()))
 					.handler(rc -> {
 						((GrpcServerImpl) server).handle(rc.request(), rc);
