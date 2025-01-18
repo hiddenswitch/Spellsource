@@ -16,12 +16,12 @@ jobs:
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '23'
+          java-version: '21'
           distribution: oracle
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
-      - uses: actions/setup-dotnet@v3
+          node-version: 22
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             6.x.x
@@ -48,7 +48,7 @@ jobs:
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '23'
+          java-version: '21'
           distribution: oracle
       - uses: actions/setup-node@v4
         with:
