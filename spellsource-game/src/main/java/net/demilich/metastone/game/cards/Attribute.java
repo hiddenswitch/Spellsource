@@ -1242,7 +1242,15 @@ public enum Attribute {
 	/**
 	 * Indicates the card is archived and should not appear in collections.
 	 */
-	ARCHIVED;
+	ARCHIVED,
+	/**
+	 * Set on the {@code Player} entity when this player has conceded.
+	 */
+	CONCEDED,
+	/**
+	 * The last attribute specially marked as unused, for enumeration purposes.
+	 */
+	UNUSED;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

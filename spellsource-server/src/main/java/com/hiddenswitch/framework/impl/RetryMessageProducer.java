@@ -78,7 +78,7 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 	public Future<Void> write(T body) {
 		var result = Promise.<T>promise();
 		waiting.addLast(new QueueItem<>(body, result));
-		if (taken.size() == 0) {
+		if (taken.isEmpty()) {
 			write(waiting.pollFirst(), maxRetries)
 					.onFailure(com.hiddenswitch.framework.Environment.onFailure("write failures"));
 		}
@@ -96,5 +96,9 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 	}
 
 	record QueueItem<X>(X message, Promise<X> promise) {
+	}
+
+	public void trim() {
+		waiting.clear();
 	}
 }

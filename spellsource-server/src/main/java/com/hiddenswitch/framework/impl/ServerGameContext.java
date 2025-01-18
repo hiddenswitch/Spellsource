@@ -30,6 +30,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
@@ -48,6 +49,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -63,10 +65,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * A networked game context from the server's point of view.
  * <p>
- * In addition to storing game state, this class also stores references to {@link Client} objects that (1) get notified
- * when game state changes and how, and (2) allow this class to
- * {@link Behaviour#requestAction(GameContext, Player, List)} and {@link Behaviour#mulligan(GameContext, Player, List)}
- * over a network.
+ * In addition to storing game state, this class also stores references to {@link Client} objects that (1) get notified when game state changes and how, and (2) allow this class to {@link Behaviour#requestAction(GameContext, Player, List)} and {@link Behaviour#mulligan(GameContext, Player, List)} over a network.
  * <p>
  */
 public class ServerGameContext extends GameContext implements Server {
@@ -92,11 +91,13 @@ public class ServerGameContext extends GameContext implements Server {
 	private final Deque<Trigger> gameTriggers = new ConcurrentLinkedDeque<>();
 	private final Scheduler scheduler;
 	private final AtomicInteger notificationCounter = new AtomicInteger(0);
+	private final List<String> verticles = new CopyOnWriteArrayList<>();
 	private transient Long turnTimerId;
 	private boolean isRunning = false;
 	private Long timerStartTimeMillis;
 	private Long timerLengthMillis;
 	private boolean interrupted;
+	private AtomicBoolean closed = new AtomicBoolean();
 
 	/**
 	 * {@inheritDoc}
@@ -213,10 +214,10 @@ public class ServerGameContext extends GameContext implements Server {
 
 						public void startVirtual() {
 							var bus = Vertx.currentContext().owner().eventBus();
-							this.consumer = bus.<Spellsource.ClientToServerMessage>consumer(getMessagesFromClientAddress(userId));
+							this.consumer = bus.consumer(getMessagesFromClientAddress(userId));
 							consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
 							// By using a publisher, we do not require that there be a working connection while sending
-							this.producer = bus.<Spellsource.ServerToClientMessage>publisher(getMessagesFromServerAddress(userId));
+							this.producer = bus.publisher(getMessagesFromServerAddress(userId));
 							// The event bus
 
 							Promise<Void> registration = Promise.promise();
@@ -269,7 +270,8 @@ public class ServerGameContext extends GameContext implements Server {
 					// The verticle takes time to deploy, which can interfere with the expectation that once a ServerGameContext
 					// is created, messages can be sent. handlersReady() should already be dealing with this, but it doesn't
 					// apparently, so the SubscribeGame method is configured to retry sending for now.
-					vertx.deployVerticle(userVerticle, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD));
+					vertx.deployVerticle(userVerticle, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
+							.onSuccess(this.verticles::add);
 					Promise<Client> fut = Promise.promise();
 					clientsReady.put(configuration.getPlayerId(), fut);
 				}
@@ -293,7 +295,8 @@ public class ServerGameContext extends GameContext implements Server {
 		// Make the game subscription robust against a ServerGameContext not yet being ready to receive messages from this
 		// client. Messages are buffered and dequeued. A NO_HANDLERS exception indicates the ServerGameContext isn't ready
 		// yet. We retry, up to ten times, with a 1-second interval, to send, since most games are ready within 10s.
-		var publisher = new RetryMessageProducer<>(eventBus.<Spellsource.ClientToServerMessage>publisher(getMessagesFromClientAddress(userId)), 10, 1000);
+		// todo: this is sending concede messages when they are spammed, causing all sorts of havok. we only want to retry FIRST_MESSAGE
+		var publisher = eventBus.<Spellsource.ClientToServerMessage>publisher(getMessagesFromClientAddress(userId)); // new RetryMessageProducer<>(, 10, 1000);
 		request.handler(body -> {
 			keepAliveManager.onDataReceived();
 			publisher.write(body);
@@ -318,8 +321,7 @@ public class ServerGameContext extends GameContext implements Server {
 	/**
 	 * Represents the address on the event bus to which the client sends its outgoing messages.
 	 * <p>
-	 * Messages <b>consumed</b> from this address will be arriving <b>from</b> the web socket and <b>received</b> by the
-	 * server infrastructure (typically).
+	 * Messages <b>consumed</b> from this address will be arriving <b>from</b> the web socket and <b>received</b> by the server infrastructure (typically).
 	 *
 	 * @param userId The user from whom messages will arrive
 	 * @return
@@ -332,8 +334,7 @@ public class ServerGameContext extends GameContext implements Server {
 	/**
 	 * Represents the address on the event bus to which the client receives incoming messages.
 	 * <p>
-	 * Messages <b>sent</b> to this address will be written <b>to</b> the web socket and <b>received</b> by the Unity
-	 * client.
+	 * Messages <b>sent</b> to this address will be written <b>to</b> the web socket and <b>received</b> by the Unity client.
 	 *
 	 * @param userId The user to whom messages should be delivered
 	 * @return
@@ -605,8 +606,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 				} finally {
 					// Regardless of what happens that causes an event loop exception, make certain the user is released from their game
-					// clears the interrupted flag
-					// due to bugs, we have to not clear the previous interrupted status
+					// clears the interrupted flag due to bugs, we have to not clear the previous interrupted status
 					interrupted = this.interrupted || Thread.interrupted();
 					close();
 					if (interrupted) {
@@ -869,9 +869,9 @@ public class ServerGameContext extends GameContext implements Server {
 			// Close the inbound messages from the client, they should be ignored by these client instances
 			// This way, a user doesn't accidentally trigger some other kind of processing that's only going to be interrupted
 			// later. However, this does block emote processing, which is unfortunate.
-			for (var client : getClients()) {
-				client.closeInboundMessages();
-			}
+//			for (var client : getClients()) {
+//				client.closeInboundMessages();
+//			}
 
 			// Don't end the game more than once.
 			if (didCallEndGame()) {
@@ -920,12 +920,29 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	public void close() {
+		if (!this.closed.compareAndSet(false, true)) {
+			return;
+		}
 		var tracer = GlobalTracer.get();
 		var span = tracer.buildSpan("ServerGameContext/dispose")
 				.asChildOf(getSpanContext())
 				.withTag("gameId", getGameId())
 				.start();
 		try {
+			var vertx = Vertx.currentContext().owner();
+			// Close the user verticles if they are still deployed
+			try {
+				await(Future.all(verticles.stream().map(id -> {
+					if (vertx.deploymentIDs().contains(id)) {
+						return vertx.undeploy(id);
+					} else {
+						return Future.succeededFuture();
+					}
+				}).toList()));
+				verticles.clear();
+			} catch (Throwable t) {
+				getLogger().error(t.toString());
+			}
 			super.close();
 		} finally {
 			span.finish();
@@ -1079,8 +1096,7 @@ public class ServerGameContext extends GameContext implements Server {
 	/**
 	 * Causes both players to lose the game. <b>Never deadlocks.</b>
 	 * <p>
-	 * This method is appropriate to call as a bail-out error procedure when the game context is being modified externally
-	 * by editing or otherwise.
+	 * This method is appropriate to call as a bail-out error procedure when the game context is being modified externally by editing or otherwise.
 	 * <p>
 	 * Ending the game requires the lock.
 	 */

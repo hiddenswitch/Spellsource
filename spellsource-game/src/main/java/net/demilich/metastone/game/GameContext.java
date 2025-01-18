@@ -956,6 +956,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 			// todo: do we need to lock here, and unlock again later?
 			GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), validActions);
 
+			// we only get here if null is returned and InterruptedException was not thrown
 			if (nextAction == null) {
 				throw new NullPointerException("nextAction");
 			}
@@ -1306,6 +1307,13 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 			getLogic().initializePlayerAndMoveMulliganToSetAside(1, false);
 		}
 
+		// Prevents player from conceding multiple times
+		if (getPlayer(playerId).hasAttribute(Attribute.CONCEDED)) {
+			return;
+		}
+
+		// todo: should this go into the game logic?
+		getPlayer(playerId).setAttribute(Attribute.CONCEDED);
 		getLogic().concede(playerId);
 		endGame();
 	}

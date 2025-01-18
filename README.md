@@ -86,13 +86,11 @@ Install Unity 6 with the iOS, macOS, Windows, and Android modules for your platf
 
 ##### Getting Around Unity
 
-Tools > UIT > Projection > Dimetric1x2
+In order to visualize the battlefield from the correct camera angle, navigate in the menu **Tools | UIT | Projection | Dimetric1x2**. Then, click the **Eyeball** button in the **Hierarchy** pane on **Canvas (UI)** to hide it from the **Scene** view. Select **World** in the **Hierarchy** pane, then hit F to focus, then zoom.
 
-Click Eyeball ("Hide") button in Hierarchy on Canvas (UI) and World (Battlefield), select World hierarchy and hit F to focus, then zoom.
+To work on a screen, unhide the **Canvas (UI)**, click **2D** in the **Scene** pane, select **Root**, then change the **Screen View | Current screen** property in the Inspector to the screen you want to work on. Screen Views will automatically update the current page to whatever you are clicked on, but it is clunky when you click away.
 
-Select Root, then change the Screen View | Current screen property to the screen you want to work on. Screen Views will automatically update the current page to whatever you are clicked on, but it is clunky when you click away.
-
-When getting ready to commit, ensure your resolution is Full HD (1920x1080) with Low Resolution Aspect Ratios unchecked (HiDPI screens only?) in the Game View; then, set the Screen View | Current screen to Loading on the Root game object.
+When getting ready to commit, ensure your resolution is `Full HD (1920x1080)`, and in the **Game** pane, uncheck **Low Resolution Aspect Ratios**, which may only be clickable on Hi-DPI screens. Then, set the **Screen View | Current screen** to `Loading` on the **Root** game object.
 
 ##### Starting the Game
 
@@ -114,6 +112,24 @@ The server is ready to accept connections from clients when you see this message
 ```text
 11:22:30.497 [vert.x-eventloop-thread-0] INFO  c.hiddenswitch.framework.Application - Started application, now broadcasting
 ```
+
+##### Using `toxiproxy`
+
+Testing connectivity is easy using `toxiproxy`. This will allow you to reproduce issues with disconnecting clients.
+
+```shell
+brew install toxiproxy
+toxiproxy-server -port 8474 -host localhost
+# in another tab
+toxiproxy-cli create --listen localhost:8082 --upstream localhost:8081 myserver
+```
+
+Now, toggle connectivity:
+
+```shell
+toxiproxy-cli toggle myserver
+```
+
 
 ##### Configure your IDE for Python development:
 
