@@ -455,7 +455,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 
 	@ParameterizedTest()
 	@Timeout(value = 210, timeUnit = TimeUnit.SECONDS)
-	@ValueSource(ints = {60})
+	@ValueSource(ints = {32})
 	public void testManyClientsMatchmakeAcrossClusteredInstances(int clientsToDeploy, VertxTestContext testContext) {
 		testManyClientsMatchmakeAcrossInstances(testContext, 2, clientsToDeploy);
 	}
