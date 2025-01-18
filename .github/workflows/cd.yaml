@@ -1,13 +1,13 @@
 name: Build Image
 on:
   push:
-    branches: ['master']
-    tags: ['*']
-  
+    branches: [ 'master' ]
+    tags: [ '*' ]
+
 jobs:
   build-and-deploy-server:
     if: "startsWith(github.ref, 'refs/tags/')" # Deploy a new server version when a new tag is pushed
-    runs-on: ubuntu-latest
+    runs-on: [ self-hosted, linux, x64 ]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,15 +35,15 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build Server Image
         run: ./gradlew spellsource-server:githubDockerPush
-        
+
   build-and-deploy-website:
     if: "!startsWith(github.ref, 'refs/tags/')" # Deploy a new website version for each push to master
-    runs-on: ubuntu-latest
+    runs-on: [ self-hosted, linux, x64 ]
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true # TODO still needed just for website?
-      - run: git lfs checkout 
+      - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
           java-version: '23'
