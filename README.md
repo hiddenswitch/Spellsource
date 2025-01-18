@@ -213,8 +213,7 @@ Visit the [Contribution Guide](CONTRIBUTE.md) for more about contributions, incl
 
 ### Deployment
 
-Use `./gradlew tasks --group spellsource` to see all deployment related tasks. You will need to be an Administrative
-user for these.
+Increase the `allprojects.version` in `build.gradle`, then merge into the `master` branch.
 
 ### Troubleshooting
 
