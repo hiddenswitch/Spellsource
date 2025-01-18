@@ -7,6 +7,7 @@ on:
 jobs:
   build-and-deploy-server:
     runs-on: [ self-hosted, linux, x64 ]
+    container: "ubuntu:22.04"
     steps:
       - uses: actions/checkout@v4
         with:
