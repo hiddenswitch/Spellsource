@@ -7,7 +7,6 @@ on:
 jobs:
   build-and-deploy-server:
     if: "startsWith(github.ref, 'refs/tags/')" # Deploy a new server version when a new tag is pushed
-    container: "ubuntu:22.04"
     runs-on: [ self-hosted, linux, x64 ]
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +39,6 @@ jobs:
   build-and-deploy-website:
     if: "!startsWith(github.ref, 'refs/tags/')" # Deploy a new website version for each push to master
     runs-on: [ self-hosted, linux, x64 ]
-    container: "ubuntu:22.04"
     steps:
       - uses: actions/checkout@v4
         with:

@@ -384,6 +384,7 @@ jib {
     tags = spellsourceTags
   }
   container {
+    // todo: should this be 8081?
     ports = ['8080']
     jvmFlags = jvmArgs
   }
