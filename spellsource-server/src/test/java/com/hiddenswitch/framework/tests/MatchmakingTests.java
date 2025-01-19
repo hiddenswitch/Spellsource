@@ -455,7 +455,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 
 	@ParameterizedTest()
 	@Timeout(value = 210, timeUnit = TimeUnit.SECONDS)
-	@ValueSource(ints = {32})
+	@ValueSource(ints = {60})
 	public void testManyClientsMatchmakeAcrossClusteredInstances(int clientsToDeploy, VertxTestContext testContext) {
 		testManyClientsMatchmakeAcrossInstances(testContext, 2, clientsToDeploy);
 	}
@@ -539,6 +539,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 					testContext.verify(() -> {
 						assertEquals(serverVertices, ((VertxInternal) vertices.resultAt(0)).getClusterManager().getNodes().size());
 					});
+					LOGGER.error("verticles ready");
 					return Future.succeededFuture();
 				})
 				// create clients
@@ -551,7 +552,6 @@ public class MatchmakingTests extends FrameworkTestBase {
 						})
 						.collect(toList())))
 				.compose(clientsFut -> {
-					LOGGER.debug("finished all the games");
 					var clients = clientsFut.<Client>list();
 					var userIds = clients.stream().map(client -> client.getUserEntity().getId()).sorted().toArray(String[]::new);
 					var gameUsersDao = new GameUsersDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());

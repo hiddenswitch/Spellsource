@@ -81,7 +81,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		this.scheduler = scheduler;
 		// todo: investigate if this is going to cause issues, by retrying an old game's data into the client
 		// Presumably this gets closed before that could possibly happen
-		this.writer = new RetryMessageProducer<>(writer, 10, 1000);
+		// todo: seemingly in the tests, there has to be at least one retry to receive the game over message
+		this.writer = new RetryMessageProducer<>(writer, 1, 1000);
 		this.userId = userId;
 		this.playerId = playerId;
 		this.server = server;
@@ -843,7 +844,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	public void close(Promise<Void> completionHandler) {
-		this.writer.trim();
 		closeInboundMessages();
 		scheduler.cancelTimer(turnTimer);
 		for (var activityMonitor : getActivityMonitors()) {

@@ -91,13 +91,13 @@ public class ServerGameContext extends GameContext implements Server {
 	private final Deque<Trigger> gameTriggers = new ConcurrentLinkedDeque<>();
 	private final Scheduler scheduler;
 	private final AtomicInteger notificationCounter = new AtomicInteger(0);
-	private final List<String> verticles = new CopyOnWriteArrayList<>();
 	private transient Long turnTimerId;
 	private boolean isRunning = false;
 	private Long timerStartTimeMillis;
 	private Long timerLengthMillis;
 	private boolean interrupted;
-	private AtomicBoolean closed = new AtomicBoolean();
+	private final AtomicBoolean closed = new AtomicBoolean();
+	private final AtomicBoolean endGameCalled = new AtomicBoolean();
 
 	/**
 	 * {@inheritDoc}
@@ -270,8 +270,9 @@ public class ServerGameContext extends GameContext implements Server {
 					// The verticle takes time to deploy, which can interfere with the expectation that once a ServerGameContext
 					// is created, messages can be sent. handlersReady() should already be dealing with this, but it doesn't
 					// apparently, so the SubscribeGame method is configured to retry sending for now.
+					List<String> verticles = new CopyOnWriteArrayList<>();
 					vertx.deployVerticle(userVerticle, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
-							.onSuccess(this.verticles::add);
+							.onSuccess(verticles::add);
 					Promise<Client> fut = Promise.promise();
 					clientsReady.put(configuration.getPlayerId(), fut);
 				}
@@ -295,11 +296,11 @@ public class ServerGameContext extends GameContext implements Server {
 		// Make the game subscription robust against a ServerGameContext not yet being ready to receive messages from this
 		// client. Messages are buffered and dequeued. A NO_HANDLERS exception indicates the ServerGameContext isn't ready
 		// yet. We retry, up to ten times, with a 1-second interval, to send, since most games are ready within 10s.
-		// todo: this is sending concede messages when they are spammed, causing all sorts of havok. we only want to retry FIRST_MESSAGE
-		var publisher = eventBus.<Spellsource.ClientToServerMessage>publisher(getMessagesFromClientAddress(userId)); // new RetryMessageProducer<>(, 10, 1000);
+		var publisher = eventBus.<Spellsource.ClientToServerMessage>publisher(getMessagesFromClientAddress(userId));
+		var retryPublisher = new RetryMessageProducer<>(publisher, 10, 1000, body -> body.getMessageType() == Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE);
 		request.handler(body -> {
 			keepAliveManager.onDataReceived();
-			publisher.write(body);
+			retryPublisher.write(body);
 		});
 
 		var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(getMessagesFromServerAddress(userId));
@@ -858,7 +859,12 @@ public class ServerGameContext extends GameContext implements Server {
 	protected void endGame() {
 		lock.lock();
 		try {
-			LOGGER.trace("endGame {}: calling end game", gameId);
+			// Only allow end game to be called once
+			if (!endGameCalled.compareAndSet(false, true)) {
+				return;
+			}
+
+			LOGGER.error("endGame {}: calling end game", gameId);
 
 			if (turnTimerId != null) {
 				scheduler.cancelTimer(turnTimerId);
@@ -869,9 +875,9 @@ public class ServerGameContext extends GameContext implements Server {
 			// Close the inbound messages from the client, they should be ignored by these client instances
 			// This way, a user doesn't accidentally trigger some other kind of processing that's only going to be interrupted
 			// later. However, this does block emote processing, which is unfortunate.
-//			for (var client : getClients()) {
-//				client.closeInboundMessages();
-//			}
+			for (var client : getClients()) {
+				client.closeInboundMessages();
+			}
 
 			// Don't end the game more than once.
 			if (didCallEndGame()) {
@@ -920,6 +926,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	public void close() {
+		// only allow this to be closed once
 		if (!this.closed.compareAndSet(false, true)) {
 			return;
 		}
@@ -929,20 +936,7 @@ public class ServerGameContext extends GameContext implements Server {
 				.withTag("gameId", getGameId())
 				.start();
 		try {
-			var vertx = Vertx.currentContext().owner();
-			// Close the user verticles if they are still deployed
-			try {
-				await(Future.all(verticles.stream().map(id -> {
-					if (vertx.deploymentIDs().contains(id)) {
-						return vertx.undeploy(id);
-					} else {
-						return Future.succeededFuture();
-					}
-				}).toList()));
-				verticles.clear();
-			} catch (Throwable t) {
-				getLogger().error(t.toString());
-			}
+			// todo: the user verticles seem to be undeployed elsewhere
 			super.close();
 		} finally {
 			span.finish();

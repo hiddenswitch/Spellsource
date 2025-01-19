@@ -10,6 +10,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class RetryMessageProducer<T> implements MessageProducer<T> {
 
@@ -19,11 +20,18 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 	private final int intervalMillis;
 	private final Deque<QueueItem<T>> waiting = new ArrayDeque<>();
 	private final Set<QueueItem<T>> taken = new HashSet<>();
+	private final Predicate<T> predicate;
+
 	public RetryMessageProducer(MessageProducer<T> messageProducer, int maxRetries, int intervalMillis) {
+		this(messageProducer, maxRetries, intervalMillis, v -> true);
+	}
+
+	public RetryMessageProducer(MessageProducer<T> messageProducer, int maxRetries, int intervalMillis, Predicate<T> predicate) {
 		this.producer = messageProducer;
 		this.maxRetries = maxRetries;
 		this.intervalMillis = intervalMillis;
 		this.vertx = Vertx.currentContext().owner();
+		this.predicate = predicate;
 	}
 
 	private Future<Void> write(QueueItem<T> item, int retries) {
@@ -79,7 +87,7 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 		var result = Promise.<T>promise();
 		waiting.addLast(new QueueItem<>(body, result));
 		if (taken.isEmpty()) {
-			write(waiting.pollFirst(), maxRetries)
+			write(waiting.pollFirst(), predicate.test(body) ? maxRetries : 0)
 					.onFailure(com.hiddenswitch.framework.Environment.onFailure("write failures"));
 		}
 		return result.future().map((Void) null);
@@ -95,10 +103,10 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 		close().onComplete(handler);
 	}
 
-	record QueueItem<X>(X message, Promise<X> promise) {
-	}
-
 	public void trim() {
 		waiting.clear();
+	}
+
+	record QueueItem<X>(X message, Promise<X> promise) {
 	}
 }
