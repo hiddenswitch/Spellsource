@@ -15,8 +15,8 @@ jobs:
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: oracle
+          java-version: '23'
+          distribution: temurin
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -24,7 +24,7 @@ jobs:
         with:
           dotnet-version: |
             6.x.x
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel test
       - name: Log in to the Container registry
@@ -46,12 +46,12 @@ jobs:
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: oracle
+          java-version: '23'
+          distribution: temurin
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
-      - uses: gradle/wrapper-validation-action@v1
+          node-version: 22
+      - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel :spellsource-web:yarnRunTest
       - name: Log in to the Container registry
