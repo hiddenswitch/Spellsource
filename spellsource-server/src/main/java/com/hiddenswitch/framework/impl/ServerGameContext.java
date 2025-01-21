@@ -30,7 +30,6 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
@@ -59,7 +58,8 @@ import static com.hiddenswitch.framework.Environment.*;
 import static com.hiddenswitch.framework.Games.ADDRESS_IS_IN_GAME;
 import static io.micrometer.core.instrument.Metrics.globalRegistry;
 import static io.vertx.await.Async.await;
-import static io.vertx.core.CompositeFuture.all;
+import static io.vertx.core.Future.all;
+import static io.vertx.core.Future.join;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -80,7 +80,7 @@ public class ServerGameContext extends GameContext implements Server {
 	private final transient Lock lock = new ReentrantLock();
 	private final transient Map<Integer, Promise<Client>> clientsReady = new ConcurrentHashMap<>();
 	private final transient List<Client> clients = new CopyOnWriteArrayList<>();
-	private final transient List<Promise> registrationsReady = new CopyOnWriteArrayList<>();
+	private final transient List<Promise<Void>> registrationsReady = new CopyOnWriteArrayList<>();
 	private final transient Promise<Void> initialization = Promise.promise();
 	private final Context context;
 	private final List<MessageConsumer<String>> inGameConsumers = new ArrayList<>();
@@ -91,13 +91,13 @@ public class ServerGameContext extends GameContext implements Server {
 	private final Deque<Trigger> gameTriggers = new ConcurrentLinkedDeque<>();
 	private final Scheduler scheduler;
 	private final AtomicInteger notificationCounter = new AtomicInteger(0);
+	private final AtomicBoolean closed = new AtomicBoolean();
+	private final AtomicBoolean endGameCalled = new AtomicBoolean();
 	private transient Long turnTimerId;
 	private boolean isRunning = false;
 	private Long timerStartTimeMillis;
 	private Long timerLengthMillis;
 	private boolean interrupted;
-	private final AtomicBoolean closed = new AtomicBoolean();
-	private final AtomicBoolean endGameCalled = new AtomicBoolean();
 
 	/**
 	 * {@inheritDoc}
@@ -413,8 +413,8 @@ public class ServerGameContext extends GameContext implements Server {
 			if (!clientsReady.values().stream().allMatch(fut -> fut.future().isComplete())) {
 				// If this is interrupted, it will bubble up to the general interrupt handler
 				try {
-					bothClientsReady = all(clientsReady.values().stream().map(Promise::future).collect(toList()));
-					var res = await(CompositeFuture.any(sleep(timeout), bothClientsReady));
+					bothClientsReady = Future.all(clientsReady.values().stream().map(Promise::future).collect(toList()));
+					var res = await(Future.any(sleep(timeout), bothClientsReady));
 
 					if (res.isComplete(0)) {
 						//timed out
@@ -422,7 +422,7 @@ public class ServerGameContext extends GameContext implements Server {
 					} else if (res.isComplete(1)) {
 						// succeeded
 					} else {
-						bothClientsReady = Future.failedFuture("some other issue");
+						bothClientsReady = Future.failedFuture(bothClientsReady.cause());
 					}
 				} catch (Throwable t) {
 					bothClientsReady = Future.failedFuture(t);
@@ -436,7 +436,7 @@ public class ServerGameContext extends GameContext implements Server {
 				// lead to a double loss
 				for (var entry : clientsReady.entrySet()) {
 					if (!entry.getValue().future().isComplete()) {
-						LOGGER.debug("init {}: Game prematurely ended because player id={} did not connect in {}ms", getGameId(), entry.getKey(), timeout);
+						LOGGER.error("init {}: Game prematurely ended because {} (player id={} did not connect in {}ms)", bothClientsReady.cause(), getGameId(), entry.getKey(), timeout);
 						getLogic().concede(entry.getKey());
 					}
 				}
@@ -511,7 +511,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			// If this is interrupted, it'll bubble up to the general interrupt handler
-			var simultaneousMulligans = await(CompositeFuture.join(mulligansActive.future(), mulligansNonActive.future()));
+			var simultaneousMulligans = await(join(mulligansActive.future(), mulligansNonActive.future()));
 
 			// If we got this far, we should cancel the time
 			if (mulliganTimerId != null) {
@@ -864,7 +864,7 @@ public class ServerGameContext extends GameContext implements Server {
 				return;
 			}
 
-			LOGGER.error("endGame {}: calling end game", gameId);
+			LOGGER.debug("endGame {}: calling end game", gameId);
 
 			if (turnTimerId != null) {
 				scheduler.cancelTimer(turnTimerId);
@@ -1091,18 +1091,13 @@ public class ServerGameContext extends GameContext implements Server {
 	 * Causes both players to lose the game. <b>Never deadlocks.</b>
 	 * <p>
 	 * This method is appropriate to call as a bail-out error procedure when the game context is being modified externally by editing or otherwise.
-	 * <p>
-	 * Ending the game requires the lock.
 	 */
-
 	public void loseBothPlayers() {
-		try {
-			currentContext.set(this);
-			getLogic().loseBothPlayers();
-			endGame();
-		} finally {
-			// This should be a no-op in the new engineering of this
-		}
+		// todo: should this suppress taking actions?
+		// maybe the rule should be that if your hero is destroyed, you cannot take actions, but that could have unintended side effects
+		currentContext.set(this);
+		getLogic().loseBothPlayers();
+		endGame();
 	}
 
 	/**

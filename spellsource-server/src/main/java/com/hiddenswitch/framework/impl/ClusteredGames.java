@@ -196,7 +196,6 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 		if (gameContext.getStatus() == GameStatus.RUNNING) {
 			gameContext.loseBothPlayers();
 		}
-
 	}
 
 	@Override

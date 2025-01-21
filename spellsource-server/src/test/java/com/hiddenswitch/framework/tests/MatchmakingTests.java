@@ -25,6 +25,7 @@ import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.logic.GameLogic;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -613,11 +614,11 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
-	@Test
+	@RepeatedTest(5)
 	public void testBotQueueWorksAfterDisconnect(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
 		var queueId = UUID.randomUUID().toString();
-		System.getProperties().setProperty(Games.GAMES_DEFAULT_NO_ACTIVITY_TIMEOUT, "10000");
+		System.getProperties().setProperty(Games.GAMES_DEFAULT_NO_ACTIVITY_TIMEOUT, "4000");
 		startServices(vertx)
 				.compose(v -> Matchmaking.createQueue(createSinglePlayerQueue(queueId)))
 				.compose(v -> client.createAndLogin())
@@ -625,7 +626,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.compose(response -> {
 					var gameId1 = response.getUnityConnection().getGameId();
 					return client.connectToGame()
-							.compose(v -> Environment.sleep(vertx, 10000L * 2))
+							.compose(v -> Environment.sleep(vertx, 4000L * 2))
 							.compose(v -> client.matchmake(queueId))
 							.compose(response2 -> {
 								var gameId2 = response2.getUnityConnection().getGameId();
