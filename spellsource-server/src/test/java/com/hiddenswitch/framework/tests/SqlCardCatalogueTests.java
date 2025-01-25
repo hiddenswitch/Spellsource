@@ -47,7 +47,7 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 
 	@ParameterizedTest
 	@ValueSource(strings = {"hero_neutral"})
-	public void testGetCards(Vertx vertx, VertxTestContext vertxTestContext, String cardId) {
+	public void testGetCards(String cardId, Vertx vertx, VertxTestContext vertxTestContext) {
 		testCachedCardCatalogue(vertx, vertxTestContext, catalogue -> assertNotNull(catalogue.getCardById(cardId)));
 	}
 
