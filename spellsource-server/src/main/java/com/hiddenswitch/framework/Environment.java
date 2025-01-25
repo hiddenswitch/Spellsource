@@ -470,6 +470,7 @@ public class Environment {
 		try {
 			filesystemConfigurationIterable = Files.walk(currentWorkingDirectoryPath, 1, FileVisitOption.FOLLOW_LINKS);
 		} catch (IOException e) {
+			LOGGER.error("No configuration directory found at {}/, using default configuration", currentWorkingDirectoryPath);
 			filesystemConfigurationIterable = Stream.empty();
 		}
 		var pattern = Pattern.compile("^.*" + CONFIGURATION_NAME_TOKEN + ".*\\.ya?ml$");
