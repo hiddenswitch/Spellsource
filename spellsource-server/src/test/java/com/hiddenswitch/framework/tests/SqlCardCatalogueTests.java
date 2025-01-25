@@ -13,11 +13,12 @@ import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
 import static io.vertx.await.Async.await;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SqlCardCatalogueTests extends FrameworkTestBase {
 
@@ -39,9 +40,15 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 	public void testGetFormats(Vertx vertx, VertxTestContext vertxTestContext) {
 		testCachedCardCatalogue(vertx, vertxTestContext, catalogue -> {
 			var formats = catalogue.formats();
-			assertTrue(formats.size() > 0);
+			assertFalse(formats.isEmpty());
 			assertTrue(formats.containsKey("Spellsource"));
 		});
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"hero_neutral"})
+	public void testGetCards(Vertx vertx, VertxTestContext vertxTestContext, String cardId) {
+		testCachedCardCatalogue(vertx, vertxTestContext, catalogue -> assertNotNull(catalogue.getCardById(cardId)));
 	}
 
 	@Test
