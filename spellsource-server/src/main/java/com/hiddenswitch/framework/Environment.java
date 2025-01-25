@@ -283,7 +283,7 @@ public class Environment {
 			vertx = Vertx.currentContext().owner();
 		}
 		var promise = Promise.<Long>promise();
-		vertx.setTimer(milliseconds, promise::complete);
+		vertx.setTimer(milliseconds, promise::tryComplete);
 		return promise.future().mapEmpty();
 	}
 

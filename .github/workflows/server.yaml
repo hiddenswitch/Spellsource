@@ -14,11 +14,11 @@ jobs:
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '23'
           distribution: temurin
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |

@@ -52,7 +52,7 @@ Once you've rebooted, start Docker Desktop at least once. Observe you may be pro
 Hit `Win + X` and click Windows Powershell. Do not start a prompt as an `admin`. Then run the following:
 
 ```sh
-# install node 18
+# install node 22
 nvm install 22
 nvm use 22
 
@@ -80,18 +80,69 @@ Start a local server and website using:
 gradle runServer
 ```
 
-##### Starting the Servers
+### Unity Requirements
+
+Install Unity 6 with the iOS, macOS, Windows, and Android modules for your platform. You should not install Visual Studio.
+
+##### Getting Around Unity
+
+In order to visualize the battlefield from the correct camera angle, navigate in the menu **Tools | UIT | Projection | Dimetric1x2**. Then, click the **Eyeball** button in the **Hierarchy** pane on **Canvas (UI)** to hide it from the **Scene** view. Select **World** in the **Hierarchy** pane, then hit F to focus, then zoom.
+
+To work on a screen, unhide the **Canvas (UI)**, click **2D** in the **Scene** pane, select **Root**, then change the **Screen View | Current screen** property in the Inspector to the screen you want to work on. Screen Views will automatically update the current page to whatever you are clicked on, but it is clunky when you click away.
+
+When getting ready to commit, ensure your resolution is `Full HD (1920x1080)`, and in the **Game** pane, uncheck **Low Resolution Aspect Ratios**, which may only be clickable on Hi-DPI screens. Then, set the **Screen View | Current screen** to `Loading` on the **Root** game object.
+
+##### Starting the Game
 
 There are four main components:
 
- - The Java server backend: `gradle spellsource-server:run`
+ - The Java server backend:
+   **Windows**: `./gradlew.bat spellsource-server:run`
+   **macOS and Linux**: `./gradlew spellsource-server:run`
  - The website: `yarn install --immutable; cd spellsource-web; yarn run dev`
  - The image generator:
-   - Windows: `gradle venv; & .venv/scripts/activate.ps1; comfyui -w ./spellsource-python/workdir`
-   - Linux and macOS: `gradle venv; source .venv/bin/activate; comfyui -w ./spellsource-python/workdir`
- - The Unity client: Open `spellsource-client/src/unity` in Unity 6, open the Game scene, and hit Play.
+   **Windows**: `./gradlew.bat venv; & .venv/scripts/activate.ps1; comfyui -w ./spellsource-python/workdir`
+   **Linux and macOS:** `./gradlew venv; source .venv/bin/activate; comfyui -w ./spellsource-python/workdir`
+ - The Unity client: Open `spellsource-client/src/unity` in Unity 6, open the **Assets/Scenes/Game.unity** scene, and hit Play.
 
 Start the Java server backend first, since it also starts Postgres and Redis.
+
+The server is ready to accept connections from clients when you see this message:
+
+```text
+11:22:30.497 [vert.x-eventloop-thread-0] INFO  c.hiddenswitch.framework.Application - Started application, now broadcasting
+```
+
+##### Using `toxiproxy`
+
+Testing connectivity is easy using `toxiproxy`. This will allow you to reproduce issues with disconnecting clients.
+
+```shell
+brew install toxiproxy
+toxiproxy-server -port 8474 -host localhost
+# in another tab
+toxiproxy-cli create --listen localhost:8082 --upstream localhost:8081 myserver
+```
+
+Now, toggle connectivity:
+
+```shell
+toxiproxy-cli toggle myserver
+```
+
+##### Using `ktunnel`
+
+Testing the local server on a URL can be performed with:
+
+```shell
+kubectl delete deployments/proxy svc/proxy -n spellsource || true && ./bin/darwin/arm64/ktunnel expose proxy --node-selector-tags kubernetes.io/os=linux 8081:8081 --namespace=spellsource --server-image=docker.io/appmana/ktunnel:v2.0.0
+```
+
+Then, place a file in `spellsource-client/src/unity/Assets/Resources/Url.txt`:
+
+```text
+https://spellsource-proxy.appmana.com:443
+```
 
 ##### Configure your IDE for Python development:
 
@@ -162,10 +213,15 @@ Visit the [Contribution Guide](CONTRIBUTE.md) for more about contributions, incl
 
 ### Deployment
 
-Use `./gradlew tasks --group spellsource` to see all deployment related tasks. You will need to be an Administrative
-user for these.
+Increase the `allprojects.version` in `build.gradle`, then merge into the `master` branch.
 
 ### Troubleshooting
+
+> I see errors about the Gradle daemon already running.
+
+This is an issue if you are accidentally already running the server in another terminal tab or your IDE. Carefully check that you are not already running the server using a Gradle command.
+
+This is normal when using the IntelliJ IDEs, or when killing Gradle with Ctrl+C on Windows. You can run `gradle --stop` to clean these "daemons" (background processes), or restart your computer.
 
 > I cannot clone the repository.
 
@@ -234,6 +290,10 @@ In IntelliJ, visit the Help > Edit Custom Properties... menu, then add the follo
 # custom IntelliJ IDEA properties
 idea.max.intellisense.filesize=99999
 ```
+
+> I see an error message that reads, in part, "all predefined address pools have been fully subnetted", from docker
+
+Open Docker Desktop, stop all the containers related to Spellsource. Then run `docker system prune`.
 
 ### Special Thanks
 

@@ -5,6 +5,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DOTNET_INSTALL_DIR: ~/.dotnet
     steps:
       - uses: actions/checkout@v4
         with:
@@ -12,15 +14,15 @@ jobs:
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '23'
           distribution: temurin
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
-      - uses: actions/setup-dotnet@v3
+          node-version: 22
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             6.x.x
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel test

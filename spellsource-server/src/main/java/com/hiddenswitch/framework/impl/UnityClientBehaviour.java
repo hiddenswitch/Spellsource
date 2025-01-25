@@ -33,6 +33,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Consumer;
@@ -45,9 +46,7 @@ import static net.demilich.metastone.game.GameContext.PLAYER_1;
 import static net.demilich.metastone.game.GameContext.PLAYER_2;
 
 /**
- * Represents a behaviour that converts requests from {@link ActionListener} and game event updates from
- * {@link EventListener} into messages on a {@link ReadStream} and {@link WriteStream}, decoding the read buffers as
- * {@link ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
+ * Represents a behaviour that converts requests from {@link ActionListener} and game event updates from {@link EventListener} into messages on a {@link ReadStream} and {@link WriteStream}, decoding the read buffers as {@link ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
  */
 public class UnityClientBehaviour extends UtilityBehaviour implements Client, Closeable, HasElapsableTurns {
 	public static final int MAX_POWER_HISTORY_SIZE = 10;
@@ -61,14 +60,14 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final int playerId;
 	private final Scheduler scheduler;
 	private final Lock requestsLock = new NoOpLock();
-	private final MessageProducer<ServerToClientMessage> writer;
+	private final RetryMessageProducer<ServerToClientMessage> writer;
 	private final Server server;
 	private final Long turnTimer;
 	private final Deque<GameEvent> powerHistory = new ArrayDeque<>();
-
+	private final AtomicBoolean inboundMessagesClosed = new AtomicBoolean(false);
+	private final AtomicBoolean elapsed = new AtomicBoolean(false);
+	private final AtomicBoolean conceded = new AtomicBoolean(false);
 	private GameState lastStateSent;
-	private boolean inboundMessagesClosed;
-	private boolean elapsed;
 	private GameOver gameOver;
 	private boolean needsPowerHistory;
 
@@ -80,7 +79,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	                            int playerId,
 	                            long noActivityTimeout) {
 		this.scheduler = scheduler;
-		this.writer = new RetryMessageProducer<>(writer, 10, 1000);
+		// todo: investigate if this is going to cause issues, by retrying an old game's data into the client
+		// Presumably this gets closed before that could possibly happen
+		// todo: seemingly in the tests, there has to be at least one retry to receive the game over message
+		this.writer = new RetryMessageProducer<>(writer, 1, 1000);
 		this.userId = userId;
 		this.playerId = playerId;
 		this.server = server;
@@ -158,12 +160,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	public boolean isElapsed() {
-		return elapsed;
+		return elapsed.get();
 	}
 
 	@Override
 	public UnityClientBehaviour setElapsed(boolean elapsed) {
-		this.elapsed = elapsed;
+		this.elapsed.set(elapsed);
 		return this;
 	}
 
@@ -178,7 +180,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	public void elapseAwaitingRequests() {
 		requestsLock.lock();
-		elapsed = true;
+		elapsed.set(true);
 		try {
 			// Prevent concurrent modification by locking access to this iterator
 			GameplayRequest request;
@@ -234,7 +236,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 
 	protected void handleWebSocketMessage(ClientToServerMessage message) {
-		if (inboundMessagesClosed) {
+		if (inboundMessagesClosed.get()) {
 			var exceptionHandler = Vertx.currentContext().owner().exceptionHandler();
 			if (exceptionHandler != null) {
 				exceptionHandler.handle(new IllegalStateException("inbound messaged closed"));
@@ -295,7 +297,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				}
 				break;
 			case CONCEDE:
-				server.onConcede(this);
+				// should prevent spamming concede
+				// corner case if the user disconnects and reconnects in between conceding
+				if (!this.conceded.get()) {
+					this.conceded.set(true);
+					server.onConcede(this);
+				}
 				break;
 		}
 	}
@@ -349,9 +356,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	/**
 	 * Handles a mulligan from a Unity client.
 	 * <p>
-	 * The starting hand is also sent in the
-	 * {@link com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones#SET_ASIDE_ZONE}, where the index in the set
-	 * aside zone corresponds to the index that should be sent to discard.
+	 * The starting hand is also sent in the {@link com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones#SET_ASIDE_ZONE}, where the index in the set aside zone corresponds to the index that should be sent to discard.
 	 *
 	 * @param discardedCardIndices A list of indices in the list of starter cards that should be discarded.
 	 */
@@ -415,10 +420,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				getRequests().add(request);
 				onRequestAction(id, state, validActions);
 			}
-			var result = await(promise.future());
-			return result;
+			return await(promise.future());
 		} catch (Throwable t) {
-			LOGGER.error("requestAction error:", t);
+			// Throw InterruptedExecption so that the play() loop can observe it
+			if (t instanceof InterruptedException) {
+				LOGGER.error("requestAction interrupted, likely due to conceding or timing out");
+				throw t;
+			} else {
+				LOGGER.error("requestAction error:", t);
+			}
 			return null;
 		} finally {
 			requestsLock.unlock();
@@ -426,9 +436,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	/**
-	 * When a player's turn ends prematurely, this method will process a player's turn, choosing
-	 * {@link ActionType#BATTLECRY} and {@link ActionType#DISCOVER} randomly and performing an {@link ActionType#END_TURN}
-	 * as soon as possible.
+	 * When a player's turn ends prematurely, this method will process a player's turn, choosing {@link ActionType#BATTLECRY} and {@link ActionType#DISCOVER} randomly and performing an {@link ActionType#END_TURN} as soon as possible.
 	 *
 	 * @param actions  The possible {@link GameAction} for this request.
 	 * @param callback The callback for this request.
@@ -733,8 +741,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	/**
 	 * Sends a mulligan request to a Unity client.
 	 * <p>
-	 * The {@link com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones#SET_ASIDE_ZONE} will contain the cards
-	 * that can be mulliganned.
+	 * The {@link com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones#SET_ASIDE_ZONE} will contain the cards that can be mulliganned.
 	 *
 	 * @param id       Mulligan ID
 	 * @param state    The game state
@@ -785,7 +792,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	public void closeInboundMessages() {
-		inboundMessagesClosed = true;
+		inboundMessagesClosed.set(true);
 	}
 
 	@Override

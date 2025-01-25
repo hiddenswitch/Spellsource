@@ -1,9 +1,9 @@
 name: Build Image
 on:
   push:
-    branches: ['master']
-    tags: ['*']
-  
+    branches: [ 'master' ]
+    tags: [ '*' ]
+
 jobs:
   build-and-deploy-server:
     if: "startsWith(github.ref, 'refs/tags/')" # Deploy a new server version when a new tag is pushed
@@ -16,15 +16,15 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           java-version: '23'
-          distribution: oracle
+          distribution: temurin
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
-      - uses: actions/setup-dotnet@v3
+          node-version: 22
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             6.x.x
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel test
       - name: Log in to the Container registry
@@ -35,7 +35,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build Server Image
         run: ./gradlew spellsource-server:githubDockerPush
-        
+
   build-and-deploy-website:
     if: "!startsWith(github.ref, 'refs/tags/')" # Deploy a new website version for each push to master
     runs-on: ubuntu-latest
@@ -43,15 +43,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: true # TODO still needed just for website?
-      - run: git lfs checkout 
+      - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
           java-version: '23'
-          distribution: oracle
+          distribution: temurin
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
-      - uses: gradle/wrapper-validation-action@v1
+          node-version: 22
+      - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel :spellsource-web:yarnRunTest
       - name: Log in to the Container registry

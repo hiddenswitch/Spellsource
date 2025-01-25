@@ -15,7 +15,7 @@ jobs:
         with:
           java-version: '19'
           distribution: temurin
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/actions/wrapper-validation@v3
       - name: Deploy Website
         run: ./gradlew distWWW
         env:

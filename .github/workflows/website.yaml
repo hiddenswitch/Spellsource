@@ -1,10 +1,10 @@
 name: Build Website
 on:
   push:
-    branches: ['develop']
+    branches: [ 'develop' ]
     paths:
       - spellsource-web/**
-    
+
 jobs:
   build-and-deploy-website:
     runs-on: ubuntu-latest
@@ -15,11 +15,11 @@ jobs:
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '23'
           distribution: temurin
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
       - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel :spellsource-web:yarnRunTest
