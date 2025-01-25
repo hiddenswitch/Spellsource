@@ -4,7 +4,8 @@
 <configuration
         xmlns="http://ch.qos.logback/xml/ns/logback"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd">
+        xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd"
+        scan="true" scanPeriod="10 seconds">
     <import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"/>
     <import class="ch.qos.logback.core.ConsoleAppender"/>
     <import class="ch.qos.logback.classic.AsyncAppender"/>
@@ -38,4 +39,5 @@
     <logger name="org.redisson" level="WARN" />
     <logger name="io.github.jklingsporn" level="ERROR" />
     <logger name="com.github.dockerjava" level="ERROR" />
+    <logger name="org.flywaydb" level="DEBUG"/>
 </configuration>
