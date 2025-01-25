@@ -72,8 +72,8 @@ public class ListCardCatalogue implements CardCatalogue {
 	@Override
 	@NotNull
 	public CardList getAll() {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			CardList result = new CardArrayList();
 			for (var card : cards.values()) {
 				result.addCard(card.clone());
@@ -86,8 +86,8 @@ public class ListCardCatalogue implements CardCatalogue {
 
 	@Override
 	public @NotNull Map<String, Card> getCards() {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			return cards;
 		} finally {
 			lock.readLock().unlock();
@@ -96,8 +96,8 @@ public class ListCardCatalogue implements CardCatalogue {
 
 	@Override
 	public @NotNull Card getCardById(@NotNull String id) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			var card = cards.getOrDefault(id, null);
 			if (card != null) {
 				card = card.getCopy();
@@ -113,8 +113,8 @@ public class ListCardCatalogue implements CardCatalogue {
 	@Override
 	@Nullable
 	public Card getCardByName(String name) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			var namedCard = cardsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).findFirst().orElse(cardsByName.get(name).stream().findFirst().orElse(null));
 			if (namedCard != null) {
 				return getCardById(namedCard.getCardId());
@@ -128,8 +128,8 @@ public class ListCardCatalogue implements CardCatalogue {
 	@Override
 	@NotNull
 	public Card getCardByName(String name, String heroClass) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			var namedCards = cardsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).toList();
 			if (!namedCards.isEmpty()) {
 				if (namedCards.size() > 1) {
@@ -151,8 +151,8 @@ public class ListCardCatalogue implements CardCatalogue {
 	@Override
 	@NotNull
 	public CardList query(DeckFormat deckFormat, Spellsource.CardTypeMessage.CardType cardType, Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag, boolean clone) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			CardList result = new CardArrayList();
 			for (var card : cards.values()) {
 
@@ -198,8 +198,8 @@ public class ListCardCatalogue implements CardCatalogue {
 	}
 
 	public void removeCard(String id) {
-        lock.writeLock().lock();
-        try {
+		lock.writeLock().lock();
+		try {
 			var res = cards.remove(id);
 			if (res != null) {
 				cardsByName.remove(res.getDesc().getName(), res);
@@ -211,7 +211,7 @@ public class ListCardCatalogue implements CardCatalogue {
 					case CLASS -> {
 						classCards.remove(res.getDesc().getHeroClass());
 						for (var format : classCardsForFormat.keySet()) {
-							classCardsForFormat.get(format).removeIf(c -> c.getDesc().getId().equals(res.getId()));
+							classCardsForFormat.get(format).removeIf(c -> c.getDesc().getId().equals(res.getCardId()));
 						}
 					}
 					case HERO -> heroCards.remove(res.getCardId());
@@ -224,8 +224,8 @@ public class ListCardCatalogue implements CardCatalogue {
 
 	@Override
 	public Card getFormatCard(String name) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			return formatCardsByName.getOrDefault(name, null);
 		} finally {
 			lock.readLock().unlock();
@@ -234,8 +234,8 @@ public class ListCardCatalogue implements CardCatalogue {
 
 	@Override
 	public Card getHeroCard(String heroClass) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			var heroCard = heroCards.getOrDefault(heroClass, null);
 			if (heroCard == null) {
 				return getCardById(this.getNeutralHero());
@@ -248,8 +248,8 @@ public class ListCardCatalogue implements CardCatalogue {
 
 	@Override
 	public CardList getClassCards(DeckFormat format) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			return new CardArrayList(classCardsForFormat.get(format));
 		} finally {
 			lock.readLock().unlock();
@@ -258,8 +258,8 @@ public class ListCardCatalogue implements CardCatalogue {
 
 	@Override
 	public List<String> getBaseClasses(DeckFormat deckFormat) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			return new ArrayList<>(baseClassesForFormat.get(deckFormat));
 		} finally {
 			lock.readLock().unlock();
@@ -267,8 +267,8 @@ public class ListCardCatalogue implements CardCatalogue {
 	}
 
 	public CardList query(DeckFormat deckFormat, Predicate<Card> filter) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			CardList result = new CardArrayList();
 			for (var card : cards.values()) {
 				if (GameLogic.isCardType(card.getCardType(), Spellsource.CardTypeMessage.CardType.CLASS) || GameLogic.isCardType(card.getCardType(), Spellsource.CardTypeMessage.CardType.FORMAT)) {
@@ -296,8 +296,8 @@ public class ListCardCatalogue implements CardCatalogue {
 
 	@Override
 	public CardList queryClassCards(DeckFormat format, String hero, Set<String> bannedCards, Spellsource.RarityMessage.Rarity rarity, Set<Spellsource.CardTypeMessage.CardType> validCardTypes) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			return query(format, c -> c.hasHeroClass(hero) && !bannedCards.contains(c.getCardId()) && c.getRarity() == rarity && validCardTypes.contains(c.getCardType()) && c.isCollectible());
 		} finally {
 			lock.readLock().unlock();
@@ -306,8 +306,8 @@ public class ListCardCatalogue implements CardCatalogue {
 
 	@Override
 	public CardList queryNeutrals(DeckFormat format, Set<String> bannedCards, Spellsource.RarityMessage.Rarity rarity, Set<Spellsource.CardTypeMessage.CardType> validCardTypes) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			return query(format,
 					c -> c.hasHeroClass(HeroClass.ANY) && !bannedCards.contains(c.getCardId()) && c.getRarity() == rarity && validCardTypes.contains(c.getCardType()) && c.isCollectible());
 		} finally {
@@ -317,8 +317,8 @@ public class ListCardCatalogue implements CardCatalogue {
 
 	@Override
 	public CardList queryUncollectible(DeckFormat deckFormat) {
-        lock.readLock().lock();
-        try {
+		lock.readLock().lock();
+		try {
 			return query(deckFormat, always -> true);
 		} finally {
 			lock.readLock().unlock();
@@ -356,8 +356,8 @@ public class ListCardCatalogue implements CardCatalogue {
 	 * Clears all the cards in this catalogue.
 	 */
 	public void clear() {
-        lock.writeLock().lock();
-        try {
+		lock.writeLock().lock();
+		try {
 			formatsByName.clear();
 			bannedCardIds.clear();
 			hardRemovalCardIds.clear();
@@ -383,8 +383,7 @@ public class ListCardCatalogue implements CardCatalogue {
 	}
 
 	/**
-	 * Loads all the cards from the specified {@link ResourceInputStream} instances, which can be a mix of files and
-	 * resources.
+	 * Loads all the cards from the specified {@link ResourceInputStream} instances, which can be a mix of files and resources.
 	 *
 	 * @param inputStreams
 	 */
@@ -413,8 +412,8 @@ public class ListCardCatalogue implements CardCatalogue {
 	 * @param cardDescs
 	 */
 	protected void updatedWith(Map<String, CardDesc> cardDescs) {
-        lock.writeLock().lock();
-        try {
+		lock.writeLock().lock();
+		try {
 			var newCards = new ArrayList<Card>(cardDescs.size());
 			// sort so that this is more consistent
 			List<CardDesc> values = new ArrayList<>(cardDescs.values());
@@ -503,8 +502,8 @@ public class ListCardCatalogue implements CardCatalogue {
 	 * @param directories
 	 */
 	public void loadCardsFromFilesystemDirectories(String... directories) {
-        lock.writeLock().lock();
-        try {
+		lock.writeLock().lock();
+		try {
 			var inputStreams = new ArrayList<ResourceInputStream>();
 
 			try {
