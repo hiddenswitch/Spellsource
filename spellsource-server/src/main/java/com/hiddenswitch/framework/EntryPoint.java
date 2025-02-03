@@ -5,6 +5,7 @@ import com.hiddenswitch.framework.impl.Options;
 import com.hiddenswitch.framework.rpc.Hiddenswitch;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.Json;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 
 public class EntryPoint {
 	public static void main(String[] args) {
@@ -35,6 +36,8 @@ public class EntryPoint {
 			var path = options.writeCurrentConfig;
 			write(configuration, path);
 		}
+
+		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
 
 		var application = new Application();
 		application.deploy()
