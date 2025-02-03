@@ -3,16 +3,7 @@ import _, { isEqual } from "lodash";
 import { textDecorationStyle } from "./collection";
 import { Button } from "react-bootstrap";
 import { useDrag, useDrop } from "react-dnd";
-import {
-  GetDeckQuery,
-  GetDeckQueryVariables,
-  GetDecksQuery,
-  GetDecksQueryVariables,
-  useCreateDeckMutation,
-  useDeleteDeckMutation,
-  useRenameDeckMutation,
-  useSetCardsInDeckMutation,
-} from "../../__generated__/client";
+import { GetDeckQuery, GetDeckQueryVariables, GetDecksQuery, GetDecksQueryVariables, useCreateDeckMutation, useDeleteDeckMutation, useRenameDeckMutation, useSetCardsInDeckMutation } from "../../__generated__/client";
 import { ListActions } from "react-use/lib/useList";
 import { useRouter } from "next/router";
 import { CardCache } from "../../pages/collection";
@@ -33,14 +24,7 @@ interface DeckProps {
   realCards: string[];
 }
 
-function DeckCard(props: {
-  cardDefs: CardDef[];
-  card: CardDef;
-  heroClass: any;
-  myDeck: boolean;
-  classColors: any;
-  onClick: () => void;
-}) {
+function DeckCard(props: { cardDefs: CardDef[]; card: CardDef; heroClass: any; myDeck: boolean; classColors: any; onClick: () => void }) {
   const { card, myDeck } = props;
 
   const [, dragRef] = useDrag({
@@ -51,15 +35,11 @@ function DeckCard(props: {
 
   return (
     <li className={"d-flex flex-row align-items-baseline"}>
-      <span className={`${props.cardDefs.length + 1 > (props.card.rarity === "LEGENDARY" ? 1 : 2) && "text-danger"}`}>
-        {props.cardDefs.length + 1} x
-      </span>
+      <span className={`${props.cardDefs.length + 1 > (props.card.rarity === "LEGENDARY" ? 1 : 2) && "text-danger"}`}>{props.cardDefs.length + 1} x</span>
       <Button
-        ref={dragRef}
+        ref={dragRef as any}
         variant={"light"}
-        className={`ms-2 ${
-          props.card.heroClass !== "ANY" && props.card.heroClass !== props.heroClass && "text-danger"
-        }`}
+        className={`ms-2 ${props.card.heroClass !== "ANY" && props.card.heroClass !== props.heroClass && "text-danger"}`}
         style={{
           pointerEvents: props.myDeck ? "initial" : "none",
           ...textDecorationStyle(props.card.heroClass, props.classColors),
@@ -72,18 +52,7 @@ function DeckCard(props: {
   );
 }
 
-export const Deck: FunctionComponent<DeckProps> = ({
-  deck,
-  user,
-  myDeck,
-  cardIds,
-  classColors,
-  cardActions,
-  getDecks,
-  getDeck,
-  setDeckId,
-  realCards,
-}) => {
+export const Deck: FunctionComponent<DeckProps> = ({ deck, user, myDeck, cardIds, classColors, cardActions, getDecks, getDeck, setDeckId, realCards }) => {
   const router = useRouter();
 
   const cache = useContext(CardCache);
@@ -116,7 +85,7 @@ export const Deck: FunctionComponent<DeckProps> = ({
   });
 
   return (
-    <div ref={deckDrop}>
+    <div ref={deckDrop as any}>
       <h3 className={"d-flex flex-row gap-2 align-items-baseline flex-wrap"}>
         <span style={textDecorationStyle(deck?.heroClass, classColors)}>{deck?.name ?? "Your Decks"}</span>
         <span className={`ms-auto ${cardIds.length > 30 && "text-danger"}`}>{cardIds.length}/30</span>
@@ -184,11 +153,7 @@ export const Deck: FunctionComponent<DeckProps> = ({
             >
               Rename
             </Button>
-            <Button
-              disabled={isEqual(cardIds, realCards) || getDeck.loading}
-              variant={"light"}
-              onClick={() => setCards(realCards)}
-            >
+            <Button disabled={isEqual(cardIds, realCards) || getDeck.loading} variant={"light"} onClick={() => setCards(realCards)}>
               Reset
             </Button>
             <Button

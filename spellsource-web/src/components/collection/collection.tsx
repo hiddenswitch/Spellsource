@@ -30,10 +30,7 @@ const orderings = {
   TYPE_ASC: "Type",
 } as Record<CollectionCardsOrderBy, string>;
 
-export const textDecorationStyle = (
-  heroClass: string | null | undefined,
-  classColors: Record<string, string | undefined>
-) => ({
+export const textDecorationStyle = (heroClass: string | null | undefined, classColors: Record<string, string | undefined>) => ({
   textDecorationLine: "underline",
   textDecorationColor: heroClass && heroClass in classColors ? classColors[heroClass!] : "rgba(#888888)",
 });
@@ -53,7 +50,7 @@ const CardRow: FunctionComponent<{
   });
 
   return (
-    <tr ref={dragRef} onClick={() => addToDeck?.(cardScript.id)} style={{ cursor: addToDeck ? "pointer" : "initial" }}>
+    <tr ref={dragRef as any} onClick={() => addToDeck?.(cardScript.id)} style={{ cursor: addToDeck ? "pointer" : "initial" }}>
       <td>{cardScript.baseManaCost ?? 0}</td>
       <td>{cardScript.name}</td>
       <td
@@ -66,11 +63,7 @@ const CardRow: FunctionComponent<{
         {classes[cardScript.heroClass] ?? "Any"}
       </td>
       <td>{toTitleCaseCorrected(cardScript.type)}</td>
-      <td>
-        {!cardScript.baseAttack && !cardScript.baseHp && !cardScript.durability
-          ? "n/a"
-          : `${cardScript.baseAttack ?? 0}/${cardScript.baseHp ?? cardScript.durability ?? 0}`}
-      </td>
+      <td>{!cardScript.baseAttack && !cardScript.baseHp && !cardScript.durability ? "n/a" : `${cardScript.baseAttack ?? 0}/${cardScript.baseHp ?? cardScript.durability ?? 0}`}</td>
       <td>{cardScript.description?.replaceAll(new RegExp("[$#\\[\\]]", "g"), "") ?? ""}</td>
       <td>
         <Link href={`/card-editor?card=${encodeURIComponent(card.id!)}`} target={"_blank"}>
@@ -95,8 +88,7 @@ interface CollectionProps {
 }
 
 const Collection: FunctionComponent<CollectionProps> = (props) => {
-  const { classes, classColors, heroClass, setHeroClass, offset, setOffset, mainHeroClass, addToDeck, removeFromDeck } =
-    props;
+  const { classes, classColors, heroClass, setHeroClass, offset, setOffset, mainHeroClass, addToDeck, removeFromDeck } = props;
   const { data: session, status } = useSession();
 
   const cache = useContext(CardCache);
@@ -122,11 +114,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
       orderBy: orderBy ? [orderBy as CollectionCardsOrderBy, "COST_ASC", "NAME_ASC"] : ["COST_ASC", "NAME_ASC"],
       filter: {
         type: { in: [...cardTypes] },
-        class: heroClass
-          ? mainHeroClass && heroClass === "ALLOWED"
-            ? { in: [mainHeroClass, "ANY"] }
-            : { equalTo: heroClass }
-          : undefined,
+        class: heroClass ? (mainHeroClass && heroClass === "ALLOWED" ? { in: [mainHeroClass, "ANY"] } : { equalTo: heroClass }) : undefined,
         searchMessage: search ? { includesInsensitive: search.trim() } : undefined,
         collectible: { equalTo: !uncollectible },
         createdBy: ownOnly ? { equalTo: user ?? "" } : undefined,
@@ -135,8 +123,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
     onCompleted: (data) => data.allCollectionCards?.nodes?.forEach((node) => (cache[node!.id!] = node!.cardScript)),
   });
   const cards = getCards?.data?.allCollectionCards?.nodes ?? getCards?.previousData?.allCollectionCards?.nodes ?? [];
-  const total =
-    getCards?.data?.allCollectionCards?.totalCount ?? getCards?.previousData?.allCollectionCards?.totalCount ?? 0;
+  const total = getCards?.data?.allCollectionCards?.totalCount ?? getCards?.previousData?.allCollectionCards?.totalCount ?? 0;
 
   const showing = Math.min(limit, cards.length);
 
@@ -159,7 +146,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
   });
 
   return (
-    <div ref={collectionDrop} className={"h-100"}>
+    <div ref={collectionDrop as any} className={"h-100"}>
       <div id={"Top Bar"} className={"d-flex flex-row flex-wrap gap-2 pt-2 ps-2 align-items-center"}>
         <Form
           onSubmit={(event) => {
@@ -169,11 +156,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           }}
           className={"flex-grow-1"}
         >
-          <Form.Control
-            placeholder={"Search"}
-            value={searchVisual}
-            onChange={(event) => setSearchVisual(event.target.value)}
-          />
+          <Form.Control placeholder={"Search"} value={searchVisual} onChange={(event) => setSearchVisual(event.target.value)} />
         </Form>
         <Dropdown>
           <DropdownToggle variant={"light"} disabled={!getCards.data}>
@@ -195,11 +178,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
         <div className={"mb-1 text-center user-select-none"}>
           {cards?.length ? offset + 1 : "0"}-{cards?.length ? offset + showing : "0"} of {cards?.length ? total : "0"}
         </div>
-        <Button
-          disabled={!getCards.data || offset >= total - limit}
-          variant={"secondary"}
-          onClick={() => changeOffset(limit)}
-        >
+        <Button disabled={!getCards.data || offset >= total - limit} variant={"secondary"} onClick={() => changeOffset(limit)}>
           Next
         </Button>
         <div className={"w-100 d-none d-lg-block"} />
@@ -210,33 +189,18 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           <DropdownMenu>
             <div className={"overflow-scroll d-flex flex-column gap-1"} style={{ maxHeight: "25rem" }}>
               {mainHeroClass && (
-                <DropdownItem
-                  key={"Allowed"}
-                  as={Button}
-                  active={heroClass === "ALLOWED"}
-                  onClick={() => setHeroClass("ALLOWED")}
-                >
+                <DropdownItem key={"Allowed"} as={Button} active={heroClass === "ALLOWED"} onClick={() => setHeroClass("ALLOWED")}>
                   Allowed
                 </DropdownItem>
               )}
               <DropdownItem as={Button} type={"toggle"} active={!heroClass} onClick={() => setHeroClass("")}>
                 All
               </DropdownItem>
-              <DropdownItem
-                as={Button}
-                type={"toggle"}
-                active={heroClass === "ANY"}
-                onClick={() => setHeroClass("ANY")}
-              >
+              <DropdownItem as={Button} type={"toggle"} active={heroClass === "ANY"} onClick={() => setHeroClass("ANY")}>
                 Any
               </DropdownItem>
               {Object.entries(classes).map(([classId, className]) => (
-                <DropdownItem
-                  key={classId}
-                  as={Button}
-                  active={heroClass === classId}
-                  onClick={() => setHeroClass(classId)}
-                >
+                <DropdownItem key={classId} as={Button} active={heroClass === classId} onClick={() => setHeroClass(classId)}>
                   {className}
                 </DropdownItem>
               ))}
@@ -247,31 +211,11 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           <DropdownToggle disabled={!getCards.data}>Card Types</DropdownToggle>
           <DropdownMenu>
             <div className={"d-flex flex-column gap-1"}>
-              <DropdownItem
-                key={"All"}
-                as={Button}
-                active={!ShowCardTypes.find((type) => !cardTypes.includes(type))}
-                onClick={() =>
-                  setCardTypes(
-                    ShowCardTypes.find((type) => !cardTypes.includes(type)) ? ShowCardTypes : DefaultShowCardTypes
-                  )
-                }
-              >
+              <DropdownItem key={"All"} as={Button} active={!ShowCardTypes.find((type) => !cardTypes.includes(type))} onClick={() => setCardTypes(ShowCardTypes.find((type) => !cardTypes.includes(type)) ? ShowCardTypes : DefaultShowCardTypes)}>
                 All
               </DropdownItem>
               {ShowCardTypes.map((cardType) => (
-                <DropdownItem
-                  key={cardType}
-                  as={Button}
-                  active={cardTypes.includes(cardType)}
-                  onClick={() =>
-                    setCardTypes(
-                      cardTypes.includes(cardType)
-                        ? cardTypes.filter((type) => type !== cardType)
-                        : [...cardTypes, cardType]
-                    )
-                  }
-                >
+                <DropdownItem key={cardType} as={Button} active={cardTypes.includes(cardType)} onClick={() => setCardTypes(cardTypes.includes(cardType) ? cardTypes.filter((type) => type !== cardType) : [...cardTypes, cardType])}>
                   {toTitleCaseCorrected(cardType)}
                 </DropdownItem>
               ))}
@@ -283,24 +227,14 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           <DropdownMenu>
             <div className={"d-flex flex-column gap-1"}>
               {Object.entries(orderings).map(([order, name]) => (
-                <DropdownItem
-                  key={order}
-                  as={Button}
-                  active={orderBy === order}
-                  onClick={() => setOrderBy(order as CollectionCardsOrderBy)}
-                >
+                <DropdownItem key={order} as={Button} active={orderBy === order} onClick={() => setOrderBy(order as CollectionCardsOrderBy)}>
                   {name}
                 </DropdownItem>
               ))}
             </div>
           </DropdownMenu>
         </Dropdown>
-        <Button
-          disabled={!getCards.data}
-          variant={"light"}
-          active={uncollectible}
-          onClick={() => setUncollectible(!uncollectible)}
-        >
+        <Button disabled={!getCards.data} variant={"light"} active={uncollectible} onClick={() => setUncollectible(!uncollectible)}>
           {uncollectible ? "Uncollectible" : "Collectible"}
         </Button>
         <Button disabled={!getCards.data} variant={"light"} active={ownOnly} onClick={() => setOwnOnly(!ownOnly)}>
