@@ -1,0 +1,9 @@
+fragment deck on Deck {
+  id
+  name
+  isPremade
+  createdBy
+  heroClass
+  format
+  deckType
+}

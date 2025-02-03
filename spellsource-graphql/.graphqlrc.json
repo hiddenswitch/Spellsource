@@ -1,0 +1,13 @@
+{
+  "schema": "schema.graphql",
+  "documents": [
+    "graphql/shared/**/*.graphql",
+    "graphql/client/**/*.graphql"
+  ],
+  "extensions": {
+    "strawberryShake": {
+      "name": "GraphQL",
+      "namespace": "Spellsource"
+    }
+  }
+}

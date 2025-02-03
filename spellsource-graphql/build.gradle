@@ -1,0 +1,77 @@
+import groovy.json.JsonSlurper
+
+plugins {
+  id "com.github.node-gradle.node"
+  id "base"
+  id "docker"
+  id "java"
+  id "next"
+  id "io.github.kobylynskyi.graphql.codegen" version "5.9.0"
+}
+
+apply from: '../gradle/node.gradle'
+
+
+new JsonSlurper().parseText(file('package.json').text).scripts.each { String scriptName, _ ->
+  tasks.register("yarnRun${scriptName.split('-').collect { it.capitalize() }.join('')}", YarnTask) {
+    group('yarn')
+    dependsOn 'yarn'
+    args = ['run', scriptName]
+  }
+}
+
+
+graphqlCodegen {
+  // all config options: 
+  // https://github.com/kobylynskyi/graphql-java-codegen/blob/main/docs/codegen-options.md
+  graphqlSchemaPaths = [
+          file("schema.graphql").path,
+          *fileTree("graphql/web").collect { it.path }.findAll { it.endsWith(".graphql") },
+          *fileTree("graphql/shared").collect { it.path }.findAll { it.endsWith(".graphql") }
+  ]
+  outputDir = rootProject.project("spellsource-server").file("src/main/java/com/hiddenswitch/framework/graphql")
+  packageName = "com.hiddenswitch.framework.graphql"
+  customTypesMapping = [
+          DateTime: "org.joda.time.DateTime"
+  ]
+  customAnnotationsMapping = [
+          DateTime: ["@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.example.json.EpochMillisScalarDeserializer.class)"]
+  ]
+  addGeneratedAnnotation = false
+  generateModelsForRootTypes = true
+  modelValidationAnnotation = ""
+  typeResolverSuffix = "TypeResolver"
+  generateParameterizedFieldsResolvers = false // TODO are these actually needed?
+
+  doLast {
+    copy {
+      from "${outputDir.path}/com/hiddenswitch/framework/graphql"
+      into outputDir.path
+    }
+    delete "${outputDir.path}/com"
+  }
+}
+
+tasks.named("yarnRunCodegen").configure {
+  inputs.dir("graphql/web")
+  inputs.dir("graphql/shared")
+  // TODO manually specify outputs as well?
+}
+
+tasks.named("yarnRunStrawberryShake").configure {
+  inputs.dir("graphql/client")
+  inputs.dir("graphql/shared")
+  // TODO manually specify outputs as well?
+}
+
+tasks.register("generateAll") {
+  inputs.file("schema.graphql")
+  inputs.dir("graphql")
+  dependsOn yarnRunCodegen, yarnRunStrawberryShake, graphqlCodegen
+}
+
+tasks.named("createDist").configure {
+  outputs.dir("docker/spellsource/graphql")
+
+  group "spellsource"
+}

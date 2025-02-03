@@ -23,29 +23,24 @@ class WorkspaceUtils {
   static def createDist(Project project, String distDir, boolean includeSelf) {
     def slurper = new JsonSlurper()
     def parent = project.parent
+    def parentPackage = slurper.parse(project.file("${parent.projectDir}/package.json"))
+
+    // Map of Gradle project names to their slurped package.json object
+    def packages = (Map<String, Object>) parentPackage.workspaces.collectEntries({
+      def pkg = project.file("$parent.projectDir/$it/package.json")
+      return [parent.subprojects.find({ p -> it.startsWith(p.name) })?.name, pkg.exists() ? slurper.parse(pkg) : null]
+    })
+
     def dependencies = new HashSet([project.name])
-
-    def parentPackageJson = project.file("${parent.projectDir}/package.json")
-
-    if (parentPackageJson.exists()) {
-      def parentPackage = slurper.parse()
-
-      // Map of Gradle project names to their slurped package.json object
-      def packages = (Map<String, Object>) parentPackage.workspaces.collectEntries({
-        def pkg = project.file("$parent.projectDir/$it/package.json")
-        return [parent.subprojects.find({ p -> it.startsWith(p.name) })?.name, pkg.exists() ? slurper.parse(pkg) : null]
-      })
-
-      while (true) {
-        def prevSize = dependencies.size()
-        dependencies.addAll(packages.findAll({ entry ->
-          dependencies.any { p ->
-            entry.value && packages.get(p)?.dependencies?.containsKey(entry.value.name)
-          }
-        }).keySet())
-        if (dependencies.size() == prevSize) {
-          break
+    while (true) {
+      def prevSize = dependencies.size()
+      dependencies.addAll(packages.findAll({ entry ->
+        dependencies.any { p ->
+          entry.value && packages.get(p)?.dependencies?.containsKey(entry.value.name)
         }
+      }).keySet())
+      if (dependencies.size() == prevSize) {
+        break
       }
     }
 
@@ -58,6 +53,7 @@ class WorkspaceUtils {
     ignores.add '**/csharp'
     ignores.add 'docker/'
     ignores.add '**/node_modules'
+    ignores.add '**/*Dockerfile'
 
     dependencies.forEach { p ->
       project.copy { CopySpec c ->
@@ -68,8 +64,13 @@ class WorkspaceUtils {
     }
 
     project.copy { CopySpec c ->
-      c.from "$parent.projectDir/yarn.lock", "$parent.projectDir/package.json"
+      c.from "$parent.projectDir/yarn.lock", "$parent.projectDir/package.json", "$parent.projectDir/tsconfig.json", "$parent.projectDir/.yarnrc.yml"
       c.into distDir
+    }
+
+    project.copy { CopySpec c ->
+      c.from "$parent.projectDir/.yarn"
+      c.into "$distDir/.yarn/"
     }
   }
 }

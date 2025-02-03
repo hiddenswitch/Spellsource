@@ -1,0 +1,7 @@
+{
+  "watch": ["**/*.ts", ".env.local"],
+  "ext": "graphql,ts,sql",
+  "execMap": {
+    "ts": "node -r ts-node/register"
+  }
+}

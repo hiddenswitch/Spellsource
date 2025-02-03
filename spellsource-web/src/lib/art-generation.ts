@@ -5,14 +5,28 @@ import Blockly, { BlockSvg, WorkspaceSvg } from "blockly";
 import { ContextType } from "react";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { client as api, PromptNode } from "../__generated__/comfyclient";
-import { FetchResult } from "@apollo/client";
-import { GenerateArtMutation, MutationGenerateArtArgs } from "../__generated__/client";
 import { comfyUrl } from "./config";
+import { isArray } from "lodash";
 
 type BlockWithPrivate = Blockly.Block & {
   _interval?: number | ReturnType<typeof setInterval>;
   _hash?: string;
 };
+
+export type ImageDef = {
+  id: string;
+  name: string;
+  src: string;
+  height: number;
+  width: number;
+};
+
+export interface MutationGenerateArtArgs {
+  positiveText: string;
+  negativeText: string;
+  seed: string;
+}
+
 export const randomizeSeed = (p1: any) => {
   const field = p1 as FieldButton;
   const block = field.getSourceBlock()!;
@@ -57,19 +71,22 @@ export const generateArt = async (p1: any) => {
   }, 1000);
   block["_hash"] = await generateHash(prompt);
 
-  const workspace = block.workspace as WorkspaceSvg & {
-    _data: ContextType<typeof BlocklyDataContext>;
-  };
-  const { generateArt } = workspace["_data"];
-
-  generateArt!({
-    variables: {
+  fetch("/api/art/generate", {
+    method: "POST",
+    body: JSON.stringify({
       positiveText: block.getFieldValue("positive_text"),
       negativeText: block.getFieldValue("negative_text"),
       seed: parseInt(block.getFieldValue("seed")),
-    },
+    }),
   })
-    .then(onGenerateArt(block))
+    .then(async (res) => {
+      const body = await res.json();
+      if (isArray(body)) {
+        await onGenerateArt(block, body);
+      } else {
+        console.error(body);
+      }
+    })
     .finally(() => onRequestStop(block));
 };
 
@@ -87,30 +104,13 @@ const onRequestStop = (block: BlockWithPrivate) => {
   }
 };
 
-export const getPrompt = (args: MutationGenerateArtArgs) => {
-  const { positiveText, negativeText, seed } = args;
-
-  const promptText = JSON.stringify(sdxl).replace("$POSITIVE_TEXT", positiveText.trim()).replace("$NEGATIVE_TEXT", negativeText.trim());
-
-  const prompt = JSON.parse(promptText) as Record<string, PromptNode>;
-
-  for (let node of Object.values(prompt)) {
-    if (node.class_type === "KSampler") {
-      node.inputs["seed"] = seed!;
-    }
-  }
-
-  return prompt;
-};
-
-const onGenerateArt = (block: BlockWithPrivate) => async (response: FetchResult<GenerateArtMutation> | undefined | null) => {
+const onGenerateArt = async (block: BlockWithPrivate, response: string[] | undefined | null) => {
   const hash = block["_hash"];
-  const result = response?.data?.generateArt;
-  if (!result || !hash) {
+  if (!response || !hash) {
     console.log("canceled request");
     return;
   }
-  const url = result.urls.at(-1);
+  const url = response.at(-1);
 
   if (!url || block.isInFlyout || block.isDisposed()) return;
 

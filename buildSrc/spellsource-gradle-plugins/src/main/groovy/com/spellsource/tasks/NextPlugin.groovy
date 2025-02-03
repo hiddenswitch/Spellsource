@@ -18,7 +18,9 @@ class NextPlugin implements Plugin<Project> {
       if (project.file('public').exists()) {
         inputs.dir('public')
       }
-      inputs.dir('src')
+      if (project.file('src').exists()) {
+        inputs.dir('src')
+      }
       if (project.file('next.config.js').exists()) {
         inputs.file('next.config.js')
       }

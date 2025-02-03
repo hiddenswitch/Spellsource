@@ -1,6 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { isArray } from "lodash";
-import { getArtById } from "../../../server/art";
+import { isArray, keyBy } from "lodash";
+import { ImageDef } from "../../../lib/art-generation";
+import { getAllArt } from "../../../lib/fs-utils";
+
+let artById: Promise<Record<string, ImageDef>>;
+
+export const getArtById = async () => {
+  if (!artById) {
+    console.log("Reading art from disk");
+    artById = getAllArt().then((value) => keyBy(value, (value) => value.name));
+  }
+
+  return artById;
+};
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const nameParam = req.query["name"] ?? "";

@@ -1388,3 +1388,6 @@ ij_yaml_keep_line_breaks = true
 
 [*.proto]
 indent_size = 2
+
+[{*.ts,*.tsx,*.graphql}]
+indent_size = 2

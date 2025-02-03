@@ -1,3 +1,8 @@
+import com.github.gradle.node.npm.task.NpmSetupTask
+import com.github.gradle.node.task.NodeSetupTask
+import com.github.gradle.node.yarn.task.YarnSetupTask
+import groovy.json.JsonSlurper
+
 buildscript {
   repositories {
     maven { url "file://${rootDir}/mavenRepository" }
@@ -8,7 +13,10 @@ buildscript {
 plugins {
   id 'org.javamodularity.moduleplugin' version '1.8.15' apply false
   id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
+  id "com.github.node-gradle.node"
 }
+
+apply from: "gradle/node.gradle"
 
 dependencies {
   gradleApi()
@@ -318,5 +326,57 @@ idea.module.settings {
     urls.each { url ->
       contentNode.appendNode('sourceFolder', [url: url, isTestSource: 'false'])
     }
+  }
+}
+
+def packageJson = new JsonSlurper().parseText(file('package.json').text)
+def yarnVersionStr = (packageJson.packageManager as String).split("@")[1]
+def binExt = isWindows ? ".cmd" : ""
+
+tasks.register("corepack") {
+  def dirPath = ".gradle/yarn/yarn-v${yarnVersionStr}/${isWindows ? "" : "/bin"}"
+  outputs.dir(dirPath)
+  doLast {
+    mkdir(dirPath)
+    exec {
+      commandLine "corepack${binExt}", "enable", "--install-directory", dirPath
+    }
+  }
+}
+
+tasks.named("yarnSetup").configure {
+  dependsOn "corepack"
+}
+
+tasks.register('yarnWorkspace', YarnTask) {
+  group('spellsource')
+  description("Installs all the necessary modules to develop ${packageJson.workspaces.join(', ')}")
+  inputs.files("package.json", "yarn.lock")
+          .withPropertyName("yarnLock")
+          .withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.files(packageJson.workspaces.collect { "$it/package.json" })
+          .withPropertyName("workspacePackageJsons")
+          .withPathSensitivity(PathSensitivity.RELATIVE)
+  outputs.file("node_modules/.yarn-state.yml")
+  outputs.cacheIf { false }
+
+  def argsList = ['install']
+  if (!System.getenv().containsKey('CI')) {
+    argsList.add('--immutable')
+  }
+
+  args = argsList
+}
+
+afterEvaluate {
+  // disable all setup tasks because they bust the cache
+  allprojects {
+    [YarnSetupTask.class, NpmSetupTask.class, NodeSetupTask.class].forEach({ setupTask ->
+      tasks.withType(setupTask).configureEach({ task ->
+        task.configure {
+          onlyIf { false }
+        }
+      })
+    })
   }
 }

@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import java.time.Duration;
 
 public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
-	private static final int KEYCLOAK_PORT_HTTP = 8080;
+	public static final int KEYCLOAK_PORT_HTTP = 8080;
 
 	private static final String KEYCLOAK_ADMIN_USER = "admin";
 	private static final String KEYCLOAK_ADMIN_PASSWORD = "admin";
