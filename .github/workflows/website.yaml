@@ -22,10 +22,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: corepack enable
       - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
-        run: ./gradlew --no-parallel :spellsource-web:yarnRunTest --debug
+        run: ./gradlew --no-parallel :spellsource-web:yarnRunTest
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:

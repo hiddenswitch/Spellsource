@@ -96,19 +96,8 @@ tasks.named('yarn').configure {
   group('spellsource')
   // todo: we need to patch the generator
   //  dependsOn += ['copyComfyClient']
+  dependsOn += [':yarnSetup']
   args = ['--immutable']
-}
-
-tasks.register("corepack") {
-  enabled = true
-  def dirPath = ".gradle/yarn/yarn-v${yarnVersionStr}/${isWindows ? "" : "/bin"}"
-  outputs.dir(dirPath)
-  doLast {
-    mkdir(dirPath)
-    exec {
-      commandLine "${isMacOs ? '/opt/homebrew/bin/' : ''}corepack${binExt}", "enable", "--install-directory", file(dirPath).absolutePath
-    }
-  }
 }
 
 Provider<JavaLauncher> thisToolchain() {
