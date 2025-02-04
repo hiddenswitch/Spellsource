@@ -4,6 +4,8 @@ on:
     branches: [ 'develop' ]
     paths:
       - spellsource-web/**
+      - build.gradle
+      - /github/workflows/website.yaml
 
 jobs:
   build-and-deploy-website:
@@ -22,7 +24,7 @@ jobs:
           node-version: 22
       - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
-        run: ./gradlew --no-parallel :spellsource-web:yarnRunTest
+        run: ./gradlew --no-parallel :spellsource-web:yarnRunTest --debug
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
