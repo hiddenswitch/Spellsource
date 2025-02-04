@@ -44,7 +44,7 @@ const preset: GraphileConfig.Preset = {
       pgSettings: ({ expressv4 }) => {
         const req = expressv4.req as AuthRequest;
         return {
-          role: req.admin ? "admin" : "website", // TODO use different roles for website / client / server
+          role: req.admin ? "admin" : req.auth ? "website" : undefined, // TODO use different roles for website / client / server ? or just rename role to "user"
           "user.id": req.auth?.sub ?? "",
         };
       },

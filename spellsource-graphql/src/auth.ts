@@ -25,7 +25,8 @@ export const authenticate: RequestHandler = (req: AuthRequest, res, next) => {
   const token = req.header("Authorization")?.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ message: "No token provided" });
+    next();
+    return;
   }
 
   if (token == pgJwtSecret) {

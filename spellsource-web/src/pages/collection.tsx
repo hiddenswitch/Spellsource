@@ -86,6 +86,7 @@ export default () => {
   const getDeck = useGetDeckQuery({
     variables: { deckId },
     onCompleted: (data) => data.deckById?.cardsInDecksByDeckId?.nodes?.forEach((node) => (cache[node!.cardId] = node?.publishedCardByCardId?.cardBySuccession?.cardScript)),
+    skip: !deckId,
   });
   const deck = getDeck?.data?.deckById ?? getDeck?.previousData?.deckById;
 

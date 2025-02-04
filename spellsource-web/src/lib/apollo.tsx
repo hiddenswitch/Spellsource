@@ -3,19 +3,12 @@ import { setContext } from "@apollo/client/link/context";
 import { FunctionComponent, PropsWithChildren, RefObject, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { graphqlHost } from "./config";
+import { useUpdateEffect } from "react-use";
 
 export const ApolloClientProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const { data: session, status } = useSession();
   const tokenRef = useRef<string | null>(session?.token?.accessToken ?? null);
   const [apolloClient] = useState(() => createApolloClient(tokenRef));
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      apolloClient.resetStore();
-    } else {
-      apolloClient.clearStore();
-    }
-  }, [status]);
 
   useEffect(() => {
     tokenRef.current = session?.token?.accessToken ?? null;

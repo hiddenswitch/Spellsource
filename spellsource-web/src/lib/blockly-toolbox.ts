@@ -4,13 +4,13 @@ import { toTitleCaseCorrected } from "./blockly-spellsource-utils";
 import { ContextType } from "react";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { CardDef } from "../components/collection/card-display";
-import { ImageDef } from "../__generated__/client";
 import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
 import { CardSearchCategory } from "../components/blockly/card-search-category";
 import { getBlockInfo } from "./blockly-utils";
 import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo;
 import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo;
 import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
+import { ImageDef } from "./art-generation";
 
 /**
  * Initializes the necessary callbacks for the Variables tab's CUSTOM dynamic-ness
@@ -34,14 +34,8 @@ export function initCallbacks(workspace: WorkspaceSvg) {
     button.setAttribute("callbackKey", "CREATE_VARIABLE_NUMBER");
     xmlList.push(button);
 
-    workspace.registerButtonCallback(
-      "CREATE_VARIABLE_STRING",
-      Blockly.VariablesDynamic["onCreateVariableButtonClick_String"]
-    );
-    workspace.registerButtonCallback(
-      "CREATE_VARIABLE_NUMBER",
-      Blockly.VariablesDynamic["onCreateVariableButtonClick_Number"]
-    );
+    workspace.registerButtonCallback("CREATE_VARIABLE_STRING", Blockly.VariablesDynamic["onCreateVariableButtonClick_String"]);
+    workspace.registerButtonCallback("CREATE_VARIABLE_NUMBER", Blockly.VariablesDynamic["onCreateVariableButtonClick_Number"]);
     workspace.registerButtonCallback("CREATE_VARIABLE_ENTITY", () => {
       Blockly.Variables.createVariableButtonHandler(workspace, undefined, "EntityReference");
     });
@@ -82,19 +76,9 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
         kind: "sep",
       },
 
-      category(
-        "Card Starters",
-        "#888888",
-        "The core blocks that cards of any type will be built from",
-        contents("Starter")
-      ),
+      category("Card Starters", "#888888", "The core blocks that cards of any type will be built from", contents("Starter")),
 
-      category(
-        "Card Properties",
-        "#888888",
-        "Blocks to add additional properties to your card (placed connected to your Starter)",
-        contents("Property")
-      ),
+      category("Card Properties", "#888888", "Blocks to add additional properties to your card (placed connected to your Starter)", contents("Property")),
 
       category("Card Art", "#888888", "Blocks representing the art that your card can have", [
         /*category("Unused", "#888888", "Art that hasn't yet been used by a card", artContents(false)),
@@ -113,52 +97,11 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
 
       cardsCategory(data),
 
-      category("Targets", "30", "Blocks for the many different targets that effects can have", [
-        category("Ally", "30", "Blocks that target allied things", subContents("EntityReference", "Ally")),
+      category("Targets", "30", "Blocks for the many different targets that effects can have", [category("Ally", "30", "Blocks that target allied things", subContents("EntityReference", "Ally")), category("Enemy", "30", "Blocks that target enemy things", subContents("EntityReference", "Enemy")), category("Both", "30", "Blocks that target both allied and enemy things", subContents("EntityReference", "Both")), category("Misc", "30", "Blocks that target other things", subContents("EntityReference", "Misc")), category("Helper", "30", "Blocks that help you target specific/niche things", subContents("EntityReference", "Util"))]),
 
-        category("Enemy", "30", "Blocks that target enemy things", subContents("EntityReference", "Enemy")),
+      category("Choices", "60", "Blocks for the actions that a card can make the player take when being played", contents("TargetSelection")),
 
-        category(
-          "Both",
-          "30",
-          "Blocks that target both allied and enemy things",
-          subContents("EntityReference", "Both")
-        ),
-
-        category("Misc", "30", "Blocks that target other things", subContents("EntityReference", "Misc")),
-
-        category(
-          "Helper",
-          "30",
-          "Blocks that help you target specific/niche things",
-          subContents("EntityReference", "Util")
-        ),
-      ]),
-
-      category(
-        "Choices",
-        "60",
-        "Blocks for the actions that a card can make the player take when being played",
-        contents("TargetSelection")
-      ),
-
-      category("Attributes", "200", "Blocks for the many properties of cards/entities", [
-        category(
-          "Primary",
-          "200",
-          "Attribute blocks that are frequently used on cards",
-          subContents("Attribute", "Frequent")
-        ),
-
-        category(
-          "Secondary",
-          "200",
-          "Attribute blocks that aren't commonly put on cards directly, but rather are used by other cards",
-          subContents("Attribute", "Infrequent")
-        ),
-
-        category("Misc", "200", "Attribute blocks that are used rarely and nichely", subContents("Attribute", "Misc")),
-      ]),
+      category("Attributes", "200", "Blocks for the many properties of cards/entities", [category("Primary", "200", "Attribute blocks that are frequently used on cards", subContents("Attribute", "Frequent")), category("Secondary", "200", "Attribute blocks that aren't commonly put on cards directly, but rather are used by other cards", subContents("Attribute", "Infrequent")), category("Misc", "200", "Attribute blocks that are used rarely and nichely", subContents("Attribute", "Misc"))]),
 
       category("Players", "45", "Blocks for specifying (in different ways) the two players", [
         ...exclusionContents("TargetPlayer", "TargetPlayer_1", "TargetPlayer_2"),
@@ -184,196 +127,68 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
         kind: "sep",
       },
 
-      category(
-        "Spells",
-        "260",
-        "Blocks that are the actual effects cards can cause (not actually related to the 'Spell' card type)",
-        [
-          category("Buff", "260", "Spell blocks that deal with changing units' stats", subContents("Spell", "Buff")),
+      category("Spells", "260", "Blocks that are the actual effects cards can cause (not actually related to the 'Spell' card type)", [
+        category("Buff", "260", "Spell blocks that deal with changing units' stats", subContents("Spell", "Buff")),
 
-          category(
-            "Damage",
-            "260",
-            "Spell blocks that relate to dealing damage (and also the one block for healing)",
-            subContents("Spell", "Damage")
-          ),
+        category("Damage", "260", "Spell blocks that relate to dealing damage (and also the one block for healing)", subContents("Spell", "Damage")),
 
-          category("Draw", "260", "Spell blocks that involve drawing/receiving cards", subContents("Spell", "Draw")),
+        category("Draw", "260", "Spell blocks that involve drawing/receiving cards", subContents("Spell", "Draw")),
 
-          category(
-            "Summon",
-            "260",
-            "Spell blocks that have to do with the summoning of units",
-            subContents("Spell", "Summon")
-          ),
+        category("Summon", "260", "Spell blocks that have to do with the summoning of units", subContents("Spell", "Summon")),
 
-          category(
-            "Shuffle",
-            "260",
-            "Spell blocks that handle card shuffling to decks",
-            subContents("Spell", "Shuffle")
-          ),
+        category("Shuffle", "260", "Spell blocks that handle card shuffling to decks", subContents("Spell", "Shuffle")),
 
-          category("Cost", "260", "Spell blocks that create cost modification effects", subContents("Spell", "Cost")),
+        category("Cost", "260", "Spell blocks that create cost modification effects", subContents("Spell", "Cost")),
 
-          category(
-            "Mechanics",
-            "260",
-            "Spell blocks that employ specific custom mechanics",
-            subContents("Spell", "Mechanic")
-          ),
+        category("Mechanics", "260", "Spell blocks that employ specific custom mechanics", subContents("Spell", "Mechanic")),
 
-          category(
-            "Enchantment",
-            "260",
-            "Spell blocks that add/remove enchantments/auras",
-            subContents("Spell", "Enchant")
-          ),
+        category("Enchantment", "260", "Spell blocks that add/remove enchantments/auras", subContents("Spell", "Enchant")),
 
-          category("Attacking", "260", "Spell blocks about enities attacking", subContents("Spell", "Attack")),
+        category("Attacking", "260", "Spell blocks about enities attacking", subContents("Spell", "Attack")),
 
-          category("Misc", "260", "Spell blocks that aren't otherwise categorized", subContents("Spell", "Misc")),
+        category("Misc", "260", "Spell blocks that aren't otherwise categorized", subContents("Spell", "Misc")),
 
-          category(
-            "Helper",
-            "260",
-            "Spell blocks that help implement complex/combined effects",
-            subContents("Spell", "Util")
-          ),
-        ]
-      ),
-
-      category("Values", "340", "Blocks for anything and everything numeric", [
-        category(
-          "Number of ...",
-          "340",
-          "Blocks for counting the number of things",
-          subContents("ValueProvider", "Number")
-        ),
-
-        category(
-          "Properties",
-          "340",
-          "Blocks for numerical properties of things",
-          subContents("ValueProvider", "Properties")
-        ),
-
-        category("Misc", "340", "Blocks for other values", subContents("ValueProvider", "Misc")),
-
-        category("Helper", "340", "Blocks for calculating more advanced values", subContents("ValueProvider", "Util")),
+        category("Helper", "260", "Spell blocks that help implement complex/combined effects", subContents("Spell", "Util")),
       ]),
 
-      category(
-        "Conditions",
-        "100",
-        "Blocks that CAN handle the truth, because they evaluate it",
-        contents("Condition")
-      ),
+      category("Values", "340", "Blocks for anything and everything numeric", [category("Number of ...", "340", "Blocks for counting the number of things", subContents("ValueProvider", "Number")), category("Properties", "340", "Blocks for numerical properties of things", subContents("ValueProvider", "Properties")), category("Misc", "340", "Blocks for other values", subContents("ValueProvider", "Misc")), category("Helper", "340", "Blocks for calculating more advanced values", subContents("ValueProvider", "Util"))]),
 
-      category(
-        "Filters",
-        "120",
-        "Blocks for narrowing down lists of entities based on desired properties",
-        contents("Filter")
-      ),
+      category("Conditions", "100", "Blocks that CAN handle the truth, because they evaluate it", contents("Condition")),
+
+      category("Filters", "120", "Blocks for narrowing down lists of entities based on desired properties", contents("Filter")),
 
       category("Enchantment", "280", "Blocks for the creation of ongoing triggered effects", contents("Enchantment")),
 
-      category("Triggers", "300", "Blocks for waiting/listening for specific events in-game", [
-        category("Unit", "300", "Trigger blocks that deal with units", subContents("Trigger", "Unit")),
-
-        category("Card", "300", "Trigger blocks that relate to cards", subContents("Trigger", "Card")),
-        category("Attack", "300", "Trigger blocks that involve attacks / attacking", subContents("Trigger", "Attack")),
-
-        category(
-          "Damage",
-          "300",
-          "Trigger blocks that have to do with damage being dealt",
-          subContents("Trigger", "Damage")
-        ),
-
-        category("Turn", "300", "Trigger blocks that handle turns starting / ending", subContents("Trigger", "Turn")),
-
-        category("Misc", "300", "Trigger blocks that aren't otherwise categorized", subContents("Trigger", "Misc")),
-
-        category(
-          "Helper",
-          "300",
-          "Trigger blocks that help with reacting to more specific events",
-          subContents("Trigger", "Util")
-        ),
-      ]),
+      category("Triggers", "300", "Blocks for waiting/listening for specific events in-game", [category("Unit", "300", "Trigger blocks that deal with units", subContents("Trigger", "Unit")), category("Card", "300", "Trigger blocks that relate to cards", subContents("Trigger", "Card")), category("Attack", "300", "Trigger blocks that involve attacks / attacking", subContents("Trigger", "Attack")), category("Damage", "300", "Trigger blocks that have to do with damage being dealt", subContents("Trigger", "Damage")), category("Turn", "300", "Trigger blocks that handle turns starting / ending", subContents("Trigger", "Turn")), category("Misc", "300", "Trigger blocks that aren't otherwise categorized", subContents("Trigger", "Misc")), category("Helper", "300", "Trigger blocks that help with reacting to more specific events", subContents("Trigger", "Util"))]),
 
       category("Auras", "230", "Blocks for the specific type of Enchantment of ongoing effects", contents("Aura")),
 
-      category(
-        "Card Sources",
-        "10",
-        "Blocks for the different places that cards can be generated from",
-        contents("Source")
-      ),
+      category("Card Sources", "10", "Blocks for the different places that cards can be generated from", contents("Source")),
 
-      category(
-        "Cost Modifier",
-        "320",
-        "Blocks for making more complex lun cost modification effects",
-        contents("CostModifier")
-      ),
+      category("Cost Modifier", "320", "Blocks for making more complex lun cost modification effects", contents("CostModifier")),
 
       {
         kind: "sep",
       },
 
-      category("Custom", "-1", "Blocks for representing your own effect from the old JSON system", [
-        category("Custom Blocks", "#000000", "", subContents("Custom", "Desc")),
-
-        category("Custom Args", "#000000", "", subContents("Custom", "Arg")),
-
-        category("Custom Enums", "#000000", "", subContents("Custom", "Enum")),
-      ]),
+      category("Custom", "-1", "Blocks for representing your own effect from the old JSON system", [category("Custom Blocks", "#000000", "", subContents("Custom", "Desc")), category("Custom Args", "#000000", "", subContents("Custom", "Arg")), category("Custom Enums", "#000000", "", subContents("Custom", "Enum"))]),
 
       category("Simulation", -1, "Blocks for creating simulation tests to see if your cards work", [
-        category(
-          "Testing",
-          "#888888",
-          "The blocks used to start a new test",
-          inclusionContents("TestStarter", "TestAssertion")
-        ),
+        category("Testing", "#888888", "The blocks used to start a new test", inclusionContents("TestStarter", "TestAssertion")),
 
         category("Actions", "260", "Blocks for actions that you can simulate players taking", contents("TestAction")),
 
-        category(
-          "Variables",
-          "310",
-          "Blocks to save and refer back to specific targets/values in the simulation",
-          null,
-          { custom: "SPELLSOURCE_VARIABLES" }
-        ),
+        category("Variables", "310", "Blocks to save and refer back to specific targets/values in the simulation", null, { custom: "SPELLSOURCE_VARIABLES" }),
 
         {
           kind: "sep",
         },
 
-        category(
-          "Logic",
-          "210",
-          "Blocks to help manage what actions are simulated",
-          inclusionContents("logic", "controls_if", "controls_ifelse")
-        ),
+        category("Logic", "210", "Blocks to help manage what actions are simulated", inclusionContents("logic", "controls_if", "controls_ifelse")),
 
-        category(
-          "Loops",
-          "120",
-          "Blocks to facilitate simulating many actions iteratively",
-          exclusionContents("controls", "controls_if", "controls_ifelse", "controls_forEach")
-        ),
+        category("Loops", "120", "Blocks to facilitate simulating many actions iteratively", exclusionContents("controls", "controls_if", "controls_ifelse", "controls_forEach")),
 
-        category(
-          "Math",
-          "230",
-          "Blocks for doing math in regards to actions. Don't try to use these blocks for cards or effects other than test actions.",
-          exclusionContents("math", "math_change", "math_trig", "math_constant", "math_atan2")
-        ),
+        category("Math", "230", "Blocks for doing math in regards to actions. Don't try to use these blocks for cards or effects other than test actions.", exclusionContents("math", "math_change", "math_trig", "math_constant", "math_atan2")),
 
         /* Not sure if these are actually going to be needed
                                                                   category('Text', '160',
@@ -449,8 +264,7 @@ export function myCardsForSetCategory(set: string, data: ContextType<typeof Bloc
  * @returns category json
  */
 export function classesCategory(data: ContextType<typeof BlocklyDataContext>) {
-  const myCards =
-    data.myCards.map((value) => value.cardScript as CardDef).filter((card) => card && card.type === "CLASS") ?? [];
+  const myCards = data.myCards.map((value) => value.cardScript as CardDef).filter((card) => card && card.type === "CLASS") ?? [];
 
   const classCards = Object.values(data.classes).filter((card) => card.collectible !== false);
 
@@ -658,11 +472,7 @@ function artCategories() {
  * @returns boolean
  */
 function defaultTest(block: string) {
-  return (
-    !block.endsWith("SHADOW") &&
-    (!block.match(/^.*_.*_.*/) || BlocklyMiscUtils.isSpellsourceBlock(block)) &&
-    !block.endsWith("_REFERENCE")
-  );
+  return !block.endsWith("SHADOW") && (!block.match(/^.*_.*_.*/) || BlocklyMiscUtils.isSpellsourceBlock(block)) && !block.endsWith("_REFERENCE");
 }
 
 export function generatedArtCategory(data: ContextType<typeof BlocklyDataContext>) {
