@@ -5,7 +5,7 @@ on:
     paths:
       - spellsource-web/**
       - build.gradle
-      - /github/workflows/website.yaml
+      - .github/workflows/website.yaml
 
 jobs:
   build-and-deploy-website:
@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          lfs: true # TODO still needed just for website?
+          lfs: true
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
@@ -22,6 +22,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: corepack enable
       - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel :spellsource-web:yarnRunTest --debug
