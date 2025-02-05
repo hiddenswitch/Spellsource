@@ -16977,7 +16977,6 @@ __metadata:
     "@types/uuid": "npm:^9.0.4"
     acorn: "npm:^8.2.4"
     aseprite: "npm:^0.3.0"
-    blockly: "npm:10.0.0"
     bootstrap: "npm:^5.2.3"
     classnames: "npm:^2.3.2"
     cors: "npm:^2.8.5"
@@ -17053,6 +17052,7 @@ __metadata:
   resolution: "spellsource@workspace:."
   dependencies:
     "@types/node": "npm:22.10.5"
+    blockly: "npm:10.0.0"
     patch-package: "npm:^6.5.1"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.3.3"
