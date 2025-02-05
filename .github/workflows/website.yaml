@@ -6,6 +6,7 @@ on:
       - spellsource-web/**
       - build.gradle
       - .github/workflows/website.yaml
+      - yarn.lock
 
 jobs:
   build-and-deploy-website:
