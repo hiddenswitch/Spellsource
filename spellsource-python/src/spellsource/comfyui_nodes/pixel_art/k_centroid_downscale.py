@@ -8,9 +8,8 @@ art model.
 from itertools import product
 
 import numpy as np
-from PIL import Image
 import torch
-
+from PIL import Image
 from comfy.nodes.package_typing import CustomNode
 
 MAX_RESOLUTION = 1024
@@ -20,7 +19,8 @@ AUTO_FACTOR = 8
 def k_centroid_downscale(images, width, height, centroids=2):
     '''k-centroid scaling, based on: https://github.com/Astropulse/stable-diffusion-aseprite/blob/main/scripts/image_server.py.'''
 
-    downscaled = np.zeros((images.shape[0], height, width, 3), dtype=np.uint8)
+    channels = images.shape[-1]
+    downscaled = np.zeros((images.shape[0], height, width, channels), dtype=np.uint8)
 
     for ii, image in enumerate(images):
         i = 255. * image.cpu().numpy()
@@ -30,11 +30,12 @@ def k_centroid_downscale(images, width, height, centroids=2):
         for x, y in product(range(width), range(height)):
             tile = image.crop((x * factor[0], y * factor[1], (x + 1) * factor[0], (y + 1) * factor[1]))
             # quantize tile to fixed number of colors (creates palettized image)
-            tile = tile.quantize(colors=centroids, method=1, kmeans=centroids)
+            method = 2 if channels == 4 else 1
+            tile = tile.quantize(colors=centroids, method=method, kmeans=centroids)
             # get most common (median) color
             color_counts = tile.getcolors()
             most_common_idx = max(color_counts, key=lambda x: x[0])[1]
-            downscaled[ii, y, x, :] = tile.getpalette()[most_common_idx * 3:(most_common_idx + 1) * 3]
+            downscaled[ii, y, x, :] = tile.getpalette(rawmode="RGBA" if channels == 4 else "RGB")[most_common_idx * channels:(most_common_idx + 1) * channels]
 
     downscaled = downscaled.astype(np.float32) / 255.0
     return torch.from_numpy(downscaled)

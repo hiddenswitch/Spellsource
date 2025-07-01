@@ -2,7 +2,7 @@
 name = "spellsource"
 # Note: You'll need to define the version variable somewhere,
 # typically in a separate file like __init__.py
-version = "0.10.1"
+version = "0.10.4"
 authors = [
     { name = "doctorpangloss" }
 ]
@@ -10,7 +10,8 @@ description = ""
 license = { text = "AGPLv3" }
 keywords = ["spellsource", "art", "generation"]
 dependencies = [
-    "comfyui@git+https://github.com/hiddenswitch/ComfyUI.git",
+    'comfyui [withtorch] @ git+https://github.com/hiddenswitch/ComfyUI.git ; platform_system == "Windows"',
+    'comfyui @ git+https://github.com/hiddenswitch/ComfyUI.git ; platform_system != "Windows"',
     "comfyui_controlnet_aux@git+https://github.com/AppMana/appmana-comfyui-nodes-controlnet-aux.git",
     "comfy-bria-rmbg@git+https://github.com/AppMana/appmana-comfyui-nodes-bria-bg-removal.git",
     'py4j',
@@ -25,6 +26,8 @@ dependencies = [
     'mistletoe',
     'GitPython',
     'psd-tools',
+    'nltk',
+    "skia-python",
     "SecretColors==1.1.0",
 ]
 

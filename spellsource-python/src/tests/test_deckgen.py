@@ -1,6 +1,6 @@
 import unittest
 
-from ..ext.deckgen import generate_deck
+from spellsource.ext.deckgen import generate_deck
 
 
 class DeckGenTest(unittest.TestCase):

@@ -117,8 +117,21 @@ The server is ready to accept connections from clients when you see this message
 
 Testing connectivity is easy using `toxiproxy`. This will allow you to reproduce issues with disconnecting clients.
 
+**Windows**
+
+```shell
+export PATH="${PATH};$(pwd)/bin/windows/amd64"
+```
+
+**macOS**
+
 ```shell
 brew install toxiproxy
+```
+
+Run the commands:
+
+```shell
 toxiproxy-server -port 8474 -host localhost
 # in another tab
 toxiproxy-cli create --listen localhost:8082 --upstream localhost:8081 myserver
@@ -214,6 +227,18 @@ Visit the [Contribution Guide](CONTRIBUTE.md) for more about contributions, incl
 ### Deployment
 
 Increase the `allprojects.version` in `build.gradle`, then merge into the `master` branch.
+
+### Configure `UnityYamlMerge`
+
+**Windows**
+
+```shell
+if ! grep -q "\[merge \"unityyamlmerge\"\]" .git/modules/unityclient/config; then
+    echo -e "[merge \"unityyamlmerge\"]\ndriver = 'C:/Program Files/Unity/Hub/Editor/6000.0.27f1/Editor/Data/Tools/UnityYamlMerge.exe' merge -h -p --force %O %B %A %A\nname = Unity SmartMerge (UnityYamlMerge)\nrecursive = binary" >> .git/modules/unityclient/config
+else
+    echo "Merge tool configuration already exists."
+fi
+```
 
 ### Troubleshooting
 

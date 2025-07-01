@@ -6,7 +6,7 @@ from os.path import join, dirname, abspath
 from autoboto.services.rekognition.shapes import DetectTextResponse, TextTypes
 from nltk.translate.bleu_score import sentence_bleu
 
-from ..ext.image2card import RekognitionGenerator, SpellsourceCardDescGenerator, PageToImages
+from spellsource.ext.image2card import RekognitionGenerator, SpellsourceCardDescGenerator, PageToImages
 
 
 def _base_test(test_case: unittest.TestCase, cases: typing.Mapping[str, typing.Any]):

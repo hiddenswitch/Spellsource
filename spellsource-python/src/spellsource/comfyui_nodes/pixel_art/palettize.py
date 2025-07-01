@@ -80,7 +80,7 @@ class ImagePalettize(CustomNode):
         return {
             "required": {
                 "image": ("IMAGE",),
-                "palette": (["auto_best_k", "auto_fixed_k"] + list(str(p) for p in fn.get_paths("palettes")), {
+                "palette": (["auto_best_k", "auto_fixed_k"] + list(str(p) for p in fn.file_paths("palettes")), {
                     "default": "auto_best_k",
                 }),
                 "max_k": ("INT", {
@@ -103,8 +103,10 @@ class ImagePalettize(CustomNode):
     def palettize(self, image, palette, max_k, method):
         k = None
         pal_img = None
+        fn = current_execution_context().folder_names_and_paths
+
         if palette not in {'auto_best_k', 'auto_fixed_k'}:
-            pal_entries = Image.open(current_execution_context().folder_names_and_paths.first_existing_or_none("palettes", palette))
+            pal_entries = Image.open(fn.first_existing_or_none("palettes", palette))
             k = len(pal_entries) // 3
             pal_img = Image.new('P', (1, 1))  # image size doesn't matter it only holds the palette
             pal_img.putpalette(pal_entries)
