@@ -7,6 +7,10 @@ import org.gradle.api.tasks.AbstractExecTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.model.ObjectFactory
+
+import javax.inject.Inject
+
 
 class UnityTask extends AbstractExecTask<UnityTask> {
 
@@ -15,6 +19,12 @@ class UnityTask extends AbstractExecTask<UnityTask> {
 
     @Input
     String outputDir = ''
+
+    @Inject
+    ObjectFactory getObjectFactory() {}
+
+    @Inject
+    org.gradle.process.internal.ExecActionFactory getExecActionFactory() {}
 
     @Internal
     Provider<BuildService<BuildServiceParameters>> unity3d

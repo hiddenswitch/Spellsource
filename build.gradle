@@ -333,15 +333,14 @@ def packageJson = new JsonSlurper().parseText(file('package.json').text)
 def yarnVersionStr = (packageJson.packageManager as String).split("@")[1]
 def binExt = isWindows ? ".cmd" : ""
 
-tasks.register("corepack") {
+tasks.register("corepack", Exec) {
   def dirPath = ".gradle/yarn/yarn-v${yarnVersionStr}/${isWindows ? "" : "/bin"}"
   outputs.dir(dirPath)
-  doLast {
+  doFirst {
     mkdir(dirPath)
-    exec {
-      commandLine "corepack${binExt}", "enable", "--install-directory", dirPath
-    }
   }
+  commandLine "corepack${binExt}", "enable", "--install-directory", dirPath
+
 }
 
 tasks.named("yarnSetup").configure {

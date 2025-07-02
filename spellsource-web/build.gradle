@@ -26,7 +26,6 @@ def graalNpmPrefix = 'node_modules'
 def packageJsonFile = file('package.json')
 def packageJson = new JsonSlurper().parseText(packageJsonFile.text)
 def scripts = packageJson.scripts
-def scriptNames = ["dev": "run"]
 def binExt = isWindows ? ".cmd" : ""
 def distDir = "docker/spellsource/web"
 

@@ -102,18 +102,14 @@ public class StandaloneApplication extends Application {
 		Environment.setConfiguration(configuration.build());
 		try {
 			var envFile = new File("../spellsource-web/.env.local");
-			var contents = STR."""
-REDIS_URI=\{REDIS.getRedisUrl()}
-PG_PORT=\{POSTGRES.getMappedPort(PostgresContainer.POSTGRESQL_PORT)}
-KEYCLOAK_PORT=\{KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP)}
-NEXT_PUBLIC_GRAPHQL_PORT=\{GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT)}
-""";
+			var contents = "REDIS_URI=" + REDIS.getRedisUrl() + "\n"
+					+ "PG_PORT=" + POSTGRES.getMappedPort(PostgresContainer.POSTGRESQL_PORT) + "\n"
+					+ "KEYCLOAK_PORT=" + KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP) + "\n"
+					+ "NEXT_PUBLIC_GRAPHQL_PORT=" + GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT) + "\n";
 			FileUtils.writeStringToFile(envFile, contents, StandardCharsets.UTF_8);
 
 			var envFile2 = new File("../spellsource-graphql/.env.local");
-			var contents2 = STR."""
-KEYCLOAK_ISSUER=http://localhost:\{KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP)}/realms/hiddenswitch
-""";
+			var contents2 = "KEYCLOAK_ISSUER=http://localhost:" + KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP) + "/realms/hiddenswitch";
 			FileUtils.writeStringToFile(envFile2, contents2, StandardCharsets.UTF_8);
 
 		} catch (IOException e) {
