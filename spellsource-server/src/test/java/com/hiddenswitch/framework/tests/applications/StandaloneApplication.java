@@ -87,7 +87,7 @@ public class StandaloneApplication extends Application {
 				.setShouldMigrate(true)
 				.build());
 		configuration.setGraphql(ServerConfiguration.GraphQLConfiguration.newBuilder()
-				.setUrl(String.format("https://%s:%d/graphql", GRAPHQL_HOST, GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT)))
+				.setUrl(String.format("http://%s:%d/graphql", "localhost", GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT)))
 		);
 		// todo: allow environment variables *only* to override this configuration, but something weird about kube env
 		// configuration.mergeFrom(Environment.environmentConfiguration());
