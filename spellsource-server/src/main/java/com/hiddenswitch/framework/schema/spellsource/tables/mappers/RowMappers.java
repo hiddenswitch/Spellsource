@@ -180,4 +180,22 @@ public class RowMappers {
                 };
         }
 
+        public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun> getRogueRunMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun();
+                        pojo.setId(row.getLong("id"));
+                        pojo.setPlayer(row.getString("player"));
+                        pojo.setStartedAt(row.getOffsetDateTime("started_at"));
+                        pojo.setEndedAt(row.getOffsetDateTime("ended_at"));
+                        pojo.setDeck(row.getString("deck"));
+                        pojo.setBossesDefeated(row.getInteger("bosses_defeated"));
+                        pojo.setState(java.util.Arrays.stream(com.hiddenswitch.framework.schema.spellsource.enums.RogueRunState.values()).filter(td -> td.getLiteral().equals(row.getString("state"))).findFirst().orElse(null));
+                        // Omitting unrecognized type DataType [ t=ARRAY; p=0; s=0; u="pg_catalog"."_text"; j=null ] (java.lang.String[]) for column choices!
+                        pojo.setGame(row.getLong("game"));
+                        pojo.setOpponentDeck(row.getString("opponent_deck"));
+                        pojo.setSeed(row.getLong("seed"));
+                        return pojo;
+                };
+        }
+
 }

@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework;
 
 import com.hiddenswitch.framework.impl.BindAll;
+import com.hiddenswitch.framework.impl.RogueManager;
 import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
 import com.hiddenswitch.framework.rpc.*;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
@@ -14,13 +15,12 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.JWTAuthHandler;
 import io.vertx.grpc.server.GrpcServer;
 import io.vertx.grpc.server.impl.GrpcServerImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static io.vertx.await.Async.await;
 
 public class Gateway extends AbstractVirtualThreadVerticle {
 	private final SqlCachedCardCatalogue cardCatalogue = new SqlCachedCardCatalogue();
+	private final RogueManager rogueManager = new RogueManager(cardCatalogue);
 	private final int port;
 	private Matchmaking.Services matchmaking;
 	private HttpServer httpServer;
@@ -42,6 +42,8 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 		cardCatalogue.subscribe();
 		cardCatalogue.invalidateAllAndRefresh();
 
+		rogueManager.subscribe();
+
 		this.matchmaking = Matchmaking.services();
 		var services = new BindAll<?>[]{
 				Legacy.services(cardCatalogue),
@@ -50,7 +52,8 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 				matchmaking.binder(),
 				Accounts.unauthenticatedService(),
 				Accounts.authenticatedService(),
-				Games.services()};
+				Games.services()
+		};
 
 		var server = GrpcServer.server(vertx);
 		var jwtAuth = JWTAuth.create(vertx, Accounts.jwtAuthOptions());

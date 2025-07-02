@@ -4,6 +4,7 @@
 package com.hiddenswitch.framework.schema.spellsource;
 
 
+import com.hiddenswitch.framework.schema.spellsource.enums.RoguePayloadType;
 import com.hiddenswitch.framework.schema.spellsource.routines.ArchiveCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.CanSeeDeck;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardCatalogueGetCardByName;
@@ -14,16 +15,22 @@ import com.hiddenswitch.framework.schema.spellsource.routines.CardsCollectible;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsCost;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsInDeckCardByCardId;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsType;
+import com.hiddenswitch.framework.schema.spellsource.routines.CheckRogueGameEnd;
+import com.hiddenswitch.framework.schema.spellsource.routines.CheckRogueGameStart;
 import com.hiddenswitch.framework.schema.spellsource.routines.ClusteredGamesUpdateGameAndUsers;
 import com.hiddenswitch.framework.schema.spellsource.routines.CreateDeckWithCards;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetLatestCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserAttribute;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
+import com.hiddenswitch.framework.schema.spellsource.routines.MakeRogueChoice;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishGitCard;
+import com.hiddenswitch.framework.schema.spellsource.routines.ResignRogueRun;
+import com.hiddenswitch.framework.schema.spellsource.routines.RogueNotify;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveGeneratedArt;
 import com.hiddenswitch.framework.schema.spellsource.routines.SetUserAttribute;
+import com.hiddenswitch.framework.schema.spellsource.routines.StartRogueRun;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueFormats;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBannedDraftCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBaseClasses;
@@ -50,6 +57,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GeneratedArtRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GetClassesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GetCollectionCardsRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.RogueRunRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.SetCardsInDeckRecord;
 
 import io.vertx.core.json.JsonObject;
@@ -442,6 +450,36 @@ public class Routines {
     }
 
     /**
+     * Call <code>spellsource.check_rogue_game_end</code>
+     */
+    public static void checkRogueGameEnd(
+          Configuration configuration
+        , Long gameId
+        , String winningUser
+    ) {
+        CheckRogueGameEnd p = new CheckRogueGameEnd();
+        p.setGameId(gameId);
+        p.setWinningUser(winningUser);
+
+        p.execute(configuration);
+    }
+
+    /**
+     * Call <code>spellsource.check_rogue_game_start</code>
+     */
+    public static void checkRogueGameStart(
+          Configuration configuration
+        , String deckId
+        , Long gameId
+    ) {
+        CheckRogueGameStart p = new CheckRogueGameStart();
+        p.setDeckId(deckId);
+        p.setGameId(gameId);
+
+        p.execute(configuration);
+    }
+
+    /**
      * Call <code>spellsource.clustered_games_update_game_and_users</code>
      */
     public static Boolean clusteredGamesUpdateGameAndUsers(
@@ -671,6 +709,21 @@ public class Routines {
     }
 
     /**
+     * Call <code>spellsource.make_rogue_choice</code>
+     */
+    public static void makeRogueChoice(
+          Configuration configuration
+        , Long rogueId
+        , Integer choiceIndex
+    ) {
+        MakeRogueChoice p = new MakeRogueChoice();
+        p.setRogueId(rogueId);
+        p.setChoiceIndex(choiceIndex);
+
+        p.execute(configuration);
+    }
+
+    /**
      * Call <code>spellsource.publish_card</code>
      */
     public static Long publishCard(
@@ -756,6 +809,36 @@ public class Routines {
         f.setCreator(creator);
 
         return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.resign_rogue_run</code>
+     */
+    public static void resignRogueRun(
+          Configuration configuration
+        , Long rogueId
+    ) {
+        ResignRogueRun p = new ResignRogueRun();
+        p.setRogueId(rogueId);
+
+        p.execute(configuration);
+    }
+
+    /**
+     * Call <code>spellsource.rogue_notify</code>
+     */
+    public static void rogueNotify(
+          Configuration configuration
+        , Long rogueRunId
+        , RoguePayloadType type
+        , JsonObject payload
+    ) {
+        RogueNotify p = new RogueNotify();
+        p.setRogueRunId(rogueRunId);
+        p.setType(type);
+        p.setPayload(payload);
+
+        p.execute(configuration);
     }
 
     /**
@@ -873,6 +956,50 @@ public class Routines {
         p.setVal(val);
 
         p.execute(configuration);
+    }
+
+    /**
+     * Call <code>spellsource.start_rogue_run</code>
+     */
+    public static RogueRunRecord startRogueRun(
+          Configuration configuration
+        , String classHero
+        , Long useSeed
+    ) {
+        StartRogueRun f = new StartRogueRun();
+        f.setClassHero(classHero);
+        f.setUseSeed(useSeed);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.start_rogue_run</code> as a field.
+     */
+    public static Field<RogueRunRecord> startRogueRun(
+          String classHero
+        , Long useSeed
+    ) {
+        StartRogueRun f = new StartRogueRun();
+        f.setClassHero(classHero);
+        f.setUseSeed(useSeed);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.start_rogue_run</code> as a field.
+     */
+    public static Field<RogueRunRecord> startRogueRun(
+          Field<String> classHero
+        , Field<Long> useSeed
+    ) {
+        StartRogueRun f = new StartRogueRun();
+        f.setClassHero(classHero);
+        f.setUseSeed(useSeed);
+
+        return f.asField();
     }
 
     /**

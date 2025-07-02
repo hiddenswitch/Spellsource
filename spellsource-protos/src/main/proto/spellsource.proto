@@ -38,6 +38,7 @@ message CardTypeMessage {
         ENCHANTMENT = 7;
         CLASS = 8;
         FORMAT = 9;
+        ROGUE_CHOICE = 10;
     }
 }
 

@@ -33,6 +33,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.HardRemovalCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
 import com.hiddenswitch.framework.schema.spellsource.tables.PublishedCards;
+import com.hiddenswitch.framework.schema.spellsource.tables.RogueRun;
 import com.hiddenswitch.framework.schema.spellsource.tables.SetCardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueFormatsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetBannedDraftCardsRecord;
@@ -481,6 +482,11 @@ public class Spellsource extends SchemaImpl {
     public final PublishedCards PUBLISHED_CARDS = PublishedCards.PUBLISHED_CARDS;
 
     /**
+     * The table <code>spellsource.rogue_run</code>.
+     */
+    public final RogueRun ROGUE_RUN = RogueRun.ROGUE_RUN;
+
+    /**
      * The table <code>spellsource.set_cards_in_deck</code>.
      */
     public final SetCardsInDeck SET_CARDS_IN_DECK = SetCardsInDeck.SET_CARDS_IN_DECK;
@@ -569,6 +575,7 @@ public class Spellsource extends SchemaImpl {
             MatchmakingQueues.MATCHMAKING_QUEUES,
             MatchmakingTickets.MATCHMAKING_TICKETS,
             PublishedCards.PUBLISHED_CARDS,
+            RogueRun.ROGUE_RUN,
             SetCardsInDeck.SET_CARDS_IN_DECK
         );
     }

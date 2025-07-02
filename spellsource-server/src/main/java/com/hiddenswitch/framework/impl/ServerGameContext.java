@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
+import com.hiddenswitch.framework.schema.spellsource.Routines;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
@@ -895,6 +896,11 @@ public class ServerGameContext extends GameContext implements Server {
 			for (var consumer : inGameConsumers) {
 				consumer.unregister();
 			}
+			
+			withExecutor(executor -> {
+				Routines.checkRogueGameEnd(executor.configuration(), Long.valueOf(gameId), getWinner() == null ? null : getWinner().getUserId());
+				return Future.succeededFuture();
+			});
 
 			LOGGER.trace("endGame {}: endGameHandlers run", gameId);
 

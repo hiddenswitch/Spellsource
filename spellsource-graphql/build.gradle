@@ -74,7 +74,7 @@ tasks.named("yarnRunStrawberryShake").configure {
 tasks.register("generateAll") {
   inputs.file("schema.graphql")
   inputs.dir("graphql")
-  dependsOn yarnRunCodegen, yarnRunStrawberryShake, graphqlCodegen
+  dependsOn yarnRunCodegen, yarnRunStrawberryShake/*, graphqlCodegen*/
 }
 
 tasks.named("createDist").configure {

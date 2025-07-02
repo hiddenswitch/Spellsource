@@ -86,6 +86,36 @@ CREATE TYPE spellsource.game_user_victory_enum AS ENUM (
 ALTER TYPE spellsource.game_user_victory_enum OWNER TO admin;
 
 --
+-- Name: rogue_payload_type; Type: TYPE; Schema: spellsource; Owner: admin
+--
+
+CREATE TYPE spellsource.rogue_payload_type AS ENUM (
+    'start',
+    'choice',
+    'matchStart',
+    'matchEnd',
+    'resign'
+);
+
+
+ALTER TYPE spellsource.rogue_payload_type OWNER TO admin;
+
+--
+-- Name: rogue_run_state; Type: TYPE; Schema: spellsource; Owner: admin
+--
+
+CREATE TYPE spellsource.rogue_run_state AS ENUM (
+    'INITIAL',
+    'FINISHED',
+    'PRE_MATCH',
+    'IN_MATCH',
+    'CHOICE'
+);
+
+
+ALTER TYPE spellsource.rogue_run_state OWNER TO admin;
+
+--
 -- Name: archive_card(text); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -631,6 +661,62 @@ $$;
 ALTER FUNCTION spellsource.cards_type(card spellsource.cards) OWNER TO admin;
 
 --
+-- Name: check_rogue_game_end(bigint, character varying); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.check_rogue_game_end(game_id bigint, winning_user character varying) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+declare
+    rogue_run spellsource.rogue_run%rowtype;
+begin
+    select * from spellsource.rogue_run where game = game_id into rogue_run;
+
+    if rogue_run is null then
+        return;
+    end if;
+
+
+    perform spellsource.rogue_notify(rogue_run.id, 'matchEnd',
+                                     jsonb_build_object
+                                     ('gameId', game_id,
+                                      'won', winning_user = rogue_run.player
+                                     )
+            );
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.check_rogue_game_end(game_id bigint, winning_user character varying) OWNER TO admin;
+
+--
+-- Name: check_rogue_game_start(text, bigint); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.check_rogue_game_start(deck_id text, game_id bigint) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+declare
+    deck      spellsource.decks%rowtype;
+    rogue_run spellsource.rogue_run%rowtype;
+begin
+    select * from spellsource.decks where id = deck_id and deck_type = 2 into deck;
+
+    if deck is null then
+        return;
+    end if;
+
+    update spellsource.rogue_run set game = game_id, state = 'IN_MATCH' where deck = deck_id returning * into rogue_run;
+
+
+    perform spellsource.rogue_notify(rogue_run.id, 'matchStart', jsonb_build_object());
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.check_rogue_game_start(deck_id text, game_id bigint) OWNER TO admin;
+
+--
 -- Name: clustered_games_update_game_and_users(text, text, bigint, json); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -797,6 +883,27 @@ $$;
 ALTER FUNCTION spellsource.get_user_id() OWNER TO admin;
 
 --
+-- Name: make_rogue_choice(bigint, integer); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.make_rogue_choice(rogue_id bigint, choice_index integer) RETURNS void
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'spellsource', 'pg_temp'
+    AS $$
+declare
+begin
+    perform spellsource.rogue_notify(rogue_id, 'choice',
+                                     jsonb_build_object
+                                     ('index', choice_index
+                                     )
+            );
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.make_rogue_choice(rogue_id bigint, choice_index integer) OWNER TO admin;
+
+--
 -- Name: on_card_published(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -886,6 +993,42 @@ $$;
 
 
 ALTER FUNCTION spellsource.publish_git_card(card_id text, json jsonb, creator character varying) OWNER TO admin;
+
+--
+-- Name: resign_rogue_run(bigint); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.resign_rogue_run(rogue_id bigint) RETURNS void
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'spellsource', 'pg_temp'
+    AS $$
+declare
+begin
+    perform spellsource.rogue_notify(rogue_id, 'resign', jsonb_build_object());
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.resign_rogue_run(rogue_id bigint) OWNER TO admin;
+
+--
+-- Name: rogue_notify(bigint, spellsource.rogue_payload_type, jsonb); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.rogue_notify(rogue_run_id bigint, type spellsource.rogue_payload_type, payload jsonb) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+begin
+    perform pg_notify('spellsource_rogue_updates_v0',
+                      jsonb_build_object
+                      ('id', rogue_run_id,
+                       type::text, payload
+                      )::text);
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.rogue_notify(rogue_run_id bigint, type spellsource.rogue_payload_type, payload jsonb) OWNER TO admin;
 
 --
 -- Name: save_card(text, jsonb, jsonb); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -996,6 +1139,68 @@ $$;
 
 
 ALTER FUNCTION spellsource.set_user_attribute(id_user text, attribute text, val text) OWNER TO admin;
+
+--
+-- Name: rogue_run; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.rogue_run (
+    id bigint NOT NULL,
+    player character varying(36) NOT NULL,
+    started_at timestamp with time zone DEFAULT now() NOT NULL,
+    ended_at timestamp with time zone,
+    deck text NOT NULL,
+    bosses_defeated integer DEFAULT 0 NOT NULL,
+    state spellsource.rogue_run_state DEFAULT 'INITIAL'::spellsource.rogue_run_state NOT NULL,
+    choices text[],
+    game bigint,
+    opponent_deck text,
+    seed bigint DEFAULT ((random() * ('10000000000'::numeric)::double precision))::bigint NOT NULL
+);
+
+
+ALTER TABLE spellsource.rogue_run OWNER TO admin;
+
+--
+-- Name: start_rogue_run(text, bigint); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.start_rogue_run(class_hero text, use_seed bigint) RETURNS spellsource.rogue_run
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'spellsource', 'pg_temp'
+    AS $$
+declare
+    id_deck   text;
+    user_id   varchar(36);
+    rogue_run spellsource.rogue_run%rowtype;
+    deck_id   text;
+begin
+    user_id := spellsource.get_user_id();
+
+    id_deck := gen_random_uuid();
+
+    insert into spellsource.decks (id, created_by, last_edited_by, name, hero_class, deck_type, format)
+    values (id_deck::text, spellsource.get_user_id(), spellsource.get_user_id(), 'Rogue Deck', class_hero, 2, 'rogue')
+    returning (id) into deck_id;
+
+
+    insert into spellsource.rogue_run (player, started_at, deck, seed)
+    values (user_id, now(), id_deck, use_seed)
+    returning * into rogue_run;
+
+
+    perform spellsource.rogue_notify(rogue_run.id, 'start',
+                                     jsonb_build_object
+                                     (
+                                     )
+            );
+
+    return rogue_run;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.start_rogue_run(class_hero text, use_seed bigint) OWNER TO admin;
 
 --
 -- Name: flyway_schema_history; Type: TABLE; Schema: hiddenswitch; Owner: admin
@@ -2725,6 +2930,20 @@ CREATE TABLE spellsource.published_cards (
 ALTER TABLE spellsource.published_cards OWNER TO admin;
 
 --
+-- Name: rogue_run_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.rogue_run ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME spellsource.rogue_run_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: flyway_schema_history flyway_schema_history_pk; Type: CONSTRAINT; Schema: hiddenswitch; Owner: admin
 --
 
@@ -3698,6 +3917,30 @@ ALTER TABLE ONLY spellsource.matchmaking_tickets
 
 ALTER TABLE ONLY spellsource.published_cards
     ADD CONSTRAINT published_cards_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rogue_run rogue_run_deck_key; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_deck_key UNIQUE (deck);
+
+
+--
+-- Name: rogue_run rogue_run_game_key; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_game_key UNIQUE (game);
+
+
+--
+-- Name: rogue_run rogue_run_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_pkey PRIMARY KEY (id);
 
 
 --
@@ -5189,6 +5432,38 @@ ALTER TABLE ONLY spellsource.published_cards
 
 
 --
+-- Name: rogue_run rogue_run_deck_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_deck_fkey FOREIGN KEY (deck) REFERENCES spellsource.decks(id);
+
+
+--
+-- Name: rogue_run rogue_run_game_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_game_fkey FOREIGN KEY (game) REFERENCES spellsource.games(id);
+
+
+--
+-- Name: rogue_run rogue_run_opponent_deck_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_opponent_deck_fkey FOREIGN KEY (opponent_deck) REFERENCES spellsource.decks(id);
+
+
+--
+-- Name: rogue_run rogue_run_player_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_player_fkey FOREIGN KEY (player) REFERENCES keycloak.user_entity(id);
+
+
+--
 -- Name: user_attribute; Type: ROW SECURITY; Schema: keycloak; Owner: admin
 --
 
@@ -5257,6 +5532,19 @@ CREATE POLICY public_view ON spellsource.decks FOR SELECT USING (is_premade);
 --
 
 ALTER TABLE spellsource.published_cards ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: rogue_run rls; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY rls ON spellsource.rogue_run FOR SELECT USING ((spellsource.get_user_id() = (player)::text));
+
+
+--
+-- Name: rogue_run; Type: ROW SECURITY; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.rogue_run ENABLE ROW LEVEL SECURITY;
 
 --
 -- Name: generated_art update_art; Type: POLICY; Schema: spellsource; Owner: admin
@@ -5463,6 +5751,20 @@ GRANT ALL ON FUNCTION spellsource.create_deck_with_cards(deck_name text, class_h
 
 
 --
+-- Name: FUNCTION make_rogue_choice(rogue_id bigint, choice_index integer); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT ALL ON FUNCTION spellsource.make_rogue_choice(rogue_id bigint, choice_index integer) TO website;
+
+
+--
+-- Name: FUNCTION resign_rogue_run(rogue_id bigint); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT ALL ON FUNCTION spellsource.resign_rogue_run(rogue_id bigint) TO website;
+
+
+--
 -- Name: TABLE generated_art; Type: ACL; Schema: spellsource; Owner: admin
 --
 
@@ -5474,6 +5776,13 @@ GRANT SELECT,INSERT,UPDATE ON TABLE spellsource.generated_art TO website;
 --
 
 GRANT ALL ON FUNCTION spellsource.set_cards_in_deck(deck text, card_ids text[]) TO website;
+
+
+--
+-- Name: FUNCTION start_rogue_run(class_hero text, use_seed bigint); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT ALL ON FUNCTION spellsource.start_rogue_run(class_hero text, use_seed bigint) TO website;
 
 
 --

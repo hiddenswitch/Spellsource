@@ -102,7 +102,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			}
 
 			var configurationFut = deckCollectionFut
-					.compose(v -> Environment.withExecutor(queryExecutor -> queryExecutor.findOneRow(dsl -> dsl.select(KEYCLOAK.USER_ENTITY.USERNAME).from(KEYCLOAK.USER_ENTITY)
+					.compose(_ -> Environment.withExecutor(queryExecutor -> queryExecutor.findOneRow(dsl -> dsl.select(KEYCLOAK.USER_ENTITY.USERNAME).from(KEYCLOAK.USER_ENTITY)
 									.where(KEYCLOAK.USER_ENTITY.ID.eq(userId))))
 							.map(usernameRow -> usernameRow.getString(0))
 							.compose(username -> {
@@ -115,7 +115,11 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 								configuration.setPlayerAttributes(playerAttributes);
 
 								return Future.succeededFuture(configuration);
-							}));
+							}))
+					.compose(_ -> Environment.withExecutor(executor -> {
+						Routines.checkRogueGameStart(executor.configuration(), deckId, Long.valueOf(request.getGameId()));
+						return Future.succeededFuture(configuration);
+					}));
 
 			playerConfigurations.add(configurationFut);
 		}
