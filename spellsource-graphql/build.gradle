@@ -6,7 +6,7 @@ plugins {
   id "docker"
   id "java"
   id "next"
-  id "io.github.kobylynskyi.graphql.codegen" version "5.9.0"
+  /*id "io.github.kobylynskyi.graphql.codegen" version "5.9.0"*/
 }
 
 apply from: '../gradle/node.gradle'
@@ -22,7 +22,7 @@ new JsonSlurper().parseText(file('package.json').text).scripts.each { String scr
 }
 
 
-graphqlCodegen {
+/*graphqlCodegen {
   // all config options: 
   // https://github.com/kobylynskyi/graphql-java-codegen/blob/main/docs/codegen-options.md
   graphqlSchemaPaths = [
@@ -51,7 +51,7 @@ graphqlCodegen {
     }
     delete "${outputDir.path}/com"
   }
-}
+}*/
 
 tasks.named("yarnRunCodegen").configure {
   inputs.dir("graphql/web")

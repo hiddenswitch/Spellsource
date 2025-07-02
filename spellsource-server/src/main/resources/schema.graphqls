@@ -1,0 +1,26 @@
+type Query {
+  rogueRun(id: ID!): RogueRun
+  allRogueRuns: [RogueRun!]!
+}
+
+type Mutation {
+  startRogueRun(player: String!, classHero: String!): RogueRun!
+  updateRogueRun(id: ID!, state: RogueRunState!): RogueRun!
+}
+
+type RogueRun {
+  id: ID!
+  player: String!
+  startedAt: String
+  endedAt: String
+  state: RogueRunState!
+  bossesDefeated: Int!
+  choices: [String!]!
+}
+
+enum RogueRunState {
+  INITIAL
+  ACTIVE
+  COMPLETED
+  FAILED
+}

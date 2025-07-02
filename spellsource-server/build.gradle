@@ -24,6 +24,7 @@ plugins {
   id 'org.javamodularity.moduleplugin'
   id 'idea'
   id 'application'
+  id "io.github.kobylynskyi.graphql.codegen" version "5.9.0"
 }
 
 apply from: '../gradle/instrument.gradle'
@@ -399,4 +400,22 @@ tasks.register('githubDockerPush') {
       }
     }
   }
+}
+
+graphqlCodegen {
+  // all config options: 
+  // https://github.com/kobylynskyi/graphql-java-codegen/blob/main/docs/codegen-options.md
+  graphqlSchemaPaths = [project.file("src/main/resources/schema.graphqls").path]
+  outputDir = "src/main/java"
+  packageName = "com.hiddenswitch.framework.graphql"
+  customTypesMapping = [
+      DateTime: "org.joda.time.DateTime"
+  ]
+  customAnnotationsMapping = [
+      DateTime: ["@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.example.json.EpochMillisScalarDeserializer.class)"]
+  ]
+  addGeneratedAnnotation = false
+  generateModelsForRootTypes = true
+  modelValidationAnnotation = ""
+  typeResolverSuffix = "TypeResolver"
 }
