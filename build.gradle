@@ -335,12 +335,15 @@ def binExt = isWindows ? ".cmd" : ""
 
 tasks.register("corepack", Exec) {
   def dirPath = ".gradle/yarn/yarn-v${yarnVersionStr}/${isWindows ? "" : "/bin"}"
+  def path = "corepack${binExt}"
+  if (isMacOs) {
+    path = "/opt/homebrew/bin/corepack"
+  }
   outputs.dir(dirPath)
   doFirst {
     mkdir(dirPath)
   }
-  commandLine "corepack${binExt}", "enable", "--install-directory", dirPath
-
+  commandLine path, "enable", "--install-directory", dirPath
 }
 
 tasks.named("yarnSetup").configure {

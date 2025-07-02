@@ -32,21 +32,17 @@ public class StandaloneApplication extends Application {
 	protected static final String KEYCLOAK_HOST = "keycloak";
 	private static final Logger LOGGER = LoggerFactory.getLogger(StandaloneApplication.class);
 	public static RedisContainer REDIS = new RedisContainer()
-			.withNetwork(Network.SHARED)
-			.withReuse(true);
+			.withNetwork(Network.SHARED);
 	protected static PostgresContainer POSTGRES = new PostgresContainer(PGUSER, PGPASSWORD, PGDATABASE)
-			.withReuse(true)
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(PGHOST)
 			.withExposedPorts(PostgresContainer.POSTGRESQL_PORT);
 	public static KeycloakContainer KEYCLOAK = new KeycloakContainer()
-			.withReuse(true)
 			.dependsOn(POSTGRES)
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(KEYCLOAK_HOST)
 			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD);
 	public static GraphQLContainer GRAPHQL = new GraphQLContainer()
-			.withReuse(true)
 			.dependsOn(POSTGRES)
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(GRAPHQL_HOST)
