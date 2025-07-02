@@ -35,7 +35,7 @@ Hit `Win + X` and click Windows PowerShell (Admin). Then run the following:
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 # install dependencies
 wsl --install
-choco install -y gsudo git.portable 7zip openjdk vcredist140 docker-desktop dotnet-sdk nvm python gradle
+choco install -y gsudo git.portable 7zip openjdk vcredist140 docker-desktop dotnet-sdk nvm python
 # separately add vs2022 compilation tools with clang
 # must be run separately
 choco install -y visualstudio2022buildtools
@@ -71,18 +71,18 @@ git submodule update --init --recursive
 You should now be able to run the tests.
 
 ```shell
-gradle test
+./gradlew.bat test
 ```
 
 Start a local server and website using:
 
 ```shell
-gradle runServer
+./gradlew.bat runServer
 ```
 
 ### Unity Requirements
 
-Install Unity 6 with the iOS, macOS, Windows, and Android modules for your platform. You should not install Visual Studio.
+Install Unity 6.2 beta with the iOS, macOS, Windows, and Android modules for your platform. You should not install Visual Studio.
 
 ##### Getting Around Unity
 
@@ -199,10 +199,8 @@ Requirements: **Java 21 or later** and **Docker**. Check your current version of
    # Docker. Look carefully at any messages brew tells you and do them
    brew cask install docker
    # Java (if required)
-   # Install openjdk 21 or later, dotnet 6.0 & gradle 8.3 or higher
-   brew install openjdk dotnet-sdk gradle
-   sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
-   brew link --force openjdk
+   # Install openjdk 21 or later, dotnet 6.0 or higher
+   brew install openjdk dotnet-sdk
    ```
 2. Clone the repository:
    ```shell script
@@ -211,7 +209,7 @@ Requirements: **Java 21 or later** and **Docker**. Check your current version of
    ```
 3. See Spellsource-specific tasks using `./gradlew tasks --group spellsource`.
 4. Run tests using `./gradlew test`
-5. Start a local server using `./gradlew run`. This will download about 9GB of content.
+5. Start a local server using `./gradlew runServer`.
 
 macOS requires larger receive buffer limits:
 
@@ -233,11 +231,17 @@ Increase the `allprojects.version` in `build.gradle`, then merge into the `maste
 **Windows**
 
 ```shell
-if ! grep -q "\[merge \"unityyamlmerge\"\]" .git/modules/unityclient/config; then
-    echo -e "[merge \"unityyamlmerge\"]\ndriver = 'C:/Program Files/Unity/Hub/Editor/6000.0.27f1/Editor/Data/Tools/UnityYamlMerge.exe' merge -h -p --force %O %B %A %A\nname = Unity SmartMerge (UnityYamlMerge)\nrecursive = binary" >> .git/modules/unityclient/config
-else
-    echo "Merge tool configuration already exists."
-fi
+git config --local merge.unityyamlmerge.driver "'C:/Program Files/Unity/Hub/Editor/6000.2.0b7/Editor/Data/Tools/UnityYamlMerge.exe' merge --fallback none -h -p --force %O %B %A %A"
+git config --local merge.unityyamlmerge.name "Unity SmartMerge (UnityYamlMerge)"
+git config --local merge.unityyamlmerge.recursive binary
+```
+
+**macOS**
+
+```shell
+git config --local merge.unityyamlmerge.driver "'/Applications/Unity/Hub/Editor/6000.2.0b7/Unity.app/Contents/Tools/UnityYAMLMerge' merge --fallback none -h -p --force %O %B %A %A"
+git config --local merge.unityyamlmerge.name "Unity SmartMerge (UnityYamlMerge)"
+git config --local merge.unityyamlmerge.recursive binary
 ```
 
 ### Troubleshooting
