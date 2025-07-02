@@ -1,8 +1,8 @@
 {
-  "name": "Spellsource",
+  "name": "Rogue",
   "type": "FORMAT",
   "rarity": "FREE",
-  "description": "The format with Custom made cards ONLY.",
+  "description": "The format for rogue runs",
   "condition": {
     "class": "AndCondition",
     "conditions": [
@@ -28,7 +28,7 @@
       }
     ]
   },
-  "collectible": true,
+  "collectible": false,
   "fileFormatVersion": 1,
   "secondPlayerBonusCards": [
     "spell_lunstone"

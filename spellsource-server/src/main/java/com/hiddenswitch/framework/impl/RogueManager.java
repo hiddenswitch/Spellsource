@@ -15,6 +15,7 @@ import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.pgclient.pubsub.PgSubscriber;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.jooq.UpdateReturningStep;
 import org.jooq.UpdateSetFirstStep;
 
@@ -91,7 +92,14 @@ public class RogueManager {
 	public record RogueRunStarted() implements RoguePayload {
 		@Override
 		public Future<?> handle(RogueRun rogueRun, RogueManager rogueManager) {
-			// TODO populate rogue deck
+			// TODO real populate rogue deck
+
+			var format = rogueManager.cardCatalogue.getFormat("Rogue");
+			var testCards = rogueManager.cardCatalogue.query(format).filtered(card -> card.hasHeroClass(HeroClass.TEST) && card.isCollectible());
+
+			await(Future.all(testCards.stream().map(card -> Environment.withDslContext(dsl ->
+					dsl.insertInto(Tables.CARDS_IN_DECK).set(Tables.CARDS_IN_DECK.newRecord().setDeckId(rogueRun.getDeck()).setCardId(card.getCardId()))
+			)).toList()));
 
 			// TODO set opponent deck
 

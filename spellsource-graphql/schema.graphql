@@ -17,14 +17,8 @@ type Query implements Node {
     nodeId: ID!
   ): Node
 
-  """Get a single `BannedDraftCard`."""
-  bannedDraftCardByCardId(cardId: String!): BannedDraftCard
-
   """Get a single `BotUser`."""
   botUserById(id: String!): BotUser
-
-  """Get a single `HardRemovalCard`."""
-  hardRemovalCardByCardId(cardId: String!): HardRemovalCard
 
   """Get a single `PublishedCard`."""
   publishedCardById(id: String!): PublishedCard
@@ -56,9 +50,6 @@ type Query implements Node {
   """Get a single `Card`."""
   cardBySuccession(succession: BigInt!): Card
 
-  """Get a single `GeneratedArt`."""
-  generatedArtByHashAndOwner(hash: String!, owner: String!): GeneratedArt
-
   """Get a single `Game`."""
   gameById(id: BigInt!): Game
 
@@ -68,27 +59,11 @@ type Query implements Node {
   canSeeDeck(userId: String, deck: DeckInput): Boolean
   getLatestCard(cardId: String, published: Boolean): Card
 
-  """Reads a single `BannedDraftCard` using its globally unique `ID`."""
-  bannedDraftCard(
-    """
-    The globally unique `ID` to be used in selecting a single `BannedDraftCard`.
-    """
-    nodeId: ID!
-  ): BannedDraftCard
-
   """Reads a single `BotUser` using its globally unique `ID`."""
   botUser(
     """The globally unique `ID` to be used in selecting a single `BotUser`."""
     nodeId: ID!
   ): BotUser
-
-  """Reads a single `HardRemovalCard` using its globally unique `ID`."""
-  hardRemovalCard(
-    """
-    The globally unique `ID` to be used in selecting a single `HardRemovalCard`.
-    """
-    nodeId: ID!
-  ): HardRemovalCard
 
   """Reads a single `PublishedCard` using its globally unique `ID`."""
   publishedCard(
@@ -174,40 +149,6 @@ type Query implements Node {
     nodeId: ID!
   ): GameUser
 
-  """Reads and enables pagination through a set of `BannedDraftCard`."""
-  allBannedDraftCards(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `BannedDraftCard`."""
-    orderBy: [BannedDraftCardsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: BannedDraftCardCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: BannedDraftCardFilter
-  ): BannedDraftCardsConnection
-
   """Reads and enables pagination through a set of `BotUser`."""
   allBotUsers(
     """Only read the first `n` values of the set."""
@@ -241,40 +182,6 @@ type Query implements Node {
     """
     filter: BotUserFilter
   ): BotUsersConnection
-
-  """Reads and enables pagination through a set of `HardRemovalCard`."""
-  allHardRemovalCards(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `HardRemovalCard`."""
-    orderBy: [HardRemovalCardsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: HardRemovalCardCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: HardRemovalCardFilter
-  ): HardRemovalCardsConnection
 
   """Reads and enables pagination through a set of `PublishedCard`."""
   allPublishedCards(
@@ -691,45 +598,6 @@ type Query implements Node {
     filter: CollectionCardFilter
   ): CollectionCardsConnection
 
-  """Reads and enables pagination through a set of `GeneratedArt`."""
-  allGeneratedArts(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `GeneratedArt`."""
-    orderBy: [GeneratedArtsOrderBy!] = [NATURAL]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: GeneratedArtCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: GeneratedArtFilter
-
-    """
-    Indicates whether archived items should be included in the results or not.
-    """
-    includeArchived: IncludeArchivedOption = NO
-  ): GeneratedArtsConnection
-
   """Reads and enables pagination through a set of `Game`."""
   allGames(
     """Only read the first `n` values of the set."""
@@ -807,28 +675,12 @@ interface Node {
   nodeId: ID!
 }
 
-type BannedDraftCard implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  cardId: String!
-}
-
 type BotUser implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   nodeId: ID!
   id: String!
-}
-
-type HardRemovalCard implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  cardId: String!
 }
 
 type PublishedCard implements Node {
@@ -2835,14 +2687,6 @@ type Friend implements Node {
   createdAt: Datetime!
 }
 
-type GeneratedArt {
-  hash: String!
-  owner: String!
-  urls: [String]!
-  info: JSON
-  isArchived: Boolean!
-}
-
 """An input for mutations affecting `Deck`"""
 input DeckInput {
   id: String!
@@ -2861,69 +2705,6 @@ input DeckInput {
   """premades always shared with all users by application logic"""
   isPremade: Boolean
   permittedToDuplicate: Boolean
-}
-
-"""A connection to a list of `BannedDraftCard` values."""
-type BannedDraftCardsConnection {
-  """A list of `BannedDraftCard` objects."""
-  nodes: [BannedDraftCard]!
-
-  """
-  A list of edges which contains the `BannedDraftCard` and cursor to aid in pagination.
-  """
-  edges: [BannedDraftCardsEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `BannedDraftCard` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-"""A `BannedDraftCard` edge in the connection."""
-type BannedDraftCardsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `BannedDraftCard` at the end of the edge."""
-  node: BannedDraftCard
-}
-
-"""Methods to use when ordering `BannedDraftCard`."""
-enum BannedDraftCardsOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  CARD_ID_ASC
-  CARD_ID_DESC
-}
-
-"""
-A condition to be used against `BannedDraftCard` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input BannedDraftCardCondition {
-  """Checks for equality with the object’s `cardId` field."""
-  cardId: String
-}
-
-"""
-A filter to be used against `BannedDraftCard` object types. All fields are combined with a logical ‘and.’
-"""
-input BannedDraftCardFilter {
-  """Filter by the object’s `cardId` field."""
-  cardId: StringFilter
-
-  """Checks for all expressions in this list."""
-  and: [BannedDraftCardFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [BannedDraftCardFilter!]
-
-  """Negates the expression."""
-  not: BannedDraftCardFilter
 }
 
 """A connection to a list of `BotUser` values."""
@@ -2984,69 +2765,6 @@ input BotUserFilter {
 
   """Negates the expression."""
   not: BotUserFilter
-}
-
-"""A connection to a list of `HardRemovalCard` values."""
-type HardRemovalCardsConnection {
-  """A list of `HardRemovalCard` objects."""
-  nodes: [HardRemovalCard]!
-
-  """
-  A list of edges which contains the `HardRemovalCard` and cursor to aid in pagination.
-  """
-  edges: [HardRemovalCardsEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `HardRemovalCard` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-"""A `HardRemovalCard` edge in the connection."""
-type HardRemovalCardsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `HardRemovalCard` at the end of the edge."""
-  node: HardRemovalCard
-}
-
-"""Methods to use when ordering `HardRemovalCard`."""
-enum HardRemovalCardsOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  CARD_ID_ASC
-  CARD_ID_DESC
-}
-
-"""
-A condition to be used against `HardRemovalCard` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input HardRemovalCardCondition {
-  """Checks for equality with the object’s `cardId` field."""
-  cardId: String
-}
-
-"""
-A filter to be used against `HardRemovalCard` object types. All fields are combined with a logical ‘and.’
-"""
-input HardRemovalCardFilter {
-  """Filter by the object’s `cardId` field."""
-  cardId: StringFilter
-
-  """Checks for all expressions in this list."""
-  and: [HardRemovalCardFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [HardRemovalCardFilter!]
-
-  """Negates the expression."""
-  not: HardRemovalCardFilter
 }
 
 """A connection to a list of `Guest` values."""
@@ -3776,158 +3494,6 @@ input CollectionCardFilter {
   not: CollectionCardFilter
 }
 
-"""A connection to a list of `GeneratedArt` values."""
-type GeneratedArtsConnection {
-  """A list of `GeneratedArt` objects."""
-  nodes: [GeneratedArt]!
-
-  """
-  A list of edges which contains the `GeneratedArt` and cursor to aid in pagination.
-  """
-  edges: [GeneratedArtsEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `GeneratedArt` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `GeneratedArt` edge in the connection."""
-type GeneratedArtsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `GeneratedArt` at the end of the edge."""
-  node: GeneratedArt
-}
-
-"""Methods to use when ordering `GeneratedArt`."""
-enum GeneratedArtsOrderBy {
-  NATURAL
-  HASH_ASC
-  HASH_DESC
-  OWNER_ASC
-  OWNER_DESC
-  INFO_ASC
-  INFO_DESC
-  IS_ARCHIVED_ASC
-  IS_ARCHIVED_DESC
-}
-
-"""
-A condition to be used against `GeneratedArt` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input GeneratedArtCondition {
-  """Checks for equality with the object’s `hash` field."""
-  hash: String
-
-  """Checks for equality with the object’s `owner` field."""
-  owner: String
-
-  """Checks for equality with the object’s `urls` field."""
-  urls: [String]
-
-  """Checks for equality with the object’s `info` field."""
-  info: JSON
-
-  """Checks for equality with the object’s `isArchived` field."""
-  isArchived: Boolean
-}
-
-"""
-A filter to be used against `GeneratedArt` object types. All fields are combined with a logical ‘and.’
-"""
-input GeneratedArtFilter {
-  """Filter by the object’s `hash` field."""
-  hash: StringFilter
-
-  """Filter by the object’s `owner` field."""
-  owner: StringFilter
-
-  """Filter by the object’s `urls` field."""
-  urls: StringListFilter
-
-  """Filter by the object’s `info` field."""
-  info: JSONFilter
-
-  """Filter by the object’s `isArchived` field."""
-  isArchived: BooleanFilter
-
-  """Checks for all expressions in this list."""
-  and: [GeneratedArtFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [GeneratedArtFilter!]
-
-  """Negates the expression."""
-  not: GeneratedArtFilter
-}
-
-"""
-A filter to be used against String List fields. All fields are combined with a logical ‘and.’
-"""
-input StringListFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: [String]
-
-  """Not equal to the specified value."""
-  notEqualTo: [String]
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: [String]
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: [String]
-
-  """Less than the specified value."""
-  lessThan: [String]
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: [String]
-
-  """Greater than the specified value."""
-  greaterThan: [String]
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: [String]
-
-  """Contains the specified list of values."""
-  contains: [String]
-
-  """Contained by the specified list of values."""
-  containedBy: [String]
-
-  """Overlaps the specified list of values."""
-  overlaps: [String]
-
-  """Any array item is equal to the specified value."""
-  anyEqualTo: String
-
-  """Any array item is not equal to the specified value."""
-  anyNotEqualTo: String
-
-  """Any array item is less than the specified value."""
-  anyLessThan: String
-
-  """Any array item is less than or equal to the specified value."""
-  anyLessThanOrEqualTo: String
-
-  """Any array item is greater than the specified value."""
-  anyGreaterThan: String
-
-  """Any array item is greater than or equal to the specified value."""
-  anyGreaterThanOrEqualTo: String
-}
-
 """A connection to a list of `Game` values."""
 type GamesConnection {
   """A list of `Game` objects."""
@@ -3995,18 +3561,6 @@ input GameCondition {
 The root mutation type which contains root level fields which mutate data.
 """
 type Mutation {
-  cardCatalogueGetBannedDraftCards(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetBannedDraftCardsInput!
-  ): CardCatalogueGetBannedDraftCardsPayload
-  cardCatalogueGetHardRemovalCards(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetHardRemovalCardsInput!
-  ): CardCatalogueGetHardRemovalCardsPayload
   archiveCard(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -4019,24 +3573,6 @@ type Mutation {
     """
     input: PublishCardInput!
   ): PublishCardPayload
-  setUserAttribute(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: SetUserAttributeInput!
-  ): SetUserAttributePayload
-  getUserAttribute(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: GetUserAttributeInput!
-  ): GetUserAttributePayload
-  clusteredGamesUpdateGameAndUsers(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: ClusteredGamesUpdateGameAndUsersInput!
-  ): ClusteredGamesUpdateGameAndUsersPayload
   getClasses(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -4061,54 +3597,6 @@ type Mutation {
     """
     input: CreateDeckWithCardsInput!
   ): CreateDeckWithCardsPayload
-  cardCatalogueFormats(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueFormatsInput!
-  ): CardCatalogueFormatsPayload
-  cardCatalogueGetClassCards(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetClassCardsInput!
-  ): CardCatalogueGetClassCardsPayload
-  cardCatalogueGetBaseClasses(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetBaseClassesInput!
-  ): CardCatalogueGetBaseClassesPayload
-  cardCatalogueGetCardById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetCardByIdInput!
-  ): CardCatalogueGetCardByIdPayload
-  cardCatalogueGetCardByName(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetCardByNameInput!
-  ): CardCatalogueGetCardByNamePayload
-  cardCatalogueGetFormat(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetFormatInput!
-  ): CardCatalogueGetFormatPayload
-  cardCatalogueGetHeroCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetHeroCardInput!
-  ): CardCatalogueGetHeroCardPayload
-  cardCatalogueGetCardByNameAndClass(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetCardByNameAndClassInput!
-  ): CardCatalogueGetCardByNameAndClassPayload
   publishGitCard(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -4121,26 +3609,6 @@ type Mutation {
     """
     input: SaveCardInput!
   ): SaveCardPayload
-  cardCatalogueQuery(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueQueryInput!
-  ): CardCatalogueQueryPayload
-  saveGeneratedArt(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: SaveGeneratedArtInput!
-  ): SaveGeneratedArtPayload
-
-  """Creates a single `BannedDraftCard`."""
-  createBannedDraftCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateBannedDraftCardInput!
-  ): CreateBannedDraftCardPayload
 
   """Creates a single `BotUser`."""
   createBotUser(
@@ -4149,14 +3617,6 @@ type Mutation {
     """
     input: CreateBotUserInput!
   ): CreateBotUserPayload
-
-  """Creates a single `HardRemovalCard`."""
-  createHardRemovalCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateHardRemovalCardInput!
-  ): CreateHardRemovalCardPayload
 
   """Creates a single `PublishedCard`."""
   createPublishedCard(
@@ -4238,14 +3698,6 @@ type Mutation {
     input: CreateCardInput!
   ): CreateCardPayload
 
-  """Creates a single `GeneratedArt`."""
-  createGeneratedArt(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateGeneratedArtInput!
-  ): CreateGeneratedArtPayload
-
   """Creates a single `Game`."""
   createGame(
     """
@@ -4262,24 +3714,6 @@ type Mutation {
     input: CreateGameUserInput!
   ): CreateGameUserPayload
 
-  """
-  Updates a single `BannedDraftCard` using its globally unique id and a patch.
-  """
-  updateBannedDraftCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateBannedDraftCardInput!
-  ): UpdateBannedDraftCardPayload
-
-  """Updates a single `BannedDraftCard` using a unique key and a patch."""
-  updateBannedDraftCardByCardId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateBannedDraftCardByCardIdInput!
-  ): UpdateBannedDraftCardPayload
-
   """Updates a single `BotUser` using its globally unique id and a patch."""
   updateBotUser(
     """
@@ -4295,24 +3729,6 @@ type Mutation {
     """
     input: UpdateBotUserByIdInput!
   ): UpdateBotUserPayload
-
-  """
-  Updates a single `HardRemovalCard` using its globally unique id and a patch.
-  """
-  updateHardRemovalCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateHardRemovalCardInput!
-  ): UpdateHardRemovalCardPayload
-
-  """Updates a single `HardRemovalCard` using a unique key and a patch."""
-  updateHardRemovalCardByCardId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateHardRemovalCardByCardIdInput!
-  ): UpdateHardRemovalCardPayload
 
   """
   Updates a single `PublishedCard` using its globally unique id and a patch.
@@ -4486,14 +3902,6 @@ type Mutation {
     input: UpdateCardBySuccessionInput!
   ): UpdateCardPayload
 
-  """Updates a single `GeneratedArt` using a unique key and a patch."""
-  updateGeneratedArtByHashAndOwner(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateGeneratedArtByHashAndOwnerInput!
-  ): UpdateGeneratedArtPayload
-
   """Updates a single `Game` using its globally unique id and a patch."""
   updateGame(
     """
@@ -4526,22 +3934,6 @@ type Mutation {
     input: UpdateGameUserByGameIdAndUserIdInput!
   ): UpdateGameUserPayload
 
-  """Deletes a single `BannedDraftCard` using its globally unique id."""
-  deleteBannedDraftCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteBannedDraftCardInput!
-  ): DeleteBannedDraftCardPayload
-
-  """Deletes a single `BannedDraftCard` using a unique key."""
-  deleteBannedDraftCardByCardId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteBannedDraftCardByCardIdInput!
-  ): DeleteBannedDraftCardPayload
-
   """Deletes a single `BotUser` using its globally unique id."""
   deleteBotUser(
     """
@@ -4557,22 +3949,6 @@ type Mutation {
     """
     input: DeleteBotUserByIdInput!
   ): DeleteBotUserPayload
-
-  """Deletes a single `HardRemovalCard` using its globally unique id."""
-  deleteHardRemovalCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteHardRemovalCardInput!
-  ): DeleteHardRemovalCardPayload
-
-  """Deletes a single `HardRemovalCard` using a unique key."""
-  deleteHardRemovalCardByCardId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteHardRemovalCardByCardIdInput!
-  ): DeleteHardRemovalCardPayload
 
   """Deletes a single `PublishedCard` using its globally unique id."""
   deletePublishedCard(
@@ -4736,14 +4112,6 @@ type Mutation {
     input: DeleteCardBySuccessionInput!
   ): DeleteCardPayload
 
-  """Deletes a single `GeneratedArt` using a unique key."""
-  deleteGeneratedArtByHashAndOwner(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteGeneratedArtByHashAndOwnerInput!
-  ): DeleteGeneratedArtPayload
-
   """Deletes a single `Game` using its globally unique id."""
   deleteGame(
     """
@@ -4775,54 +4143,6 @@ type Mutation {
     """
     input: DeleteGameUserByGameIdAndUserIdInput!
   ): DeleteGameUserPayload
-}
-
-"""The output of our `cardCatalogueGetBannedDraftCards` mutation."""
-type CardCatalogueGetBannedDraftCardsPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  cardIds: [String]
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `cardCatalogueGetBannedDraftCards` mutation."""
-input CardCatalogueGetBannedDraftCardsInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-}
-
-"""The output of our `cardCatalogueGetHardRemovalCards` mutation."""
-type CardCatalogueGetHardRemovalCardsPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  cardIds: [String]
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `cardCatalogueGetHardRemovalCards` mutation."""
-input CardCatalogueGetHardRemovalCardsInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
 }
 
 """The output of our `archiveCard` mutation."""
@@ -4872,87 +4192,6 @@ input PublishCardInput {
   """
   clientMutationId: String
   cardId: String
-}
-
-"""The output of our `setUserAttribute` mutation."""
-type SetUserAttributePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `setUserAttribute` mutation."""
-input SetUserAttributeInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  idUser: String
-  attribute: String
-  val: String
-}
-
-"""The output of our `getUserAttribute` mutation."""
-type GetUserAttributePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  string: String
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `getUserAttribute` mutation."""
-input GetUserAttributeInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  idUser: String
-  attribute: String
-  orDefault: String
-}
-
-"""The output of our `clusteredGamesUpdateGameAndUsers` mutation."""
-type ClusteredGamesUpdateGameAndUsersPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  boolean: Boolean
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `clusteredGamesUpdateGameAndUsers` mutation."""
-input ClusteredGamesUpdateGameAndUsersInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  pUserIdWinner: String
-  pUserIdLoser: String
-  pGameId: BigInt
-  pTrace: JSON
 }
 
 """The output of our `getClasses` mutation."""
@@ -5088,223 +4327,6 @@ input CreateDeckWithCardsInput {
   cardIds: [String]
 }
 
-"""The output of our `cardCatalogueFormats` mutation."""
-type CardCatalogueFormatsPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  cards: [Card]
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `cardCatalogueFormats` mutation."""
-input CardCatalogueFormatsInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-}
-
-"""The output of our `cardCatalogueGetClassCards` mutation."""
-type CardCatalogueGetClassCardsPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  cards: [Card]
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `cardCatalogueGetClassCards` mutation."""
-input CardCatalogueGetClassCardsInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-}
-
-"""The output of our `cardCatalogueGetBaseClasses` mutation."""
-type CardCatalogueGetBaseClassesPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  cards: [Card]
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `cardCatalogueGetBaseClasses` mutation."""
-input CardCatalogueGetBaseClassesInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  sets: [String]
-}
-
-"""The output of our `cardCatalogueGetCardById` mutation."""
-type CardCatalogueGetCardByIdPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  cards: [Card]
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `cardCatalogueGetCardById` mutation."""
-input CardCatalogueGetCardByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  cardId: String
-}
-
-"""The output of our `cardCatalogueGetCardByName` mutation."""
-type CardCatalogueGetCardByNamePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  card: Card
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Card`. May be used by Relay 1."""
-  cardEdge(
-    """The method to use when ordering `Card`."""
-    orderBy: [CardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): CardsEdge
-}
-
-"""All input for the `cardCatalogueGetCardByName` mutation."""
-input CardCatalogueGetCardByNameInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  cardName: String
-}
-
-"""The output of our `cardCatalogueGetFormat` mutation."""
-type CardCatalogueGetFormatPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  cards: [Card]
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `cardCatalogueGetFormat` mutation."""
-input CardCatalogueGetFormatInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  cardName: String
-}
-
-"""The output of our `cardCatalogueGetHeroCard` mutation."""
-type CardCatalogueGetHeroCardPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  card: Card
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Card`. May be used by Relay 1."""
-  cardEdge(
-    """The method to use when ordering `Card`."""
-    orderBy: [CardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): CardsEdge
-}
-
-"""All input for the `cardCatalogueGetHeroCard` mutation."""
-input CardCatalogueGetHeroCardInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  heroClass: String
-}
-
-"""The output of our `cardCatalogueGetCardByNameAndClass` mutation."""
-type CardCatalogueGetCardByNameAndClassPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  card: Card
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Card`. May be used by Relay 1."""
-  cardEdge(
-    """The method to use when ordering `Card`."""
-    orderBy: [CardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): CardsEdge
-}
-
-"""All input for the `cardCatalogueGetCardByNameAndClass` mutation."""
-input CardCatalogueGetCardByNameAndClassInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  cardName: String
-  heroClass: String
-}
-
 """The output of our `publishGitCard` mutation."""
 type PublishGitCardPayload {
   """
@@ -5371,102 +4393,6 @@ input SaveCardInput {
   json: JSON
 }
 
-"""The output of our `cardCatalogueQuery` mutation."""
-type CardCatalogueQueryPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  cards: [Card]
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `cardCatalogueQuery` mutation."""
-input CardCatalogueQueryInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  sets: [String]
-  cardType: String
-  rarity: String
-  heroClass: String
-  attribute: String
-}
-
-"""The output of our `saveGeneratedArt` mutation."""
-type SaveGeneratedArtPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  generatedArt: GeneratedArt
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `saveGeneratedArt` mutation."""
-input SaveGeneratedArtInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  digest: String
-  links: [String]
-  extraInfo: JSON
-}
-
-"""The output of our create `BannedDraftCard` mutation."""
-type CreateBannedDraftCardPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `BannedDraftCard` that was created by this mutation."""
-  bannedDraftCard: BannedDraftCard
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `BannedDraftCard`. May be used by Relay 1."""
-  bannedDraftCardEdge(
-    """The method to use when ordering `BannedDraftCard`."""
-    orderBy: [BannedDraftCardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): BannedDraftCardsEdge
-}
-
-"""All input for the create `BannedDraftCard` mutation."""
-input CreateBannedDraftCardInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `BannedDraftCard` to be created by this mutation."""
-  bannedDraftCard: BannedDraftCardInput!
-}
-
-"""An input for mutations affecting `BannedDraftCard`"""
-input BannedDraftCardInput {
-  cardId: String!
-}
-
 """The output of our create `BotUser` mutation."""
 type CreateBotUserPayload {
   """
@@ -5505,46 +4431,6 @@ input CreateBotUserInput {
 """An input for mutations affecting `BotUser`"""
 input BotUserInput {
   id: String!
-}
-
-"""The output of our create `HardRemovalCard` mutation."""
-type CreateHardRemovalCardPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `HardRemovalCard` that was created by this mutation."""
-  hardRemovalCard: HardRemovalCard
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `HardRemovalCard`. May be used by Relay 1."""
-  hardRemovalCardEdge(
-    """The method to use when ordering `HardRemovalCard`."""
-    orderBy: [HardRemovalCardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): HardRemovalCardsEdge
-}
-
-"""All input for the create `HardRemovalCard` mutation."""
-input CreateHardRemovalCardInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `HardRemovalCard` to be created by this mutation."""
-  hardRemovalCard: HardRemovalCardInput!
-}
-
-"""An input for mutations affecting `HardRemovalCard`"""
-input HardRemovalCardInput {
-  cardId: String!
 }
 
 """The output of our create `PublishedCard` mutation."""
@@ -6010,44 +4896,6 @@ input CardInput {
   isPublished: Boolean
 }
 
-"""The output of our create `GeneratedArt` mutation."""
-type CreateGeneratedArtPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `GeneratedArt` that was created by this mutation."""
-  generatedArt: GeneratedArt
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the create `GeneratedArt` mutation."""
-input CreateGeneratedArtInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `GeneratedArt` to be created by this mutation."""
-  generatedArt: GeneratedArtInput!
-}
-
-"""An input for mutations affecting `GeneratedArt`"""
-input GeneratedArtInput {
-  hash: String!
-  owner: String
-  urls: [String]!
-  info: JSON
-  isArchived: Boolean
-}
-
 """The output of our create `Game` mutation."""
 type CreateGamePayload {
   """
@@ -6141,70 +4989,6 @@ input GameUserInput {
   victoryStatus: GameUserVictoryEnum
 }
 
-"""The output of our update `BannedDraftCard` mutation."""
-type UpdateBannedDraftCardPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `BannedDraftCard` that was updated by this mutation."""
-  bannedDraftCard: BannedDraftCard
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `BannedDraftCard`. May be used by Relay 1."""
-  bannedDraftCardEdge(
-    """The method to use when ordering `BannedDraftCard`."""
-    orderBy: [BannedDraftCardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): BannedDraftCardsEdge
-}
-
-"""All input for the `updateBannedDraftCard` mutation."""
-input UpdateBannedDraftCardInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `BannedDraftCard` to be updated.
-  """
-  nodeId: ID!
-
-  """
-  An object where the defined keys will be set on the `BannedDraftCard` being updated.
-  """
-  bannedDraftCardPatch: BannedDraftCardPatch!
-}
-
-"""
-Represents an update to a `BannedDraftCard`. Fields that are set will be updated.
-"""
-input BannedDraftCardPatch {
-  cardId: String
-}
-
-"""All input for the `updateBannedDraftCardByCardId` mutation."""
-input UpdateBannedDraftCardByCardIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  cardId: String!
-
-  """
-  An object where the defined keys will be set on the `BannedDraftCard` being updated.
-  """
-  bannedDraftCardPatch: BannedDraftCardPatch!
-}
-
 """The output of our update `BotUser` mutation."""
 type UpdateBotUserPayload {
   """
@@ -6267,70 +5051,6 @@ input UpdateBotUserByIdInput {
   An object where the defined keys will be set on the `BotUser` being updated.
   """
   botUserPatch: BotUserPatch!
-}
-
-"""The output of our update `HardRemovalCard` mutation."""
-type UpdateHardRemovalCardPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `HardRemovalCard` that was updated by this mutation."""
-  hardRemovalCard: HardRemovalCard
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `HardRemovalCard`. May be used by Relay 1."""
-  hardRemovalCardEdge(
-    """The method to use when ordering `HardRemovalCard`."""
-    orderBy: [HardRemovalCardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): HardRemovalCardsEdge
-}
-
-"""All input for the `updateHardRemovalCard` mutation."""
-input UpdateHardRemovalCardInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `HardRemovalCard` to be updated.
-  """
-  nodeId: ID!
-
-  """
-  An object where the defined keys will be set on the `HardRemovalCard` being updated.
-  """
-  hardRemovalCardPatch: HardRemovalCardPatch!
-}
-
-"""
-Represents an update to a `HardRemovalCard`. Fields that are set will be updated.
-"""
-input HardRemovalCardPatch {
-  cardId: String
-}
-
-"""All input for the `updateHardRemovalCardByCardId` mutation."""
-input UpdateHardRemovalCardByCardIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  cardId: String!
-
-  """
-  An object where the defined keys will be set on the `HardRemovalCard` being updated.
-  """
-  hardRemovalCardPatch: HardRemovalCardPatch!
 }
 
 """The output of our update `PublishedCard` mutation."""
@@ -7056,50 +5776,6 @@ input UpdateCardBySuccessionInput {
   cardPatch: CardPatch!
 }
 
-"""The output of our update `GeneratedArt` mutation."""
-type UpdateGeneratedArtPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `GeneratedArt` that was updated by this mutation."""
-  generatedArt: GeneratedArt
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `updateGeneratedArtByHashAndOwner` mutation."""
-input UpdateGeneratedArtByHashAndOwnerInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  hash: String!
-  owner: String!
-
-  """
-  An object where the defined keys will be set on the `GeneratedArt` being updated.
-  """
-  generatedArtPatch: GeneratedArtPatch!
-}
-
-"""
-Represents an update to a `GeneratedArt`. Fields that are set will be updated.
-"""
-input GeneratedArtPatch {
-  hash: String
-  owner: String
-  urls: [String]
-  info: JSON
-  isArchived: Boolean
-}
-
 """The output of our update `Game` mutation."""
 type UpdateGamePayload {
   """
@@ -7240,54 +5916,6 @@ input UpdateGameUserByGameIdAndUserIdInput {
   gameUserPatch: GameUserPatch!
 }
 
-"""The output of our delete `BannedDraftCard` mutation."""
-type DeleteBannedDraftCardPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `BannedDraftCard` that was deleted by this mutation."""
-  bannedDraftCard: BannedDraftCard
-  deletedBannedDraftCardId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `BannedDraftCard`. May be used by Relay 1."""
-  bannedDraftCardEdge(
-    """The method to use when ordering `BannedDraftCard`."""
-    orderBy: [BannedDraftCardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): BannedDraftCardsEdge
-}
-
-"""All input for the `deleteBannedDraftCard` mutation."""
-input DeleteBannedDraftCardInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `BannedDraftCard` to be deleted.
-  """
-  nodeId: ID!
-}
-
-"""All input for the `deleteBannedDraftCardByCardId` mutation."""
-input DeleteBannedDraftCardByCardIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  cardId: String!
-}
-
 """The output of our delete `BotUser` mutation."""
 type DeleteBotUserPayload {
   """
@@ -7334,54 +5962,6 @@ input DeleteBotUserByIdInput {
   """
   clientMutationId: String
   id: String!
-}
-
-"""The output of our delete `HardRemovalCard` mutation."""
-type DeleteHardRemovalCardPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `HardRemovalCard` that was deleted by this mutation."""
-  hardRemovalCard: HardRemovalCard
-  deletedHardRemovalCardId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `HardRemovalCard`. May be used by Relay 1."""
-  hardRemovalCardEdge(
-    """The method to use when ordering `HardRemovalCard`."""
-    orderBy: [HardRemovalCardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): HardRemovalCardsEdge
-}
-
-"""All input for the `deleteHardRemovalCard` mutation."""
-input DeleteHardRemovalCardInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `HardRemovalCard` to be deleted.
-  """
-  nodeId: ID!
-}
-
-"""All input for the `deleteHardRemovalCardByCardId` mutation."""
-input DeleteHardRemovalCardByCardIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  cardId: String!
 }
 
 """The output of our delete `PublishedCard` mutation."""
@@ -7894,34 +6474,6 @@ input DeleteCardBySuccessionInput {
   """
   clientMutationId: String
   succession: BigInt!
-}
-
-"""The output of our delete `GeneratedArt` mutation."""
-type DeleteGeneratedArtPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `GeneratedArt` that was deleted by this mutation."""
-  generatedArt: GeneratedArt
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `deleteGeneratedArtByHashAndOwner` mutation."""
-input DeleteGeneratedArtByHashAndOwnerInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  hash: String!
-  owner: String!
 }
 
 """The output of our delete `Game` mutation."""

@@ -68,7 +68,7 @@ begin
     id_deck := gen_random_uuid();
 
     insert into spellsource.decks (id, created_by, last_edited_by, name, hero_class, deck_type, format)
-    values (id_deck::text, spellsource.get_user_id(), spellsource.get_user_id(), 'Rogue Deck', class_hero, 2, 'rogue')
+    values (id_deck::text, spellsource.get_user_id(), spellsource.get_user_id(), 'Rogue Deck', class_hero, 2, 'Rogue')
     returning (id) into deck_id;
 
 
