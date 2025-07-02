@@ -28,6 +28,7 @@ const preset: GraphileConfig.Preset = {
   plugins: [PgOmitArchivedPlugin],
   grafserv: {
     graphiql: true,
+    websockets: true,
   },
   schema: {
     dontSwallowErrors: true,

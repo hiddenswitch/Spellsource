@@ -39,7 +39,7 @@
     <logger name="org.redisson" level="WARN" />
     <logger name="io.github.jklingsporn" level="ERROR" />
     <logger name="com.github.dockerjava" level="ERROR" />
-    <logger name="org.flywaydb" level="DEBUG"/>
+    <logger name="org.flywaydb" level="WARN"/>
     <logger name="org.jboss.resteasy.client.jaxrs.i18n" level="ERROR" />
     <logger name="org.redisson.connection.DNSMonitor" level="ERROR" />
 </configuration>

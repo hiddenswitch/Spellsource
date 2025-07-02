@@ -87,9 +87,7 @@ public class StandaloneApplication extends Application {
 				.setShouldMigrate(true)
 				.build());
 		configuration.setGraphql(ServerConfiguration.GraphQLConfiguration.newBuilder()
-				.setHost(GRAPHQL_HOST)
-				.setPort(GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT))
-				.setRoute("/graphql")
+				.setUrl(String.format("https://%s:%d/graphql", GRAPHQL_HOST, GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT)))
 		);
 		// todo: allow environment variables *only* to override this configuration, but something weird about kube env
 		// configuration.mergeFrom(Environment.environmentConfiguration());
@@ -117,7 +115,7 @@ NEXT_PUBLIC_GRAPHQL_PORT=\{GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT)}
 KEYCLOAK_ISSUER=http://localhost:\{KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP)}/realms/hiddenswitch
 """;
 			FileUtils.writeStringToFile(envFile2, contents2, StandardCharsets.UTF_8);
-			
+
 		} catch (IOException e) {
 			LOGGER.error("Error occurred while writing the environment file for the website.");
 		}

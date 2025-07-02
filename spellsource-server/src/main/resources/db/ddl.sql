@@ -3,12 +3,11 @@
 --
 
 -- Dumped from database version 13.11 (Debian 13.11-1.pgdg110+1)
--- Dumped by pg_dump version 17.2 (Debian 17.2-1.pgdg120+1)
+-- Dumped by pg_dump version 13.11
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -34,15 +33,6 @@ CREATE SCHEMA keycloak;
 
 
 ALTER SCHEMA keycloak OWNER TO admin;
-
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: admin
---
-
--- *not* creating schema, since initdb creates it
-
-
-ALTER SCHEMA public OWNER TO admin;
 
 --
 -- Name: spellsource; Type: SCHEMA; Schema: -; Owner: admin
@@ -533,7 +523,7 @@ CREATE VIEW spellsource.classes AS
    FROM spellsource.get_classes() get_classes(created_by, class, is_published, collectible, card_script, id, name);
 
 
-ALTER VIEW spellsource.classes OWNER TO admin;
+ALTER TABLE spellsource.classes OWNER TO admin;
 
 --
 -- Name: card_message(spellsource.cards, spellsource.classes); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -2525,7 +2515,7 @@ CREATE VIEW spellsource.collection_cards AS
    FROM spellsource.get_collection_cards() get_collection_cards(id, created_by, card_script, blockly_workspace, name, type, class, cost, collectible, search_message, last_modified, created_at);
 
 
-ALTER VIEW spellsource.collection_cards OWNER TO admin;
+ALTER TABLE spellsource.collection_cards OWNER TO admin;
 
 --
 -- Name: deck_player_attribute_tuples; Type: TABLE; Schema: spellsource; Owner: admin
@@ -5429,14 +5419,6 @@ CREATE POLICY website_view ON spellsource.published_cards FOR SELECT USING (true
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: admin
---
-
-REVOKE USAGE ON SCHEMA public FROM PUBLIC;
-GRANT ALL ON SCHEMA public TO PUBLIC;
-
-
---
 -- Name: SCHEMA spellsource; Type: ACL; Schema: -; Owner: admin
 --
 
@@ -5498,7 +5480,7 @@ GRANT ALL ON FUNCTION spellsource.set_cards_in_deck(deck text, card_ids text[]) 
 -- Name: TABLE user_attribute; Type: ACL; Schema: keycloak; Owner: admin
 --
 
-GRANT SELECT,INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE keycloak.user_attribute TO website;
+GRANT ALL ON TABLE keycloak.user_attribute TO website;
 
 
 --

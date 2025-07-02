@@ -33898,7 +33898,10 @@ namespace Spellsource.Proto {
     public const int NamedFieldNumber = 1;
     private string named_ = "";
     /// <summary>
-    /// The sprite name in the client.
+    /// The address to retrieve the sprite.
+    /// When this is a plain string, this corresponds to a sprite name inside the Unity client.
+    /// Otherwise, this is treated as a URL.
+    /// The server will reject art in untrusted domains.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -33913,7 +33916,7 @@ namespace Spellsource.Proto {
     public const int PivotFieldNumber = 2;
     private global::Spellsource.Proto.Sprite.Types.SpritePivot pivot_ = global::Spellsource.Proto.Sprite.Types.SpritePivot.Bottom;
     /// <summary>
-    /// The sprite's pivor point.
+    /// The sprite's pivot point.
     /// 
     ///  - BOTTOM: The center bottom of the sprite (i.e. 0.5, 1.0)
     ///  - DIMETRIC_2X1_FLOOR: Calculates the pivot point by ascending one pixel from the bottom for every four pixels
