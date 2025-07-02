@@ -11,6 +11,7 @@ plugins {
 
 apply from: '../gradle/node.gradle'
 
+def isMacOs = org.gradle.internal.os.OperatingSystem.current().isMacOsX()
 
 new JsonSlurper().parseText(file('package.json').text).scripts.each { String scriptName, _ ->
   tasks.register("yarnRun${scriptName.split('-').collect { it.capitalize() }.join('')}", YarnTask) {
@@ -58,7 +59,13 @@ tasks.named("yarnRunCodegen").configure {
   // TODO manually specify outputs as well?
 }
 
+tasks.register("toolRestore", Exec) {
+  def binary = isMacOs ? "/opt/homebrew/bin/dotnet" : "dotnet"
+  commandLine binary, "tool", "restore"
+}
+
 tasks.named("yarnRunStrawberryShake").configure {
+  dependsOn "toolRestore"
   inputs.dir("graphql/client")
   inputs.dir("graphql/shared")
   // TODO manually specify outputs as well?

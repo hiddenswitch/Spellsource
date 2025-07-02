@@ -10,8 +10,8 @@ unity {
 }
 
 def secretsPath = "${project(':spellsource-private').projectDir}/src/secrets"
-def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
-def isMacOs = Os.isFamily(Os.FAMILY_MAC)
+def isWindows = org.gradle.internal.os.OperatingSystem.current().isWindows()
+def isMacOs = org.gradle.internal.os.OperatingSystem.current().isMacOsX()
 
 tasks.register('distIOS', Exec) { t ->
   description("Builds and uploads to Testflight the iOS project")
