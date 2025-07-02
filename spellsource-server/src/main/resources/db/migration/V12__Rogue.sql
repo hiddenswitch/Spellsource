@@ -37,8 +37,7 @@ create type spellsource.rogue_payload_type as enum (
     'start',
     'choice',
     'matchStart',
-    'matchEnd',
-    'resign'
+    'matchEnd'
     );
 
 create or replace function spellsource.rogue_notify(rogue_run_id bigint, type spellsource.rogue_payload_type,
@@ -65,10 +64,14 @@ declare
 begin
     user_id := spellsource.get_user_id();
 
+    if user_id is null or user_id = '' then
+        raise exception 'User not logged in';
+    end if;
+
     id_deck := gen_random_uuid();
 
     insert into spellsource.decks (id, created_by, last_edited_by, name, hero_class, deck_type, format)
-    values (id_deck::text, spellsource.get_user_id(), spellsource.get_user_id(), 'Rogue Deck', class_hero, 2, 'Rogue')
+    values (id_deck::text, user_id, user_id, 'Rogue Deck', class_hero, 2, 'Rogue')
     returning (id) into deck_id;
 
 
@@ -96,7 +99,21 @@ grant execute on function spellsource.start_rogue_run to website;
 create or replace function spellsource.make_rogue_choice(rogue_id bigint, choice_index int) returns void as
 $$
 declare
+    user_id   varchar(36);
+    rogue_run spellsource.rogue_run%rowtype;
 begin
+    user_id := spellsource.get_user_id();
+
+    if user_id is null or user_id = '' then
+        raise exception 'User not logged in';
+    end if;
+
+    select * from spellsource.rogue_run where id = rogue_id into rogue_run;
+
+    if rogue_run.player != user_id then
+        raise exception 'Not permitted';
+    end if;
+
     perform spellsource.rogue_notify(rogue_id, 'choice',
                                      jsonb_build_object
                                      ('index', choice_index
@@ -113,7 +130,7 @@ create or replace function spellsource.resign_rogue_run(rogue_id bigint) returns
 $$
 declare
 begin
-    perform spellsource.rogue_notify(rogue_id, 'resign', jsonb_build_object());
+    update spellsource.rogue_run set ended_at = now(), state = 'FINISHED' where id = rogue_id;
 end;
 $$ volatile language plpgsql
    security definer
@@ -134,9 +151,6 @@ begin
     end if;
 
     update spellsource.rogue_run set game = game_id, state = 'IN_MATCH' where deck = deck_id returning * into rogue_run;
-
-
-    perform spellsource.rogue_notify(rogue_run.id, 'matchStart', jsonb_build_object());
 end;
 $$ volatile language plpgsql;
 
@@ -152,6 +166,13 @@ begin
         return;
     end if;
 
+
+    if winning_user != rogue_run.player then
+        update spellsource.rogue_run as r set ended_at = now(), state = 'FINISHED' where id = rogue_run.id;
+        return;
+    end if;
+
+    update spellsource.rogue_run as r set bosses_defeated = r.bosses_defeated + 1 where id = rogue_run.id;
 
     perform spellsource.rogue_notify(rogue_run.id, 'matchEnd',
                                      jsonb_build_object

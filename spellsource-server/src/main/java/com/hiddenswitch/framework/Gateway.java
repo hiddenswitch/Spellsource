@@ -20,7 +20,6 @@ import static io.vertx.await.Async.await;
 
 public class Gateway extends AbstractVirtualThreadVerticle {
 	private final SqlCachedCardCatalogue cardCatalogue = new SqlCachedCardCatalogue();
-	private final RogueManager rogueManager = new RogueManager(cardCatalogue);
 	private final int port;
 	private Matchmaking.Services matchmaking;
 	private HttpServer httpServer;
@@ -41,8 +40,8 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 	public void startVirtual() {
 		cardCatalogue.subscribe();
 		cardCatalogue.invalidateAllAndRefresh();
-
-		rogueManager.subscribe();
+		
+		RogueManager.initialize();
 
 		this.matchmaking = Matchmaking.services();
 		var services = new BindAll<?>[]{

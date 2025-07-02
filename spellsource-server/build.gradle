@@ -66,6 +66,7 @@ dependencies {
   implementation group: 'io.vertx', name: 'vertx-service-discovery', version: vertxVersion
   implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
   implementation group: 'io.vertx', name: 'vertx-auth-jwt', version: vertxVersion
+  implementation group: 'io.vertx', name: 'vertx-web-graphql', version: vertxVersion
   implementation "io.vertx:vertx-rx-java3:$vertxVersion"
   implementation 'javax.activation:activation:1.1.1'
 
@@ -134,7 +135,7 @@ dependencies {
   }
 
   implementation "io.github.kobylynskyi:graphql-java-codegen:5.9.0"
-  implementation 'com.graphql-java:graphql-java:22.3'
+  implementation 'com.graphql-java:graphql-java:20.7'
 
 
   testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
@@ -220,9 +221,9 @@ tasks.register('createPostgresContainer', DockerCreateContainer) {
   entrypoint.set(["/bin/bash", "-c", "mkdir -pv /docker-entrypoint-initdb.d/ && echo 'create schema if not exists keycloak;' > /docker-entrypoint-initdb.d/init.sql && docker-entrypoint.sh postgres"])
   cmd.set([])
   envVars.putAll([
-          'POSTGRES_DB'      : localDatabaseName,
-          'POSTGRES_USER'    : localUsername,
-          'POSTGRES_PASSWORD': localPassword, 'POSTGRES_PORT': localPort])
+      'POSTGRES_DB'      : localDatabaseName,
+      'POSTGRES_USER'    : localUsername,
+      'POSTGRES_PASSWORD': localPassword, 'POSTGRES_PORT': localPort])
   hostConfig.autoRemove.set(true)
 }
 
@@ -242,17 +243,17 @@ tasks.register('createKeycloakContainer', DockerCreateContainer) {
   dependsOn += [createPostgresContainer, pullKeycloakImage]
   imageId.set("quay.io/keycloak/keycloak:22.0.3")
   envVars.putAll([
-          'KEYCLOAK_ADMIN_USERNAME': "admin",
-          'KEYCLOAK_ADMIN_PASSWORD': 'password',
-          'KC_DB'                  : 'postgres',
-          'KC_DB_URL_HOST'         : 'gradleSupabasePostgres',
-          'KC_DB_URL_PORT'         : localPort,
-          'KC_DB_URL_DATABASE'     : localDatabaseName,
-          'KC_DB_USERNAME'         : localUsername,
-          'KC_DB_PASSWORD'         : localPassword,
-          'KC_DB_SCHEMA'           : 'keycloak',
-          'KC_HOSTNAME_STRICT'     : 'false',
-          'KC_FEATURES'            : 'declarative-user-profile'
+      'KEYCLOAK_ADMIN_USERNAME': "admin",
+      'KEYCLOAK_ADMIN_PASSWORD': 'password',
+      'KC_DB'                  : 'postgres',
+      'KC_DB_URL_HOST'         : 'gradleSupabasePostgres',
+      'KC_DB_URL_PORT'         : localPort,
+      'KC_DB_URL_DATABASE'     : localDatabaseName,
+      'KC_DB_USERNAME'         : localUsername,
+      'KC_DB_PASSWORD'         : localPassword,
+      'KC_DB_SCHEMA'           : 'keycloak',
+      'KC_HOSTNAME_STRICT'     : 'false',
+      'KC_FEATURES'            : 'declarative-user-profile'
   ])
   cmd.set(["start-dev"])
   hostConfig.autoRemove.set(true)
@@ -283,42 +284,42 @@ tasks.register('jooqGenerate') {
 
   def configuration = new Configuration()
   configuration
-          .withJdbc(new Jdbc()
-                  .withDriver('org.postgresql.Driver')
-                  .withUrl(jdbcUrl)
-                  .withUser(localUsername)
-                  .withPassword(localPassword))
-          .withGenerator(new Generator()
-                  .withName('io.github.jklingsporn.vertx.jooq.generate.classic.ClassicReactiveVertxGenerator')
-                  .withDatabase(new Database()
-                          .withName('org.jooq.meta.postgres.PostgresDatabase')
-                          .withSchemata(new SchemaMappingType().withInputSchema("keycloak").withOutputSchema('keycloak'),
-                                  new SchemaMappingType().withInputSchema("spellsource").withOutputSchema('spellsource'),
-                                  new SchemaMappingType().withInputSchema("hiddenswitch").withOutputSchema("hiddenswitch"))
-                          .withForcedTypes(
-                                  new ForcedType()
-                                          .withUserType(JsonObject.class.getName())
-                                          .withConverter(JSONBToJsonObjectConverter.class.getName())
-                                          .withIncludeTypes("jsonb"))
-                          .withIncludeTables(true)
-                          .withIncludeRoutines(true)
-                          .withIncludePackages(false)
-                          .withIncludeUDTs(true)
-                          .withIncludeSequences(true)
-                          .withExcludes('schema_version')
-                          .withIncludes('.*'))
-                  .withGenerate(new Generate()
-                          .withDeprecated(false)
-                          .withRecords(true)
-                          .withInterfaces(true)
-                          .withFluentSetters(true)
-                          .withPojos(true)
-                          .withDaos(true))
-                  .withTarget(new Target()
-                          .withPackageName('com.hiddenswitch.framework.schema')
-                          .withDirectory(outputDir))
-                  .withStrategy(new Strategy()
-                          .withName('io.github.jklingsporn.vertx.jooq.generate.VertxGeneratorStrategy')))
+      .withJdbc(new Jdbc()
+          .withDriver('org.postgresql.Driver')
+          .withUrl(jdbcUrl)
+          .withUser(localUsername)
+          .withPassword(localPassword))
+      .withGenerator(new Generator()
+          .withName('io.github.jklingsporn.vertx.jooq.generate.classic.ClassicReactiveVertxGenerator')
+          .withDatabase(new Database()
+              .withName('org.jooq.meta.postgres.PostgresDatabase')
+              .withSchemata(new SchemaMappingType().withInputSchema("keycloak").withOutputSchema('keycloak'),
+                  new SchemaMappingType().withInputSchema("spellsource").withOutputSchema('spellsource'),
+                  new SchemaMappingType().withInputSchema("hiddenswitch").withOutputSchema("hiddenswitch"))
+              .withForcedTypes(
+                  new ForcedType()
+                      .withUserType(JsonObject.class.getName())
+                      .withConverter(JSONBToJsonObjectConverter.class.getName())
+                      .withIncludeTypes("jsonb"))
+              .withIncludeTables(true)
+              .withIncludeRoutines(true)
+              .withIncludePackages(false)
+              .withIncludeUDTs(true)
+              .withIncludeSequences(true)
+              .withExcludes('schema_version')
+              .withIncludes('.*'))
+          .withGenerate(new Generate()
+              .withDeprecated(false)
+              .withRecords(true)
+              .withInterfaces(true)
+              .withFluentSetters(true)
+              .withPojos(true)
+              .withDaos(true))
+          .withTarget(new Target()
+              .withPackageName('com.hiddenswitch.framework.schema')
+              .withDirectory(outputDir))
+          .withStrategy(new Strategy()
+              .withName('io.github.jklingsporn.vertx.jooq.generate.VertxGeneratorStrategy')))
 
   doLast() {
     GenerationTool.generate(configuration)

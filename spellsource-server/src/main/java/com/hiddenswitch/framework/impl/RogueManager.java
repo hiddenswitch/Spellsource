@@ -8,19 +8,20 @@ import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.RogueRunRecord;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
-import io.github.jklingsporn.vertx.jooq.shared.internal.QueryResult;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.pgclient.pubsub.PgSubscriber;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import org.jooq.UpdateReturningStep;
+import org.jooq.DSLContext;
+import org.jooq.ResultQuery;
 import org.jooq.UpdateSetFirstStep;
+import org.jooq.UpdateSetMoreStep;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -29,34 +30,35 @@ import static io.vertx.await.Async.await;
 
 public class RogueManager {
 
-	private final CardCatalogue cardCatalogue;
+	public static final SqlCachedCardCatalogue cardCatalogue = new SqlCachedCardCatalogue();
 
 	private static final String SPELLSOURCE_ROGUE_UPDATES_CHANNEL_FROM_DDL = "spellsource_rogue_updates_v0";
-	private WeakVertxMap<PgSubscriber> subscribers = new WeakVertxMap<>(vertx -> PgSubscriber.subscriber(vertx, Environment.pgArgs().connectionOptions()));
-	private PgSubscriber subscriber;
+	private static WeakVertxMap<PgSubscriber> subscribers = new WeakVertxMap<>(vertx -> PgSubscriber.subscriber(vertx, Environment.pgArgs().connectionOptions()));
+	private static PgSubscriber subscriber;
 
-	public RogueManager(CardCatalogue cardCatalogue) {
-		this.cardCatalogue = cardCatalogue;
-	}
+	private static final AtomicBoolean initialized = new AtomicBoolean(false);
 
 	/**
 	 * @see SqlCachedCardCatalogue#subscribe()
 	 */
-	public Future<Void> subscribe() {
-		if (subscriber != null) {
+	public static Future<Void> initialize() {
+		if (initialized.getAndSet(true)) {
 			return Future.succeededFuture();
 		}
 
-		this.subscriber = subscribers.get();
+		cardCatalogue.invalidateAllAndRefresh();
+
+		subscriber = subscribers.get();
 		var context = (ContextInternal) Vertx.currentContext();
 		subscriber.channel(SPELLSOURCE_ROGUE_UPDATES_CHANNEL_FROM_DDL).handler(payload -> context.runOnContext(_ -> {
 			try {
 				var update = DatabindCodec.mapper().readValue(payload, SpellsourceRogueUpdate.class);
 				var rogueId = update.id;
+				System.out.println("handling a rogue update for " + rogueId);
 
 				var rogueRun = await(getRogueRun(rogueId));
 
-				await(update.payload().handle(rogueRun, this));
+				await(update.payload().handle(rogueRun));
 			} catch (JsonProcessingException e) {
 				throw new RuntimeException(e);
 			}
@@ -65,19 +67,23 @@ public class RogueManager {
 		return subscriber.connect();
 	}
 
-	public Future<RogueRun> getRogueRun(long rogueId) {
-		return Environment.withExecutor(executor -> executor.findOneRow(dsl -> dsl.selectFrom(ROGUE_RUN).where(ROGUE_RUN.ID.eq(rogueId))).compose(row -> row == null ?
-				Future.failedFuture("No rogue run found") : Future.succeededFuture(RowMappers.getRogueRunMapper().apply(row))));
+	public static Future<RogueRun> returningRogueRun(Function<DSLContext, ResultQuery<RogueRunRecord>> handler) {
+		return Environment.withExecutor(executor -> executor.findOneRow(handler)
+				.compose(row -> row == null ? Future.failedFuture("No rogue run found") : Future.succeededFuture(RowMappers.getRogueRunMapper().apply(row))));
 	}
 
-	public Future<RogueRun> updateRogueRun(long rogueId, Function<UpdateSetFirstStep<RogueRunRecord>, UpdateReturningStep<RogueRunRecord>> handler) {
-		return Environment.withExecutor(executor -> executor.query(dsl -> handler.apply(dsl.update(ROGUE_RUN.where(ROGUE_RUN.ID.eq(rogueId)))).returning()).compose(QueryResult::unwrap));
+	public static Future<RogueRun> getRogueRun(long rogueId) {
+		return returningRogueRun(dsl -> dsl.selectFrom(ROGUE_RUN).where(ROGUE_RUN.ID.eq(rogueId)));
+	}
+
+	public static Future<RogueRun> updateRogueRun(long rogueId, Function<UpdateSetFirstStep<RogueRunRecord>, UpdateSetMoreStep<RogueRunRecord>> handler) {
+		return returningRogueRun(dsl -> handler.apply(dsl.update(ROGUE_RUN)).where(ROGUE_RUN.ID.eq(rogueId)).returning());
 	}
 
 	// the field names are the values within spellsource.rogue_payload_type in sql
-	public record SpellsourceRogueUpdate(long id, RogueRunStarted start, RogueChoice choice, RogueMatchStart matchStart, RogueMatchEnd matchEnd, RogueResign resign) {
+	public record SpellsourceRogueUpdate(long id, RogueRunStarted start, RogueChoice choice, RogueMatchStart matchStart, RogueMatchEnd matchEnd) {
 		private Stream<RoguePayload> payloads() {
-			return Stream.of(start, choice, matchStart, matchEnd, resign);
+			return Stream.of(start, choice, matchStart, matchEnd);
 		}
 
 		public RoguePayload payload() {
@@ -86,18 +92,16 @@ public class RogueManager {
 	}
 
 	public interface RoguePayload {
-		Future<?> handle(RogueRun rogueRun, RogueManager rogueManager);
+		Future<?> handle(RogueRun rogueRun);
 	}
 
 	public record RogueRunStarted() implements RoguePayload {
 		@Override
-		public Future<?> handle(RogueRun rogueRun, RogueManager rogueManager) {
-			// TODO real populate rogue deck
+		public Future<?> handle(RogueRun rogueRun) {
+			var format = cardCatalogue.getFormat("Rogue");
+			var testCards = cardCatalogue.query(format).stream().filter(card -> card.hasHeroClass(HeroClass.ANY) && card.isCollectible()).limit(10);
 
-			var format = rogueManager.cardCatalogue.getFormat("Rogue");
-			var testCards = rogueManager.cardCatalogue.query(format).filtered(card -> card.hasHeroClass(HeroClass.TEST) && card.isCollectible());
-
-			await(Future.all(testCards.stream().map(card -> Environment.withDslContext(dsl ->
+			await(Future.all(testCards.map(card -> Environment.withDslContext(dsl ->
 					dsl.insertInto(Tables.CARDS_IN_DECK).set(Tables.CARDS_IN_DECK.newRecord().setDeckId(rogueRun.getDeck()).setCardId(card.getCardId()))
 			)).toList()));
 
@@ -105,13 +109,15 @@ public class RogueManager {
 
 			// TODO change state to pre match OR give initial set of choices
 
+			await(updateRogueRun(rogueRun.getId(), r -> r.set(ROGUE_RUN.STATE, RogueRunState.PRE_MATCH)));
+
 			return Future.succeededFuture();
 		}
 	}
 
 	public record RogueChoice(int index) implements RoguePayload {
 		@Override
-		public Future<?> handle(RogueRun rogueRun, RogueManager rogueManager) {
+		public Future<?> handle(RogueRun rogueRun) {
 			if (index < 0 || index > rogueRun.getChoices().length) {
 				return Future.failedFuture("Choice index invalid");
 			}
@@ -121,7 +127,7 @@ public class RogueManager {
 			var newChoices = new String[0];
 
 			try {
-				var card = rogueManager.cardCatalogue.getCardById(choice);
+				var card = cardCatalogue.getCardById(choice);
 
 				if (card.getCardType() == Spellsource.CardTypeMessage.CardType.ROGUE_CHOICE) {
 					// TODO do other rogue choice stuff
@@ -132,7 +138,7 @@ public class RogueManager {
 				return Future.failedFuture(e);
 			}
 
-			return rogueManager.updateRogueRun(rogueRun.getId(), r -> r
+			return updateRogueRun(rogueRun.getId(), r -> r
 					.set(ROGUE_RUN.CHOICES, newChoices)
 					.set(ROGUE_RUN.STATE, newChoices.length > 0 ? RogueRunState.CHOICE : RogueRunState.PRE_MATCH)
 			);
@@ -141,38 +147,17 @@ public class RogueManager {
 
 	public record RogueMatchStart(long gameId) implements RoguePayload {
 		@Override
-		public Future<?> handle(RogueRun rogueRun, RogueManager rogueManager) {
+		public Future<?> handle(RogueRun rogueRun) {
 			return Future.succeededFuture();
 		}
 	}
 
 	public record RogueMatchEnd(boolean won) implements RoguePayload {
 		@Override
-		public Future<?> handle(RogueRun rogueRun, RogueManager rogueManager) {
-			if (!won) {
-				// TODO implement a lives mechanic
-
-				return rogueManager.updateRogueRun(rogueRun.getId(), r -> r
-						.set(ROGUE_RUN.STATE, RogueRunState.FINISHED)
-						.set(ROGUE_RUN.ENDED_AT, OffsetDateTime.now())
-				);
-			}
-
+		public Future<?> handle(RogueRun rogueRun) {
 			// TODO determine new choices / next opponent deck
 
-			return rogueManager.updateRogueRun(rogueRun.getId(), r -> r
-					.set(ROGUE_RUN.STATE, RogueRunState.CHOICE)
-			);
-		}
-	}
-
-	public record RogueResign() implements RoguePayload {
-		@Override
-		public Future<?> handle(RogueRun rogueRun, RogueManager rogueManager) {
-			return rogueManager.updateRogueRun(rogueRun.getId(), r -> r
-					.set(ROGUE_RUN.STATE, RogueRunState.FINISHED)
-					.set(ROGUE_RUN.ENDED_AT, OffsetDateTime.now())
-			);
+			return Future.succeededFuture();
 		}
 	}
 

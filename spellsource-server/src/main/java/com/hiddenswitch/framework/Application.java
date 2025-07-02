@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework;
 
 import com.hiddenswitch.framework.impl.ClusteredGames;
+import com.hiddenswitch.framework.impl.RogueManager;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.ServerConfiguration;
 import io.vertx.core.*;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
