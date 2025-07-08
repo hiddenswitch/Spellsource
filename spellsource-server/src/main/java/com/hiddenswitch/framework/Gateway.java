@@ -40,8 +40,6 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 	public void startVirtual() {
 		cardCatalogue.subscribe();
 		cardCatalogue.invalidateAllAndRefresh();
-		
-		RogueManager.initialize();
 
 		this.matchmaking = Matchmaking.services();
 		var services = new BindAll<?>[]{

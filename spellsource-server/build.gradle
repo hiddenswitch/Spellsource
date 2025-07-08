@@ -40,6 +40,7 @@ import com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerStopContainer
 import com.bmuschko.gradle.docker.tasks.image.DockerPullImage
+import com.kobylynskyi.graphql.codegen.model.ApiInterfaceStrategy
 import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConverter
 import io.vertx.core.json.JsonObject
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -136,7 +137,9 @@ dependencies {
   }
 
   implementation "io.github.kobylynskyi:graphql-java-codegen:5.9.0"
+  implementation 'com.graphql-java-kickstart:graphql-java-tools:13.0.5'
   implementation 'com.graphql-java:graphql-java:20.7'
+  implementation 'com.graphql-java:graphql-java-extended-scalars:20.2'
 
 
   testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
@@ -405,8 +408,8 @@ tasks.register('githubDockerPush') {
 graphqlCodegen {
   // all config options: 
   // https://github.com/kobylynskyi/graphql-java-codegen/blob/main/docs/codegen-options.md
-  graphqlSchemaPaths = [project.file("src/main/resources/schema.graphqls").path]
-  outputDir = "src/main/java"
+  graphqlSchemaPaths = [file("src/main/resources/schema.graphqls").path]
+  outputDir = file("src/main/java/com/hiddenswitch/framework/graphql")
   packageName = "com.hiddenswitch.framework.graphql"
   customTypesMapping = [
       DateTime: "org.joda.time.DateTime"
@@ -415,7 +418,17 @@ graphqlCodegen {
       DateTime: ["@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.example.json.EpochMillisScalarDeserializer.class)"]
   ]
   addGeneratedAnnotation = false
-  generateModelsForRootTypes = true
   modelValidationAnnotation = ""
   typeResolverSuffix = "TypeResolver"
+  apiInterfaceStrategy = ApiInterfaceStrategy.DO_NOT_GENERATE
+  apiReturnType = "io.vertx.core.Future"
+  // generateDataFetchingEnvironmentArgumentInApis = true
+  
+  doLast {
+    copy {
+      from "${outputDir.path}/com/hiddenswitch/framework/graphql"
+      into outputDir.path
+    }
+    delete "${outputDir.path}/com"
+  }
 }

@@ -11,8 +11,12 @@
   "author": "Benjamin Berman",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@apollo/server": "^4.9.4",
+    "@apollo/server": "^4.12.2",
     "@graphile-contrib/pg-omit-archived": "^4.0.0-beta.2",
+    "@graphql-tools/schema": "^10.0.23",
+    "@graphql-tools/stitch": "^9.4.25",
+    "@graphql-tools/utils": "^10.8.6",
+    "@graphql-tools/wrap": "^10.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -35,16 +39,17 @@
     "@graphql-codegen/typescript-resolvers": "^3.1.1",
     "@types/cors": "^2.8.14",
     "@types/jsonwebtoken": "^9",
-    "graphile-migrate": "^2.0.0-rc.2",
     "nodemon": "^3.1.9",
+    "ts-node": "^10.9.1",
     "typescript": "^5.3.3"
   },
   "packageManager": "yarn@4.5.0",
   "scripts": {
-    "develop": "nodemon -L src/server.ts",
+    "develop": "nodemon -L --inspect=0.0.0.0:9229 src/server.ts",
     "build": "tsc",
     "start": "node build/server.js",
     "codegen": "graphql-codegen",
-    "strawberry-shake": "dotnet graphql generate -o ../spellsource-client/src/unity/Assets/Scripts"
+    "strawberry-shake": "dotnet graphql generate -o ../spellsource-client/src/unity/Assets/Scripts",
+    "docker-debug": "node -r ts-node/register --inspect=0.0.0.0:51535 src/server.ts"
   }
 }

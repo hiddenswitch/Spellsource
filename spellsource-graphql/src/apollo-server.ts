@@ -1,0 +1,43 @@
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginLandingPageDisabled } from "@apollo/server/plugin/disabled";
+import express, { Application, NextFunction, Request, Response } from "express";
+import { createFullSchema } from "./schema/stitching";
+import { AuthRequest } from "./auth";
+
+type Handler = (req: Request, res: Response, next: NextFunction) => void;
+
+export const setupApolloServer = async (app: Application): Promise<ApolloServer> => {
+  const schema = await createFullSchema();
+
+  // const subscriptionServer = SubscriptionServer.create({ schema, execute, subscribe }, { server, path });
+
+  const apolloServer = new ApolloServer({
+    schema,
+    plugins: [ApolloServerPluginLandingPageDisabled()]
+
+  });
+  await apolloServer.start();
+
+  if (process.env.NODE_ENV === "production") {
+    app.use("/graphql", addGraphiqlHeaders);
+  }
+  app.use(
+    "/graphql",
+    express.json(),
+    expressMiddleware(apolloServer, {
+      context: async ({ req }) => (req as AuthRequest)
+    })
+  );
+
+  return apolloServer;
+};
+
+// Just some headers that the special Apollo Server graphiql asked for
+const addGraphiqlHeaders: Handler = (req, res, next) => {
+  res.setHeader("access-control-allow-origin", "https://studio.apollographql.com");
+  res.setHeader("access-control-allow-credentials", "true");
+  res.setHeader("access-control-allow-methods", "POST");
+
+  next();
+};

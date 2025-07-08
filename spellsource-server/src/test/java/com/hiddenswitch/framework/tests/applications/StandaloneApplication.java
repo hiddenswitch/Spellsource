@@ -99,7 +99,6 @@ public class StandaloneApplication extends Application {
 		try {
 			var envFile = new File("../spellsource-web/.env.local");
 			var contents = "REDIS_URI=" + REDIS.getRedisUrl() + "\n"
-					+ "PG_PORT=" + POSTGRES.getMappedPort(PostgresContainer.POSTGRESQL_PORT) + "\n"
 					+ "KEYCLOAK_PORT=" + KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP) + "\n"
 					+ "NEXT_PUBLIC_GRAPHQL_PORT=" + GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT) + "\n";
 			FileUtils.writeStringToFile(envFile, contents, StandardCharsets.UTF_8);

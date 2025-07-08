@@ -19,7 +19,6 @@ import org.jooq.ResultQuery;
 import org.jooq.UpdateSetFirstStep;
 import org.jooq.UpdateSetMoreStep;
 
-import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;

@@ -13,7 +13,7 @@ export const pgPool = new Pool({
   host: pgHost,
   database: pgDatabase,
   port: pgPort,
-  connectionTimeoutMillis: 1000, // Set connection timeout to 1 second
+  connectionTimeoutMillis: 1000 // Set connection timeout to 1 second,
 });
 
 const preset: GraphileConfig.Preset = {
@@ -21,36 +21,35 @@ const preset: GraphileConfig.Preset = {
     PostGraphileAmberPreset,
     makeV4Preset({
       dynamicJson: true,
-      subscriptions: true,
+      subscriptions: true
     }),
-    PostGraphileConnectionFilterPreset,
+    PostGraphileConnectionFilterPreset
   ],
   plugins: [PgOmitArchivedPlugin],
-  grafserv: {
-    graphiql: true,
-    websockets: true,
-  },
   schema: {
     dontSwallowErrors: true,
     retryOnInitFail: true,
-    exportSchemaSDLPath: "schema.graphql",
+    /*exportSchemaSDLPath: "schema.graphql",*/
     pgArchivedColumnName: "is_archived",
-    connectionFilterAllowNullInput: true,
+    connectionFilterAllowNullInput: true
   },
   pgServices: [
     makePgService({
       schemas: ["spellsource"],
       pubsub: true,
       pool: pgPool,
-      pgSettings: ({ expressv4 }) => {
-        const req = expressv4.req as AuthRequest;
+      pgSettingsForIntrospection: ({
+        role: "website"
+      }),
+      pgSettings: (ctx) => {
+        const req = ctx as unknown as AuthRequest;
         return {
           role: req.admin ? "admin" : req.auth ? "website" : undefined, // TODO use different roles for website / client / server ? or just rename role to "user"
-          "user.id": req.auth?.sub ?? "",
+          "user.id": req.auth?.sub ?? ""
         };
-      },
-    }),
-  ],
+      }
+    })
+  ]
 };
 
 export default preset;

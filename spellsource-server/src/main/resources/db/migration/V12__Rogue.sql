@@ -32,28 +32,6 @@ create policy rls on spellsource.rogue_run for select
     using (spellsource.get_user_id() = player);
 
 
--- the payload field names within SpellsourceRogueUpdate within RogueManager
-create type spellsource.rogue_payload_type as enum (
-    'start',
-    'choice',
-    'matchStart',
-    'matchEnd'
-    );
-
-create or replace function spellsource.rogue_notify(rogue_run_id bigint, type spellsource.rogue_payload_type,
-                                                    payload jsonb) returns void as
-$$
-begin
-    perform pg_notify('spellsource_rogue_updates_v0',
-                      jsonb_build_object
-                      ('id', rogue_run_id,
-                       type::text, payload
-                      )::text);
-end;
-$$ volatile language plpgsql;
-
-
-/* Called from client to begin a new Rogue Run */
 create or replace function spellsource.start_rogue_run(class_hero text, use_seed bigint) returns spellsource.rogue_run as
 $$
 declare
@@ -78,13 +56,6 @@ begin
     insert into spellsource.rogue_run (player, started_at, deck, seed)
     values (user_id, now(), id_deck, use_seed)
     returning * into rogue_run;
-
-
-    perform spellsource.rogue_notify(rogue_run.id, 'start',
-                                     jsonb_build_object
-                                     (
-                                     )
-            );
 
     return rogue_run;
 end;

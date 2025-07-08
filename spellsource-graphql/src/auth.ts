@@ -6,11 +6,12 @@ import { Request, RequestHandler } from "express-serve-static-core";
 export type AuthRequest = Request & {
   auth?: JwtPayload;
   admin?: boolean;
+  token?: string;
 };
 
 const client = jwksRsa({
   jwksUri: `${keycloakUrl}/realms/${realm}/protocol/openid-connect/certs`,
-  cache: true,
+  cache: true
 });
 
 const getKey = (header: jwt.JwtHeader, callback: jwt.SigningKeyCallback) =>
@@ -22,12 +23,14 @@ const getKey = (header: jwt.JwtHeader, callback: jwt.SigningKeyCallback) =>
   });
 
 export const authenticate: RequestHandler = (req: AuthRequest, res, next) => {
-  const token = req.header("Authorization")?.split(" ")[1];
+  const token = req.header("Authorization")?.replace("Bearer ", "");
 
   if (!token) {
     next();
     return;
   }
+
+  req.token = token;
 
   if (token == pgJwtSecret) {
     req.admin = true;
@@ -40,7 +43,7 @@ export const authenticate: RequestHandler = (req: AuthRequest, res, next) => {
     getKey,
     {
       issuer: issuer,
-      algorithms: ["RS256"],
+      algorithms: ["RS256"]
     },
     (err, decoded) => {
       if (err || !decoded) {
@@ -54,6 +57,6 @@ export const authenticate: RequestHandler = (req: AuthRequest, res, next) => {
       }
 
       next(); // Continue to the next middleware or route handler
-    },
+    }
   );
 };
