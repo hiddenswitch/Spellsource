@@ -4,7 +4,6 @@
 package com.hiddenswitch.framework.schema.spellsource;
 
 
-import com.hiddenswitch.framework.schema.spellsource.enums.RoguePayloadType;
 import com.hiddenswitch.framework.schema.spellsource.routines.ArchiveCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.CanSeeDeck;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardCatalogueGetCardByName;
@@ -19,14 +18,13 @@ import com.hiddenswitch.framework.schema.spellsource.routines.CheckRogueGameEnd;
 import com.hiddenswitch.framework.schema.spellsource.routines.CheckRogueGameStart;
 import com.hiddenswitch.framework.schema.spellsource.routines.ClusteredGamesUpdateGameAndUsers;
 import com.hiddenswitch.framework.schema.spellsource.routines.CreateDeckWithCards;
+import com.hiddenswitch.framework.schema.spellsource.routines.CurrentRogueChoice;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetLatestCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserAttribute;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
-import com.hiddenswitch.framework.schema.spellsource.routines.MakeRogueChoice;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishGitCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.ResignRogueRun;
-import com.hiddenswitch.framework.schema.spellsource.routines.RogueNotify;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveGeneratedArt;
 import com.hiddenswitch.framework.schema.spellsource.routines.SetUserAttribute;
@@ -39,6 +37,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetClas
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetFormat;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetHardRemovalCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueQuery;
+import com.hiddenswitch.framework.schema.spellsource.tables.GetCardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.GetClasses;
 import com.hiddenswitch.framework.schema.spellsource.tables.GetCollectionCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.SetCardsInDeck;
@@ -55,8 +54,10 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.ClassesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GeneratedArtRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.GetCardsInDeckRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GetClassesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GetCollectionCardsRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.RogueChoiceRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.RogueRunRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.SetCardsInDeckRecord;
 
@@ -594,6 +595,44 @@ public class Routines {
     }
 
     /**
+     * Call <code>spellsource.current_rogue_choice</code>
+     */
+    public static RogueChoiceRecord currentRogueChoice(
+          Configuration configuration
+        , Long rogueId
+    ) {
+        CurrentRogueChoice f = new CurrentRogueChoice();
+        f.setRogueId(rogueId);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.current_rogue_choice</code> as a field.
+     */
+    public static Field<RogueChoiceRecord> currentRogueChoice(
+          Long rogueId
+    ) {
+        CurrentRogueChoice f = new CurrentRogueChoice();
+        f.setRogueId(rogueId);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.current_rogue_choice</code> as a field.
+     */
+    public static Field<RogueChoiceRecord> currentRogueChoice(
+          Field<Long> rogueId
+    ) {
+        CurrentRogueChoice f = new CurrentRogueChoice();
+        f.setRogueId(rogueId);
+
+        return f.asField();
+    }
+
+    /**
      * Call <code>spellsource.get_latest_card</code>
      */
     public static CardsRecord getLatestCard(
@@ -709,21 +748,6 @@ public class Routines {
     }
 
     /**
-     * Call <code>spellsource.make_rogue_choice</code>
-     */
-    public static void makeRogueChoice(
-          Configuration configuration
-        , Long rogueId
-        , Integer choiceIndex
-    ) {
-        MakeRogueChoice p = new MakeRogueChoice();
-        p.setRogueId(rogueId);
-        p.setChoiceIndex(choiceIndex);
-
-        p.execute(configuration);
-    }
-
-    /**
      * Call <code>spellsource.publish_card</code>
      */
     public static Long publishCard(
@@ -820,23 +844,6 @@ public class Routines {
     ) {
         ResignRogueRun p = new ResignRogueRun();
         p.setRogueId(rogueId);
-
-        p.execute(configuration);
-    }
-
-    /**
-     * Call <code>spellsource.rogue_notify</code>
-     */
-    public static void rogueNotify(
-          Configuration configuration
-        , Long rogueRunId
-        , RoguePayloadType type
-        , JsonObject payload
-    ) {
-        RogueNotify p = new RogueNotify();
-        p.setRogueRunId(rogueRunId);
-        p.setType(type);
-        p.setPayload(payload);
 
         p.execute(configuration);
     }
@@ -1233,6 +1240,40 @@ public class Routines {
             rarity,
             heroClass,
             attribute
+        );
+    }
+
+    /**
+     * Call <code>spellsource.get_cards_in_deck</code>.
+     */
+    public static Result<GetCardsInDeckRecord> getCardsInDeck(
+          Configuration configuration
+        , String deck
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.GetCardsInDeck.GET_CARDS_IN_DECK.call(
+              deck
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.get_cards_in_deck</code> as a table.
+     */
+    public static GetCardsInDeck getCardsInDeck(
+          String deck
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.GetCardsInDeck.GET_CARDS_IN_DECK.call(
+            deck
+        );
+    }
+
+    /**
+     * Get <code>spellsource.get_cards_in_deck</code> as a table.
+     */
+    public static GetCardsInDeck getCardsInDeck(
+          Field<String> deck
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.GetCardsInDeck.GET_CARDS_IN_DECK.call(
+            deck
         );
     }
 

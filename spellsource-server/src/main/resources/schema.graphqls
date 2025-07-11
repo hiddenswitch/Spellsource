@@ -5,5 +5,14 @@ type Query {
 }
 
 type Mutation {
-  startRogueRun(heroClass: String!, seed: BigInt): BigInt!
+    startRogueRun(heroClass: String!, seed: BigInt): RogueRun!
+    makeRogueChoice(choiceId: BigInt!, choices: [Int!]!): RogueRun!
+}
+
+type RogueRun {
+    id: BigInt!
+}
+
+type RogueChoice {
+    id: BigInt!
 }

@@ -14,11 +14,10 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.internal.KeepAliveManager;
 import io.micrometer.core.instrument.Metrics;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.Context;
 import io.vertx.core.*;
+import io.vertx.core.Context;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpConnection;
-import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.json.Json;
 import io.vertx.core.spi.cluster.ClusterManager;
@@ -28,8 +27,8 @@ import io.vertx.micrometer.VertxPrometheusOptions;
 import io.vertx.micrometer.backends.PrometheusBackendRegistry;
 import io.vertx.pgclient.PgBuilder;
 import io.vertx.pgclient.PgConnectOptions;
-import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.*;
+import io.vertx.sqlclient.Row;
 import io.vertx.tracing.opentracing.OpenTracingOptions;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
@@ -37,10 +36,10 @@ import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jooq.*;
 import org.jooq.Configuration;
 import org.jooq.Query;
 import org.jooq.Record;
-import org.jooq.*;
 import org.jooq.conf.ParamType;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
@@ -62,10 +61,9 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.DriverManager;
-import java.util.Comparator;
 import java.util.*;
+import java.util.Comparator;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -203,7 +201,7 @@ public class Environment {
 		return handler.apply(executor);
 	}
 
-	public static <R extends Record, P> Future<List<P>> callRoutine(Function<Row, P> mapper, Table<R> called) {
+	public static <R extends Record, P> Future<List<P>> callRoutine(Table<R> called, Function<Row, P> mapper) {
 		var conn = Environment.sqlClient();
 		var executor = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), conn);
 		return executor.executeAny(dsl -> dsl.select(DSL.asterisk()).from(called))
@@ -220,11 +218,48 @@ public class Environment {
 		var namedSql = dsl.getSQL(ParamType.INLINED);
 		return conn.query(namedSql)
 				.execute()
-				.map(res -> StreamSupport
+				.map(res -> StreamSupport // TODO dont hardcode this way of retrieving the results
 						.stream(res.spliterator(), false)
 						.findFirst()
 						.map(row -> row.get(called.getType(), 0))
 						.orElseThrow());
+	}
+
+	public static <R, P> Future<P> callRoutine(Field<R> called, Function<Row, P> mapper) {
+		var conn = Environment.sqlClient();
+		var config = Environment.jooqAkaDaoConfiguration();
+		var namedSql = config.dsl().select(DSL.asterisk()).from(called.toString()).getSQL(ParamType.INLINED);
+		return conn.query(namedSql)
+				.execute()
+				.map(res -> StreamSupport
+						.stream(res.spliterator(), false)
+						.map(mapper)
+						.findFirst()
+						.orElse(null));
+	}
+
+	public static <R> Future<RowSet<Row>> callRoutine(Field<R> called, String userId) {
+		return callRoutine(called, userId, null);
+	}
+
+	public static <R> Future<RowSet<Row>> callRoutine(Field<R> called, String userId, String role) {
+		var jooq = Environment.jooqAkaDaoConfiguration();
+		var dsl = jooq.dsl();
+
+		return Environment.withConnection(conn -> conn.begin().compose(_ -> {
+			if (userId != null) {
+				await(conn.query(dsl.setLocal(DSL.name("user.id"), DSL.value(userId)).getSQL(ParamType.INLINED)).execute());
+			}
+
+			if (role != null) {
+				await(conn.query(dsl.setLocal(DSL.name("role"), DSL.value(role)).getSQL(ParamType.INLINED)).execute());
+			}
+
+			// TODO dont hardcode this way of retrieving the results
+			var query = dsl.select(DSL.asterisk()).from(called.toString()).getSQL(ParamType.INLINED);
+
+			return conn.query(query).execute();
+		}).eventually(() -> conn.transaction().commit()));
 	}
 
 	public static <T> Future<T> withConnection(Function<SqlConnection, Future<T>> handler) {

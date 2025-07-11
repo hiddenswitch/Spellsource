@@ -33,8 +33,18 @@ type Query implements Node {
 
   """Get a single `GeneratedArt`."""
   generatedArtByHashAndOwner(hash: String!, owner: String!): GeneratedArt
+
+  """Get a single `RogueRun`."""
+  rogueRunById(id: BigInt!): RogueRun
+
+  """Get a single `RogueRun`."""
+  rogueRunByDeck(deck: String!): RogueRun
+
+  """Get a single `RogueRun`."""
+  rogueRunByGame(game: BigInt!): RogueRun
   getUserId: String
   canSeeDeck(userId: String, deck: DeckInput): Boolean
+  getLatestCard(cardId: String, published: Boolean): Card
 
   """Reads a single `PublishedCard` using its globally unique `ID`."""
   publishedCard(
@@ -69,6 +79,12 @@ type Query implements Node {
     """The globally unique `ID` to be used in selecting a single `Card`."""
     nodeId: ID!
   ): Card
+
+  """Reads a single `RogueRun` using its globally unique `ID`."""
+  rogueRun(
+    """The globally unique `ID` to be used in selecting a single `RogueRun`."""
+    nodeId: ID!
+  ): RogueRun
 
   """Reads and enables pagination through a set of `PublishedCard`."""
   allPublishedCards(
@@ -351,6 +367,40 @@ type Query implements Node {
     """
     includeArchived: IncludeArchivedOption = NO
   ): GeneratedArtsConnection
+
+  """Reads and enables pagination through a set of `RogueRun`."""
+  allRogueRuns(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `RogueRun`."""
+    orderBy: [RogueRunsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: RogueRunCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: RogueRunFilter
+  ): RogueRunsConnection
   currentUserId: String
 }
 
@@ -361,12 +411,6 @@ type Mutation {
     """
     input: ArchiveCardInput!
   ): ArchiveCardPayload
-  resignRogueRun(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: ResignRogueRunInput!
-  ): ResignRogueRunPayload
   publishCard(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -418,14 +462,6 @@ type Mutation {
     input: CreatePublishedCardInput!
   ): CreatePublishedCardPayload
 
-  """Creates a single `DeckShare`."""
-  createDeckShare(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateDeckShareInput!
-  ): CreateDeckSharePayload
-
   """Creates a single `CardsInDeck`."""
   createCardsInDeck(
     """
@@ -475,22 +511,6 @@ type Mutation {
     """
     input: UpdatePublishedCardByIdInput!
   ): UpdatePublishedCardPayload
-
-  """Updates a single `DeckShare` using its globally unique id and a patch."""
-  updateDeckShare(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateDeckShareInput!
-  ): UpdateDeckSharePayload
-
-  """Updates a single `DeckShare` using a unique key and a patch."""
-  updateDeckShareByDeckIdAndShareRecipientId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateDeckShareByDeckIdAndShareRecipientIdInput!
-  ): UpdateDeckSharePayload
 
   """
   Updates a single `CardsInDeck` using its globally unique id and a patch.
@@ -566,22 +586,6 @@ type Mutation {
     input: DeletePublishedCardByIdInput!
   ): DeletePublishedCardPayload
 
-  """Deletes a single `DeckShare` using its globally unique id."""
-  deleteDeckShare(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckShareInput!
-  ): DeleteDeckSharePayload
-
-  """Deletes a single `DeckShare` using a unique key."""
-  deleteDeckShareByDeckIdAndShareRecipientId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckShareByDeckIdAndShareRecipientIdInput!
-  ): DeleteDeckSharePayload
-
   """Deletes a single `CardsInDeck` using its globally unique id."""
   deleteCardsInDeck(
     """
@@ -597,47 +601,10 @@ type Mutation {
     """
     input: DeleteCardsInDeckByIdInput!
   ): DeleteCardsInDeckPayload
+  startRogueRun(heroClass: String!, seed: BigInt): RogueRun!
 
-  """Deletes a single `Deck` using its globally unique id."""
-  deleteDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckInput!
-  ): DeleteDeckPayload
-
-  """Deletes a single `Deck` using a unique key."""
-  deleteDeckById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckByIdInput!
-  ): DeleteDeckPayload
-
-  """Deletes a single `Card` using its globally unique id."""
-  deleteCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteCardInput!
-  ): DeleteCardPayload
-
-  """Deletes a single `Card` using a unique key."""
-  deleteCardBySuccession(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteCardBySuccessionInput!
-  ): DeleteCardPayload
-
-  """Deletes a single `GeneratedArt` using a unique key."""
-  deleteGeneratedArtByHashAndOwner(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteGeneratedArtByHashAndOwnerInput!
-  ): DeleteGeneratedArtPayload
-  startRogueRun(heroClass: String!, seed: BigInt): BigInt!
+  """TODO can we return as RogueRun object?"""
+  makeRogueChoice(rogueId: BigInt!, choiceIndex: Int!): RogueRun!
 }
 
 """An object with a globally unique `ID`."""
@@ -1132,6 +1099,18 @@ input DeckFilter {
   """Some related `deckSharesByDeckId` exist."""
   deckSharesByDeckIdExist: Boolean
 
+  """Filter by the object’s `rogueRunByDeck` relation."""
+  rogueRunByDeck: RogueRunFilter
+
+  """A related `rogueRunByDeck` exists."""
+  rogueRunByDeckExists: Boolean
+
+  """Filter by the object’s `rogueRunsByOpponentDeck` relation."""
+  rogueRunsByOpponentDeck: DeckToManyRogueRunFilter
+
+  """Some related `rogueRunsByOpponentDeck` exist."""
+  rogueRunsByOpponentDeckExist: Boolean
+
   """Checks for all expressions in this list."""
   and: [DeckFilter!]
 
@@ -1293,6 +1272,237 @@ input DeckShareFilter {
 }
 
 """
+A filter to be used against `RogueRun` object types. All fields are combined with a logical ‘and.’
+"""
+input RogueRunFilter {
+  """Filter by the object’s `id` field."""
+  id: BigIntFilter
+
+  """Filter by the object’s `player` field."""
+  player: StringFilter
+
+  """Filter by the object’s `startedAt` field."""
+  startedAt: DatetimeFilter
+
+  """Filter by the object’s `endedAt` field."""
+  endedAt: DatetimeFilter
+
+  """Filter by the object’s `deck` field."""
+  deck: StringFilter
+
+  """Filter by the object’s `bossesDefeated` field."""
+  bossesDefeated: IntFilter
+
+  """Filter by the object’s `state` field."""
+  state: RogueRunStateFilter
+
+  """Filter by the object’s `choices` field."""
+  choices: StringListFilter
+
+  """Filter by the object’s `game` field."""
+  game: BigIntFilter
+
+  """Filter by the object’s `opponentDeck` field."""
+  opponentDeck: StringFilter
+
+  """Filter by the object’s `seed` field."""
+  seed: BigIntFilter
+
+  """Filter by the object’s `deckByDeck` relation."""
+  deckByDeck: DeckFilter
+
+  """Filter by the object’s `deckByOpponentDeck` relation."""
+  deckByOpponentDeck: DeckFilter
+
+  """A related `deckByOpponentDeck` exists."""
+  deckByOpponentDeckExists: Boolean
+
+  """Checks for all expressions in this list."""
+  and: [RogueRunFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [RogueRunFilter!]
+
+  """Negates the expression."""
+  not: RogueRunFilter
+}
+
+"""
+A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
+"""
+input DatetimeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Datetime
+
+  """Not equal to the specified value."""
+  notEqualTo: Datetime
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Datetime
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Datetime
+
+  """Included in the specified list."""
+  in: [Datetime!]
+
+  """Not included in the specified list."""
+  notIn: [Datetime!]
+
+  """Less than the specified value."""
+  lessThan: Datetime
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Datetime
+
+  """Greater than the specified value."""
+  greaterThan: Datetime
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Datetime
+}
+
+"""
+A filter to be used against RogueRunState fields. All fields are combined with a logical ‘and.’
+"""
+input RogueRunStateFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: RogueRunState
+
+  """Not equal to the specified value."""
+  notEqualTo: RogueRunState
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: RogueRunState
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: RogueRunState
+
+  """Included in the specified list."""
+  in: [RogueRunState!]
+
+  """Not included in the specified list."""
+  notIn: [RogueRunState!]
+
+  """Less than the specified value."""
+  lessThan: RogueRunState
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: RogueRunState
+
+  """Greater than the specified value."""
+  greaterThan: RogueRunState
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: RogueRunState
+}
+
+enum RogueRunState {
+  INITIAL
+  FINISHED
+  PRE_MATCH
+  IN_MATCH
+  CHOICE
+}
+
+"""
+A filter to be used against String List fields. All fields are combined with a logical ‘and.’
+"""
+input StringListFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: [String]
+
+  """Not equal to the specified value."""
+  notEqualTo: [String]
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: [String]
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: [String]
+
+  """Less than the specified value."""
+  lessThan: [String]
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: [String]
+
+  """Greater than the specified value."""
+  greaterThan: [String]
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: [String]
+
+  """Contains the specified list of values."""
+  contains: [String]
+
+  """Contained by the specified list of values."""
+  containedBy: [String]
+
+  """Overlaps the specified list of values."""
+  overlaps: [String]
+
+  """Any array item is equal to the specified value."""
+  anyEqualTo: String
+
+  """Any array item is not equal to the specified value."""
+  anyNotEqualTo: String
+
+  """Any array item is less than the specified value."""
+  anyLessThan: String
+
+  """Any array item is less than or equal to the specified value."""
+  anyLessThanOrEqualTo: String
+
+  """Any array item is greater than the specified value."""
+  anyGreaterThan: String
+
+  """Any array item is greater than or equal to the specified value."""
+  anyGreaterThanOrEqualTo: String
+}
+
+"""
+A filter to be used against many `RogueRun` object types. All fields are combined with a logical ‘and.’
+"""
+input DeckToManyRogueRunFilter {
+  """
+  Every related `RogueRun` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: RogueRunFilter
+
+  """
+  Some related `RogueRun` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: RogueRunFilter
+
+  """
+  No related `RogueRun` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: RogueRunFilter
+}
+
+"""
 A filter to be used against `Card` object types. All fields are combined with a logical ‘and.’
 """
 input CardFilter {
@@ -1397,48 +1607,6 @@ input JSONFilter {
 
   """Contained by the specified JSON."""
   containedBy: JSON
-}
-
-"""
-A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
-"""
-input DatetimeFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Datetime
-
-  """Not equal to the specified value."""
-  notEqualTo: Datetime
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Datetime
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Datetime
-
-  """Included in the specified list."""
-  in: [Datetime!]
-
-  """Not included in the specified list."""
-  notIn: [Datetime!]
-
-  """Less than the specified value."""
-  lessThan: Datetime
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Datetime
-
-  """Greater than the specified value."""
-  greaterThan: Datetime
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Datetime
 }
 
 """
@@ -1587,6 +1755,43 @@ type Deck implements Node {
     """
     filter: DeckShareFilter
   ): DeckSharesConnection!
+
+  """Reads a single `RogueRun` that is related to this `Deck`."""
+  rogueRunByDeck: RogueRun
+
+  """Reads and enables pagination through a set of `RogueRun`."""
+  rogueRunsByOpponentDeck(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `RogueRun`."""
+    orderBy: [RogueRunsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: RogueRunCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: RogueRunFilter
+  ): RogueRunsConnection!
 }
 
 """Methods to use when ordering `CardsInDeck`."""
@@ -1634,7 +1839,6 @@ type DeckSharesConnection {
   totalCount: Int!
 }
 
-"""indicates a deck shared to a player"""
 type DeckShare implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
@@ -1683,6 +1887,122 @@ input DeckShareCondition {
 
   """Checks for equality with the object’s `trashedByRecipient` field."""
   trashedByRecipient: Boolean
+}
+
+type RogueRun implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: BigInt!
+  player: String!
+  startedAt: Datetime!
+  endedAt: Datetime
+  deck: String!
+  bossesDefeated: Int!
+  state: RogueRunState!
+  choices: [String]
+  game: BigInt
+  opponentDeck: String
+  seed: BigInt!
+
+  """Reads a single `Deck` that is related to this `RogueRun`."""
+  deckByDeck: Deck
+
+  """Reads a single `Deck` that is related to this `RogueRun`."""
+  deckByOpponentDeck: Deck
+}
+
+"""A connection to a list of `RogueRun` values."""
+type RogueRunsConnection {
+  """A list of `RogueRun` objects."""
+  nodes: [RogueRun]!
+
+  """
+  A list of edges which contains the `RogueRun` and cursor to aid in pagination.
+  """
+  edges: [RogueRunsEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `RogueRun` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `RogueRun` edge in the connection."""
+type RogueRunsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `RogueRun` at the end of the edge."""
+  node: RogueRun
+}
+
+"""Methods to use when ordering `RogueRun`."""
+enum RogueRunsOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ID_ASC
+  ID_DESC
+  PLAYER_ASC
+  PLAYER_DESC
+  STARTED_AT_ASC
+  STARTED_AT_DESC
+  ENDED_AT_ASC
+  ENDED_AT_DESC
+  DECK_ASC
+  DECK_DESC
+  BOSSES_DEFEATED_ASC
+  BOSSES_DEFEATED_DESC
+  STATE_ASC
+  STATE_DESC
+  GAME_ASC
+  GAME_DESC
+  OPPONENT_DECK_ASC
+  OPPONENT_DECK_DESC
+  SEED_ASC
+  SEED_DESC
+}
+
+"""
+A condition to be used against `RogueRun` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input RogueRunCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: BigInt
+
+  """Checks for equality with the object’s `player` field."""
+  player: String
+
+  """Checks for equality with the object’s `startedAt` field."""
+  startedAt: Datetime
+
+  """Checks for equality with the object’s `endedAt` field."""
+  endedAt: Datetime
+
+  """Checks for equality with the object’s `deck` field."""
+  deck: String
+
+  """Checks for equality with the object’s `bossesDefeated` field."""
+  bossesDefeated: Int
+
+  """Checks for equality with the object’s `state` field."""
+  state: RogueRunState
+
+  """Checks for equality with the object’s `choices` field."""
+  choices: [String]
+
+  """Checks for equality with the object’s `game` field."""
+  game: BigInt
+
+  """Checks for equality with the object’s `opponentDeck` field."""
+  opponentDeck: String
+
+  """Checks for equality with the object’s `seed` field."""
+  seed: BigInt
 }
 
 """A `CardsInDeck` edge in the connection."""
@@ -2284,69 +2604,6 @@ input GeneratedArtFilter {
   not: GeneratedArtFilter
 }
 
-"""
-A filter to be used against String List fields. All fields are combined with a logical ‘and.’
-"""
-input StringListFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: [String]
-
-  """Not equal to the specified value."""
-  notEqualTo: [String]
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: [String]
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: [String]
-
-  """Less than the specified value."""
-  lessThan: [String]
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: [String]
-
-  """Greater than the specified value."""
-  greaterThan: [String]
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: [String]
-
-  """Contains the specified list of values."""
-  contains: [String]
-
-  """Contained by the specified list of values."""
-  containedBy: [String]
-
-  """Overlaps the specified list of values."""
-  overlaps: [String]
-
-  """Any array item is equal to the specified value."""
-  anyEqualTo: String
-
-  """Any array item is not equal to the specified value."""
-  anyNotEqualTo: String
-
-  """Any array item is less than the specified value."""
-  anyLessThan: String
-
-  """Any array item is less than or equal to the specified value."""
-  anyLessThanOrEqualTo: String
-
-  """Any array item is greater than the specified value."""
-  anyGreaterThan: String
-
-  """Any array item is greater than or equal to the specified value."""
-  anyGreaterThanOrEqualTo: String
-}
-
 """The output of our `archiveCard` mutation."""
 type ArchiveCardPayload {
   """
@@ -2369,30 +2626,6 @@ input ArchiveCardInput {
   """
   clientMutationId: String
   cardId: String
-}
-
-"""The output of our `resignRogueRun` mutation."""
-type ResignRogueRunPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `resignRogueRun` mutation."""
-input ResignRogueRunInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  rogueId: BigInt
 }
 
 """The output of our `publishCard` mutation."""
@@ -2657,51 +2890,6 @@ input PublishedCardInput {
   succession: BigInt!
 }
 
-"""The output of our create `DeckShare` mutation."""
-type CreateDeckSharePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `DeckShare` that was created by this mutation."""
-  deckShare: DeckShare
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `DeckShare`. May be used by Relay 1."""
-  deckShareEdge(
-    """The method to use when ordering `DeckShare`."""
-    orderBy: [DeckSharesOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): DeckSharesEdge
-
-  """Reads a single `Deck` that is related to this `DeckShare`."""
-  deckByDeckId: Deck
-}
-
-"""All input for the create `DeckShare` mutation."""
-input CreateDeckShareInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `DeckShare` to be created by this mutation."""
-  deckShare: DeckShareInput!
-}
-
-"""An input for mutations affecting `DeckShare`"""
-input DeckShareInput {
-  deckId: String!
-  shareRecipientId: String!
-  trashedByRecipient: Boolean
-}
-
 """The output of our create `CardsInDeck` mutation."""
 type CreateCardsInDeckPayload {
   """
@@ -2945,78 +3133,6 @@ input UpdatePublishedCardByIdInput {
   An object where the defined keys will be set on the `PublishedCard` being updated.
   """
   publishedCardPatch: PublishedCardPatch!
-}
-
-"""The output of our update `DeckShare` mutation."""
-type UpdateDeckSharePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `DeckShare` that was updated by this mutation."""
-  deckShare: DeckShare
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `DeckShare`. May be used by Relay 1."""
-  deckShareEdge(
-    """The method to use when ordering `DeckShare`."""
-    orderBy: [DeckSharesOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): DeckSharesEdge
-
-  """Reads a single `Deck` that is related to this `DeckShare`."""
-  deckByDeckId: Deck
-}
-
-"""All input for the `updateDeckShare` mutation."""
-input UpdateDeckShareInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `DeckShare` to be updated.
-  """
-  nodeId: ID!
-
-  """
-  An object where the defined keys will be set on the `DeckShare` being updated.
-  """
-  deckSharePatch: DeckSharePatch!
-}
-
-"""
-Represents an update to a `DeckShare`. Fields that are set will be updated.
-"""
-input DeckSharePatch {
-  deckId: String
-  shareRecipientId: String
-  trashedByRecipient: Boolean
-}
-
-"""
-All input for the `updateDeckShareByDeckIdAndShareRecipientId` mutation.
-"""
-input UpdateDeckShareByDeckIdAndShareRecipientIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  deckId: String!
-  shareRecipientId: String!
-
-  """
-  An object where the defined keys will be set on the `DeckShare` being updated.
-  """
-  deckSharePatch: DeckSharePatch!
 }
 
 """The output of our update `CardsInDeck` mutation."""
@@ -3341,60 +3457,6 @@ input DeletePublishedCardByIdInput {
   id: String!
 }
 
-"""The output of our delete `DeckShare` mutation."""
-type DeleteDeckSharePayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `DeckShare` that was deleted by this mutation."""
-  deckShare: DeckShare
-  deletedDeckShareId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `DeckShare`. May be used by Relay 1."""
-  deckShareEdge(
-    """The method to use when ordering `DeckShare`."""
-    orderBy: [DeckSharesOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): DeckSharesEdge
-
-  """Reads a single `Deck` that is related to this `DeckShare`."""
-  deckByDeckId: Deck
-}
-
-"""All input for the `deleteDeckShare` mutation."""
-input DeleteDeckShareInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `DeckShare` to be deleted.
-  """
-  nodeId: ID!
-}
-
-"""
-All input for the `deleteDeckShareByDeckIdAndShareRecipientId` mutation.
-"""
-input DeleteDeckShareByDeckIdAndShareRecipientIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  deckId: String!
-  shareRecipientId: String!
-}
-
 """The output of our delete `CardsInDeck` mutation."""
 type DeleteCardsInDeckPayload {
   """
@@ -3447,128 +3509,4 @@ input DeleteCardsInDeckByIdInput {
   """
   clientMutationId: String
   id: BigInt!
-}
-
-"""The output of our delete `Deck` mutation."""
-type DeleteDeckPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Deck` that was deleted by this mutation."""
-  deck: Deck
-  deletedDeckId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Deck`. May be used by Relay 1."""
-  deckEdge(
-    """The method to use when ordering `Deck`."""
-    orderBy: [DecksOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): DecksEdge
-}
-
-"""All input for the `deleteDeck` mutation."""
-input DeleteDeckInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Deck` to be deleted.
-  """
-  nodeId: ID!
-}
-
-"""All input for the `deleteDeckById` mutation."""
-input DeleteDeckByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  id: String!
-}
-
-"""The output of our delete `Card` mutation."""
-type DeleteCardPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Card` that was deleted by this mutation."""
-  card: Card
-  deletedCardId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Card`. May be used by Relay 1."""
-  cardEdge(
-    """The method to use when ordering `Card`."""
-    orderBy: [CardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): CardsEdge
-}
-
-"""All input for the `deleteCard` mutation."""
-input DeleteCardInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Card` to be deleted.
-  """
-  nodeId: ID!
-}
-
-"""All input for the `deleteCardBySuccession` mutation."""
-input DeleteCardBySuccessionInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  succession: BigInt!
-}
-
-"""The output of our delete `GeneratedArt` mutation."""
-type DeleteGeneratedArtPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `GeneratedArt` that was deleted by this mutation."""
-  generatedArt: GeneratedArt
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `deleteGeneratedArtByHashAndOwner` mutation."""
-input DeleteGeneratedArtByHashAndOwnerInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  hash: String!
-  owner: String!
 }

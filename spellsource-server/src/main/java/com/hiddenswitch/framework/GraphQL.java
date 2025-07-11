@@ -2,6 +2,8 @@ package com.hiddenswitch.framework;
 
 import com.hiddenswitch.framework.impl.GraphQLMutationResolverImpl;
 import com.hiddenswitch.framework.impl.GraphQLQueryResolverImpl;
+import com.hiddenswitch.framework.impl.RogueManager;
+import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
 import com.hiddenswitch.framework.virtual.VirtualThreadRoutingContextHandler;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import graphql.kickstart.tools.SchemaParser;
@@ -14,6 +16,7 @@ import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.HttpException;
 import io.vertx.ext.web.handler.JWTAuthHandler;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandlerOptions;
@@ -28,6 +31,8 @@ public class GraphQL extends AbstractVirtualThreadVerticle {
 
 	@Override
 	public void startVirtual() throws Exception {
+		RogueManager.initCardCatalogue();
+		
 		var router = Router.router(vertx);
 		var jwtAuth = JWTAuth.create(vertx, Accounts.jwtAuthOptions());
 		var realm = await(Accounts.realm());
@@ -51,18 +56,21 @@ public class GraphQL extends AbstractVirtualThreadVerticle {
 		router.post("/graphql")
 				.handler(BodyHandler.create())
 				.handler(JWTAuthHandler.create(jwtAuth, realm.toRepresentation().getRealm()))
+				.handler(VirtualThreadRoutingContextHandler.create(ctx -> handler.handle(RoutingContext.newInstance(ctx))))
 				.failureHandler(ctx -> {
-					var json = ctx.body().asJsonObject();
-					var query = json.getString("query");
+					if (ctx.failed() && ctx.failure() instanceof HttpException httpException && httpException.getMessage().contains("Unauthorized")) {
+						var json = ctx.body().asJsonObject();
+						var query = json.getString("query");
 
-					if (ctx.user() == null && query.startsWith("query IntrospectionQuery")) {
-						ctx.setUser(User.create(new JsonObject().put("name", "Introspection Query")));
-						ctx.reroute(ctx.normalizedPath());
-					} else {
-						ctx.response().setStatusCode(401).end("Unauthorized");
+						if (ctx.user() == null && query.startsWith("query IntrospectionQuery")) {
+							ctx.setUser(User.create(new JsonObject().put("name", "Introspection Query")));
+							ctx.reroute(ctx.normalizedPath());
+							return;
+						}
 					}
-				})
-				.handler(VirtualThreadRoutingContextHandler.create(ctx -> handler.handle(RoutingContext.newInstance(ctx))));
+
+					ctx.next();
+				});
 
 
 		router.route("/graphiql*").subRouter(GraphiQLHandler.create(vertx, new GraphiQLHandlerOptions().setEnabled(true)).router());

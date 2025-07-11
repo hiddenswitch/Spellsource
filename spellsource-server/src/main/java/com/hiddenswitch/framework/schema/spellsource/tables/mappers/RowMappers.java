@@ -180,6 +180,18 @@ public class RowMappers {
                 };
         }
 
+        public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueChoice> getRogueChoiceMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueChoice pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueChoice();
+                        pojo.setId(row.getLong("id"));
+                        pojo.setRogueRun(row.getLong("rogue_run"));
+                        // Omitting unrecognized type DataType [ t=ARRAY; p=0; s=0; u="pg_catalog"."_text"; j=null ] (java.lang.String[]) for column cards!
+                        pojo.setCanPick(row.getInteger("can_pick"));
+                        pojo.setIndex(row.getInteger("index"));
+                        return pojo;
+                };
+        }
+
         public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun> getRogueRunMapper() {
                 return row -> {
                         com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun();
@@ -187,10 +199,10 @@ public class RowMappers {
                         pojo.setPlayer(row.getString("player"));
                         pojo.setStartedAt(row.getOffsetDateTime("started_at"));
                         pojo.setEndedAt(row.getOffsetDateTime("ended_at"));
+                        pojo.setHeroClass(row.getString("hero_class"));
                         pojo.setDeck(row.getString("deck"));
                         pojo.setBossesDefeated(row.getInteger("bosses_defeated"));
                         pojo.setState(java.util.Arrays.stream(com.hiddenswitch.framework.schema.spellsource.enums.RogueRunState.values()).filter(td -> td.getLiteral().equals(row.getString("state"))).findFirst().orElse(null));
-                        // Omitting unrecognized type DataType [ t=ARRAY; p=0; s=0; u="pg_catalog"."_text"; j=null ] (java.lang.String[]) for column choices!
                         pojo.setGame(row.getLong("game"));
                         pojo.setOpponentDeck(row.getString("opponent_deck"));
                         pojo.setSeed(row.getLong("seed"));

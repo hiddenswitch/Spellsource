@@ -156,6 +156,8 @@ dependencies {
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
   testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
   testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.2'
+
+  testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
 
 javadoc {
@@ -412,7 +414,8 @@ graphqlCodegen {
   outputDir = file("src/main/java/com/hiddenswitch/framework/graphql")
   packageName = "com.hiddenswitch.framework.graphql"
   customTypesMapping = [
-      DateTime: "org.joda.time.DateTime"
+      DateTime: "org.joda.time.DateTime",
+      BigInt: "java.lang.Long"
   ]
   customAnnotationsMapping = [
       DateTime: ["@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.example.json.EpochMillisScalarDeserializer.class)"]

@@ -1,7 +1,8 @@
 package net.demilich.metastone.game;
 
-import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import com.hiddenswitch.spellsource.common.GameState;
+import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
+import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
@@ -37,19 +38,18 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
+import net.demilich.metastone.game.spells.rogue.ExternalLogicComponent;
 import net.demilich.metastone.game.spells.trigger.Aftermath;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.targeting.*;
-import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 import org.apache.commons.math3.util.Combinations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -61,9 +61,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 
 /**
- * A game context helps execute a match of Spellsource, providing a place to store state, deliver requests for actions
- * to players, apply those player actions through a {@link GameLogic}, and then save the updated state as a result of
- * those actions.
+ * A game context helps execute a match of Spellsource, providing a place to store state, deliver requests for actions to players, apply those player actions through a {@link GameLogic}, and then save the updated state as a result of those actions.
  * <p>
  * For example, this code starts a game between two opponents that perform random actions:
  * <pre>
@@ -76,8 +74,7 @@ import static java.util.stream.Collectors.toList;
  * }
  * </pre>
  * <p>
- * This will start a game between two opponents that try to play a little smarter, using the Spellsource agent
- * {@link net.demilich.metastone.game.behaviour.GameStateValueBehaviour}. It will also use a pair of decks to do it.
+ * This will start a game between two opponents that try to play a little smarter, using the Spellsource agent {@link net.demilich.metastone.game.behaviour.GameStateValueBehaviour}. It will also use a pair of decks to do it.
  * <pre>
  * {@code
  * GameContext context = new GameContext();
@@ -89,9 +86,7 @@ import static java.util.stream.Collectors.toList;
  * }
  * </pre>
  * <p>
- * The most important part of the game state is encoded inside the fields of the {@link Player} object in
- * {@link #getPlayers()}, like {@link Player#getMinions()}. The actions taken by the players are delegated to the
- * {@link Behaviour} objects in {@link #getBehaviours()}.
+ * The most important part of the game state is encoded inside the fields of the {@link Player} object in {@link #getPlayers()}, like {@link Player#getMinions()}. The actions taken by the players are delegated to the {@link Behaviour} objects in {@link #getBehaviours()}.
  * <p>
  * Game state is composed of a variety of fields that live inside the context. These fields are:
  * <ul>
@@ -181,13 +176,9 @@ import static java.util.stream.Collectors.toList;
  * card behaviour using Spellsource.
  *
  * @see #play() for more about how a game is "played."
- * @see Behaviour for the interface that the {@link GameContext} delegates player actions and notifications to. This is
- * both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
- * sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
- * {@link Behaviour#requestAction(GameContext, Player, List)}.
+ * @see Behaviour for the interface that the {@link GameContext} delegates player actions and notifications to. This is both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g. {@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see PlayRandomBehaviour for an example behaviour that just makes random decisions when requested.
- * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a
- * {@link GameContext} because it manipulates the state stored in it.
+ * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
  * @see #getGameState() to access and modify the game state.
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
@@ -227,11 +218,12 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	private Trace trace = new Trace();
 	private Thread thread;
 
+	protected HashMap<Class<? extends ExternalLogicComponent>, ExternalLogicComponent> externalLogicComponents = new HashMap<>();
+
 	/**
 	 * Creates a game context with two empty players and two {@link PlayRandomBehaviour} behaviours.
 	 * <p>
-	 * Hero cards are not given to the players. Thus, this is not enough typically to mutate and run a game. Use
-	 * {@link #GameContext(String...)} to create a game initialized with the specified hero classes.
+	 * Hero cards are not given to the players. Thus, this is not enough typically to mutate and run a game. Use {@link #GameContext(String...)} to create a game initialized with the specified hero classes.
 	 */
 	public GameContext() {
 		this(ClasspathCardCatalogue.INSTANCE);
@@ -312,8 +304,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Creates an uninitialized game context (i.e., no cards in the decks of the players or behaviours specified). A hero
-	 * card is retrieved and given to each player.
+	 * Creates an uninitialized game context (i.e., no cards in the decks of the players or behaviours specified). A hero card is retrieved and given to each player.
 	 * <p>
 	 * This is typically the absolute minimum needed to mutate and run a game.
 	 *
@@ -337,8 +328,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Adds a temporary card. A temporary card is a card that exists only in this instance and not in the
-	 * {@link CardCatalogue}.
+	 * Adds a temporary card. A temporary card is a card that exists only in this instance and not in the {@link CardCatalogue}.
 	 *
 	 * @param card The card to add, typically made with code.
 	 */
@@ -349,8 +339,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	/**
 	 * Clones the game context, recursively cloning the game state and logic.
 	 * <p>
-	 * Internally, this is used by AI functions to evaluate a game state until a win condition (or just the end of the
-	 * turn) is reached.
+	 * Internally, this is used by AI functions to evaluate a game state until a win condition (or just the end of the turn) is reached.
 	 * <p>
 	 * This method is not thread safe. Two threads can't clone and mutate a context at the same time.
 	 *
@@ -428,8 +417,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	/**
 	 * Determines whether the game is over (decided). As a side effect, records the current result of the game.
 	 *
-	 * @return {@code true} if the game has been decided by concession or because one of the two heroes have been
-	 * destroyed.
+	 * @return {@code true} if the game has been decided by concession or because one of the two heroes have been destroyed.
 	 */
 	public boolean updateAndGetGameOver() {
 		if (getPlayer1() == null
@@ -529,8 +517,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Gets a reference to the game context's environment, a piece of game state that keeps tracks of which minions are
-	 * currently being summoned, which targets are being targeted, how much damage is set to be dealt, etc.
+	 * Gets a reference to the game context's environment, a piece of game state that keeps tracks of which minions are currently being summoned, which targets are being targeted, how much damage is set to be dealt, etc.
 	 * <p>
 	 * This helps implement a variety of complex rules in the game.
 	 *
@@ -616,12 +603,10 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Gets the {@link Actor} entities geometrically opposite of the given {@code minionReference} on the
-	 * {@link Zones#BATTLEFIELD}.
+	 * Gets the {@link Actor} entities geometrically opposite of the given {@code minionReference} on the {@link Zones#BATTLEFIELD}.
 	 *
 	 * @param minionReference The minion from whose perspective we will consider "opposite."
-	 * @return The list of {@link Actor} (typically one or two) that are geometrically opposite from the minion referenced
-	 * by {@code minionReference}.
+	 * @return The list of {@link Actor} (typically one or two) that are geometrically opposite from the minion referenced by {@code minionReference}.
 	 */
 	public List<Actor> getOppositeMinions(EntityReference minionReference) {
 		List<Actor> oppositeMinions = new ArrayList<>();
@@ -710,8 +695,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Gets minions geometrically right of the given {@code minionReference} on the {@link Zones#BATTLEFIELD} that belongs
-	 * to the specified player.
+	 * Gets minions geometrically right of the given {@code minionReference} on the {@link Zones#BATTLEFIELD} that belongs to the specified player.
 	 *
 	 * @param minionReference The minion reference.
 	 * @return A list of {@link Actor} (sometimes empty) of minions to the geometric right of the {@code minionReference}.
@@ -734,8 +718,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	/**
 	 * Gets the minions whose summoning is currently being processed.
 	 * <p>
-	 * This stack can have multiple entries because battlecries or secrets can trigger summoning of other minions in the
-	 * middle of evaluating a {@link GameLogic#summon(int, Minion, Entity, int, boolean)}.
+	 * This stack can have multiple entries because battlecries or secrets can trigger summoning of other minions in the middle of evaluating a {@link GameLogic#summon(int, Minion, Entity, int, boolean)}.
 	 *
 	 * @return A stack of summons.
 	 */
@@ -806,8 +789,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	/**
 	 * Initializes a game.
 	 * <p>
-	 * This function will choose a starting player, then move cards into the mulligan (set aside) zone, ask for mulligans,
-	 * and start the game. {@link #resume()} will start the first turn.
+	 * This function will choose a starting player, then move cards into the mulligan (set aside) zone, ask for mulligans, and start the game. {@link #resume()} will start the first turn.
 	 */
 	public void init() {
 		currentContext.set(this);
@@ -878,12 +860,9 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	/**
 	 * Plays the game.
 	 * <p>
-	 * When a game is played, mulligans are requested from both players, and then each player is asked for actions until
-	 * the player can't take any.
+	 * When a game is played, mulligans are requested from both players, and then each player is asked for actions until the player can't take any.
 	 * <p>
-	 * Play relies on the {@link Behaviour} delegates to determine what a player's chosen action is. It takes the chosen
-	 * action and feeds it to the {@link GameLogic}, which executes the effects of that action until the next action needs
-	 * to be requested.
+	 * Play relies on the {@link Behaviour} delegates to determine what a player's chosen action is. It takes the chosen action and feeds it to the {@link GameLogic}, which executes the effects of that action until the next action needs to be requested.
 	 *
 	 * @see #takeActionInTurn() for a breakdown of a specific turn.
 	 */
@@ -917,12 +896,9 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	/**
 	 * Requests an action from a player and takes it in the turn.
 	 * <p>
-	 * This method will call {@link Behaviour#requestAction(GameContext, Player, List)} to get an action from the
-	 * currently active player. It then calls {@link #performAction(int, GameAction)} with the returned
-	 * {@link GameAction}.
+	 * This method will call {@link Behaviour#requestAction(GameContext, Player, List)} to get an action from the currently active player. It then calls {@link #performAction(int, GameAction)} with the returned {@link GameAction}.
 	 *
-	 * @return {@code false} if the player selected an {@link EndTurnAction}, indicating the player would like to end
-	 * their turn.
+	 * @return {@code false} if the player selected an {@link EndTurnAction}, indicating the player would like to end their turn.
 	 */
 	public boolean takeActionInTurn() {
 		currentContext.set(this);
@@ -973,10 +949,8 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * Tries to find the entity references by the {@link EntityReference}.
 	 *
 	 * @param targetKey The reference to find.
-	 * @return The {@link Entity} pointed to by the {@link EntityReference}, or {@code null} if the provided entity
-	 * reference was {@code null} or {@link EntityReference#NONE}
-	 * @throws TargetNotFoundException if the reference could not be found. Game rules shouldn't be looking for references
-	 *                                 that cannot be found.
+	 * @return The {@link Entity} pointed to by the {@link EntityReference}, or {@code null} if the provided entity reference was {@code null} or {@link EntityReference#NONE}
+	 * @throws TargetNotFoundException if the reference could not be found. Game rules shouldn't be looking for references that cannot be found.
 	 */
 	public Entity resolveSingleTarget(EntityReference targetKey) throws TargetNotFoundException {
 		currentContext.set(this);
@@ -984,8 +958,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Resolves a single target given the specification, even if the specification is a
-	 * {@link EntityReference#isTargetGroup()}
+	 * Resolves a single target given the specification, even if the specification is a {@link EntityReference#isTargetGroup()}
 	 *
 	 * @param targetKey
 	 * @param rejectRemovedFromPlay
@@ -1009,15 +982,13 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Interprets {@link EntityReference} that specifies a group of {@link Entity} objects, like
-	 * {@link EntityReference#ALL_MINIONS}.
+	 * Interprets {@link EntityReference} that specifies a group of {@link Entity} objects, like {@link EntityReference#ALL_MINIONS}.
 	 *
 	 * @param player    The player from whose point of view this method interprets the {@link EntityReference}.
 	 * @param source    The entity from whose point of view this method interprets the {@link EntityReference}.
 	 * @param targetKey The {@link EntityReference}.
 	 * @return A potentially empty list of entities.
-	 * @see TargetLogic#resolveTargetKey(GameContext, Player, Entity, EntityReference) for more about how target
-	 * resolution works.
+	 * @see TargetLogic#resolveTargetKey(GameContext, Player, Entity, EntityReference) for more about how target resolution works.
 	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
 		currentContext.set(this);
@@ -1044,9 +1015,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	/**
 	 * Retrieves the current target override specified in the environment.
 	 * <p>
-	 * A target override can be a specific {@link EntityReference} or a "group reference" (logical entity reference) that
-	 * returns exactly zero or one targets. The override should almost always succeed, and it would be surprising if there
-	 * were overrides that resulted in no targets being found.
+	 * A target override can be a specific {@link EntityReference} or a "group reference" (logical entity reference) that returns exactly zero or one targets. The override should almost always succeed, and it would be surprising if there were overrides that resulted in no targets being found.
 	 *
 	 * @param player The player for whom the override should be evaluated.
 	 * @param source The source entity of this override.
@@ -1319,8 +1288,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Raised when a {@link Enchantment} is fired (i.e., a secret is about to be played or a special effect hosted by a
-	 * minion/weapon is about to happen).
+	 * Raised when a {@link Enchantment} is fired (i.e., a secret is about to be played or a special effect hosted by a minion/weapon is about to happen).
 	 *
 	 * @param enchantment The spell trigger that fired.
 	 */
@@ -1491,19 +1459,13 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * This call will be blocking regardless of using it in a parallel fashion.
 	 *
 	 * @param decks           Decks to run the match with. At least two are required.
-	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
-	 *                        corresponds to an AI to use for this player.
+	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that corresponds to an AI to use for this player.
 	 *                        <p>
-	 *                        For example, use the argument {@code GameStateValueBehaviour::new} to specify that the first
-	 *                        player's AI should be a game state value behaviour.
-	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
-	 *                        corresponds to an AI to use for this player.
-	 * @param gamesPerMatchup The number of games per matchup to play. The number of matchups total can be calculated with
-	 *                        {@link #simulationCount(int, int, boolean)}.
-	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
-	 *                        on this JVM instance.
-	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is
-	 *                        completed. This can be used to implement progress on a different thread.
+	 *                        For example, use the argument {@code GameStateValueBehaviour::new} to specify that the first player's AI should be a game state value behaviour.
+	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that corresponds to an AI to use for this player.
+	 * @param gamesPerMatchup The number of games per matchup to play. The number of matchups total can be calculated with {@link #simulationCount(int, int, boolean)}.
+	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation on this JVM instance.
+	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is completed. This can be used to implement progress on a different thread.
 	 */
 	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, AtomicInteger matchCounter) {
 		return simulate(decks, player1, player2, gamesPerMatchup, useJavaParallel, false, matchCounter, null, null);
@@ -1514,19 +1476,13 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * <p>
 	 * This call will be blocking regardless of using it in a parallel fashion.
 	 *
-	 * @param decks           Decks to run the match with. At least one is required if {@code includeMirrors} is
-	 *                        {@code true}, otherwise at least two.
-	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
-	 *                        corresponds to an AI to use for this player.
+	 * @param decks           Decks to run the match with. At least one is required if {@code includeMirrors} is {@code true}, otherwise at least two.
+	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that corresponds to an AI to use for this player.
 	 *                        <p>
-	 *                        For example, use the argument {@code GameStateValueBehaviour::new} to specify that the first
-	 *                        player's AI should be a game state value behaviour.
-	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
-	 *                        corresponds to an AI to use for this player.
-	 * @param gamesPerMatchup The number of games per matchup to play. The number of matchups total can be calculated with
-	 *                        {@link #simulationCount(int, int, boolean)}.
-	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
-	 *                        on this JVM instance.
+	 *                        For example, use the argument {@code GameStateValueBehaviour::new} to specify that the first player's AI should be a game state value behaviour.
+	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that corresponds to an AI to use for this player.
+	 * @param gamesPerMatchup The number of games per matchup to play. The number of matchups total can be calculated with {@link #simulationCount(int, int, boolean)}.
+	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation on this JVM instance.
 	 * @param includeMirrors  When {@code true}, includes mirror matchups for each deck.
 	 */
 	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, boolean includeMirrors) {
@@ -1541,25 +1497,16 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * When more than two decks are specified, the players will have their statistics merged with multiple decks.
 	 *
 	 * @param decks                        Decks to run the match with. At least two are required.
-	 * @param player1                      A {@link Supplier} (function which returns a new instance) of a
-	 *                                     {@link Behaviour} that corresponds to an AI to use for this player.
+	 * @param player1                      A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that corresponds to an AI to use for this player.
 	 *                                     <p>
-	 *                                     For example, use the argument {@code GameStateValueBehaviour::new} to specify
-	 *                                     that the first player's AI should be a game state value behaviour.
-	 * @param player2                      A {@link Supplier} (function which returns a new instance) of a
-	 *                                     {@link Behaviour} that corresponds to an AI to use for this player.
-	 * @param gamesPerMatchup              The number of games per matchup to play. The number of matchups total can be
-	 *                                     calculated with {@link #simulationCount(int, int, boolean)}.
-	 * @param useJavaParallel              When {@code true}, uses the Java Streams Parallel interface to parallelize this
-	 *                                     computation on this JVM instance.
+	 *                                     For example, use the argument {@code GameStateValueBehaviour::new} to specify that the first player's AI should be a game state value behaviour.
+	 * @param player2                      A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that corresponds to an AI to use for this player.
+	 * @param gamesPerMatchup              The number of games per matchup to play. The number of matchups total can be calculated with {@link #simulationCount(int, int, boolean)}.
+	 * @param useJavaParallel              When {@code true}, uses the Java Streams Parallel interface to parallelize this computation on this JVM instance.
 	 * @param includeMirrors               When {@code true}, includes mirror matchups
-	 * @param matchCounter                 When not {@code null}, the simulator will increment this counter each time a
-	 *                                     match is
-	 * @param mutateConstructedGameContext A handler that can modify the game context for customization after it was
-	 *                                     initialized with the specified decks but before mulligans. For example, the
-	 *                                     {@link GameLogic#getSeed()} can
-	 * @param afterGameContextInit         A handler that can add/remove things to the game context after the players have
-	 *                                     mulliganned.
+	 * @param matchCounter                 When not {@code null}, the simulator will increment this counter each time a match is
+	 * @param mutateConstructedGameContext A handler that can modify the game context for customization after it was initialized with the specified decks but before mulligans. For example, the {@link GameLogic#getSeed()} can
+	 * @param afterGameContextInit         A handler that can add/remove things to the game context after the players have mulliganned.
 	 */
 	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, boolean includeMirrors, AtomicInteger matchCounter, Consumer<GameContext> mutateConstructedGameContext, Consumer<GameContext> afterGameContextInit) {
 		// Actually run the computation
@@ -1701,8 +1648,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Gets a game context that's ready to play from two {@link GameDeck} objects. Uses the {@link PlayRandomBehaviour}
-	 * for both players.
+	 * Gets a game context that's ready to play from two {@link GameDeck} objects. Uses the {@link PlayRandomBehaviour} for both players.
 	 *
 	 * @param decks The {@link GameDeck}s to use for the players.
 	 * @return A {@link GameContext} for which {@link #play()} will immediately work.
@@ -1714,8 +1660,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Gets a game context that's ready to play from two deck lists encoded in the standard community format. Uses the
-	 * {@link PlayRandomBehaviour} for both players.
+	 * Gets a game context that's ready to play from two deck lists encoded in the standard community format. Uses the {@link PlayRandomBehaviour} for both players.
 	 *
 	 * @param deckLists A Hearthstone deck string or a deck list of the format, with newlines:
 	 *                  <p>
@@ -1858,13 +1803,11 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Resolves a single target that could be a {@link EntityReference#isTargetGroup()} that points to exactly one entity,
-	 * like {@link EntityReference#FRIENDLY_HERO}.
+	 * Resolves a single target that could be a {@link EntityReference#isTargetGroup()} that points to exactly one entity, like {@link EntityReference#FRIENDLY_HERO}.
 	 *
 	 * @param player The source player.
 	 * @param source The entity from whose point of view this target should be evaluated.
-	 * @param target A target key to a specific entity or a named reference ("target group") that returns exactly one
-	 *               entity.
+	 * @param target A target key to a specific entity or a named reference ("target group") that returns exactly one entity.
 	 * @return The entity.
 	 */
 	@SuppressWarnings("unchecked")
@@ -1943,8 +1886,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Provides context for tracing in this context. This is the OpenTracing span context, typically assigned by the
-	 * matchmaker or whatever created this instance.
+	 * Provides context for tracing in this context. This is the OpenTracing span context, typically assigned by the matchmaker or whatever created this instance.
 	 *
 	 * @return
 	 */
@@ -1958,8 +1900,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Returns a reference to the variables stored in the game context, used by spells to maintain correct space when a
-	 * strand currently being executed is cloned.
+	 * Returns a reference to the variables stored in the game context, used by spells to maintain correct space when a strand currently being executed is cloned.
 	 *
 	 * @return
 	 */
@@ -2058,8 +1999,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	/**
 	 * Sets the card catalogue.
 	 * <p>
-	 * If there is a pre-exiting format on this game context, this method will also look up the deck format and change it
-	 * if it exists in the new catalogue.
+	 * If there is a pre-exiting format on this game context, this method will also look up the deck format and change it if it exists in the new catalogue.
 	 *
 	 * @param cardCatalogue the card catalogue to use
 	 * @return this game context
@@ -2077,9 +2017,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	/**
-	 * Returns a card for the purposes of overriding a card. The {@code CardDesc} on the card has been cloned, in order to
-	 * allow the overriding card to potentially modify / mutate the {@code CardDesc} without modifying the underlying card
-	 * catalogue.
+	 * Returns a card for the purposes of overriding a card. The {@code CardDesc} on the card has been cloned, in order to allow the overriding card to potentially modify / mutate the {@code CardDesc} without modifying the underlying card catalogue.
 	 *
 	 * @param overrideCardId the card ID to override
 	 * @return a copy of a card where the {@code CardDesc} is copied, cached in temp cards
@@ -2100,5 +2038,10 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 			target.setDesc(target.getDesc().clone());
 		}
 		return target;
+	}
+
+	public <T extends ExternalLogicComponent> T getExternalLogicComponent(T dummy) {
+		//noinspection unchecked
+		return (T) externalLogicComponents.get(dummy.getClass());
 	}
 }

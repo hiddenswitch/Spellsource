@@ -1,7 +1,6 @@
 package com.hiddenswitch.framework;
 
 import com.hiddenswitch.framework.impl.BindAll;
-import com.hiddenswitch.framework.impl.RogueManager;
 import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
 import com.hiddenswitch.framework.rpc.*;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;

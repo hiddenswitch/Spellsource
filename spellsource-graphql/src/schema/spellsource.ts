@@ -5,10 +5,9 @@ import { AuthRequest } from "../auth";
 
 const executor = buildHTTPExecutor({
   endpoint: `http://${spellsourceHost}:${spellsourcePort}/graphql`,
-  retry: 3,
   fetch: (url, init, context, info) => {
     const req = context as AuthRequest;
-    
+
     if (req?.token && init) {
       const headers = new Headers(init.headers);
       headers.set("Authorization", `Bearer ${req.token}`);
@@ -16,12 +15,11 @@ const executor = buildHTTPExecutor({
     }
 
     return fetch(url, init);
-  }
+  },
 });
-
 
 export const createSpellsourceSchema = async () =>
   wrapSchema({
     schema: await schemaFromExecutor(executor),
-    executor
+    executor,
   });

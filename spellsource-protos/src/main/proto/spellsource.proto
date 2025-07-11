@@ -244,6 +244,7 @@ message GameEventTypeMessage {
         WEAPON_EQUIPPED = 58;
         WILL_END_SEQUENCE = 59;
         DESTROY_WILL_QUEUE = 60;
+        ROGUE_CHOICE = 61;
     }
 }
 

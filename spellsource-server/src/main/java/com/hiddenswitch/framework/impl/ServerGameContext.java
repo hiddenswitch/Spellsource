@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
-import com.hiddenswitch.framework.schema.spellsource.Routines;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
@@ -16,8 +15,8 @@ import io.micrometer.core.instrument.binder.BaseUnits;
 import io.opentracing.log.Fields;
 import io.opentracing.propagation.Format;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.Future;
 import io.vertx.core.*;
+import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
@@ -896,11 +895,8 @@ public class ServerGameContext extends GameContext implements Server {
 			for (var consumer : inGameConsumers) {
 				consumer.unregister();
 			}
-			
-			withExecutor(executor -> {
-				Routines.checkRogueGameEnd(executor.configuration(), Long.valueOf(gameId), getWinner() == null ? null : getWinner().getUserId());
-				return Future.succeededFuture();
-			});
+
+			RogueManager.handleGameEnd(Long.parseLong(gameId), getWinner() == null ? null : getWinner().getUserId());
 
 			LOGGER.trace("endGame {}: endGameHandlers run", gameId);
 

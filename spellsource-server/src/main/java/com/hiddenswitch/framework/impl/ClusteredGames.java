@@ -115,17 +115,15 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 								configuration.setPlayerAttributes(playerAttributes);
 
 								return Future.succeededFuture(configuration);
-							}))
-					.compose(_ -> Environment.withExecutor(executor -> {
-						Routines.checkRogueGameStart(executor.configuration(), deckId, Long.valueOf(request.getGameId()));
-						return Future.succeededFuture(configuration);
-					}));
+							}));
 
 			playerConfigurations.add(configurationFut);
+			
+			RogueManager.handleGameStart(deckId, Long.parseLong(request.getGameId()));
 		}
 
 		return CompositeFuture.all(playerConfigurations)
-				.compose(v -> {
+				.compose(_ -> {
 					LOGGER.trace("loading player configurations for request {}", request);
 					var serverContextVerticle = new AbstractVirtualThreadVerticle() {
 						private ServerGameContext serverGameContext;

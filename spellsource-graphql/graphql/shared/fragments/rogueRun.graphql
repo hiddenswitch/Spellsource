@@ -1,0 +1,11 @@
+fragment rogueRun on RogueRun {
+  id
+  player
+  seed
+  choices,
+  bossesDefeated,
+  deckByDeck {
+    ...deck
+    ...deckCards
+  }
+}

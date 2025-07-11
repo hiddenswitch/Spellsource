@@ -1,7 +1,7 @@
 def allJvmArgs = ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED']
 
 tasks.withType(JavaCompile).configureEach {
-  options.compilerArgs += ["--enable-preview", "-g:none"]
+  options.compilerArgs += ["--enable-preview"]
 }
 
 tasks.withType(Test).configureEach {
