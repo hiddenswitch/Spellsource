@@ -34,6 +34,9 @@ type Query implements Node {
   """Get a single `GeneratedArt`."""
   generatedArtByHashAndOwner(hash: String!, owner: String!): GeneratedArt
 
+  """Get a single `RogueChoice`."""
+  rogueChoiceById(id: BigInt!): RogueChoice
+
   """Get a single `RogueRun`."""
   rogueRunById(id: BigInt!): RogueRun
 
@@ -45,6 +48,7 @@ type Query implements Node {
   getUserId: String
   canSeeDeck(userId: String, deck: DeckInput): Boolean
   getLatestCard(cardId: String, published: Boolean): Card
+  currentRogueChoice(rogueId: BigInt): RogueChoice
 
   """Reads a single `PublishedCard` using its globally unique `ID`."""
   publishedCard(
@@ -79,6 +83,14 @@ type Query implements Node {
     """The globally unique `ID` to be used in selecting a single `Card`."""
     nodeId: ID!
   ): Card
+
+  """Reads a single `RogueChoice` using its globally unique `ID`."""
+  rogueChoice(
+    """
+    The globally unique `ID` to be used in selecting a single `RogueChoice`.
+    """
+    nodeId: ID!
+  ): RogueChoice
 
   """Reads a single `RogueRun` using its globally unique `ID`."""
   rogueRun(
@@ -368,6 +380,40 @@ type Query implements Node {
     includeArchived: IncludeArchivedOption = NO
   ): GeneratedArtsConnection
 
+  """Reads and enables pagination through a set of `RogueChoice`."""
+  allRogueChoices(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `RogueChoice`."""
+    orderBy: [RogueChoicesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: RogueChoiceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: RogueChoiceFilter
+  ): RogueChoicesConnection
+
   """Reads and enables pagination through a set of `RogueRun`."""
   allRogueRuns(
     """Only read the first `n` values of the set."""
@@ -602,9 +648,7 @@ type Mutation {
     input: DeleteCardsInDeckByIdInput!
   ): DeleteCardsInDeckPayload
   startRogueRun(heroClass: String!, seed: BigInt): RogueRun!
-
-  """TODO can we return as RogueRun object?"""
-  makeRogueChoice(rogueId: BigInt!, choiceIndex: Int!): RogueRun!
+  makeRogueChoice(choiceId: BigInt!, choices: [Int!]!): RogueRun!
 }
 
 """An object with a globally unique `ID`."""
@@ -1287,6 +1331,9 @@ input RogueRunFilter {
   """Filter by the object’s `endedAt` field."""
   endedAt: DatetimeFilter
 
+  """Filter by the object’s `heroClass` field."""
+  heroClass: StringFilter
+
   """Filter by the object’s `deck` field."""
   deck: StringFilter
 
@@ -1296,9 +1343,6 @@ input RogueRunFilter {
   """Filter by the object’s `state` field."""
   state: RogueRunStateFilter
 
-  """Filter by the object’s `choices` field."""
-  choices: StringListFilter
-
   """Filter by the object’s `game` field."""
   game: BigIntFilter
 
@@ -1307,6 +1351,12 @@ input RogueRunFilter {
 
   """Filter by the object’s `seed` field."""
   seed: BigIntFilter
+
+  """Filter by the object’s `rogueChoicesByRogueRun` relation."""
+  rogueChoicesByRogueRun: RogueRunToManyRogueChoiceFilter
+
+  """Some related `rogueChoicesByRogueRun` exist."""
+  rogueChoicesByRogueRunExist: Boolean
 
   """Filter by the object’s `deckByDeck` relation."""
   deckByDeck: DeckFilter
@@ -1417,6 +1467,58 @@ enum RogueRunState {
   PRE_MATCH
   IN_MATCH
   CHOICE
+}
+
+"""
+A filter to be used against many `RogueChoice` object types. All fields are combined with a logical ‘and.’
+"""
+input RogueRunToManyRogueChoiceFilter {
+  """
+  Every related `RogueChoice` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: RogueChoiceFilter
+
+  """
+  Some related `RogueChoice` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: RogueChoiceFilter
+
+  """
+  No related `RogueChoice` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: RogueChoiceFilter
+}
+
+"""
+A filter to be used against `RogueChoice` object types. All fields are combined with a logical ‘and.’
+"""
+input RogueChoiceFilter {
+  """Filter by the object’s `id` field."""
+  id: BigIntFilter
+
+  """Filter by the object’s `rogueRun` field."""
+  rogueRun: BigIntFilter
+
+  """Filter by the object’s `cards` field."""
+  cards: StringListFilter
+
+  """Filter by the object’s `canPick` field."""
+  canPick: IntFilter
+
+  """Filter by the object’s `index` field."""
+  index: IntFilter
+
+  """Filter by the object’s `rogueRunByRogueRun` relation."""
+  rogueRunByRogueRun: RogueRunFilter
+
+  """Checks for all expressions in this list."""
+  and: [RogueChoiceFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [RogueChoiceFilter!]
+
+  """Negates the expression."""
+  not: RogueChoiceFilter
 }
 
 """
@@ -1894,14 +1996,15 @@ type RogueRun implements Node {
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   nodeId: ID!
+  currentChoice: RogueChoice
   id: BigInt!
   player: String!
   startedAt: Datetime!
   endedAt: Datetime
+  heroClass: String!
   deck: String!
   bossesDefeated: Int!
   state: RogueRunState!
-  choices: [String]
   game: BigInt
   opponentDeck: String
   seed: BigInt!
@@ -1911,6 +2014,117 @@ type RogueRun implements Node {
 
   """Reads a single `Deck` that is related to this `RogueRun`."""
   deckByOpponentDeck: Deck
+
+  """Reads and enables pagination through a set of `RogueChoice`."""
+  rogueChoicesByRogueRun(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `RogueChoice`."""
+    orderBy: [RogueChoicesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: RogueChoiceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: RogueChoiceFilter
+  ): RogueChoicesConnection!
+}
+
+type RogueChoice implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: BigInt!
+  rogueRun: BigInt!
+  cards: [String]!
+  canPick: Int!
+  index: Int!
+
+  """Reads a single `RogueRun` that is related to this `RogueChoice`."""
+  rogueRunByRogueRun: RogueRun
+}
+
+"""A connection to a list of `RogueChoice` values."""
+type RogueChoicesConnection {
+  """A list of `RogueChoice` objects."""
+  nodes: [RogueChoice]!
+
+  """
+  A list of edges which contains the `RogueChoice` and cursor to aid in pagination.
+  """
+  edges: [RogueChoicesEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `RogueChoice` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `RogueChoice` edge in the connection."""
+type RogueChoicesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `RogueChoice` at the end of the edge."""
+  node: RogueChoice
+}
+
+"""Methods to use when ordering `RogueChoice`."""
+enum RogueChoicesOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ID_ASC
+  ID_DESC
+  ROGUE_RUN_ASC
+  ROGUE_RUN_DESC
+  CAN_PICK_ASC
+  CAN_PICK_DESC
+  INDEX_ASC
+  INDEX_DESC
+}
+
+"""
+A condition to be used against `RogueChoice` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input RogueChoiceCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: BigInt
+
+  """Checks for equality with the object’s `rogueRun` field."""
+  rogueRun: BigInt
+
+  """Checks for equality with the object’s `cards` field."""
+  cards: [String]
+
+  """Checks for equality with the object’s `canPick` field."""
+  canPick: Int
+
+  """Checks for equality with the object’s `index` field."""
+  index: Int
 }
 
 """A connection to a list of `RogueRun` values."""
@@ -1952,6 +2166,8 @@ enum RogueRunsOrderBy {
   STARTED_AT_DESC
   ENDED_AT_ASC
   ENDED_AT_DESC
+  HERO_CLASS_ASC
+  HERO_CLASS_DESC
   DECK_ASC
   DECK_DESC
   BOSSES_DEFEATED_ASC
@@ -1983,6 +2199,9 @@ input RogueRunCondition {
   """Checks for equality with the object’s `endedAt` field."""
   endedAt: Datetime
 
+  """Checks for equality with the object’s `heroClass` field."""
+  heroClass: String
+
   """Checks for equality with the object’s `deck` field."""
   deck: String
 
@@ -1991,9 +2210,6 @@ input RogueRunCondition {
 
   """Checks for equality with the object’s `state` field."""
   state: RogueRunState
-
-  """Checks for equality with the object’s `choices` field."""
-  choices: [String]
 
   """Checks for equality with the object’s `game` field."""
   game: BigInt

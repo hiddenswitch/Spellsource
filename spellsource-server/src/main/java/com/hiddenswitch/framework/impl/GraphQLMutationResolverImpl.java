@@ -2,7 +2,6 @@ package com.hiddenswitch.framework.impl;
 
 import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.graphql.MutationResolver;
-import com.hiddenswitch.framework.graphql.RogueChoice;
 import com.hiddenswitch.framework.graphql.RogueRun;
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import io.vertx.core.Future;

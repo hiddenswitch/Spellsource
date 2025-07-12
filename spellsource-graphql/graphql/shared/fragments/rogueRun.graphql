@@ -1,11 +1,14 @@
 fragment rogueRun on RogueRun {
   id
   player
-  seed
-  choices,
-  bossesDefeated,
+  state
+  bossesDefeated
   deckByDeck {
     ...deck
     ...deckCards
+  }
+  currentChoice {
+    cards
+    canPick
   }
 }

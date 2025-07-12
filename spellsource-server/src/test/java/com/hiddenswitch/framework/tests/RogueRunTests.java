@@ -3,20 +3,22 @@ package com.hiddenswitch.framework.tests;
 import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Legacy;
+import com.hiddenswitch.framework.Matchmaking;
+import com.hiddenswitch.framework.impl.ClusteredGames;
 import com.hiddenswitch.framework.impl.RogueManager;
 import com.hiddenswitch.framework.schema.spellsource.Routines;
 import com.hiddenswitch.framework.schema.spellsource.enums.RogueRunState;
-import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
-import io.vertx.core.Future;
-import io.vertx.core.Vertx;
+import com.hiddenswitch.spellsource.rpc.Spellsource;
+import io.vertx.core.*;
+import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.hiddenswitch.framework.schema.spellsource.Tables.ROGUE_RUN;
 import static io.vertx.await.Async.await;
@@ -43,24 +45,9 @@ public class RogueRunTests extends FrameworkTestBase {
 
 			await(Environment.sleep(200));
 
-			var cardsInDeck = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck()), row -> row.getString(0)));
+			var cardsInDeck = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck())).execute(row -> row.getString(0)));
 
 			assertFalse(cardsInDeck.isEmpty(), "Deck should have cards");
-		});
-	}
-
-	@Test
-	public void testRogueRunMatch(Vertx vertx, VertxTestContext vertxTestContext) {
-		testVirtual(vertx, vertxTestContext, () -> {
-			RogueManager.initCardCatalogue();
-
-			var client = new Client(vertx);
-			await(startGateway(vertx));
-			await(client.createAndLogin());
-			var userId = client.getUserEntity().getId();
-
-			var rogueRun = await(startRogueRun(userId));
-
 		});
 	}
 
@@ -76,7 +63,7 @@ public class RogueRunTests extends FrameworkTestBase {
 
 			var rogueRun = await(startRogueRun(userId));
 
-			var cardsBefore = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck()), row -> row.getString(0)));
+			var cardsBefore = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck())).execute(row -> row.getString(0)));
 
 			var rogueChoice = await(RogueManager.addNewRogueChoice(rogueRun.getId(), new String[]{"rogue_chosen_test"}, -1, 1));
 
@@ -86,7 +73,7 @@ public class RogueRunTests extends FrameworkTestBase {
 
 			await(RogueManager.makeRogueChoice(rogueChoice.getId(), List.of(0)));
 
-			var cardsAfter = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck()), row -> row.getString(0)));
+			var cardsAfter = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck())).execute(row -> row.getString(0)));
 			var deckAfter = await(Legacy.getDeck(RogueManager.cardCatalogue, rogueRun.getDeck(), rogueRun.getPlayer()));
 
 			assertEquals(cardsBefore.size() + 2, cardsAfter.size(), "Expected 2 new cards to be added");
@@ -99,16 +86,16 @@ public class RogueRunTests extends FrameworkTestBase {
 			await(RogueManager.updateRogueRun(rogueRun.getId(), r -> r.set(ROGUE_RUN.STATE, RogueRunState.CHOICE)));
 			await(RogueManager.makeRogueChoice(anotherChoice.getId(), List.of(0)));
 
-			var cardsAfterAgain = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck()), row -> row.getString(0)));
+			var cardsAfterAgain = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck())).execute(row -> row.getString(0)));
 
 			assertEquals(cardsAfter.size(), cardsAfterAgain.size(), "Same amount of cards");
 
-			var newChoice = await(Environment.callRoutine(Routines.currentRogueChoice(rogueRun.getId()), RogueManager.rogueChoiceMapper()));
+			var newChoice = await(Environment.callRoutine(Routines.currentRogueChoice(rogueRun.getId())).execute(RogueManager.rogueChoiceMapper()));
 
 			assertArrayEquals(new String[]{"minion_test_1_3", "spell_test_1_aoe", "weapon_test_1_1"}, newChoice.getCards());
 			await(RogueManager.makeRogueChoice(newChoice.getId(), List.of(0)));
 
-			var cardsAfterAgain2 = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck()), row -> row.getString(0)));
+			var cardsAfterAgain2 = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck())).execute(row -> row.getString(0)));
 
 			assertEquals(cardsAfterAgain.size() + 1, cardsAfterAgain2.size(), "Now added another card");
 
@@ -116,26 +103,57 @@ public class RogueRunTests extends FrameworkTestBase {
 		});
 	}
 
+	@Test
+	@Timeout(value = 30, timeUnit = TimeUnit.SECONDS)
+	public void testRogueRunMatch(Vertx vertx, VertxTestContext vertxTestContext) {
+		testVirtual(vertx, vertxTestContext, () -> {
+			RogueManager.initCardCatalogue();
+
+			var client = new Client(vertx);
+			await(startGateway(vertx));
+			await(startMatchmakingServices(vertx));
+			await(client.createAndLogin());
+			var userId = client.getUserEntity().getId();
+
+			var rogueRun = await(startRogueRun(userId));
+
+			assertEquals(RogueRunState.PRE_MATCH, await(RogueManager.getRogueRun(rogueRun.getId())).getState(), "Rogue run should be in in pre game state");
+
+			var stream = await(client.matchmaking().enqueue(matchmaking ->
+					matchmaking.write(Spellsource.MatchmakingQueuePutRequest.newBuilder()
+							.setQueueId("rogueRun")
+							.setDeckId(rogueRun.getDeck())
+							.setBotDeckId(rogueRun.getOpponentDeck())
+							.build())));
+
+			var responded = Promise.<Spellsource.MatchmakingQueuePutResponse>promise();
+			stream.handler(responded::complete);
+			await(responded.future());
+
+			await(Environment.sleep(200));
+			
+			assertEquals(RogueRunState.IN_MATCH, await(RogueManager.getRogueRun(rogueRun.getId())).getState(), "Rogue run should now be in in game state");
+
+			await(client.playUntilGameOver());
+
+			await(Environment.sleep(200));
+			
+			assertNotEquals(RogueRunState.IN_MATCH, await(RogueManager.getRogueRun(rogueRun.getId())).getState(), "Rogue run should now be in post game state");
+		});
+	}
+
+
 	private Future<RogueRun> startRogueRun(String userId) {
 		var rogueId = await(RogueManager.startRogueRun(HeroClass.TEST, 0L, userId));
 
 		return RogueManager.returningRogueRun(dsl -> dsl.selectFrom(ROGUE_RUN).where(ROGUE_RUN.ID.eq(rogueId)).limit(1));
 	}
 
-	@NotNull
-	private MatchmakingQueues createRogueQueue(String queueId) {
-		return new MatchmakingQueues()
-				.setId(queueId)
-				.setAutomaticallyClose(false)
-				.setLobbySize(1)
-				.setAwaitingLobbyTimeout(0L)
-				.setBotOpponent(true)
-				.setEmptyLobbyTimeout(0L)
-				.setName("single player test")
-				.setPrivateLobby(false)
-				.setOnce(false)
-				.setStartsAutomatically(true)
-				.setStillConnectedTimeout(0L);
+	protected Future<Void> startMatchmakingServices(Vertx vertx) {
+		await(vertx.deployVerticle(new Matchmaking(), new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD)));
+		await(vertx.deployVerticle(new ClusteredGames(), new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD)));
+
+		return Future.succeededFuture();
 	}
 
 }

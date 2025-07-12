@@ -25,7 +25,6 @@ import org.jooq.UpdateSetMoreStep;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.hiddenswitch.framework.Environment.withExecutor;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.ROGUE_CHOICE;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.ROGUE_RUN;
 import static io.vertx.await.Async.await;
@@ -41,15 +40,14 @@ public class RogueManager {
 	}
 
 	public static Future<Long> startRogueRun(String heroClass, long seed, String userId) {
-		var result = await(Environment.callRoutine(Routines.startRogueRun(heroClass, seed), userId));
-		var rogueRun = RowMappers.getRogueRunMapper().apply(result.iterator().next());
+		var rogueRun = await(Environment.callRoutine(Routines.startRogueRun(heroClass, seed)).withUserId(userId).execute(RowMappers.getRogueRunMapper()));
 
 		var format = cardCatalogue.getFormat("Rogue");
 		var testCards = cardCatalogue.query(format).stream().filter(card -> card.hasHeroClass(HeroClass.ANY) && card.isCollectible()).limit(10);
 
 		await(Future.all(testCards.map(card -> Environment.withDslContext(dsl -> dsl.insertInto(Tables.CARDS_IN_DECK).set(Tables.CARDS_IN_DECK.newRecord().setDeckId(rogueRun.getDeck()).setCardId(card.getCardId())))).toList()));
 
-		// TODO set opponent deck
+		// TODO set opponent deck cards
 
 		// TODO change state to pre match OR give initial set of choices
 
@@ -83,14 +81,13 @@ public class RogueManager {
 			return Future.failedFuture("Cannot make choice in current state");
 		}
 
-
 		var userId = rogueRun.getPlayer();
 		var deckId = rogueRun.getDeck();
 
-		var deckCards = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck()), row -> row.getString(0)));
+		var deckCards = await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck())).execute(row -> row.getString(0)));
 		var deck = new CardArrayList(deckCards.stream().map(cardCatalogue::getCardById).toList());
 
-		var context = new RogueChoiceGameContext(cardCatalogue, rogueRun.getHeroClass(), deck, userId, deckId);
+		var context = new RogueChoiceGameContext(cardCatalogue, rogueRun.getHeroClass(), deck, userId, deckId, rogueRun.getSeed());
 		context.init(); // TODO add info for rogue run id ?
 		var player = context.getPlayer1();
 
@@ -113,43 +110,36 @@ public class RogueManager {
 			context.getLogic().fireGameEvent(new RogueChoiceEvent(context, player, card));
 		}
 
-		// TODO context clean up?
-
-		await(Environment.callRoutine(Routines.setCardsInDeck(deckId, context.getPlayer1().getDeck().stream().map(Card::getCardId).toArray(String[]::new)), RowMappers.getCardsInDeckMapper()));
+		await(Environment.callRoutine(Routines.setCardsInDeck(deckId, context.getPlayer1().getDeck().stream().map(Card::getCardId).toArray(String[]::new))).execute(RowMappers.getCardsInDeckMapper()));
 
 		await(Environment.withDslContext(dsl -> dsl.deleteFrom(ROGUE_CHOICE).where(ROGUE_CHOICE.ID.eq(choiceId))));
 
-		var newChoice = await(Environment.callRoutine(Routines.currentRogueChoice(rogueRun.getId()), RowMappers.getRogueChoiceMapper()));
+		var newChoice = await(Environment.callRoutine(Routines.currentRogueChoice(rogueRun.getId())).execute(RowMappers.getRogueChoiceMapper()));
 
-		updateRogueRun(rogueRun.getId(), r -> r.set(ROGUE_RUN.STATE, newChoice == null ? RogueRunState.PRE_MATCH : RogueRunState.CHOICE));
+		updateRogueRun(rogueRun.getId(), r -> r.set(ROGUE_RUN.STATE, newChoice == null ? RogueRunState.PRE_MATCH : RogueRunState.CHOICE).set(ROGUE_RUN.SEED, rogueRun.getSeed() + 1));
 
-		return Future.succeededFuture(newChoice.getId());
+		return Future.succeededFuture(rogueRun.getId());
 	}
 
 	public static Future<RogueChoice> addNewRogueChoice(long rogueId, String[] cards, int index, int canPick) {
 		return returningRogueChoice(dsl -> dsl.insertInto(ROGUE_CHOICE).set(ROGUE_CHOICE.newRecord().setRogueRun(rogueId).setCards(cards).setIndex(index).setCanPick(canPick)).returning());
 	}
 
-	public static Future<Void> handleGameStart(String deckId, long gameId) {
-		return Environment.withExecutor(executor -> {
-			Routines.checkRogueGameStart(executor.configuration(), deckId, gameId);
-			return Future.succeededFuture();
-		});
+	public static Future<Boolean> handleGameStart(String deckId, long gameId) {
+		return Environment.callRoutine(Routines.checkRogueGameStart(deckId, gameId)).execute();
 	}
 
-	public static Future<Void> handleGameEnd(long gameId, String winnerUserId) {
-		return withExecutor(executor -> {
-			Routines.checkRogueGameEnd(executor.configuration(), gameId, winnerUserId);
-			return Future.succeededFuture();
-		});
+	public static Future<Boolean> handleGameEnd(long gameId, String winnerUserId) {
+		// TODO handle populating rewards, next opponent and stuff
+		return Environment.callRoutine(Routines.checkRogueGameEnd(gameId, winnerUserId)).execute();
 	}
 
 	public static Future<RogueRun> returningRogueRun(Function<DSLContext, ResultQuery<RogueRunRecord>> handler) {
-		return Environment.withExecutor(executor -> executor.findOneRow(handler).compose(row -> Future.succeededFuture(row == null ? null : RowMappers.getRogueRunMapper().apply(row))));
+		return Environment.withExecutor(executor -> executor.findOneRow(handler).map(row -> row == null ? null : RowMappers.getRogueRunMapper().apply(row)));
 	}
 
 	public static Future<RogueChoice> returningRogueChoice(Function<DSLContext, ResultQuery<RogueChoiceRecord>> handler) {
-		return Environment.withExecutor(executor -> executor.findOneRow(handler).compose(row -> Future.succeededFuture(row == null ? null : rogueChoiceMapper().apply(row))));
+		return Environment.withExecutor(executor -> executor.findOneRow(handler).map(row -> row == null ? null : rogueChoiceMapper().apply(row)));
 	}
 
 	public static Future<RogueRun> getRogueRun(long rogueId) {

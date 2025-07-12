@@ -5,6 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.rogue.ChoiceSpell;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +13,7 @@ import java.util.Objects;
 
 public class RogueChoiceGameContext extends GameContext {
 
-	public RogueChoiceGameContext(@NotNull CardCatalogue cardCatalogue, String heroClass, CardList deck, String userId, String deckId) {
+	public RogueChoiceGameContext(@NotNull CardCatalogue cardCatalogue, String heroClass, CardList deck, String userId, String deckId, long seed) {
 		super(cardCatalogue, Objects.requireNonNull(cardCatalogue.getFormat("Rogue")));
 
 		var player = new Player(heroClass, cardCatalogue);
@@ -24,6 +25,8 @@ public class RogueChoiceGameContext extends GameContext {
 		setPlayer1(player);
 
 		setPlayer2(new Player(heroClass, cardCatalogue));
+		
+		setLogic(new GameLogic(seed));
 	}
 
 	@Override

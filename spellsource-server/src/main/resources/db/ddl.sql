@@ -776,7 +776,7 @@ COMMENT ON FUNCTION spellsource.cards_type(card spellsource.cards) IS '@omit';
 -- Name: check_rogue_game_end(bigint, character varying); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
-CREATE FUNCTION spellsource.check_rogue_game_end(game_id bigint, winning_user character varying) RETURNS void
+CREATE FUNCTION spellsource.check_rogue_game_end(game_id bigint, winning_user character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 declare
@@ -785,16 +785,18 @@ begin
     select * from spellsource.rogue_run where game = game_id into rogue_run;
 
     if rogue_run is null then
-        return;
+        return false;
     end if;
 
 
     if winning_user != rogue_run.player then
         update spellsource.rogue_run as r set ended_at = now(), state = 'FINISHED' where id = rogue_run.id;
-        return;
+        return true;
     end if;
 
-    update spellsource.rogue_run as r set bosses_defeated = r.bosses_defeated + 1 where id = rogue_run.id;
+    update spellsource.rogue_run as r set bosses_defeated = r.bosses_defeated + 1, state = 'CHOICE' where id = rogue_run.id;
+
+    return true;
 end;
 $$;
 
@@ -812,7 +814,7 @@ COMMENT ON FUNCTION spellsource.check_rogue_game_end(game_id bigint, winning_use
 -- Name: check_rogue_game_start(text, bigint); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
-CREATE FUNCTION spellsource.check_rogue_game_start(deck_id text, game_id bigint) RETURNS void
+CREATE FUNCTION spellsource.check_rogue_game_start(deck_id text, game_id bigint) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 declare
@@ -822,10 +824,12 @@ begin
     select * from spellsource.decks where id = deck_id and deck_type = 2 into deck;
 
     if deck is null then
-        return;
+        return false;
     end if;
 
     update spellsource.rogue_run set game = game_id, state = 'IN_MATCH' where deck = deck_id returning * into rogue_run;
+
+    return (rogue_run is not null)::bool;
 end;
 $$;
 
@@ -1217,6 +1221,71 @@ COMMENT ON FUNCTION spellsource.resign_rogue_run(rogue_id bigint) IS '@omit';
 
 
 --
+-- Name: rogue_opponent_bot_user(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.rogue_opponent_bot_user() RETURNS character varying
+    LANGUAGE sql STABLE
+    AS $$
+select id
+from spellsource.bot_users
+limit 1;
+$$;
+
+
+ALTER FUNCTION spellsource.rogue_opponent_bot_user() OWNER TO admin;
+
+--
+-- Name: FUNCTION rogue_opponent_bot_user(); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.rogue_opponent_bot_user() IS '@omit';
+
+
+--
+-- Name: rogue_run; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.rogue_run (
+    id bigint NOT NULL,
+    player character varying(36) NOT NULL,
+    started_at timestamp with time zone DEFAULT now() NOT NULL,
+    ended_at timestamp with time zone,
+    hero_class text NOT NULL,
+    deck text NOT NULL,
+    bosses_defeated integer DEFAULT 0 NOT NULL,
+    state spellsource.rogue_run_state DEFAULT 'INITIAL'::spellsource.rogue_run_state NOT NULL,
+    game bigint,
+    opponent_deck text,
+    seed bigint DEFAULT ((random() * ('10000000000'::numeric)::double precision))::bigint NOT NULL
+);
+
+
+ALTER TABLE spellsource.rogue_run OWNER TO admin;
+
+--
+-- Name: TABLE rogue_run; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.rogue_run IS '@omit create,update,delete';
+
+
+--
+-- Name: rogue_run_current_choice(spellsource.rogue_run); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.rogue_run_current_choice(rr spellsource.rogue_run) RETURNS spellsource.rogue_choice
+    LANGUAGE plpgsql STABLE
+    AS $$
+begin
+    return spellsource.current_rogue_choice(rr.id);
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.rogue_run_current_choice(rr spellsource.rogue_run) OWNER TO admin;
+
+--
 -- Name: save_card(text, jsonb, jsonb); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -1341,34 +1410,6 @@ COMMENT ON FUNCTION spellsource.set_user_attribute(id_user text, attribute text,
 
 
 --
--- Name: rogue_run; Type: TABLE; Schema: spellsource; Owner: admin
---
-
-CREATE TABLE spellsource.rogue_run (
-    id bigint NOT NULL,
-    player character varying(36) NOT NULL,
-    started_at timestamp with time zone DEFAULT now() NOT NULL,
-    ended_at timestamp with time zone,
-    hero_class text NOT NULL,
-    deck text NOT NULL,
-    bosses_defeated integer DEFAULT 0 NOT NULL,
-    state spellsource.rogue_run_state DEFAULT 'INITIAL'::spellsource.rogue_run_state NOT NULL,
-    game bigint,
-    opponent_deck text,
-    seed bigint DEFAULT ((random() * ('10000000000'::numeric)::double precision))::bigint NOT NULL
-);
-
-
-ALTER TABLE spellsource.rogue_run OWNER TO admin;
-
---
--- Name: TABLE rogue_run; Type: COMMENT; Schema: spellsource; Owner: admin
---
-
-COMMENT ON TABLE spellsource.rogue_run IS '@omit create,update,delete';
-
-
---
 -- Name: start_rogue_run(text, bigint); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -1377,10 +1418,11 @@ CREATE FUNCTION spellsource.start_rogue_run(class_hero text, use_seed bigint) RE
     SET search_path TO 'spellsource', 'pg_temp'
     AS $$
 declare
-    id_deck   text;
-    user_id   varchar(36);
-    rogue_run spellsource.rogue_run%rowtype;
-    deck_id   text;
+    user_id          varchar(36);
+    rogue_run        spellsource.rogue_run%rowtype;
+    deck_id          text;
+    opponent_bot     varchar(36);
+    opponent_deck_id text;
 begin
     user_id := spellsource.get_user_id();
 
@@ -1388,15 +1430,19 @@ begin
         raise exception 'User not logged in';
     end if;
 
-    id_deck := gen_random_uuid();
-
     insert into spellsource.decks (id, created_by, last_edited_by, name, hero_class, deck_type, format)
-    values (id_deck::text, user_id, user_id, 'Rogue Deck', class_hero, 2, 'Rogue')
+    values (gen_random_uuid()::text, user_id, user_id, 'Rogue Deck', class_hero, 2, 'Rogue')
     returning (id) into deck_id;
 
+    opponent_bot := spellsource.rogue_opponent_bot_user();
 
-    insert into spellsource.rogue_run (player, started_at, deck, seed, hero_class)
-    values (user_id, now(), id_deck, use_seed, class_hero)
+    insert into spellsource.decks (id, created_by, last_edited_by, name, hero_class, deck_type, format)
+    values (gen_random_uuid()::text, opponent_bot, opponent_bot, 'Rogue Opponent Deck', '', 2, 'Rogue')
+    returning (id) into opponent_deck_id;
+
+
+    insert into spellsource.rogue_run (player, started_at, deck, seed, hero_class, opponent_deck)
+    values (user_id, now(), deck_id, use_seed, class_hero, opponent_deck_id)
     returning * into rogue_run;
 
     return rogue_run;
@@ -6337,6 +6383,28 @@ REVOKE ALL ON FUNCTION spellsource.resign_rogue_run(rogue_id bigint) FROM PUBLIC
 
 
 --
+-- Name: FUNCTION rogue_opponent_bot_user(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.rogue_opponent_bot_user() FROM PUBLIC;
+
+
+--
+-- Name: TABLE rogue_run; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT ON TABLE spellsource.rogue_run TO website;
+
+
+--
+-- Name: FUNCTION rogue_run_current_choice(rr spellsource.rogue_run); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.rogue_run_current_choice(rr spellsource.rogue_run) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.rogue_run_current_choice(rr spellsource.rogue_run) TO website;
+
+
+--
 -- Name: FUNCTION save_card(card_id text, workspace jsonb, json jsonb); Type: ACL; Schema: spellsource; Owner: admin
 --
 
@@ -6372,13 +6440,6 @@ GRANT ALL ON FUNCTION spellsource.set_cards_in_deck(deck text, card_ids text[]) 
 --
 
 REVOKE ALL ON FUNCTION spellsource.set_user_attribute(id_user text, attribute text, val text) FROM PUBLIC;
-
-
---
--- Name: TABLE rogue_run; Type: ACL; Schema: spellsource; Owner: admin
---
-
-GRANT SELECT ON TABLE spellsource.rogue_run TO website;
 
 
 --

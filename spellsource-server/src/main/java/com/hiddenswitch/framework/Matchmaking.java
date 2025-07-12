@@ -127,8 +127,20 @@ public class Matchmaking extends AbstractVerticle {
 				.setEmptyLobbyTimeout(0L)
 				.setStillConnectedTimeout(1000L)
 				.setStartsAutomatically(true);
+		var rogueRun = MATCHMAKING_QUEUES.newRecord()
+				.setName("Rogue Run")
+				.setId("rogueRun")
+				.setAutomaticallyClose(false)
+				.setLobbySize(1)
+				.setOnce(false)
+				.setBotOpponent(true)
+				.setPrivateLobby(false)
+				.setAwaitingLobbyTimeout(0L)
+				.setEmptyLobbyTimeout(0L)
+				.setStillConnectedTimeout(4000L)
+				.setStartsAutomatically(true);
 
-		return new MatchmakingQueuesRecord[]{quickPlay, constructed};
+		return new MatchmakingQueuesRecord[]{quickPlay, constructed, rogueRun};
 	}
 
 	@Override

@@ -192,7 +192,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			var userIdLoser = gameContext.getOpponent(gameContext.getWinner()).getUserId();
 
 			var pTrace = JSONToJsonObjectConverter.getInstance().to(gameContext.getTrace().toJson());
-			await(Environment.callRoutine(Routines.clusteredGamesUpdateGameAndUsers(winner, userIdLoser, gameIdLong, pTrace)));
+			await(Environment.callRoutine(Routines.clusteredGamesUpdateGameAndUsers(winner, userIdLoser, gameIdLong, pTrace)).execute());
 		}
 
 		if (gameContext.getStatus() == GameStatus.RUNNING) {

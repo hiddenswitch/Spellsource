@@ -25,6 +25,8 @@ import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishGitCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.ResignRogueRun;
+import com.hiddenswitch.framework.schema.spellsource.routines.RogueOpponentBotUser;
+import com.hiddenswitch.framework.schema.spellsource.routines.RogueRunCurrentChoice;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveGeneratedArt;
 import com.hiddenswitch.framework.schema.spellsource.routines.SetUserAttribute;
@@ -453,31 +455,89 @@ public class Routines {
     /**
      * Call <code>spellsource.check_rogue_game_end</code>
      */
-    public static void checkRogueGameEnd(
+    public static Boolean checkRogueGameEnd(
           Configuration configuration
         , Long gameId
         , String winningUser
     ) {
-        CheckRogueGameEnd p = new CheckRogueGameEnd();
-        p.setGameId(gameId);
-        p.setWinningUser(winningUser);
+        CheckRogueGameEnd f = new CheckRogueGameEnd();
+        f.setGameId(gameId);
+        f.setWinningUser(winningUser);
 
-        p.execute(configuration);
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.check_rogue_game_end</code> as a field.
+     */
+    public static Field<Boolean> checkRogueGameEnd(
+          Long gameId
+        , String winningUser
+    ) {
+        CheckRogueGameEnd f = new CheckRogueGameEnd();
+        f.setGameId(gameId);
+        f.setWinningUser(winningUser);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.check_rogue_game_end</code> as a field.
+     */
+    public static Field<Boolean> checkRogueGameEnd(
+          Field<Long> gameId
+        , Field<String> winningUser
+    ) {
+        CheckRogueGameEnd f = new CheckRogueGameEnd();
+        f.setGameId(gameId);
+        f.setWinningUser(winningUser);
+
+        return f.asField();
     }
 
     /**
      * Call <code>spellsource.check_rogue_game_start</code>
      */
-    public static void checkRogueGameStart(
+    public static Boolean checkRogueGameStart(
           Configuration configuration
         , String deckId
         , Long gameId
     ) {
-        CheckRogueGameStart p = new CheckRogueGameStart();
-        p.setDeckId(deckId);
-        p.setGameId(gameId);
+        CheckRogueGameStart f = new CheckRogueGameStart();
+        f.setDeckId(deckId);
+        f.setGameId(gameId);
 
-        p.execute(configuration);
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.check_rogue_game_start</code> as a field.
+     */
+    public static Field<Boolean> checkRogueGameStart(
+          String deckId
+        , Long gameId
+    ) {
+        CheckRogueGameStart f = new CheckRogueGameStart();
+        f.setDeckId(deckId);
+        f.setGameId(gameId);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.check_rogue_game_start</code> as a field.
+     */
+    public static Field<Boolean> checkRogueGameStart(
+          Field<String> deckId
+        , Field<Long> gameId
+    ) {
+        CheckRogueGameStart f = new CheckRogueGameStart();
+        f.setDeckId(deckId);
+        f.setGameId(gameId);
+
+        return f.asField();
     }
 
     /**
@@ -846,6 +906,65 @@ public class Routines {
         p.setRogueId(rogueId);
 
         p.execute(configuration);
+    }
+
+    /**
+     * Call <code>spellsource.rogue_opponent_bot_user</code>
+     */
+    public static String rogueOpponentBotUser(
+          Configuration configuration
+    ) {
+        RogueOpponentBotUser f = new RogueOpponentBotUser();
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.rogue_opponent_bot_user</code> as a field.
+     */
+    public static Field<String> rogueOpponentBotUser() {
+        RogueOpponentBotUser f = new RogueOpponentBotUser();
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.rogue_run_current_choice</code>
+     */
+    public static RogueChoiceRecord rogueRunCurrentChoice(
+          Configuration configuration
+        , RogueRunRecord rr
+    ) {
+        RogueRunCurrentChoice f = new RogueRunCurrentChoice();
+        f.setRr(rr);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.rogue_run_current_choice</code> as a field.
+     */
+    public static Field<RogueChoiceRecord> rogueRunCurrentChoice(
+          RogueRunRecord rr
+    ) {
+        RogueRunCurrentChoice f = new RogueRunCurrentChoice();
+        f.setRr(rr);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.rogue_run_current_choice</code> as a field.
+     */
+    public static Field<RogueChoiceRecord> rogueRunCurrentChoice(
+          Field<RogueRunRecord> rr
+    ) {
+        RogueRunCurrentChoice f = new RogueRunCurrentChoice();
+        f.setRr(rr);
+
+        return f.asField();
     }
 
     /**

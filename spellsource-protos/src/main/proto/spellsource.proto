@@ -245,6 +245,7 @@ message GameEventTypeMessage {
         WILL_END_SEQUENCE = 59;
         DESTROY_WILL_QUEUE = 60;
         ROGUE_CHOICE = 61;
+        GAME_INITIALIZED = 62;
     }
 }
 

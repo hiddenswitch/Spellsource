@@ -211,6 +211,10 @@ subprojects {
         if (details.requested.group == 'org.apache.commons' && details.requested.name == 'commons-lang3') {
           details.useVersion '3.13.0'
         }
+        
+        if (details.requested.group == 'org.wildfly.common' && details.requested.name == 'wildfly-common') {
+          details.useVersion '1.5.1.Final'
+        }
       }
     }
   }
