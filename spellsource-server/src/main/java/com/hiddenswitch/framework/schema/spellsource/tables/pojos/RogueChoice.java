@@ -4,6 +4,7 @@
 package com.hiddenswitch.framework.schema.spellsource.tables.pojos;
 
 
+import com.hiddenswitch.framework.schema.spellsource.enums.RogueChoiceType;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IRogueChoice;
 
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
@@ -25,6 +26,9 @@ public class RogueChoice implements VertxPojo, IRogueChoice {
     private String[] cards;
     private Integer canPick;
     private Integer index;
+    private Boolean canReroll;
+    private Boolean repopulate;
+    private RogueChoiceType type;
 
     public RogueChoice() {}
 
@@ -34,6 +38,9 @@ public class RogueChoice implements VertxPojo, IRogueChoice {
         this.cards = value.getCards();
         this.canPick = value.getCanPick();
         this.index = value.getIndex();
+        this.canReroll = value.getCanReroll();
+        this.repopulate = value.getRepopulate();
+        this.type = value.getType();
     }
 
     public RogueChoice(
@@ -41,13 +48,19 @@ public class RogueChoice implements VertxPojo, IRogueChoice {
         Long rogueRun,
         String[] cards,
         Integer canPick,
-        Integer index
+        Integer index,
+        Boolean canReroll,
+        Boolean repopulate,
+        RogueChoiceType type
     ) {
         this.id = id;
         this.rogueRun = rogueRun;
         this.cards = cards;
         this.canPick = canPick;
         this.index = index;
+        this.canReroll = canReroll;
+        this.repopulate = repopulate;
+        this.type = type;
     }
 
         public RogueChoice(io.vertx.core.json.JsonObject json) {
@@ -140,6 +153,57 @@ public class RogueChoice implements VertxPojo, IRogueChoice {
         return this;
     }
 
+    /**
+     * Getter for <code>spellsource.rogue_choice.can_reroll</code>.
+     */
+    @Override
+    public Boolean getCanReroll() {
+        return this.canReroll;
+    }
+
+    /**
+     * Setter for <code>spellsource.rogue_choice.can_reroll</code>.
+     */
+    @Override
+    public RogueChoice setCanReroll(Boolean canReroll) {
+        this.canReroll = canReroll;
+        return this;
+    }
+
+    /**
+     * Getter for <code>spellsource.rogue_choice.repopulate</code>.
+     */
+    @Override
+    public Boolean getRepopulate() {
+        return this.repopulate;
+    }
+
+    /**
+     * Setter for <code>spellsource.rogue_choice.repopulate</code>.
+     */
+    @Override
+    public RogueChoice setRepopulate(Boolean repopulate) {
+        this.repopulate = repopulate;
+        return this;
+    }
+
+    /**
+     * Getter for <code>spellsource.rogue_choice.type</code>.
+     */
+    @Override
+    public RogueChoiceType getType() {
+        return this.type;
+    }
+
+    /**
+     * Setter for <code>spellsource.rogue_choice.type</code>.
+     */
+    @Override
+    public RogueChoice setType(RogueChoiceType type) {
+        this.type = type;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -179,6 +243,24 @@ public class RogueChoice implements VertxPojo, IRogueChoice {
         }
         else if (!this.index.equals(other.index))
             return false;
+        if (this.canReroll == null) {
+            if (other.canReroll != null)
+                return false;
+        }
+        else if (!this.canReroll.equals(other.canReroll))
+            return false;
+        if (this.repopulate == null) {
+            if (other.repopulate != null)
+                return false;
+        }
+        else if (!this.repopulate.equals(other.repopulate))
+            return false;
+        if (this.type == null) {
+            if (other.type != null)
+                return false;
+        }
+        else if (!this.type.equals(other.type))
+            return false;
         return true;
     }
 
@@ -191,6 +273,9 @@ public class RogueChoice implements VertxPojo, IRogueChoice {
         result = prime * result + ((this.cards == null) ? 0 : Arrays.hashCode(this.cards));
         result = prime * result + ((this.canPick == null) ? 0 : this.canPick.hashCode());
         result = prime * result + ((this.index == null) ? 0 : this.index.hashCode());
+        result = prime * result + ((this.canReroll == null) ? 0 : this.canReroll.hashCode());
+        result = prime * result + ((this.repopulate == null) ? 0 : this.repopulate.hashCode());
+        result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         return result;
     }
 
@@ -203,6 +288,9 @@ public class RogueChoice implements VertxPojo, IRogueChoice {
         sb.append(", ").append(Arrays.toString(cards));
         sb.append(", ").append(canPick);
         sb.append(", ").append(index);
+        sb.append(", ").append(canReroll);
+        sb.append(", ").append(repopulate);
+        sb.append(", ").append(type);
 
         sb.append(")");
         return sb.toString();
@@ -219,6 +307,9 @@ public class RogueChoice implements VertxPojo, IRogueChoice {
         setCards(from.getCards());
         setCanPick(from.getCanPick());
         setIndex(from.getIndex());
+        setCanReroll(from.getCanReroll());
+        setRepopulate(from.getRepopulate());
+        setType(from.getType());
     }
 
     @Override

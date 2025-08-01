@@ -169,6 +169,8 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	@JsonIgnore
 	private transient List<Condition> glowConditions;
 	private RogueInfoDesc rogueInfo;
+	private SpellDesc onInitialized;
+	
 
 	public CardDesc() {
 		super();
@@ -1186,5 +1188,13 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	public void setRogueInfo(RogueInfoDesc rogueInfo) {
 		this.rogueInfo = rogueInfo;
+	}
+
+	public SpellDesc getOnInitialized() {
+		return onInitialized;
+	}
+
+	public void setOnInitialized(SpellDesc onInitialized) {
+		this.onInitialized = onInitialized;
 	}
 }

@@ -11,4 +11,9 @@ public class GraphQLQueryResolverImpl implements QueryResolver, GraphQLQueryReso
 	public Future<String> currentUserId() throws Exception {
 		return Future.succeededFuture(Accounts.userId());
 	}
+
+	@Override
+	public Future<Integer> rerollCost(Long rogueId) throws Exception {
+		return RogueManager.rerollCost(rogueId);
+	}
 }

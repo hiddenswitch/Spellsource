@@ -2757,14 +2757,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// The player can use a hero power once per turn by default
 		player.setAttribute(Attribute.HERO_POWER_USAGES, 1);
 
-		// Implements Open the Waygate
-		Stream.concat(player.getDeck().stream(),
-				player.getHand().stream()).forEach(c -> c.getAttributes().put(Attribute.STARTED_IN_DECK, true));
+		Stream.concat(player.getDeck().stream(), player.getHand().stream()).forEach(c -> {
+			// Implements Open the Waygate
+			c.getAttributes().put(Attribute.STARTED_IN_DECK, true);
+			
+			if (c.getDesc().getOnInitialized() != null) {
+				castSpell(playerId, c.getDesc().getOnInitialized(), c.getReference(), EntityReference.NONE, TargetSelection.NONE, false, null);
+			}
+		});
 
 		// The deck is shuffled TWICE. Once before the mulligan, here, and once after.
 		player.getDeck().shuffle(getRandom());
-
-		fireGameEvent(new GameInitializedEvent(context, playerId, playerId)); // TODO deal with enchantments not being set yet
+		
 
 		// Populate both player's hands here first to prevent consuming random resources
 		var numberOfStarterCards = begins ? getStarterCards() : getStarterCards() + getSecondPlayerBonusStarterCards();

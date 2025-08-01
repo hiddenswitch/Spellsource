@@ -455,7 +455,7 @@ public class Routines {
     /**
      * Call <code>spellsource.check_rogue_game_end</code>
      */
-    public static Boolean checkRogueGameEnd(
+    public static RogueRunRecord checkRogueGameEnd(
           Configuration configuration
         , Long gameId
         , String winningUser
@@ -471,7 +471,7 @@ public class Routines {
     /**
      * Get <code>spellsource.check_rogue_game_end</code> as a field.
      */
-    public static Field<Boolean> checkRogueGameEnd(
+    public static Field<RogueRunRecord> checkRogueGameEnd(
           Long gameId
         , String winningUser
     ) {
@@ -485,7 +485,7 @@ public class Routines {
     /**
      * Get <code>spellsource.check_rogue_game_end</code> as a field.
      */
-    public static Field<Boolean> checkRogueGameEnd(
+    public static Field<RogueRunRecord> checkRogueGameEnd(
           Field<Long> gameId
         , Field<String> winningUser
     ) {
@@ -499,7 +499,7 @@ public class Routines {
     /**
      * Call <code>spellsource.check_rogue_game_start</code>
      */
-    public static Boolean checkRogueGameStart(
+    public static RogueRunRecord checkRogueGameStart(
           Configuration configuration
         , String deckId
         , Long gameId
@@ -515,7 +515,7 @@ public class Routines {
     /**
      * Get <code>spellsource.check_rogue_game_start</code> as a field.
      */
-    public static Field<Boolean> checkRogueGameStart(
+    public static Field<RogueRunRecord> checkRogueGameStart(
           String deckId
         , Long gameId
     ) {
@@ -529,7 +529,7 @@ public class Routines {
     /**
      * Get <code>spellsource.check_rogue_game_start</code> as a field.
      */
-    public static Field<Boolean> checkRogueGameStart(
+    public static Field<RogueRunRecord> checkRogueGameStart(
           Field<String> deckId
         , Field<Long> gameId
     ) {

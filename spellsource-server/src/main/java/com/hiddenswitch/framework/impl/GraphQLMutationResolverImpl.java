@@ -12,11 +12,21 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 
 	@Override
 	public Future<RogueRun> startRogueRun(String heroClass, Long seed) throws Exception {
-		return RogueManager.startRogueRun(heroClass, seed, Accounts.userId()).compose(id -> Future.succeededFuture(new RogueRun(id)));
+		return RogueManager.startRogueRun(heroClass, seed, Accounts.userId()).map(RogueRun::new);
 	}
 
 	@Override
 	public Future<RogueRun> makeRogueChoice(Long choiceId, List<Integer> choices) throws Exception {
-		return RogueManager.makeRogueChoice(choiceId, choices).compose(id -> Future.succeededFuture(new RogueRun(id)));
+		return RogueManager.makeRogueChoice(choiceId, choices).map(RogueRun::new);
+	}
+
+	@Override
+	public Future<RogueRun> reroll(Long choiceId) throws Exception {
+		return RogueManager.reroll(choiceId).map(RogueRun::new);
+	}
+
+	@Override
+	public Future<RogueRun> trashCard(Long rogueId, String cardId) throws Exception {
+		return RogueManager.trashCard(rogueId, cardId).map(RogueRun::new);
 	}
 }

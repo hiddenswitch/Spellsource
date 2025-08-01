@@ -129,6 +129,26 @@ public interface IRogueRun extends VertxPojo, Serializable {
      */
     public Long getSeed();
 
+    /**
+     * Setter for <code>spellsource.rogue_run.seed_state</code>.
+     */
+    public IRogueRun setSeedState(Long value);
+
+    /**
+     * Getter for <code>spellsource.rogue_run.seed_state</code>.
+     */
+    public Long getSeedState();
+
+    /**
+     * Setter for <code>spellsource.rogue_run.gold</code>.
+     */
+    public IRogueRun setGold(Integer value);
+
+    /**
+     * Getter for <code>spellsource.rogue_run.gold</code>.
+     */
+    public Integer getGold();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -158,6 +178,8 @@ public interface IRogueRun extends VertxPojo, Serializable {
                 setOrThrow(this::setGame,json::getLong,"game","java.lang.Long");
                 setOrThrow(this::setOpponentDeck,json::getString,"opponent_deck","java.lang.String");
                 setOrThrow(this::setSeed,json::getLong,"seed","java.lang.Long");
+                setOrThrow(this::setSeedState,json::getLong,"seed_state","java.lang.Long");
+                setOrThrow(this::setGold,json::getInteger,"gold","java.lang.Integer");
                 return this;
         }
 
@@ -176,6 +198,8 @@ public interface IRogueRun extends VertxPojo, Serializable {
                 json.put("game",getGame());
                 json.put("opponent_deck",getOpponentDeck());
                 json.put("seed",getSeed());
+                json.put("seed_state",getSeedState());
+                json.put("gold",getGold());
                 return json;
         }
 

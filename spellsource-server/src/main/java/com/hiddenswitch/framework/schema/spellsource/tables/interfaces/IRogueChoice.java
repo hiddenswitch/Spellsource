@@ -4,6 +4,8 @@
 package com.hiddenswitch.framework.schema.spellsource.tables.interfaces;
 
 
+import com.hiddenswitch.framework.schema.spellsource.enums.RogueChoiceType;
+
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
 import java.io.Serializable;
@@ -66,6 +68,36 @@ public interface IRogueChoice extends VertxPojo, Serializable {
      */
     public Integer getIndex();
 
+    /**
+     * Setter for <code>spellsource.rogue_choice.can_reroll</code>.
+     */
+    public IRogueChoice setCanReroll(Boolean value);
+
+    /**
+     * Getter for <code>spellsource.rogue_choice.can_reroll</code>.
+     */
+    public Boolean getCanReroll();
+
+    /**
+     * Setter for <code>spellsource.rogue_choice.repopulate</code>.
+     */
+    public IRogueChoice setRepopulate(Boolean value);
+
+    /**
+     * Getter for <code>spellsource.rogue_choice.repopulate</code>.
+     */
+    public Boolean getRepopulate();
+
+    /**
+     * Setter for <code>spellsource.rogue_choice.type</code>.
+     */
+    public IRogueChoice setType(RogueChoiceType value);
+
+    /**
+     * Getter for <code>spellsource.rogue_choice.type</code>.
+     */
+    public RogueChoiceType getType();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -89,6 +121,9 @@ public interface IRogueChoice extends VertxPojo, Serializable {
                 // Omitting unrecognized type java.lang.String[] for column cards!
                 setOrThrow(this::setCanPick,json::getInteger,"can_pick","java.lang.Integer");
                 setOrThrow(this::setIndex,json::getInteger,"index","java.lang.Integer");
+                setOrThrow(this::setCanReroll,json::getBoolean,"can_reroll","java.lang.Boolean");
+                setOrThrow(this::setRepopulate,json::getBoolean,"repopulate","java.lang.Boolean");
+                setOrThrow(this::setType,key -> java.util.Arrays.stream(com.hiddenswitch.framework.schema.spellsource.enums.RogueChoiceType.values()).filter(td -> td.getLiteral().equals(json.getString(key))).findFirst().orElse(null),"type","com.hiddenswitch.framework.schema.spellsource.enums.RogueChoiceType");
                 return this;
         }
 
@@ -101,6 +136,9 @@ public interface IRogueChoice extends VertxPojo, Serializable {
                 // Omitting unrecognized type java.lang.String[] for column cards!
                 json.put("can_pick",getCanPick());
                 json.put("index",getIndex());
+                json.put("can_reroll",getCanReroll());
+                json.put("repopulate",getRepopulate());
+                json.put("type",getType()==null?null:getType().getLiteral());
                 return json;
         }
 

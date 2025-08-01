@@ -192,6 +192,36 @@ public class RogueRunDao extends AbstractReactiveVertxDAO<RogueRunRecord, com.hi
                 return findManyByCondition(RogueRun.ROGUE_RUN.SEED.in(values),limit);
         }
 
+        /**
+     * Find records that have <code>seed_state IN (values)</code> asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun>> findManyBySeedState(Collection<Long> values) {
+                return findManyByCondition(RogueRun.ROGUE_RUN.SEED_STATE.in(values));
+        }
+
+        /**
+     * Find records that have <code>seed_state IN (values)</code> asynchronously
+     * limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun>> findManyBySeedState(Collection<Long> values, int limit) {
+                return findManyByCondition(RogueRun.ROGUE_RUN.SEED_STATE.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>gold IN (values)</code> asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun>> findManyByGold(Collection<Integer> values) {
+                return findManyByCondition(RogueRun.ROGUE_RUN.GOLD.in(values));
+        }
+
+        /**
+     * Find records that have <code>gold IN (values)</code> asynchronously
+     * limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun>> findManyByGold(Collection<Integer> values, int limit) {
+                return findManyByCondition(RogueRun.ROGUE_RUN.GOLD.in(values),limit);
+        }
+
         @Override
         public ReactiveClassicQueryExecutor<RogueRunRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun,Long> queryExecutor(){
                 return (ReactiveClassicQueryExecutor<RogueRunRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun,Long>) super.queryExecutor();

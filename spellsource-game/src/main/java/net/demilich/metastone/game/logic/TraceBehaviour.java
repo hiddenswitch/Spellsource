@@ -5,8 +5,10 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Entity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -25,11 +27,9 @@ class TraceBehaviour extends UtilityBehaviour {
 	/**
 	 * @param playerId                   The player that this behaviour is "playing" for.
 	 * @param mulligans                  The list of mulligans from the traced game.
-	 * @param nextAction                 The index of the next action to take (shared between two {@link
-	 *                                   TraceBehaviour}s).
+	 * @param nextAction                 The index of the next action to take (shared between two {@link TraceBehaviour}s).
 	 * @param actions                    The list of action (indices) from the traced game.
-	 * @param beforeRequestActionHandler [Optional] consumer to be called on every {@link GameContext} before each action
-	 *                                   is taken.
+	 * @param beforeRequestActionHandler [Optional] consumer to be called on every {@link GameContext} before each action is taken.
 	 */
 	TraceBehaviour(
 			int playerId,
@@ -77,7 +77,7 @@ class TraceBehaviour extends UtilityBehaviour {
 					if (card.isPresent()) {
 						return card.get();
 					} else {
-						throw new NullPointerException();
+						throw new NullPointerException("Card with id " + i + " was not a valid mulligan option, expected one of " + Arrays.toString(cards.stream().map(Entity::getId).toArray()));
 					}
 				})
 				.collect(Collectors.toList());

@@ -32,6 +32,8 @@ public class RogueRun implements VertxPojo, IRogueRun {
     private Long game;
     private String opponentDeck;
     private Long seed;
+    private Long seedState;
+    private Integer gold;
 
     public RogueRun() {}
 
@@ -47,6 +49,8 @@ public class RogueRun implements VertxPojo, IRogueRun {
         this.game = value.getGame();
         this.opponentDeck = value.getOpponentDeck();
         this.seed = value.getSeed();
+        this.seedState = value.getSeedState();
+        this.gold = value.getGold();
     }
 
     public RogueRun(
@@ -60,7 +64,9 @@ public class RogueRun implements VertxPojo, IRogueRun {
         RogueRunState state,
         Long game,
         String opponentDeck,
-        Long seed
+        Long seed,
+        Long seedState,
+        Integer gold
     ) {
         this.id = id;
         this.player = player;
@@ -73,6 +79,8 @@ public class RogueRun implements VertxPojo, IRogueRun {
         this.game = game;
         this.opponentDeck = opponentDeck;
         this.seed = seed;
+        this.seedState = seedState;
+        this.gold = gold;
     }
 
         public RogueRun(io.vertx.core.json.JsonObject json) {
@@ -267,6 +275,40 @@ public class RogueRun implements VertxPojo, IRogueRun {
         return this;
     }
 
+    /**
+     * Getter for <code>spellsource.rogue_run.seed_state</code>.
+     */
+    @Override
+    public Long getSeedState() {
+        return this.seedState;
+    }
+
+    /**
+     * Setter for <code>spellsource.rogue_run.seed_state</code>.
+     */
+    @Override
+    public RogueRun setSeedState(Long seedState) {
+        this.seedState = seedState;
+        return this;
+    }
+
+    /**
+     * Getter for <code>spellsource.rogue_run.gold</code>.
+     */
+    @Override
+    public Integer getGold() {
+        return this.gold;
+    }
+
+    /**
+     * Setter for <code>spellsource.rogue_run.gold</code>.
+     */
+    @Override
+    public RogueRun setGold(Integer gold) {
+        this.gold = gold;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -342,6 +384,18 @@ public class RogueRun implements VertxPojo, IRogueRun {
         }
         else if (!this.seed.equals(other.seed))
             return false;
+        if (this.seedState == null) {
+            if (other.seedState != null)
+                return false;
+        }
+        else if (!this.seedState.equals(other.seedState))
+            return false;
+        if (this.gold == null) {
+            if (other.gold != null)
+                return false;
+        }
+        else if (!this.gold.equals(other.gold))
+            return false;
         return true;
     }
 
@@ -360,6 +414,8 @@ public class RogueRun implements VertxPojo, IRogueRun {
         result = prime * result + ((this.game == null) ? 0 : this.game.hashCode());
         result = prime * result + ((this.opponentDeck == null) ? 0 : this.opponentDeck.hashCode());
         result = prime * result + ((this.seed == null) ? 0 : this.seed.hashCode());
+        result = prime * result + ((this.seedState == null) ? 0 : this.seedState.hashCode());
+        result = prime * result + ((this.gold == null) ? 0 : this.gold.hashCode());
         return result;
     }
 
@@ -378,6 +434,8 @@ public class RogueRun implements VertxPojo, IRogueRun {
         sb.append(", ").append(game);
         sb.append(", ").append(opponentDeck);
         sb.append(", ").append(seed);
+        sb.append(", ").append(seedState);
+        sb.append(", ").append(gold);
 
         sb.append(")");
         return sb.toString();
@@ -400,6 +458,8 @@ public class RogueRun implements VertxPojo, IRogueRun {
         setGame(from.getGame());
         setOpponentDeck(from.getOpponentDeck());
         setSeed(from.getSeed());
+        setSeedState(from.getSeedState());
+        setGold(from.getGold());
     }
 
     @Override

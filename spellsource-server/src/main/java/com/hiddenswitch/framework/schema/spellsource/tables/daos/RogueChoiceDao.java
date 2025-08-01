@@ -4,6 +4,7 @@
 package com.hiddenswitch.framework.schema.spellsource.tables.daos;
 
 
+import com.hiddenswitch.framework.schema.spellsource.enums.RogueChoiceType;
 import com.hiddenswitch.framework.schema.spellsource.tables.RogueChoice;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.RogueChoiceRecord;
 
@@ -96,6 +97,51 @@ public class RogueChoiceDao extends AbstractReactiveVertxDAO<RogueChoiceRecord, 
      */
         public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueChoice>> findManyByIndex(Collection<Integer> values, int limit) {
                 return findManyByCondition(RogueChoice.ROGUE_CHOICE.INDEX.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>can_reroll IN (values)</code> asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueChoice>> findManyByCanReroll(Collection<Boolean> values) {
+                return findManyByCondition(RogueChoice.ROGUE_CHOICE.CAN_REROLL.in(values));
+        }
+
+        /**
+     * Find records that have <code>can_reroll IN (values)</code> asynchronously
+     * limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueChoice>> findManyByCanReroll(Collection<Boolean> values, int limit) {
+                return findManyByCondition(RogueChoice.ROGUE_CHOICE.CAN_REROLL.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>repopulate IN (values)</code> asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueChoice>> findManyByRepopulate(Collection<Boolean> values) {
+                return findManyByCondition(RogueChoice.ROGUE_CHOICE.REPOPULATE.in(values));
+        }
+
+        /**
+     * Find records that have <code>repopulate IN (values)</code> asynchronously
+     * limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueChoice>> findManyByRepopulate(Collection<Boolean> values, int limit) {
+                return findManyByCondition(RogueChoice.ROGUE_CHOICE.REPOPULATE.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>type IN (values)</code> asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueChoice>> findManyByType(Collection<RogueChoiceType> values) {
+                return findManyByCondition(RogueChoice.ROGUE_CHOICE.TYPE.in(values));
+        }
+
+        /**
+     * Find records that have <code>type IN (values)</code> asynchronously
+     * limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueChoice>> findManyByType(Collection<RogueChoiceType> values, int limit) {
+                return findManyByCondition(RogueChoice.ROGUE_CHOICE.TYPE.in(values),limit);
         }
 
         @Override

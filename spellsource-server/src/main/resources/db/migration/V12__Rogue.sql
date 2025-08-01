@@ -18,7 +18,9 @@ create table if not exists spellsource.rogue_run
     state           spellsource.rogue_run_state not null default 'INITIAL',
     game            bigint unique references spellsource.games (id),
     opponent_deck   text references spellsource.decks (id),
-    seed            bigint                      not null default (random() * 1e10)::bigint
+    seed            bigint                      not null default (random() * 1e10)::bigint,
+    seed_state      bigint                      not null default 0,
+    gold            int                         not null default 0
 );
 grant select on spellsource.rogue_run to website;
 alter table spellsource.rogue_run
@@ -26,14 +28,21 @@ alter table spellsource.rogue_run
 create policy rls on spellsource.rogue_run for select
     using (spellsource.get_user_id() = player);
 
+create type spellsource.rogue_choice_type as enum (
+    'STANDARD',
+    'EQUIPMENT'
+    );
 
 create table spellsource.rogue_choice
 (
-    id        bigint not null primary key generated always as identity,
-    rogue_run bigint not null references spellsource.rogue_run (id),
-    cards     text[] not null,
-    can_pick  int    not null default 1,
-    index     int    not null default 0
+    id         bigint                        not null primary key generated always as identity,
+    rogue_run  bigint                        not null references spellsource.rogue_run (id),
+    cards      text[]                        not null,
+    can_pick   int                           not null default 1,
+    index      int                           not null default 0,
+    can_reroll bool                          not null default false,
+    repopulate bool                          not null default false,
+    type       spellsource.rogue_choice_type not null default 'STANDARD'
 );
 grant select on spellsource.rogue_choice to website;
 alter table spellsource.rogue_choice
@@ -106,7 +115,7 @@ $$ volatile language plpgsql
 -- grant execute on function spellsource.resign_rogue_run to website;
 
 
-create or replace function spellsource.check_rogue_game_start(deck_id text, game_id bigint) returns bool as
+create or replace function spellsource.check_rogue_game_start(deck_id text, game_id bigint) returns spellsource.rogue_run as
 $$
 declare
     rogue_run spellsource.rogue_run%rowtype;
@@ -114,15 +123,15 @@ begin
     update spellsource.rogue_run set game = game_id, state = 'IN_MATCH' where deck = deck_id returning * into rogue_run;
 
     if found then
-        return true;
+        return rogue_run;
     else
-        return false;
+        return null;
     end if;
 end;
 $$ volatile language plpgsql;
 
 
-create or replace function spellsource.check_rogue_game_end(game_id bigint, winning_user varchar(36)) returns bool as
+create or replace function spellsource.check_rogue_game_end(game_id bigint, winning_user varchar(36)) returns spellsource.rogue_run as
 $$
 declare
     rogue_run spellsource.rogue_run%rowtype;
@@ -130,18 +139,18 @@ begin
     select * from spellsource.rogue_run where game = game_id into rogue_run;
 
     if not found then
-        return false;
+        return null;
     end if;
 
 
     if winning_user != rogue_run.player then
         update spellsource.rogue_run as r set ended_at = now(), state = 'FINISHED' where id = rogue_run.id;
-        return true;
+        return rogue_run;
     end if;
 
     update spellsource.rogue_run as r set bosses_defeated = r.bosses_defeated + 1, state = 'CHOICE' where id = rogue_run.id;
 
-    return true;
+    return rogue_run;
 end;
 $$ volatile language plpgsql;
 

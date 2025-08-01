@@ -6,6 +6,7 @@ package com.hiddenswitch.framework.schema.spellsource.tables;
 
 import com.hiddenswitch.framework.schema.spellsource.Keys;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
+import com.hiddenswitch.framework.schema.spellsource.enums.RogueChoiceType;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.RogueChoiceRecord;
 
 import java.util.Arrays;
@@ -14,12 +15,12 @@ import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function5;
+import org.jooq.Function8;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row5;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -76,6 +77,21 @@ public class RogueChoice extends TableImpl<RogueChoiceRecord> {
      * The column <code>spellsource.rogue_choice.index</code>.
      */
     public final TableField<RogueChoiceRecord, Integer> INDEX = createField(DSL.name("index"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
+
+    /**
+     * The column <code>spellsource.rogue_choice.can_reroll</code>.
+     */
+    public final TableField<RogueChoiceRecord, Boolean> CAN_REROLL = createField(DSL.name("can_reroll"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>spellsource.rogue_choice.repopulate</code>.
+     */
+    public final TableField<RogueChoiceRecord, Boolean> REPOPULATE = createField(DSL.name("repopulate"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>spellsource.rogue_choice.type</code>.
+     */
+    public final TableField<RogueChoiceRecord, RogueChoiceType> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR.nullable(false).defaultValue(DSL.field("'STANDARD'::spellsource.rogue_choice_type", SQLDataType.VARCHAR)).asEnumDataType(com.hiddenswitch.framework.schema.spellsource.enums.RogueChoiceType.class), this, "");
 
     private RogueChoice(Name alias, Table<RogueChoiceRecord> aliased) {
         this(alias, aliased, null);
@@ -183,18 +199,18 @@ public class RogueChoice extends TableImpl<RogueChoiceRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Long, Long, String[], Integer, Integer> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row8<Long, Long, String[], Integer, Integer, Boolean, Boolean, RogueChoiceType> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function5<? super Long, ? super Long, ? super String[], ? super Integer, ? super Integer, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function8<? super Long, ? super Long, ? super String[], ? super Integer, ? super Integer, ? super Boolean, ? super Boolean, ? super RogueChoiceType, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -202,7 +218,7 @@ public class RogueChoice extends TableImpl<RogueChoiceRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function5<? super Long, ? super Long, ? super String[], ? super Integer, ? super Integer, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Long, ? super Long, ? super String[], ? super Integer, ? super Integer, ? super Boolean, ? super Boolean, ? super RogueChoiceType, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

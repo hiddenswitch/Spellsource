@@ -17,12 +17,12 @@ import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function11;
+import org.jooq.Function13;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row11;
+import org.jooq.Row13;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -109,6 +109,16 @@ public class RogueRun extends TableImpl<RogueRunRecord> {
      * The column <code>spellsource.rogue_run.seed</code>.
      */
     public final TableField<RogueRunRecord, Long> SEED = createField(DSL.name("seed"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field("((random() * ('10000000000'::numeric)::double precision))::bigint", SQLDataType.BIGINT)), this, "");
+
+    /**
+     * The column <code>spellsource.rogue_run.seed_state</code>.
+     */
+    public final TableField<RogueRunRecord, Long> SEED_STATE = createField(DSL.name("seed_state"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field("0", SQLDataType.BIGINT)), this, "");
+
+    /**
+     * The column <code>spellsource.rogue_run.gold</code>.
+     */
+    public final TableField<RogueRunRecord, Integer> GOLD = createField(DSL.name("gold"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
 
     private RogueRun(Name alias, Table<RogueRunRecord> aliased) {
         this(alias, aliased, null);
@@ -256,18 +266,18 @@ public class RogueRun extends TableImpl<RogueRunRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row11 type methods
+    // Row13 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row11<Long, String, OffsetDateTime, OffsetDateTime, String, String, Integer, RogueRunState, Long, String, Long> fieldsRow() {
-        return (Row11) super.fieldsRow();
+    public Row13<Long, String, OffsetDateTime, OffsetDateTime, String, String, Integer, RogueRunState, Long, String, Long, Long, Integer> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function11<? super Long, ? super String, ? super OffsetDateTime, ? super OffsetDateTime, ? super String, ? super String, ? super Integer, ? super RogueRunState, ? super Long, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function13<? super Long, ? super String, ? super OffsetDateTime, ? super OffsetDateTime, ? super String, ? super String, ? super Integer, ? super RogueRunState, ? super Long, ? super String, ? super Long, ? super Long, ? super Integer, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -275,7 +285,7 @@ public class RogueRun extends TableImpl<RogueRunRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function11<? super Long, ? super String, ? super OffsetDateTime, ? super OffsetDateTime, ? super String, ? super String, ? super Integer, ? super RogueRunState, ? super Long, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function13<? super Long, ? super String, ? super OffsetDateTime, ? super OffsetDateTime, ? super String, ? super String, ? super Integer, ? super RogueRunState, ? super Long, ? super String, ? super Long, ? super Long, ? super Integer, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

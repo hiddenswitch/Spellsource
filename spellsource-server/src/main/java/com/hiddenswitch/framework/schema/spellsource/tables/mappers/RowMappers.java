@@ -188,6 +188,9 @@ public class RowMappers {
                         // Omitting unrecognized type DataType [ t=ARRAY; p=0; s=0; u="pg_catalog"."_text"; j=null ] (java.lang.String[]) for column cards!
                         pojo.setCanPick(row.getInteger("can_pick"));
                         pojo.setIndex(row.getInteger("index"));
+                        pojo.setCanReroll(row.getBoolean("can_reroll"));
+                        pojo.setRepopulate(row.getBoolean("repopulate"));
+                        pojo.setType(java.util.Arrays.stream(com.hiddenswitch.framework.schema.spellsource.enums.RogueChoiceType.values()).filter(td -> td.getLiteral().equals(row.getString("type"))).findFirst().orElse(null));
                         return pojo;
                 };
         }
@@ -206,6 +209,8 @@ public class RowMappers {
                         pojo.setGame(row.getLong("game"));
                         pojo.setOpponentDeck(row.getString("opponent_deck"));
                         pojo.setSeed(row.getLong("seed"));
+                        pojo.setSeedState(row.getLong("seed_state"));
+                        pojo.setGold(row.getInteger("gold"));
                         return pojo;
                 };
         }

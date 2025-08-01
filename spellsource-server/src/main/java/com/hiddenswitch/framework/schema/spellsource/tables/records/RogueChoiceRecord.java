@@ -4,6 +4,7 @@
 package com.hiddenswitch.framework.schema.spellsource.tables.records;
 
 
+import com.hiddenswitch.framework.schema.spellsource.enums.RogueChoiceType;
 import com.hiddenswitch.framework.schema.spellsource.tables.RogueChoice;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IRogueChoice;
 
@@ -11,8 +12,8 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record5;
-import org.jooq.Row5;
+import org.jooq.Record8;
+import org.jooq.Row8;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -21,7 +22,7 @@ import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
  * @omit create,update,delete
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> implements VertxPojo, Record5<Long, Long, String[], Integer, Integer>, IRogueChoice {
+public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> implements VertxPojo, Record8<Long, Long, String[], Integer, Integer, Boolean, Boolean, RogueChoiceType>, IRogueChoice {
 
     private static final long serialVersionUID = 1L;
 
@@ -110,6 +111,57 @@ public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> im
         return (Integer) get(4);
     }
 
+    /**
+     * Setter for <code>spellsource.rogue_choice.can_reroll</code>.
+     */
+    @Override
+    public RogueChoiceRecord setCanReroll(Boolean value) {
+        set(5, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>spellsource.rogue_choice.can_reroll</code>.
+     */
+    @Override
+    public Boolean getCanReroll() {
+        return (Boolean) get(5);
+    }
+
+    /**
+     * Setter for <code>spellsource.rogue_choice.repopulate</code>.
+     */
+    @Override
+    public RogueChoiceRecord setRepopulate(Boolean value) {
+        set(6, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>spellsource.rogue_choice.repopulate</code>.
+     */
+    @Override
+    public Boolean getRepopulate() {
+        return (Boolean) get(6);
+    }
+
+    /**
+     * Setter for <code>spellsource.rogue_choice.type</code>.
+     */
+    @Override
+    public RogueChoiceRecord setType(RogueChoiceType value) {
+        set(7, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>spellsource.rogue_choice.type</code>.
+     */
+    @Override
+    public RogueChoiceType getType() {
+        return (RogueChoiceType) get(7);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -120,17 +172,17 @@ public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> im
     }
 
     // -------------------------------------------------------------------------
-    // Record5 type implementation
+    // Record8 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Long, Long, String[], Integer, Integer> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row8<Long, Long, String[], Integer, Integer, Boolean, Boolean, RogueChoiceType> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 
     @Override
-    public Row5<Long, Long, String[], Integer, Integer> valuesRow() {
-        return (Row5) super.valuesRow();
+    public Row8<Long, Long, String[], Integer, Integer, Boolean, Boolean, RogueChoiceType> valuesRow() {
+        return (Row8) super.valuesRow();
     }
 
     @Override
@@ -159,6 +211,21 @@ public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> im
     }
 
     @Override
+    public Field<Boolean> field6() {
+        return RogueChoice.ROGUE_CHOICE.CAN_REROLL;
+    }
+
+    @Override
+    public Field<Boolean> field7() {
+        return RogueChoice.ROGUE_CHOICE.REPOPULATE;
+    }
+
+    @Override
+    public Field<RogueChoiceType> field8() {
+        return RogueChoice.ROGUE_CHOICE.TYPE;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -184,6 +251,21 @@ public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> im
     }
 
     @Override
+    public Boolean component6() {
+        return getCanReroll();
+    }
+
+    @Override
+    public Boolean component7() {
+        return getRepopulate();
+    }
+
+    @Override
+    public RogueChoiceType component8() {
+        return getType();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -206,6 +288,21 @@ public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> im
     @Override
     public Integer value5() {
         return getIndex();
+    }
+
+    @Override
+    public Boolean value6() {
+        return getCanReroll();
+    }
+
+    @Override
+    public Boolean value7() {
+        return getRepopulate();
+    }
+
+    @Override
+    public RogueChoiceType value8() {
+        return getType();
     }
 
     @Override
@@ -239,12 +336,33 @@ public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> im
     }
 
     @Override
-    public RogueChoiceRecord values(Long value1, Long value2, String[] value3, Integer value4, Integer value5) {
+    public RogueChoiceRecord value6(Boolean value) {
+        setCanReroll(value);
+        return this;
+    }
+
+    @Override
+    public RogueChoiceRecord value7(Boolean value) {
+        setRepopulate(value);
+        return this;
+    }
+
+    @Override
+    public RogueChoiceRecord value8(RogueChoiceType value) {
+        setType(value);
+        return this;
+    }
+
+    @Override
+    public RogueChoiceRecord values(Long value1, Long value2, String[] value3, Integer value4, Integer value5, Boolean value6, Boolean value7, RogueChoiceType value8) {
         value1(value1);
         value2(value2);
         value3(value3);
         value4(value4);
         value5(value5);
+        value6(value6);
+        value7(value7);
+        value8(value8);
         return this;
     }
 
@@ -259,6 +377,9 @@ public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> im
         setCards(from.getCards());
         setCanPick(from.getCanPick());
         setIndex(from.getIndex());
+        setCanReroll(from.getCanReroll());
+        setRepopulate(from.getRepopulate());
+        setType(from.getType());
     }
 
     @Override
@@ -281,7 +402,7 @@ public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> im
     /**
      * Create a detached, initialised RogueChoiceRecord
      */
-    public RogueChoiceRecord(Long id, Long rogueRun, String[] cards, Integer canPick, Integer index) {
+    public RogueChoiceRecord(Long id, Long rogueRun, String[] cards, Integer canPick, Integer index, Boolean canReroll, Boolean repopulate, RogueChoiceType type) {
         super(RogueChoice.ROGUE_CHOICE);
 
         setId(id);
@@ -289,6 +410,9 @@ public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> im
         setCards(cards);
         setCanPick(canPick);
         setIndex(index);
+        setCanReroll(canReroll);
+        setRepopulate(repopulate);
+        setType(type);
     }
 
     /**
@@ -303,6 +427,9 @@ public class RogueChoiceRecord extends UpdatableRecordImpl<RogueChoiceRecord> im
             setCards(value.getCards());
             setCanPick(value.getCanPick());
             setIndex(value.getIndex());
+            setCanReroll(value.getCanReroll());
+            setRepopulate(value.getRepopulate());
+            setType(value.getType());
         }
     }
 
