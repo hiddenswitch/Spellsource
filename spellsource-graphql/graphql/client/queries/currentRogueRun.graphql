@@ -1,0 +1,5 @@
+query currentRogueRun {
+    currentRogueRun {
+        ...rogueRun
+    }
+}

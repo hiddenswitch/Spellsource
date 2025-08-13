@@ -3,6 +3,7 @@ scalar BigInt
 type Query {
     currentUserId: String
     rerollCost(rogueId: BigInt!): Int!
+    currentRogueClasses: [String!]!
 }
 
 type Mutation {

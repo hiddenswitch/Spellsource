@@ -1,0 +1,35 @@
+{
+  "name": "Level 1",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "30 HP, +2 Starting Lun, Upgraded Skill",
+  "onInitialized": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RemoveCardSpell",
+        "target": "SELF"
+      },
+      {
+        "class": "SetHpSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 30
+      },
+      {
+        "class": "ModifyMaxManaSpell",
+        "value": 2
+      },
+      {
+        "class": "custom.UpgradeHeroPowerSpell",
+        "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "attributes": {
+    "HIDDEN": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

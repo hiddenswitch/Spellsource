@@ -1,0 +1,39 @@
+{
+  "name": "More Lun",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "+1 Starting Lun",
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "target": "SELF"
+          },
+          {
+            "class": "ModifyMaxManaSpell",
+            "value": 1
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

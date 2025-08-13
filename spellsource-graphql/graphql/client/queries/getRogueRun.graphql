@@ -1,0 +1,5 @@
+query getRogueRun($id: BigInt!) {
+    rogueRunById(id: $id) {
+        ...rogueRun
+    }
+}

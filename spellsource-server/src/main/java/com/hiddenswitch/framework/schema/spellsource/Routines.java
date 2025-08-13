@@ -19,6 +19,7 @@ import com.hiddenswitch.framework.schema.spellsource.routines.CheckRogueGameStar
 import com.hiddenswitch.framework.schema.spellsource.routines.ClusteredGamesUpdateGameAndUsers;
 import com.hiddenswitch.framework.schema.spellsource.routines.CreateDeckWithCards;
 import com.hiddenswitch.framework.schema.spellsource.routines.CurrentRogueChoice;
+import com.hiddenswitch.framework.schema.spellsource.routines.CurrentRogueRun;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetLatestCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserAttribute;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
@@ -688,6 +689,27 @@ public class Routines {
     ) {
         CurrentRogueChoice f = new CurrentRogueChoice();
         f.setRogueId(rogueId);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.current_rogue_run</code>
+     */
+    public static RogueRunRecord currentRogueRun(
+          Configuration configuration
+    ) {
+        CurrentRogueRun f = new CurrentRogueRun();
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.current_rogue_run</code> as a field.
+     */
+    public static Field<RogueRunRecord> currentRogueRun() {
+        CurrentRogueRun f = new CurrentRogueRun();
 
         return f.asField();
     }

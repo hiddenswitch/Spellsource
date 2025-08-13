@@ -49,7 +49,7 @@
     "build": "tsc",
     "start": "node build/server.js",
     "codegen": "graphql-codegen",
-    "strawberry-shake": "dotnet graphql generate -o ../spellsource-client/src/unity/Assets/Scripts",
+    "strawberry-shake": "dotnet graphql generate",
     "docker-debug": "node -r ts-node/register --inspect=0.0.0.0:51535 src/server.ts"
   }
 }

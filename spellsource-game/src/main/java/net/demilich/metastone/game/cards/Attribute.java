@@ -1248,6 +1248,14 @@ public enum Attribute {
 	 */
 	CONCEDED,
 	/**
+	 * Equipment cards for rogue runs
+	 */
+	EQUIPMENT,
+  /**
+   * Will not be shown to the client
+   */
+  HIDDEN,
+	/**
 	 * The last attribute specially marked as unused, for enumeration purposes.
 	 */
 	UNUSED;

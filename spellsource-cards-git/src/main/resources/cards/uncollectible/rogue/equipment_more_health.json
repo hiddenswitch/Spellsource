@@ -1,0 +1,49 @@
+{
+  "name": "More Health",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Your starting Health is doubled.",
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "target": "SELF"
+          },
+          {
+            "class": "SetHeroHpSpell",
+            "target": "FRIENDLY_HERO",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "operation": "MULTIPLY",
+              "value1": {
+                "class": "AttributeValueProvider",
+                "target": "FRIENDLY_HERO",
+                "attribute": "HP"
+              },
+              "value2": 2
+            }
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

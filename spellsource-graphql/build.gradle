@@ -68,7 +68,16 @@ tasks.named("yarnRunStrawberryShake").configure {
   dependsOn "toolRestore"
   inputs.dir("graphql/client")
   inputs.dir("graphql/shared")
-  // TODO manually specify outputs as well?
+  inputs.file(".graphqlrc.json")
+  outputs.file("Generated/GraphQL.Client.cs")
+  outputs.file("../spellsource-client/src/unity/Assets/Scripts/GraphQL.Client.cs")
+
+  doLast {
+    copy {
+      from "Generated/GraphQL.Client.cs"
+      into "../spellsource-client/src/unity/Assets/Scripts/"
+    }
+  }
 }
 
 tasks.register("generateAll") {

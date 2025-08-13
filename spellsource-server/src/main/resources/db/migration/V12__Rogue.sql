@@ -6,6 +6,11 @@ create type spellsource.rogue_run_state as enum (
     'CHOICE' -- Choosing rewards to add to deck
     );
 
+create or replace function spellsource.generate_seed() returns bigint as
+$$
+select (random() * 1e10)::bigint;
+$$ language sql volatile;
+
 create table if not exists spellsource.rogue_run
 (
     id              bigint                      not null primary key generated always as identity,
@@ -18,7 +23,7 @@ create table if not exists spellsource.rogue_run
     state           spellsource.rogue_run_state not null default 'INITIAL',
     game            bigint unique references spellsource.games (id),
     opponent_deck   text references spellsource.decks (id),
-    seed            bigint                      not null default (random() * 1e10)::bigint,
+    seed            bigint                      not null default spellsource.generate_seed(),
     seed_state      bigint                      not null default 0,
     gold            int                         not null default 0
 );
@@ -90,7 +95,7 @@ begin
 
 
     insert into spellsource.rogue_run (player, started_at, deck, seed, hero_class, opponent_deck)
-    values (user_id, now(), deck_id, use_seed, class_hero, opponent_deck_id)
+    values (user_id, now(), deck_id, coalesce(use_seed, spellsource.generate_seed()), class_hero, opponent_deck_id)
     returning * into rogue_run;
 
     return rogue_run;
@@ -148,7 +153,10 @@ begin
         return rogue_run;
     end if;
 
-    update spellsource.rogue_run as r set bosses_defeated = r.bosses_defeated + 1, state = 'CHOICE' where id = rogue_run.id;
+    update spellsource.rogue_run as r
+    set bosses_defeated = r.bosses_defeated + 1,
+        state           = 'CHOICE'
+    where id = rogue_run.id;
 
     return rogue_run;
 end;
@@ -186,6 +194,17 @@ $$
 grant execute on function spellsource.rogue_run_current_choice to website;
 
 
+
+create or replace function spellsource.current_rogue_run() returns spellsource.rogue_run as
+$$
+select *
+from spellsource.rogue_run
+where player = spellsource.get_user_id()
+limit 1;
+$$ language sql stable;
+grant execute on function spellsource.current_rogue_run to website;
+
+
 create or replace function spellsource.get_cards_in_deck(deck text) returns setof text as
 $$
 select card_id
@@ -199,7 +218,8 @@ $$ language sql stable;
 drop policy if exists website_update on spellsource.decks;
 create policy website_update on spellsource.decks for update to website
     using (created_by = spellsource.get_user_id())
-    with check (created_by = spellsource.get_user_id() and last_edited_by = spellsource.get_user_id() and deck_type != 2);
+    with check (created_by = spellsource.get_user_id() and last_edited_by = spellsource.get_user_id() and
+                deck_type != 2);
 
 drop policy if exists website_insert on spellsource.cards_in_deck;
 create policy website_insert on spellsource.cards_in_deck for insert to website

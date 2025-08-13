@@ -34,9 +34,6 @@ type Query implements Node {
   """Get a single `GeneratedArt`."""
   generatedArtByHashAndOwner(hash: String!, owner: String!): GeneratedArt
 
-  """Get a single `RogueChoice`."""
-  rogueChoiceById(id: BigInt!): RogueChoice
-
   """Get a single `RogueRun`."""
   rogueRunById(id: BigInt!): RogueRun
 
@@ -45,9 +42,13 @@ type Query implements Node {
 
   """Get a single `RogueRun`."""
   rogueRunByGame(game: BigInt!): RogueRun
+
+  """Get a single `RogueChoice`."""
+  rogueChoiceById(id: BigInt!): RogueChoice
   getUserId: String
   canSeeDeck(userId: String, deck: DeckInput): Boolean
   getLatestCard(cardId: String, published: Boolean): Card
+  currentRogueRun: RogueRun
   currentRogueChoice(rogueId: BigInt): RogueChoice
 
   """Reads a single `PublishedCard` using its globally unique `ID`."""
@@ -84,6 +85,12 @@ type Query implements Node {
     nodeId: ID!
   ): Card
 
+  """Reads a single `RogueRun` using its globally unique `ID`."""
+  rogueRun(
+    """The globally unique `ID` to be used in selecting a single `RogueRun`."""
+    nodeId: ID!
+  ): RogueRun
+
   """Reads a single `RogueChoice` using its globally unique `ID`."""
   rogueChoice(
     """
@@ -91,12 +98,6 @@ type Query implements Node {
     """
     nodeId: ID!
   ): RogueChoice
-
-  """Reads a single `RogueRun` using its globally unique `ID`."""
-  rogueRun(
-    """The globally unique `ID` to be used in selecting a single `RogueRun`."""
-    nodeId: ID!
-  ): RogueRun
 
   """Reads and enables pagination through a set of `PublishedCard`."""
   allPublishedCards(
@@ -380,40 +381,6 @@ type Query implements Node {
     includeArchived: IncludeArchivedOption = NO
   ): GeneratedArtsConnection
 
-  """Reads and enables pagination through a set of `RogueChoice`."""
-  allRogueChoices(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `RogueChoice`."""
-    orderBy: [RogueChoicesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: RogueChoiceCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: RogueChoiceFilter
-  ): RogueChoicesConnection
-
   """Reads and enables pagination through a set of `RogueRun`."""
   allRogueRuns(
     """Only read the first `n` values of the set."""
@@ -447,7 +414,43 @@ type Query implements Node {
     """
     filter: RogueRunFilter
   ): RogueRunsConnection
+
+  """Reads and enables pagination through a set of `RogueChoice`."""
+  allRogueChoices(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `RogueChoice`."""
+    orderBy: [RogueChoicesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: RogueChoiceCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: RogueChoiceFilter
+  ): RogueChoicesConnection
   currentUserId: String
+  rerollCost(rogueId: BigInt!): Int!
+  currentRogueClasses: [String!]!
 }
 
 type Mutation {
@@ -649,6 +652,8 @@ type Mutation {
   ): DeleteCardsInDeckPayload
   startRogueRun(heroClass: String!, seed: BigInt): RogueRun!
   makeRogueChoice(choiceId: BigInt!, choices: [Int!]!): RogueRun!
+  reroll(choiceId: BigInt!): RogueRun!
+  trashCard(rogueId: BigInt!, cardId: String!): RogueRun!
 }
 
 """An object with a globally unique `ID`."""
@@ -1352,6 +1357,12 @@ input RogueRunFilter {
   """Filter by the object’s `seed` field."""
   seed: BigIntFilter
 
+  """Filter by the object’s `seedState` field."""
+  seedState: BigIntFilter
+
+  """Filter by the object’s `gold` field."""
+  gold: IntFilter
+
   """Filter by the object’s `rogueChoicesByRogueRun` relation."""
   rogueChoicesByRogueRun: RogueRunToManyRogueChoiceFilter
 
@@ -1508,6 +1519,15 @@ input RogueChoiceFilter {
   """Filter by the object’s `index` field."""
   index: IntFilter
 
+  """Filter by the object’s `canReroll` field."""
+  canReroll: BooleanFilter
+
+  """Filter by the object’s `repopulate` field."""
+  repopulate: BooleanFilter
+
+  """Filter by the object’s `type` field."""
+  type: RogueChoiceTypeFilter
+
   """Filter by the object’s `rogueRunByRogueRun` relation."""
   rogueRunByRogueRun: RogueRunFilter
 
@@ -1582,6 +1602,53 @@ input StringListFilter {
 
   """Any array item is greater than or equal to the specified value."""
   anyGreaterThanOrEqualTo: String
+}
+
+"""
+A filter to be used against RogueChoiceType fields. All fields are combined with a logical ‘and.’
+"""
+input RogueChoiceTypeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: RogueChoiceType
+
+  """Not equal to the specified value."""
+  notEqualTo: RogueChoiceType
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: RogueChoiceType
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: RogueChoiceType
+
+  """Included in the specified list."""
+  in: [RogueChoiceType!]
+
+  """Not included in the specified list."""
+  notIn: [RogueChoiceType!]
+
+  """Less than the specified value."""
+  lessThan: RogueChoiceType
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: RogueChoiceType
+
+  """Greater than the specified value."""
+  greaterThan: RogueChoiceType
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: RogueChoiceType
+}
+
+enum RogueChoiceType {
+  STANDARD
+  EQUIPMENT
 }
 
 """
@@ -2008,6 +2075,8 @@ type RogueRun implements Node {
   game: BigInt
   opponentDeck: String
   seed: BigInt!
+  seedState: BigInt!
+  gold: Int!
 
   """Reads a single `Deck` that is related to this `RogueRun`."""
   deckByDeck: Deck
@@ -2060,6 +2129,9 @@ type RogueChoice implements Node {
   cards: [String]!
   canPick: Int!
   index: Int!
+  canReroll: Boolean!
+  repopulate: Boolean!
+  type: RogueChoiceType!
 
   """Reads a single `RogueRun` that is related to this `RogueChoice`."""
   rogueRunByRogueRun: RogueRun
@@ -2104,6 +2176,12 @@ enum RogueChoicesOrderBy {
   CAN_PICK_DESC
   INDEX_ASC
   INDEX_DESC
+  CAN_REROLL_ASC
+  CAN_REROLL_DESC
+  REPOPULATE_ASC
+  REPOPULATE_DESC
+  TYPE_ASC
+  TYPE_DESC
 }
 
 """
@@ -2125,6 +2203,15 @@ input RogueChoiceCondition {
 
   """Checks for equality with the object’s `index` field."""
   index: Int
+
+  """Checks for equality with the object’s `canReroll` field."""
+  canReroll: Boolean
+
+  """Checks for equality with the object’s `repopulate` field."""
+  repopulate: Boolean
+
+  """Checks for equality with the object’s `type` field."""
+  type: RogueChoiceType
 }
 
 """A connection to a list of `RogueRun` values."""
@@ -2180,6 +2267,10 @@ enum RogueRunsOrderBy {
   OPPONENT_DECK_DESC
   SEED_ASC
   SEED_DESC
+  SEED_STATE_ASC
+  SEED_STATE_DESC
+  GOLD_ASC
+  GOLD_DESC
 }
 
 """
@@ -2219,6 +2310,12 @@ input RogueRunCondition {
 
   """Checks for equality with the object’s `seed` field."""
   seed: BigInt
+
+  """Checks for equality with the object’s `seedState` field."""
+  seedState: BigInt
+
+  """Checks for equality with the object’s `gold` field."""
+  gold: Int
 }
 
 """A `CardsInDeck` edge in the connection."""

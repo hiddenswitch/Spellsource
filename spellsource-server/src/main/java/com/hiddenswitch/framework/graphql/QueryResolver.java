@@ -7,4 +7,6 @@ public interface QueryResolver {
 
     io.vertx.core.Future<Integer> rerollCost(java.lang.Long rogueId) throws Exception;
 
+    io.vertx.core.Future<java.util.List<String>> currentRogueClasses() throws Exception;
+
 }

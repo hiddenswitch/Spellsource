@@ -836,7 +836,10 @@ begin
         return rogue_run;
     end if;
 
-    update spellsource.rogue_run as r set bosses_defeated = r.bosses_defeated + 1, state = 'CHOICE' where id = rogue_run.id;
+    update spellsource.rogue_run as r
+    set bosses_defeated = r.bosses_defeated + 1,
+        state           = 'CHOICE'
+    where id = rogue_run.id;
 
     return rogue_run;
 end;
@@ -1005,6 +1008,22 @@ $$;
 
 
 ALTER FUNCTION spellsource.current_rogue_choice(rogue_id bigint) OWNER TO admin;
+
+--
+-- Name: current_rogue_run(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.current_rogue_run() RETURNS spellsource.rogue_run
+    LANGUAGE sql STABLE
+    AS $$
+select *
+from spellsource.rogue_run
+where player = spellsource.get_user_id()
+limit 1;
+$$;
+
+
+ALTER FUNCTION spellsource.current_rogue_run() OWNER TO admin;
 
 --
 -- Name: get_cards_in_deck(text); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -6338,6 +6357,14 @@ GRANT SELECT ON TABLE spellsource.rogue_choice TO website;
 
 REVOKE ALL ON FUNCTION spellsource.current_rogue_choice(rogue_id bigint) FROM PUBLIC;
 GRANT ALL ON FUNCTION spellsource.current_rogue_choice(rogue_id bigint) TO website;
+
+
+--
+-- Name: FUNCTION current_rogue_run(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.current_rogue_run() FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.current_rogue_run() TO website;
 
 
 --
