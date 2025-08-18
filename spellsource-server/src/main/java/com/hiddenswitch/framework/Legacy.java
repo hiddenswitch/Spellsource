@@ -345,7 +345,7 @@ public class Legacy {
 		}::bindAll;
 	}
 
-	private static Future<Boolean> invalidateDeck(String deckId) {
+	public static Future<Boolean> invalidateDeck(String deckId) {
 		return Future.fromCompletionStage(getBucketForDeck(deckId).deleteAsync(), Vertx.currentContext());
 	}
 

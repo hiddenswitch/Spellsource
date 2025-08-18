@@ -1,0 +1,5 @@
+mutation resignRogueRun($rogueId: BigInt!) {
+    resignRogueRun(input: {rogueId: $rogueId}) {
+        __typename
+    }
+}

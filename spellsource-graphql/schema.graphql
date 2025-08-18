@@ -460,6 +460,12 @@ type Mutation {
     """
     input: ArchiveCardInput!
   ): ArchiveCardPayload
+  resignRogueRun(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: ResignRogueRunInput!
+  ): ResignRogueRunPayload
   publishCard(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -654,6 +660,7 @@ type Mutation {
   makeRogueChoice(choiceId: BigInt!, choices: [Int!]!): RogueRun!
   reroll(choiceId: BigInt!): RogueRun!
   trashCard(rogueId: BigInt!, cardId: String!): RogueRun!
+  skipBoss(rogueId: BigInt!): RogueRun!
 }
 
 """An object with a globally unique `ID`."""
@@ -1363,6 +1370,9 @@ input RogueRunFilter {
   """Filter by the object’s `gold` field."""
   gold: IntFilter
 
+  """Filter by the object’s `opponentInfo` field."""
+  opponentInfo: StringFilter
+
   """Filter by the object’s `rogueChoicesByRogueRun` relation."""
   rogueChoicesByRogueRun: RogueRunToManyRogueChoiceFilter
 
@@ -2063,6 +2073,7 @@ type RogueRun implements Node {
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
   nodeId: ID!
+  opponentInfo: String
   currentChoice: RogueChoice
   id: BigInt!
   player: String!
@@ -2316,6 +2327,9 @@ input RogueRunCondition {
 
   """Checks for equality with the object’s `gold` field."""
   gold: Int
+
+  """Checks for equality with the object’s `opponentInfo` field."""
+  opponentInfo: String
 }
 
 """A `CardsInDeck` edge in the connection."""
@@ -2939,6 +2953,30 @@ input ArchiveCardInput {
   """
   clientMutationId: String
   cardId: String
+}
+
+"""The output of our `resignRogueRun` mutation."""
+type ResignRogueRunPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""All input for the `resignRogueRun` mutation."""
+input ResignRogueRunInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rogueId: BigInt
 }
 
 """The output of our `publishCard` mutation."""

@@ -1,0 +1,6 @@
+fragment rogueChoice on RogueChoice {
+    id
+    cards
+    canPick
+    canReroll
+}

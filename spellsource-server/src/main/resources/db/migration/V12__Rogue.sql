@@ -117,7 +117,7 @@ end;
 $$ volatile language plpgsql
    security definer
    set search_path = spellsource, pg_temp;
--- grant execute on function spellsource.resign_rogue_run to website;
+grant execute on function spellsource.resign_rogue_run to website;
 
 
 create or replace function spellsource.check_rogue_game_start(deck_id text, game_id bigint) returns spellsource.rogue_run as
@@ -211,6 +211,17 @@ select card_id
 from spellsource.cards_in_deck
 where deck_id = deck;
 $$ language sql stable;
+
+create or replace function spellsource.rogue_run_opponent_info(rr spellsource.rogue_run) returns text as
+$$
+select d.hero_class
+from spellsource.rogue_run as r
+         inner join spellsource.decks d on d.id = r.opponent_deck
+where r.id = rr.id;
+$$ stable language sql
+   security definer
+   set search_path = spellsource, pg_temp;
+grant execute on function spellsource.rogue_run_opponent_info to website;
 
 
 -- No manually editing rogue decks

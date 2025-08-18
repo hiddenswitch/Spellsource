@@ -103,6 +103,7 @@ public class RogueManager {
 			context.init(); // TODO add info for rogue run id ?
 			var player = context.getPlayer1();
 
+			context.setActivePlayerId(player.getId());
 			context.getLogic().getRandom().setState(seedState);
 
 			for (var index : choices) {
@@ -131,7 +132,9 @@ public class RogueManager {
 				context.getPlayer1().getDeck().stream().map(Card::getCardId).toArray(String[]::new))).execute(RowMappers.getCardsInDeckMapper()));
 		}
 
-		if (!choice.getRepopulate() || choices.size() >= choice.getCanPick()) {
+		Legacy.invalidateDeck(rogueRun.getDeck());
+
+		if (!choice.getRepopulate() || choices.size() >= choice.getCanPick() || choices.isEmpty()) {
 			await(Environment.withDslContext(dsl -> dsl.deleteFrom(ROGUE_CHOICE).where(ROGUE_CHOICE.ID.eq(choiceId))));
 		} else {
 			var random = new XORShiftRandom(seedState);
@@ -152,8 +155,8 @@ public class RogueManager {
 			await(Environment.callRoutine(Routines.currentRogueChoice(rogueRun.getId())).execute(RowMappers.getRogueChoiceMapper()));
 
 		var finalSeedState = seedState;
-		await(updateRogueRun(rogueRun.getId(), r -> r.set(ROGUE_RUN.STATE, newChoice == null ? RogueRunState.PRE_MATCH :
-			RogueRunState.CHOICE).set(ROGUE_RUN.SEED_STATE, finalSeedState)));
+		await(updateRogueRun(rogueRun.getId(), r -> r.set(ROGUE_RUN.STATE,
+			(newChoice == null || newChoice.getId() == null) ? RogueRunState.PRE_MATCH : RogueRunState.CHOICE).set(ROGUE_RUN.SEED_STATE, finalSeedState)));
 
 		return Future.succeededFuture(rogueRun.getId());
 	}
@@ -232,24 +235,37 @@ public class RogueManager {
 			return Future.succeededFuture(null);
 		}
 
-		var random = new XORShiftRandom(result.getSeedState());
-		var equipment = getCardChoices(random, result.getHeroClass(), RogueChoiceType.EQUIPMENT, 3);
+		return progressRun(result);
+	}
 
-		await(addNewRogueChoice(r -> r.setType(RogueChoiceType.EQUIPMENT).setRogueRun(result.getId()).setIndex(0).setCards(equipment.toArray(String[]::new)).setCanPick(1)));
+	public static Future<RogueRun> progressRun(RogueRun rogueRun) {
+		var random = new XORShiftRandom(rogueRun.getSeedState());
+		var equipment = getCardChoices(random, rogueRun.getHeroClass(), RogueChoiceType.EQUIPMENT, 3);
 
-		var cards = getCardChoices(random, result.getHeroClass(), RogueChoiceType.STANDARD, 3);
-		await(addNewRogueChoice(r -> r.setType(RogueChoiceType.STANDARD).setRogueRun(result.getId()).setIndex(1).setCards(cards.toArray(String[]::new)).setCanPick(3).setRepopulate(true).setCanReroll(true)));
+		await(addNewRogueChoice(r -> r.setType(RogueChoiceType.EQUIPMENT).setRogueRun(rogueRun.getId()).setIndex(0).setCards(equipment.toArray(String[]::new)).setCanPick(1)));
 
-		await(updateOpponentDeck(result, random));
+		var cards = getCardChoices(random, rogueRun.getHeroClass(), RogueChoiceType.STANDARD, 3);
+		await(addNewRogueChoice(r -> r.setType(RogueChoiceType.STANDARD).setRogueRun(rogueRun.getId()).setIndex(1).setCards(cards.toArray(String[]::new)).setCanPick(3).setRepopulate(true).setCanReroll(true)));
 
-		await(updateRogueRun(result.getId(),
-			r -> r.set(ROGUE_RUN.GOLD, result.getGold() + result.getBossesDefeated()).set(ROGUE_RUN.SEED_STATE,
-				random.getState())));
+		await(updateOpponentDeck(rogueRun, random));
+
+		var result = await(updateRogueRun(rogueRun.getId(), r -> r.set(ROGUE_RUN.GOLD,
+			rogueRun.getGold() + rogueRun.getBossesDefeated()).set(ROGUE_RUN.SEED_STATE, random.getState()).set(ROGUE_RUN.STATE, RogueRunState.CHOICE)));
 
 		await(Environment.withDslContext(dsl -> dsl.update(CARDS_IN_DECK).set(CARDS_IN_DECK.CARD_ID,
-			"level_" + (result.getBossesDefeated() + 1)).where(CARDS_IN_DECK.CARD_ID.eq("level_" + result.getBossesDefeated()))));
+			"level_" + (rogueRun.getBossesDefeated() + 1)).where(CARDS_IN_DECK.CARD_ID.eq("level_" + rogueRun.getBossesDefeated()))));
+
+		Legacy.invalidateDeck(rogueRun.getDeck());
 
 		return Future.succeededFuture(result);
+	}
+
+	public static Future<RogueRun> skipBoss(Long rogueId) {
+		var rogueRun = await(getRogueRun(rogueId));
+		var result = await(RogueManager.updateRogueRun(rogueId, r -> r.set(ROGUE_RUN.BOSSES_DEFEATED,
+			rogueRun.getBossesDefeated() + 1)));
+
+		return RogueManager.progressRun(rogueRun);
 	}
 
 	public static Future<Void> updateOpponentDeck(RogueRun rogueRun, XORShiftRandom random) {
@@ -260,6 +276,8 @@ public class RogueManager {
 		await(Environment.withDslContext(dsl -> dsl.update(DECKS).set(DECKS.HERO_CLASS, deck.getHeroClass()).where(DECKS.ID.eq(rogueRun.getOpponentDeck()))));
 		await(Environment.callRoutine(Routines.setCardsInDeck(rogueRun.getOpponentDeck(),
 			deck.getCardIds().toArray(String[]::new))).execute(RowMappers.getCardsInDeckMapper()));
+
+		Legacy.invalidateDeck(rogueRun.getOpponentDeck());
 
 		await(Environment.withDslContext(dsl -> dsl.insertInto(CARDS_IN_DECK, CARDS_IN_DECK.DECK_ID,
 			CARDS_IN_DECK.CARD_ID).values(rogueRun.getOpponentDeck(), "level_" + (rogueRun.getBossesDefeated() + 1))));

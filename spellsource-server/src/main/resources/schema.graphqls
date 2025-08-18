@@ -11,6 +11,7 @@ type Mutation {
     makeRogueChoice(choiceId: BigInt!, choices: [Int!]!): RogueRun!
     reroll(choiceId: BigInt!): RogueRun!
     trashCard(rogueId: BigInt!, cardId: String!): RogueRun!
+    skipBoss(rogueId: BigInt!): RogueRun!
 }
 
 type RogueRun {

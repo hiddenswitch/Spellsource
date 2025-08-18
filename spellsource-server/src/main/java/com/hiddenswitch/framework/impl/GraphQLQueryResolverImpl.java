@@ -22,6 +22,6 @@ public class GraphQLQueryResolverImpl implements QueryResolver, GraphQLQueryReso
 
 	@Override
 	public Future<List<String>> currentRogueClasses() throws Exception {
-		return Future.succeededFuture(List.of(HeroClass.COPPER));
+		return Future.succeededFuture(List.of(HeroClass.COPPER, HeroClass.TOAST));
 	}
 }

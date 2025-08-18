@@ -7,13 +7,9 @@ fragment rogueRun on RogueRun {
     startedAt
     gold
     deck
-    opponentDeck
-    deckByDeck {
-        ...deck
-        ...deckCards
-    }
     currentChoice {
-        cards
-        canPick
+        ...rogueChoice
     }
+    opponentDeck
+    opponentInfo
 }

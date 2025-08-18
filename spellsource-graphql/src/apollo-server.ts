@@ -4,19 +4,42 @@ import { ApolloServerPluginLandingPageDisabled } from "@apollo/server/plugin/dis
 import express, { Application, NextFunction, Request, Response } from "express";
 import { createFullSchema } from "./schema/stitching";
 import { AuthRequest } from "./auth";
+import { WebSocketServer } from "ws";
+import { Server } from "node:http";
+import { useServer } from "graphql-ws/use/ws";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
 type Handler = (req: Request, res: Response, next: NextFunction) => void;
 
-export const setupApolloServer = async (app: Application): Promise<ApolloServer> => {
+export const setupApolloServer = async (app: Application, httpServer: Server): Promise<ApolloServer> => {
   const schema = await createFullSchema();
 
   // const subscriptionServer = SubscriptionServer.create({ schema, execute, subscribe }, { server, path });
 
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: "/subscriptions",
+  });
+
+  const serverCleanup = useServer({ schema }, wsServer);
+
   const apolloServer = new ApolloServer({
     schema,
-    plugins: [ApolloServerPluginLandingPageDisabled()]
-
+    plugins: [
+      ApolloServerPluginLandingPageDisabled(),
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose();
+            },
+          };
+        },
+      },
+    ],
   });
+
   await apolloServer.start();
 
   if (process.env.NODE_ENV === "production") {
@@ -26,8 +49,8 @@ export const setupApolloServer = async (app: Application): Promise<ApolloServer>
     "/graphql",
     express.json(),
     expressMiddleware(apolloServer, {
-      context: async ({ req }) => (req as AuthRequest)
-    })
+      context: async ({ req }) => req as AuthRequest,
+    }),
   );
 
   return apolloServer;

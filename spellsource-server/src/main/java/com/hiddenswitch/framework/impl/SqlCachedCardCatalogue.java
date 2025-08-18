@@ -299,7 +299,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 			return Objects.equals(attributes.get(Attribute.CREATED_BY_USER_ID), userId)
 					&& card.hasAttribute(Attribute.PUBLISHED)
 					&& !card.hasAttribute(Attribute.ARCHIVED)
-					&& spellsource().isInFormat(card.getDesc().getSet())
+					&& (spellsource().isInFormat(card.getDesc().getSet()) || rogue().isInFormat(card.getDesc().getSet()))
 					&& card.getCardType() != Spellsource.CardTypeMessage.CardType.GROUP;
 		};
 
@@ -314,6 +314,10 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 	@Override
 	public DeckFormat defaultFormat() {
 		return spellsource();
+	}
+	
+	public DeckFormat rogue() {
+		return getFormat("Rogue");
 	}
 
 	@NotNull

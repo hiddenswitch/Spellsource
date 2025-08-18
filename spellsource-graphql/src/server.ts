@@ -21,8 +21,7 @@ import { setupApolloServer } from "./apollo-server";
   app.use(`/graphql`, authenticate);
 
   const server = createServer(app);
-  server.on("error", () => {
-  });
+  server.on("error", () => {});
   server.listen(graphqlPort, graphqlHost);
   console.log(`Server listening at http://${graphqlHost}:${graphqlPort}`);
 
@@ -42,8 +41,7 @@ import { setupApolloServer } from "./apollo-server";
     }
   }
 
-
-  await setupApolloServer(app);
+  await setupApolloServer(app, server);
 
   console.log("Postgraphile ready");
 })();
