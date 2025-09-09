@@ -25,7 +25,9 @@ create table if not exists spellsource.rogue_run
     opponent_deck   text references spellsource.decks (id),
     seed            bigint                      not null default spellsource.generate_seed(),
     seed_state      bigint                      not null default 0,
-    gold            int                         not null default 0
+    gold            int                         not null default 0,
+    lives           int                         not null default 1
+    -- TODO 
 );
 grant select on spellsource.rogue_run to website;
 alter table spellsource.rogue_run
@@ -94,8 +96,8 @@ begin
     returning (id) into opponent_deck_id;
 
 
-    insert into spellsource.rogue_run (player, started_at, deck, seed, hero_class, opponent_deck)
-    values (user_id, now(), deck_id, coalesce(use_seed, spellsource.generate_seed()), class_hero, opponent_deck_id)
+    insert into spellsource.rogue_run (player, started_at, deck, seed, hero_class, opponent_deck, lives)
+    values (user_id, now(), deck_id, coalesce(use_seed, spellsource.generate_seed()), class_hero, opponent_deck_id, 3)
     returning * into rogue_run;
 
     return rogue_run;
@@ -108,16 +110,22 @@ $$
 -- grant execute on function spellsource.start_rogue_run to website;
 
 
-create or replace function spellsource.resign_rogue_run(rogue_id bigint) returns void as
+create or replace function spellsource.end_rogue_run(rogue_id bigint) returns spellsource.rogue_run as
 $$
 declare
+    rogue_run spellsource.rogue_run%rowtype;
 begin
-    update spellsource.rogue_run set ended_at = now(), state = 'FINISHED' where id = rogue_id;
+    update spellsource.rogue_run
+    set ended_at = now(), state = 'FINISHED'
+    where id = rogue_id
+    returning * into rogue_run;
+
+    return rogue_run;
 end;
 $$ volatile language plpgsql
    security definer
    set search_path = spellsource, pg_temp;
-grant execute on function spellsource.resign_rogue_run to website;
+grant execute on function spellsource.end_rogue_run to website;
 
 
 create or replace function spellsource.check_rogue_game_start(deck_id text, game_id bigint) returns spellsource.rogue_run as
@@ -147,16 +155,18 @@ begin
         return null;
     end if;
 
-
     if winning_user != rogue_run.player then
-        update spellsource.rogue_run as r set ended_at = now(), state = 'FINISHED' where id = rogue_run.id;
-        return rogue_run;
-    end if;
+        if rogue_run.lives = 1 then
+            update spellsource.rogue_run as r
+            set ended_at = now(),
+                state    = 'FINISHED',
+                lives    = rogue_run.lives - 1
+            where r.id = rogue_run.id;
+            return null;
+        end if;
 
-    update spellsource.rogue_run as r
-    set bosses_defeated = r.bosses_defeated + 1,
-        state           = 'CHOICE'
-    where id = rogue_run.id;
+        update spellsource.rogue_run as r set lives = rogue_run.lives - 1 where r.id = rogue_run.id returning * into rogue_run;
+    end if;
 
     return rogue_run;
 end;

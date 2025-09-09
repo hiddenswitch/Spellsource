@@ -42,12 +42,16 @@ public class RogueRunTests extends FrameworkTestBase {
 
 			assertEquals(0L, (long) rogueRun.getSeed(), "Seed should be 0");
 			assertEquals(userId, rogueRun.getPlayer(), "UserId should match");
-			assertEquals(RogueRunState.PRE_MATCH, rogueRun.getState(), "Should have pre match state");
 
 			var cardsInDeck =
 				await(Environment.callRoutine(Routines.getCardsInDeck(rogueRun.getDeck())).execute(row -> row.getString(0)));
 
 			assertFalse(cardsInDeck.isEmpty(), "Deck should have cards");
+
+
+			rogueRun = await(RogueManager.makeAnyChoices(rogueRun.getId()));
+
+			assertEquals(RogueRunState.PRE_MATCH, rogueRun.getState(), "Should have pre match state");
 		});
 	}
 
@@ -124,15 +128,13 @@ public class RogueRunTests extends FrameworkTestBase {
 
 			var rogueRun = await(startRogueRun(userId));
 
+			await(RogueManager.makeAnyChoices(rogueRun.getId()));
+
 			assertEquals(RogueRunState.PRE_MATCH, await(RogueManager.getRogueRun(rogueRun.getId())).getState(), "Rogue run " +
 				"should be in in pre game state");
 
-			var stream = await(client.matchmaking().enqueue(matchmaking ->
-				matchmaking.write(Spellsource.MatchmakingQueuePutRequest.newBuilder()
-					.setQueueId("rogueRun")
-					.setDeckId(rogueRun.getDeck())
-					.setBotDeckId(rogueRun.getOpponentDeck())
-					.build())));
+			var stream =
+				await(client.matchmaking().enqueue(matchmaking -> matchmaking.write(Spellsource.MatchmakingQueuePutRequest.newBuilder().setQueueId("rogueRun").setDeckId(rogueRun.getDeck()).setBotDeckId(rogueRun.getOpponentDeck()).build())));
 
 			var responded = Promise.<Spellsource.MatchmakingQueuePutResponse>promise();
 			stream.handler(responded::complete);
@@ -140,8 +142,8 @@ public class RogueRunTests extends FrameworkTestBase {
 
 			await(Environment.sleep(200));
 
-			assertEquals(RogueRunState.IN_MATCH, await(RogueManager.getRogueRun(rogueRun.getId())).getState(), "Rogue run " +
-				"should now be in in game state");
+			assertEquals(RogueRunState.IN_MATCH, await(RogueManager.getRogueRun(rogueRun.getId())).getState(),
+				"Rogue run should now be in in game state");
 
 			await(client.playUntilGameOver());
 
@@ -195,12 +197,8 @@ public class RogueRunTests extends FrameworkTestBase {
 			// No cards to ensure opponent will lose
 			await(Environment.callRoutine(Routines.setCardsInDeck(rogueRun.getOpponentDeck(), new String[0])).execute(RowMappers.getCardsInDeckMapper()));
 
-			var stream = await(client.matchmaking().enqueue(matchmaking ->
-				matchmaking.write(Spellsource.MatchmakingQueuePutRequest.newBuilder()
-					.setQueueId("rogueRun")
-					.setDeckId(rogueRun.getDeck())
-					.setBotDeckId(rogueRun.getOpponentDeck())
-					.build())));
+			var stream =
+				await(client.matchmaking().enqueue(matchmaking -> matchmaking.write(Spellsource.MatchmakingQueuePutRequest.newBuilder().setQueueId("rogueRun").setDeckId(rogueRun.getDeck()).setBotDeckId(rogueRun.getOpponentDeck()).build())));
 
 			var responded = Promise.<Spellsource.MatchmakingQueuePutResponse>promise();
 			stream.handler(responded::complete);

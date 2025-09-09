@@ -1,12 +1,13 @@
 {
-  "name": "Double Openers",
+  "name": "Guard Units",
   "type": "ENCHANTMENT",
   "heroClass": "ANY",
-  "rarity": "EPIC",
-  "description": "Your Openers trigger twice.",
+  "rarity": "RARE",
+  "description": "Your units have Guard.",
   "aura": {
-    "class": "DoubleBattlecriesAura",
-    "target": "FRIENDLY_CARDS"
+    "class": "AttributeAura",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "AURA_TAUNT"
   },
   "gameTriggers": [
     {
@@ -20,7 +21,7 @@
           {
             "class": "AddEnchantmentSpell",
             "target": "FRIENDLY_PLAYER",
-            "card": "equipment_double_openers"
+            "card": "equipment_guard_units"
           },
           {
             "class": "RemoveCardSpell",

@@ -14,8 +14,8 @@ import java.time.OffsetDateTime;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record13;
-import org.jooq.Row13;
+import org.jooq.Record14;
+import org.jooq.Row14;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -24,7 +24,7 @@ import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
  * @omit create,update,delete
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implements VertxPojo, Record13<Long, String, OffsetDateTime, OffsetDateTime, String, String, Integer, RogueRunState, Long, String, Long, Long, Integer>, IRogueRun {
+public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implements VertxPojo, Record14<Long, String, OffsetDateTime, OffsetDateTime, String, String, Integer, RogueRunState, Long, String, Long, Long, Integer, Integer>, IRogueRun {
 
     private static final long serialVersionUID = 1L;
 
@@ -249,6 +249,23 @@ public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implemen
         return (Integer) get(12);
     }
 
+    /**
+     * Setter for <code>spellsource.rogue_run.lives</code>.
+     */
+    @Override
+    public RogueRunRecord setLives(Integer value) {
+        set(13, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>spellsource.rogue_run.lives</code>.
+     */
+    @Override
+    public Integer getLives() {
+        return (Integer) get(13);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -259,17 +276,17 @@ public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implemen
     }
 
     // -------------------------------------------------------------------------
-    // Record13 type implementation
+    // Record14 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row13<Long, String, OffsetDateTime, OffsetDateTime, String, String, Integer, RogueRunState, Long, String, Long, Long, Integer> fieldsRow() {
-        return (Row13) super.fieldsRow();
+    public Row14<Long, String, OffsetDateTime, OffsetDateTime, String, String, Integer, RogueRunState, Long, String, Long, Long, Integer, Integer> fieldsRow() {
+        return (Row14) super.fieldsRow();
     }
 
     @Override
-    public Row13<Long, String, OffsetDateTime, OffsetDateTime, String, String, Integer, RogueRunState, Long, String, Long, Long, Integer> valuesRow() {
-        return (Row13) super.valuesRow();
+    public Row14<Long, String, OffsetDateTime, OffsetDateTime, String, String, Integer, RogueRunState, Long, String, Long, Long, Integer, Integer> valuesRow() {
+        return (Row14) super.valuesRow();
     }
 
     @Override
@@ -338,6 +355,11 @@ public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implemen
     }
 
     @Override
+    public Field<Integer> field14() {
+        return RogueRun.ROGUE_RUN.LIVES;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -403,6 +425,11 @@ public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implemen
     }
 
     @Override
+    public Integer component14() {
+        return getLives();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -465,6 +492,11 @@ public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implemen
     @Override
     public Integer value13() {
         return getGold();
+    }
+
+    @Override
+    public Integer value14() {
+        return getLives();
     }
 
     @Override
@@ -546,7 +578,13 @@ public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implemen
     }
 
     @Override
-    public RogueRunRecord values(Long value1, String value2, OffsetDateTime value3, OffsetDateTime value4, String value5, String value6, Integer value7, RogueRunState value8, Long value9, String value10, Long value11, Long value12, Integer value13) {
+    public RogueRunRecord value14(Integer value) {
+        setLives(value);
+        return this;
+    }
+
+    @Override
+    public RogueRunRecord values(Long value1, String value2, OffsetDateTime value3, OffsetDateTime value4, String value5, String value6, Integer value7, RogueRunState value8, Long value9, String value10, Long value11, Long value12, Integer value13, Integer value14) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -560,6 +598,7 @@ public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implemen
         value11(value11);
         value12(value12);
         value13(value13);
+        value14(value14);
         return this;
     }
 
@@ -582,6 +621,7 @@ public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implemen
         setSeed(from.getSeed());
         setSeedState(from.getSeedState());
         setGold(from.getGold());
+        setLives(from.getLives());
     }
 
     @Override
@@ -604,7 +644,7 @@ public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implemen
     /**
      * Create a detached, initialised RogueRunRecord
      */
-    public RogueRunRecord(Long id, String player, OffsetDateTime startedAt, OffsetDateTime endedAt, String heroClass, String deck, Integer bossesDefeated, RogueRunState state, Long game, String opponentDeck, Long seed, Long seedState, Integer gold) {
+    public RogueRunRecord(Long id, String player, OffsetDateTime startedAt, OffsetDateTime endedAt, String heroClass, String deck, Integer bossesDefeated, RogueRunState state, Long game, String opponentDeck, Long seed, Long seedState, Integer gold, Integer lives) {
         super(RogueRun.ROGUE_RUN);
 
         setId(id);
@@ -620,6 +660,7 @@ public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implemen
         setSeed(seed);
         setSeedState(seedState);
         setGold(gold);
+        setLives(lives);
     }
 
     /**
@@ -642,6 +683,7 @@ public class RogueRunRecord extends UpdatableRecordImpl<RogueRunRecord> implemen
             setSeed(value.getSeed());
             setSeedState(value.getSeedState());
             setGold(value.getGold());
+            setLives(value.getLives());
         }
     }
 

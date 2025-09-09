@@ -2947,10 +2947,12 @@ EntityReference potentialTargets) {
 			// Implements Open the Waygate
 			c.getAttributes().put(Attribute.STARTED_IN_DECK, true);
 
+			context.setIgnoreEvents(true);
 			if (c.getDesc().getOnInitialized() != null) {
 				castSpell(playerId, c.getDesc().getOnInitialized(), c.getReference(), EntityReference.NONE,
 				 TargetSelection.NONE, false, null);
 			}
+			context.setIgnoreEvents(false);
 		});
 
 		// The deck is shuffled TWICE. Once before the mulligan, here, and once after.

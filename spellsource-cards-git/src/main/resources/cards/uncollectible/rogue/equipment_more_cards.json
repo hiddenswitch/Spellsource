@@ -14,10 +14,6 @@
         "class": "MetaSpell",
         "spells": [
           {
-            "class": "RevealCardSpell",
-            "target": "SELF"
-          },
-          {
             "class": "DrawCardSpell",
             "value": 2
           },

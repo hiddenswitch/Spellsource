@@ -149,6 +149,16 @@ public interface IRogueRun extends VertxPojo, Serializable {
      */
     public Integer getGold();
 
+    /**
+     * Setter for <code>spellsource.rogue_run.lives</code>.
+     */
+    public IRogueRun setLives(Integer value);
+
+    /**
+     * Getter for <code>spellsource.rogue_run.lives</code>.
+     */
+    public Integer getLives();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -180,6 +190,7 @@ public interface IRogueRun extends VertxPojo, Serializable {
                 setOrThrow(this::setSeed,json::getLong,"seed","java.lang.Long");
                 setOrThrow(this::setSeedState,json::getLong,"seed_state","java.lang.Long");
                 setOrThrow(this::setGold,json::getInteger,"gold","java.lang.Integer");
+                setOrThrow(this::setLives,json::getInteger,"lives","java.lang.Integer");
                 return this;
         }
 
@@ -200,6 +211,7 @@ public interface IRogueRun extends VertxPojo, Serializable {
                 json.put("seed",getSeed());
                 json.put("seed_state",getSeedState());
                 json.put("gold",getGold());
+                json.put("lives",getLives());
                 return json;
         }
 

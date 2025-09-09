@@ -14,10 +14,6 @@
         "class": "MetaSpell",
         "spells": [
           {
-            "class": "RevealCardSpell",
-            "target": "SELF"
-          },
-          {
             "class": "ModifyMaxManaSpell",
             "value": 1
           },

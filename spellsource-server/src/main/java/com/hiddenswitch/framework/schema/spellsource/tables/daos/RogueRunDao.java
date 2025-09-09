@@ -222,6 +222,21 @@ public class RogueRunDao extends AbstractReactiveVertxDAO<RogueRunRecord, com.hi
                 return findManyByCondition(RogueRun.ROGUE_RUN.GOLD.in(values),limit);
         }
 
+        /**
+     * Find records that have <code>lives IN (values)</code> asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun>> findManyByLives(Collection<Integer> values) {
+                return findManyByCondition(RogueRun.ROGUE_RUN.LIVES.in(values));
+        }
+
+        /**
+     * Find records that have <code>lives IN (values)</code> asynchronously
+     * limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun>> findManyByLives(Collection<Integer> values, int limit) {
+                return findManyByCondition(RogueRun.ROGUE_RUN.LIVES.in(values),limit);
+        }
+
         @Override
         public ReactiveClassicQueryExecutor<RogueRunRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun,Long> queryExecutor(){
                 return (ReactiveClassicQueryExecutor<RogueRunRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.RogueRun,Long>) super.queryExecutor();

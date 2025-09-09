@@ -1,12 +1,19 @@
 {
-  "name": "Double Openers",
+  "name": "Cheaper Big Units",
   "type": "ENCHANTMENT",
   "heroClass": "ANY",
-  "rarity": "EPIC",
-  "description": "Your Openers trigger twice.",
-  "aura": {
-    "class": "DoubleBattlecriesAura",
-    "target": "FRIENDLY_CARDS"
+  "rarity": "RARE",
+  "description": "Your Units that cost more than (5) Lun instead cost (5).",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "operation": "SET",
+    "value": 5,
+    "cardType": "MINION",
+    "filter": {
+      "class": "ManaCostFilter",
+      "value": 5,
+      "operation": "GREATER_OR_EQUAL"
+    }
   },
   "gameTriggers": [
     {
@@ -20,7 +27,7 @@
           {
             "class": "AddEnchantmentSpell",
             "target": "FRIENDLY_PLAYER",
-            "card": "equipment_double_openers"
+            "card": "equipment_cheaper_big_units"
           },
           {
             "class": "RemoveCardSpell",

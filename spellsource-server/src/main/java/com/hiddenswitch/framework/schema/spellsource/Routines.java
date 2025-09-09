@@ -20,14 +20,16 @@ import com.hiddenswitch.framework.schema.spellsource.routines.ClusteredGamesUpda
 import com.hiddenswitch.framework.schema.spellsource.routines.CreateDeckWithCards;
 import com.hiddenswitch.framework.schema.spellsource.routines.CurrentRogueChoice;
 import com.hiddenswitch.framework.schema.spellsource.routines.CurrentRogueRun;
+import com.hiddenswitch.framework.schema.spellsource.routines.EndRogueRun;
+import com.hiddenswitch.framework.schema.spellsource.routines.GenerateSeed;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetLatestCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserAttribute;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishGitCard;
-import com.hiddenswitch.framework.schema.spellsource.routines.ResignRogueRun;
 import com.hiddenswitch.framework.schema.spellsource.routines.RogueOpponentBotUser;
 import com.hiddenswitch.framework.schema.spellsource.routines.RogueRunCurrentChoice;
+import com.hiddenswitch.framework.schema.spellsource.routines.RogueRunOpponentInfo;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveGeneratedArt;
 import com.hiddenswitch.framework.schema.spellsource.routines.SetUserAttribute;
@@ -715,6 +717,65 @@ public class Routines {
     }
 
     /**
+     * Call <code>spellsource.end_rogue_run</code>
+     */
+    public static RogueRunRecord endRogueRun(
+          Configuration configuration
+        , Long rogueId
+    ) {
+        EndRogueRun f = new EndRogueRun();
+        f.setRogueId(rogueId);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.end_rogue_run</code> as a field.
+     */
+    public static Field<RogueRunRecord> endRogueRun(
+          Long rogueId
+    ) {
+        EndRogueRun f = new EndRogueRun();
+        f.setRogueId(rogueId);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.end_rogue_run</code> as a field.
+     */
+    public static Field<RogueRunRecord> endRogueRun(
+          Field<Long> rogueId
+    ) {
+        EndRogueRun f = new EndRogueRun();
+        f.setRogueId(rogueId);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.generate_seed</code>
+     */
+    public static Long generateSeed(
+          Configuration configuration
+    ) {
+        GenerateSeed f = new GenerateSeed();
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.generate_seed</code> as a field.
+     */
+    public static Field<Long> generateSeed() {
+        GenerateSeed f = new GenerateSeed();
+
+        return f.asField();
+    }
+
+    /**
      * Call <code>spellsource.get_latest_card</code>
      */
     public static CardsRecord getLatestCard(
@@ -918,19 +979,6 @@ public class Routines {
     }
 
     /**
-     * Call <code>spellsource.resign_rogue_run</code>
-     */
-    public static void resignRogueRun(
-          Configuration configuration
-        , Long rogueId
-    ) {
-        ResignRogueRun p = new ResignRogueRun();
-        p.setRogueId(rogueId);
-
-        p.execute(configuration);
-    }
-
-    /**
      * Call <code>spellsource.rogue_opponent_bot_user</code>
      */
     public static String rogueOpponentBotUser(
@@ -984,6 +1032,44 @@ public class Routines {
           Field<RogueRunRecord> rr
     ) {
         RogueRunCurrentChoice f = new RogueRunCurrentChoice();
+        f.setRr(rr);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.rogue_run_opponent_info</code>
+     */
+    public static String rogueRunOpponentInfo(
+          Configuration configuration
+        , RogueRunRecord rr
+    ) {
+        RogueRunOpponentInfo f = new RogueRunOpponentInfo();
+        f.setRr(rr);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.rogue_run_opponent_info</code> as a field.
+     */
+    public static Field<String> rogueRunOpponentInfo(
+          RogueRunRecord rr
+    ) {
+        RogueRunOpponentInfo f = new RogueRunOpponentInfo();
+        f.setRr(rr);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.rogue_run_opponent_info</code> as a field.
+     */
+    public static Field<String> rogueRunOpponentInfo(
+          Field<RogueRunRecord> rr
+    ) {
+        RogueRunOpponentInfo f = new RogueRunOpponentInfo();
         f.setRr(rr);
 
         return f.asField();

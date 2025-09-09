@@ -785,6 +785,26 @@ COMMENT ON FUNCTION spellsource.cards_type(card spellsource.cards) IS '@omit';
 
 
 --
+-- Name: generate_seed(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.generate_seed() RETURNS bigint
+    LANGUAGE sql
+    AS $$
+select (random() * 1e10)::bigint;
+$$;
+
+
+ALTER FUNCTION spellsource.generate_seed() OWNER TO admin;
+
+--
+-- Name: FUNCTION generate_seed(); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.generate_seed() IS '@omit';
+
+
+--
 -- Name: rogue_run; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
@@ -799,9 +819,10 @@ CREATE TABLE spellsource.rogue_run (
     state spellsource.rogue_run_state DEFAULT 'INITIAL'::spellsource.rogue_run_state NOT NULL,
     game bigint,
     opponent_deck text,
-    seed bigint DEFAULT ((random() * ('10000000000'::numeric)::double precision))::bigint NOT NULL,
+    seed bigint DEFAULT spellsource.generate_seed() NOT NULL,
     seed_state bigint DEFAULT 0 NOT NULL,
-    gold integer DEFAULT 0 NOT NULL
+    gold integer DEFAULT 0 NOT NULL,
+    lives integer DEFAULT 1 NOT NULL
 );
 
 
@@ -830,16 +851,20 @@ begin
         return null;
     end if;
 
-
     if winning_user != rogue_run.player then
-        update spellsource.rogue_run as r set ended_at = now(), state = 'FINISHED' where id = rogue_run.id;
-        return rogue_run;
+        if rogue_run.lives = 1 then
+            update spellsource.rogue_run as r
+            set ended_at = now(),
+                state    = 'FINISHED',
+                lives    = rogue_run.lives - 1
+            where r.id = rogue_run.id;
+            return null;
+        end if;
+
+        update spellsource.rogue_run as r set lives = rogue_run.lives - 1 where r.id = rogue_run.id;
     end if;
 
-    update spellsource.rogue_run as r
-    set bosses_defeated = r.bosses_defeated + 1,
-        state           = 'CHOICE'
-    where id = rogue_run.id;
+    update spellsource.rogue_run as r set state = 'CHOICE' where r.id = rogue_run.id returning * into rogue_run;
 
     return rogue_run;
 end;
@@ -1024,6 +1049,29 @@ $$;
 
 
 ALTER FUNCTION spellsource.current_rogue_run() OWNER TO admin;
+
+--
+-- Name: end_rogue_run(bigint); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.end_rogue_run(rogue_id bigint) RETURNS spellsource.rogue_run
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'spellsource', 'pg_temp'
+    AS $$
+declare
+    rogue_run spellsource.rogue_run%rowtype;
+begin
+    update spellsource.rogue_run
+    set ended_at = now(), state = 'FINISHED'
+    where id = rogue_id
+    returning * into rogue_run;
+
+    return rogue_run;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.end_rogue_run(rogue_id bigint) OWNER TO admin;
 
 --
 -- Name: get_cards_in_deck(text); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -1258,30 +1306,6 @@ COMMENT ON FUNCTION spellsource.publish_git_card(card_id text, json jsonb, creat
 
 
 --
--- Name: resign_rogue_run(bigint); Type: FUNCTION; Schema: spellsource; Owner: admin
---
-
-CREATE FUNCTION spellsource.resign_rogue_run(rogue_id bigint) RETURNS void
-    LANGUAGE plpgsql SECURITY DEFINER
-    SET search_path TO 'spellsource', 'pg_temp'
-    AS $$
-declare
-begin
-    update spellsource.rogue_run set ended_at = now(), state = 'FINISHED' where id = rogue_id;
-end;
-$$;
-
-
-ALTER FUNCTION spellsource.resign_rogue_run(rogue_id bigint) OWNER TO admin;
-
---
--- Name: FUNCTION resign_rogue_run(rogue_id bigint); Type: COMMENT; Schema: spellsource; Owner: admin
---
-
-COMMENT ON FUNCTION spellsource.resign_rogue_run(rogue_id bigint) IS '@omit';
-
-
---
 -- Name: rogue_opponent_bot_user(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -1317,6 +1341,23 @@ $$;
 
 
 ALTER FUNCTION spellsource.rogue_run_current_choice(rr spellsource.rogue_run) OWNER TO admin;
+
+--
+-- Name: rogue_run_opponent_info(spellsource.rogue_run); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.rogue_run_opponent_info(rr spellsource.rogue_run) RETURNS text
+    LANGUAGE sql STABLE SECURITY DEFINER
+    SET search_path TO 'spellsource', 'pg_temp'
+    AS $$
+select d.hero_class
+from spellsource.rogue_run as r
+         inner join spellsource.decks d on d.id = r.opponent_deck
+where r.id = rr.id;
+$$;
+
+
+ALTER FUNCTION spellsource.rogue_run_opponent_info(rr spellsource.rogue_run) OWNER TO admin;
 
 --
 -- Name: save_card(text, jsonb, jsonb); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -1474,8 +1515,8 @@ begin
     returning (id) into opponent_deck_id;
 
 
-    insert into spellsource.rogue_run (player, started_at, deck, seed, hero_class, opponent_deck)
-    values (user_id, now(), deck_id, use_seed, class_hero, opponent_deck_id)
+    insert into spellsource.rogue_run (player, started_at, deck, seed, hero_class, opponent_deck, lives)
+    values (user_id, now(), deck_id, coalesce(use_seed, spellsource.generate_seed()), class_hero, opponent_deck_id, 3)
     returning * into rogue_run;
 
     return rogue_run;
@@ -5946,7 +5987,8 @@ CREATE POLICY rls ON spellsource.rogue_choice FOR SELECT USING ((EXISTS ( SELECT
     rogue_run.opponent_deck,
     rogue_run.seed,
     rogue_run.seed_state,
-    rogue_run.gold
+    rogue_run.gold,
+    rogue_run.lives
    FROM spellsource.rogue_run
   WHERE ((rogue_run.id = rogue_choice.rogue_run) AND ((rogue_run.player)::text = spellsource.get_user_id())))));
 
@@ -6309,6 +6351,13 @@ REVOKE ALL ON FUNCTION spellsource.cards_type(card spellsource.cards) FROM PUBLI
 
 
 --
+-- Name: FUNCTION generate_seed(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.generate_seed() FROM PUBLIC;
+
+
+--
 -- Name: TABLE rogue_run; Type: ACL; Schema: spellsource; Owner: admin
 --
 
@@ -6365,6 +6414,14 @@ GRANT ALL ON FUNCTION spellsource.current_rogue_choice(rogue_id bigint) TO websi
 
 REVOKE ALL ON FUNCTION spellsource.current_rogue_run() FROM PUBLIC;
 GRANT ALL ON FUNCTION spellsource.current_rogue_run() TO website;
+
+
+--
+-- Name: FUNCTION end_rogue_run(rogue_id bigint); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.end_rogue_run(rogue_id bigint) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.end_rogue_run(rogue_id bigint) TO website;
 
 
 --
@@ -6426,13 +6483,6 @@ REVOKE ALL ON FUNCTION spellsource.publish_git_card(card_id text, json jsonb, cr
 
 
 --
--- Name: FUNCTION resign_rogue_run(rogue_id bigint); Type: ACL; Schema: spellsource; Owner: admin
---
-
-REVOKE ALL ON FUNCTION spellsource.resign_rogue_run(rogue_id bigint) FROM PUBLIC;
-
-
---
 -- Name: FUNCTION rogue_opponent_bot_user(); Type: ACL; Schema: spellsource; Owner: admin
 --
 
@@ -6445,6 +6495,14 @@ REVOKE ALL ON FUNCTION spellsource.rogue_opponent_bot_user() FROM PUBLIC;
 
 REVOKE ALL ON FUNCTION spellsource.rogue_run_current_choice(rr spellsource.rogue_run) FROM PUBLIC;
 GRANT ALL ON FUNCTION spellsource.rogue_run_current_choice(rr spellsource.rogue_run) TO website;
+
+
+--
+-- Name: FUNCTION rogue_run_opponent_info(rr spellsource.rogue_run); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.rogue_run_opponent_info(rr spellsource.rogue_run) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.rogue_run_opponent_info(rr spellsource.rogue_run) TO website;
 
 
 --

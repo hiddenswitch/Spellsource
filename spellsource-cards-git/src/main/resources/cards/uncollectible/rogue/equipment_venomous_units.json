@@ -1,12 +1,13 @@
 {
-  "name": "Double Openers",
+  "name": "Venomous Units",
   "type": "ENCHANTMENT",
   "heroClass": "ANY",
-  "rarity": "EPIC",
-  "description": "Your Openers trigger twice.",
+  "rarity": "RARE",
+  "description": "Your units have Venomous.",
   "aura": {
-    "class": "DoubleBattlecriesAura",
-    "target": "FRIENDLY_CARDS"
+    "class": "AttributeAura",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "AURA_POISONOUS"
   },
   "gameTriggers": [
     {
@@ -20,7 +21,7 @@
           {
             "class": "AddEnchantmentSpell",
             "target": "FRIENDLY_PLAYER",
-            "card": "equipment_double_openers"
+            "card": "equipment_hidden_units"
           },
           {
             "class": "RemoveCardSpell",

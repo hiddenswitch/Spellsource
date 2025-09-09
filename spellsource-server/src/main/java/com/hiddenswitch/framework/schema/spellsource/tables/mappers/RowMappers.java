@@ -211,6 +211,7 @@ public class RowMappers {
                         pojo.setSeed(row.getLong("seed"));
                         pojo.setSeedState(row.getLong("seed_state"));
                         pojo.setGold(row.getInteger("gold"));
+                        pojo.setLives(row.getInteger("lives"));
                         return pojo;
                 };
         }

@@ -20,10 +20,6 @@
         "class": "MetaSpell",
         "spells": [
           {
-            "class": "RevealCardSpell",
-            "target": "SELF"
-          },
-          {
             "class": "AddEnchantmentSpell",
             "target": "FRIENDLY_PLAYER",
             "card": "equipment_unit_buff"

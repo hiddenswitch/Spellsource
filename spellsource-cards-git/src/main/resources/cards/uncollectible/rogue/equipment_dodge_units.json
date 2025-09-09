@@ -1,12 +1,19 @@
 {
-  "name": "Double Openers",
+  "name": "Dodge Units",
   "type": "ENCHANTMENT",
   "heroClass": "ANY",
-  "rarity": "EPIC",
-  "description": "Your Openers trigger twice.",
-  "aura": {
-    "class": "DoubleBattlecriesAura",
-    "target": "FRIENDLY_CARDS"
+  "rarity": "RARE",
+  "description": "When you play a unit, give it Dodge.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "EVENT_TARGET",
+      "attribute": "DIVINE_SHIELD"
+    }
   },
   "gameTriggers": [
     {
@@ -20,7 +27,7 @@
           {
             "class": "AddEnchantmentSpell",
             "target": "FRIENDLY_PLAYER",
-            "card": "equipment_double_openers"
+            "card": "equipment_dodge_units"
           },
           {
             "class": "RemoveCardSpell",

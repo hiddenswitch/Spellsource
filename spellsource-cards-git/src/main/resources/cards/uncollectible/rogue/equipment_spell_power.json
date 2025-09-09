@@ -14,10 +14,6 @@
         "class": "MetaSpell",
         "spells": [
           {
-            "class": "RevealCardSpell",
-            "target": "SELF"
-          },
-          {
             "class": "ModifyAttributeSpell",
             "target": "FRIENDLY_HERO",
             "value": 3,

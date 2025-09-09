@@ -34,6 +34,7 @@ public class RogueRun implements VertxPojo, IRogueRun {
     private Long seed;
     private Long seedState;
     private Integer gold;
+    private Integer lives;
 
     public RogueRun() {}
 
@@ -51,6 +52,7 @@ public class RogueRun implements VertxPojo, IRogueRun {
         this.seed = value.getSeed();
         this.seedState = value.getSeedState();
         this.gold = value.getGold();
+        this.lives = value.getLives();
     }
 
     public RogueRun(
@@ -66,7 +68,8 @@ public class RogueRun implements VertxPojo, IRogueRun {
         String opponentDeck,
         Long seed,
         Long seedState,
-        Integer gold
+        Integer gold,
+        Integer lives
     ) {
         this.id = id;
         this.player = player;
@@ -81,6 +84,7 @@ public class RogueRun implements VertxPojo, IRogueRun {
         this.seed = seed;
         this.seedState = seedState;
         this.gold = gold;
+        this.lives = lives;
     }
 
         public RogueRun(io.vertx.core.json.JsonObject json) {
@@ -309,6 +313,23 @@ public class RogueRun implements VertxPojo, IRogueRun {
         return this;
     }
 
+    /**
+     * Getter for <code>spellsource.rogue_run.lives</code>.
+     */
+    @Override
+    public Integer getLives() {
+        return this.lives;
+    }
+
+    /**
+     * Setter for <code>spellsource.rogue_run.lives</code>.
+     */
+    @Override
+    public RogueRun setLives(Integer lives) {
+        this.lives = lives;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -396,6 +417,12 @@ public class RogueRun implements VertxPojo, IRogueRun {
         }
         else if (!this.gold.equals(other.gold))
             return false;
+        if (this.lives == null) {
+            if (other.lives != null)
+                return false;
+        }
+        else if (!this.lives.equals(other.lives))
+            return false;
         return true;
     }
 
@@ -416,6 +443,7 @@ public class RogueRun implements VertxPojo, IRogueRun {
         result = prime * result + ((this.seed == null) ? 0 : this.seed.hashCode());
         result = prime * result + ((this.seedState == null) ? 0 : this.seedState.hashCode());
         result = prime * result + ((this.gold == null) ? 0 : this.gold.hashCode());
+        result = prime * result + ((this.lives == null) ? 0 : this.lives.hashCode());
         return result;
     }
 
@@ -436,6 +464,7 @@ public class RogueRun implements VertxPojo, IRogueRun {
         sb.append(", ").append(seed);
         sb.append(", ").append(seedState);
         sb.append(", ").append(gold);
+        sb.append(", ").append(lives);
 
         sb.append(")");
         return sb.toString();
@@ -460,6 +489,7 @@ public class RogueRun implements VertxPojo, IRogueRun {
         setSeed(from.getSeed());
         setSeedState(from.getSeedState());
         setGold(from.getGold());
+        setLives(from.getLives());
     }
 
     @Override
