@@ -2,8 +2,10 @@ scalar BigInt
 
 type Query {
     currentUserId: String
-    rerollCost(rogueId: BigInt!): Int!
     currentRogueClasses: [String!]!
+    rerollCost(rogueId: BigInt!): Int!
+    trashCardCost(rogueId: BigInt!, cardId: String!): Int!
+    upgradeCardCost(rogueId: BigInt!, cardId: String!): Int!
 }
 
 type Mutation {
@@ -12,6 +14,7 @@ type Mutation {
     reroll(choiceId: BigInt!): RogueRun!
     trashCard(rogueId: BigInt!, cardId: String!): RogueRun!
     skipBoss(rogueId: BigInt!): RogueRun!
+    upgradeCard(rogueId: BigInt!, cardId: String!): RogueRun!
 }
 
 type RogueRun {

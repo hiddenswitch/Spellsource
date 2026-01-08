@@ -21,6 +21,16 @@ public class GraphQLQueryResolverImpl implements QueryResolver, GraphQLQueryReso
 	}
 
 	@Override
+	public Future<Integer> trashCardCost(Long rogueId, String cardId) throws Exception {
+		return Future.succeededFuture(1);
+	}
+
+	@Override
+	public Future<Integer> upgradeCardCost(Long rogueId, String cardId) throws Exception {
+		return RogueManager.upgradeCardCost(rogueId, cardId);
+	}
+
+	@Override
 	public Future<List<String>> currentRogueClasses() throws Exception {
 		return Future.succeededFuture(List.of(HeroClass.COPPER, HeroClass.TOAST));
 	}

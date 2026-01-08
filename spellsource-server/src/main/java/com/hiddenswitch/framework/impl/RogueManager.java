@@ -342,6 +342,47 @@ public class RogueManager {
 		return Future.succeededFuture();
 	}
 
+	public static Future<Integer> upgradeCardCost(RogueRun rogueRun, String cardId) {
+		var card = cardCatalogue.getCardById(cardId);
+
+		return Future.succeededFuture(switch (card.getRarity()) {
+			case LEGENDARY -> 8;
+			case EPIC -> 4;
+			case RARE -> 2;
+			case COMMON -> 1;
+			default -> 0;
+		});
+	}
+
+	public static Future<Integer> upgradeCardCost(long rogueId, String cardId) {
+		var rogueRun = await(getRogueRun(rogueId));
+		return upgradeCardCost(rogueRun, cardId);
+	}
+
+	public static Future<Long> upgradeCard(Long rogueId, String cardId) {
+		var rogueRun = await(getRogueRun(rogueId));
+
+		var card = cardCatalogue.getCardById(cardId);
+
+		if (!card.hasAttribute(Attribute.UPGRADE)) {
+			return Future.failedFuture("That card can't be upgraded");
+		}
+		var upgradeCard = (String) card.getAttribute(Attribute.UPGRADE);
+
+		var cost = await(upgradeCardCost(rogueRun, cardId));
+
+		if (rogueRun.getGold() < cost) {
+			return Future.failedFuture("Not enough gold to upgrade card");
+		}
+
+		await(Environment.withDslContext(dsl -> dsl.update(CARDS_IN_DECK).set(CARDS_IN_DECK.CARD_ID,
+			upgradeCard).where(CARDS_IN_DECK.CARD_ID.eq("cardId")).limit(1)));
+
+		await(updateRogueRun(rogueRun.getId(), r -> r.set(ROGUE_RUN.GOLD, rogueRun.getGold() - cost)));
+
+		return Future.succeededFuture(rogueId);
+	}
+
 	public static Future<RogueRun> returningRogueRun(Function<DSLContext, ResultQuery<RogueRunRecord>> handler) {
 		return Environment.withExecutor(executor -> executor.findOneRow(handler).map(row -> row == null ? null :
 			RowMappers.getRogueRunMapper().apply(row)));
@@ -406,6 +447,16 @@ public class RogueManager {
 			if (card.getCardType() != CardType.MINION) {
 				weight *= 2;
 			}
+
+			if (choiceType == RogueChoiceType.EQUIPMENT) {
+				weight *= switch (card.getRarity()) {
+					case LEGENDARY -> 8;
+					case EPIC -> 4;
+					case RARE -> 2;
+					default -> 1;
+				};
+			}
+
 			weightedOptions.add(card, weight);
 		});
 

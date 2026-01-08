@@ -13,21 +13,22 @@ $$ language sql volatile;
 
 create table if not exists spellsource.rogue_run
 (
-    id              bigint                      not null primary key generated always as identity,
-    player          varchar(36)                 not null references keycloak.user_entity (id),
-    started_at      timestamptz                 not null default now(),
-    ended_at        timestamptz,
-    hero_class      text                        not null,
-    deck            text unique                 not null references spellsource.decks (id),
-    bosses_defeated int                         not null default 0,
-    state           spellsource.rogue_run_state not null default 'INITIAL',
-    game            bigint unique references spellsource.games (id),
-    opponent_deck   text references spellsource.decks (id),
-    seed            bigint                      not null default spellsource.generate_seed(),
-    seed_state      bigint                      not null default 0,
-    gold            int                         not null default 0,
-    lives           int                         not null default 1
-    -- TODO 
+    id                 bigint                      not null primary key generated always as identity,
+    player             varchar(36)                 not null references keycloak.user_entity (id),
+    started_at         timestamptz                 not null default now(),
+    ended_at           timestamptz,
+    hero_class         text                        not null,
+    deck               text unique                 not null references spellsource.decks (id),
+    bosses_defeated    int                         not null default 0,
+    state              spellsource.rogue_run_state not null default 'INITIAL',
+    game               bigint unique references spellsource.games (id),
+    opponent_deck      text references spellsource.decks (id),
+    seed               bigint                      not null default spellsource.generate_seed(),
+    seed_state         bigint                      not null default 0,
+    gold               int                         not null default 0,
+    lives              int                         not null default 1,
+    rerolls_this_round int                         not null default 0
+    -- TODO
 );
 grant select on spellsource.rogue_run to website;
 alter table spellsource.rogue_run
@@ -116,7 +117,8 @@ declare
     rogue_run spellsource.rogue_run%rowtype;
 begin
     update spellsource.rogue_run
-    set ended_at = now(), state = 'FINISHED'
+    set ended_at = now(),
+        state    = 'FINISHED'
     where id = rogue_id
     returning * into rogue_run;
 
@@ -165,7 +167,10 @@ begin
             return null;
         end if;
 
-        update spellsource.rogue_run as r set lives = rogue_run.lives - 1 where r.id = rogue_run.id returning * into rogue_run;
+        update spellsource.rogue_run as r
+        set lives = rogue_run.lives - 1
+        where r.id = rogue_run.id
+        returning * into rogue_run;
     end if;
 
     return rogue_run;

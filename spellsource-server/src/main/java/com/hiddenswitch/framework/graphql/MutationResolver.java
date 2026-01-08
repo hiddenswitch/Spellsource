@@ -13,4 +13,6 @@ public interface MutationResolver {
 
     io.vertx.core.Future<RogueRun> skipBoss(java.lang.Long rogueId) throws Exception;
 
+    io.vertx.core.Future<RogueRun> upgradeCard(java.lang.Long rogueId, String cardId) throws Exception;
+
 }

@@ -1255,6 +1255,10 @@ public enum Attribute {
    * Will not be shown to the client
    */
   HIDDEN,
+	/*
+	 * Stores a String for the card id that is considered the upgrade to this
+	 */
+	UPGRADE,
 	/**
 	 * The last attribute specially marked as unused, for enumeration purposes.
 	 */

@@ -34,4 +34,9 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 	public Future<RogueRun> skipBoss(Long rogueId) throws Exception {
 		return RogueManager.skipBoss(rogueId).map(r -> new com.hiddenswitch.framework.graphql.RogueRun(r.getId()));
 	}
+
+	@Override
+	public Future<RogueRun> upgradeCard(Long rogueId, String cardId) throws Exception {
+		return RogueManager.upgradeCard(rogueId, cardId).map(RogueRun::new);
+	}
 }

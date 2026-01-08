@@ -1,0 +1,56 @@
+{
+  "name": "Boom",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "When you play a unit, give it Aftermath: Deal 1-4 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "spell": {
+        "class": "MissilesSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": {
+          "class": "RandomValueProvider",
+          "max": 4,
+          "min": 1
+        },
+        "howMany": 1
+      }
+    }
+  },
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "equipment_boom"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true,
+    "UPGRADE": "equipment_boom_2"
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}
