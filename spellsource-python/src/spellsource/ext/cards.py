@@ -22,6 +22,7 @@ CLASS_MAPPING = {
     'SHAMAN': 'SILVER',
     'WARLOCK': 'VIOLET',
     'WARRIOR': 'RED',
+    'DEMONHUNTER': 'PURPLE',
     'DEATHKNIGHT': 'SPIRIT',
     'WHIZBANG': 'ANY',
     'NEUTRAL': 'ANY',

@@ -1863,6 +1863,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 
 			resolveAftermaths(owner, target, previousLocations.get(target));
+
+			// Reborn: resummon at 1 HP without reborn
+			if (target.getEntityType() == EntityType.MINION && target.hasAttribute(Attribute.REBORN)) {
+				var rebornLocation = previousLocations.get(target);
+				var rebornMinion = target.getSourceCard().minion();
+				rebornMinion.setHp(1);
+				rebornMinion.getAttributes().remove(Attribute.REBORN);
+				summon(owner.getId(), rebornMinion, target, rebornLocation.getIndex(), false);
+			}
 		}
 
 		for (var target : targets) {

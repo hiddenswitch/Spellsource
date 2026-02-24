@@ -491,7 +491,7 @@ public class SpellUtils {
 	 * @param targets
 	 * @return
 	 */
-	static List<Entity> getValidRandomTargets(List<Entity> targets) {
+	public static List<Entity> getValidRandomTargets(List<Entity> targets) {
 		List<Entity> validTargets = new ArrayList<>();
 		for (Entity entity : targets) {
 			if (entity instanceof Actor) {

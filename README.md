@@ -12,6 +12,12 @@ Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab 
 
 The `Spellsource-Server` project is a 2-player card battler that supports hosted, networked gameplay. It features matchmaking, collection management and support for game mechanics that persist between matches.
 
+### Documentation
+
+- [CLAUDE.md](CLAUDE.md) — AI assistant quick reference
+- [docs/](docs/) — Card authoring, spell reference, testing guide
+- [CONTRIBUTE.md](CONTRIBUTE.md) — Contribution guidelines
+
 ### Getting Around
 
 Cards are located at [spellsource-cards-git/src/main/resources/cards/custom](https://github.com/hiddenswitch/Spellsource/tree/master/spellsource-cards-git).

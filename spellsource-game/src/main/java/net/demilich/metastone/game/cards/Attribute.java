@@ -1248,6 +1248,62 @@ public enum Attribute {
 	 */
 	CONCEDED,
 	/**
+	 * When a minion with REBORN dies for the first time it is resummoned at 1 HP without REBORN.
+	 */
+	REBORN,
+	/**
+	 * A dormant minion is untargetable and cannot attack. After a number of turns it awakens.
+	 */
+	DORMANT,
+	/**
+	 * Tracks the number of turns a dormant minion has been dormant.
+	 */
+	DORMANT_TURNS,
+	/**
+	 * Outcast triggers when the card is played from the leftmost or rightmost position in hand.
+	 */
+	OUTCAST,
+	/**
+	 * Corrupt transforms a card in hand when you play a card costing more.
+	 */
+	CORRUPT,
+	/**
+	 * Tradeable allows swapping the card from hand to deck and drawing a new card.
+	 */
+	TRADEABLE,
+	/**
+	 * Honorable Kill triggers when damage exactly kills the target.
+	 */
+	HONORABLE_KILL,
+	/**
+	 * Infuse transforms a card in hand after enough friendly minions die.
+	 */
+	INFUSE,
+	/**
+	 * Tracks the infuse counter on a card.
+	 */
+	INFUSE_COUNTER,
+	/**
+	 * Colossal minions summon appendage tokens alongside them.
+	 */
+	COLOSSAL,
+	/**
+	 * Sidequest is like a quest but does not start in the opening hand.
+	 */
+	SIDEQUEST,
+	/**
+	 * Marks a spell card as a Twinspell. When played the first time it adds a copy without TWINSPELL to the hand.
+	 */
+	TWINSPELL,
+	/**
+	 * Marks a card as a Libram for cost reduction synergies.
+	 */
+	LIBRAM,
+	/**
+	 * Tracks the number of secrets played this turn.
+	 */
+	SECRETS_PLAYED_THIS_TURN,
+	/**
 	 * The last attribute specially marked as unused, for enumeration purposes.
 	 */
 	UNUSED;

@@ -36,6 +36,8 @@ public class HeroClass {
 	public static final String TWILIGHT = "TWILIGHT";
 	public static final String CANDY = "CANDY";
 	public static final String PEACH = "PEACH";
+	public static final String PURPLE = "PURPLE";
+	public static final String SPIRIT = "SPIRIT";
 
 
 	/**
