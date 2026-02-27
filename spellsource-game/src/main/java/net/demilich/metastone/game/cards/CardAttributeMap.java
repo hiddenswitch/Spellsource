@@ -148,7 +148,7 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 					switch (attr) {
 						case BASE_ATTACK:
 						case ATTACK:
-							return desc.getDamage();
+							return desc.getDamage() != 0 ? desc.getDamage() : desc.getBaseAttack();
 						case BASE_HP:
 						case HP:
 						case MAX_HP:

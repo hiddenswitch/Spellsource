@@ -18,6 +18,18 @@ The `Spellsource-Server` project is a 2-player card battler that supports hosted
 - [docs/](docs/) — Card authoring, spell reference, testing guide
 - [CONTRIBUTE.md](CONTRIBUTE.md) — Contribution guidelines
 
+### Hearthstone Card Database
+
+The community-maintained Hearthstone card database is provided by [HearthstoneJSON](https://hearthstonejson.com/):
+
+```
+https://api.hearthstonejson.com/v1/latest/enUS/cards.collectible.json
+```
+
+This JSON array contains all collectible cards with fields including `id`, `name`, `set`, `type`, `cardClass`, `rarity`, `cost`, `attack`, `health`, `text`, and `mechanics`. It is used to track which Hearthstone cards are not yet implemented in Spellsource.
+
+See [docs/missing-cards.md](docs/missing-cards.md) for the current list of 230 unimplemented collectible cards (matched by name against `spellsource-cards-private` and `spellsource-cards-git`).
+
 ### Getting Around
 
 Cards are located at [spellsource-cards-git/src/main/resources/cards/custom](https://github.com/hiddenswitch/Spellsource/tree/master/spellsource-cards-git).

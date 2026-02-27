@@ -12,6 +12,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 public final class GainArmorSpell extends BuffSpell {
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		if (target == null) {
+			target = player.getHero();
+		}
 		SpellDesc armorBuffDesc = new SpellDesc(GainArmorSpell.class);
 		armorBuffDesc.put(SpellArg.ARMOR_BONUS, desc.getValue(SpellArg.VALUE, context, player, target, source, 0));
 		armorBuffDesc.put(SpellArg.TARGET, context.getPlayer(target.getOwner()).getHero().getReference());

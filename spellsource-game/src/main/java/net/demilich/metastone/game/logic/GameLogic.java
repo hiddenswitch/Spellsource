@@ -1589,6 +1589,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				// Implements Flesshapper
 				if (!SpellUtils.getAuras(context, LifedrainGrantsArmorInsteadAura.class, source).isEmpty()) {
 					gainArmor(player, damageDealt);
+				} else if (!SpellUtils.getAuras(context, LifedrainDamagesEnemyHeroAura.class, source).isEmpty()) {
+					// Implements Il'gynoth: lifesteal damages the enemy hero instead of healing you
+					var enemyPlayer = context.getOpponent(sourceOwner);
+					damage(sourceOwner, enemyPlayer.getHero(), damageDealt, source, false, true, damageType);
 				} else {
 					heal(sourceOwner, sourceOwner.getHero(), damageDealt, source);
 					// Implements Lan the Forsaken
@@ -4295,6 +4299,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return false;
 		}
 
+		// Check if deathrattles/aftermaths are disabled (e.g. Deathwarden)
+		if (context.getPlayers().stream().anyMatch(p -> hasAttribute(p, Attribute.DEATHRATTLES_DISABLED))) {
+			return false;
+		}
+
 		context.getProcessingAftermathsStack().push(aftermath);
 		var spell = aftermath.getSpell();
 		// cast it with the board position
@@ -4834,6 +4843,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				&& enchantmentSource.getDesc().getAttributes() != null
 				&& !enchantments.isEmpty()) {
 			enchantments.get(0).getAttributes().putAll(enchantmentSource.getDesc().getAttributes());
+		}
+
+		// Execute the enchantment card's spell on the host (for one-time buff enchantments like Dark Gifts)
+		if (enchantmentSource.getCardType() == CardType.ENCHANTMENT
+				&& enchantmentSource.getDesc().getSpell() != null) {
+			SpellUtils.castChildSpell(context, player, enchantmentSource.getDesc().getSpell(), effectSource, host);
 		}
 
 		return enchantments;

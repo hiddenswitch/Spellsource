@@ -40,6 +40,9 @@ public final class CardPropertyCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+		if (target == null) {
+			return false;
+		}
 		var card = target.getSourceCard();
 
 		if (card == null) {

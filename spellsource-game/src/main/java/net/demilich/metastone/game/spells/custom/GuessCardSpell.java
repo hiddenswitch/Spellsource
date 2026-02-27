@@ -53,10 +53,14 @@ public final class GuessCardSpell extends Spell {
 				&& deckCards.get(opponentClass).size() > 0) {
 			correctCard = (Card) context.getLogic().getRandom(deckCards.get(opponentClass));
 			correctClass = opponentClass;
-		} else {
+		} else if (deckCards.containsKey(HeroClass.ANY)
+				&& deckCards.get(HeroClass.ANY).size() > 0) {
 			logger.debug("onCast {} {}: The opponent's deck does not use any class cards, only choosing neutrals for wrong cards now.", context.getGameId(), source);
 			correctCard = (Card) context.getLogic().getRandom(deckCards.get(HeroClass.ANY));
 			correctClass = HeroClass.ANY;
+		} else {
+			logger.debug("onCast {} {}: The opponent's deck has no identifiable cards, skipping.", context.getGameId(), source);
+			return;
 		}
 
 		List<Card> others = context.getCardCatalogue().query(new DeckFormat().withCardSets(CardCatalogue.latestImplementedHearthstoneExpansion(), "BASIC", "CLASSIC")/*prefer the latest expansion*/)

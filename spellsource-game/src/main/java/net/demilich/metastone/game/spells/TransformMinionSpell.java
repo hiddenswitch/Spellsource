@@ -66,6 +66,10 @@ public class TransformMinionSpell extends Spell {
 			LOGGER.warn("onCast {} {}: Target {} is not a minion, skipping transform", context.getGameId(), source, target);
 			return;
 		}
+		if (card == null) {
+			LOGGER.warn("onCast {} {}: No card specified for transform, skipping", context.getGameId(), source);
+			return;
+		}
 		if (!GameLogic.isCardType(card.getCardType(), CardType.MINION)) {
 			LOGGER.warn("onCast {} {}: Card {} is not a minion card, skipping transform", context.getGameId(), source, card);
 			return;

@@ -195,9 +195,13 @@ public class TargetLogic implements Serializable {
 		if (actionType == ActionType.PHYSICAL_ATTACK
 				&& (targetRequirement == TargetSelection.ENEMY_CHARACTERS || targetRequirement == TargetSelection.ENEMY_MINIONS)
 				&& (containsTaunters(withoutPermanents(opponent.getMinions())) || containsTaunters(opponent.getHeroZone()))) {
-			List<Entity> entities = new ArrayList<>(opponent.getMinions());
-			entities.add(opponent.getHero());
-			return getTaunters(entities);
+			// Check if the attacker ignores taunt (e.g. Kayn Sunfury aura)
+			Entity attacker = context.resolveSingleTarget(action.getSourceReference());
+			if (attacker == null || !attacker.hasAttribute(Attribute.AURA_IGNORES_TAUNT)) {
+				List<Entity> entities = new ArrayList<>(opponent.getMinions());
+				entities.add(opponent.getHero());
+				return getTaunters(entities);
+			}
 		}
 		if (actionType == ActionType.SUMMON) {
 			// you can summon next to any friendly minion or provide no target

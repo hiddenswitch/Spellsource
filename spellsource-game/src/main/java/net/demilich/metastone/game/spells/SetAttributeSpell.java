@@ -39,7 +39,9 @@ public class SetAttributeSpell extends Spell {
 		checkArguments(LOGGER, context, source, desc, SpellArg.ATTRIBUTE, SpellArg.VALUE);
 		Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 		Object value = desc.get(SpellArg.VALUE);
-		if (ValueProvider.class.isAssignableFrom(value.getClass())) {
+		if (value == null) {
+			value = true;
+		} else if (ValueProvider.class.isAssignableFrom(value.getClass())) {
 			value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		}
 		target.setAttribute(attribute, value);

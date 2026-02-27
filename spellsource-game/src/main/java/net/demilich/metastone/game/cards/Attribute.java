@@ -324,6 +324,14 @@ public enum Attribute {
 	 */
 	AURA_IMMUNE_WHILE_ATTACKING,
 	/**
+	 * When set on a player or aura-applied to friendly characters, physical attacks ignore {@link #TAUNT} on enemy
+	 * minions.
+	 *
+	 * @see net.demilich.metastone.game.logic.TargetLogic#getValidTargets(net.demilich.metastone.game.GameContext,
+	 * 		Player, net.demilich.metastone.game.actions.GameAction) for where this is checked.
+	 */
+	AURA_IGNORES_TAUNT,
+	/**
 	 * Marks that the {@link Actor} has a divine shield.
 	 * <p>
 	 * Divine shield causes the actor to take zero damage instead of the full damage it should receive the first time it
@@ -522,6 +530,19 @@ public enum Attribute {
 	 * Implements Mindbreaker.
 	 */
 	HERO_POWERS_DISABLED,
+	/**
+	 * When any {@link Entity} alive has this attribute, deathrattles (aftermaths) cannot trigger.
+	 * <p>
+	 * Implements Deathwarden.
+	 */
+	DEATHRATTLES_DISABLED,
+	/**
+	 * Indicates that a minion (or card in hand/deck) has received a Dark Gift (+2/+2 buff from the Emerald Dream set).
+	 * <p>
+	 * Used by cards like Wallow, the Wretched (via {@link net.demilich.metastone.game.spells.trigger.AttributeAppliedTrigger})
+	 * and condition cards that check for holding a minion with a Dark Gift.
+	 */
+	DARK_GIFT,
 	/**
 	 * Records the amount of damage last sustained by an {@link Actor}. Typically used by an
 	 * {@link net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell

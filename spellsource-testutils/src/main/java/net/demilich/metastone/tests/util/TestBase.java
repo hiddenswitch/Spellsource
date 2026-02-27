@@ -156,6 +156,30 @@ public class TestBase {
 		return handle;
 	}
 
+	/**
+	 * Overrides {@link GameLogic#getRandom(List)} to return the element at {@code index} when the list contains {@link
+	 * SpellDesc} objects (as used by {@link net.demilich.metastone.game.spells.RandomlyCastSpell}). For lists of other
+	 * types, falls through to the real method.
+	 */
+	protected static OverrideHandle<SpellDesc> overrideRandomCast(GameContext context, int index) {
+		OverrideHandle<SpellDesc> handle = new OverrideHandle<>();
+		MockingDetails mockingDetails = Mockito.mockingDetails(context.getLogic());
+		GameLogic spyLogic = mockingDetails.isSpy() ? context.getLogic() : Mockito.spy(context.getLogic());
+		context.setLogic(spyLogic);
+		Mockito.doAnswer(invocation -> {
+			List<?> list = invocation.getArgument(0);
+			if (!handle.stopped.get()
+					&& list.size() > 0
+					&& list.get(0) instanceof SpellDesc) {
+				SpellDesc selected = (SpellDesc) list.get(Math.min(index, list.size() - 1));
+				handle.set(selected);
+				return selected;
+			}
+			return invocation.callRealMethod();
+		}).when(spyLogic).getRandom(Mockito.anyList());
+		return handle;
+	}
+
 	protected static OverrideHandle<Card> overrideDiscover(GameContext context, Player player, Function<List<DiscoverAction>, GameAction> discovery) {
 		Behaviour overriden = Mockito.spy(context.getBehaviours().get(player.getId()));
 		context.setBehaviour(player.getId(), overriden);
