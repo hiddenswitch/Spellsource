@@ -93,6 +93,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * The maximum number of {@link Card} entities that can be in a {@link Zones#HAND}.
 	 */
 	public static final int MAX_HAND_CARDS = 10;
+
+	/**
+	 * Gets the effective maximum hand size for the given player, accounting for any {@link Attribute#EXTRA_HAND_CARDS}.
+	 */
+	public int getMaxHandCards(Player player) {
+		return MAX_HAND_CARDS + player.getAttributeValue(Attribute.EXTRA_HAND_CARDS);
+	}
+
 	/**
 	 * The default maximum {@link Attribute#HP} a {@link Hero} can have.
 	 */
@@ -3762,7 +3770,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		var hand = player.getHand();
 
-		if (hand.getCount() < MAX_HAND_CARDS) {
+		if (hand.getCount() < getMaxHandCards(player)) {
 			// Cards that are received this way should never keep an ephemeral state like choices
 			card.getAttributes().remove(Attribute.CHOICES);
 			// Forget that the card was invoked
