@@ -31,6 +31,7 @@ public class EventTriggerDescDeserializer extends DescDeserializer<EventTriggerD
 		ctx.add(EventTriggerArg.FIRE_CONDITION, ParseValueType.CONDITION);
 		ctx.add(EventTriggerArg.TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(EventTriggerArg.VALUE, ParseValueType.VALUE);
+		ctx.add(EventTriggerArg.SPELL_SCHOOL, ParseValueType.STRING);
 	}
 
 	@Override

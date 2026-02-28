@@ -99,5 +99,9 @@ public enum CardCostModifierArg {
 	/**
 	 * A {@link Condition} for this card cost modifier to be active
 	 */
-	CONDITION
+	CONDITION,
+	/**
+	 * The spell school required for this modifier to apply (e.g. "FIRE", "NATURE", "ARCANE").
+	 */
+	SPELL_SCHOOL
 }

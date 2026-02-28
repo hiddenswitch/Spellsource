@@ -39,6 +39,7 @@ public class EntityFilterDescDeserializer extends DescDeserializer<EntityFilterD
 		ctx.add(EntityFilterArg.AND_CONDITION, ParseValueType.CONDITION);
 		ctx.add(EntityFilterArg.SPELL, ParseValueType.SPELL);
 		ctx.add(EntityFilterArg.ENTITY_TYPE, ParseValueType.ENTITY_TYPE);
+		ctx.add(EntityFilterArg.SPELL_SCHOOL, ParseValueType.STRING);
 	}
 
 	@Override
