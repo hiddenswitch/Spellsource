@@ -90,6 +90,11 @@ public final class CardFilter extends EntityFilter {
 			return false;
 		}
 
+		String spellSchool = (String) getDesc().get(EntityFilterArg.SPELL_SCHOOL);
+		if (spellSchool != null && !spellSchool.equals(card.getSpellSchool())) {
+			return false;
+		}
+
 		if (getDesc().containsKey(EntityFilterArg.ATTRIBUTE)) {
 			Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
 			ComparisonOperation operation = null;

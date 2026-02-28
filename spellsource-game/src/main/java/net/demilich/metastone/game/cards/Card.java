@@ -413,6 +413,15 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	/**
+	 * Gets the spell school of this card, if any. Typically only applies to spell cards.
+	 *
+	 * @return The spell school string, or {@code null} if none.
+	 */
+	public String getSpellSchool() {
+		return (String) getAttributes().getOrDefault(Attribute.SPELL_SCHOOL, getDesc().getSpellSchool());
+	}
+
+	/**
 	 * Checks if the hero class specified is in its list of hero classes when this card belongs to multiple hero classes.
 	 *
 	 * @param heroClass The {@link HeroClass} to search.

@@ -1325,6 +1325,14 @@ public enum Attribute {
 	 */
 	SECRETS_PLAYED_THIS_TURN,
 	/**
+	 * The spell school of a spell card (e.g. "FIRE", "HOLY", "SHADOW", "ARCANE", "NATURE", "FEL", "FROST").
+	 */
+	SPELL_SCHOOL,
+	/**
+	 * The number of extra hand card slots a player has beyond the default {@link net.demilich.metastone.game.logic.GameLogic#MAX_HAND_CARDS}.
+	 */
+	EXTRA_HAND_CARDS,
+	/**
 	 * The last attribute specially marked as unused, for enumeration purposes.
 	 */
 	UNUSED;
