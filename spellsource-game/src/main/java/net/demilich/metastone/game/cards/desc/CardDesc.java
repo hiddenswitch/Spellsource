@@ -24,6 +24,7 @@ import net.demilich.metastone.game.spells.desc.AbstractEnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.OpenerDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.TapDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
@@ -121,6 +122,8 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	private Rarity rarity;
 	private String race;
 	private String spellSchool;
+	private TapDesc[] taps;
+	private String[] tags;
 	private String description;
 	private TargetSelection targetSelection;
 	private EventTriggerDesc secret;
@@ -722,6 +725,22 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 		this.spellSchool = spellSchool;
 	}
 
+	public TapDesc[] getTaps() {
+		return taps;
+	}
+
+	public void setTaps(TapDesc[] taps) {
+		this.taps = taps;
+	}
+
+	public String[] getTags() {
+		return tags;
+	}
+
+	public void setTags(String[] tags) {
+		this.tags = tags;
+	}
+
 	/**
 	 * A card cost modifier that is active whenever the actor is in play.
 	 */
@@ -1010,7 +1029,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	 */
 	@JsonIgnore
 	public Set<Map.Entry<CardDescArg, Object>> entrySet() {
-		@SuppressWarnings("unchecked") Set<Map.Entry<CardDescArg, Object>> entries = Sets.newHashSet(immutableEntry(CardDescArg.ID, getId()), immutableEntry(CardDescArg.NAME, getName()), immutableEntry(CardDescArg.DESCRIPTION, getDescription()), immutableEntry(CardDescArg.LEGACY, getLegacy()), immutableEntry(CardDescArg.TYPE, getType()), immutableEntry(CardDescArg.HERO_CLASS, getHeroClass()), immutableEntry(CardDescArg.HERO_CLASSES, getHeroClasses()), immutableEntry(CardDescArg.RARITY, getRarity()), immutableEntry(CardDescArg.SETS, link(getSet(), getSets(), String.class)), immutableEntry(CardDescArg.BASE_MANA_COST, getBaseManaCost()), immutableEntry(CardDescArg.COLLECTIBLE, isCollectible()), immutableEntry(CardDescArg.ATTRIBUTES, getAttributes()), immutableEntry(CardDescArg.MANA_COST_MODIFIER, getManaCostModifier()), immutableEntry(CardDescArg.PASSIVE_TRIGGERS, link(getPassiveTrigger(), getPassiveTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.DECK_TRIGGERS, link(getDeckTrigger(), getDeckTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.GAME_TRIGGERS, link(null, getGameTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.BATTLECRY, getBattlecry()), immutableEntry(CardDescArg.DEATHRATTLE, getDeathrattle()), immutableEntry(CardDescArg.TRIGGERS, link(getTrigger(), getTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.AURAS, getAuras()), immutableEntry(CardDescArg.BASE_ATTACK, getBaseAttack()), immutableEntry(CardDescArg.BASE_HP, getBaseHp()), immutableEntry(CardDescArg.DAMAGE, getDamage()), immutableEntry(CardDescArg.DURABILITY, getDurability()), immutableEntry(CardDescArg.TARGET_SELECTION, getTargetSelection()), immutableEntry(CardDescArg.GROUP, getGroup()), immutableEntry(CardDescArg.SPELL, getSpell()), immutableEntry(CardDescArg.CONDITION, getCondition()), immutableEntry(CardDescArg.SECRET, getSecret()), immutableEntry(CardDescArg.COUNT_UNTIL_CAST, getCountUntilCast()), immutableEntry(CardDescArg.COUNT_BY_VALUE, isCountByValue()), immutableEntry(CardDescArg.QUEST, getQuest()), immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, getDynamicDescription()), immutableEntry(CardDescArg.TARGET_SELECTION_OVERRIDE, getTargetSelectionOverride()), immutableEntry(CardDescArg.TARGET_SELECTION_CONDITION, getTargetSelectionCondition()), immutableEntry(CardDescArg.SPELL_SCHOOL, getSpellSchool()));
+		@SuppressWarnings("unchecked") Set<Map.Entry<CardDescArg, Object>> entries = Sets.newHashSet(immutableEntry(CardDescArg.ID, getId()), immutableEntry(CardDescArg.NAME, getName()), immutableEntry(CardDescArg.DESCRIPTION, getDescription()), immutableEntry(CardDescArg.LEGACY, getLegacy()), immutableEntry(CardDescArg.TYPE, getType()), immutableEntry(CardDescArg.HERO_CLASS, getHeroClass()), immutableEntry(CardDescArg.HERO_CLASSES, getHeroClasses()), immutableEntry(CardDescArg.RARITY, getRarity()), immutableEntry(CardDescArg.SETS, link(getSet(), getSets(), String.class)), immutableEntry(CardDescArg.BASE_MANA_COST, getBaseManaCost()), immutableEntry(CardDescArg.COLLECTIBLE, isCollectible()), immutableEntry(CardDescArg.ATTRIBUTES, getAttributes()), immutableEntry(CardDescArg.MANA_COST_MODIFIER, getManaCostModifier()), immutableEntry(CardDescArg.PASSIVE_TRIGGERS, link(getPassiveTrigger(), getPassiveTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.DECK_TRIGGERS, link(getDeckTrigger(), getDeckTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.GAME_TRIGGERS, link(null, getGameTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.BATTLECRY, getBattlecry()), immutableEntry(CardDescArg.DEATHRATTLE, getDeathrattle()), immutableEntry(CardDescArg.TRIGGERS, link(getTrigger(), getTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.AURAS, getAuras()), immutableEntry(CardDescArg.BASE_ATTACK, getBaseAttack()), immutableEntry(CardDescArg.BASE_HP, getBaseHp()), immutableEntry(CardDescArg.DAMAGE, getDamage()), immutableEntry(CardDescArg.DURABILITY, getDurability()), immutableEntry(CardDescArg.TARGET_SELECTION, getTargetSelection()), immutableEntry(CardDescArg.GROUP, getGroup()), immutableEntry(CardDescArg.SPELL, getSpell()), immutableEntry(CardDescArg.CONDITION, getCondition()), immutableEntry(CardDescArg.SECRET, getSecret()), immutableEntry(CardDescArg.COUNT_UNTIL_CAST, getCountUntilCast()), immutableEntry(CardDescArg.COUNT_BY_VALUE, isCountByValue()), immutableEntry(CardDescArg.QUEST, getQuest()), immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, getDynamicDescription()), immutableEntry(CardDescArg.TARGET_SELECTION_OVERRIDE, getTargetSelectionOverride()), immutableEntry(CardDescArg.TARGET_SELECTION_CONDITION, getTargetSelectionCondition()), immutableEntry(CardDescArg.SPELL_SCHOOL, getSpellSchool()), immutableEntry(CardDescArg.TAPS, getTaps()), immutableEntry(CardDescArg.TAGS, getTags()));
 		return entries;
 	}
 
