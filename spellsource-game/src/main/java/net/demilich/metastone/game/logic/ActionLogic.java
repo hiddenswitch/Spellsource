@@ -4,12 +4,14 @@ import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.ChooseOneOverride;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.aura.PhysicalAttackTargetOverrideAura;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
@@ -115,6 +117,9 @@ public class ActionLogic implements Serializable {
 
 	private void rolloutChooseOnesWithOverrides(GameContext context, Player player, List<GameAction> playCardActions, Card card) {
 		ChooseOneOverride override = context.getLogic().getChooseOneAuraOverrides(player, card);
+		if (override == ChooseOneOverride.NONE && card.hasAttribute(Attribute.BOTH_CHOOSE_ONE_OPTIONS)) {
+			override = ChooseOneOverride.BOTH_COMBINED;
+		}
 		switch (override) {
 			case BOTH_COMBINED:
 				rollout(card.playBothOptions(context), context, player, playCardActions);
@@ -142,10 +147,92 @@ public class ActionLogic implements Serializable {
 	 * @param player
 	 * @return
 	 */
+	private static boolean tapAllowsZone(net.demilich.metastone.game.spells.desc.TapDesc tap, com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones zone, boolean isPermanent) {
+		var zones = tap.getZones();
+		if (zones != null) {
+			for (var z : zones) {
+				if (z == zone) {
+					return true;
+				}
+			}
+			return false;
+		}
+		// Default: PERMANENT cards (locations) tap from BATTLEFIELD, others (Forge) tap from HAND
+		if (isPermanent) {
+			return zone == com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones.BATTLEFIELD;
+		} else {
+			return zone == com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones.HAND;
+		}
+	}
+
+	private List<GameAction> getTapActions(GameContext context, Player player) {
+		List<GameAction> tapActions = new ArrayList<GameAction>();
+		// Minion taps (activated abilities on the battlefield)
+		for (Minion minion : player.getMinions()) {
+			Card sourceCard = minion.getSourceCard();
+			var taps = sourceCard.getDesc().getTaps();
+			if (taps == null) {
+				continue;
+			}
+			if (minion.getAttributeValue(Attribute.USED_THIS_TURN) > 0) {
+				continue;
+			}
+			boolean isPermanent = minion.hasAttribute(Attribute.PERMANENT);
+			for (int i = 0; i < taps.length; i++) {
+				var tap = taps[i];
+				if (!tapAllowsZone(tap, com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones.BATTLEFIELD, isPermanent)) {
+					continue;
+				}
+				if (tap.getCost() > 0 && player.getMana() < tap.getCost()) {
+					continue;
+				}
+				SpellDesc spell = tap.getSpell();
+				if (tap.getCondition() != null && !tap.getCondition().create().isFulfilled(context, player, minion, null)) {
+					continue;
+				}
+				TargetSelection targetSelection = tap.getTargetSelection();
+				if (targetSelection == null) {
+					targetSelection = TargetSelection.NONE;
+				}
+				TapAction action = new TapAction(spell, minion, minion.getReference(), targetSelection, i, tap.getCost());
+				rollout(action, context, player, tapActions);
+			}
+		}
+		// Hand card taps (e.g. Forge)
+		for (Card card : player.getHand()) {
+			var taps = card.getDesc().getTaps();
+			if (taps == null) {
+				continue;
+			}
+			boolean isPermanent = card.hasAttribute(Attribute.PERMANENT);
+			for (int i = 0; i < taps.length; i++) {
+				var tap = taps[i];
+				if (!tapAllowsZone(tap, com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones.HAND, isPermanent)) {
+					continue;
+				}
+				if (tap.getCost() > 0 && player.getMana() < tap.getCost()) {
+					continue;
+				}
+				SpellDesc spell = tap.getSpell();
+				if (tap.getCondition() != null && !tap.getCondition().create().isFulfilled(context, player, card, null)) {
+					continue;
+				}
+				TargetSelection targetSelection = tap.getTargetSelection();
+				if (targetSelection == null) {
+					targetSelection = TargetSelection.NONE;
+				}
+				TapAction action = new TapAction(spell, card, card.getReference(), targetSelection, i, tap.getCost());
+				rollout(action, context, player, tapActions);
+			}
+		}
+		return tapActions;
+	}
+
 	public List<GameAction> getValidActions(GameContext context, Player player) {
 		List<GameAction> validActions = new ArrayList<GameAction>();
 		validActions.addAll(getPhysicalAttackActions(context, player));
 		validActions.addAll(getPlayCardActions(context, player));
+		validActions.addAll(getTapActions(context, player));
 		if (context.getTurnState() != TurnState.TURN_ENDED) {
 			final EndTurnAction endTurnAction = new EndTurnAction(player.getId());
 			endTurnAction.setSourceReference(player.getReference());
@@ -170,6 +257,9 @@ public class ActionLogic implements Serializable {
 	 * @param actions
 	 */
 	public void rollout(GameAction action, GameContext context, Player player, Collection<GameAction> actions) {
+		if (action == null) {
+			return;
+		}
 		context.getLogic().processTargetModifiers(action);
 		if (action.getTargetRequirement() == TargetSelection.NONE) {
 			actions.add(action);

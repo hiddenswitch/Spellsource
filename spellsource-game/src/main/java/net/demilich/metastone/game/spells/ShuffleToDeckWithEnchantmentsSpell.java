@@ -8,6 +8,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.IdFactory;
 
 /**
  * Shuffles the {@code target} {@link EntityType#MINION} into the player's deck with the enchantments
@@ -38,7 +39,9 @@ public class ShuffleToDeckWithEnchantmentsSpell extends ShuffleMinionToDeckSpell
 			moveCopyToDestination(context, player, target, copiedCard);
 		});
 
-		if (card == null) {
+		// card is null if copyCard fails (e.g. transform reference), or if the deck is full the copy
+		// won't have an assigned ID since shuffleToDeck doesn't add it to any zone
+		if (card == null || card.getId() == IdFactory.UNASSIGNED) {
 			return;
 		}
 

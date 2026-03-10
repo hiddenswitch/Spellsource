@@ -1000,7 +1000,6 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 
 		Entity entity = targetLogic.findEntity(this, targetKey).transformResolved(this);
 
-		// TODO: Better inspect and test what causes these issues (Auras being removed from transformed entities?)
 		if (rejectRemovedFromPlay && entity.getZone() == Zones.REMOVED_FROM_PLAY) {
 			throw new TargetNotFoundException("Although this reference was found, it was located in the REMOVED_FROM_PLAY zone", targetKey);
 		}

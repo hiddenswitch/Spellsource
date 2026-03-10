@@ -8,7 +8,7 @@ public interface HasWeights {
 	default int getWeight(Player targetPlayer, Card card) {
 		if (card.hasHeroClass(targetPlayer.getHero().getHeroClass())) {
 			return 4;
-		} else if (HeroClass.ANY.equals(card.getHeroClass())) {
+		} else if (card.hasHeroClass(HeroClass.ANY)) {
 			return 1;
 		} else {
 			return 0;

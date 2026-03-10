@@ -72,7 +72,7 @@ public class CreateCardSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String heroClass = HeroClass.ANY;
 		Rarity rarity = Rarity.FREE;
-		String cardSet = "BASIC";
+		String cardSet = CardSet.BASIC;
 		SpellDesc[] spells = discoverCardParts(context, player, desc, source, target);
 		switch (source.getEntityType()) {
 			case ANY:
@@ -83,7 +83,8 @@ public class CreateCardSpell extends Spell {
 				break;
 			case MINION:
 				Minion sourceMinion = (Minion) source;
-				heroClass = sourceMinion.getSourceCard().getHeroClass();
+				String[] classes = sourceMinion.getSourceCard().getHeroClasses();
+				heroClass = classes != null && classes.length > 0 ? classes[0] : null;
 				rarity = Rarity.FREE;
 				cardSet = sourceMinion.getSourceCard().getCardSet();
 				break;

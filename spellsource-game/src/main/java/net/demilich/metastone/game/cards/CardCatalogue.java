@@ -27,7 +27,7 @@ public interface CardCatalogue {
 			.withName(FORMAT_NAME_ALL);
 
 	static String latestImplementedHearthstoneExpansion() {
-		return "RISE_OF_SHADOWS";
+		return CardSet.PERILS_IN_PARADISE;
 	}
 
 

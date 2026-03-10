@@ -21,7 +21,12 @@ public class SameHeroClassFilter extends EntityFilter {
 			entities = Collections.singletonList(player.getHero());
 		}
 
-		String targetClass = entities.get(0).getSourceCard().getHeroClass();
-		return entity.getSourceCard().hasHeroClass(targetClass);
+		String[] targetClasses = entities.get(0).getSourceCard().getHeroClasses();
+		for (String targetClass : targetClasses) {
+			if (entity.getSourceCard().hasHeroClass(targetClass)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

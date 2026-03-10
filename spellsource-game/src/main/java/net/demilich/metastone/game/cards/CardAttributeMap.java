@@ -35,10 +35,6 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 
 	public Set<Attribute> unsafeKeySet() {
 		Set<Attribute> keys = super.keySet().isEmpty() ? EnumSet.noneOf(Attribute.class) : EnumSet.copyOf(super.keySet());
-		if (getCard() == null) {
-			return Collections.unmodifiableSet(keys);
-		}
-
 		CardDesc desc = getCard().getDesc();
 		AttributeMap attributes = desc.getAttributes();
 		if (attributes != null) {
@@ -70,7 +66,7 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 		if (desc.getQuest() != null) {
 			keys.add(Attribute.QUEST);
 		}
-		if (desc.getHeroClass() != null) {
+		if (desc.getHeroClass() != null || desc.getHeroClasses() != null) {
 			keys.add(Attribute.HERO_CLASS);
 		}
 		final boolean weaponOrMinion = getCard().getCardType() == CardType.MINION
@@ -92,20 +88,12 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 
 	@Override
 	public Object get(Object key) {
-		if (getCard() == null) {
-			return super.get(key);
-		}
-
 		Attribute attr = (Attribute) key;
 		CardDesc desc = getCard().getDesc();
 		if (super.get(key) != null) {
 			return super.get(key);
 		} else {
 			// Retrieves things from the desc specified in the card
-
-			if (desc == null) {
-				return super.get(key);
-			}
 
 			if (desc.getAttributes() != null
 					&& desc.getAttributes().containsKey(attr)) {
@@ -133,15 +121,7 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 					return desc.getQuest() != null;
 			}
 
-			CardType cardType;
-
-			if (getCard() == null) {
-				// TODO: Ascertain why in high performance situations the weak reference is null. Weak references here should
-				// never be null.
-				cardType = CardType.MINION;
-			} else {
-				cardType = getCard().getCardType();
-			}
+			CardType cardType = getCard().getCardType();
 
 			switch (cardType) {
 				case WEAPON:

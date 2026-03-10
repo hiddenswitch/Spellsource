@@ -19,10 +19,23 @@ import java.util.Map;
  * <p>
  * To cast a choose one spell card, cast the choice card.
  *
- * Only casts on {@code target} if it is still valid.
+ * Only casts on {@code target} if it is still valid (i.e., {@code target.isInPlay()} is {@code true}).
  * <p>
  * Uses {@link SpellArg#EXCLUSIVE} to signal that the cards should be created and put into the graveyard as they're
  * cast, rather than just their effects being enacted.
+ * <p>
+ * When using {@link SpellArg#SECONDARY_TARGET} to specify the spell card, the reference must resolve to a
+ * {@link Card} entity. In trigger contexts, be aware that different event types populate {@code EVENT_SOURCE}
+ * and {@code EVENT_TARGET} differently:
+ * <ul>
+ *     <li>{@link net.demilich.metastone.game.events.AfterSpellCastedEvent}: {@code EVENT_SOURCE} = spell card,
+ *     {@code EVENT_TARGET} = the spell's target (a minion/hero, NOT a card). Use {@code EVENT_SOURCE} to reference
+ *     the cast spell card.</li>
+ *     <li>{@link net.demilich.metastone.game.events.CardPlayedEvent}: {@code EVENT_SOURCE} = played card,
+ *     {@code EVENT_TARGET} = {@code null}. Use {@code EVENT_SOURCE}.</li>
+ * </ul>
+ * Using the wrong reference will cause a {@link ClassCastException} (if it resolves to a non-Card entity) or
+ * a {@link NullPointerException} (if it resolves to {@code null}).
  * <p>
  * For example, to cast Inner Fire on every minion in your deck:
  * <pre>
@@ -64,13 +77,20 @@ public final class CastCardsSpell extends Spell {
 			card.moveOrAddTo(context, Zones.GRAVEYARD);
 		}
 
-		var validTarget = target == null || target.isInPlay();
+		var requiresTarget = !card.getTargetSelection().equals(TargetSelection.NONE);
+		// A targeted spell cannot be cast if the target is null or has left play
+		if (requiresTarget && (target == null || !target.isInPlay())) {
+			return;
+		}
+		// An untargeted spell is cast as long as the target hasn't left play (target may be null for NONE spells)
+		if (!requiresTarget && target != null && !target.isInPlay()) {
+			return;
+		}
 		if (card.isSpell()
-				&& card.getSpell() != null
-				&& validTarget) {
+				&& card.getSpell() != null) {
 			SpellUtils.castChildSpell(context, player, card.getSpell().removeArg(SpellArg.FILTER),
 					card.getId() == IdFactory.UNASSIGNED ? source : card,
-					card.getTargetSelection().equals(TargetSelection.NONE) ? null : target);
+					requiresTarget ? target : null);
 		}
 	}
 }

@@ -37,7 +37,8 @@ public class PlayHeroCardAction extends PlayCardAction implements OpenerOverrida
 
 	@Override
 	public void innerExecute(GameContext context, int playerId) {
-		Card heroCard = (Card) context.resolveSingleTarget(getSourceReference());
+		var resolved = context.resolveSingleTarget(getSourceReference(), false);
+		Card heroCard = resolved instanceof Card ? (Card) resolved : resolved.getSourceCard();
 		Hero hero = heroCard.hero();
 		context.getLogic().changeHero(context.getPlayer(playerId), heroCard, hero, getResolveOpener());
 	}

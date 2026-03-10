@@ -21,6 +21,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.events.DestroyWillQueue;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
@@ -599,7 +600,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (card.getCardType() == CardType.SPELL
 						&& card.isSecret()
 						&& card.getOwner() != playerId) {
-					source = ModelConversions.getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+					String[] cardClasses = card.getHeroClasses();
+					source = ModelConversions.getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), cardClasses != null && cardClasses.length > 0 ? cardClasses : new String[]{HeroClass.ANY});
 				} else {
 					source = ModelConversions.getEntity(workingContext, card, playerId);
 				}

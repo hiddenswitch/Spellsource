@@ -375,6 +375,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @return {@link Optional#empty()} if the aftermath should not be added, otherwise
 	 */
 	public Optional<Aftermath> tryCreateAftermath(SpellDesc spellDesc, Entity effectSource, Card sourceCard, Entity host, boolean force) {
+		if (host == null) {
+			throw new NullPointerException("tryCreateAftermath: host must not be null for spellDesc=" + spellDesc + " sourceCard=" + sourceCard);
+		}
 		var shouldCreateAftermath = false;
 
 		if (host instanceof Actor) {
@@ -637,6 +640,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		var spellpower = getTotalAttributeValue(player, Attribute.SPELL_DAMAGE)
 				+ getTotalAttributeValue(player, Attribute.AURA_SPELL_DAMAGE)
 				+ getTotalAttributeValue(context.getOpponent(player), Attribute.OPPONENT_SPELL_DAMAGE);
+		// Add per-card spell damage (from AttributeValueAura applying AURA_SPELL_DAMAGE_SELF to matching spell cards)
+		var sourceCard = source.getSourceCard();
+		if (sourceCard != null) {
+			spellpower += sourceCard.getAttributeValue(Attribute.SPELL_DAMAGE_SELF)
+					+ sourceCard.getAttributeValue(Attribute.AURA_SPELL_DAMAGE_SELF);
+		}
 		if (source.hasAttribute(Attribute.SPELL_DAMAGE_MULTIPLIER)) {
 			spellpower *= source.getAttributeValue(Attribute.SPELL_DAMAGE_MULTIPLIER);
 		}
@@ -1306,7 +1315,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		hero.moveOrAddTo(context, Zones.HERO);
 		player.getHeroPowerZone().add(heroPower);
 
-		if (Objects.equals(heroPower.getHeroClass(), HeroClass.INHERIT)) {
+		if (heroPower.hasHeroClass(HeroClass.INHERIT)) {
 			player.getHeroPowerZone().get(0).setHeroClass(previousHero.getHeroClass());
 		}
 		hero.modifyArmor(previousArmor);
@@ -1676,6 +1685,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			// Check now if a kill is registered so the source can be properly credited
 			if (target.isDestroyed() && !startedDestroyed) {
 				source.modifyAttribute(Attribute.TOTAL_KILLS, 1);
+				// Honorable Kill: damage exactly killed the target (HP is exactly 0, no overkill)
+				if (target.getHp() == 0) {
+					target.setAttribute(Attribute.HONORABLE_KILL);
+					fireGameEvent(new HonorableKillEvent(context, source, target));
+				}
 			}
 		}
 	}
@@ -1970,7 +1984,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// only a 'real' discard should fire a DiscardEvent
 		if (card.getZone() == Zones.HAND) {
 			LOGGER.debug("discardCard {}: {} discards {}", context.getGameId(), player.getName(), card);
-			card.getAttributes().put(Attribute.DISCARDED, context.getTurn());
+			int discardOrder = player.getAttributeValue(Attribute.DISCARDED) + 1;
+			player.setAttribute(Attribute.DISCARDED, discardOrder);
+			card.getAttributes().put(Attribute.DISCARDED, discardOrder);
 			fireGameEvent(new DiscardEvent(context, player.getId(), card));
 			if (!card.hasAttribute(Attribute.DISCARDED)) {
 				LOGGER.debug("discardCard {}: Discard of {} has been cancelled by a trigger.", context.getGameId(), card);
@@ -2783,6 +2799,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return new HealingResult(0, 0);
 		}
 
+		// Check if the target is immune to healing
+		if (target.hasAttribute(Attribute.IMMUNE_TO_HEALING) || target.hasAttribute(Attribute.AURA_IMMUNE_TO_HEALING)) {
+			return new HealingResult(0, 0);
+		}
+
 		healing = getModifiedHealing(player, healing, source, applyHealingBonus);
 		var newHp = Math.min(target.getMaxHp(), target.getHp() + healing);
 		var oldHp = target.getHp();
@@ -3108,10 +3129,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                                  {@link Zones#SET_ASIDE_ZONE}.
 	 */
 	public boolean stealCard(Player newOwner, Entity source, Card card, Zones destination) throws IllegalArgumentException {
-		// If the card isn't already in the SET_ASIDE_ZONE, move it
-		if (card.getZone() != Zones.SET_ASIDE_ZONE) {
-			// Move to set aside zone first.
-			context.getPlayer(card.getOwner()).getZone(card.getZone()).move(card, newOwner.getSetAsideZone());
+		// Move to new owner's SET_ASIDE_ZONE first
+		if (card.getZone() != Zones.SET_ASIDE_ZONE || card.getOwner() != newOwner.getId()) {
+			var sourceZone = context.getPlayer(card.getOwner()).getZone(card.getZone());
+			sourceZone.move(card, newOwner.getSetAsideZone());
 		}
 
 		// Only change the owner if necessary
@@ -3452,6 +3473,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		card.setAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
 		card.setAttribute(Attribute.MANA_SPENT, modifiedManaCost);
 		card.setAttribute(Attribute.HAND_INDEX, card.getEntityLocation().getIndex());
+		// Outcast: set attribute if played from leftmost or rightmost position in hand
+		if (card.hasAttribute(Attribute.OUTCAST)) {
+			var handIndex = card.getEntityLocation().getIndex();
+			var handSize = player.getHand().getCount();
+			if (handIndex == 0 || handIndex == handSize - 1) {
+				card.setAttribute(Attribute.OUTCAST_TRIGGERED);
+			}
+		}
 		var cardPlayedEvent = new CardPlayedEvent(context, playerId, card);
 		context.setLastCardPlayed(playerId, card.getReference());
 		if (card.getCardType() == CardType.SPELL) {
@@ -4663,6 +4692,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (isEntityType(entity.getEntityType(), EntityType.MINION)) {
 			entity.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
+			// Refresh tap cooldowns at the start of the turn
+			if (entity instanceof Minion && ((Minion) entity).getSourceCard().getDesc().getTaps() != null) {
+				entity.getAttributes().put(Attribute.USED_THIS_TURN, 0);
+			}
 		}
 
 		entity.setAttribute(Attribute.ATTACKS_LAST_TURN, entity.getAttributeValue(Attribute.ATTACKS_THIS_TURN));
@@ -4802,6 +4835,19 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				context.getOpponent(player).modifyAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 1);
 				fireGameEvent(new AfterSummonEvent(context, minion, source, resolveOpener, openerActions));
 			}
+			// Miniaturize: after the main minion is summoned from hand, summon a 1/1 copy to its right
+			if (resolveOpener
+					&& minion.hasAttribute(Attribute.MINIATURIZE)
+					&& player.getMinions().contains(minion)
+					&& canSummonMoreMinions(player)) {
+				var miniCopy = minion.getCopy();
+				miniCopy.setAttack(1);
+				miniCopy.setHp(1);
+				miniCopy.setMaxHp(1);
+				miniCopy.getAttributes().remove(Attribute.MINIATURIZE);
+				var miniIndex = minion.getEntityLocation().getIndex() + 1;
+				summon(playerId, miniCopy, source, miniIndex, false);
+			}
 			fireGameEvent(new BoardChangedEvent(context));
 			return true;
 		} finally {
@@ -4927,12 +4973,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		addEnchantments(player, card, card, targetMinion);
-		context.getTriggers().stream()
+		var aftermathCopies = context.getTriggers().stream()
 				.filter(t -> t instanceof Aftermath)
 				.map(t -> (Aftermath) t)
 				.filter(a -> !a.isExpired() && Objects.equals(a.getHostReference(), card.getReference()))
 				.map(Aftermath::getCopy)
-				.forEach(a -> addEnchantment(player, a, card, targetMinion));
+				.collect(java.util.stream.Collectors.toList());
+		for (var a : aftermathCopies) {
+			addEnchantment(player, a, card, targetMinion);
+		}
 
 		magnets.add(card.getCardId());
 		targetMinion.setAttribute(Attribute.MAGNETS, magnets.toArray(new String[0]));

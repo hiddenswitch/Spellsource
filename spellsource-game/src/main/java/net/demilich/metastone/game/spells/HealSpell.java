@@ -19,6 +19,11 @@ import java.util.function.Predicate;
  * Healing raises a {@link net.demilich.metastone.game.events.HealEvent} and can be reacted to with the {@link
  * net.demilich.metastone.game.spells.trigger.HealingTrigger}.
  * <p>
+ * The {@code target} must be an {@link Actor} (minion, hero, or weapon). If the spell is used inside a trigger
+ * or card effect, the target resolution must produce a valid {@link Actor}; a {@code null} target or non-Actor
+ * entity will cause a {@link ClassCastException} or {@link NullPointerException}. Ensure the spell's target
+ * reference and filter restrict to valid Actor entities.
+ * <p>
  * For <b>example</b>, to fully heal a minion, heal up to its maximum hitpoints:
  * <pre>
  *   {

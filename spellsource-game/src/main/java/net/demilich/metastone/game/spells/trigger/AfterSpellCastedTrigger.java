@@ -34,6 +34,10 @@ public class AfterSpellCastedTrigger extends AbstractCardTrigger {
 
 	@Override
 	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
+		if (!super.innerQueues(event, enchantment, host)) {
+			return false;
+		}
+
 		AfterSpellCastedEvent spellCastedEvent = (AfterSpellCastedEvent) event;
 
 		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);

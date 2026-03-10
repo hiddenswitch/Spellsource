@@ -18,7 +18,7 @@ build/
 classes/
 out/
 *.iml
-
+.claude/
 artifact.zip
 
 cards/src/main/resources/metastone.properties

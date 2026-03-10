@@ -26,7 +26,11 @@ public class DredgeSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		var deck = player.getDeck();
+		var targetPlayerEnum = desc.getTargetPlayer();
+		var resolvedPlayer = targetPlayerEnum != null
+				? SpellUtils.determineCastingPlayer(context, player, source, targetPlayerEnum).getCastingPlayer()
+				: player;
+		var deck = resolvedPlayer.getDeck();
 		if (deck.isEmpty()) {
 			return;
 		}
@@ -71,7 +75,7 @@ public class DredgeSpell extends Spell {
 
 		// Cast sub-spell on the chosen card if specified
 		for (SpellDesc subSpell : desc.subSpells(0)) {
-			SpellUtils.castChildSpell(context, player, subSpell, source, target, actualCard);
+			SpellUtils.castChildSpell(context, player, subSpell, source, actualCard);
 		}
 	}
 }

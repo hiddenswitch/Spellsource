@@ -642,6 +642,44 @@ public class TestBase {
 		return playMinionCard(context, player, context.getCardCatalogue().getCardById(minionCardId));
 	}
 
+	/**
+	 * Activates a tappable entity that is on the battlefield without a target.
+	 */
+	protected static void tap(GameContext context, Player player, Card card) {
+		tap(context, player, card, null);
+	}
+
+	/**
+	 * Activates a tappable entity that is on the battlefield, optionally targeting an entity.
+	 */
+	protected static void tap(GameContext context, Player player, Card card, Entity target) {
+		Minion minion = null;
+		for (Minion m : player.getMinions()) {
+			if (m.getSourceCard().getCardId().equals(card.getCardId())) {
+				minion = m;
+				break;
+			}
+		}
+		if (minion == null) {
+			throw new UnsupportedOperationException("Tappable entity not found on the board: " + card.getName());
+		}
+		var taps = card.getDesc().getTaps();
+		if (taps == null || taps.length == 0) {
+			throw new UnsupportedOperationException("Card has no taps: " + card.getName());
+		}
+		var tapDesc = taps[0];
+		var spell = tapDesc.getSpell();
+		var targetSelection = tapDesc.getTargetSelection();
+		if (targetSelection == null) {
+			targetSelection = TargetSelection.NONE;
+		}
+		TapAction action = new TapAction(spell, card, minion.getReference(), targetSelection, 0);
+		if (target != null) {
+			action.setTarget(target);
+		}
+		context.performAction(player.getId(), action);
+	}
+
 	protected static Minion playMinionCard(GameContext context, Player player, int attack, int hp) {
 		Minion minion = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 		minion.setAttack(attack);

@@ -81,11 +81,11 @@ public class ModelConversions {
 	 * @param id        The card's entity ID
 	 * @param owner     The secret's owner
 	 * @param location  The secret'slocation
-	 * @param heroClass The hero class of the secret
+	 * @param heroClasses The hero classes of the secret
 	 * @return A censored secret card.
 	 */
-	static Entity.Builder getCensoredCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, String heroClass) {
-		return Entity.newBuilder()
+	static Entity.Builder getCensoredCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, String[] heroClasses) {
+		var builder = Entity.newBuilder()
 				.setCardId("hidden")
 				.setEntityType(EntityType.CARD)
 				.setDescription("A secret! This card will be revealed when a certain action occurs.")
@@ -93,8 +93,11 @@ public class ModelConversions {
 				.setId(id)
 				.setOwner(owner)
 				.setCardType(CardType.SPELL)
-				.setHeroClass(heroClass)
 				.setLocation(toClientLocation(location));
+		if (heroClasses != null) {
+			builder.addAllHeroClasses(Arrays.asList(heroClasses));
+		}
+		return builder;
 	}
 
 	/**
@@ -270,7 +273,8 @@ public class ModelConversions {
 					&& card.isSecret()
 					&& card.getOwner() != playerId
 					&& !(event instanceof SecretRevealedEvent)) {
-				var censoredCard = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+				String[] cardClasses = card.getHeroClasses();
+				var censoredCard = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), cardClasses != null && cardClasses.length > 0 ? cardClasses : new String[]{HeroClass.ANY});
 				if (source != null) {
 					clientEvent.setSource(censoredCard);
 				}
@@ -368,11 +372,12 @@ public class ModelConversions {
 		// Add limited information for opposing secrets
 		List<Entity> opposingSecrets = new ArrayList<>();
 		for (var secret : opponent.getSecrets()) {
+			var secretClasses = secret.getSourceCard().getHeroClasses();
 			var entity = Entity.newBuilder()
 					.setId(secret.getId())
 					.setEntityType(EntityType.SECRET)
 					.setOwner(secret.getOwner())
-					.setHeroClass(secret.getSourceCard().getHeroClass())
+					.addAllHeroClasses(Arrays.asList(secretClasses != null && secretClasses.length > 0 ? secretClasses : new String[]{HeroClass.ANY}))
 					.setLocation(toClientLocation(secret.getEntityLocation()))
 					.build();
 			opposingSecrets.add(entity);
@@ -568,7 +573,8 @@ public class ModelConversions {
 		entity.setExtraAttack(Int32Value.of(extraAttack));
 		entity.setLocation(toClientLocation(actor.getEntityLocation()));
 		entity.setManaCost(Int32Value.of(card.getBaseManaCost()));
-		entity.setHeroClass(card.getHeroClass());
+		String[] cardClasses = card.getHeroClasses();
+		entity.addAllHeroClasses(Arrays.asList(cardClasses != null && cardClasses.length > 0 ? cardClasses : new String[]{HeroClass.ANY}));
 		entity.setCardSet(Objects.toString(card.getCardSet()));
 		entity.setRarity(card.getRarity());
 		entity.setBaseManaCost(Int32Value.of(card.getBaseManaCost()));
@@ -585,7 +591,6 @@ public class ModelConversions {
 		entity.setBaseHp(Int32Value.of(actor.getBaseHp()));
 		entity.setHp(Int32Value.of(actor.getHp()));
 		entity.setMaxHp(Int32Value.of(actor.getMaxHp()));
-		entity.setHeroClass(actor.getHeroClass());
 		entity.setUnderAura(actor.hasAttribute(Attribute.AURA_ATTACK_BONUS)
 				|| actor.hasAttribute(Attribute.AURA_HP_BONUS)
 				|| actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)
@@ -613,7 +618,7 @@ public class ModelConversions {
 		entity.setUntargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS) || actor.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
 		entity.setPermanent(actor.hasAttribute(Attribute.PERMANENT));
 		entity.setRush(actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
-		entity.setTribe(actor.getRace());
+		entity.addAllTribes(Arrays.asList(actor.getRaces()));
 		var triggers = workingContext.getLogic().getActiveTriggers(actor.getReference());
 		entity.setHostsTrigger(triggers.stream().anyMatch(t -> !(t instanceof Aftermath) && !(t instanceof Aura)));
 		return entity;
@@ -731,19 +736,13 @@ public class ModelConversions {
 		}
 		entity.addAllTooltips(Arrays.asList(card.getDesc().getTooltips()));
 
-		var heroClass = card.getHeroClass();
+		String[] cardHeroClasses = card.getHeroClasses();
+		entity.addAllHeroClasses(Arrays.asList(cardHeroClasses != null && cardHeroClasses.length > 0 ? cardHeroClasses : new String[]{HeroClass.ANY}));
 
 		// Put the condition met glow on the card
 		if (card.getZone() == Zones.HAND && entity.getPlayable()) {
 			entity.setConditionMet(workingContext.getLogic().conditionMet(localPlayerId, card));
 		}
-
-		// Handles tri-class cards correctly
-		if (heroClass == null) {
-			heroClass = HeroClass.ANY;
-		}
-
-		entity.setHeroClass(heroClass);
 		entity.setCardType(card.getCardType());
 		var hostsTrigger = !workingContext.getLogic().getActiveTriggers(card.getReference()).isEmpty();
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
@@ -767,7 +766,7 @@ public class ModelConversions {
 				entity.setUnderAura(card.getBonusAttack() > 0
 						|| card.getBonusAttack() > 0
 						|| hostsTrigger);
-				entity.setTribe(card.getRace());
+				entity.addAllTribes(Arrays.asList(card.getRaces()));
 				// Include handbuffs from WhereverTheyAre enchantments. Also use this for other effects!
 				visualizeEffectsInHand(workingContext, owningPlayer.getId(), card, entity);
 				break;

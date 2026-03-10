@@ -24,3 +24,26 @@ test {
     }
     enableAssertions = false
 }
+
+tasks.register('jshell', JavaExec) {
+    dependsOn testClasses
+    jvmArgs = ['--add-modules', 'jdk.jshell']
+    classpath = files()
+    mainClass = 'jdk.internal.jshell.tool.JShellToolProvider'
+    args = ['--enable-preview', '--class-path', sourceSets.test.runtimeClasspath.asPath]
+    standardInput = System.in
+}
+
+tasks.register('diagnose', JavaExec) {
+    dependsOn testClasses
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.hiddenswitch.spellsource.tests.hearthstone.TraceDiagnostics'
+    jvmArgs = ['--enable-preview']
+}
+
+tasks.register('replay', JavaExec) {
+    dependsOn testClasses
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.hiddenswitch.spellsource.tests.hearthstone.TraceReplay'
+    jvmArgs = ['--enable-preview']
+}

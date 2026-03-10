@@ -21,6 +21,18 @@ import org.slf4j.LoggerFactory;
  * Attribute#STARTED_IN_DECK}, {@link Attribute#STARTED_IN_HAND} and {@link Attribute#REMOVES_SELF_AT_END_OF_TURN}
  * (ghostly) consistent. Typically used in conjunction with a {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc#keepAfterTransform}
  * setting.
+ * <p>
+ * The {@code target} must be a {@link Card} entity (i.e., in the hand or deck zones). If the trigger providing
+ * the target resolves to a non-Card entity (e.g., a {@link net.demilich.metastone.game.entities.minions.Minion}
+ * on the battlefield), a {@link ClassCastException} will be thrown. Card JSON authors must ensure the trigger's
+ * target or filter restricts to card zones.
+ * <p>
+ * When using {@link SpellArg#SECONDARY_TARGET} to specify the replacement card, the reference must resolve to a
+ * {@link Card} entity. For example, in a trigger responding to
+ * {@link net.demilich.metastone.game.events.CardPlayedEvent}, {@code EVENT_TARGET} is {@code null} (the event has
+ * no target entity), while {@code EVENT_SOURCE} is the played card. Use {@code EVENT_SOURCE} to reference the
+ * played card. Similarly, for {@link net.demilich.metastone.game.events.AfterSpellCastedEvent}, {@code EVENT_SOURCE}
+ * is the spell card and {@code EVENT_TARGET} is the spell's target (which may be a minion, not a card).
  */
 public class TransformInHandSpell extends Spell {
 

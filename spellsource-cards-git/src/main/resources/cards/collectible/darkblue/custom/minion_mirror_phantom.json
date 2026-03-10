@@ -19,7 +19,7 @@
       "class": "custom.TransformInHandSpell",
       "target": "SELF",
       "exclusive": false,
-      "secondaryTarget": "EVENT_TARGET"
+      "secondaryTarget": "EVENT_SOURCE"
     },
     "keepAfterTransform": true
   },

@@ -23,6 +23,7 @@ message ActionTypeMessage {
         EQUIP_WEAPON = 7;
         DISCOVER = 8;
         HERO = 9;
+        TAP = 10;
     }
 }
 
@@ -243,6 +244,8 @@ message GameEventTypeMessage {
         WEAPON_EQUIPPED = 58;
         WILL_END_SEQUENCE = 59;
         DESTROY_WILL_QUEUE = 60;
+        TAP_ACTIVATED = 61;
+        HONORABLE_KILL = 62;
     }
 }
 
@@ -767,8 +770,9 @@ message Entity {
     // Render this entity with a "gold" effect.
     bool gold = 36;
 
-    // The string enum value that corresponds to this entity's hero class.
-    string heroClass = 37;
+    reserved 37; // was heroClass (string)
+    // The hero class(es) of this entity. Dual-class cards (e.g. Scholomance Academy) will have multiple entries.
+    repeated string heroClasses = 73;
 
     // An integer corresponding to the enchantment's host
     int32 host = 38;
@@ -850,8 +854,9 @@ message Entity {
     bool taunt = 65;
     repeated Tooltip tooltips = 66;
 
-    // When not null, indicates the card's tribe/race. Typically only minions have this field set.
-    string tribe = 67;
+    reserved 67; // was tribe (string)
+    // The tribes (minion types) of this entity. Multi-tribe entities will have multiple entries (e.g. Beast and Dragon).
+    repeated string tribes = 74;
 
     // When true, indicates that this entity that is ordinarily censored to this user is not. It can be "flipped" and
     // shown to the opponent.

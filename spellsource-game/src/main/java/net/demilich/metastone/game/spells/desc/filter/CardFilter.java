@@ -90,8 +90,8 @@ public final class CardFilter extends EntityFilter {
 			return false;
 		}
 
-		String spellSchool = (String) getDesc().get(EntityFilterArg.SPELL_SCHOOL);
-		if (spellSchool != null && !spellSchool.equals(card.getSpellSchool())) {
+		String cardId = (String) getDesc().get(EntityFilterArg.CARD);
+		if (cardId != null && !card.getCardId().contains(cardId)) {
 			return false;
 		}
 

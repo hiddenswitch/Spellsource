@@ -39,7 +39,10 @@ public class CreateAndTeachSpell extends Spell {
 			minionCardDesc.setName(desc.getString(SpellArg.NAME));
 			minionCardDesc.setDescription(desc.getString(SpellArg.DESCRIPTION));
 			if (source != null) {
-				minionCardDesc.setHeroClass(source.getSourceCard().getHeroClass());
+				String[] classes = source.getSourceCard().getHeroClasses();
+				if (classes != null && classes.length > 0) {
+					minionCardDesc.setHeroClass(classes[0]);
+				}
 			}
 
 			CardList chosenSpells = new CardArrayList();

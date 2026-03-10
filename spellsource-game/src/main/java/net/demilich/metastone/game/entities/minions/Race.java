@@ -40,19 +40,20 @@ public class Race {
 	 * @return {@code true} if {@code lhs} has the race specified in {@code rhs}, including ALL.
 	 */
 	public static boolean hasRace(GameContext gameContext, Entity entity, String rhs) {
-		if (Objects.equals(entity.getRace(), ALL) && !Objects.equals(rhs, NONE)) {
-			return true;
-		}
-		if (Objects.equals(rhs, ALL) && !Objects.equals(entity.getRace(), NONE)) {
-			return true;
-		}
+		String[] lhsRaces = entity.getRaces();
 
-		String[] lhsRaces;
-		String lhsRaceStr = entity.getRace();
-		if (lhsRaceStr.contains("&")) {
-			lhsRaces = lhsRaceStr.split("&");
-		} else {
-			lhsRaces = new String[]{lhsRaceStr};
+		// ALL matches everything except NONE
+		for (String lhsRace : lhsRaces) {
+			if (Objects.equals(lhsRace, ALL) && !Objects.equals(rhs, NONE)) {
+				return true;
+			}
+		}
+		if (Objects.equals(rhs, ALL)) {
+			for (String lhsRace : lhsRaces) {
+				if (!Objects.equals(lhsRace, NONE)) {
+					return true;
+				}
+			}
 		}
 
 		final List<MenagerieMogulAura> auras = SpellUtils.getAuras(gameContext, MenagerieMogulAura.class, entity);

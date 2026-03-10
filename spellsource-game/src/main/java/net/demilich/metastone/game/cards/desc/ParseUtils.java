@@ -217,6 +217,10 @@ public class ParseUtils {
 				return EntityReference.ENEMY_SIGNATURE;
 			case "friendly_secrets":
 				return EntityReference.FRIENDLY_SECRETS;
+			case "enemy_permanents":
+				return EntityReference.ENEMY_PERMANENTS;
+			case "friendly_permanents":
+				return EntityReference.FRIENDLY_PERMANENTS;
 			case "PLAYER_1":
 				return EntityReference.PLAYER_1;
 			case "PLAYER_2":

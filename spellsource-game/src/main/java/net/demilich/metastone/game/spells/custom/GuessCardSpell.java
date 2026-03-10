@@ -14,13 +14,10 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -37,26 +34,38 @@ public final class GuessCardSpell extends Spell {
 		Player opponent = context.getOpponent(player);
 
 		// Find all the cards which started in the opponent's deck.
-		Map<String, List<Entity>> deckCards = context.getEntities()
+		List<Card> allDeckCards = context.getEntities()
 				.filter(e -> e.getOwner() == opponent.getId())
 				.filter(e -> e.getEntityType() == EntityType.CARD)
 				.filter(e -> e.hasAttribute(Attribute.STARTED_IN_DECK))
-				.collect(groupingBy(e -> e.getSourceCard().getHeroClass()));
+				.map(e -> e.getSourceCard())
+				.collect(Collectors.toList());
 
-		Set<String> startingDeck = deckCards.values().stream().flatMap(Collection::stream).map(Entity::getSourceCard).map(Card::getCardId).collect(toSet());
+		if (allDeckCards.isEmpty()) {
+			logger.debug("onCast {} {}: The opponent's deck has no identifiable cards, skipping.", context.getGameId(), source);
+			return;
+		}
+
+		Set<String> startingDeck = allDeckCards.stream().map(Card::getCardId).collect(toSet());
 
 		String opponentClass = opponent.getHero().getHeroClass();
-		String correctClass;
-		final Card correctCard;
 
-		if (deckCards.containsKey(opponentClass)
-				&& deckCards.get(opponentClass).size() > 0) {
-			correctCard = (Card) context.getLogic().getRandom(deckCards.get(opponentClass));
+		// Prefer class cards, fall back to neutrals
+		List<Card> classCards = allDeckCards.stream()
+				.filter(c -> c.hasHeroClass(opponentClass))
+				.collect(Collectors.toList());
+		List<Card> neutralCards = allDeckCards.stream()
+				.filter(c -> c.hasHeroClass(HeroClass.ANY))
+				.collect(Collectors.toList());
+
+		final Card correctCard;
+		final String correctClass;
+		if (!classCards.isEmpty()) {
+			correctCard = (Card) context.getLogic().getRandom(classCards);
 			correctClass = opponentClass;
-		} else if (deckCards.containsKey(HeroClass.ANY)
-				&& deckCards.get(HeroClass.ANY).size() > 0) {
+		} else if (!neutralCards.isEmpty()) {
 			logger.debug("onCast {} {}: The opponent's deck does not use any class cards, only choosing neutrals for wrong cards now.", context.getGameId(), source);
-			correctCard = (Card) context.getLogic().getRandom(deckCards.get(HeroClass.ANY));
+			correctCard = (Card) context.getLogic().getRandom(neutralCards);
 			correctClass = HeroClass.ANY;
 		} else {
 			logger.debug("onCast {} {}: The opponent's deck has no identifiable cards, skipping.", context.getGameId(), source);
@@ -66,7 +75,7 @@ public final class GuessCardSpell extends Spell {
 		List<Card> others = context.getCardCatalogue().query(new DeckFormat().withCardSets(CardCatalogue.latestImplementedHearthstoneExpansion(), "BASIC", "CLASSIC")/*prefer the latest expansion*/)
 				.shuffle(context.getLogic().getRandom())
 				.stream()
-				.filter(c -> c.getHeroClass().equals(correctClass))
+				.filter(c -> c.hasHeroClass(correctClass))
 				.filter(c -> !c.getCardId().equals(correctCard.getCardId()))
 				.filter(c -> !startingDeck.contains(c.getCardId()))
 				.limit(2)

@@ -523,6 +523,14 @@ public final class EntityReference implements Serializable {
 	public static final EntityReference FRIENDLY_SIGNATURE = new EntityReference(-78);
 	public static final EntityReference ENEMY_SIGNATURE = new EntityReference(-78);
 	public static final EntityReference FRIENDLY_SECRETS = new EntityReference(-79);
+	/**
+	 * References all permanents on the enemy battlefield.
+	 */
+	public static final EntityReference ENEMY_PERMANENTS = new EntityReference(-80);
+	/**
+	 * References all permanents on the friendly battlefield.
+	 */
+	public static final EntityReference FRIENDLY_PERMANENTS = new EntityReference(-81);
 	public static final EntityReference PLAYER_1 = new EntityReference(0);
 	public static final EntityReference PLAYER_2 = new EntityReference(1);
 

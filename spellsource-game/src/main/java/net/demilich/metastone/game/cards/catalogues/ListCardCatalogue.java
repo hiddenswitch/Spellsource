@@ -155,7 +155,6 @@ public class ListCardCatalogue implements CardCatalogue {
 		try {
 			CardList result = new CardArrayList();
 			for (var card : cards.values()) {
-
 				if (!deckFormat.isInFormat(card)) {
 					continue;
 				}
@@ -458,15 +457,11 @@ public class ListCardCatalogue implements CardCatalogue {
 			}
 			formatCardsByName.putAll(formatCards.stream().collect(toMap(Card::getName, Function.identity())));
 			// Populate the class and hero cards
-			classCards.putAll(newCards.stream().filter(c -> c.getCardType() == Spellsource.CardTypeMessage.CardType.CLASS).collect(toMap(Card::getHeroClass, Function.identity())));
+			classCards.putAll(newCards.stream().filter(c -> c.getCardType() == Spellsource.CardTypeMessage.CardType.CLASS).collect(toMap(c -> c.getDesc().getHeroClass(), Function.identity())));
 			for (var classCard : classCards.values()) {
-				if (classCard.getHeroClass() == null) {
-					// there are limited circumstances where the hero class should be null
-					// not sure why this should ever happen
-					continue;
-				}
+				String heroClass = classCard.getDesc().getHeroClass();
 				// skip the Neutral class
-				if (classCard.getHeroClass() != null & classCard.getHeroClass().equals(HeroClass.ANY)) {
+				if (heroClass.equals(HeroClass.ANY)) {
 					continue;
 				}
 
@@ -475,12 +470,12 @@ public class ListCardCatalogue implements CardCatalogue {
 					if (format.isInFormat(classCard)) {
 						classCardsForFormat.get(format).removeIf(existing -> Objects.equals(existing.getCardId(), classCard.getCardId()));
 						classCardsForFormat.put(format, classCard);
-						baseClassesForFormat.put(format, classCard.getHeroClass());
+						baseClassesForFormat.put(format, heroClass);
 					}
 				}
 				classCardsForFormat.get(all()).removeIf(existing -> Objects.equals(existing.getCardId(), classCard.getCardId()));
 				classCardsForFormat.put(all(), classCard);
-				baseClassesForFormat.put(all(), classCard.getHeroClass());
+				baseClassesForFormat.put(all(), heroClass);
 			}
 			heroCards.putAll(classCards
 					.values()
@@ -490,7 +485,7 @@ public class ListCardCatalogue implements CardCatalogue {
 					// even if it's not super useful for a game
 					.filter(card -> card.getHero() != null && cards.containsKey(card.getHero()))
 					.map(value -> cards.get(Objects.requireNonNull(value).getHero()))
-					.collect(toMap(Card::getHeroClass, Function.identity())));
+					.collect(toMap(c -> c.getDesc().getHeroClass(), Function.identity())));
 		} finally {
 			lock.writeLock().unlock();
 		}

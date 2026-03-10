@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardSet;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -44,7 +45,7 @@ public class CreateSummonSpell extends Spell {
 		if (attribute != null) {
 			cardDesc.getAttributes().put(attribute, true);
 		}
-		cardDesc.setSet("BASIC");
+		cardDesc.setSet(CardSet.BASIC);
 		cardDesc.setCollectible(false);
 		cardDesc.setBaseManaCost(desc.getValue(SpellArg.MANA, context, player, target, source, 0));
 		Card newCard = cardDesc.create();

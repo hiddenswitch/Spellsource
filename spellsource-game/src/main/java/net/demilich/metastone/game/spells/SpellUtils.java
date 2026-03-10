@@ -28,6 +28,7 @@ import net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects
 import net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.TargetNotFoundException;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 import org.jetbrains.annotations.NotNull;
@@ -208,15 +209,54 @@ public class SpellUtils {
 		} else {
 			action.setOverrideChild(true);
 			int playedFromHandOrDeck = -1;
-			// Reference the real card
+			// Reference the real card, allowing REMOVED_FROM_PLAY since cards may be removed
+			// during complex spell chains before being played
 			if (card.getId() != IdFactory.UNASSIGNED) {
-				card = (Card) context.resolveSingleTarget(card.getReference());
+				try {
+					Entity resolved = context.resolveSingleTarget(card.getReference(), false);
+					if (resolved instanceof Card) {
+						card = (Card) resolved;
+					} else {
+						// The card entity was transformed into a non-Card (e.g., a Minion on the
+						// battlefield). The original card no longer exists to play — skip it.
+						player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
+						return true;
+					}
+				} catch (TargetNotFoundException e) {
+					// Card entity was removed from the game entirely — skip it
+					player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
+					return true;
+				}
+			}
+			// The card's type may have changed since card.play() was called (e.g., a CardAura that set
+			// AURA_CARD_ID expired because the card moved zones or the aura source was removed). Re-create
+			// the action if the card type no longer matches, to avoid e.g. PlayHeroCardAction for a minion.
+			if (!card.hasChoices()) {
+				var currentAction = card.play();
+				if (currentAction != null && !action.getClass().equals(currentAction.getClass())) {
+					// The card type changed. If the card is already in the graveyard or removed from play,
+					// it was consumed by a prior effect in this spell chain — skip it.
+					var zone = card.getZone();
+					if (zone == com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones.GRAVEYARD
+							|| zone == com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones.REMOVED_FROM_PLAY) {
+						player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
+						return true;
+					}
+					action = currentAction.clone();
+					action.setOverrideChild(true);
+				}
 			}
 			if (card.hasAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK)) {
 				playedFromHandOrDeck = card.getAttributeValue(Attribute.PLAYED_FROM_HAND_OR_DECK);
 				card.getAttributes().remove(Attribute.PLAYED_FROM_HAND_OR_DECK);
 			}
-			action.innerExecute(context, player.getId());
+			try {
+				action.innerExecute(context, player.getId());
+			} catch (TargetNotFoundException e) {
+				// Card entity was removed during spell chain, skip
+				player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
+				return false;
+			}
 			if (playedFromHandOrDeck != -1) {
 				card.getAttributes().put(Attribute.PLAYED_FROM_HAND_OR_DECK, playedFromHandOrDeck);
 			}
@@ -328,6 +368,9 @@ public class SpellUtils {
 		for (int i = 0; i < cards.length; i++) {
 			// If the discover zone contains the card, reference it instead
 			final String cardId = cardIds[i];
+			if (cardId == null || cardId.isEmpty()) {
+				throw new IllegalArgumentException("getCards: empty/null cardId at index " + i + " in spell: " + spell);
+			}
 			cards[i] = getSingleCard(context, cardId);
 		}
 		return cards;

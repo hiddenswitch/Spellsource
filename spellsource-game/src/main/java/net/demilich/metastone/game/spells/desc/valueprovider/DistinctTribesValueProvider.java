@@ -5,7 +5,10 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import net.demilich.metastone.game.entities.minions.Race;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -32,7 +35,9 @@ public final class DistinctTribesValueProvider extends ValueProvider {
 		} else {
 			targets = new ArrayList<>();
 		}
-		Stream<String> raceStream = targets.stream().map(Entity::getRace);
+		Stream<String> raceStream = targets.stream()
+				.flatMap(e -> Arrays.stream(e.getRaces()))
+				.filter(r -> !r.equals(Race.NONE));
 		if (getDesc().containsKey(ValueProviderArg.RACE)) {
 			raceStream = Stream.concat(Stream.of((String) getDesc().get(ValueProviderArg.RACE)), raceStream);
 		}

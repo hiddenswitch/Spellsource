@@ -193,10 +193,6 @@ public abstract class Actor extends Entity {
 		setAttribute(Attribute.MAX_HP, value);
 	}
 
-	public String getHeroClass() {
-		return getSourceCard().getHeroClass();
-	}
-
 	@Override
 	public void setOwner(int ownerIndex) {
 		super.setOwner(ownerIndex);

@@ -262,28 +262,42 @@ public class Card extends Entity implements HasChooseOneActions {
 		return getDesc().getType();
 	}
 
-	/**
-	 * Gets the hero class that this card belongs to. Valid classes include ANY (neutral) or any of the main 9 classes.
-	 *
-	 * @return The hero class
-	 */
-	@JsonIgnore
-	public String getHeroClass() {
-		return (String) getAttributes().getOrDefault(Attribute.HERO_CLASS, getDesc().getHeroClass());
-	}
-
 	public void setHeroClass(String heroClass) {
 		getAttributes().put(Attribute.HERO_CLASS, heroClass);
 	}
 
 	/**
-	 * Some cards have multiple hero classes. This field stores those multiple classes when they are defined.
+	 * Returns all hero classes this card belongs to, merging both {@code heroClass} and {@code heroClasses} from the
+	 * card description (and any runtime {@link Attribute#HERO_CLASS} override).
+	 * <p>
+	 * If only {@code heroClass} is set, returns a single-element array. If only {@code heroClasses} is set, returns
+	 * that array. If both are set, returns the union. Returns {@code null} if neither is set.
 	 *
-	 * @return The hero classes (the gang)
+	 * @return The hero classes, or {@code null} if none are defined.
 	 */
 	@JsonIgnore
 	public String[] getHeroClasses() {
-		return getDesc().getHeroClasses();
+		String[] descClasses = getDesc().getHeroClasses();
+		String singleClass = (String) getAttributes().getOrDefault(Attribute.HERO_CLASS, getDesc().getHeroClass());
+
+		if (descClasses != null && singleClass != null) {
+			// Check if singleClass is already in the array
+			for (String h : descClasses) {
+				if (singleClass.equals(h)) {
+					return descClasses;
+				}
+			}
+			// Merge: prepend singleClass
+			String[] merged = new String[descClasses.length + 1];
+			merged[0] = singleClass;
+			System.arraycopy(descClasses, 0, merged, 1, descClasses.length);
+			return merged;
+		} else if (descClasses != null) {
+			return descClasses;
+		} else if (singleClass != null) {
+			return new String[]{singleClass};
+		}
+		return null;
 	}
 
 	/**
@@ -413,12 +427,41 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	/**
-	 * Gets the spell school of this card, if any. Typically only applies to spell cards.
+	 * Returns all races this card belongs to, merging both {@code race} and {@code races} from the card description
+	 * (and any runtime {@link Attribute#RACE} override).
 	 *
-	 * @return The spell school string, or {@code null} if none.
+	 * @return A non-null array of race strings.
 	 */
-	public String getSpellSchool() {
-		return (String) getAttributes().getOrDefault(Attribute.SPELL_SCHOOL, getDesc().getSpellSchool());
+	@NotNull
+	@Override
+	public String[] getRaces() {
+		// If there's a runtime attribute override, use the base implementation (handles "&" splitting)
+		if (getAttributes().containsKey(Attribute.RACE)) {
+			return super.getRaces();
+		}
+		String[] descRaces = getDesc().getRaces();
+		String singleRace = getDesc().getRace();
+		if (descRaces != null && singleRace != null) {
+			// Merge: check if singleRace is already in the array
+			for (String r : descRaces) {
+				if (singleRace.equals(r)) {
+					return descRaces;
+				}
+			}
+			String[] merged = new String[descRaces.length + 1];
+			merged[0] = singleRace;
+			System.arraycopy(descRaces, 0, merged, 1, descRaces.length);
+			return merged;
+		} else if (descRaces != null) {
+			return descRaces;
+		} else if (singleRace != null) {
+			// Handle legacy "&" format
+			if (singleRace.contains("&")) {
+				return singleRace.split("&");
+			}
+			return new String[]{singleRace};
+		}
+		return new String[]{Race.NONE};
 	}
 
 	/**
@@ -428,16 +471,16 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return <code>True</code> if this card has the specified class.
 	 */
 	public boolean hasHeroClass(String heroClass) {
-		if (getHeroClasses() != null) {
-			for (String h : getHeroClasses()) {
+		if (Objects.equals(heroClass, HeroClass.INHERIT)) {
+			return true;
+		}
+		String[] classes = getHeroClasses();
+		if (classes != null) {
+			for (String h : classes) {
 				if (heroClass.equals(h)) {
 					return true;
 				}
 			}
-		} else if (Objects.equals(heroClass, getHeroClass())) {
-			return true;
-		} else if (Objects.equals(heroClass, HeroClass.INHERIT)) {
-			return true;
 		}
 		return false;
 	}
@@ -950,9 +993,13 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @param instance
 	 */
 	public void applyRace(Actor instance) {
-		instance.setRace((getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) ?
-				(String) getAttribute(Attribute.RACE) :
-				getDesc().getRace());
+		if (getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) {
+			instance.setRace((String) getAttribute(Attribute.RACE));
+		} else if (getDesc().getRaces() != null) {
+			instance.setRace(String.join("&", getDesc().getRaces()));
+		} else {
+			instance.setRace(getDesc().getRace());
+		}
 	}
 	@JsonIgnore
 	public int getAttack() {

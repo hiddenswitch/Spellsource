@@ -1086,6 +1086,14 @@ public enum Attribute {
 	 */
 	RESERVED_BOOLEAN_5,
 	/**
+	 * Allows spell effects to store a card ID string without a dedicated enchantment.
+	 */
+	RESERVED_STRING_1,
+	/**
+	 * Allows spell effects to store a card ID string without a dedicated enchantment.
+	 */
+	RESERVED_STRING_2,
+	/**
 	 * Counts the number of supremacies (kills, but not overkills) that the {@link Actor} has achieved.
 	 */
 	SUPREMACIES_THIS_GAME,
@@ -1325,13 +1333,48 @@ public enum Attribute {
 	 */
 	SECRETS_PLAYED_THIS_TURN,
 	/**
-	 * The spell school of a spell card (e.g. "FIRE", "HOLY", "SHADOW", "ARCANE", "NATURE", "FEL", "FROST").
-	 */
-	SPELL_SCHOOL,
-	/**
 	 * The number of extra hand card slots a player has beyond the default {@link net.demilich.metastone.game.logic.GameLogic#MAX_HAND_CARDS}.
 	 */
 	EXTRA_HAND_CARDS,
+	/**
+	 * When set on an {@link net.demilich.metastone.game.entities.Actor}, prevents all healing to that actor.
+	 */
+	IMMUNE_TO_HEALING,
+	/**
+	 * Aura version of {@link #IMMUNE_TO_HEALING}.
+	 */
+	AURA_IMMUNE_TO_HEALING,
+	/**
+	 * When a player has this aura attribute, their hero power spell is cast a second time automatically.
+	 */
+	AURA_DOUBLE_HERO_POWER,
+	/**
+	 * When set on a spell card, adds bonus spell damage to that specific card only. Unlike {@link #SPELL_DAMAGE} which
+	 * is a player-level bonus on minions, this attribute is placed directly on the spell card that benefits from it.
+	 */
+	SPELL_DAMAGE_SELF,
+	/**
+	 * Aura version of {@link #SPELL_DAMAGE_SELF}. Applied by an {@link
+	 * net.demilich.metastone.game.spells.aura.AttributeValueAura} to individual spell cards matching a filter.
+	 */
+	AURA_SPELL_DAMAGE_SELF,
+	/**
+	 * Set on a card when it is actually played from the leftmost or rightmost position in hand, indicating the
+	 * outcast bonus should trigger.
+	 */
+	OUTCAST_TRIGGERED,
+	/**
+	 * Tracks how many times a player has Excavated this game.
+	 */
+	EXCAVATED,
+	/**
+	 * When a minion with Miniaturize is played, also summon a 1/1 copy with the same text.
+	 */
+	MINIATURIZE,
+	/**
+	 * Marks a card as a Starship Piece for assembly.
+	 */
+	STARSHIP_PIECE,
 	/**
 	 * The last attribute specially marked as unused, for enumeration purposes.
 	 */

@@ -39,11 +39,6 @@ public abstract class AbstractCardTrigger extends EventTrigger {
 			return false;
 		}
 
-		String spellSchool = (String) getDesc().get(EventTriggerArg.SPELL_SCHOOL);
-		if (spellSchool != null && !spellSchool.equals(cardPlayedEvent.getSourceCard().getSpellSchool())) {
-			return false;
-		}
-
 		return true;
 	}
 }

@@ -81,7 +81,10 @@ public final class HeroPowerToSpellSpell extends Spell {
 			spellCardDesc.setRarity(heroPower.getRarity());
 			spellCardDesc.setBaseManaCost(heroPower.getBaseManaCost());
 			spellCardDesc.setTargetSelection(heroPower.getTargetSelection());
-			spellCardDesc.setHeroClass(heroPower.getHeroClass());
+			String[] classes = heroPower.getHeroClasses();
+			if (classes != null && classes.length > 0) {
+				spellCardDesc.setHeroClass(classes[0]);
+			}
 			spellCardDesc.setSet(heroPower.getCardSet());
 			spellCardDesc.setCollectible(false);
 			spellCard = spellCardDesc.create();

@@ -1,6 +1,6 @@
 {
   "name": "Average Joe",
-  "heroPower": "hero_power_neutral",
+  "heroPower": "hs_hero_power_neutral",
   "baseManaCost": 0,
   "type": "HERO",
   "heroClass": "ANY",

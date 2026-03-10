@@ -132,7 +132,11 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return The attribute's value or 0 if it isn't set.
 	 */
 	public int getAttributeValue(Attribute attribute) {
-		return (int) getAttributes().getOrDefault(attribute, 0);
+		var value = getAttributes().getOrDefault(attribute, 0);
+		if (value instanceof Boolean) {
+			return (Boolean) value ? 1 : 0;
+		}
+		return (int) value;
 	}
 
 	/**
@@ -143,7 +147,11 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return The attribute's value or 0 if it isn't set.
 	 */
 	public int getAttributeValue(Attribute attribute, int defaultValue) {
-		return (int) getAttributes().getOrDefault(attribute, defaultValue);
+		var value = getAttributes().getOrDefault(attribute, defaultValue);
+		if (value instanceof Boolean) {
+			return (Boolean) value ? 1 : 0;
+		}
+		return (int) value;
 	}
 
 	/**
@@ -553,6 +561,21 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	@NotNull
 	public String getRace() {
 		return (String) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
+	}
+
+	/**
+	 * Returns all races this entity belongs to as an array. Handles the legacy {@code "&"}-separated race string format
+	 * as well as single race values.
+	 *
+	 * @return A non-null array of race strings. Returns {@code [Race.NONE]} if no race is set.
+	 */
+	@NotNull
+	public String[] getRaces() {
+		String race = getRace();
+		if (race.contains("&")) {
+			return race.split("&");
+		}
+		return new String[]{race};
 	}
 
 	/**

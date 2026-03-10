@@ -15,7 +15,8 @@ public final class Hero extends Actor {
 		super();
 		setSourceCard(heroCard);
 		setName(heroCard.getName());
-		setHeroClass(heroCard.getHeroClass());
+		String[] classes = heroCard.getHeroClasses();
+		setHeroClass(classes != null && classes.length > 0 ? classes[0] : null);
 	}
 
 	@Override

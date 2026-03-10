@@ -55,7 +55,11 @@ public class ChangeHeroPowerSpell extends Spell {
 		context.getLogic().removeEnchantments(oldHeroPower);
 		oldHeroPower.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		context.getLogic().removeCard(oldHeroPower);
-		if (heroPower.getHeroClass().equals(HeroClass.INHERIT)) {
+		// Only convert INHERIT class hero powers to the hero's class.
+		// Use direct array check because hasHeroClass("INHERIT") always returns true.
+		String[] heroPowerClasses = heroPower.getHeroClasses();
+		boolean isInherit = heroPowerClasses != null && java.util.Arrays.asList(heroPowerClasses).contains(HeroClass.INHERIT);
+		if (isInherit) {
 			heroPower.setHeroClass(hero.getHeroClass());
 		}
 		heroPower.moveOrAddTo(context, Zones.HERO_POWER);

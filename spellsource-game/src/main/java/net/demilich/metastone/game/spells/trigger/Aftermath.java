@@ -38,7 +38,7 @@ public final class Aftermath extends Enchantment {
 
 	@Override
 	public void expire(GameContext context) {
-		var host = context.resolveSingleTarget(getHostReference());
+		var host = context.resolveSingleTarget(getHostReference(), false);
 		if (host != null && !expired) {
 			host.modifyAttribute(Attribute.AFTERMATH_COUNT, -1);
 		}

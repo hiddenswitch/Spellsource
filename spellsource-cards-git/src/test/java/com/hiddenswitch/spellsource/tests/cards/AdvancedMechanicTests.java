@@ -345,7 +345,7 @@ public class AdvancedMechanicTests extends TestBase {
 				});
 
 				playCard(context, player, "spell_test_discover1");
-				assertEquals(player.getHand().get(0).getHeroClass(), classes[i]);
+				assertTrue(player.getHand().get(0).hasHeroClass(classes[i]));
 				assertEquals(player.getDiscoverZone().size(), 0);
 				assertEquals(player.getRemovedFromPlay().size(), 3);
 			});

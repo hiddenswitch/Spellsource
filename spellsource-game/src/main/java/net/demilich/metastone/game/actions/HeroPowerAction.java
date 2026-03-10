@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.events.HeroPowerUsedEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -54,6 +55,10 @@ public final class HeroPowerAction extends PlaySpellCardAction implements HasCho
 		player.getStatistics().cardPlayed(power, context.getTurn());
 
 		innerExecute(context, playerId);
+		// If the player has AURA_DOUBLE_HERO_POWER, cast the hero power spell a second time
+		if (gameLogic.hasAttribute(player, Attribute.AURA_DOUBLE_HERO_POWER)) {
+			innerExecute(context, playerId);
+		}
 		power.markUsed();
 		context.getLogic().fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
 	}

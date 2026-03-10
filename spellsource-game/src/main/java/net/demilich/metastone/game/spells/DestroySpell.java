@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -74,7 +75,11 @@ public class DestroySpell extends Spell {
 		if (!target.isDestroyed()) {
 			source.modifyAttribute(Attribute.TOTAL_KILLS, 1);
 		}
-		context.getLogic().markAsDestroyed((Actor) target, source);
+		if (target instanceof Card) {
+			context.getLogic().removeCard((Card) target);
+		} else {
+			context.getLogic().markAsDestroyed((Actor) target, source);
+		}
 	}
 }
 

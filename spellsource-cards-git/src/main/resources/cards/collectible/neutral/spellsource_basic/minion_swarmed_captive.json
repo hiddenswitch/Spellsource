@@ -12,6 +12,7 @@
       "class": "BeforeMinionPlayedTrigger",
       "queueCondition": {
         "class": "ManaCostCondition",
+        "target": "EVENT_SOURCE",
         "value": 1
       },
       "targetPlayer": "SELF"

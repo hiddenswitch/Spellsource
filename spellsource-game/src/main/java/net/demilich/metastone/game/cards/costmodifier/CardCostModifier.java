@@ -203,9 +203,6 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 		applies &= !(getCardType() != null
 				&& !GameLogic.isCardType(card.getCardType(), getCardType()));
 
-		// If a required spell school is specified, does it match?
-		applies &= !(getRequiredSpellSchool() != null
-				&& !getRequiredSpellSchool().equals(card.getSpellSchool()));
 
 		// If a filter is specified, does it satisfy the filter?
 		applies &= !(getFilter() != null
@@ -250,9 +247,6 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 		return (String) get(CardCostModifierArg.RACE);
 	}
 
-	protected String getRequiredSpellSchool() {
-		return (String) get(CardCostModifierArg.SPELL_SCHOOL);
-	}
 
 	/**
 	 * Gets the target player of the given card cost modifier.

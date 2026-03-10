@@ -3,7 +3,9 @@ package net.demilich.metastone.game.spells;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -66,6 +68,11 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 		Card card = (Card) target;
 		if (!player.getDeck().contains(card)) {
 			logger.debug("onCast {} {}: The specified minion card {} was not present in {}'s deck. Exiting.", context.getGameId(), source, card, player);
+			return;
+		}
+
+		if (!GameLogic.isCardType(card.getCardType(), CardType.MINION)) {
+			logger.error("onCast {} {}: The specified card {} is not a minion", context.getGameId(), source, card);
 			return;
 		}
 

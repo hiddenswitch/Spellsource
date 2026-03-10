@@ -10,6 +10,7 @@ import net.demilich.metastone.game.cards.CardArrayList;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
@@ -72,7 +73,7 @@ public class TargetLogic implements Serializable {
 			}
 
 			// You can summon next to permanents but not anything else.
-			if (action.getActionType() != ActionType.SUMMON && entity.hasAttribute(Attribute.PERMANENT)) {
+			if (action.getActionType() != ActionType.SUMMON && action.getActionType() != ActionType.TAP && entity.hasAttribute(Attribute.PERMANENT)) {
 				continue;
 			}
 
@@ -212,6 +213,7 @@ public class TargetLogic implements Serializable {
 			summonTargets.add(null);
 			return summonTargets;
 		}
+		// Tap activations need to see their spell targets (which are non-permanent entities)
 		List<Entity> potentialTargets = this.getEntities(context, player, targetRequirement);
 		return filterTargets(context, player, action, potentialTargets);
 	}
@@ -356,13 +358,13 @@ public class TargetLogic implements Serializable {
 			if (target == null || target.equals(EntityReference.NONE)) {
 				return new ArrayList<>();
 			}
-			return singleTargetAsList(context.resolveSingleTarget(target));
+			return singleTargetAsList(context.resolveSingleTarget(target, false));
 		} else if (targetKey.equals(EntityReference.EVENT_SOURCE)) {
 			EntityReference target = context.getEventSourceStack().peek();
 			if (target == null || target.equals(EntityReference.NONE)) {
 				return new ArrayList<>();
 			}
-			return singleTargetAsList(context.resolveSingleTarget(target));
+			return singleTargetAsList(context.resolveSingleTarget(target, false));
 		} else if (targetKey.equals(EntityReference.TARGET)) {
 			EntityReference targetKey1 = (EntityReference) context.getEnvironment().get(Environment.TARGET);
 			if (targetKey1 == null) {
@@ -572,6 +574,22 @@ public class TargetLogic implements Serializable {
 			}
 		} else if (targetKey.equals(EntityReference.FRIENDLY_SECRETS)) {
 			return new ArrayList<>(player.getSecrets());
+		} else if (targetKey.equals(EntityReference.ENEMY_PERMANENTS)) {
+			List<Entity> permanents = new ArrayList<>();
+			for (Minion m : context.getOpponent(player).getMinions()) {
+				if (m.hasAttribute(Attribute.PERMANENT)) {
+					permanents.add(m);
+				}
+			}
+			return permanents;
+		} else if (targetKey.equals(EntityReference.FRIENDLY_PERMANENTS)) {
+			List<Entity> permanents = new ArrayList<>();
+			for (Minion m : player.getMinions()) {
+				if (m.hasAttribute(Attribute.PERMANENT)) {
+					permanents.add(m);
+				}
+			}
+			return permanents;
 		}
 		throw new NullPointerException("invalid spec");
 	}

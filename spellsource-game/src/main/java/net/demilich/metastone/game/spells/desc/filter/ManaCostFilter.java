@@ -2,9 +2,11 @@ package net.demilich.metastone.game.spells.desc.filter;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
+import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 
 import java.util.Map;
 
@@ -37,6 +39,18 @@ public class ManaCostFilter extends EntityFilter {
 
 	protected int getManaCost(GameContext context, Player player, Entity entity) {
 		Card card = entity.getSourceCard();
-		return context.getLogic().getModifiedManaCost(player, card);
+		var zone = card.getZone();
+		// For cards in hand or deck, evaluate modified mana cost
+		if (zone == Zones.HAND || zone == Zones.DECK) {
+			return context.getLogic().getModifiedManaCost(player, card);
+		}
+		// For already-played cards (graveyard, etc.), use the mana that was
+		// actually spent to play them. This prevents recursive evaluation
+		// (e.g. CardsPlayedValueProvider + ManaCostFilter on a card whose
+		// manaCostModifier itself uses ManaCostFilter)
+		if (card.hasAttribute(Attribute.MANA_SPENT)) {
+			return card.getAttributeValue(Attribute.MANA_SPENT);
+		}
+		return card.getBaseManaCost();
 	}
 }

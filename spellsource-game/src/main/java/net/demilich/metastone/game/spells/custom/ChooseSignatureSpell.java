@@ -13,21 +13,20 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.groupingBy;
-
 public class ChooseSignatureSpell extends Spell {
 
 
     @Override
     protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
         // Find all the cards which started in your deck.
-        Map<String, List<Entity>> deckCards = context.getEntities()
+        List<Card> allDeckCards = context.getEntities()
                 .filter(e -> e.getOwner() == player.getId())
                 .filter(e -> e.getEntityType() == EntityType.CARD)
                 .filter(e -> e.hasAttribute(Attribute.STARTED_IN_DECK))
-                .collect(groupingBy(e -> e.getSourceCard().getHeroClass()));
+                .map(e -> e.getSourceCard())
+                .collect(Collectors.toList());
 
-        CardList validChoices = new CardArrayList(deckCards.values().stream().flatMap(Collection::stream).map(Entity::getSourceCard)
+        CardList validChoices = new CardArrayList(allDeckCards.stream()
                 .filter(card -> card.getCardType() == CardType.SPELL).sorted(Comparator.comparingInt(Card::getBaseManaCost)).map(Card::getCardId)
                 .distinct().map(context::getCardById).collect(Collectors.toSet()));
 

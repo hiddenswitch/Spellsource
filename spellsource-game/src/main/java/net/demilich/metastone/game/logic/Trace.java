@@ -339,6 +339,93 @@ public class Trace implements Serializable, Cloneable {
 		return JsonObject.mapFrom(this);
 	}
 
+	/**
+	 * Replays this trace and returns a list of human-readable log lines describing each action taken.
+	 * <p>
+	 * Useful for debugging MassTest crashes: load a trace from JSON, call this method, and inspect the log to see
+	 * exactly what happened before the crash.
+	 *
+	 * @return A list of log lines, one per action plus board state summaries.
+	 */
+	@JsonIgnore
+	public List<String> replayWithLogs() {
+		return replayWithLogs(this.cardCatalogue == null ? ClasspathCardCatalogue.INSTANCE : this.cardCatalogue);
+	}
+
+	/**
+	 * Replays this trace and returns a list of human-readable log lines describing each action taken.
+	 *
+	 * @param cardCatalogue The card catalogue to use for replay.
+	 * @return A list of log lines.
+	 */
+	@JsonIgnore
+	public List<String> replayWithLogs(CardCatalogue cardCatalogue) {
+		List<String> logs = new ArrayList<>();
+		AtomicInteger actionIndex = new AtomicInteger();
+
+		logs.add("=== TRACE REPLAY START ===");
+		logs.add("Seed: " + seed);
+		if (heroClasses != null) {
+			logs.add("Player 0 hero class: " + heroClasses.get(0));
+			logs.add("Player 1 hero class: " + heroClasses.get(1));
+		}
+		if (deckCardIds != null) {
+			for (int i = 0; i < deckCardIds.size(); i++) {
+				logs.add("Player " + i + " deck: " + deckCardIds.get(i).getCardIds());
+			}
+		}
+
+		try {
+			replayContext(false, ctx -> {
+				int idx = actionIndex.getAndIncrement();
+				var validActions = ctx.getValidActions();
+				int chosenActionIdx = idx < actions.size() ? actions.get(idx) : -1;
+				GameAction chosenAction = (chosenActionIdx >= 0 && chosenActionIdx < validActions.size())
+						? validActions.get(chosenActionIdx) : null;
+
+				StringBuilder sb = new StringBuilder();
+				sb.append(String.format("[Turn %d] Player %d, Action #%d (choice %d of %d): ",
+						ctx.getTurn(), ctx.getActivePlayerId(), idx, chosenActionIdx, validActions.size()));
+
+				if (chosenAction != null) {
+					try {
+						sb.append(chosenAction.getDescription(ctx, ctx.getActivePlayerId()));
+					} catch (Exception e) {
+						sb.append(chosenAction.getClass().getSimpleName()).append(" (description failed: ").append(e.getMessage()).append(")");
+					}
+				} else {
+					sb.append("(no action resolved)");
+				}
+
+				// Board state summary
+				for (int p = 0; p < 2; p++) {
+					var player = ctx.getPlayer(p);
+					var hero = player.getHero();
+					sb.append(String.format("\n  P%d: %dHP %dMana Hand:%d Deck:%d Board:[",
+							p, hero.getHp(), player.getMana(), player.getHand().size(), player.getDeck().size()));
+					var minions = player.getMinions();
+					for (int m = 0; m < minions.size(); m++) {
+						var minion = minions.get(m);
+						if (m > 0) sb.append(", ");
+						sb.append(String.format("%s %d/%d", minion.getName(), minion.getAttack(), minion.getHp()));
+					}
+					sb.append("]");
+				}
+
+				logs.add(sb.toString());
+			}, cardCatalogue);
+		} catch (Exception e) {
+			logs.add("=== CRASH: " + e.getClass().getSimpleName() + ": " + e.getMessage() + " ===");
+			var trace = e.getStackTrace();
+			for (int i = 0; i < Math.min(trace.length, 10); i++) {
+				logs.add("  at " + trace[i]);
+			}
+		}
+
+		logs.add("=== TRACE REPLAY END ===");
+		return logs;
+	}
+
 	public void setCardCatalogue(CardCatalogue cardCatalogue) {
 		this.cardCatalogue = cardCatalogue;
 	}

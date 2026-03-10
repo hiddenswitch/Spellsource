@@ -46,7 +46,7 @@ public class ChooseOneOptionSpell extends MetaSpell {
 		cardDesc.setDescription(description);
 		cardDesc.setBaseManaCost(mana);
 		cardDesc.setType(CardType.SPELL);
-		cardDesc.setHeroClass(sourceCard.getHeroClass());
+		cardDesc.setHeroClasses(sourceCard.getHeroClasses());
 		cardDesc.setSpell(spellDesc);
 		var card = cardDesc.create();
 		context.addTempCard(card);

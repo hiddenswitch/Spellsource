@@ -28,7 +28,8 @@ public class DiscoverClassSpell extends Spell {
 		classCards.removeIf(card -> !context.getDeckFormat().isInFormat(card));
 		classCards.removeIf(card -> !card.isCollectible());
 		if (cantReceiveOwned) {
-			classCards.removeIf(card -> card.getHeroClass().equals(player.getHero().getHeroClass()));
+			String playerHeroClass = player.getHero().getHeroClass();
+			classCards.removeIf(card -> card.hasHeroClass(playerHeroClass));
 		}
 
 		SpellDesc fakeDesc = NullSpell.create();
