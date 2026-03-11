@@ -65,6 +65,7 @@ public class OverkillSpell extends DamageSpell {
 				//fire an overkill event?
 				SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
 				if (desc.getBool(SpellArg.EXCLUSIVE)) {
+					spell = (SpellDesc) spell.cloneAndUnfreeze();
 					spell.put(SpellArg.VALUE, Math.abs(minion.getHp()));
 				}
 				SpellUtils.castChildSpell(context, player, spell, source, target);

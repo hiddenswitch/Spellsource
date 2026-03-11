@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: trainer-redis
+  namespace: spellsource
+spec:
+  selector:
+    app: trainer-redis
+  ports:
+    - port: 6379
+      targetPort: 6379
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trainer-redis
+  namespace: spellsource
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trainer-redis
+  template:
+    metadata:
+      labels:
+        app: trainer-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          ports:
+            - containerPort: 6379
+          resources:
+            requests:
+              cpu: "1"
+              memory: 256Mi
+            limits:
+              cpu: "2"
+              memory: 512Mi

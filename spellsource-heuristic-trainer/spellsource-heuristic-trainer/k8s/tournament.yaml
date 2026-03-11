@@ -1,0 +1,62 @@
+# Tournament of Tournaments: N independent CMA-ES optimizations
+# Each pod runs local mode with full CPU saturation
+# Results collected via pod logs after completion
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trainer-config
+  namespace: spellsource
+data:
+  GENERATIONS: "50"
+  POPULATION: "12"
+  MATCHUPS_PER_EVAL: "20"
+  GAMES_PER_MATCHUP: "6"
+  GSVB_DEPTH: "2"
+  GSVB_TIMEOUT: "5000"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: trainer-tournament
+  namespace: spellsource
+spec:
+  # Number of independent optimizations to run
+  completions: 16
+  parallelism: 16
+  completionMode: Indexed
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app: trainer-tournament
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: trainer
+          image: harbor.appmana.com/appmana/spellsource-trainer:latest
+          args:
+            - local
+            - --generations=$(GENERATIONS)
+            - --population=$(POPULATION)
+            - --matchups-per-eval=$(MATCHUPS_PER_EVAL)
+            - --games-per-matchup=$(GAMES_PER_MATCHUP)
+            - --gsvb-depth=$(GSVB_DEPTH)
+            - --gsvb-timeout=$(GSVB_TIMEOUT)
+          envFrom:
+            - configMapRef:
+                name: trainer-config
+          resources:
+            requests:
+              cpu: "30"
+              memory: 4Gi
+            limits:
+              cpu: "32"
+              memory: 8Gi
+      # Spread pods across different nodes
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: trainer-tournament

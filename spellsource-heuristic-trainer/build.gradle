@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.google.cloud.tools.jib' version '3.4.4'
+}
+
+apply from: '../gradle/instrument.gradle'
+
+application {
+    mainClass = 'com.hiddenswitch.spellsource.trainer.TrainerMain'
+}
+
+dependencies {
+    implementation project(':spellsource-game')
+    implementation project(':spellsource-cards-git')
+    implementation project(':spellsource-cards-private')
+    implementation 'org.moeaframework:moeaframework:4.5'
+    implementation 'org.mlflow:mlflow-client:2.19.0'
+    implementation 'redis.clients:jedis:5.2.0'
+    implementation "com.google.code.gson:gson:2.11.0"
+    implementation 'info.picocli:picocli:4.7.6'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.6'
+}
+
+jib {
+    from {
+        image = 'eclipse-temurin:24-jre'
+    }
+    to {
+        image = 'harbor.appmana.com/appmana/spellsource-trainer'
+        tags = ['latest'] as Set
+    }
+    container {
+        mainClass = 'com.hiddenswitch.spellsource.trainer.TrainerMain'
+        format = 'Docker'
+        jvmFlags = ['--enable-preview', '-XX:+UseZGC', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=75.0']
+    }
+}

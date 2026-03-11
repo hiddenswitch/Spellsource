@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: trainer-coordinator
+  namespace: spellsource
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: coordinator
+          image: harbor.appmana.com/appmana/spellsource-trainer:latest
+          args:
+            - coordinator
+            - --redis-uri=redis://trainer-redis.spellsource.svc.cluster.local:6379
+            - --generations=50
+            - --population=12
+            - --matchups-per-eval=30
+            - --games-per-matchup=6
+            - --gsvb-depth=2
+            - --gsvb-timeout=5000
+          resources:
+            requests:
+              cpu: "2"
+              memory: 2Gi
+            limits:
+              cpu: "4"
+              memory: 4Gi
