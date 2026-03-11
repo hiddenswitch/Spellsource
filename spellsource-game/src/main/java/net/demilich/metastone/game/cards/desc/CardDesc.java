@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Freezable;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.Actor;
@@ -107,7 +108,7 @@ import static net.demilich.metastone.game.cards.desc.HasEntrySet.link;
  * value providers, etc.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object>, AbstractEnchantmentDesc<Enchantment> {
+public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object>, AbstractEnchantmentDesc<Enchantment>, Freezable {
 	private String id;
 	private String name;
 	private String heroPower;
@@ -172,9 +173,11 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	private Spellsource.ArtificialIntelligence artificialIntelligence;
 	@JsonIgnore
 	private transient List<Condition> glowConditions;
+	@JsonIgnore
+	private transient boolean readOnly;
 	private RogueInfoDesc rogueInfo;
 	private SpellDesc onInitialized;
-	
+
 
 	public CardDesc() {
 		super();
@@ -198,13 +201,194 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	public CardDesc clone() {
 		try {
 			CardDesc clone = (CardDesc) super.clone();
+			clone.readOnly = this.readOnly;
 			if (getAttributes() != null) {
-				clone.setAttributes(getAttributes().clone());
+				clone.attributes = getAttributes().clone();
 			}
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
+	}
+
+	protected void checkNotFrozen() {
+		if (readOnly) {
+			throw new UnsupportedOperationException("This CardDesc is frozen (read-only) and cannot be modified.");
+		}
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	@Override
+	public void freeze() {
+		readOnly = true;
+		if (attributes != null) {
+			attributes.freeze();
+		}
+		freezeValue(spell);
+		freezeValue(deathrattle);
+		freezeValue(onEquip);
+		freezeValue(onUnequip);
+		freezeValue(battlecry);
+		freezeValue(chooseBothBattlecry);
+		freezeArray(chooseOneBattlecries);
+		freezeValue(trigger);
+		freezeArray(triggers);
+		freezeValue(passiveTrigger);
+		freezeArray(passiveTriggers);
+		freezeValue(deckTrigger);
+		freezeArray(deckTriggers);
+		freezeArray(gameTriggers);
+		freezeValue(aura);
+		freezeArray(auras);
+		freezeValue(cardCostModifier);
+		freezeValue(manaCostModifier);
+		freezeValue(secret);
+		freezeValue(quest);
+		freezeValue(condition);
+		freezeValue(targetSelectionCondition);
+		freezeArray(group);
+		freezeArray(dynamicDescription);
+		freezeArray(taps);
+		freezeValue(onInitialized);
+	}
+
+	private static void freezeValue(Object value) {
+		if (value instanceof Freezable) {
+			((Freezable) value).freeze();
+		}
+	}
+
+	private static void freezeArray(Object[] arr) {
+		if (arr != null) {
+			for (Object element : arr) {
+				freezeValue(element);
+			}
+		}
+	}
+
+	/**
+	 * Deep-clones all nested mutable fields and returns a fully independent mutable copy.
+	 */
+	public CardDesc cloneAndUnfreeze() {
+		try {
+			CardDesc clone = (CardDesc) super.clone();
+			clone.readOnly = false;
+			if (attributes != null) {
+				clone.attributes = attributes.cloneAndUnfreeze();
+			}
+			if (spell != null) {
+				clone.spell = spell.cloneAndUnfreeze();
+			}
+			if (deathrattle != null) {
+				clone.deathrattle = deathrattle.cloneAndUnfreeze();
+			}
+			if (onEquip != null) {
+				clone.onEquip = onEquip.cloneAndUnfreeze();
+			}
+			if (onUnequip != null) {
+				clone.onUnequip = onUnequip.cloneAndUnfreeze();
+			}
+			if (battlecry != null) {
+				clone.battlecry = battlecry.cloneAndUnfreeze();
+			}
+			if (chooseBothBattlecry != null) {
+				clone.chooseBothBattlecry = chooseBothBattlecry.cloneAndUnfreeze();
+			}
+			if (chooseOneBattlecries != null) {
+				clone.chooseOneBattlecries = cloneAndUnfreezeArray(chooseOneBattlecries, OpenerDesc.class);
+			}
+			if (trigger != null) {
+				clone.trigger = trigger.cloneAndUnfreeze();
+			}
+			if (triggers != null) {
+				clone.triggers = cloneAndUnfreezeArray(triggers, EnchantmentDesc.class);
+			}
+			if (passiveTrigger != null) {
+				clone.passiveTrigger = passiveTrigger.cloneAndUnfreeze();
+			}
+			if (passiveTriggers != null) {
+				clone.passiveTriggers = cloneAndUnfreezeArray(passiveTriggers, EnchantmentDesc.class);
+			}
+			if (deckTrigger != null) {
+				clone.deckTrigger = deckTrigger.cloneAndUnfreeze();
+			}
+			if (deckTriggers != null) {
+				clone.deckTriggers = cloneAndUnfreezeArray(deckTriggers, EnchantmentDesc.class);
+			}
+			if (gameTriggers != null) {
+				clone.gameTriggers = cloneAndUnfreezeArray(gameTriggers, EnchantmentDesc.class);
+			}
+			if (aura != null) {
+				clone.aura = aura.cloneAndUnfreeze();
+			}
+			if (auras != null) {
+				clone.auras = cloneAndUnfreezeAuraArray(auras);
+			}
+			if (cardCostModifier != null) {
+				clone.cardCostModifier = cardCostModifier.cloneAndUnfreeze();
+			}
+			if (manaCostModifier != null) {
+				clone.manaCostModifier = manaCostModifier.cloneAndUnfreeze();
+			}
+			if (secret != null) {
+				clone.secret = secret.cloneAndUnfreeze();
+			}
+			if (quest != null) {
+				clone.quest = quest.cloneAndUnfreeze();
+			}
+			if (condition != null) {
+				clone.condition = condition.cloneAndUnfreeze();
+			}
+			if (targetSelectionCondition != null) {
+				clone.targetSelectionCondition = targetSelectionCondition.cloneAndUnfreeze();
+			}
+			if (group != null) {
+				clone.group = new SpellDesc[group.length];
+				for (int i = 0; i < group.length; i++) {
+					clone.group[i] = group[i] != null ? group[i].cloneAndUnfreeze() : null;
+				}
+			}
+			if (taps != null) {
+				clone.taps = new TapDesc[taps.length];
+				for (int i = 0; i < taps.length; i++) {
+					clone.taps[i] = taps[i] != null ? taps[i].cloneAndUnfreeze() : null;
+				}
+			}
+			if (onInitialized != null) {
+				clone.onInitialized = onInitialized.cloneAndUnfreeze();
+			}
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
+	private static OpenerDesc[] cloneAndUnfreezeArray(OpenerDesc[] arr, Class<OpenerDesc> type) {
+		OpenerDesc[] result = new OpenerDesc[arr.length];
+		for (int i = 0; i < arr.length; i++) {
+			result[i] = arr[i] != null ? arr[i].cloneAndUnfreeze() : null;
+		}
+		return result;
+	}
+
+	private static EnchantmentDesc[] cloneAndUnfreezeArray(EnchantmentDesc[] arr, Class<EnchantmentDesc> type) {
+		EnchantmentDesc[] result = new EnchantmentDesc[arr.length];
+		for (int i = 0; i < arr.length; i++) {
+			result[i] = arr[i] != null ? arr[i].cloneAndUnfreeze() : null;
+		}
+		return result;
+	}
+
+	private static AuraDesc[] cloneAndUnfreezeAuraArray(AuraDesc[] arr) {
+		AuraDesc[] result = new AuraDesc[arr.length];
+		for (int i = 0; i < arr.length; i++) {
+			result[i] = arr[i] != null ? arr[i].cloneAndUnfreeze() : null;
+		}
+		return result;
 	}
 
 	/**
@@ -224,6 +408,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setId(String id) {
+		checkNotFrozen();
 		this.id = id;
 	}
 
@@ -238,6 +423,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setName(String name) {
+		checkNotFrozen();
 		this.name = name;
 	}
 
@@ -252,6 +438,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setDescription(String description) {
+		checkNotFrozen();
 		this.description = description;
 	}
 
@@ -266,6 +453,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setLegacy(Boolean legacy) {
+		checkNotFrozen();
 		this.legacy = legacy;
 	}
 
@@ -277,6 +465,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setType(CardType type) {
+		checkNotFrozen();
 		this.type = type;
 	}
 
@@ -290,6 +479,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setHeroClass(String heroClass) {
+		checkNotFrozen();
 		this.heroClass = heroClass;
 	}
 
@@ -302,6 +492,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setHeroClasses(String[] heroClasses) {
+		checkNotFrozen();
 		this.heroClasses = heroClasses;
 	}
 
@@ -313,6 +504,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setRarity(Rarity rarity) {
+		checkNotFrozen();
 		this.rarity = rarity;
 	}
 
@@ -335,6 +527,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setSet(String set) {
+		checkNotFrozen();
 		this.set = set;
 	}
 
@@ -351,6 +544,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setBaseManaCost(int baseManaCost) {
+		checkNotFrozen();
 		this.baseManaCost = baseManaCost;
 	}
 
@@ -364,6 +558,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setCollectible(boolean collectible) {
+		checkNotFrozen();
 		this.collectible = collectible;
 	}
 
@@ -394,6 +589,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setAttributes(AttributeMap attributes) {
+		checkNotFrozen();
 		this.attributes = attributes;
 	}
 
@@ -410,6 +606,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	@Deprecated
 	public void setFileFormatVersion(int fileFormatVersion) {
+		checkNotFrozen();
 		this.fileFormatVersion = fileFormatVersion;
 	}
 
@@ -432,6 +629,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setManaCostModifier(ValueProviderDesc manaCostModifier) {
+		checkNotFrozen();
 		this.manaCostModifier = manaCostModifier;
 	}
 
@@ -467,6 +665,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	@JsonDeserialize(converter = PassiveEnchantmentDescConverter.class)
 	public void setPassiveTrigger(EnchantmentDesc passiveTrigger) {
+		checkNotFrozen();
 		this.passiveTrigger = passiveTrigger;
 	}
 
@@ -492,6 +691,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	@JsonDeserialize(contentConverter = PassiveEnchantmentDescConverter.class)
 	public void setPassiveTriggers(EnchantmentDesc[] passiveTriggers) {
+		checkNotFrozen();
 		this.passiveTriggers = passiveTriggers;
 	}
 
@@ -504,6 +704,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	@JsonDeserialize(converter = DeckEnchantmentDescConverter.class)
 	public void setDeckTrigger(EnchantmentDesc deckTrigger) {
+		checkNotFrozen();
 		this.deckTrigger = deckTrigger;
 	}
 
@@ -547,6 +748,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	@JsonDeserialize(contentConverter = GameEnchantmentDescConverter.class)
 	public void setGameTriggers(EnchantmentDesc[] gameTriggers) {
+		checkNotFrozen();
 		this.gameTriggers = gameTriggers;
 	}
 
@@ -561,6 +763,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setAuthor(String author) {
+		checkNotFrozen();
 		this.author = author;
 	}
 
@@ -572,6 +775,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setFlavor(String flavor) {
+		checkNotFrozen();
 		this.flavor = flavor;
 	}
 
@@ -590,6 +794,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setWiki(String wiki) {
+		checkNotFrozen();
 		this.wiki = wiki;
 	}
 
@@ -608,6 +813,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setBattlecry(OpenerDesc battlecry) {
+		checkNotFrozen();
 		this.battlecry = battlecry;
 	}
 
@@ -621,6 +827,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setDeathrattle(SpellDesc deathrattle) {
+		checkNotFrozen();
 		this.deathrattle = deathrattle;
 	}
 
@@ -637,6 +844,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	@JsonDeserialize(converter = BattlefieldEnchantmentDescConverter.class)
 	public void setTrigger(EnchantmentDesc trigger) {
+		checkNotFrozen();
 		this.trigger = trigger;
 	}
 
@@ -648,6 +856,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setTriggers(EnchantmentDesc[] triggers) {
+		checkNotFrozen();
 		this.triggers = triggers;
 	}
 
@@ -692,6 +901,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setAura(AuraDesc aura) {
+		checkNotFrozen();
 		this.aura = aura;
 	}
 
@@ -703,6 +913,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setAuras(AuraDesc[] auras) {
+		checkNotFrozen();
 		this.auras = auras;
 	}
 
@@ -714,6 +925,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setRace(String race) {
+		checkNotFrozen();
 		this.race = race;
 	}
 
@@ -725,6 +937,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setRaces(String[] races) {
+		checkNotFrozen();
 		this.races = races;
 	}
 
@@ -733,6 +946,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setTaps(TapDesc[] taps) {
+		checkNotFrozen();
 		this.taps = taps;
 	}
 
@@ -741,6 +955,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setTags(String[] tags) {
+		checkNotFrozen();
 		this.tags = tags;
 	}
 
@@ -752,6 +967,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setCardCostModifier(CardCostModifierDesc cardCostModifier) {
+		checkNotFrozen();
 		this.cardCostModifier = cardCostModifier;
 	}
 
@@ -763,6 +979,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setBaseAttack(int baseAttack) {
+		checkNotFrozen();
 		this.baseAttack = baseAttack;
 	}
 
@@ -774,6 +991,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setBaseHp(int baseHp) {
+		checkNotFrozen();
 		this.baseHp = baseHp;
 	}
 
@@ -793,6 +1011,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setChooseOneBattlecries(OpenerDesc[] chooseOneBattlecries) {
+		checkNotFrozen();
 		this.chooseOneBattlecries = chooseOneBattlecries;
 	}
 
@@ -805,6 +1024,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setChooseBothBattlecry(OpenerDesc chooseBothBattlecry) {
+		checkNotFrozen();
 		this.chooseBothBattlecry = chooseBothBattlecry;
 	}
 
@@ -820,6 +1040,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setChooseOneCardIds(String[] chooseOneCardIds) {
+		checkNotFrozen();
 		this.chooseOneCardIds = chooseOneCardIds;
 	}
 
@@ -832,6 +1053,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setChooseBothCardId(String chooseBothCardId) {
+		checkNotFrozen();
 		this.chooseBothCardId = chooseBothCardId;
 	}
 
@@ -844,6 +1066,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setDamage(int damage) {
+		checkNotFrozen();
 		this.damage = damage;
 	}
 
@@ -855,6 +1078,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setDurability(int durability) {
+		checkNotFrozen();
 		this.durability = durability;
 	}
 
@@ -869,6 +1093,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setOnEquip(SpellDesc onEquip) {
+		checkNotFrozen();
 		this.onEquip = onEquip;
 	}
 
@@ -883,6 +1108,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setOnUnequip(SpellDesc onUnequip) {
+		checkNotFrozen();
 		this.onUnequip = onUnequip;
 	}
 
@@ -897,6 +1123,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setHeroPower(String heroPower) {
+		checkNotFrozen();
 		this.heroPower = heroPower;
 	}
 
@@ -925,6 +1152,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setTargetSelection(TargetSelection targetSelection) {
+		checkNotFrozen();
 		this.targetSelection = targetSelection;
 	}
 
@@ -940,6 +1168,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setSpell(SpellDesc spell) {
+		checkNotFrozen();
 		this.spell = spell;
 	}
 
@@ -952,6 +1181,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setCondition(ConditionDesc condition) {
+		checkNotFrozen();
 		this.condition = condition;
 	}
 
@@ -965,6 +1195,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setGroup(SpellDesc[] group) {
+		checkNotFrozen();
 		this.group = group;
 	}
 
@@ -976,6 +1207,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setSecret(EventTriggerDesc secret) {
+		checkNotFrozen();
 		this.secret = secret;
 	}
 
@@ -987,6 +1219,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setQuest(EventTriggerDesc quest) {
+		checkNotFrozen();
 		this.quest = quest;
 	}
 
@@ -1002,6 +1235,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setCountUntilCast(int countUntilCast) {
+		checkNotFrozen();
 		this.countUntilCast = countUntilCast;
 	}
 
@@ -1016,6 +1250,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public CardDesc setTooltips(Spellsource.Tooltip[] tooltips) {
+		checkNotFrozen();
 		this.tooltips = tooltips;
 		return this;
 	}
@@ -1104,6 +1339,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setSecondPlayerBonusCards(String[] secondPlayerBonusCards) {
+		checkNotFrozen();
 		this.secondPlayerBonusCards = secondPlayerBonusCards;
 	}
 
@@ -1116,31 +1352,38 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setTargetSelectionCondition(ConditionDesc targetSelectionCondition) {
+		checkNotFrozen();
 		this.targetSelectionCondition = targetSelectionCondition;
 	}
 
 	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
+		checkNotFrozen();
 		this.targetSelectionOverride = targetSelectionOverride;
 	}
 
 	public void setCountByValue(boolean countByValue) {
+		checkNotFrozen();
 		this.countByValue = countByValue;
 	}
 
 	@JsonDeserialize(contentConverter = DeckEnchantmentDescConverter.class)
 	public void setDeckTriggers(EnchantmentDesc[] deckTriggers) {
+		checkNotFrozen();
 		this.deckTriggers = deckTriggers;
 	}
 
 	public void setSets(String[] sets) {
+		checkNotFrozen();
 		this.sets = sets;
 	}
 
 	public void setDynamicDescription(DynamicDescriptionDesc[] dynamicDescription) {
+		checkNotFrozen();
 		this.dynamicDescription = dynamicDescription;
 	}
 
 	public void setHero(String hero) {
+		checkNotFrozen();
 		this.hero = hero;
 	}
 
@@ -1164,6 +1407,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public CardDesc setArt(Spellsource.Art art) {
+		checkNotFrozen();
 		this.art = art;
 		return this;
 	}
@@ -1173,6 +1417,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public CardDesc setDraft(Spellsource.Draft draft) {
+		checkNotFrozen();
 		this.draft = draft;
 		return this;
 	}
@@ -1182,14 +1427,19 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public CardDesc setArtificialIntelligence(Spellsource.ArtificialIntelligence artificialIntelligence) {
+		checkNotFrozen();
 		this.artificialIntelligence = artificialIntelligence;
 		return this;
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 		CardDesc cardDesc = (CardDesc) o;
 		return getBaseManaCost() == cardDesc.getBaseManaCost() && getBaseAttack() == cardDesc.getBaseAttack() && getBaseHp() == cardDesc.getBaseHp() && getDamage() == cardDesc.getDamage() && getDurability() == cardDesc.getDurability() && getCountUntilCast() == cardDesc.getCountUntilCast() && isCountByValue() == cardDesc.isCountByValue() && isCollectible() == cardDesc.isCollectible() && getFileFormatVersion() == cardDesc.getFileFormatVersion() && Objects.equals(getId(), cardDesc.getId()) && Objects.equals(getName(), cardDesc.getName()) && Objects.equals(getHeroPower(), cardDesc.getHeroPower()) && getType() == cardDesc.getType() && Objects.equals(getHeroClass(), cardDesc.getHeroClass()) && Arrays.equals(getHeroClasses(), cardDesc.getHeroClasses()) && getRarity() == cardDesc.getRarity() && Objects.equals(getRace(), cardDesc.getRace()) && Arrays.equals(getRaces(), cardDesc.getRaces()) && Objects.equals(getDescription(), cardDesc.getDescription()) && getTargetSelection() == cardDesc.getTargetSelection() && Objects.equals(getSecret(), cardDesc.getSecret()) && Objects.equals(getQuest(), cardDesc.getQuest()) && Objects.equals(getBattlecry(), cardDesc.getBattlecry()) && Objects.equals(getDeathrattle(), cardDesc.getDeathrattle()) && Objects.equals(getTrigger(), cardDesc.getTrigger()) && Arrays.equals(getTriggers(), cardDesc.getTriggers()) && Objects.equals(getAura(), cardDesc.getAura()) && Arrays.equals(getAuras(), cardDesc.getAuras()) && Objects.equals(getCardCostModifier(), cardDesc.getCardCostModifier()) && Arrays.equals(getChooseOneBattlecries(), cardDesc.getChooseOneBattlecries()) && Objects.equals(getChooseBothBattlecry(), cardDesc.getChooseBothBattlecry()) && Arrays.equals(getChooseOneCardIds(), cardDesc.getChooseOneCardIds()) && Objects.equals(getChooseBothCardId(), cardDesc.getChooseBothCardId()) && Objects.equals(getOnEquip(), cardDesc.getOnEquip()) && Objects.equals(getOnUnequip(), cardDesc.getOnUnequip()) && Objects.equals(getSpell(), cardDesc.getSpell()) && Objects.equals(getCondition(), cardDesc.getCondition()) && Arrays.equals(getGroup(), cardDesc.getGroup()) && Objects.equals(getPassiveTrigger(), cardDesc.getPassiveTrigger()) && Arrays.equals(getPassiveTriggers(), cardDesc.getPassiveTriggers()) && Objects.equals(getDeckTrigger(), cardDesc.getDeckTrigger()) && Arrays.equals(getDeckTriggers(), cardDesc.getDeckTriggers()) && Arrays.equals(getGameTriggers(), cardDesc.getGameTriggers()) && Objects.equals(getManaCostModifier(), cardDesc.getManaCostModifier()) && Objects.equals(getAttributes(), cardDesc.getAttributes()) && Objects.equals(getAuthor(), cardDesc.getAuthor()) && Objects.equals(getFlavor(), cardDesc.getFlavor()) && Objects.equals(getWiki(), cardDesc.getWiki()) && Objects.equals(getSet(), cardDesc.getSet()) && Arrays.equals(getSets(), cardDesc.getSets()) && Arrays.equals(getDynamicDescription(), cardDesc.getDynamicDescription()) && Objects.equals(getLegacy(), cardDesc.getLegacy()) && Objects.equals(getHero(), cardDesc.getHero()) && Arrays.equals(getSecondPlayerBonusCards(), cardDesc.getSecondPlayerBonusCards()) && getTargetSelectionOverride() == cardDesc.getTargetSelectionOverride() && Objects.equals(getTargetSelectionCondition(), cardDesc.getTargetSelectionCondition()) && Objects.equals(getArt(), cardDesc.getArt()) && Arrays.equals(getTooltips(), cardDesc.getTooltips()) && Objects.equals(draft, cardDesc.draft) && Objects.equals(artificialIntelligence, cardDesc.artificialIntelligence) && Objects.equals(getGlowConditions(), cardDesc.getGlowConditions());
 	}
@@ -1219,6 +1469,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setRogueInfo(RogueInfoDesc rogueInfo) {
+		checkNotFrozen();
 		this.rogueInfo = rogueInfo;
 	}
 
@@ -1227,6 +1478,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	public void setOnInitialized(SpellDesc onInitialized) {
+		checkNotFrozen();
 		this.onInitialized = onInitialized;
 	}
 }

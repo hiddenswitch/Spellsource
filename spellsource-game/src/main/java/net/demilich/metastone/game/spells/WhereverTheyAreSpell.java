@@ -73,7 +73,7 @@ public final class WhereverTheyAreSpell extends MetaSpell {
 		}
 
 		if (!context.getOutputStack().isEmpty()) {
-			desc = desc.clone();
+			desc = desc.cloneAndUnfreeze();
 			desc.spellStream(1, false)
 					.forEach(subSpellDesc -> {
 						if (subSpellDesc.getTarget() != null && subSpellDesc.getTarget().equals(EntityReference.OUTPUT)) {

@@ -18,7 +18,7 @@ public final class WeaponDamageSpell extends DamageSpell {
 		if (player.getWeaponZone().isEmpty()) {
 			return;
 		}
-		desc = desc.clone();
+		desc = desc.cloneAndUnfreeze();
 		desc.put(SpellArg.IGNORE_SPELL_DAMAGE, true);
 		desc.put(SpellArg.VALUE, player.getWeaponZone().get(0).getAttack());
 		super.onCast(context, player, desc, player.getHero(), target);

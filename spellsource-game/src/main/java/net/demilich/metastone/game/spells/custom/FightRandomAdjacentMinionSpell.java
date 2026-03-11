@@ -17,7 +17,7 @@ public final class FightRandomAdjacentMinionSpell extends FightSpell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		desc = desc.clone();
+		desc = desc.cloneAndUnfreeze();
 		Entity triggerHost = context.resolveSingleTarget(player, source, EntityReference.TRIGGER_HOST);
 		if (triggerHost == null) {
 			return;

@@ -31,8 +31,13 @@ public class DynamicDescriptionDesc extends Desc<DynamicDescriptionArg, DynamicD
 	}
 
 	@Override
-	public Desc<DynamicDescriptionArg, DynamicDescription> clone() {
-		return copyTo(new DynamicDescriptionDesc(getDescClass()));
+	public DynamicDescriptionDesc clone() {
+		return (DynamicDescriptionDesc) copyTo(new DynamicDescriptionDesc(getDescClass()));
+	}
+
+	@Override
+	public DynamicDescriptionDesc cloneAndUnfreeze() {
+		return (DynamicDescriptionDesc) super.cloneAndUnfreeze();
 	}
 
 	public String getDynamicDescription(DynamicDescriptionArg arg, GameContext context, Player player, Entity entity) {

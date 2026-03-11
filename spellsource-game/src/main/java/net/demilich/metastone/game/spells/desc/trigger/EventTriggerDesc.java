@@ -40,6 +40,11 @@ public final class EventTriggerDesc extends Desc<EventTriggerArg, EventTrigger> 
 		return (EventTriggerDesc) copyTo(new EventTriggerDesc(getDescClass()));
 	}
 
+	@Override
+	public EventTriggerDesc cloneAndUnfreeze() {
+		return (EventTriggerDesc) super.cloneAndUnfreeze();
+	}
+
 	public TargetPlayer getSourcePlayer() {
 		return (TargetPlayer) get(EventTriggerArg.SOURCE_PLAYER);
 	}

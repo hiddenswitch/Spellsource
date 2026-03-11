@@ -107,7 +107,7 @@ public class ChooseOneSpell extends Spell {
 			return;
 		}
 
-		var clone = desc.clone();
+		var clone = desc.cloneAndUnfreeze();
 		clone.put(SpellArg.SPELL, NullSpell.create());
 		var discoverAction = SpellUtils.discoverCard(context, player, source, clone, cards);
 

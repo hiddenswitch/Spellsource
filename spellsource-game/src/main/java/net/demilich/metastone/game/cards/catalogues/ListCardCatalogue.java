@@ -486,6 +486,10 @@ public class ListCardCatalogue implements CardCatalogue {
 					.filter(card -> card.getHero() != null && cards.containsKey(card.getHero()))
 					.map(value -> cards.get(Objects.requireNonNull(value).getHero()))
 					.collect(toMap(c -> c.getDesc().getHeroClass(), Function.identity())));
+			// Freeze all cards so their descs are read-only and shared safely
+			for (var card : newCards) {
+				card.freeze();
+			}
 		} finally {
 			lock.writeLock().unlock();
 		}

@@ -28,8 +28,8 @@ public class TriggerSecretSpell extends Spell {
 		if (card.isSecret()) {
 			SpellDesc secretSpell =
 					AddSecretSpell.class.isAssignableFrom(card.getSpell().getDescClass())
-							? ((Secret) (card.getSpell().get(SpellArg.SECRET))).getSpell().clone()
-							: card.getSpell().clone();
+							? ((Secret) (card.getSpell().get(SpellArg.SECRET))).getSpell().cloneAndUnfreeze()
+							: card.getSpell().cloneAndUnfreeze();
 
 			context.getLogic().fireGameEvent(new SecretPlayedEvent(context, player.getId(), card));
 			SpellUtils.castChildSpell(context, player, secretSpell, card, target);

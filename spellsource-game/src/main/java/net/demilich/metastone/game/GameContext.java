@@ -2031,10 +2031,8 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 		}
 
 		if (target == null) {
-			// creates a clone
+			// creates a clone - the frozen desc protects against accidental mutation
 			target = getCardById(overrideCardId);
-			// deeply clone the card desc
-			target.setDesc(target.getDesc().clone());
 		}
 		return target;
 	}

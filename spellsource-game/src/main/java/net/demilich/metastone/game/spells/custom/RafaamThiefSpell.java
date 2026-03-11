@@ -19,7 +19,7 @@ public final class RafaamThiefSpell extends AddDeathrattleSpell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		desc = desc.clone();
+		desc = desc.cloneAndUnfreeze();
 		SpellDesc deathrattle = new SpellDesc(ShuffleMinionToDeckSpell.class);
 		deathrattle.put(SpellArg.TARGET, EntityReference.SELF);
 		deathrattle.put(SpellArg.TARGET_PLAYER, player.getId() == GameContext.PLAYER_1 ? TargetPlayer.PLAYER_1 : TargetPlayer.PLAYER_2);

@@ -23,28 +23,24 @@
       "class": "BuffSpell",
       "value": {
         "class": "OriginalValueProvider",
-        "evaluateOnce": true,
         "offset": {
           "class": "SpellDamageValueProvider"
         }
       },
       "armorBonus": {
         "class": "OriginalValueProvider",
-        "evaluateOnce": true,
         "offset": {
           "class": "SpellDamageValueProvider"
         }
       },
       "attackBonus": {
         "class": "OriginalValueProvider",
-        "evaluateOnce": true,
         "offset": {
           "class": "SpellDamageValueProvider"
         }
       },
       "hpBonus": {
         "class": "OriginalValueProvider",
-        "evaluateOnce": true,
         "offset": {
           "class": "SpellDamageValueProvider"
         }

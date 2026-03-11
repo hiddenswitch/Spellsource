@@ -51,6 +51,11 @@ public class AuraDesc extends Desc<AuraArg, Aura> implements AbstractEnchantment
 		return (AuraDesc) copyTo(new AuraDesc(getDescClass()));
 	}
 
+	@Override
+	public AuraDesc cloneAndUnfreeze() {
+		return (AuraDesc) super.cloneAndUnfreeze();
+	}
+
 	public SpellDesc getApplyEffect() {
 		return (SpellDesc) get(AuraArg.APPLY_EFFECT);
 	}

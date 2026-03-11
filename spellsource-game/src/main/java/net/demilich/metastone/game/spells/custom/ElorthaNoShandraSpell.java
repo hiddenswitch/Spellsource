@@ -16,7 +16,7 @@ public final class ElorthaNoShandraSpell extends AddDeathrattleSpell {
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		SpellDesc deathrattle = SummonSpell.create(target.getSourceCard().getCardId());
-		desc = desc.clone();
+		desc = desc.cloneAndUnfreeze();
 		desc.put(SpellArg.SPELL, deathrattle);
 		super.onCast(context, player, desc, source, target);
 	}

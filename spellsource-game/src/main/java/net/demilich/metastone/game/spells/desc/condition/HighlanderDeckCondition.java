@@ -17,10 +17,11 @@ public class HighlanderDeckCondition extends NumberOfCopiesCondition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		desc.put(ConditionArg.TARGET, EntityReference.FRIENDLY_DECK);
-		desc.put(ConditionArg.OPERATION, ComparisonOperation.EQUAL);
-		desc.put(ConditionArg.VALUE, 1);
-		return super.isFulfilled(context, player, desc, source, target);
+		ConditionDesc mutableDesc = desc.cloneAndUnfreeze();
+		mutableDesc.put(ConditionArg.TARGET, EntityReference.FRIENDLY_DECK);
+		mutableDesc.put(ConditionArg.OPERATION, ComparisonOperation.EQUAL);
+		mutableDesc.put(ConditionArg.VALUE, 1);
+		return super.isFulfilled(context, player, mutableDesc, source, target);
 	}
 }
 

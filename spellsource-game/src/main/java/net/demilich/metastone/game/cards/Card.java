@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
-import de.cronn.reflection.util.immutable.ImmutableProxy;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -611,7 +610,16 @@ public class Card extends Entity implements HasChooseOneActions {
 		return (EnchantmentDesc[]) getAttribute(Attribute.DECK_TRIGGERS);
 	}
 
+	@Override
+	public void freeze() {
+		super.freeze();
+		if (desc != null) {
+			desc.freeze();
+		}
+	}
+
 	public void setDesc(CardDesc desc) {
+		checkNotFrozen();
 		this.desc = desc;
 	}
 

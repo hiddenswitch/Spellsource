@@ -20,7 +20,7 @@ public class SetRaceFromAttributeSpell extends SetRaceSpell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		SpellDesc newDesc = desc.clone();
+		SpellDesc newDesc = desc.cloneAndUnfreeze();
 		Attribute attribute = desc.getAttribute();
 		Entity realTarget = target;
 		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {

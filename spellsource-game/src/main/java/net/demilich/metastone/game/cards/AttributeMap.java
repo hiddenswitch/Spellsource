@@ -45,6 +45,7 @@ public class AttributeMap extends BaseMap<Attribute, Object> implements Serializ
 
 	@Override
 	public Object put(@NotNull Attribute key, Object value) {
+		checkNotFrozen();
 		if (value == null && this.containsKey(key)) {
 			throw new IllegalStateException("Cannot clear a key with a null value");
 		}
@@ -52,6 +53,12 @@ public class AttributeMap extends BaseMap<Attribute, Object> implements Serializ
 			return null;
 		}
 		return super.put(key, value);
+	}
+
+	@Override
+	public AttributeMap cloneAndUnfreeze() {
+		AttributeMap clone = (AttributeMap) super.cloneAndUnfreeze();
+		return clone;
 	}
 
 	public Set<Attribute> unsafeKeySet() {

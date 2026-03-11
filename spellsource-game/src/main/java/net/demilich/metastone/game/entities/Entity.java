@@ -19,6 +19,7 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.*;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
+import net.demilich.metastone.game.cards.Freezable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -48,7 +49,7 @@ import java.util.regex.Pattern;
  * to their opponents.
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class)
-public abstract class Entity extends CustomCloneable implements Serializable, HasCard, Comparable<Entity> {
+public abstract class Entity extends CustomCloneable implements Serializable, HasCard, Comparable<Entity>, Freezable {
 	private static Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
 	private static Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");
 	private static final long serialVersionUID = 1L;
@@ -76,6 +77,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @see #getEntityLocation()
 	 */
 	protected EntityLocation entityLocation = EntityLocation.UNASSIGNED;
+	private transient boolean readOnly;
 
 	protected Entity() {
 		super();
@@ -94,11 +96,29 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	@Override
 	public Entity clone() {
 		Entity clone = (Entity) super.clone();
+		clone.readOnly = false;
 		// The attributes need to be cloned
 		if (attributes != null) {
 			clone.attributes = attributes.clone();
+			clone.attributes.setReadOnly(false);
 		}
 		return clone;
+	}
+
+	@Override
+	public void freeze() {
+		readOnly = true;
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	protected void checkNotFrozen() {
+		if (readOnly) {
+			throw new UnsupportedOperationException("This entity is frozen (read-only) and cannot be modified.");
+		}
 	}
 
 	/**
@@ -325,14 +345,17 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	public void setId(int id) {
+		checkNotFrozen();
 		this.id = id;
 	}
 
 	public void setName(String name) {
+		checkNotFrozen();
 		this.name = name;
 	}
 
 	public void setOwner(int ownerIndex) {
+		checkNotFrozen();
 		this.ownerIndex = ownerIndex;
 	}
 
@@ -510,6 +533,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return
 	 */
 	public Entity setDescription(String description) {
+		checkNotFrozen();
 		getAttributes().put(Attribute.DESCRIPTION, description);
 		return this;
 	}
@@ -729,6 +753,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	public Entity setSourceCard(Card sourceCard) {
+		checkNotFrozen();
 		this.sourceCard = sourceCard;
 		return this;
 	}
@@ -738,6 +763,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	public Entity setEffectSource(Entity effectSource) {
+		checkNotFrozen();
 		this.effectSource = effectSource;
 		return this;
 	}

@@ -6,8 +6,9 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
-import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
+
 import net.demilich.metastone.game.cards.BaseMap;
+import net.demilich.metastone.game.cards.Freezable;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -95,11 +96,7 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 		}
 		if (ValueProvider.class.isAssignableFrom(storedValue.getClass())) {
 			ValueProvider valueProvider = (ValueProvider) storedValue;
-			int value = valueProvider.getValue(context, player, target, host);
-			if (valueProvider.getDesc().getBool(ValueProviderArg.EVALUATE_ONCE)) {
-				this.put(arg, value);
-			}
-			return value;
+			return valueProvider.getValue(context, player, target, host);
 		}
 		return (int) storedValue;
 	}
@@ -120,6 +117,7 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 
 	@Override
 	public Object put(@NotNull T key, Object value) {
+		checkNotFrozen();
 		if (value == null && this.containsKey(key)) {
 			throw new IllegalStateException("Cannot clear a key with a null value");
 		}
@@ -153,7 +151,83 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 				clone.put(arg, value);
 			}
 		}
+		clone.setReadOnly(this.isReadOnly());
 		return clone;
+	}
+
+	@Override
+	public void freeze() {
+		super.freeze();
+		for (Object value : values()) {
+			freezeValue(value);
+		}
+	}
+
+	private static void freezeValue(Object value) {
+		if (value instanceof Freezable) {
+			((Freezable) value).freeze();
+		} else if (value instanceof Object[]) {
+			for (Object element : (Object[]) value) {
+				freezeValue(element);
+			}
+		}
+	}
+
+	/**
+	 * Creates a deep copy of this desc with readOnly set to false, recursively unfreezing all nested values.
+	 */
+	public Desc<T, V> cloneAndUnfreeze() {
+		Desc<T, V> clone = (Desc<T, V>) super.cloneAndUnfreeze();
+		// Deep copy all nested mutable values
+		for (T arg : clone.keySet()) {
+			Object value = clone.get(arg);
+			Object unfrozen = deepCopyAndUnfreeze(value);
+			if (unfrozen != value) {
+				// bypass frozen check by using super.put directly since clone is already unfrozen
+				clone.put(arg, unfrozen);
+			}
+		}
+		return clone;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Object deepCopyAndUnfreeze(Object value) {
+		if (value instanceof Desc) {
+			return ((Desc<?, ?>) value).cloneAndUnfreeze();
+		} else if (value instanceof CustomCloneable) {
+			Object cloned = ((CustomCloneable) value).clone();
+			if (cloned instanceof Freezable) {
+				unfreezeRecursive(cloned);
+			}
+			return cloned;
+		} else if (value instanceof Object[]) {
+			Object[] arr = (Object[]) value;
+			Object[] newArr = arr.clone();
+			boolean changed = false;
+			for (int i = 0; i < newArr.length; i++) {
+				Object orig = newArr[i];
+				Object copy = deepCopyAndUnfreeze(orig);
+				if (copy != orig) {
+					newArr[i] = copy;
+					changed = true;
+				}
+			}
+			return changed ? newArr : newArr;
+		}
+		return value;
+	}
+
+	private static void unfreezeRecursive(Object value) {
+		if (value instanceof BaseMap) {
+			((BaseMap<?, ?>) value).setReadOnly(false);
+			for (Object v : ((BaseMap<?, ?>) value).values()) {
+				unfreezeRecursive(v);
+			}
+		} else if (value instanceof Object[]) {
+			for (Object element : (Object[]) value) {
+				unfreezeRecursive(element);
+			}
+		}
 	}
 
 	@Override
@@ -164,6 +238,7 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 	@Override
 	@SuppressWarnings("unchecked")
 	public void setDesc(Desc<?, ?> desc) {
+		checkNotFrozen();
 		this.clear();
 		this.putAll((Map) desc);
 	}

@@ -1010,7 +1010,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			.collect(Collectors.toList());
 
 		if (!overrideAuras.isEmpty()) {
-			spellDesc = spellDesc.clone();
+			spellDesc = spellDesc.cloneAndUnfreeze();
 			for (var aura : overrideAuras) {
 				for (var spellArgObjectEntry : aura.getDesc().getApplyEffect().entrySet()) {
 					var value = spellArgObjectEntry.getValue();
@@ -1021,7 +1021,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 							// Only override key/value pairs in the override using OriginalValueProvider if the original value exists
 							var originalValue = spellDesc.get(spellArgObjectEntry.getKey());
 							var newValue = (ValueProvider) value;
-							var newDesc = newValue.getDesc().clone();
+							var newDesc = newValue.getDesc().cloneAndUnfreeze();
 							newDesc.put(ValueProviderArg.VALUE, originalValue);
 							newValue.setDesc(newDesc);
 							value = newValue;
@@ -1406,7 +1406,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Only perform at most END_OF_SEQUENCE_MAX_DEPTH times. This limits the number of deathrattles to evaluate.
 		if (sequenceDepth > END_OF_SEQUENCE_MAX_DEPTH) {
-			throw new RuntimeException("Infinite death checking loop");
+			LOGGER.warn("endOfSequence: Exceeded max depth of {}. Forcefully ending sequence without processing further deathrattles.", END_OF_SEQUENCE_MAX_DEPTH);
+			// Forcefully destroy any remaining marked characters without triggering further deathrattles
+			var remaining = getDestroyedCharacters();
+			for (var actor : remaining) {
+				actor.moveOrAddTo(context, Zones.GRAVEYARD);
+			}
+			return;
 		}
 
 		var destroyList = getDestroyedCharacters();

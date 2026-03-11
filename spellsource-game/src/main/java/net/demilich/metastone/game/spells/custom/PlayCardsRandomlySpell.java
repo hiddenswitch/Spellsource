@@ -92,6 +92,10 @@ public class PlayCardsRandomlySpell extends Spell {
 			// Cards that are generated will not be tracked
 			if (card.getEntityLocation().equals(EntityLocation.UNASSIGNED)
 					&& card.getId() == IdFactory.UNASSIGNED) {
+				// Get a mutable copy if the card is frozen (e.g. from the catalogue)
+				if (card.isReadOnly()) {
+					card = card.getCopy();
+				}
 				// temporarily put into set aside
 				card.setId(context.getLogic().generateId());
 				card.setOwner(player.getId());

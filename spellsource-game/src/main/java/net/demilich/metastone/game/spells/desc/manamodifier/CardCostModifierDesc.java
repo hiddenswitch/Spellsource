@@ -40,13 +40,13 @@ public final class CardCostModifierDesc extends Desc<CardCostModifierArg, CardCo
 	}
 
 	public CardCostModifierDesc addArg(CardCostModifierArg cardCostModififerArg, Object value) {
-		CardCostModifierDesc clone = clone();
+		CardCostModifierDesc clone = cloneAndUnfreeze();
 		clone.put(cardCostModififerArg, value);
 		return clone;
 	}
 
 	public CardCostModifierDesc removeArg(CardCostModifierArg cardCostModififerArg) {
-		CardCostModifierDesc clone = clone();
+		CardCostModifierDesc clone = cloneAndUnfreeze();
 		clone.remove(cardCostModififerArg);
 		return clone;
 	}
@@ -54,6 +54,11 @@ public final class CardCostModifierDesc extends Desc<CardCostModifierArg, CardCo
 	@Override
 	public CardCostModifierDesc clone() {
 		return (CardCostModifierDesc) copyTo(new CardCostModifierDesc(getDescClass()));
+	}
+
+	@Override
+	public CardCostModifierDesc cloneAndUnfreeze() {
+		return (CardCostModifierDesc) super.cloneAndUnfreeze();
 	}
 
 	@Override

@@ -15,6 +15,8 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 
+import net.demilich.metastone.game.cards.Freezable;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Map;
@@ -66,7 +68,8 @@ import static com.google.common.collect.Maps.immutableEntry;
  * @see net.demilich.metastone.game.cards.desc.CardDesc to see where {@link EnchantmentDesc} can typically go.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class EnchantmentDesc implements Serializable, Cloneable, HasEntrySet<EnchantmentDescArg, Object>, AbstractEnchantmentDesc<Enchantment> {
+public final class EnchantmentDesc implements Serializable, Cloneable, HasEntrySet<EnchantmentDescArg, Object>, AbstractEnchantmentDesc<Enchantment>, Freezable {
+	private transient boolean readOnly;
 
 	public EnchantmentDesc() {
 	}
@@ -155,6 +158,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setEventTrigger(EventTriggerDesc eventTrigger) {
+		checkNotFrozen();
 		this.eventTrigger = eventTrigger;
 		return this;
 	}
@@ -169,6 +173,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setSpell(SpellDesc spell) {
+		checkNotFrozen();
 		this.spell = spell;
 		return this;
 	}
@@ -181,6 +186,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setOneTurn(boolean oneTurn) {
+		checkNotFrozen();
 		this.oneTurn = oneTurn;
 		return this;
 	}
@@ -198,6 +204,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setPersistentOwner(boolean persistentOwner) {
+		checkNotFrozen();
 		this.persistentOwner = persistentOwner;
 		return this;
 	}
@@ -214,6 +221,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setKeepAfterTransform(boolean keepAfterTransform) {
+		checkNotFrozen();
 		this.keepAfterTransform = keepAfterTransform;
 		return this;
 	}
@@ -228,6 +236,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setMaxFires(Integer maxFires) {
+		checkNotFrozen();
 		this.maxFires = maxFires;
 		return this;
 	}
@@ -243,6 +252,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setMaxFiresPerSequence(Integer maxFiresPerSequence) {
+		checkNotFrozen();
 		this.maxFiresPerSequence = maxFiresPerSequence;
 		return this;
 	}
@@ -260,6 +270,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setCountUntilCast(Integer countUntilCast) {
+		checkNotFrozen();
 		this.countUntilCast = countUntilCast;
 		return this;
 	}
@@ -275,6 +286,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setCountByValue(boolean countByValue) {
+		checkNotFrozen();
 		this.countByValue = countByValue;
 		return this;
 	}
@@ -294,6 +306,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setActivationTriggers(EventTriggerDesc[] activationTriggers) {
+		checkNotFrozen();
 		this.activationTriggers = activationTriggers;
 		return this;
 	}
@@ -310,6 +323,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setExpirationTriggers(EventTriggerDesc[] expirationTriggers) {
+		checkNotFrozen();
 		this.expirationTriggers = expirationTriggers;
 		return this;
 	}
@@ -322,6 +336,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setName(String name) {
+		checkNotFrozen();
 		this.name = name;
 		return this;
 	}
@@ -334,6 +349,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setDescription(String description) {
+		checkNotFrozen();
 		this.description = description;
 		return this;
 	}
@@ -346,6 +362,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	public EnchantmentDesc setZones(Zones[] zones) {
+		checkNotFrozen();
 		this.zones = zones;
 		return this;
 	}
@@ -353,5 +370,80 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	@Override
 	public Optional<Enchantment> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
 		return context.getLogic().tryCreateEnchantment(player, this, effectSource, enchantmentSource, host, force);
+	}
+
+	protected void checkNotFrozen() {
+		if (readOnly) {
+			throw new UnsupportedOperationException("This EnchantmentDesc is frozen (read-only) and cannot be modified.");
+		}
+	}
+
+	@Override
+	public void freeze() {
+		readOnly = true;
+		if (eventTrigger != null) {
+			eventTrigger.freeze();
+		}
+		if (spell != null) {
+			spell.freeze();
+		}
+		if (activationTriggers != null) {
+			for (EventTriggerDesc t : activationTriggers) {
+				if (t != null) {
+					t.freeze();
+				}
+			}
+		}
+		if (expirationTriggers != null) {
+			for (EventTriggerDesc t : expirationTriggers) {
+				if (t != null) {
+					t.freeze();
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	@Override
+	public EnchantmentDesc clone() {
+		try {
+			EnchantmentDesc clone = (EnchantmentDesc) super.clone();
+			clone.readOnly = this.readOnly;
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public EnchantmentDesc cloneAndUnfreeze() {
+		try {
+			EnchantmentDesc clone = (EnchantmentDesc) super.clone();
+			clone.readOnly = false;
+			if (eventTrigger != null) {
+				clone.eventTrigger = eventTrigger.cloneAndUnfreeze();
+			}
+			if (spell != null) {
+				clone.spell = spell.cloneAndUnfreeze();
+			}
+			if (activationTriggers != null) {
+				clone.activationTriggers = new EventTriggerDesc[activationTriggers.length];
+				for (int i = 0; i < activationTriggers.length; i++) {
+					clone.activationTriggers[i] = activationTriggers[i] != null ? activationTriggers[i].cloneAndUnfreeze() : null;
+				}
+			}
+			if (expirationTriggers != null) {
+				clone.expirationTriggers = new EventTriggerDesc[expirationTriggers.length];
+				for (int i = 0; i < expirationTriggers.length; i++) {
+					clone.expirationTriggers[i] = expirationTriggers[i] != null ? expirationTriggers[i].cloneAndUnfreeze() : null;
+				}
+			}
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

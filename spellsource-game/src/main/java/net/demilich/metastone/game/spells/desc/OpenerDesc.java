@@ -14,6 +14,8 @@ import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.trigger.Opener;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
+import net.demilich.metastone.game.cards.Freezable;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Map;
@@ -81,7 +83,8 @@ import static com.google.common.collect.Maps.immutableEntry;
  * 		how the battlecry action is processed.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class OpenerDesc implements Serializable, HasEntrySet<BattlecryDescArg, Object>, Cloneable, AbstractEnchantmentDesc<Opener> {
+public final class OpenerDesc implements Serializable, HasEntrySet<BattlecryDescArg, Object>, Cloneable, AbstractEnchantmentDesc<Opener>, Freezable {
+	private transient boolean readOnly;
 	public SpellDesc spell;
 	public TargetSelection targetSelection = TargetSelection.NONE;
 	public ConditionDesc condition;
@@ -129,10 +132,12 @@ public final class OpenerDesc implements Serializable, HasEntrySet<BattlecryDesc
 	}
 
 	public void setSpell(SpellDesc spell) {
+		checkNotFrozen();
 		this.spell = spell;
 	}
 
 	public void setTargetSelection(TargetSelection targetSelection) {
+		checkNotFrozen();
 		this.targetSelection = targetSelection;
 	}
 
@@ -150,6 +155,7 @@ public final class OpenerDesc implements Serializable, HasEntrySet<BattlecryDesc
 	}
 
 	public void setCondition(ConditionDesc condition) {
+		checkNotFrozen();
 		this.condition = condition;
 	}
 
@@ -166,6 +172,7 @@ public final class OpenerDesc implements Serializable, HasEntrySet<BattlecryDesc
 	}
 
 	public void setName(String name) {
+		checkNotFrozen();
 		this.name = name;
 	}
 
@@ -181,6 +188,7 @@ public final class OpenerDesc implements Serializable, HasEntrySet<BattlecryDesc
 	}
 
 	public void setDescription(String description) {
+		checkNotFrozen();
 		this.description = description;
 	}
 
@@ -202,11 +210,59 @@ public final class OpenerDesc implements Serializable, HasEntrySet<BattlecryDesc
 	public OpenerDesc clone() {
 		try {
 			OpenerDesc desc = (OpenerDesc) super.clone();
+			desc.readOnly = this.readOnly;
 			if (desc.spell != null) {
 				desc.spell = spell.clone();
 			}
 			if (desc.condition != null) {
 				desc.condition = condition.clone();
+			}
+			if (desc.targetSelectionCondition != null) {
+				desc.targetSelectionCondition = targetSelectionCondition.clone();
+			}
+			return desc;
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
+	protected void checkNotFrozen() {
+		if (readOnly) {
+			throw new UnsupportedOperationException("This OpenerDesc is frozen (read-only) and cannot be modified.");
+		}
+	}
+
+	@Override
+	public void freeze() {
+		readOnly = true;
+		if (spell != null) {
+			spell.freeze();
+		}
+		if (condition != null) {
+			condition.freeze();
+		}
+		if (targetSelectionCondition != null) {
+			targetSelectionCondition.freeze();
+		}
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	public OpenerDesc cloneAndUnfreeze() {
+		try {
+			OpenerDesc desc = (OpenerDesc) super.clone();
+			desc.readOnly = false;
+			if (spell != null) {
+				desc.spell = spell.cloneAndUnfreeze();
+			}
+			if (condition != null) {
+				desc.condition = condition.cloneAndUnfreeze();
+			}
+			if (targetSelectionCondition != null) {
+				desc.targetSelectionCondition = targetSelectionCondition.cloneAndUnfreeze();
 			}
 			return desc;
 		} catch (CloneNotSupportedException e) {
@@ -223,10 +279,12 @@ public final class OpenerDesc implements Serializable, HasEntrySet<BattlecryDesc
 	}
 
 	public void setTargetSelectionCondition(ConditionDesc targetSelectionCondition) {
+		checkNotFrozen();
 		this.targetSelectionCondition = targetSelectionCondition;
 	}
 
 	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
+		checkNotFrozen();
 		this.targetSelectionOverride = targetSelectionOverride;
 	}
 

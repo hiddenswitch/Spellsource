@@ -35,4 +35,9 @@ public class CardSourceDesc extends Desc<CardSourceArg, CardSource> {
 	public CardSourceDesc clone() {
 		return (CardSourceDesc) copyTo(new CardSourceDesc(getDescClass()));
 	}
+
+	@Override
+	public CardSourceDesc cloneAndUnfreeze() {
+		return (CardSourceDesc) super.cloneAndUnfreeze();
+	}
 }

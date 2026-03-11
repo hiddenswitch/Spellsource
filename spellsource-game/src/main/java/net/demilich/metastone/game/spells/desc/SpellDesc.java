@@ -122,15 +122,33 @@ public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantm
 
 	@NotNull
 	public SpellDesc addArg(SpellArg spellArg, Object value) {
-		SpellDesc clone = clone();
+		SpellDesc clone = cloneAndUnfreeze();
 		clone.put(spellArg, value);
 		return clone;
 	}
 
 	@NotNull
 	public SpellDesc removeArg(SpellArg spellArg) {
-		SpellDesc clone = clone();
+		SpellDesc clone = cloneAndUnfreeze();
 		clone.remove(spellArg);
+		return clone;
+	}
+
+	@Override
+	@NotNull
+	public SpellDesc cloneAndUnfreeze() {
+		SpellDesc clone = new SpellDesc(getDescClass());
+		for (SpellArg arg : keySet()) {
+			Object value = get(arg);
+			if (value instanceof net.demilich.metastone.game.logic.CustomCloneable) {
+				clone.put(arg, ((net.demilich.metastone.game.logic.CustomCloneable) value).clone());
+			} else if (value instanceof Desc) {
+				clone.put(arg, ((Desc) value).cloneAndUnfreeze());
+			} else {
+				clone.put(arg, value);
+			}
+		}
+		clone.setReadOnly(false);
 		return clone;
 	}
 
@@ -251,12 +269,12 @@ public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantm
 			if (childSpells.length == 0) {
 				return NullSpell.create();
 			} else if (childSpells.length == 1) {
-				return childSpells[0].clone();
+				return childSpells[0].cloneAndUnfreeze();
 			} else {
 				return SpellDesc.join(childSpells[0], Arrays.copyOfRange(childSpells, 1, childSpells.length));
 			}
 		} else if (childSpells.length == 0) {
-			return masterSpell.clone();
+			return masterSpell.cloneAndUnfreeze();
 		}
 
 		SpellDesc[] descs = new SpellDesc[childSpells.length + 1];

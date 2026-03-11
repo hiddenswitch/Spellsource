@@ -15,7 +15,7 @@ public final class ValueToHowManySpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		SpellDesc spell = desc.getSpell().clone();
+		SpellDesc spell = desc.getSpell().cloneAndUnfreeze();
 		spell.put(SpellArg.HOW_MANY, desc.get(SpellArg.VALUE));
 		SpellUtils.castChildSpell(context, player, spell, source, target);
 	}

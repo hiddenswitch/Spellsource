@@ -75,7 +75,7 @@ public class CopyDeathrattleSpell extends AddDeathrattleSpell {
 			SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, target);
 		} else if (!impliedCards.isEmpty() && !aftermaths.isEmpty() && desc.getSpell() != null) {
 			for (Card card : impliedCards) {
-				SpellDesc spell = desc.getSpell().clone();
+				SpellDesc spell = desc.getSpell().cloneAndUnfreeze();
 				spell.put(SpellArg.CARD, card.getCardId());
 				SpellUtils.castChildSpell(context, player, spell, source, target);
 			}

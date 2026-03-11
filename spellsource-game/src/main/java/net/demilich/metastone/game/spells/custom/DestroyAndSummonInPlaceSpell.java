@@ -51,7 +51,7 @@ public final class DestroyAndSummonInPlaceSpell extends SummonSpell {
 		context.getLogic().endOfSequence();
 		// Then do all summons
 		for (Entity target : targets) {
-			SpellDesc singleSummon = desc.clone();
+			SpellDesc singleSummon = desc.cloneAndUnfreeze();
 			singleSummon.remove(SpellArg.HOW_MANY);
 			singleSummon.put(SpellArg.BOARD_POSITION_ABSOLUTE, targetLocations.get(target.getId()));
 			super.cast(context, player, singleSummon, source, Collections.singletonList(target));

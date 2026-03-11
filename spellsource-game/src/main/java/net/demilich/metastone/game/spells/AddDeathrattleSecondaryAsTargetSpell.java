@@ -46,7 +46,7 @@ public final class AddDeathrattleSecondaryAsTargetSpell extends AddDeathrattleSp
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		desc = desc.clone();
+		desc = desc.cloneAndUnfreeze();
 		SpellDesc deathrattle = desc.getSpell();
 		deathrattle.put(SpellArg.TARGET, context.resolveSingleTarget(player, source, desc.getSecondaryTarget()).getReference());
 		desc.remove(SpellArg.SECONDARY_TARGET);

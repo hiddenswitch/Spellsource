@@ -53,7 +53,7 @@ public final class CastAfterSequenceSpell extends Spell {
 		// Pass a card to the sub spell. Addresses an issue where a change hero spell performed in a discover action causes
 		// the source to be removed from play, breaking the null "not chosen" spells to fail.
 		if (desc.containsKey(SpellArg.CARD) && !spell.containsKey(SpellArg.CARD)) {
-			spell = spell.clone();
+			spell = spell.cloneAndUnfreeze();
 			spell.put(SpellArg.CARD, desc.get(SpellArg.CARD));
 		}
 

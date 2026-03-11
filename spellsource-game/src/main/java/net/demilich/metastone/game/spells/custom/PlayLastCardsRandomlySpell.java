@@ -24,7 +24,7 @@ public final class PlayLastCardsRandomlySpell extends PlayCardsRandomlySpell {
 	@Override
 	protected CardList getCards(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 5);
-		desc = desc.clone();
+		desc = desc.cloneAndUnfreeze();
 		// Retrieve the last 5 cards played by this player
 		List<Card> cardsPlayed = player.getGraveyard().stream()
 				.filter(e -> e.getEntityType() == EntityType.CARD)

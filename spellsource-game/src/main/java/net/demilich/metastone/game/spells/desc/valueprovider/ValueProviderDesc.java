@@ -47,6 +47,11 @@ public class ValueProviderDesc extends Desc<ValueProviderArg, ValueProvider> {
 		return (ValueProviderDesc) copyTo(new ValueProviderDesc(getDescClass()));
 	}
 
+	@Override
+	public ValueProviderDesc cloneAndUnfreeze() {
+		return (ValueProviderDesc) super.cloneAndUnfreeze();
+	}
+
 	public EntityReference getTarget() {
 		return (EntityReference) get(ValueProviderArg.TARGET);
 	}

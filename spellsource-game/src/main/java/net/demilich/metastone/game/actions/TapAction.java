@@ -38,7 +38,7 @@ public class TapAction extends GameAction implements Serializable {
 	@Override
 	public TapAction clone() {
 		TapAction clone = (TapAction) super.clone();
-		clone.spell = spell.clone();
+		clone.spell = spell.cloneAndUnfreeze();
 		return clone;
 	}
 

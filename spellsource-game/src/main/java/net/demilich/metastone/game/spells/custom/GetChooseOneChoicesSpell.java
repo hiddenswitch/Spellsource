@@ -45,11 +45,11 @@ public class GetChooseOneChoicesSpell extends Spell {
 			SpellDesc spell1;
 			SpellDesc spell2;
 			if (desc.containsKey(SpellArg.SPELL)) {
-				spell1 = desc.getSpell().clone();
-				spell2 = desc.getSpell().clone();
+				spell1 = desc.getSpell().cloneAndUnfreeze();
+				spell2 = desc.getSpell().cloneAndUnfreeze();
 			} else {
-				spell1 = ((SpellDesc) desc.get(SpellArg.SPELL1)).clone();
-				spell2 = ((SpellDesc) desc.get(SpellArg.SPELL2)).clone();
+				spell1 = ((SpellDesc) desc.get(SpellArg.SPELL1)).cloneAndUnfreeze();
+				spell2 = ((SpellDesc) desc.get(SpellArg.SPELL2)).cloneAndUnfreeze();
 			}
 			spell1.put(SpellArg.CARD, card.getChooseOneCardIds()[0]);
 			spell2.put(SpellArg.CARD, card.getChooseOneCardIds()[1]);

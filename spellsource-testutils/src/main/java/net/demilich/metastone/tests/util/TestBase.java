@@ -130,7 +130,7 @@ public class TestBase {
 
 	protected static void overrideMissilesTrigger(GameContext context, Entity source, Entity target) {
 		Enchantment enchantment = (Enchantment) context.getLogic().getActiveTriggers(source.getReference()).get(0);
-		SpellDesc spell = enchantment.getSpell().clone();
+		SpellDesc spell = enchantment.getSpell().cloneAndUnfreeze();
 		spell.remove(SpellArg.RANDOM_TARGET);
 		spell.setTarget(target.getReference());
 		enchantment.setSpell(spell);

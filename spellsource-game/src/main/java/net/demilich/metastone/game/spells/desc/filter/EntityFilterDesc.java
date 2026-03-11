@@ -41,6 +41,11 @@ public class EntityFilterDesc extends Desc<EntityFilterArg, EntityFilter> {
 		return (EntityFilterDesc) copyTo(new EntityFilterDesc(getDescClass()));
 	}
 
+	@Override
+	public EntityFilterDesc cloneAndUnfreeze() {
+		return (EntityFilterDesc) super.cloneAndUnfreeze();
+	}
+
 	public List<String> getCardOrCards() {
 		if (getDesc().containsKey(EntityFilterArg.CARD) && ! getDesc().containsKey(EntityFilterArg.CARDS)) {
 			return Collections.singletonList((String)get(EntityFilterArg.CARD));

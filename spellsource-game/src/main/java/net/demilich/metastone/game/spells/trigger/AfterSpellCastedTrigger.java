@@ -2,9 +2,11 @@ package net.demilich.metastone.game.spells.trigger;
 
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import net.demilich.metastone.game.events.AfterSpellCastedEvent;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
@@ -27,13 +29,14 @@ public class AfterSpellCastedTrigger extends AbstractCardTrigger {
 
 	public AfterSpellCastedTrigger(EventTriggerDesc desc) {
 		super(desc);
-		EventTriggerDesc clone = desc.clone();
-		clone.put(EventTriggerArg.CARD_TYPE, CardType.SPELL);
-		setDesc(clone);
 	}
 
 	@Override
 	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
+		HasCard cardEvent = (HasCard) event;
+		if (!GameLogic.isCardType(cardEvent.getSourceCard().getCardType(), CardType.SPELL)) {
+			return false;
+		}
 		if (!super.innerQueues(event, enchantment, host)) {
 			return false;
 		}

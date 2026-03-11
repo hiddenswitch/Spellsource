@@ -24,7 +24,7 @@ public final class ExcessDamageSpell extends DamageSpell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		SpellDesc toExcess;
 		if (desc.getSpell() != null) {
-			toExcess = desc.getSpell().clone();
+			toExcess = desc.getSpell().cloneAndUnfreeze();
 		} else {
 			toExcess = DamageSpell.create();
 		}
