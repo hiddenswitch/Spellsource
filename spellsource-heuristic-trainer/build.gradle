@@ -33,6 +33,6 @@ jib {
     container {
         mainClass = 'com.hiddenswitch.spellsource.trainer.TrainerMain'
         format = 'Docker'
-        jvmFlags = ['--enable-preview', '-XX:+UseZGC', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=75.0']
+        jvmFlags = ['--enable-preview', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=75.0']
     }
 }
