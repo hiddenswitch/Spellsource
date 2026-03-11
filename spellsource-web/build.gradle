@@ -13,23 +13,14 @@ apply from: '../gradle/instrument.gradle'
 apply from: '../gradle/node.gradle'
 
 def isWindows = org.gradle.internal.os.OperatingSystem.current().isWindows()
-def isLinux = org.gradle.internal.os.OperatingSystem.current().isLinux()
-def isMacOs = org.gradle.internal.os.OperatingSystem.current().isMacOsX()
 def spellsourceDepTask = ':spellsource-web-cardeditor-support:shadowJar'
-def yarnVersionStr = (new JsonSlurper().parse(file("package.json")).packageManager as String).split("@")[1]
-def yarnPath = "languages/nodejs/bin/yarn"
-def npmPath = "bin/npm"
-def nodePath = "bin/node"
 // todo: this will have to be a distinct path
 // you can't really operate them side by side
-def graalNpmPrefix = 'node_modules'
 def packageJsonFile = file('package.json')
 def packageJson = new JsonSlurper().parseText(packageJsonFile.text)
 def scripts = packageJson.scripts
-def scriptNames = ["dev": "run"]
-def binExt = isWindows ? ".cmd" : ""
 def distDir = "docker/spellsource/web"
-
+def scriptNames = ['dev': 'run']
 
 evaluationDependsOn(":spellsource-server")
 evaluationDependsOn(":spellsource-python")
@@ -100,37 +91,6 @@ tasks.named('yarn').configure {
   args = ['--immutable']
 }
 
-Provider<JavaLauncher> thisToolchain() {
-  return (project.services.get(JavaToolchainService) as JavaToolchainService).launcherFor(java.toolchain)
-}
-
-Provider<RegularFile> graalFileFor(String graalBinary) {
-  def toolchain = thisToolchain()
-  return toolchain.map { it.metadata.installationPath.file("${graalBinary}${Os.isFamily(Os.FAMILY_WINDOWS) ? '.cmd' : ''}") }
-}
-
-tasks.register('nodeJsDepsGraal') {
-  def bins = ["bin/node", "bin/yarn"]
-  onlyIf {
-    bins.every { bin -> graalFileFor(bin).map { !it.asFile.exists() }.get() }
-  }
-
-  inputs.property("bins", bins)
-  outputs.file(graalFileFor("bin/yarn"))
-  outputs.cacheIf { false }
-
-  doLast {
-    exec {
-      executable graalFileFor(isLinux ? "lib/installer/bin/gu" : "bin/gu").map { it.asFile.path }.get()
-      args 'install', 'org.graalvm.nodejs'
-    }
-
-    exec {
-      executable graalFileFor(npmPath).map { it.asFile.path }.get()
-      args "install", "-g", "yarn"
-    }
-  }
-}
 
 clean {
   delete '.cache'

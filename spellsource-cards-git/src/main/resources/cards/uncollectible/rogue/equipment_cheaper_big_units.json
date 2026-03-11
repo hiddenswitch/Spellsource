@@ -1,0 +1,47 @@
+{
+  "name": "Cheaper Big Units",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Your Units that cost more than (5) Lun instead cost (5).",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "operation": "SET",
+    "value": 5,
+    "cardType": "MINION",
+    "filter": {
+      "class": "ManaCostFilter",
+      "value": 5,
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "equipment_cheaper_big_units"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

@@ -172,6 +172,9 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	private Spellsource.ArtificialIntelligence artificialIntelligence;
 	@JsonIgnore
 	private transient List<Condition> glowConditions;
+	private RogueInfoDesc rogueInfo;
+	private SpellDesc onInitialized;
+	
 
 	public CardDesc() {
 		super();
@@ -1209,5 +1212,21 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 		result = 31 * result + Arrays.hashCode(getSecondPlayerBonusCards());
 		result = 31 * result + Arrays.hashCode(getTooltips());
 		return result;
+	}
+
+	public RogueInfoDesc getRogueInfo() {
+		return rogueInfo;
+	}
+
+	public void setRogueInfo(RogueInfoDesc rogueInfo) {
+		this.rogueInfo = rogueInfo;
+	}
+
+	public SpellDesc getOnInitialized() {
+		return onInitialized;
+	}
+
+	public void setOnInitialized(SpellDesc onInitialized) {
+		this.onInitialized = onInitialized;
 	}
 }

@@ -38,6 +38,7 @@ public class HeroClass {
 	public static final String PEACH = "PEACH";
 	public static final String PURPLE = "PURPLE";
 	public static final String SPIRIT = "SPIRIT";
+	public static final String TOAST = "TOAST";
 
 
 	/**

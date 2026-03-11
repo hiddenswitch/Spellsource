@@ -22,6 +22,8 @@ import com.hiddenswitch.framework.schema.spellsource.tables.HardRemovalCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
 import com.hiddenswitch.framework.schema.spellsource.tables.PublishedCards;
+import com.hiddenswitch.framework.schema.spellsource.tables.RogueChoice;
+import com.hiddenswitch.framework.schema.spellsource.tables.RogueRun;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.BannedDraftCardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.BotUsersRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsInDeckRecord;
@@ -38,6 +40,8 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.HardRemovalC
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingQueuesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingTicketsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.PublishedCardsRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.RogueChoiceRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.RogueRunRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -73,6 +77,10 @@ public class Keys {
     public static final UniqueKey<MatchmakingQueuesRecord> MATCHMAKING_QUEUES_PKEY = Internal.createUniqueKey(MatchmakingQueues.MATCHMAKING_QUEUES, DSL.name("matchmaking_queues_pkey"), new TableField[] { MatchmakingQueues.MATCHMAKING_QUEUES.ID }, true);
     public static final UniqueKey<MatchmakingTicketsRecord> MATCHMAKING_TICKETS_PKEY = Internal.createUniqueKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_pkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.USER_ID }, true);
     public static final UniqueKey<PublishedCardsRecord> PUBLISHED_CARDS_PKEY = Internal.createUniqueKey(PublishedCards.PUBLISHED_CARDS, DSL.name("published_cards_pkey"), new TableField[] { PublishedCards.PUBLISHED_CARDS.ID }, true);
+    public static final UniqueKey<RogueChoiceRecord> ROGUE_CHOICE_PKEY = Internal.createUniqueKey(RogueChoice.ROGUE_CHOICE, DSL.name("rogue_choice_pkey"), new TableField[] { RogueChoice.ROGUE_CHOICE.ID }, true);
+    public static final UniqueKey<RogueRunRecord> ROGUE_RUN_DECK_KEY = Internal.createUniqueKey(RogueRun.ROGUE_RUN, DSL.name("rogue_run_deck_key"), new TableField[] { RogueRun.ROGUE_RUN.DECK }, true);
+    public static final UniqueKey<RogueRunRecord> ROGUE_RUN_GAME_KEY = Internal.createUniqueKey(RogueRun.ROGUE_RUN, DSL.name("rogue_run_game_key"), new TableField[] { RogueRun.ROGUE_RUN.GAME }, true);
+    public static final UniqueKey<RogueRunRecord> ROGUE_RUN_PKEY = Internal.createUniqueKey(RogueRun.ROGUE_RUN, DSL.name("rogue_run_pkey"), new TableField[] { RogueRun.ROGUE_RUN.ID }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -99,4 +107,9 @@ public class Keys {
     public static final ForeignKey<MatchmakingTicketsRecord, MatchmakingQueuesRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_QUEUE_ID_FKEY = Internal.createForeignKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_queue_id_fkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID }, Keys.MATCHMAKING_QUEUES_PKEY, new TableField[] { MatchmakingQueues.MATCHMAKING_QUEUES.ID }, true);
     public static final ForeignKey<MatchmakingTicketsRecord, UserEntityRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_USER_ID_FKEY = Internal.createForeignKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_user_id_fkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.USER_ID }, com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, new TableField[] { UserEntity.USER_ENTITY.ID }, true);
     public static final ForeignKey<PublishedCardsRecord, CardsRecord> PUBLISHED_CARDS__PUBLISHED_CARDS_SUCCESSION_FKEY = Internal.createForeignKey(PublishedCards.PUBLISHED_CARDS, DSL.name("published_cards_succession_fkey"), new TableField[] { PublishedCards.PUBLISHED_CARDS.SUCCESSION }, Keys.CARDS_PKEY, new TableField[] { Cards.CARDS.SUCCESSION }, true);
+    public static final ForeignKey<RogueChoiceRecord, RogueRunRecord> ROGUE_CHOICE__ROGUE_CHOICE_ROGUE_RUN_FKEY = Internal.createForeignKey(RogueChoice.ROGUE_CHOICE, DSL.name("rogue_choice_rogue_run_fkey"), new TableField[] { RogueChoice.ROGUE_CHOICE.ROGUE_RUN }, Keys.ROGUE_RUN_PKEY, new TableField[] { RogueRun.ROGUE_RUN.ID }, true);
+    public static final ForeignKey<RogueRunRecord, DecksRecord> ROGUE_RUN__ROGUE_RUN_DECK_FKEY = Internal.createForeignKey(RogueRun.ROGUE_RUN, DSL.name("rogue_run_deck_fkey"), new TableField[] { RogueRun.ROGUE_RUN.DECK }, Keys.DECKS_PKEY, new TableField[] { Decks.DECKS.ID }, true);
+    public static final ForeignKey<RogueRunRecord, GamesRecord> ROGUE_RUN__ROGUE_RUN_GAME_FKEY = Internal.createForeignKey(RogueRun.ROGUE_RUN, DSL.name("rogue_run_game_fkey"), new TableField[] { RogueRun.ROGUE_RUN.GAME }, Keys.GAMES_PKEY, new TableField[] { Games.GAMES.ID }, true);
+    public static final ForeignKey<RogueRunRecord, DecksRecord> ROGUE_RUN__ROGUE_RUN_OPPONENT_DECK_FKEY = Internal.createForeignKey(RogueRun.ROGUE_RUN, DSL.name("rogue_run_opponent_deck_fkey"), new TableField[] { RogueRun.ROGUE_RUN.OPPONENT_DECK }, Keys.DECKS_PKEY, new TableField[] { Decks.DECKS.ID }, true);
+    public static final ForeignKey<RogueRunRecord, UserEntityRecord> ROGUE_RUN__ROGUE_RUN_PLAYER_FKEY = Internal.createForeignKey(RogueRun.ROGUE_RUN, DSL.name("rogue_run_player_fkey"), new TableField[] { RogueRun.ROGUE_RUN.PLAYER }, com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, new TableField[] { UserEntity.USER_ENTITY.ID }, true);
 }

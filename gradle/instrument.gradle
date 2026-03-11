@@ -13,9 +13,9 @@ tasks.withType(JavaExec).configureEach {
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_21
+  sourceCompatibility = JavaVersion.VERSION_24
   toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
+    languageVersion = JavaLanguageVersion.of(24)
   }
 }
 

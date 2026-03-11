@@ -14,8 +14,6 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.JWTAuthHandler;
 import io.vertx.grpc.server.GrpcServer;
 import io.vertx.grpc.server.impl.GrpcServerImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static io.vertx.await.Async.await;
 
@@ -50,7 +48,8 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 				matchmaking.binder(),
 				Accounts.unauthenticatedService(),
 				Accounts.authenticatedService(),
-				Games.services()};
+				Games.services()
+		};
 
 		var server = GrpcServer.server(vertx);
 		var jwtAuth = JWTAuth.create(vertx, Accounts.jwtAuthOptions());

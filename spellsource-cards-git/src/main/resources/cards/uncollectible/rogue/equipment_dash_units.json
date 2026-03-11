@@ -1,0 +1,41 @@
+{
+  "name": "Dash Units",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Your units have Dash.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "AURA_RUSH"
+  },
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "equipment_dash_units"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

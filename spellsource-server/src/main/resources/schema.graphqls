@@ -1,0 +1,26 @@
+scalar BigInt
+
+type Query {
+    currentUserId: String
+    currentRogueClasses: [String!]!
+    rerollCost(rogueId: BigInt!): Int!
+    trashCardCost(rogueId: BigInt!, cardId: String!): Int!
+    upgradeCardCost(rogueId: BigInt!, cardId: String!): Int!
+}
+
+type Mutation {
+    startRogueRun(heroClass: String!, seed: BigInt): RogueRun!
+    makeRogueChoice(choiceId: BigInt!, choices: [Int!]!): RogueRun!
+    reroll(choiceId: BigInt!): RogueRun!
+    trashCard(rogueId: BigInt!, cardId: String!): RogueRun!
+    skipBoss(rogueId: BigInt!): RogueRun!
+    upgradeCard(rogueId: BigInt!, cardId: String!): RogueRun!
+}
+
+type RogueRun {
+    id: BigInt!
+}
+
+type RogueChoice {
+    id: BigInt!
+}

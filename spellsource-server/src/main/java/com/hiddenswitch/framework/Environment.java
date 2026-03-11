@@ -14,11 +14,10 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.internal.KeepAliveManager;
 import io.micrometer.core.instrument.Metrics;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.Context;
 import io.vertx.core.*;
+import io.vertx.core.Context;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpConnection;
-import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.json.Json;
 import io.vertx.core.spi.cluster.ClusterManager;
@@ -28,7 +27,6 @@ import io.vertx.micrometer.VertxPrometheusOptions;
 import io.vertx.micrometer.backends.PrometheusBackendRegistry;
 import io.vertx.pgclient.PgBuilder;
 import io.vertx.pgclient.PgConnectOptions;
-import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.*;
 import io.vertx.tracing.opentracing.OpenTracingOptions;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
@@ -37,11 +35,10 @@ import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jooq.*;
 import org.jooq.Configuration;
 import org.jooq.Query;
 import org.jooq.Record;
-import org.jooq.*;
-import org.jooq.conf.ParamType;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
@@ -62,10 +59,11 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.*;
+import java.util.Locale;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -73,7 +71,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static com.hiddenswitch.protos.Serialization.configureSerialization;
 import static io.vertx.await.Async.await;
@@ -202,31 +199,15 @@ public class Environment {
 		var executor = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), conn);
 		return handler.apply(executor);
 	}
-
-	public static <R extends Record, P> Future<List<P>> callRoutine(Function<Row, P> mapper, Table<R> called) {
-		var conn = Environment.sqlClient();
-		var executor = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), conn);
-		return executor.executeAny(dsl -> dsl.select(DSL.asterisk()).from(called))
-				.map(res -> StreamSupport
-						.stream(res.spliterator(), false)
-						.map(mapper)
-						.toList());
+	
+	public static <R> RoutineCaller.ForField<?, R> callRoutine(Field<R> called) {
+		return new RoutineCaller.ForField<>(called);
 	}
 
-	public static <R> Future<R> callRoutine(Field<R> called) {
-		var conn = Environment.sqlClient();
-		var config = Environment.jooqAkaDaoConfiguration();
-		var dsl = config.dsl().select(called);
-		var namedSql = dsl.getSQL(ParamType.INLINED);
-		return conn.query(namedSql)
-				.execute()
-				.map(res -> StreamSupport
-						.stream(res.spliterator(), false)
-						.findFirst()
-						.map(row -> row.get(called.getType(), 0))
-						.orElseThrow());
+	public static <R extends Record> RoutineCaller.ForTable<?, R> callRoutine(Table<R> called) {
+		return new RoutineCaller.ForTable<>(called);
 	}
-
+	
 	public static <T> Future<T> withConnection(Function<SqlConnection, Future<T>> handler) {
 		return Environment.transactionPool()
 				.getConnection()
@@ -565,6 +546,7 @@ public class Environment {
 			var isSelfAssigned = false;
 			var isHyperV = false;
 			var isMacOSBridgeNet = false;
+			var isTailscale = false;
 			try {
 				isSelfAssigned = ni.inetAddresses().anyMatch(i -> i.getHostAddress().startsWith("169"));
 				isLoopback = ni.isLoopback();
@@ -572,10 +554,11 @@ public class Environment {
 				isVirtualbox = ni.getDisplayName().contains("VirtualBox") || ni.getDisplayName().contains("Host-Only");
 				isHyperV = ni.getDisplayName().contains("Hyper-V");
 				isMacOSBridgeNet = ni.getDisplayName().startsWith("bridge");
+				isTailscale = ni.getDisplayName().toLowerCase().contains("tailscale");
 			} catch (IOException failure) {
 			}
 			var hasIPv4 = ni.getInterfaceAddresses().stream().anyMatch(ia -> ia.getAddress() instanceof Inet4Address);
-			return supportsMulticast && !isSelfAssigned && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox && !isHyperV && !isMacOSBridgeNet;
+			return supportsMulticast && !isSelfAssigned && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox && !isHyperV && !isMacOSBridgeNet && !isTailscale;
 		}).sorted(Comparator.comparing(NetworkInterface::getName)).findFirst().orElse(null);
 	}
 

@@ -11,7 +11,7 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
 import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
 /**
- * indicates a deck shared to a player
+ * @omit create,update,delete
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DeckShares implements VertxPojo, IDeckShares {

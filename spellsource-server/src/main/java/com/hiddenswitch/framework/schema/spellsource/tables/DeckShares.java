@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 
 
 /**
- * indicates a deck shared to a player
+ * @omit create,update,delete
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DeckShares extends TableImpl<DeckSharesRecord> {
@@ -74,7 +74,7 @@ public class DeckShares extends TableImpl<DeckSharesRecord> {
     }
 
     private DeckShares(Name alias, Table<DeckSharesRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("indicates a deck shared to a player"), TableOptions.table());
+        super(alias, null, aliased, parameters, DSL.comment("@omit create,update,delete"), TableOptions.table());
     }
 
     /**

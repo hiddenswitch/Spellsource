@@ -1,0 +1,49 @@
+{
+  "name": "Juggler III",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "After you summon a unit, deal 3 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionSummonedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 3,
+      "howMany": 1,
+      "randomTarget": true
+    }
+  },
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "equipment_juggler_3"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

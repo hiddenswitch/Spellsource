@@ -7,6 +7,7 @@ import org.testcontainers.containers.SelinuxContext;
 public class GraphQLContainer extends GenericContainer<GraphQLContainer> {
 
 	public static final int GRAPHQL_PORT = 5678;
+	public static final int NODE_INSPECTOR_PORT = 9229;
 
 	public GraphQLContainer() {
 		super("node:22");
@@ -14,6 +15,7 @@ public class GraphQLContainer extends GenericContainer<GraphQLContainer> {
 		addEnv("GRAPHILE_ENV", "development");
 		addEnv("SLEEP", "30"); // Allow the full pg schema to be setup before postgraphile introspection
 		addExposedPort(GRAPHQL_PORT);
+		addExposedPort(NODE_INSPECTOR_PORT);
 		addFileSystemBind("..", "/spellsource", BindMode.READ_WRITE, SelinuxContext.NONE);
 		setWorkingDirectory("/spellsource/spellsource-graphql");
 		setCommand("yarn", "develop");

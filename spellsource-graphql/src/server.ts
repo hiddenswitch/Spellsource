@@ -1,12 +1,11 @@
 import "./config";
 import { createServer } from "node:http";
 import express from "express";
-import { grafserv } from "postgraphile/grafserv/express/v4";
-import { postgraphile } from "postgraphile";
 import { graphqlHost, graphqlPort } from "./config";
-import preset, { pgPool } from "./graphile.config";
+import { pgPool } from "./graphile.config";
 import { authenticate } from "./auth";
 import cors from "cors";
+import { setupApolloServer } from "./apollo-server";
 
 (async () => {
   console.log("Starting express server");
@@ -42,14 +41,7 @@ import cors from "cors";
     }
   }
 
-  const pgl = postgraphile(preset);
-
-  const serv = pgl.createServ(grafserv);
-
-  await serv.addTo(app, server).catch((e) => {
-    console.error(e);
-    process.exit(1);
-  });
+  await setupApolloServer(app, server);
 
   console.log("Postgraphile ready");
 })();

@@ -32,21 +32,17 @@ public class StandaloneApplication extends Application {
 	protected static final String KEYCLOAK_HOST = "keycloak";
 	private static final Logger LOGGER = LoggerFactory.getLogger(StandaloneApplication.class);
 	public static RedisContainer REDIS = new RedisContainer()
-			.withNetwork(Network.SHARED)
-			.withReuse(true);
+			.withNetwork(Network.SHARED);
 	protected static PostgresContainer POSTGRES = new PostgresContainer(PGUSER, PGPASSWORD, PGDATABASE)
-			.withReuse(true)
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(PGHOST)
 			.withExposedPorts(PostgresContainer.POSTGRESQL_PORT);
 	public static KeycloakContainer KEYCLOAK = new KeycloakContainer()
-			.withReuse(true)
 			.dependsOn(POSTGRES)
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(KEYCLOAK_HOST)
 			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD);
 	public static GraphQLContainer GRAPHQL = new GraphQLContainer()
-			.withReuse(true)
 			.dependsOn(POSTGRES)
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(GRAPHQL_HOST)
@@ -87,9 +83,7 @@ public class StandaloneApplication extends Application {
 				.setShouldMigrate(true)
 				.build());
 		configuration.setGraphql(ServerConfiguration.GraphQLConfiguration.newBuilder()
-				.setHost(GRAPHQL_HOST)
-				.setPort(GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT))
-				.setRoute("/graphql")
+				.setUrl(String.format("http://%s:%d/graphql", "localhost", GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT)))
 		);
 		// todo: allow environment variables *only* to override this configuration, but something weird about kube env
 		// configuration.mergeFrom(Environment.environmentConfiguration());
@@ -104,20 +98,15 @@ public class StandaloneApplication extends Application {
 		Environment.setConfiguration(configuration.build());
 		try {
 			var envFile = new File("../spellsource-web/.env.local");
-			var contents = STR."""
-REDIS_URI=\{REDIS.getRedisUrl()}
-PG_PORT=\{POSTGRES.getMappedPort(PostgresContainer.POSTGRESQL_PORT)}
-KEYCLOAK_PORT=\{KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP)}
-NEXT_PUBLIC_GRAPHQL_PORT=\{GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT)}
-""";
+			var contents = "REDIS_URI=" + REDIS.getRedisUrl() + "\n"
+					+ "KEYCLOAK_PORT=" + KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP) + "\n"
+					+ "NEXT_PUBLIC_GRAPHQL_PORT=" + GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT) + "\n";
 			FileUtils.writeStringToFile(envFile, contents, StandardCharsets.UTF_8);
 
 			var envFile2 = new File("../spellsource-graphql/.env.local");
-			var contents2 = STR."""
-KEYCLOAK_ISSUER=http://localhost:\{KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP)}/realms/hiddenswitch
-""";
+			var contents2 = "KEYCLOAK_ISSUER=http://localhost:" + KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP) + "/realms/hiddenswitch";
 			FileUtils.writeStringToFile(envFile2, contents2, StandardCharsets.UTF_8);
-			
+
 		} catch (IOException e) {
 			LOGGER.error("Error occurred while writing the environment file for the website.");
 		}

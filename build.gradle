@@ -5,7 +5,6 @@ import groovy.json.JsonSlurper
 
 buildscript {
   repositories {
-    maven { url "file://${rootDir}/mavenRepository" }
     mavenCentral()
   }
 }
@@ -29,7 +28,6 @@ allprojects {
 
 subprojects {
   repositories {
-    maven { url "file://${rootDir}/mavenRepository" }
     mavenCentral()
     maven { url 'https://jitpack.io' }
   }
@@ -205,6 +203,18 @@ subprojects {
         if (details.requested.group == 'org.objenesis') {
           details.useVersion '3.4'
         }
+        
+        if (details.requested.group == 'com.graphql-java' && details.requested.name == 'graphql-java') {
+          details.useVersion '20.1'
+        }
+        
+        if (details.requested.group == 'org.apache.commons' && details.requested.name == 'commons-lang3') {
+          details.useVersion '3.13.0'
+        }
+        
+        if (details.requested.group == 'org.wildfly.common' && details.requested.name == 'wildfly-common') {
+          details.useVersion '1.5.1.Final'
+        }
       }
     }
   }
@@ -333,15 +343,17 @@ def packageJson = new JsonSlurper().parseText(file('package.json').text)
 def yarnVersionStr = (packageJson.packageManager as String).split("@")[1]
 def binExt = isWindows ? ".cmd" : ""
 
-tasks.register("corepack") {
+tasks.register("corepack", Exec) {
   def dirPath = ".gradle/yarn/yarn-v${yarnVersionStr}/${isWindows ? "" : "/bin"}"
-  outputs.dir(dirPath)
-  doLast {
-    mkdir(dirPath)
-    exec {
-      commandLine "corepack${binExt}", "enable", "--install-directory", dirPath
-    }
+  def path = "corepack${binExt}"
+  if (isMacOs) {
+    path = "/opt/homebrew/bin/corepack"
   }
+  outputs.dir(dirPath)
+  doFirst {
+    mkdir(dirPath)
+  }
+  commandLine path, "enable", "--install-directory", dirPath
 }
 
 tasks.named("yarnSetup").configure {

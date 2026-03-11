@@ -19,7 +19,7 @@ import java.util.List;
 import io.vertx.core.Future;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryExecutor;
 /**
- * indicates a deck shared to a player
+ * @omit create,update,delete
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DeckSharesDao extends AbstractReactiveVertxDAO<DeckSharesRecord, com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>>, Future<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<DeckSharesRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares,Record2<String, String>> {

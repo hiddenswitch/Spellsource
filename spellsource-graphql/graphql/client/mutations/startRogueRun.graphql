@@ -1,0 +1,5 @@
+mutation startRogueRun($heroClass: String!, $seed: BigInt) {
+  startRogueRun(heroClass: $heroClass, seed: $seed) {
+      ...rogueRun
+  }
+}

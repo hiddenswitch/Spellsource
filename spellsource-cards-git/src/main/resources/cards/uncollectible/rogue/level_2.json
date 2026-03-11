@@ -1,0 +1,27 @@
+{
+  "name": "Level 2",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "20 HP, +0 Starting Lun, Standard Skill",
+  "onInitialized": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RemoveCardSpell",
+        "target": "SELF"
+      },
+      {
+        "class": "SetHpSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 20
+      }
+    ]
+  },
+  "attributes": {
+    "HIDDEN": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

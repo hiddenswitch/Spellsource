@@ -6,11 +6,12 @@ plugins {
   id "docker"
   id "java"
   id "next"
-  id "io.github.kobylynskyi.graphql.codegen" version "5.9.0"
+  /*id "io.github.kobylynskyi.graphql.codegen" version "5.9.0"*/
 }
 
 apply from: '../gradle/node.gradle'
 
+def isMacOs = org.gradle.internal.os.OperatingSystem.current().isMacOsX()
 
 new JsonSlurper().parseText(file('package.json').text).scripts.each { String scriptName, _ ->
   tasks.register("yarnRun${scriptName.split('-').collect { it.capitalize() }.join('')}", YarnTask) {
@@ -21,7 +22,7 @@ new JsonSlurper().parseText(file('package.json').text).scripts.each { String scr
 }
 
 
-graphqlCodegen {
+/*graphqlCodegen {
   // all config options: 
   // https://github.com/kobylynskyi/graphql-java-codegen/blob/main/docs/codegen-options.md
   graphqlSchemaPaths = [
@@ -50,7 +51,7 @@ graphqlCodegen {
     }
     delete "${outputDir.path}/com"
   }
-}
+}*/
 
 tasks.named("yarnRunCodegen").configure {
   inputs.dir("graphql/web")
@@ -58,16 +59,31 @@ tasks.named("yarnRunCodegen").configure {
   // TODO manually specify outputs as well?
 }
 
+tasks.register("toolRestore", Exec) {
+  def binary = isMacOs ? "/opt/homebrew/bin/dotnet" : "dotnet"
+  commandLine binary, "tool", "restore"
+}
+
 tasks.named("yarnRunStrawberryShake").configure {
+  dependsOn "toolRestore"
   inputs.dir("graphql/client")
   inputs.dir("graphql/shared")
-  // TODO manually specify outputs as well?
+  inputs.file(".graphqlrc.json")
+  outputs.file("Generated/GraphQL.Client.cs")
+  outputs.file("../spellsource-client/src/unity/Assets/Scripts/GraphQL.Client.cs")
+
+  doLast {
+    copy {
+      from "Generated/GraphQL.Client.cs"
+      into "../spellsource-client/src/unity/Assets/Scripts/"
+    }
+  }
 }
 
 tasks.register("generateAll") {
   inputs.file("schema.graphql")
   inputs.dir("graphql")
-  dependsOn yarnRunCodegen, yarnRunStrawberryShake, graphqlCodegen
+  dependsOn yarnRunCodegen, yarnRunStrawberryShake/*, graphqlCodegen*/
 }
 
 tasks.named("createDist").configure {

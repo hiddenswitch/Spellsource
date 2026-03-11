@@ -1,0 +1,41 @@
+{
+  "name": "Cheaper Spells",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Your Spells cost (1) less.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -1,
+    "cardType": "SPELL"
+  },
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "equipment_cheaper_spells"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

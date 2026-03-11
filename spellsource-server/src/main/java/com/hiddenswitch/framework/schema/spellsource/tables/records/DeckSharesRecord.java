@@ -18,7 +18,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 
 import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
 /**
- * indicates a deck shared to a player
+ * @omit create,update,delete
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DeckSharesRecord extends UpdatableRecordImpl<DeckSharesRecord> implements VertxPojo, Record3<String, String, Boolean>, IDeckShares {

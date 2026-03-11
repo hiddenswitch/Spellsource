@@ -95,9 +95,7 @@ message ServerConfiguration {
   }
 
   message GraphQLConfiguration {
-    string host = 1;
-    int32 port = 2;
-    string route = 3;
+    string url = 5;
   }
 
   PostgresConfiguration pg = 1;
@@ -123,7 +121,12 @@ message ClientConfiguration {
     string keycloakAccountManagementUrl = 2;
   }
 
+  message GraphQlConfiguration {
+    string graphQlUrl = 1;
+  }
+
   AccountsConfiguration accounts = 1;
+  GraphQlConfiguration graphQl = 2;
 }
 
 

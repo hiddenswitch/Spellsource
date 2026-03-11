@@ -15,8 +15,8 @@ import io.micrometer.core.instrument.binder.BaseUnits;
 import io.opentracing.log.Fields;
 import io.opentracing.propagation.Format;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.Future;
 import io.vertx.core.*;
+import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
@@ -895,6 +895,8 @@ public class ServerGameContext extends GameContext implements Server {
 			for (var consumer : inGameConsumers) {
 				consumer.unregister();
 			}
+
+			RogueManager.handleGameEnd(Long.parseLong(gameId), getWinner() == null ? null : getWinner().getUserId());
 
 			LOGGER.trace("endGame {}: endGameHandlers run", gameId);
 

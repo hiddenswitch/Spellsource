@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "blockly": "10.0.0",
+    "graphile-export": "^0.0.2-beta.29",
     "patch-package": "^6.5.1",
     "typescript": "^5.3.3",
     "yarn": "^2.4.3"

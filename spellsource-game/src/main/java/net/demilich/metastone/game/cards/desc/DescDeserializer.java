@@ -14,14 +14,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * A base class for deserializers of the "component" or object types in the Spellsource card JSON. Each type, like
- * {@link net.demilich.metastone.game.spells.Spell}, has a corresponding {@link Desc}, like {@link SpellDesc}, which is
- * deserialized by this class's implementor {@link SpellDescDeserializer}. In that class, the {@code
- * #init(SerializationContext)} implementation adds the mappings from each enum value of {@link SpellArg} to its
- * corresponding {@link ParseValueType}.
+ * A base class for deserializers of the "component" or object types in the Spellsource card JSON. Each type, like {@link net.demilich.metastone.game.spells.Spell}, has a corresponding {@link Desc}, like {@link SpellDesc}, which is deserialized by this class's implementor {@link SpellDescDeserializer}. In that class, the {@code #init(SerializationContext)} implementation adds the mappings from each enum value of {@link SpellArg} to its corresponding {@link ParseValueType}.
  * <p>
- * To help visualize, this means that if {@code <K>} is your enum type and {@code <V>} is your class deserialize to,
- * you'll have:
+ * To help visualize, this means that if {@code <K>} is your enum type and {@code <V>} is your class deserialize to, you'll have:
  *
  * <ul>
  * <li>A type {@code <T>} that is a "desc", which is a map of {@code <K>} to objects.</li>
@@ -106,7 +101,11 @@ public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, 
 	public T innerDeserialize(DeserializationContext ctxt, JsonNode node) throws JsonMappingException {
 		T inst = createDescInstance();
 		final String suppliedClassName = node.get("class").asText();
-		String[] spellClassNames = new String[]{getAbstractComponentClass().getPackage().getName() + "." + suppliedClassName, getAbstractComponentClass().getPackage().getName() + ".custom." + suppliedClassName};
+		String[] spellClassNames = new String[]{
+				getAbstractComponentClass().getPackage().getName() + "." + suppliedClassName,
+				getAbstractComponentClass().getPackage().getName() + ".custom." + suppliedClassName,
+				getAbstractComponentClass().getPackage().getName() + ".rogue." + suppliedClassName
+		};
 		Class<? extends V> spellClass = null;
 		for (String concreteClass : spellClassNames) {
 			try {

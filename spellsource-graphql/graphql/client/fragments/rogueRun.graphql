@@ -1,0 +1,16 @@
+fragment rogueRun on RogueRun {
+    id
+    player
+    state
+    bossesDefeated
+    heroClass
+    startedAt
+    gold
+    deck
+    lives
+    currentChoice {
+        ...rogueChoice
+    }
+    opponentDeck
+    opponentInfo
+}

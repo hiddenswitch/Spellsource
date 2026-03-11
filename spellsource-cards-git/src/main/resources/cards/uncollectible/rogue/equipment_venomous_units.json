@@ -1,0 +1,41 @@
+{
+  "name": "Venomous Units",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Your units have Venomous.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "AURA_POISONOUS"
+  },
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "equipment_hidden_units"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

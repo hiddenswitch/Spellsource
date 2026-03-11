@@ -13,10 +13,6 @@ repositories {
 }
 gradlePlugin {
   plugins {
-    nativeImage {
-      id = 'native-image'
-      implementationClass = 'com.spellsource.tasks.GraalPlugin'
-    }
     unity {
       id = 'unity'
       implementationClass = 'com.spellsource.tasks.UnityPlugin'

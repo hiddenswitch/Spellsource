@@ -1,0 +1,47 @@
+{
+  "name": "Dodge Units",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "When you play a unit, give it Dodge.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "EVENT_TARGET",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "equipment_dodge_units"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

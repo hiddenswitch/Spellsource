@@ -1,0 +1,5 @@
+mutation skipBoss($rogueId: BigInt!) {
+    skipBoss(rogueId: $rogueId) {
+        ...rogueRun
+    }
+}

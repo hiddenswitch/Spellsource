@@ -1,0 +1,50 @@
+{
+  "name": "Aftermath Spirits",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "When you play a unit, give it Aftermath: Summon a 1/1 Spirit.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_spirit"
+      }
+    }
+  },
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "equipment_aftermath_spirits"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true,
+    "UPGRADE": "equipment_aftermath_spirits_2"
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

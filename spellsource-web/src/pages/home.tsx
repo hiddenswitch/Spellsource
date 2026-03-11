@@ -8,6 +8,14 @@ import gameplay from "../../public/static/assets/gameplay.png";
 import cardEditor from "../../public/static/assets/card-editor.png";
 import collection from "../../public/static/assets/collection.png";
 import map from "../../public/static/wiki/Artboard_1-50.jpg";
+import { useGetUserIdTestQuery } from "../__generated__/client";
+import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
+
+
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+  props: { session: await getSession(context) },
+});
 
 const Rectangle: FunctionComponent<{
   href: string;

@@ -25,6 +25,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Friends;
 import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.GeneratedArt;
+import com.hiddenswitch.framework.schema.spellsource.tables.GetCardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.GetClasses;
 import com.hiddenswitch.framework.schema.spellsource.tables.GetCollectionCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.Guests;
@@ -32,6 +33,8 @@ import com.hiddenswitch.framework.schema.spellsource.tables.HardRemovalCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
 import com.hiddenswitch.framework.schema.spellsource.tables.PublishedCards;
+import com.hiddenswitch.framework.schema.spellsource.tables.RogueChoice;
+import com.hiddenswitch.framework.schema.spellsource.tables.RogueRun;
 import com.hiddenswitch.framework.schema.spellsource.tables.SetCardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueFormatsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetBannedDraftCardsRecord;
@@ -41,6 +44,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogu
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetFormatRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetHardRemovalCardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueQueryRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.GetCardsInDeckRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GetClassesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GetCollectionCardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.SetCardsInDeckRecord;
@@ -57,12 +61,12 @@ import org.jooq.Result;
 public class Tables {
 
     /**
-     * The table <code>spellsource.banned_draft_cards</code>.
+     * @omit
      */
     public static final BannedDraftCards BANNED_DRAFT_CARDS = BannedDraftCards.BANNED_DRAFT_CARDS;
 
     /**
-     * The table <code>spellsource.bot_users</code>.
+     * @omit
      */
     public static final BotUsers BOT_USERS = BotUsers.BOT_USERS;
 
@@ -341,7 +345,7 @@ public class Tables {
     }
 
     /**
-     * The table <code>spellsource.cards</code>.
+     * @omit delete
      */
     public static final Cards CARDS = Cards.CARDS;
 
@@ -351,49 +355,88 @@ public class Tables {
     public static final CardsInDeck CARDS_IN_DECK = CardsInDeck.CARDS_IN_DECK;
 
     /**
-     * The table <code>spellsource.classes</code>.
+     * @omit create,update,delete
      */
     public static final Classes CLASSES = Classes.CLASSES;
 
     /**
-     * The table <code>spellsource.collection_cards</code>.
+     * @omit create,update,delete
      */
     public static final CollectionCards COLLECTION_CARDS = CollectionCards.COLLECTION_CARDS;
 
     /**
-     * The table <code>spellsource.deck_player_attribute_tuples</code>.
+     * @omit
      */
     public static final DeckPlayerAttributeTuples DECK_PLAYER_ATTRIBUTE_TUPLES = DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES;
 
     /**
-     * indicates a deck shared to a player
+     * @omit create,update,delete
      */
     public static final DeckShares DECK_SHARES = DeckShares.DECK_SHARES;
 
     /**
-     * The table <code>spellsource.decks</code>.
+     * @omit delete
      */
     public static final Decks DECKS = Decks.DECKS;
 
     /**
-     * The table <code>spellsource.friends</code>.
+     * @omit
      */
     public static final Friends FRIENDS = Friends.FRIENDS;
 
     /**
-     * The table <code>spellsource.game_users</code>.
+     * @omit
      */
     public static final GameUsers GAME_USERS = GameUsers.GAME_USERS;
 
     /**
-     * The table <code>spellsource.games</code>.
+     * @omit
      */
     public static final Games GAMES = Games.GAMES;
 
     /**
-     * The table <code>spellsource.generated_art</code>.
+     * @omit delete
      */
     public static final GeneratedArt GENERATED_ART = GeneratedArt.GENERATED_ART;
+
+    /**
+     * The table <code>spellsource.get_cards_in_deck</code>.
+     */
+    public static final GetCardsInDeck GET_CARDS_IN_DECK = GetCardsInDeck.GET_CARDS_IN_DECK;
+
+    /**
+     * Call <code>spellsource.get_cards_in_deck</code>.
+     */
+    public static Result<GetCardsInDeckRecord> GET_CARDS_IN_DECK(
+          Configuration configuration
+        , String deck
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.GetCardsInDeck.GET_CARDS_IN_DECK.call(
+              deck
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.get_cards_in_deck</code> as a table.
+     */
+    public static GetCardsInDeck GET_CARDS_IN_DECK(
+          String deck
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.GetCardsInDeck.GET_CARDS_IN_DECK.call(
+            deck
+        );
+    }
+
+    /**
+     * Get <code>spellsource.get_cards_in_deck</code> as a table.
+     */
+    public static GetCardsInDeck GET_CARDS_IN_DECK(
+          Field<String> deck
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.GetCardsInDeck.GET_CARDS_IN_DECK.call(
+            deck
+        );
+    }
 
     /**
      * The table <code>spellsource.get_classes</code>.
@@ -442,22 +485,22 @@ public class Tables {
     }
 
     /**
-     * The table <code>spellsource.guests</code>.
+     * @omit
      */
     public static final Guests GUESTS = Guests.GUESTS;
 
     /**
-     * The table <code>spellsource.hard_removal_cards</code>.
+     * @omit
      */
     public static final HardRemovalCards HARD_REMOVAL_CARDS = HardRemovalCards.HARD_REMOVAL_CARDS;
 
     /**
-     * The table <code>spellsource.matchmaking_queues</code>.
+     * @omit
      */
     public static final MatchmakingQueues MATCHMAKING_QUEUES = MatchmakingQueues.MATCHMAKING_QUEUES;
 
     /**
-     * The table <code>spellsource.matchmaking_tickets</code>.
+     * @omit
      */
     public static final MatchmakingTickets MATCHMAKING_TICKETS = MatchmakingTickets.MATCHMAKING_TICKETS;
 
@@ -465,6 +508,16 @@ public class Tables {
      * The table <code>spellsource.published_cards</code>.
      */
     public static final PublishedCards PUBLISHED_CARDS = PublishedCards.PUBLISHED_CARDS;
+
+    /**
+     * @omit create,update,delete
+     */
+    public static final RogueChoice ROGUE_CHOICE = RogueChoice.ROGUE_CHOICE;
+
+    /**
+     * @omit create,update,delete
+     */
+    public static final RogueRun ROGUE_RUN = RogueRun.ROGUE_RUN;
 
     /**
      * The table <code>spellsource.set_cards_in_deck</code>.

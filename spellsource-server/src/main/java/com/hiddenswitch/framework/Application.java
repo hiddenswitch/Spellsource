@@ -7,8 +7,6 @@ import io.vertx.core.impl.cpu.CpuCoreSensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static io.vertx.core.CompositeFuture.all;
-
 public class Application {
 	private static Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
@@ -49,7 +47,8 @@ public class Application {
 							Future.all(vertx.deployVerticle(Gateway::new, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))),
 									vertx.deployVerticle(Matchmaking.class, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(1)),
 									vertx.deployVerticle(ClusteredGames.class, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(CpuCoreSensor.availableProcessors() * 2)),
-									broadcaster)
+									broadcaster,
+									vertx.deployVerticle(GraphQL.class, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(1)))
 					)
 					.onFailure(t -> LOGGER.error("main: failed with", t))
 					.onSuccess(s -> {

@@ -1,0 +1,36 @@
+{
+  "name": "Healing Damage",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Your healing effects now deal damage instead.",
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddAttributeSpell",
+            "target": "FRIENDLY_HERO",
+            "attribute": "INVERT_HEALING"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

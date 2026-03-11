@@ -11,7 +11,7 @@
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",
       "hostTargetType": "IGNORE_AS_SOURCE_CARD",
-      "targetPlayer": "SELF"
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "MissilesSpell",

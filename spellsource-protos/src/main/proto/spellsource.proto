@@ -39,6 +39,7 @@ message CardTypeMessage {
         ENCHANTMENT = 7;
         CLASS = 8;
         FORMAT = 9;
+        ROGUE_CHOICE = 10;
     }
 }
 
@@ -246,6 +247,8 @@ message GameEventTypeMessage {
         DESTROY_WILL_QUEUE = 60;
         TAP_ACTIVATED = 61;
         HONORABLE_KILL = 62;
+        ROGUE_CHOICE = 63;
+        GAME_INITIALIZED = 64;
     }
 }
 
@@ -1526,10 +1529,13 @@ message Sprite {
         FLYING = 3;
     }
 
-    // The sprite name in the client.
+    // The address to retrieve the sprite.
+    // When this is a plain string, this corresponds to a sprite name inside the Unity client.
+    // Otherwise, this is treated as a URL.
+    // The server will reject art in untrusted domains.
     string named = 1;
 
-    // The sprite's pivor point.
+    // The sprite's pivot point.
     // 
     //  - BOTTOM: The center bottom of the sprite (i.e. 0.5, 1.0)
     //  - DIMETRIC_2X1_FLOOR: Calculates the pivot point by ascending one pixel from the bottom for every four pixels

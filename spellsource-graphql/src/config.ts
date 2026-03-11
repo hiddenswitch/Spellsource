@@ -22,3 +22,6 @@ export const realm = process.env.KEYCLOAK_REALM || "hiddenswitch";
 export const issuer = process.env.KEYCLOAK_ISSUER || `${keycloakUrl}/realms/${realm}`;
 
 export const pgJwtSecret = process.env.PG_JWT_SECRET || "Ice Block";
+
+export const spellsourceHost = process.env.SPELLSOURCE_HOST || "host.docker.internal";
+export const spellsourcePort = process.env.SPELLSOURCE_PORT || 4000;

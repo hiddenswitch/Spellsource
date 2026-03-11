@@ -1,11 +1,13 @@
 plugins {
   id 'application'
-  id 'com.gradleup.shadow' version "8.3.5"
+  id 'com.gradleup.shadow' version "$shadowPluginVersion"
 }
 
 apply from: "${project.rootProject.layout.projectDirectory}/gradle/instrument.gradle"
 
 def mainClassNameStr = 'io.vertx.grpc.plugin.VertxGrpcGenerator'
+
+application.mainClass = mainClassNameStr
 
 dependencies {
   implementation("com.salesforce.servicelibs:jprotoc:1.2.1") {
@@ -46,7 +48,6 @@ jar {
 }
 
 shadowJar {
-  mainClassName = mainClassNameStr
 }
 
 tasks.named('run').configure {

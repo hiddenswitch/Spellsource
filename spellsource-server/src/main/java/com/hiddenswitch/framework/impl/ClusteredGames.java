@@ -102,7 +102,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			}
 
 			var configurationFut = deckCollectionFut
-					.compose(v -> Environment.withExecutor(queryExecutor -> queryExecutor.findOneRow(dsl -> dsl.select(KEYCLOAK.USER_ENTITY.USERNAME).from(KEYCLOAK.USER_ENTITY)
+					.compose(_ -> Environment.withExecutor(queryExecutor -> queryExecutor.findOneRow(dsl -> dsl.select(KEYCLOAK.USER_ENTITY.USERNAME).from(KEYCLOAK.USER_ENTITY)
 									.where(KEYCLOAK.USER_ENTITY.ID.eq(userId))))
 							.map(usernameRow -> usernameRow.getString(0))
 							.compose(username -> {
@@ -118,10 +118,12 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 							}));
 
 			playerConfigurations.add(configurationFut);
+			
+			RogueManager.handleGameStart(deckId, Long.parseLong(request.getGameId()));
 		}
 
 		return CompositeFuture.all(playerConfigurations)
-				.compose(v -> {
+				.compose(_ -> {
 					LOGGER.trace("loading player configurations for request {}", request);
 					var serverContextVerticle = new AbstractVirtualThreadVerticle() {
 						private ServerGameContext serverGameContext;
@@ -190,7 +192,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			var userIdLoser = gameContext.getOpponent(gameContext.getWinner()).getUserId();
 
 			var pTrace = JSONToJsonObjectConverter.getInstance().to(gameContext.getTrace().toJson());
-			await(Environment.callRoutine(Routines.clusteredGamesUpdateGameAndUsers(winner, userIdLoser, gameIdLong, pTrace)));
+			await(Environment.callRoutine(Routines.clusteredGamesUpdateGameAndUsers(winner, userIdLoser, gameIdLong, pTrace)).execute());
 		}
 
 		if (gameContext.getStatus() == GameStatus.RUNNING) {

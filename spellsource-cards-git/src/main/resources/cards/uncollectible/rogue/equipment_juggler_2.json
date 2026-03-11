@@ -1,0 +1,50 @@
+{
+  "name": "Juggler II",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "After you summon a unit, deal 2 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionSummonedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 2,
+      "howMany": 1,
+      "randomTarget": true
+    }
+  },
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "equipment_juggler_2"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true,
+    "UPGRADE": "equipment_juggler_3"
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}

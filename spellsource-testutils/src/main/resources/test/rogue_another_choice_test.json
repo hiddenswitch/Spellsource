@@ -1,0 +1,21 @@
+{
+  "name": "Test Rogue Another Choice Spell Effect",
+  "baseManaCost": 0,
+  "type": "ROGUE_CHOICE",
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "Choose between 3 cards to add to your deck",
+  "rogueInfo": {
+    "chosenSpell": {
+      "class": "rogue.ChoiceSpell",
+      "cards": [
+        "minion_test_1_3",
+        "spell_test_1_aoe",
+        "weapon_test_1_1"
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

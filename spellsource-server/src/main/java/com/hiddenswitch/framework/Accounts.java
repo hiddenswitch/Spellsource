@@ -56,19 +56,13 @@ import static io.vertx.await.Async.await;
 import static java.util.stream.Collectors.toMap;
 
 /**
- * Implements the account services from {@link AccountsApi} against Keycloak, the open source Java identity management
- * application.
+ * Implements the account services from {@link AccountsApi} against Keycloak, the open source Java identity management application.
  * <p>
  * In the server, a {@link Keycloak} instance is used to create and manage user accounts.
  * <p>
- * The client creates an account with {@link com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpcClient}. The access
- * token returned by the reply, {@link LoginOrCreateReply#getAccessTokenResponse()}'s
- * {@link AccessTokenResponse#getToken()}
+ * The client creates an account with {@link com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpcClient}. The access token returned by the reply, {@link LoginOrCreateReply#getAccessTokenResponse()}'s {@link AccessTokenResponse#getToken()}
  * <p>
- * Keycloak manages the migration of the {@link com.hiddenswitch.framework.schema.keycloak.Keycloak} SQL schema. The
- * {@link com.hiddenswitch.framework.schema.keycloak.tables.UserEntity} table's
- * {@link com.hiddenswitch.framework.schema.keycloak.tables.UserEntity#ID} field is the user ID used throughout the
- * application.
+ * Keycloak manages the migration of the {@link com.hiddenswitch.framework.schema.keycloak.Keycloak} SQL schema. The {@link com.hiddenswitch.framework.schema.keycloak.tables.UserEntity} table's {@link com.hiddenswitch.framework.schema.keycloak.tables.UserEntity#ID} field is the user ID used throughout the application.
  */
 public class Accounts {
 	public static final String SHOW_PREMADE_DECKS = "showPremadeDecks";
@@ -95,8 +89,7 @@ public class Accounts {
 	 *   }
 	 * </pre>
 	 * <p>
-	 * Since vertx code is typically async, the GRPC context's data is only valid in the first scope of the GRPC server
-	 * implementation.
+	 * Since vertx code is typically async, the GRPC context's data is only valid in the first scope of the GRPC server implementation.
 	 *
 	 * @return A {@link UserEntity} SQL model of a user record
 	 * @see #userId() when the user ID will suffice
@@ -127,8 +120,7 @@ public class Accounts {
 	 *   }
 	 * </pre>
 	 * <p>
-	 * Since vertx code is typically async, the GRPC context's data is only valid in the first scope of the GRPC server
-	 * implementation.
+	 * Since vertx code is typically async, the GRPC context's data is only valid in the first scope of the GRPC server implementation.
 	 *
 	 * @return a user ID, or {@code null} if no token was retrieved
 	 */
@@ -263,6 +255,9 @@ public class Accounts {
 								.setKeycloakResetPasswordUrl(URI.create(authUrl + KEYCLOAK_FORGOT_PASSWORD_PATH).normalize().toString())
 								.setKeycloakAccountManagementUrl(URI.create(authUrl + KEYCLOAK_LOGIN_PATH).normalize().toString())
 								.build())
+						.setGraphQl(ClientConfiguration.GraphQlConfiguration
+								.newBuilder()
+								.setGraphQlUrl(config.getGraphql().getUrl()))
 						.build());
 			}
 		}::bindAll;

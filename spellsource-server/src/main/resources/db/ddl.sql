@@ -3,12 +3,11 @@
 --
 
 -- Dumped from database version 13.11 (Debian 13.11-1.pgdg110+1)
--- Dumped by pg_dump version 17.2 (Debian 17.2-1.pgdg120+1)
+-- Dumped by pg_dump version 13.11
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -34,15 +33,6 @@ CREATE SCHEMA keycloak;
 
 
 ALTER SCHEMA keycloak OWNER TO admin;
-
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: admin
---
-
--- *not* creating schema, since initdb creates it
-
-
-ALTER SCHEMA public OWNER TO admin;
 
 --
 -- Name: spellsource; Type: SCHEMA; Schema: -; Owner: admin
@@ -96,6 +86,33 @@ CREATE TYPE spellsource.game_user_victory_enum AS ENUM (
 ALTER TYPE spellsource.game_user_victory_enum OWNER TO admin;
 
 --
+-- Name: rogue_choice_type; Type: TYPE; Schema: spellsource; Owner: admin
+--
+
+CREATE TYPE spellsource.rogue_choice_type AS ENUM (
+    'STANDARD',
+    'EQUIPMENT'
+);
+
+
+ALTER TYPE spellsource.rogue_choice_type OWNER TO admin;
+
+--
+-- Name: rogue_run_state; Type: TYPE; Schema: spellsource; Owner: admin
+--
+
+CREATE TYPE spellsource.rogue_run_state AS ENUM (
+    'INITIAL',
+    'FINISHED',
+    'PRE_MATCH',
+    'IN_MATCH',
+    'CHOICE'
+);
+
+
+ALTER TYPE spellsource.rogue_run_state OWNER TO admin;
+
+--
 -- Name: archive_card(text); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -133,6 +150,13 @@ CREATE TABLE spellsource.decks (
 
 
 ALTER TABLE spellsource.decks OWNER TO admin;
+
+--
+-- Name: TABLE decks; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.decks IS '@omit delete';
+
 
 --
 -- Name: COLUMN decks.created_by; Type: COMMENT; Schema: spellsource; Owner: admin
@@ -197,6 +221,13 @@ CREATE TABLE spellsource.cards (
 ALTER TABLE spellsource.cards OWNER TO admin;
 
 --
+-- Name: TABLE cards; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.cards IS '@omit delete';
+
+
+--
 -- Name: COLUMN cards.uri; Type: COMMENT; Schema: spellsource; Owner: admin
 --
 
@@ -226,6 +257,13 @@ $$;
 ALTER FUNCTION spellsource.card_catalogue_formats() OWNER TO admin;
 
 --
+-- Name: FUNCTION card_catalogue_formats(); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_catalogue_formats() IS '@omit';
+
+
+--
 -- Name: card_catalogue_get_banned_draft_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -249,6 +287,13 @@ $$;
 ALTER FUNCTION spellsource.card_catalogue_get_banned_draft_cards() OWNER TO admin;
 
 --
+-- Name: FUNCTION card_catalogue_get_banned_draft_cards(); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_catalogue_get_banned_draft_cards() IS '@omit';
+
+
+--
 -- Name: card_catalogue_get_base_classes(text[]); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -270,6 +315,13 @@ $$;
 ALTER FUNCTION spellsource.card_catalogue_get_base_classes(sets text[]) OWNER TO admin;
 
 --
+-- Name: FUNCTION card_catalogue_get_base_classes(sets text[]); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_catalogue_get_base_classes(sets text[]) IS '@omit';
+
+
+--
 -- Name: card_catalogue_get_card_by_id(text); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -288,6 +340,13 @@ $$;
 
 
 ALTER FUNCTION spellsource.card_catalogue_get_card_by_id(card_id text) OWNER TO admin;
+
+--
+-- Name: FUNCTION card_catalogue_get_card_by_id(card_id text); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_catalogue_get_card_by_id(card_id text) IS '@omit';
+
 
 --
 -- Name: card_catalogue_get_card_by_name(text); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -316,6 +375,13 @@ $$;
 
 
 ALTER FUNCTION spellsource.card_catalogue_get_card_by_name(card_name text) OWNER TO admin;
+
+--
+-- Name: FUNCTION card_catalogue_get_card_by_name(card_name text); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_catalogue_get_card_by_name(card_name text) IS '@omit';
+
 
 --
 -- Name: card_catalogue_get_card_by_name_and_class(text, text); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -347,6 +413,13 @@ $$;
 ALTER FUNCTION spellsource.card_catalogue_get_card_by_name_and_class(card_name text, hero_class text) OWNER TO admin;
 
 --
+-- Name: FUNCTION card_catalogue_get_card_by_name_and_class(card_name text, hero_class text); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_catalogue_get_card_by_name_and_class(card_name text, hero_class text) IS '@omit';
+
+
+--
 -- Name: card_catalogue_get_class_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -365,6 +438,13 @@ $$;
 
 
 ALTER FUNCTION spellsource.card_catalogue_get_class_cards() OWNER TO admin;
+
+--
+-- Name: FUNCTION card_catalogue_get_class_cards(); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_catalogue_get_class_cards() IS '@omit';
+
 
 --
 -- Name: card_catalogue_get_format(text); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -388,6 +468,13 @@ $$;
 ALTER FUNCTION spellsource.card_catalogue_get_format(card_name text) OWNER TO admin;
 
 --
+-- Name: FUNCTION card_catalogue_get_format(card_name text); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_catalogue_get_format(card_name text) IS '@omit';
+
+
+--
 -- Name: card_catalogue_get_hard_removal_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -409,6 +496,13 @@ $$;
 
 
 ALTER FUNCTION spellsource.card_catalogue_get_hard_removal_cards() OWNER TO admin;
+
+--
+-- Name: FUNCTION card_catalogue_get_hard_removal_cards(); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_catalogue_get_hard_removal_cards() IS '@omit';
+
 
 --
 -- Name: card_catalogue_get_hero_card(text); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -440,6 +534,13 @@ $$;
 ALTER FUNCTION spellsource.card_catalogue_get_hero_card(hero_class text) OWNER TO admin;
 
 --
+-- Name: FUNCTION card_catalogue_get_hero_card(hero_class text); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_catalogue_get_hero_card(hero_class text) IS '@omit';
+
+
+--
 -- Name: card_catalogue_query(text[], text, text, text, text); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -462,6 +563,13 @@ $$;
 
 
 ALTER FUNCTION spellsource.card_catalogue_query(sets text[], card_type text, rarity text, hero_class text, attribute text) OWNER TO admin;
+
+--
+-- Name: FUNCTION card_catalogue_query(sets text[], card_type text, rarity text, hero_class text, attribute text); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_catalogue_query(sets text[], card_type text, rarity text, hero_class text, attribute text) IS '@omit';
+
 
 --
 -- Name: card_change_notify_event(); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -490,7 +598,8 @@ ALTER FUNCTION spellsource.card_change_notify_event() OWNER TO admin;
 -- Name: FUNCTION card_change_notify_event(); Type: COMMENT; Schema: spellsource; Owner: admin
 --
 
-COMMENT ON FUNCTION spellsource.card_change_notify_event() IS 'Whenever one of the cards change, this will be fired for
+COMMENT ON FUNCTION spellsource.card_change_notify_event() IS '@omit
+Whenever one of the cards change, this will be fired for
     the purposes of invalidating caches. This is a JSON object with fields id for the card ID and createdBy for the user
     that created the card.';
 
@@ -533,7 +642,14 @@ CREATE VIEW spellsource.classes AS
    FROM spellsource.get_classes() get_classes(created_by, class, is_published, collectible, card_script, id, name);
 
 
-ALTER VIEW spellsource.classes OWNER TO admin;
+ALTER TABLE spellsource.classes OWNER TO admin;
+
+--
+-- Name: VIEW classes; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON VIEW spellsource.classes IS '@omit create,update,delete';
+
 
 --
 -- Name: card_message(spellsource.cards, spellsource.classes); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -569,6 +685,13 @@ $$;
 ALTER FUNCTION spellsource.cards_collectible(card spellsource.cards) OWNER TO admin;
 
 --
+-- Name: FUNCTION cards_collectible(card spellsource.cards); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.cards_collectible(card spellsource.cards) IS '@omit';
+
+
+--
 -- Name: cards_cost(spellsource.cards); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -582,6 +705,13 @@ $$;
 
 
 ALTER FUNCTION spellsource.cards_cost(card spellsource.cards) OWNER TO admin;
+
+--
+-- Name: FUNCTION cards_cost(card spellsource.cards); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.cards_cost(card spellsource.cards) IS '@omit';
+
 
 --
 -- Name: cards_in_deck; Type: TABLE; Schema: spellsource; Owner: admin
@@ -626,6 +756,13 @@ $$;
 ALTER FUNCTION spellsource.cards_in_deck_card_by_card_id(cards_in_deck spellsource.cards_in_deck) OWNER TO admin;
 
 --
+-- Name: FUNCTION cards_in_deck_card_by_card_id(cards_in_deck spellsource.cards_in_deck); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.cards_in_deck_card_by_card_id(cards_in_deck spellsource.cards_in_deck) IS '@omit';
+
+
+--
 -- Name: cards_type(spellsource.cards); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -639,6 +776,139 @@ $$;
 
 
 ALTER FUNCTION spellsource.cards_type(card spellsource.cards) OWNER TO admin;
+
+--
+-- Name: FUNCTION cards_type(card spellsource.cards); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.cards_type(card spellsource.cards) IS '@omit';
+
+
+--
+-- Name: generate_seed(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.generate_seed() RETURNS bigint
+    LANGUAGE sql
+    AS $$
+select (random() * 1e10)::bigint;
+$$;
+
+
+ALTER FUNCTION spellsource.generate_seed() OWNER TO admin;
+
+--
+-- Name: FUNCTION generate_seed(); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.generate_seed() IS '@omit';
+
+
+--
+-- Name: rogue_run; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.rogue_run (
+    id bigint NOT NULL,
+    player character varying(36) NOT NULL,
+    started_at timestamp with time zone DEFAULT now() NOT NULL,
+    ended_at timestamp with time zone,
+    hero_class text NOT NULL,
+    deck text NOT NULL,
+    bosses_defeated integer DEFAULT 0 NOT NULL,
+    state spellsource.rogue_run_state DEFAULT 'INITIAL'::spellsource.rogue_run_state NOT NULL,
+    game bigint,
+    opponent_deck text,
+    seed bigint DEFAULT spellsource.generate_seed() NOT NULL,
+    seed_state bigint DEFAULT 0 NOT NULL,
+    gold integer DEFAULT 0 NOT NULL,
+    lives integer DEFAULT 1 NOT NULL
+);
+
+
+ALTER TABLE spellsource.rogue_run OWNER TO admin;
+
+--
+-- Name: TABLE rogue_run; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.rogue_run IS '@omit create,update,delete';
+
+
+--
+-- Name: check_rogue_game_end(bigint, character varying); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.check_rogue_game_end(game_id bigint, winning_user character varying) RETURNS spellsource.rogue_run
+    LANGUAGE plpgsql
+    AS $$
+declare
+    rogue_run spellsource.rogue_run%rowtype;
+begin
+    select * from spellsource.rogue_run where game = game_id into rogue_run;
+
+    if not found then
+        return null;
+    end if;
+
+    if winning_user != rogue_run.player then
+        if rogue_run.lives = 1 then
+            update spellsource.rogue_run as r
+            set ended_at = now(),
+                state    = 'FINISHED',
+                lives    = rogue_run.lives - 1
+            where r.id = rogue_run.id;
+            return null;
+        end if;
+
+        update spellsource.rogue_run as r set lives = rogue_run.lives - 1 where r.id = rogue_run.id;
+    end if;
+
+    update spellsource.rogue_run as r set state = 'CHOICE' where r.id = rogue_run.id returning * into rogue_run;
+
+    return rogue_run;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.check_rogue_game_end(game_id bigint, winning_user character varying) OWNER TO admin;
+
+--
+-- Name: FUNCTION check_rogue_game_end(game_id bigint, winning_user character varying); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.check_rogue_game_end(game_id bigint, winning_user character varying) IS '@omit';
+
+
+--
+-- Name: check_rogue_game_start(text, bigint); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.check_rogue_game_start(deck_id text, game_id bigint) RETURNS spellsource.rogue_run
+    LANGUAGE plpgsql
+    AS $$
+declare
+    rogue_run spellsource.rogue_run%rowtype;
+begin
+    update spellsource.rogue_run set game = game_id, state = 'IN_MATCH' where deck = deck_id returning * into rogue_run;
+
+    if found then
+        return rogue_run;
+    else
+        return null;
+    end if;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.check_rogue_game_start(deck_id text, game_id bigint) OWNER TO admin;
+
+--
+-- Name: FUNCTION check_rogue_game_start(deck_id text, game_id bigint); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.check_rogue_game_start(deck_id text, game_id bigint) IS '@omit';
+
 
 --
 -- Name: clustered_games_update_game_and_users(text, text, bigint, json); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -677,6 +947,13 @@ $$;
 ALTER FUNCTION spellsource.clustered_games_update_game_and_users(p_user_id_winner text, p_user_id_loser text, p_game_id bigint, p_trace json) OWNER TO admin;
 
 --
+-- Name: FUNCTION clustered_games_update_game_and_users(p_user_id_winner text, p_user_id_loser text, p_game_id bigint, p_trace json); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.clustered_games_update_game_and_users(p_user_id_winner text, p_user_id_loser text, p_game_id bigint, p_trace json) IS '@omit';
+
+
+--
 -- Name: create_deck_with_cards(text, text, text, text[]); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -707,6 +984,116 @@ $$;
 
 
 ALTER FUNCTION spellsource.create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]) OWNER TO admin;
+
+--
+-- Name: rogue_choice; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.rogue_choice (
+    id bigint NOT NULL,
+    rogue_run bigint NOT NULL,
+    cards text[] NOT NULL,
+    can_pick integer DEFAULT 1 NOT NULL,
+    index integer DEFAULT 0 NOT NULL,
+    can_reroll boolean DEFAULT false NOT NULL,
+    repopulate boolean DEFAULT false NOT NULL,
+    type spellsource.rogue_choice_type DEFAULT 'STANDARD'::spellsource.rogue_choice_type NOT NULL
+);
+
+
+ALTER TABLE spellsource.rogue_choice OWNER TO admin;
+
+--
+-- Name: TABLE rogue_choice; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.rogue_choice IS '@omit create,update,delete';
+
+
+--
+-- Name: current_rogue_choice(bigint); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.current_rogue_choice(rogue_id bigint) RETURNS spellsource.rogue_choice
+    LANGUAGE plpgsql STABLE
+    AS $$
+declare
+    choice spellsource.rogue_choice%rowtype;
+begin
+    select *
+    from spellsource.rogue_choice as rc
+    where rc.rogue_run = rogue_id
+    order by index
+    limit 1
+    into choice;
+
+    return choice;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.current_rogue_choice(rogue_id bigint) OWNER TO admin;
+
+--
+-- Name: current_rogue_run(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.current_rogue_run() RETURNS spellsource.rogue_run
+    LANGUAGE sql STABLE
+    AS $$
+select *
+from spellsource.rogue_run
+where player = spellsource.get_user_id()
+limit 1;
+$$;
+
+
+ALTER FUNCTION spellsource.current_rogue_run() OWNER TO admin;
+
+--
+-- Name: end_rogue_run(bigint); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.end_rogue_run(rogue_id bigint) RETURNS spellsource.rogue_run
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'spellsource', 'pg_temp'
+    AS $$
+declare
+    rogue_run spellsource.rogue_run%rowtype;
+begin
+    update spellsource.rogue_run
+    set ended_at = now(), state = 'FINISHED'
+    where id = rogue_id
+    returning * into rogue_run;
+
+    return rogue_run;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.end_rogue_run(rogue_id bigint) OWNER TO admin;
+
+--
+-- Name: get_cards_in_deck(text); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.get_cards_in_deck(deck text) RETURNS SETOF text
+    LANGUAGE sql STABLE
+    AS $$
+select card_id
+from spellsource.cards_in_deck
+where deck_id = deck;
+$$;
+
+
+ALTER FUNCTION spellsource.get_cards_in_deck(deck text) OWNER TO admin;
+
+--
+-- Name: FUNCTION get_cards_in_deck(deck text); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.get_cards_in_deck(deck text) IS '@omit';
+
 
 --
 -- Name: get_collection_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -794,6 +1181,13 @@ $$;
 ALTER FUNCTION spellsource.get_user_attribute(id_user text, attribute text, or_default text) OWNER TO admin;
 
 --
+-- Name: FUNCTION get_user_attribute(id_user text, attribute text, or_default text); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.get_user_attribute(id_user text, attribute text, or_default text) IS '@omit';
+
+
+--
 -- Name: get_user_id(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -827,6 +1221,13 @@ $$;
 
 
 ALTER FUNCTION spellsource.on_card_published() OWNER TO admin;
+
+--
+-- Name: FUNCTION on_card_published(); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.on_card_published() IS '@omit';
+
 
 --
 -- Name: publish_card(text); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -898,6 +1299,67 @@ $$;
 ALTER FUNCTION spellsource.publish_git_card(card_id text, json jsonb, creator character varying) OWNER TO admin;
 
 --
+-- Name: FUNCTION publish_git_card(card_id text, json jsonb, creator character varying); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.publish_git_card(card_id text, json jsonb, creator character varying) IS '@omit';
+
+
+--
+-- Name: rogue_opponent_bot_user(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.rogue_opponent_bot_user() RETURNS character varying
+    LANGUAGE sql STABLE
+    AS $$
+select id
+from spellsource.bot_users
+limit 1;
+$$;
+
+
+ALTER FUNCTION spellsource.rogue_opponent_bot_user() OWNER TO admin;
+
+--
+-- Name: FUNCTION rogue_opponent_bot_user(); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.rogue_opponent_bot_user() IS '@omit';
+
+
+--
+-- Name: rogue_run_current_choice(spellsource.rogue_run); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.rogue_run_current_choice(rr spellsource.rogue_run) RETURNS spellsource.rogue_choice
+    LANGUAGE plpgsql STABLE
+    AS $$
+begin
+    return spellsource.current_rogue_choice(rr.id);
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.rogue_run_current_choice(rr spellsource.rogue_run) OWNER TO admin;
+
+--
+-- Name: rogue_run_opponent_info(spellsource.rogue_run); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.rogue_run_opponent_info(rr spellsource.rogue_run) RETURNS text
+    LANGUAGE sql STABLE SECURITY DEFINER
+    SET search_path TO 'spellsource', 'pg_temp'
+    AS $$
+select d.hero_class
+from spellsource.rogue_run as r
+         inner join spellsource.decks d on d.id = r.opponent_deck
+where r.id = rr.id;
+$$;
+
+
+ALTER FUNCTION spellsource.rogue_run_opponent_info(rr spellsource.rogue_run) OWNER TO admin;
+
+--
 -- Name: save_card(text, jsonb, jsonb); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -944,6 +1406,13 @@ CREATE TABLE spellsource.generated_art (
 
 
 ALTER TABLE spellsource.generated_art OWNER TO admin;
+
+--
+-- Name: TABLE generated_art; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.generated_art IS '@omit delete';
+
 
 --
 -- Name: save_generated_art(text, text[], jsonb); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -1006,6 +1475,63 @@ $$;
 
 
 ALTER FUNCTION spellsource.set_user_attribute(id_user text, attribute text, val text) OWNER TO admin;
+
+--
+-- Name: FUNCTION set_user_attribute(id_user text, attribute text, val text); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.set_user_attribute(id_user text, attribute text, val text) IS '@omit';
+
+
+--
+-- Name: start_rogue_run(text, bigint); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.start_rogue_run(class_hero text, use_seed bigint) RETURNS spellsource.rogue_run
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'spellsource', 'pg_temp'
+    AS $$
+declare
+    user_id          varchar(36);
+    rogue_run        spellsource.rogue_run%rowtype;
+    deck_id          text;
+    opponent_bot     varchar(36);
+    opponent_deck_id text;
+begin
+    user_id := spellsource.get_user_id();
+
+    if user_id is null or user_id = '' then
+        raise exception 'User not logged in';
+    end if;
+
+    insert into spellsource.decks (id, created_by, last_edited_by, name, hero_class, deck_type, format)
+    values (gen_random_uuid()::text, user_id, user_id, 'Rogue Deck', class_hero, 2, 'Rogue')
+    returning (id) into deck_id;
+
+    opponent_bot := spellsource.rogue_opponent_bot_user();
+
+    insert into spellsource.decks (id, created_by, last_edited_by, name, hero_class, deck_type, format)
+    values (gen_random_uuid()::text, opponent_bot, opponent_bot, 'Rogue Opponent Deck', '', 2, 'Rogue')
+    returning (id) into opponent_deck_id;
+
+
+    insert into spellsource.rogue_run (player, started_at, deck, seed, hero_class, opponent_deck, lives)
+    values (user_id, now(), deck_id, coalesce(use_seed, spellsource.generate_seed()), class_hero, opponent_deck_id, 3)
+    returning * into rogue_run;
+
+    return rogue_run;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.start_rogue_run(class_hero text, use_seed bigint) OWNER TO admin;
+
+--
+-- Name: FUNCTION start_rogue_run(class_hero text, use_seed bigint); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.start_rogue_run(class_hero text, use_seed bigint) IS '@omit';
+
 
 --
 -- Name: flyway_schema_history; Type: TABLE; Schema: hiddenswitch; Owner: admin
@@ -2467,6 +2993,13 @@ CREATE TABLE spellsource.banned_draft_cards (
 ALTER TABLE spellsource.banned_draft_cards OWNER TO admin;
 
 --
+-- Name: TABLE banned_draft_cards; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.banned_draft_cards IS '@omit';
+
+
+--
 -- Name: bot_users; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
@@ -2476,6 +3009,13 @@ CREATE TABLE spellsource.bot_users (
 
 
 ALTER TABLE spellsource.bot_users OWNER TO admin;
+
+--
+-- Name: TABLE bot_users; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.bot_users IS '@omit';
+
 
 --
 -- Name: cards_in_deck_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
@@ -2525,7 +3065,14 @@ CREATE VIEW spellsource.collection_cards AS
    FROM spellsource.get_collection_cards() get_collection_cards(id, created_by, card_script, blockly_workspace, name, type, class, cost, collectible, search_message, last_modified, created_at);
 
 
-ALTER VIEW spellsource.collection_cards OWNER TO admin;
+ALTER TABLE spellsource.collection_cards OWNER TO admin;
+
+--
+-- Name: VIEW collection_cards; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON VIEW spellsource.collection_cards IS '@omit create,update,delete';
+
 
 --
 -- Name: deck_player_attribute_tuples; Type: TABLE; Schema: spellsource; Owner: admin
@@ -2540,6 +3087,13 @@ CREATE TABLE spellsource.deck_player_attribute_tuples (
 
 
 ALTER TABLE spellsource.deck_player_attribute_tuples OWNER TO admin;
+
+--
+-- Name: TABLE deck_player_attribute_tuples; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.deck_player_attribute_tuples IS '@omit';
+
 
 --
 -- Name: deck_player_attribute_tuples_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
@@ -2572,7 +3126,7 @@ ALTER TABLE spellsource.deck_shares OWNER TO admin;
 -- Name: TABLE deck_shares; Type: COMMENT; Schema: spellsource; Owner: admin
 --
 
-COMMENT ON TABLE spellsource.deck_shares IS 'indicates a deck shared to a player';
+COMMENT ON TABLE spellsource.deck_shares IS '@omit create,update,delete';
 
 
 --
@@ -2587,6 +3141,13 @@ CREATE TABLE spellsource.friends (
 
 
 ALTER TABLE spellsource.friends OWNER TO admin;
+
+--
+-- Name: TABLE friends; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.friends IS '@omit';
+
 
 --
 -- Name: game_users; Type: TABLE; Schema: spellsource; Owner: admin
@@ -2604,6 +3165,13 @@ CREATE TABLE spellsource.game_users (
 ALTER TABLE spellsource.game_users OWNER TO admin;
 
 --
+-- Name: TABLE game_users; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.game_users IS '@omit';
+
+
+--
 -- Name: games; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
@@ -2617,6 +3185,13 @@ CREATE TABLE spellsource.games (
 
 
 ALTER TABLE spellsource.games OWNER TO admin;
+
+--
+-- Name: TABLE games; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.games IS '@omit';
+
 
 --
 -- Name: games_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
@@ -2645,6 +3220,13 @@ CREATE TABLE spellsource.guests (
 ALTER TABLE spellsource.guests OWNER TO admin;
 
 --
+-- Name: TABLE guests; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.guests IS '@omit';
+
+
+--
 -- Name: guests_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
 --
 
@@ -2670,6 +3252,13 @@ CREATE TABLE spellsource.hard_removal_cards (
 ALTER TABLE spellsource.hard_removal_cards OWNER TO admin;
 
 --
+-- Name: TABLE hard_removal_cards; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.hard_removal_cards IS '@omit';
+
+
+--
 -- Name: matchmaking_queues; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
@@ -2693,6 +3282,13 @@ CREATE TABLE spellsource.matchmaking_queues (
 ALTER TABLE spellsource.matchmaking_queues OWNER TO admin;
 
 --
+-- Name: TABLE matchmaking_queues; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.matchmaking_queues IS '@omit';
+
+
+--
 -- Name: matchmaking_tickets; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
@@ -2707,6 +3303,13 @@ CREATE TABLE spellsource.matchmaking_tickets (
 
 
 ALTER TABLE spellsource.matchmaking_tickets OWNER TO admin;
+
+--
+-- Name: TABLE matchmaking_tickets; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.matchmaking_tickets IS '@omit';
+
 
 --
 -- Name: matchmaking_tickets_ticket_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
@@ -2733,6 +3336,34 @@ CREATE TABLE spellsource.published_cards (
 
 
 ALTER TABLE spellsource.published_cards OWNER TO admin;
+
+--
+-- Name: rogue_choice_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.rogue_choice ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME spellsource.rogue_choice_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: rogue_run_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.rogue_run ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME spellsource.rogue_run_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
 
 --
 -- Name: flyway_schema_history flyway_schema_history_pk; Type: CONSTRAINT; Schema: hiddenswitch; Owner: admin
@@ -3708,6 +4339,38 @@ ALTER TABLE ONLY spellsource.matchmaking_tickets
 
 ALTER TABLE ONLY spellsource.published_cards
     ADD CONSTRAINT published_cards_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rogue_choice rogue_choice_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_choice
+    ADD CONSTRAINT rogue_choice_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rogue_run rogue_run_deck_key; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_deck_key UNIQUE (deck);
+
+
+--
+-- Name: rogue_run rogue_run_game_key; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_game_key UNIQUE (game);
+
+
+--
+-- Name: rogue_run rogue_run_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_pkey PRIMARY KEY (id);
 
 
 --
@@ -5199,6 +5862,46 @@ ALTER TABLE ONLY spellsource.published_cards
 
 
 --
+-- Name: rogue_choice rogue_choice_rogue_run_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_choice
+    ADD CONSTRAINT rogue_choice_rogue_run_fkey FOREIGN KEY (rogue_run) REFERENCES spellsource.rogue_run(id);
+
+
+--
+-- Name: rogue_run rogue_run_deck_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_deck_fkey FOREIGN KEY (deck) REFERENCES spellsource.decks(id);
+
+
+--
+-- Name: rogue_run rogue_run_game_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_game_fkey FOREIGN KEY (game) REFERENCES spellsource.games(id);
+
+
+--
+-- Name: rogue_run rogue_run_opponent_deck_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_opponent_deck_fkey FOREIGN KEY (opponent_deck) REFERENCES spellsource.decks(id);
+
+
+--
+-- Name: rogue_run rogue_run_player_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.rogue_run
+    ADD CONSTRAINT rogue_run_player_fkey FOREIGN KEY (player) REFERENCES keycloak.user_entity(id);
+
+
+--
 -- Name: user_attribute; Type: ROW SECURITY; Schema: keycloak; Owner: admin
 --
 
@@ -5269,6 +5972,47 @@ CREATE POLICY public_view ON spellsource.decks FOR SELECT USING (is_premade);
 ALTER TABLE spellsource.published_cards ENABLE ROW LEVEL SECURITY;
 
 --
+-- Name: rogue_choice rls; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY rls ON spellsource.rogue_choice FOR SELECT USING ((EXISTS ( SELECT rogue_run.id,
+    rogue_run.player,
+    rogue_run.started_at,
+    rogue_run.ended_at,
+    rogue_run.hero_class,
+    rogue_run.deck,
+    rogue_run.bosses_defeated,
+    rogue_run.state,
+    rogue_run.game,
+    rogue_run.opponent_deck,
+    rogue_run.seed,
+    rogue_run.seed_state,
+    rogue_run.gold,
+    rogue_run.lives
+   FROM spellsource.rogue_run
+  WHERE ((rogue_run.id = rogue_choice.rogue_run) AND ((rogue_run.player)::text = spellsource.get_user_id())))));
+
+
+--
+-- Name: rogue_run rls; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY rls ON spellsource.rogue_run FOR SELECT USING ((spellsource.get_user_id() = (player)::text));
+
+
+--
+-- Name: rogue_choice; Type: ROW SECURITY; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.rogue_choice ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: rogue_run; Type: ROW SECURITY; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.rogue_run ENABLE ROW LEVEL SECURITY;
+
+--
 -- Name: generated_art update_art; Type: POLICY; Schema: spellsource; Owner: admin
 --
 
@@ -5297,7 +6041,7 @@ CREATE POLICY website_delete ON spellsource.cards_in_deck FOR DELETE TO website 
     decks.is_premade,
     decks.permitted_to_duplicate
    FROM spellsource.decks
-  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id())))));
+  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id()) AND (decks.deck_type <> 2)))));
 
 
 --
@@ -5329,7 +6073,7 @@ CREATE POLICY website_insert ON spellsource.cards_in_deck FOR INSERT TO website 
     decks.is_premade,
     decks.permitted_to_duplicate
    FROM spellsource.decks
-  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id())))));
+  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id()) AND (decks.deck_type <> 2)))));
 
 
 --
@@ -5361,7 +6105,7 @@ CREATE POLICY website_update ON spellsource.cards_in_deck FOR UPDATE TO website 
     decks.is_premade,
     decks.permitted_to_duplicate
    FROM spellsource.decks
-  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id()))))) WITH CHECK ((EXISTS ( SELECT decks.id,
+  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id()) AND (decks.deck_type <> 2))))) WITH CHECK ((EXISTS ( SELECT decks.id,
     decks.created_by,
     decks.last_edited_by,
     decks.name,
@@ -5372,14 +6116,14 @@ CREATE POLICY website_update ON spellsource.cards_in_deck FOR UPDATE TO website 
     decks.is_premade,
     decks.permitted_to_duplicate
    FROM spellsource.decks
-  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id())))));
+  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id()) AND (decks.deck_type <> 2)))));
 
 
 --
 -- Name: decks website_update; Type: POLICY; Schema: spellsource; Owner: admin
 --
 
-CREATE POLICY website_update ON spellsource.decks FOR UPDATE TO website USING (((created_by)::text = spellsource.get_user_id())) WITH CHECK ((((created_by)::text = spellsource.get_user_id()) AND ((last_edited_by)::text = spellsource.get_user_id())));
+CREATE POLICY website_update ON spellsource.decks FOR UPDATE TO website USING (((created_by)::text = spellsource.get_user_id())) WITH CHECK ((((created_by)::text = spellsource.get_user_id()) AND ((last_edited_by)::text = spellsource.get_user_id()) AND (deck_type <> 2)));
 
 
 --
@@ -5429,14 +6173,6 @@ CREATE POLICY website_view ON spellsource.published_cards FOR SELECT USING (true
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: admin
---
-
-REVOKE USAGE ON SCHEMA public FROM PUBLIC;
-GRANT ALL ON SCHEMA public TO PUBLIC;
-
-
---
 -- Name: SCHEMA spellsource; Type: ACL; Schema: -; Owner: admin
 --
 
@@ -5444,19 +6180,125 @@ GRANT USAGE ON SCHEMA spellsource TO website;
 
 
 --
+-- Name: FUNCTION archive_card(card_id text); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.archive_card(card_id text) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.archive_card(card_id text) TO website;
+
+
+--
 -- Name: TABLE decks; Type: ACL; Schema: spellsource; Owner: admin
 --
 
-GRANT SELECT,INSERT,UPDATE ON TABLE spellsource.decks TO website;
 GRANT SELECT ON TABLE spellsource.decks TO PUBLIC;
+GRANT SELECT,INSERT,UPDATE ON TABLE spellsource.decks TO website;
+
+
+--
+-- Name: FUNCTION can_see_deck(user_id text, deck spellsource.decks); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT ALL ON FUNCTION spellsource.can_see_deck(user_id text, deck spellsource.decks) TO website;
 
 
 --
 -- Name: TABLE cards; Type: ACL; Schema: spellsource; Owner: admin
 --
 
-GRANT SELECT,INSERT,UPDATE ON TABLE spellsource.cards TO website;
 GRANT SELECT ON TABLE spellsource.cards TO PUBLIC;
+GRANT SELECT,INSERT,UPDATE ON TABLE spellsource.cards TO website;
+
+
+--
+-- Name: FUNCTION card_catalogue_formats(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_catalogue_formats() FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION card_catalogue_get_banned_draft_cards(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_catalogue_get_banned_draft_cards() FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION card_catalogue_get_base_classes(sets text[]); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_catalogue_get_base_classes(sets text[]) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION card_catalogue_get_card_by_id(card_id text); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_catalogue_get_card_by_id(card_id text) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION card_catalogue_get_card_by_name(card_name text); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_catalogue_get_card_by_name(card_name text) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION card_catalogue_get_card_by_name_and_class(card_name text, hero_class text); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_catalogue_get_card_by_name_and_class(card_name text, hero_class text) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION card_catalogue_get_class_cards(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_catalogue_get_class_cards() FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION card_catalogue_get_format(card_name text); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_catalogue_get_format(card_name text) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION card_catalogue_get_hard_removal_cards(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_catalogue_get_hard_removal_cards() FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION card_catalogue_get_hero_card(hero_class text); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_catalogue_get_hero_card(hero_class text) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION card_catalogue_query(sets text[], card_type text, rarity text, hero_class text, attribute text); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_catalogue_query(sets text[], card_type text, rarity text, hero_class text, attribute text) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION card_change_notify_event(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.card_change_notify_event() FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION get_classes(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT ALL ON FUNCTION spellsource.get_classes() TO website;
 
 
 --
@@ -5467,6 +6309,27 @@ GRANT SELECT ON TABLE spellsource.classes TO website;
 
 
 --
+-- Name: FUNCTION card_message(card spellsource.cards, cl spellsource.classes); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT ALL ON FUNCTION spellsource.card_message(card spellsource.cards, cl spellsource.classes) TO website;
+
+
+--
+-- Name: FUNCTION cards_collectible(card spellsource.cards); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.cards_collectible(card spellsource.cards) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION cards_cost(card spellsource.cards); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.cards_cost(card spellsource.cards) FROM PUBLIC;
+
+
+--
 -- Name: TABLE cards_in_deck; Type: ACL; Schema: spellsource; Owner: admin
 --
 
@@ -5474,10 +6337,180 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spellsource.cards_in_deck TO website;
 
 
 --
+-- Name: FUNCTION cards_in_deck_card_by_card_id(cards_in_deck spellsource.cards_in_deck); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.cards_in_deck_card_by_card_id(cards_in_deck spellsource.cards_in_deck) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION cards_type(card spellsource.cards); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.cards_type(card spellsource.cards) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION generate_seed(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.generate_seed() FROM PUBLIC;
+
+
+--
+-- Name: TABLE rogue_run; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT ON TABLE spellsource.rogue_run TO website;
+
+
+--
+-- Name: FUNCTION check_rogue_game_end(game_id bigint, winning_user character varying); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.check_rogue_game_end(game_id bigint, winning_user character varying) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION check_rogue_game_start(deck_id text, game_id bigint); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.check_rogue_game_start(deck_id text, game_id bigint) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION clustered_games_update_game_and_users(p_user_id_winner text, p_user_id_loser text, p_game_id bigint, p_trace json); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.clustered_games_update_game_and_users(p_user_id_winner text, p_user_id_loser text, p_game_id bigint, p_trace json) FROM PUBLIC;
+
+
+--
 -- Name: FUNCTION create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]); Type: ACL; Schema: spellsource; Owner: admin
 --
 
+REVOKE ALL ON FUNCTION spellsource.create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]) FROM PUBLIC;
 GRANT ALL ON FUNCTION spellsource.create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]) TO website;
+
+
+--
+-- Name: TABLE rogue_choice; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT ON TABLE spellsource.rogue_choice TO website;
+
+
+--
+-- Name: FUNCTION current_rogue_choice(rogue_id bigint); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.current_rogue_choice(rogue_id bigint) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.current_rogue_choice(rogue_id bigint) TO website;
+
+
+--
+-- Name: FUNCTION current_rogue_run(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.current_rogue_run() FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.current_rogue_run() TO website;
+
+
+--
+-- Name: FUNCTION end_rogue_run(rogue_id bigint); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.end_rogue_run(rogue_id bigint) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.end_rogue_run(rogue_id bigint) TO website;
+
+
+--
+-- Name: FUNCTION get_cards_in_deck(deck text); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.get_cards_in_deck(deck text) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION get_collection_cards(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT ALL ON FUNCTION spellsource.get_collection_cards() TO website;
+
+
+--
+-- Name: FUNCTION get_latest_card(card_id text, published boolean); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.get_latest_card(card_id text, published boolean) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.get_latest_card(card_id text, published boolean) TO website;
+
+
+--
+-- Name: FUNCTION get_user_attribute(id_user text, attribute text, or_default text); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.get_user_attribute(id_user text, attribute text, or_default text) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION get_user_id(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT ALL ON FUNCTION spellsource.get_user_id() TO website;
+
+
+--
+-- Name: FUNCTION on_card_published(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.on_card_published() FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION publish_card(card_id text); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.publish_card(card_id text) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.publish_card(card_id text) TO website;
+
+
+--
+-- Name: FUNCTION publish_git_card(card_id text, json jsonb, creator character varying); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.publish_git_card(card_id text, json jsonb, creator character varying) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION rogue_opponent_bot_user(); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.rogue_opponent_bot_user() FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION rogue_run_current_choice(rr spellsource.rogue_run); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.rogue_run_current_choice(rr spellsource.rogue_run) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.rogue_run_current_choice(rr spellsource.rogue_run) TO website;
+
+
+--
+-- Name: FUNCTION rogue_run_opponent_info(rr spellsource.rogue_run); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.rogue_run_opponent_info(rr spellsource.rogue_run) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.rogue_run_opponent_info(rr spellsource.rogue_run) TO website;
+
+
+--
+-- Name: FUNCTION save_card(card_id text, workspace jsonb, json jsonb); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.save_card(card_id text, workspace jsonb, json jsonb) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.save_card(card_id text, workspace jsonb, json jsonb) TO website;
 
 
 --
@@ -5488,17 +6521,40 @@ GRANT SELECT,INSERT,UPDATE ON TABLE spellsource.generated_art TO website;
 
 
 --
+-- Name: FUNCTION save_generated_art(digest text, links text[], extra_info jsonb); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.save_generated_art(digest text, links text[], extra_info jsonb) FROM PUBLIC;
+GRANT ALL ON FUNCTION spellsource.save_generated_art(digest text, links text[], extra_info jsonb) TO website;
+
+
+--
 -- Name: FUNCTION set_cards_in_deck(deck text, card_ids text[]); Type: ACL; Schema: spellsource; Owner: admin
 --
 
+REVOKE ALL ON FUNCTION spellsource.set_cards_in_deck(deck text, card_ids text[]) FROM PUBLIC;
 GRANT ALL ON FUNCTION spellsource.set_cards_in_deck(deck text, card_ids text[]) TO website;
+
+
+--
+-- Name: FUNCTION set_user_attribute(id_user text, attribute text, val text); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.set_user_attribute(id_user text, attribute text, val text) FROM PUBLIC;
+
+
+--
+-- Name: FUNCTION start_rogue_run(class_hero text, use_seed bigint); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+REVOKE ALL ON FUNCTION spellsource.start_rogue_run(class_hero text, use_seed bigint) FROM PUBLIC;
 
 
 --
 -- Name: TABLE user_attribute; Type: ACL; Schema: keycloak; Owner: admin
 --
 
-GRANT SELECT,INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE keycloak.user_attribute TO website;
+GRANT ALL ON TABLE keycloak.user_attribute TO website;
 
 
 --
@@ -5520,6 +6576,13 @@ GRANT SELECT ON TABLE spellsource.deck_shares TO website;
 --
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spellsource.published_cards TO website;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: -; Owner: admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE admin REVOKE ALL ON FUNCTIONS  FROM PUBLIC;
 
 
 --

@@ -1,0 +1,40 @@
+{
+  "name": "Double Aftermaths",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "Your Aftermaths trigger twice.",
+  "aura": {
+    "class": "DoubleDeathrattlesAura",
+    "target": "FRIENDLY_CARDS"
+  },
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "equipment_double_openers"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "EQUIPMENT": true,
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "ROGUE",
+  "fileFormatVersion": 1
+}
