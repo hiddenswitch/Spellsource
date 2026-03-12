@@ -19,6 +19,10 @@ java {
   }
 }
 
+dependencies {
+  testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+}
+
 test {
   systemProperty("junit.jupiter.extensions.autodetection.enabled", true)
 }

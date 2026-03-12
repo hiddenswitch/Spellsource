@@ -4,8 +4,6 @@ buildscript {
   }
   repositories {
     mavenLocal()
-    // for jooq from github
-    maven { url 'https://jitpack.io' }
     mavenCentral()
   }
   dependencies {

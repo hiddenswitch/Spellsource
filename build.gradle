@@ -29,7 +29,6 @@ allprojects {
 subprojects {
   repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
   }
 
   apply plugin: "maven-publish"
@@ -65,6 +64,7 @@ subprojects {
         if ([
                 'com.fasterxml.jackson.core',
                 'com.fasterxml.jackson.jaxrs',
+                'com.fasterxml.jackson.jakarta.rs',
                 'com.fasterxml.jackson.datatype',
                 'com.fasterxml.jackson.module',
                 'com.fasterxml.jackson.dataformat'
@@ -126,6 +126,10 @@ subprojects {
 
         if (details.requested.group == 'org.junit.jupiter') {
           details.useVersion junitVersion
+        }
+
+        if (details.requested.group == 'org.junit.platform') {
+          details.useVersion '1.14.3'
         }
 
         if (details.requested.group == 'org.jetbrains' && details.requested.name == 'annotations') {
