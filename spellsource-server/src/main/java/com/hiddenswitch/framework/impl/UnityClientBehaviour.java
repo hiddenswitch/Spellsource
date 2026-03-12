@@ -1,7 +1,6 @@
 package com.hiddenswitch.framework.impl;
 
 import com.google.common.base.Throwables;
-import com.google.protobuf.Int32Value;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.spellsource.common.GameState;
@@ -292,9 +291,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					activityMonitor.activity();
 				}
 				if (message.hasEntityTouch()) {
-					server.onTouch(this, message.getEntityTouch().getValue());
+					server.onTouch(this, message.getEntityTouch());
 				} else if (message.hasEntityUntouch()) {
-					server.onUntouch(this, message.getEntityUntouch().getValue());
+					server.onUntouch(this, message.getEntityUntouch());
 				}
 				break;
 			case CONCEDE:
@@ -688,7 +687,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			gameOverBuilder.setLocalPlayerWon(false);
 		} else {
 			gameOverBuilder.setLocalPlayerWon(winner.getId() == playerId)
-					.setWinningPlayerId(Int32Value.of(winner.getId()));
+					.setWinningPlayerId(winner.getId());
 		}
 		gameOver = gameOverBuilder.build();
 

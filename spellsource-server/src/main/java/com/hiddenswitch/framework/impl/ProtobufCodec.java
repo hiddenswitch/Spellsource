@@ -1,12 +1,12 @@
 package com.hiddenswitch.framework.impl;
 
+import com.google.protobuf.CodedInputStream;
+import com.google.protobuf.ExtensionRegistryLite;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.MessageCodec;
-
-import java.io.IOException;
 
 public class ProtobufCodec<T extends Message> implements MessageCodec<T, T> {
 
@@ -18,11 +18,7 @@ public class ProtobufCodec<T extends Message> implements MessageCodec<T, T> {
 
 	@Override
 	public void encodeToWire(Buffer buffer, T t) {
-		try {
-			t.writeTo(new VertxBufferOutputStream(buffer));
-		} catch (IOException exception) {
-			throw new RuntimeException(exception);
-		}
+		buffer.appendBytes(t.toByteArray());
 	}
 
 	@Override
@@ -30,8 +26,8 @@ public class ProtobufCodec<T extends Message> implements MessageCodec<T, T> {
 		try {
 			@SuppressWarnings("unchecked")
 			var parserForType = (Parser<T>) target.getParserForType();
-			T result = parserForType.parseFrom(buffer.getBytes(pos, buffer.length()));
-			return result;
+			var bytes = buffer.getBytes(pos, buffer.length());
+			return parserForType.parseFrom(bytes);
 		} catch (InvalidProtocolBufferException e) {
 			throw new RuntimeException(e);
 		}

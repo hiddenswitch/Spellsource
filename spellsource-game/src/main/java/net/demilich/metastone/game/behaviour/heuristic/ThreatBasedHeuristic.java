@@ -8,6 +8,8 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.weapons.Weapon;
+import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import net.demilich.metastone.game.spells.DestroySpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
@@ -127,6 +129,31 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 			minionScore += weights.get(WeightedFeature.MINION_UNTARGETABLE_BY_SPELLS_MODIFIER);
 		}
 
+		if (minion.hasAttribute(Attribute.POISONOUS) || minion.hasAttribute(Attribute.AURA_POISONOUS)) {
+			minionScore += weights.get(WeightedFeature.MINION_POISONOUS_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.LIFESTEAL) || minion.hasAttribute(Attribute.AURA_LIFESTEAL)) {
+			minionScore += weights.get(WeightedFeature.MINION_LIFESTEAL_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.REBORN)) {
+			minionScore += weights.get(WeightedFeature.MINION_REBORN_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.FROZEN)) {
+			minionScore += weights.get(WeightedFeature.MINION_FROZEN_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.DEATHRATTLES)) {
+			minionScore += weights.get(WeightedFeature.MINION_DEATHRATTLE_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.RUSH) || minion.hasAttribute(Attribute.AURA_RUSH)) {
+			minionScore += weights.get(WeightedFeature.MINION_RUSH_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.IMMUNE) || minion.hasAttribute(Attribute.AURA_IMMUNE)) {
+			minionScore += weights.get(WeightedFeature.MINION_IMMUNE_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.CANNOT_ATTACK) || minion.hasAttribute(Attribute.AURA_CANNOT_ATTACK)) {
+			minionScore += weights.get(WeightedFeature.MINION_CANNOT_ATTACK_MODIFIER);
+		}
+
 		return minionScore;
 	}
 
@@ -202,6 +229,39 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
 		score += player.getMaxMana() * weights.get(WeightedFeature.EMPTY_MANA_CRYSTAL_VALUE);
 		score += opponent.getMaxMana() * weights.get(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE);
+
+		// Armor
+		score += player.getHero().getArmor() * weights.get(WeightedFeature.OWN_ARMOR_FACTOR);
+
+		// Weapons: damage * durability as a single value
+		if (!player.getWeaponZone().isEmpty()) {
+			Weapon ownWeapon = player.getWeaponZone().get(0);
+			score += ownWeapon.getWeaponDamage() * ownWeapon.getDurability() * weights.get(WeightedFeature.WEAPON_VALUE);
+		}
+		if (!opponent.getWeaponZone().isEmpty()) {
+			Weapon oppWeapon = opponent.getWeaponZone().get(0);
+			score -= oppWeapon.getWeaponDamage() * oppWeapon.getDurability() * weights.get(WeightedFeature.WEAPON_VALUE);
+		}
+
+		// Deck size
+		score += player.getDeck().size() * weights.get(WeightedFeature.OWN_DECK_COUNT);
+		score += opponent.getDeck().size() * weights.get(WeightedFeature.OPPONENT_DECK_COUNT);
+
+		// Secrets
+		score += player.getSecrets().size() * weights.get(WeightedFeature.OWN_SECRET_COUNT);
+		score += opponent.getSecrets().size() * weights.get(WeightedFeature.OPPONENT_SECRET_COUNT);
+
+		// Locked mana (overload)
+		score += player.getLockedMana() * weights.get(WeightedFeature.LOCKED_MANA_VALUE);
+
+		// Corpse count (graveyard minion count for Death Knight)
+		long ownCorpses = player.getGraveyard().stream()
+				.filter(e -> e.getEntityType() == EntityType.MINION)
+				.count();
+		score += ownCorpses * weights.get(WeightedFeature.CORPSE_COUNT_VALUE);
+
+		// Board width
+		score += player.getMinions().size() * weights.get(WeightedFeature.OWN_MINION_COUNT);
 
 		return score;
 	}

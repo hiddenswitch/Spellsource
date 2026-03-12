@@ -2642,7 +2642,7 @@ EntityReference potentialTargets) {
 
 	private int getTotalAttributeValue(Player player, Attribute attr) {
 		var value = 0;
-		for (var entity : player.getLookup().values()) {
+		for (var entity : player.getLookup()) {
 			if (!entity.isInPlay()) {
 				continue;
 			}

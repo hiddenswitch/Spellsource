@@ -69,6 +69,7 @@ import static com.google.common.collect.Maps.immutableEntry;
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class EnchantmentDesc implements Serializable, Cloneable, HasEntrySet<EnchantmentDescArg, Object>, AbstractEnchantmentDesc<Enchantment>, Freezable {
+	@JsonIgnore
 	private transient boolean readOnly;
 
 	public EnchantmentDesc() {

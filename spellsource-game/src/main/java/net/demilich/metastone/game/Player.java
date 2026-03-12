@@ -10,6 +10,7 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
+import net.demilich.metastone.game.entities.EntityLookup;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -57,7 +58,7 @@ import java.util.stream.Collectors;
  */
 public class Player extends Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Map<Integer, Entity> lookup = new LinkedHashMap<>(55);
+	private EntityLookup lookup = new EntityLookup(128);
 	protected CardZone deck = new CardZone(getId(), Zones.DECK, lookup);
 	private CardZone hand = new CardZone(getId(), Zones.HAND, lookup);
 	private CardZone discoverZone = new CardZone(getId(), Zones.DISCOVER, lookup);
@@ -128,19 +129,7 @@ public class Player extends Entity implements Serializable {
 		this.maxMana = otherPlayer.maxMana;
 		this.lockedMana = otherPlayer.lockedMana;
 		this.statistics = otherPlayer.getStatistics().clone();
-		this.lookup = new LinkedHashMap<>(playerZone.size()
-				+ secretZone.size()
-				+ quests.size()
-				+ deck.size()
-				+ hand.size()
-				+ minions.size()
-				+ discoverZone.size()
-				+ removedFromPlay.size()
-				+ graveyard.size()
-				+ setAsideZone.size()
-				+ heroZone.size()
-				+ heroPowerZone.size()
-				+ weaponZone.size());
+		this.lookup = new EntityLookup(128);
 		for (Zones zone : GameLogic.VALID_ZONES) {
 			@SuppressWarnings("unchecked")
 			EntityZone<? extends Entity> zone1 = (EntityZone<? extends Entity>) getZone(zone);
@@ -603,11 +592,11 @@ public class Player extends Entity implements Serializable {
 
 	public <T extends Entity> Optional<T> findEntity(int id) {
 		@SuppressWarnings("unchecked")
-		Optional<T> val = Optional.ofNullable((T) lookup.getOrDefault(id, null));
+		Optional<T> val = Optional.ofNullable((T) lookup.get(id));
 		return val;
 	}
 
-	public Map<Integer, Entity> getLookup() {
+	public EntityLookup getLookup() {
 		return lookup;
 	}
 

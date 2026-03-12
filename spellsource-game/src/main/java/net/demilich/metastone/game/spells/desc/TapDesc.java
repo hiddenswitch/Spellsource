@@ -1,16 +1,25 @@
 package net.demilich.metastone.game.spells.desc;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
+import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 import net.demilich.metastone.game.cards.Freezable;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.collect.Maps.immutableEntry;
 
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class TapDesc implements Serializable, Cloneable, Freezable {
+public final class TapDesc implements Serializable, Cloneable, HasEntrySet<TapDescArg, Object>, Freezable {
+	@JsonIgnore
 	private transient boolean readOnly;
 	private SpellDesc spell;
 	private TargetSelection targetSelection = TargetSelection.NONE;
@@ -71,6 +80,20 @@ public final class TapDesc implements Serializable, Cloneable, Freezable {
 	public void setZones(Zones[] zones) {
 		checkNotFrozen();
 		this.zones = zones;
+	}
+
+	@Override
+	public Set<Map.Entry<TapDescArg, Object>> entrySet() {
+		@SuppressWarnings("unchecked")
+		HashSet<Map.Entry<TapDescArg, Object>> entries = Sets.newHashSet(
+				immutableEntry(TapDescArg.SPELL, spell),
+				immutableEntry(TapDescArg.TARGET_SELECTION, targetSelection),
+				immutableEntry(TapDescArg.COST, cost),
+				immutableEntry(TapDescArg.COOLDOWN, cooldown),
+				immutableEntry(TapDescArg.CONDITION, condition),
+				immutableEntry(TapDescArg.ZONES, zones)
+		);
+		return entries;
 	}
 
 	@Override

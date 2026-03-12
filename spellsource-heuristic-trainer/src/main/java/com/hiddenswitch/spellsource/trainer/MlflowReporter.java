@@ -16,12 +16,13 @@ import java.util.logging.Logger;
  */
 public class MlflowReporter implements AutoCloseable {
 	private static final Logger LOG = Logger.getLogger(MlflowReporter.class.getName());
-	private static final String EXPERIMENT_NAME = "spellsource-gsvb-training";
 	private static final String SESSION_TAG = "session_type";
-	private static final String SESSION_VALUE = "ipop_cmaes";
+	private static final String DEFAULT_SESSION_VALUE = "ipop_cmaes_hof_v2";
+	private static final String DEFAULT_EXPERIMENT_NAME = "spellsource-gsvb-training";
 
 	private final MlflowClient client;
 	private final String experimentId;
+	private final String sessionValue;
 	private String runId;
 	private String islandPrefix;
 	private int stepOffset;
@@ -32,7 +33,7 @@ public class MlflowReporter implements AutoCloseable {
 	private int evalCount = 0;
 	private double cachedGlobalBest = 0.0;
 
-	public MlflowReporter(String trackingUri) {
+	public MlflowReporter(String trackingUri, String sessionName) {
 		String username = System.getenv("MLFLOW_TRACKING_USERNAME");
 		String password = System.getenv("MLFLOW_TRACKING_PASSWORD");
 		if (username != null && password != null) {
@@ -41,16 +42,23 @@ public class MlflowReporter implements AutoCloseable {
 			this.client = new MlflowClient(trackingUri);
 		}
 
+		this.sessionValue = sessionName != null ? sessionName : DEFAULT_SESSION_VALUE;
+
+		String experimentName = System.getenv("MLFLOW_EXPERIMENT_NAME");
+		if (experimentName == null) {
+			experimentName = DEFAULT_EXPERIMENT_NAME;
+		}
+
 		String expId = null;
 		try {
-			expId = client.getExperimentByName(EXPERIMENT_NAME)
+			expId = client.getExperimentByName(experimentName)
 					.orElseThrow()
 					.getExperimentId();
 		} catch (Exception e) {
-			expId = client.createExperiment(EXPERIMENT_NAME);
+			expId = client.createExperiment(experimentName);
 		}
 		this.experimentId = expId;
-		LOG.info("MLflow experiment: " + EXPERIMENT_NAME + " (id=" + experimentId + ")");
+		LOG.info("MLflow experiment: " + experimentName + " (id=" + experimentId + ")");
 	}
 
 	/**
@@ -64,7 +72,7 @@ public class MlflowReporter implements AutoCloseable {
 		// Look for an existing active training session
 		var runsPage = client.searchRuns(
 				List.of(experimentId),
-				"tags." + SESSION_TAG + " = '" + SESSION_VALUE + "' AND attributes.status = 'RUNNING'",
+				"tags." + SESSION_TAG + " = '" + sessionValue + "' AND attributes.status = 'RUNNING'",
 				Service.ViewType.ACTIVE_ONLY,
 				1,
 				List.of("attributes.start_time DESC")
@@ -107,13 +115,14 @@ public class MlflowReporter implements AutoCloseable {
 			// Create new training session
 			Service.RunInfo runInfo = client.createRun(experimentId);
 			this.runId = runInfo.getRunId();
-			client.setTag(runId, SESSION_TAG, SESSION_VALUE);
-			client.setTag(runId, "mlflow.runName", "GSVB Training");
+			client.setTag(runId, SESSION_TAG, sessionValue);
+			client.setTag(runId, "mlflow.runName", "GSVB Training (HoF)");
 			client.logParam(runId, "generations", String.valueOf(generations));
 			client.logParam(runId, "population_size", String.valueOf(populationSize));
 			client.logParam(runId, "matchups_per_eval", String.valueOf(matchupsPerEval));
 			client.logParam(runId, "games_per_matchup", String.valueOf(gamesPerMatchup));
-			client.logParam(runId, "islands", "8");
+			client.logParam(runId, "eval_method", "hall_of_fame");
+			client.logParam(runId, "islands", "10");
 			LOG.info("Created new training session: " + runId);
 		}
 
@@ -204,7 +213,7 @@ public class MlflowReporter implements AutoCloseable {
 			// Find the active or most recent training session
 			var runsPage = client.searchRuns(
 					List.of(experimentId),
-					"tags." + SESSION_TAG + " = '" + SESSION_VALUE + "'",
+					"tags." + SESSION_TAG + " = '" + sessionValue + "'",
 					Service.ViewType.ACTIVE_ONLY,
 					1,
 					List.of("attributes.start_time DESC")
@@ -250,6 +259,53 @@ public class MlflowReporter implements AutoCloseable {
 		} catch (Exception e) {
 			LOG.warning("Failed to load best weights from MLflow: " + e.getMessage());
 			return null;
+		}
+	}
+
+	/**
+	 * Returns the best win rate restored from the previous session for this island.
+	 */
+	public double getRestoredBestWinRate() {
+		return bestWinRate;
+	}
+
+	/**
+	 * Loads this island's own best weights from the training session tags.
+	 * Falls back to global best if island-specific weights are not found.
+	 */
+	public double[] loadIslandBestWeights() {
+		if (runId == null || islandPrefix == null || islandPrefix.isEmpty()) {
+			return loadBestWeights();
+		}
+		try {
+			Service.Run run = client.getRun(runId);
+			Map<String, String> tagMap = new HashMap<>();
+			for (Service.RunTag tag : run.getData().getTagsList()) {
+				tagMap.put(tag.getKey(), tag.getValue());
+			}
+
+			WeightedFeature[] features = WeightedFeature.values();
+			double[] weights = new double[features.length];
+			int found = 0;
+			for (int i = 0; i < features.length; i++) {
+				String val = tagMap.get(islandPrefix + "best_" + features[i].name());
+				if (val != null) {
+					weights[i] = Double.parseDouble(val);
+					found++;
+				}
+			}
+
+			if (found == 0) {
+				LOG.info("No island-specific best weights found, falling back to global best");
+				return loadBestWeights();
+			}
+
+			LOG.info(String.format("Loaded island best weights (%d/%d features, %.1f%% win rate)",
+					found, features.length, bestWinRate * 100));
+			return weights;
+		} catch (Exception e) {
+			LOG.warning("Failed to load island best weights: " + e.getMessage());
+			return loadBestWeights();
 		}
 	}
 
@@ -321,6 +377,58 @@ public class MlflowReporter implements AutoCloseable {
 	}
 
 	public record MigrationData(double[] weights, double winRate, String sourceIsland) {}
+
+	/**
+	 * Loads best weights from all islands in the shared run.
+	 * Used to seed the Hall of Fame on restart.
+	 */
+	public List<double[]> loadAllIslandBests() {
+		if (runId == null) {
+			return List.of();
+		}
+		try {
+			Service.Run run = client.getRun(runId);
+			Map<String, String> tagMap = new HashMap<>();
+			for (Service.RunTag tag : run.getData().getTagsList()) {
+				tagMap.put(tag.getKey(), tag.getValue());
+			}
+
+			WeightedFeature[] features = WeightedFeature.values();
+			List<double[]> results = new ArrayList<>();
+
+			// Find all island_N/best_win_rate tags
+			Set<String> islandPrefixes = new HashSet<>();
+			for (String key : tagMap.keySet()) {
+				if (key.endsWith("/best_win_rate") && key.startsWith("island_")) {
+					islandPrefixes.add(key.replace("best_win_rate", ""));
+				}
+			}
+
+			for (String prefix : islandPrefixes) {
+				if (prefix.equals(islandPrefix)) {
+					continue; // skip ourselves
+				}
+				double[] weights = new double[features.length];
+				int found = 0;
+				for (int i = 0; i < features.length; i++) {
+					String val = tagMap.get(prefix + "best_" + features[i].name());
+					if (val != null) {
+						weights[i] = Double.parseDouble(val);
+						found++;
+					}
+				}
+				if (found > 0) {
+					results.add(weights);
+				}
+			}
+
+			LOG.info("Loaded " + results.size() + " island best weights for HoF seeding");
+			return results;
+		} catch (Exception e) {
+			LOG.warning("Failed to load island bests: " + e.getMessage());
+			return List.of();
+		}
+	}
 
 	/**
 	 * Marks this island as finished but does not terminate the shared run.

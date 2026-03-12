@@ -54,7 +54,7 @@ def localDatabaseName = 'spellsource'
 def localPort = '5432'
 def mainClassNameConst = 'com.hiddenswitch.framework.EntryPoint'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
-def jvmArgs = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=85.0']
+def jvmArgs = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=80.0', '-XX:+UseG1GC', '-XX:MinHeapFreeRatio=10', '-XX:MaxHeapFreeRatio=20', '-XX:-ShrinkHeapInSteps', '-XX:G1PeriodicGCInterval=10000']
 
 dependencies {
   compileOnly 'org.infinispan:infinispan-component-annotations:15.0.0.Dev01'
@@ -369,7 +369,8 @@ test {
   group('spellsource')
   useJUnitPlatform()
   enableAssertions = false
-  maxHeapSize = '4096m'
+  maxHeapSize = '16g'
+  it.jvmArgs '-XX:+UseG1GC', '-XX:MinHeapFreeRatio=10', '-XX:MaxHeapFreeRatio=20', '-XX:-ShrinkHeapInSteps', '-XX:G1PeriodicGCInterval=10000'
   systemProperty("vertx.grpc.stack.traces", "true")
   testLogging {
     showExceptions true

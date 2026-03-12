@@ -192,6 +192,10 @@ subprojects {
           details.useVersion '3.1.8'
         }
 
+        if (details.requested.group == 'org.checkerframework') {
+          details.useVersion '3.43.0'
+        }
+
         if (details.requested.group == 'org.hdrhistogram') {
           details.useVersion '2.2.2'
         }

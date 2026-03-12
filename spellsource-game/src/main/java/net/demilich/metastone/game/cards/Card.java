@@ -117,7 +117,14 @@ public class Card extends Entity implements HasChooseOneActions {
 	 */
 	public Minion minion() {
 		if (getCardType() != CardType.MINION) {
-			throw new UnsupportedOperationException("not minion");
+			throw new UnsupportedOperationException("not minion: cardId=" + getCardId()
+					+ " descId=" + desc.getId()
+					+ " type=" + getCardType()
+					+ " descType=" + desc.getType()
+					+ " id=" + getId()
+					+ " overrideCardId=" + getAttributes().getOverrideCardId()
+					+ " zone=" + getZone()
+					+ " owner=" + getOwner());
 		}
 
 		Minion minion = new Minion(this);

@@ -50,13 +50,14 @@ public class TrainerMain {
 		@Option(names = "--output", description = "Write final weights as Java source file")
 		String output;
 
-		@Option(names = "--seed", description = "Random seed for CMA-ES (default: ISLAND_INDEX env or random)")
+		@Option(names = "--seed", description = "Random seed for CMA-ES (default: random)")
 		Long seed;
 
-		Long getEffectiveSeed() {
-			if (seed != null) {
-				return seed;
-			}
+		/**
+		 * Returns the island identity (from ISLAND_INDEX env var), used for MLflow prefixing.
+		 * Stable across restarts of the same island.
+		 */
+		Long getIslandId() {
 			String islandIndex = System.getenv("ISLAND_INDEX");
 			if (islandIndex != null) {
 				return Long.parseLong(islandIndex);
@@ -66,6 +67,9 @@ public class TrainerMain {
 
 		@Option(names = "--sigma", description = "Initial CMA-ES step size", defaultValue = "5.0")
 		double sigma;
+
+		@Option(names = "--session", description = "MLflow session name (default: from MLFLOW_SESSION env or built-in)")
+		String session;
 	}
 
 	@Command(name = "local", description = "Run everything in-process")
@@ -79,19 +83,29 @@ public class TrainerMain {
 			requireDecks(deckPool);
 
 			FitnessEvaluator evaluator = new FitnessEvaluator(gsvbDepth, gsvbTimeout);
-			MlflowReporter mlflow = mlflowUri != null ? new MlflowReporter(mlflowUri) : null;
+			MlflowReporter mlflow = mlflowUri != null ? new MlflowReporter(mlflowUri, session != null ? session : System.getenv("MLFLOW_SESSION")) : null;
 
 			try {
 				double[] initialPoint = null;
+				double restoredBestWinRate = 0.0;
 				if (mlflow != null) {
-					initialPoint = mlflow.loadBestWeights();
-					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, getEffectiveSeed());
+					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, getIslandId());
+					initialPoint = mlflow.loadIslandBestWeights();
+					restoredBestWinRate = mlflow.getRestoredBestWinRate();
 				}
 
 				CmaesTrainer trainer = new CmaesTrainer(
 						generations, population, matchupsPerEval, gamesPerMatchup,
-						deckPool.getDecks(), evaluator, mlflow, null, getEffectiveSeed(), sigma, initialPoint
+						deckPool.getDecks(), evaluator, mlflow, null, seed, sigma, initialPoint,
+						restoredBestWinRate
 				);
+
+				// Seed HoF with other islands' best weights for resume
+				if (mlflow != null) {
+					for (double[] islandBest : mlflow.loadAllIslandBests()) {
+						trainer.seedHofMember(islandBest);
+					}
+				}
 
 				FeatureVector best = trainer.train();
 				reportResults(best, trainer.getBestWinRate(), output);
@@ -118,21 +132,31 @@ public class TrainerMain {
 			requireDecks(deckPool);
 
 			FitnessEvaluator evaluator = new FitnessEvaluator(gsvbDepth, gsvbTimeout);
-			MlflowReporter mlflow = mlflowUri != null ? new MlflowReporter(mlflowUri) : null;
+			MlflowReporter mlflow = mlflowUri != null ? new MlflowReporter(mlflowUri, session != null ? session : System.getenv("MLFLOW_SESSION")) : null;
 			RedisQueue redis = new RedisQueue(redisUri);
 
 			try {
 				double[] initialPoint = null;
+				double restoredBestWinRate = 0.0;
 				if (mlflow != null) {
-					initialPoint = mlflow.loadBestWeights();
-					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, getEffectiveSeed());
+					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, getIslandId());
+					initialPoint = mlflow.loadIslandBestWeights();
+					restoredBestWinRate = mlflow.getRestoredBestWinRate();
 				}
 				redis.clear();
 
 				CmaesTrainer trainer = new CmaesTrainer(
 						generations, population, matchupsPerEval, gamesPerMatchup,
-						deckPool.getDecks(), evaluator, mlflow, redis, getEffectiveSeed(), sigma, initialPoint
+						deckPool.getDecks(), evaluator, mlflow, redis, seed, sigma, initialPoint,
+						restoredBestWinRate
 				);
+
+				// Seed HoF with other islands' best weights for resume
+				if (mlflow != null) {
+					for (double[] islandBest : mlflow.loadAllIslandBests()) {
+						trainer.seedHofMember(islandBest);
+					}
+				}
 
 				FeatureVector best = trainer.train();
 				reportResults(best, trainer.getBestWinRate(), output);

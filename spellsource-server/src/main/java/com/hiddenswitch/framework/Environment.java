@@ -547,6 +547,7 @@ public class Environment {
 			var isHyperV = false;
 			var isMacOSBridgeNet = false;
 			var isTailscale = false;
+			var isDocker = false;
 			try {
 				isSelfAssigned = ni.inetAddresses().anyMatch(i -> i.getHostAddress().startsWith("169"));
 				isLoopback = ni.isLoopback();
@@ -555,10 +556,11 @@ public class Environment {
 				isHyperV = ni.getDisplayName().contains("Hyper-V");
 				isMacOSBridgeNet = ni.getDisplayName().startsWith("bridge");
 				isTailscale = ni.getDisplayName().toLowerCase().contains("tailscale");
+				isDocker = ni.getName().equals("docker0") || ni.getName().startsWith("br-") || ni.getName().startsWith("veth");
 			} catch (IOException failure) {
 			}
 			var hasIPv4 = ni.getInterfaceAddresses().stream().anyMatch(ia -> ia.getAddress() instanceof Inet4Address);
-			return supportsMulticast && !isSelfAssigned && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox && !isHyperV && !isMacOSBridgeNet && !isTailscale;
+			return supportsMulticast && !isSelfAssigned && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox && !isHyperV && !isMacOSBridgeNet && !isTailscale && !isDocker;
 		}).sorted(Comparator.comparing(NetworkInterface::getName)).findFirst().orElse(null);
 	}
 

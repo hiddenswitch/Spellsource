@@ -8,8 +8,6 @@ import io.vertx.core.eventbus.ReplyFailure;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Predicate;
 
 public class RetryMessageProducer<T> implements MessageProducer<T> {
@@ -19,7 +17,7 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 	private final int maxRetries;
 	private final int intervalMillis;
 	private final Deque<QueueItem<T>> waiting = new ArrayDeque<>();
-	private final Set<QueueItem<T>> taken = new HashSet<>();
+	private boolean hasInFlight;
 	private final Predicate<T> predicate;
 
 	public RetryMessageProducer(MessageProducer<T> messageProducer, int maxRetries, int intervalMillis) {
@@ -38,7 +36,7 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 		if (item == null) {
 			return Future.succeededFuture();
 		}
-		taken.add(item);
+		hasInFlight = true;
 
 		return producer
 				.write(item.message)
@@ -51,16 +49,18 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 										.onComplete(promise));
 						return promise.future();
 					} else {
-						if (taken.contains(item)) {
-							taken.remove(item);
+						if (!item.completed) {
+							item.completed = true;
+							hasInFlight = false;
 							item.promise.fail(t);
 						}
 						return Future.failedFuture(t);
 					}
 				})
 				.compose(v -> {
-					if (taken.contains(item)) {
-						taken.remove(item);
+					if (!item.completed) {
+						item.completed = true;
+						hasInFlight = false;
 						item.promise.complete();
 					}
 					return write(waiting.pollFirst(), retries);
@@ -86,7 +86,7 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 	public Future<Void> write(T body) {
 		var result = Promise.<T>promise();
 		waiting.addLast(new QueueItem<>(body, result));
-		if (taken.isEmpty()) {
+		if (!hasInFlight) {
 			write(waiting.pollFirst(), predicate.test(body) ? maxRetries : 0)
 					.onFailure(com.hiddenswitch.framework.Environment.onFailure("write failures"));
 		}
@@ -107,6 +107,14 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 		waiting.clear();
 	}
 
-	record QueueItem<X>(X message, Promise<X> promise) {
+	private static final class QueueItem<X> {
+		final X message;
+		final Promise<X> promise;
+		boolean completed;
+
+		QueueItem(X message, Promise<X> promise) {
+			this.message = message;
+			this.promise = promise;
+		}
 	}
 }

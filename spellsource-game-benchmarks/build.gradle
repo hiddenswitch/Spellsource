@@ -19,5 +19,7 @@ dependencies {
 jmh {
     zip64 = true
     duplicateClassesStrategy = DuplicatesStrategy.EXCLUDE
-    profilers = ['hs_gc']
+    profilers = ['gc']
+    jvmArgs = ['--enable-preview']
+    includes = ['GameContextBenchmarks|GameStateCloneBenchmarks']
 }

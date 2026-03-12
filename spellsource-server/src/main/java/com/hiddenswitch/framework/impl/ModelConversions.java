@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.google.protobuf.Int32Value;
 import com.google.protobuf.Message;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Games;
@@ -186,7 +185,8 @@ public class ModelConversions {
 														.setAction(ga.getId())
 														.setFriendlyBattlefieldIndex(friendlyMinions.stream().filter(m -> Objects.equals(m.getReference(), ga.getTargetReference())).map(Minion::getIndex).findFirst().orElse(friendlyMinions.size()))
 														.setTarget((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(), EntityReference.NONE)) ? -1 :
-																ga.getTargetReference().getId()).build()
+																ga.getTargetReference().getId())
+														.build()
 												).collect(toList())).build());
 									} else if (kv.getKey().actionType == ActionType.DISCOVER) {
 										// Find the corresponding cards in the discover zone
@@ -254,7 +254,7 @@ public class ModelConversions {
 		clientEvent.setIsPowerHistory(event.isPowerHistory());
 		clientEvent.setDescription(description);
 		if (value != null) {
-			clientEvent.setValue(Int32Value.of(value));
+			clientEvent.setValue(value);
 		}
 
 
@@ -418,7 +418,7 @@ public class ModelConversions {
 			if (player.hasAttribute(Attribute.IMBUE)) {
 				// Include the number of "charges" to render
 				// Imbue is currently the only effect that takes advantage of this
-				heroEntity.setCharges(Int32Value.of(player.getAttributeValue(Attribute.IMBUE)));
+				heroEntity.setCharges(player.getAttributeValue(Attribute.IMBUE));
 			}
 			heroEntity
 					.setMana(player.getMana())
@@ -563,21 +563,21 @@ public class ModelConversions {
 		if (actor instanceof Minion) {
 			entity.setBoardPosition(actor.getEntityLocation().getIndex());
 		} else if (actor instanceof Hero) {
-			entity.setArmor(Int32Value.of(actor.getArmor()));
+			entity.setArmor(actor.getArmor());
 			if (!owner.getWeaponZone().isEmpty() && owner.getWeaponZone().get(0).isActive()) {
 				extraAttack += owner.getWeaponZone().get(0).getAttack();
 			}
 		}
 
 		entity.setOwner(actor.getOwner());
-		entity.setExtraAttack(Int32Value.of(extraAttack));
+		entity.setExtraAttack(extraAttack);
 		entity.setLocation(toClientLocation(actor.getEntityLocation()));
-		entity.setManaCost(Int32Value.of(card.getBaseManaCost()));
+		entity.setManaCost(card.getBaseManaCost());
 		String[] cardClasses = card.getHeroClasses();
 		entity.addAllHeroClasses(Arrays.asList(cardClasses != null && cardClasses.length > 0 ? cardClasses : new String[]{HeroClass.ANY}));
 		entity.setCardSet(Objects.toString(card.getCardSet()));
 		entity.setRarity(card.getRarity());
-		entity.setBaseManaCost(Int32Value.of(card.getBaseManaCost()));
+		entity.setBaseManaCost(card.getBaseManaCost());
 		entity.setSilenced(actor.hasAttribute(Attribute.SILENCED));
 		entity.setDeathrattles(actor.hasAttribute(Attribute.DEATHRATTLES));
 		entity.setCardType(card.getCardType());
@@ -586,11 +586,11 @@ public class ModelConversions {
 				&& workingContext.getStatus() == GameStatus.RUNNING
 				&& actor.canAttackThisTurn(workingContext);
 		entity.setPlayable(playable);
-		entity.setAttack(Int32Value.of(actor.getAttack()));
-		entity.setBaseAttack(Int32Value.of(actor.getBaseAttack()));
-		entity.setBaseHp(Int32Value.of(actor.getBaseHp()));
-		entity.setHp(Int32Value.of(actor.getHp()));
-		entity.setMaxHp(Int32Value.of(actor.getMaxHp()));
+		entity.setAttack(actor.getAttack());
+		entity.setBaseAttack(actor.getBaseAttack());
+		entity.setBaseHp(actor.getBaseHp());
+		entity.setHp(actor.getHp());
+		entity.setMaxHp(actor.getMaxHp());
 		entity.setUnderAura(actor.hasAttribute(Attribute.AURA_ATTACK_BONUS)
 				|| actor.hasAttribute(Attribute.AURA_HP_BONUS)
 				|| actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)
@@ -610,7 +610,7 @@ public class ModelConversions {
 		entity.setEnraged(actor.hasAttribute(Attribute.ENRAGED));
 		entity.setDestroyed(actor.isDestroyed());
 		entity.setCannotAttack(actor.hasAttribute(Attribute.CANNOT_ATTACK) || actor.hasAttribute(Attribute.AURA_CANNOT_ATTACK));
-		entity.setSpellDamage(Int32Value.of(actor.getAttributeValue(Attribute.SPELL_DAMAGE) + actor.getAttributeValue(Attribute.AURA_SPELL_DAMAGE)));
+		entity.setSpellDamage(actor.getAttributeValue(Attribute.SPELL_DAMAGE) + actor.getAttributeValue(Attribute.AURA_SPELL_DAMAGE));
 		entity.setWindfury(actor.hasAttribute(Attribute.WINDFURY) || actor.hasAttribute(Attribute.AURA_WINDFURY));
 		entity.setLifesteal(actor.hasAttribute(Attribute.LIFESTEAL) || actor.hasAttribute(Attribute.AURA_LIFESTEAL));
 		entity.setPoisonous(actor.hasAttribute(Attribute.POISONOUS) || actor.hasAttribute(Attribute.AURA_POISONOUS));
@@ -658,7 +658,7 @@ public class ModelConversions {
 
 		entity
 				.setId(enchantment.getId())
-				.setFires(Int32Value.of(enchantment.getFires()))
+				.setFires(enchantment.getFires())
 				.setEntityType(entityType)
 				.setLocation(toClientLocation(enchantment.getEntityLocation()))
 				.setOwner(enchantment.getOwner())
@@ -699,17 +699,17 @@ public class ModelConversions {
 						&& card.getOwner() == workingContext.getActivePlayerId()
 						&& localPlayerId == card.getOwner();
 				entity.setPlayable(playable);
-				entity.setManaCost(Int32Value.of(workingContext.getLogic().getModifiedManaCost(workingContext.getPlayer(owner), card)));
+				entity.setManaCost(workingContext.getLogic().getModifiedManaCost(workingContext.getPlayer(owner), card));
 			} else {
 				entity.setPlayable(false);
-				entity.setManaCost(Int32Value.of(card.getBaseManaCost()));
+				entity.setManaCost(card.getBaseManaCost());
 			}
 			owningPlayer = workingContext.getPlayer(card.getOwner());
 			description = card.getDescription(workingContext, owningPlayer);
 			entity.setOwner(card.getOwner());
 		} else {
 			entity.setPlayable(false);
-			entity.setManaCost(Int32Value.of(card.getBaseManaCost()));
+			entity.setManaCost(card.getBaseManaCost());
 			entity.setOwner(localPlayerId);
 			owningPlayer = Player.empty();
 		}
@@ -720,7 +720,7 @@ public class ModelConversions {
 		entity.setCardSet(Objects.toString(card.getCardSet()));
 		entity.setRarity(card.getRarity());
 		entity.setLocation(toClientLocation(card.getEntityLocation()));
-		entity.setBaseManaCost(Int32Value.of(card.getBaseManaCost()));
+		entity.setBaseManaCost(card.getBaseManaCost());
 		entity.setUncensored(card.hasAttribute(Attribute.UNCENSORED));
 		entity.setBattlecry(card.hasAttribute(Attribute.BATTLECRY));
 		entity.setDeathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
@@ -752,17 +752,17 @@ public class ModelConversions {
 				// Retrieve the weapon attack
 				var weapon = card.getWeapon(workingContext);
 				if (weapon != null) {
-					entity.setAttack(Int32Value.of(weapon.getBaseDamage()));
+					entity.setAttack(weapon.getBaseDamage());
 				}
-				entity.setArmor(Int32Value.of(card.getArmor()));
+				entity.setArmor(card.getArmor());
 				break;
 			case MINION:
-				entity.setAttack(Int32Value.of(card.getAttack() + card.getBonusAttack() + card.getAttributeValue(Attribute.AURA_ATTACK_BONUS)));
-				entity.setBaseAttack(Int32Value.of(card.getBaseAttack()));
-				entity.setBaseManaCost(Int32Value.of(card.getBaseManaCost()));
-				entity.setHp(Int32Value.of(card.getHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS)));
-				entity.setBaseHp(Int32Value.of(card.getBaseHp()));
-				entity.setMaxHp(Int32Value.of(card.getBaseHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS)));
+				entity.setAttack(card.getAttack() + card.getBonusAttack() + card.getAttributeValue(Attribute.AURA_ATTACK_BONUS));
+				entity.setBaseAttack(card.getBaseAttack());
+				entity.setBaseManaCost(card.getBaseManaCost());
+				entity.setHp(card.getHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS));
+				entity.setBaseHp(card.getBaseHp());
+				entity.setMaxHp(card.getBaseHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS));
 				entity.setUnderAura(card.getBonusAttack() > 0
 						|| card.getBonusAttack() > 0
 						|| hostsTrigger);
@@ -771,10 +771,10 @@ public class ModelConversions {
 				visualizeEffectsInHand(workingContext, owningPlayer.getId(), card, entity);
 				break;
 			case WEAPON:
-				entity.setDurability(Int32Value.of(card.getDurability()));
-				entity.setHp(Int32Value.of(card.getDurability()));
-				entity.setMaxHp(Int32Value.of(card.getBaseDurability() + card.getBonusDurability()));
-				entity.setAttack(Int32Value.of(card.getDamage() + card.getBonusDamage()));
+				entity.setDurability(card.getDurability());
+				entity.setHp(card.getDurability());
+				entity.setMaxHp(card.getBaseDurability() + card.getBonusDurability());
+				entity.setAttack(card.getDamage() + card.getBonusDamage());
 				entity.setUnderAura(card.getBonusDamage() > 0
 						|| card.getBonusDurability() > 0
 						|| hostsTrigger);
@@ -855,10 +855,10 @@ public class ModelConversions {
 			state.setTaunt(true);
 		}
 		if (attackBonus != 0) {
-			state.setAttack(Int32Value.of((state.hasAttack() ? state.getAttack().getValue() : 0) + attackBonus));
+			state.setAttack((state.hasAttack() ? state.getAttack() : 0) + attackBonus);
 		}
 		if (hpBonus != 0) {
-			state.setHp(Int32Value.of((state.hasHp() ? state.getHp().getValue() : 0) + hpBonus));
+			state.setHp((state.hasHp() ? state.getHp() : 0) + hpBonus);
 		}
 	}
 
@@ -889,7 +889,7 @@ public class ModelConversions {
 	static EntityChangeSet visibleEntities(
 			com.hiddenswitch.spellsource.common.GameState gameState) {
 		// TODO: Return array of indices
-		return EntityChangeSet.newBuilder().addAllIds(Stream.concat(gameState.getPlayer1().getLookup().values().stream(), gameState.getPlayer2().getLookup().values().stream())
+		return EntityChangeSet.newBuilder().addAllIds(Stream.concat(gameState.getPlayer1().getLookup().stream(), gameState.getPlayer2().getLookup().stream())
 				.sorted(Games.ENTITY_NATURAL_ORDER)
 				.map(net.demilich.metastone.game.entities.Entity::getId)
 				.collect(toList())).build();

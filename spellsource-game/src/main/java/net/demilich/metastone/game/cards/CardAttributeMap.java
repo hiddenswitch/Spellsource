@@ -86,6 +86,12 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 	}
 
 	@Override
+	public Object getOrDefault(Object key, Object defaultValue) {
+		Object value = get(key);
+		return value != null ? value : defaultValue;
+	}
+
+	@Override
 	public Object get(Object key) {
 		Attribute attr = (Attribute) key;
 		Card card = getCard();
@@ -155,7 +161,7 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 			}
 		}
 
-		return super.get(key);
+		return null;
 	}
 
 	@Override

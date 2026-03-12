@@ -5,17 +5,26 @@ import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.behaviour.heuristic.FeatureVector;
 import net.demilich.metastone.game.behaviour.heuristic.WeightedFeature;
 import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.statistics.Statistic;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 /**
- * Evaluates a candidate FeatureVector by playing games against a baseline.
- * All matchups and games are parallelized across available cores.
+ * Evaluates a candidate FeatureVector by playing games against a Hall of Fame
+ * of historically strong opponents.
+ * <p>
+ * Based on the competitive coevolution approach from García-Sánchez &amp; Tonda
+ * (2019) "Optimizing Hearthstone agents using an evolutionary algorithm",
+ * adapted for CMA-ES where we cannot do full round-robin within a generation.
+ * Instead, we use a Hall of Fame archive (Rosin &amp; Belew 1997) as the opponent set.
+ * <p>
+ * Matchups are distributed across HoF members and deck pairs. The total game
+ * budget stays constant regardless of HoF size — more opponents means fewer
+ * games per opponent, but broader coverage.
+ * <p>
+ * All games are parallelized across available cores.
  */
 public class FitnessEvaluator {
 	private static final Logger LOG = Logger.getLogger(FitnessEvaluator.class.getName());
@@ -29,16 +38,22 @@ public class FitnessEvaluator {
 	}
 
 	/**
-	 * A single game task: deck pair, who is candidate (P1 or P2).
+	 * A single game task: deck pair, opponent weights, who is candidate (P1 or P2).
 	 */
-	private record GameTask(GameDeck deck1, GameDeck deck2, boolean candidateIsPlayer1) {
+	private record GameTask(GameDeck deck1, GameDeck deck2, FeatureVector opponent, boolean candidateIsPlayer1) {
 	}
 
 	/**
-	 * Evaluates a candidate against a baseline by playing sampled matchups.
-	 * All games across all matchups are flattened into a single parallel stream.
+	 * Evaluates a candidate against a Hall of Fame of opponents.
+	 * <p>
+	 * Matchups are distributed across all HoF members: each matchup is assigned
+	 * to a random HoF member, so the candidate faces all of them across the
+	 * evaluation. Total game count = matchupsToSample * gamesPerMatchup,
+	 * same budget regardless of HoF size.
+	 *
+	 * @param opponents the Hall of Fame members to play against
 	 */
-	public EvalResult evaluate(String id, FeatureVector candidate, FeatureVector baseline,
+	public EvalResult evaluate(String id, FeatureVector candidate, List<FeatureVector> opponents,
 	                           List<GameDeck> allDecks, int matchupsToSample, int gamesPerMatchup) {
 		long start = System.currentTimeMillis();
 		Random rng = new Random();
@@ -47,19 +62,21 @@ public class FitnessEvaluator {
 		List<int[]> matchups = sampleMatchups(allDecks.size(), matchupsToSample, rng);
 
 		// Flatten all games across all matchups into a single list
+		// Each matchup is assigned to a random opponent from the HoF
 		List<GameTask> allTasks = new ArrayList<>();
 		for (int[] matchup : matchups) {
 			GameDeck deck1 = allDecks.get(matchup[0]);
 			GameDeck deck2 = allDecks.get(matchup[1]);
+			FeatureVector opponent = opponents.get(rng.nextInt(opponents.size()));
 
 			int gamesAsP1 = gamesPerMatchup / 2;
 			int gamesAsP2 = gamesPerMatchup - gamesAsP1;
 
 			for (int i = 0; i < gamesAsP1; i++) {
-				allTasks.add(new GameTask(deck1, deck2, true));
+				allTasks.add(new GameTask(deck1, deck2, opponent, true));
 			}
 			for (int i = 0; i < gamesAsP2; i++) {
-				allTasks.add(new GameTask(deck1, deck2, false));
+				allTasks.add(new GameTask(deck1, deck2, opponent, false));
 			}
 		}
 
@@ -69,8 +86,8 @@ public class FitnessEvaluator {
 
 		allTasks.parallelStream().forEach(task -> {
 			try {
-				FeatureVector p1Weights = task.candidateIsPlayer1 ? candidate : baseline;
-				FeatureVector p2Weights = task.candidateIsPlayer1 ? baseline : candidate;
+				FeatureVector p1Weights = task.candidateIsPlayer1 ? candidate : task.opponent;
+				FeatureVector p2Weights = task.candidateIsPlayer1 ? task.opponent : candidate;
 
 				GameContext game = GameContext.fromDecks(List.of(task.deck1, task.deck2));
 				game.setBehaviour(0, createBehaviour(p1Weights));
@@ -98,10 +115,18 @@ public class FitnessEvaluator {
 		double winRate = totalGames > 0 ? (double) wins.get() / totalGames : 0.5;
 		long duration = System.currentTimeMillis() - start;
 
-		LOG.info(String.format("Evaluated %s: %.1f%% win rate (%d/%d games) in %ds",
-				id, winRate * 100, wins.get(), totalGames, duration / 1000));
+		LOG.info(String.format("Evaluated %s: %.1f%% win rate (%d/%d games, %d HoF opponents) in %ds",
+				id, winRate * 100, wins.get(), totalGames, opponents.size(), duration / 1000));
 
 		return new EvalResult(id, winRate, totalGames, duration);
+	}
+
+	/**
+	 * Convenience overload for single-opponent evaluation (used by distributed workers).
+	 */
+	public EvalResult evaluate(String id, FeatureVector candidate, FeatureVector baseline,
+	                           List<GameDeck> allDecks, int matchupsToSample, int gamesPerMatchup) {
+		return evaluate(id, candidate, List.of(baseline), allDecks, matchupsToSample, gamesPerMatchup);
 	}
 
 	private GameStateValueBehaviour createBehaviour(FeatureVector weights) {

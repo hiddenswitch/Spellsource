@@ -17,6 +17,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -32,6 +35,18 @@ import static java.util.stream.Collectors.toMap;
 
 public class ListCardCatalogue implements CardCatalogue {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ListCardCatalogue.class);
+
+	/**
+	 * Cached query results. Key is a composite of query parameters, value is an immutable list of card IDs matching
+	 * the query. Invalidated whenever cards are loaded or removed.
+	 */
+	private final Cache<QueryKey, List<String>> queryCache = Caffeine.newBuilder()
+			.maximumSize(256)
+			.build();
+
+	private record QueryKey(Set<String> formatSets, Spellsource.CardTypeMessage.CardType cardType,
+	                        Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag) {
+	}
 
 	static {
 		Serialization.configureSerialization();
@@ -153,55 +168,69 @@ public class ListCardCatalogue implements CardCatalogue {
 	public CardList query(DeckFormat deckFormat, Spellsource.CardTypeMessage.CardType cardType, Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag, boolean clone) {
 		lock.readLock().lock();
 		try {
-			CardList result = new CardArrayList();
-			for (var card : cards.values()) {
-				var desc = card.getDesc();
-				var actualCardType = card.getCardType();
-				if (!deckFormat.isInFormat(card)) {
-					continue;
-				}
-				if (!desc.isCollectible()) {
-					continue;
-				}
-				if (hasStaticAttribute(desc, Attribute.PERMANENT)) {
-					continue;
-				}
-				if (cardType != null && !GameLogic.isCardType(actualCardType, cardType)) {
-					continue;
-				}
-				// per default, do not include hero powers, quests, classes, and formats
-				if (actualCardType == Spellsource.CardTypeMessage.CardType.HERO_POWER
-						|| card.isQuest()
-						|| (actualCardType == Spellsource.CardTypeMessage.CardType.CLASS && cardType != Spellsource.CardTypeMessage.CardType.CLASS)
-						|| (actualCardType == Spellsource.CardTypeMessage.CardType.FORMAT && cardType != Spellsource.CardTypeMessage.CardType.FORMAT)) {
-					continue;
-				}
-				if (rarity != null && !GameLogic.isRarity(card.getRarity(), rarity)) {
-					continue;
-				}
-				if (heroClass != null && !card.hasHeroClass(heroClass)) {
-					continue;
-				}
-				if (tag != null && !card.hasAttribute(tag)) {
-					continue;
-				}
-				if (clone) {
-					card = card.clone();
-				} else {
-					throw new UnsupportedOperationException("must clone");
-				}
-				result.addCard(card);
+			List<String> ids;
+			if (deckFormat.getClass() == DeckFormat.class) {
+				var sets = new LinkedHashSet<>(deckFormat.getSets());
+				sets.remove(null);
+				var key = new QueryKey(sets, cardType, rarity, heroClass, tag);
+				ids = queryCache.get(key, k -> computeQuery(deckFormat, cardType, rarity, heroClass, tag));
+			} else {
+				ids = computeQuery(deckFormat, cardType, rarity, heroClass, tag);
 			}
-
+			CardList result = new CardArrayList();
+			for (var id : ids) {
+				var card = cards.get(id);
+				if (card != null) {
+					result.addCard(card.clone());
+				}
+			}
 			return result;
 		} finally {
 			lock.readLock().unlock();
 		}
 	}
 
+	private List<String> computeQuery(DeckFormat deckFormat, Spellsource.CardTypeMessage.CardType cardType, Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag) {
+		var ids = new ArrayList<String>();
+		for (var card : cards.values()) {
+			var desc = card.getDesc();
+			var actualCardType = card.getCardType();
+			if (!deckFormat.isInFormat(card)) {
+				continue;
+			}
+			if (!desc.isCollectible()) {
+				continue;
+			}
+			if (hasStaticAttribute(desc, Attribute.PERMANENT)) {
+				continue;
+			}
+			if (cardType != null && !GameLogic.isCardType(actualCardType, cardType)) {
+				continue;
+			}
+			if (actualCardType == Spellsource.CardTypeMessage.CardType.HERO_POWER
+					|| card.isQuest()
+					|| (actualCardType == Spellsource.CardTypeMessage.CardType.CLASS && cardType != Spellsource.CardTypeMessage.CardType.CLASS)
+					|| (actualCardType == Spellsource.CardTypeMessage.CardType.FORMAT && cardType != Spellsource.CardTypeMessage.CardType.FORMAT)) {
+				continue;
+			}
+			if (rarity != null && !GameLogic.isRarity(card.getRarity(), rarity)) {
+				continue;
+			}
+			if (heroClass != null && !card.hasHeroClass(heroClass)) {
+				continue;
+			}
+			if (tag != null && !card.hasAttribute(tag)) {
+				continue;
+			}
+			ids.add(card.getCardId());
+		}
+		return List.copyOf(ids);
+	}
+
 	public void removeCard(String id) {
 		lock.writeLock().lock();
 		try {
+			queryCache.invalidateAll();
 			var res = cards.remove(id);
 			if (res != null) {
 				cardsByName.remove(res.getDesc().getName(), res);
@@ -437,6 +466,7 @@ public class ListCardCatalogue implements CardCatalogue {
 	public void clear() {
 		lock.writeLock().lock();
 		try {
+			queryCache.invalidateAll();
 			formatsByName.clear();
 			bannedCardIds.clear();
 			hardRemovalCardIds.clear();
@@ -493,6 +523,7 @@ public class ListCardCatalogue implements CardCatalogue {
 	protected void updatedWith(Map<String, CardDesc> cardDescs) {
 		lock.writeLock().lock();
 		try {
+			queryCache.invalidateAll();
 			var newCards = new ArrayList<Card>(cardDescs.size());
 			// sort so that this is more consistent
 			List<CardDesc> values = new ArrayList<>(cardDescs.values());

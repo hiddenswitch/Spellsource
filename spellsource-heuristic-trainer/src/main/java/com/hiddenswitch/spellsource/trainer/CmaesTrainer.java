@@ -18,11 +18,23 @@ import java.util.logging.Logger;
 
 /**
  * CMA-ES optimization loop for training GSVB heuristic weights,
- * using MOEAFramework's CMA-ES implementation.
+ * using MOEAFramework's CMA-ES implementation with Hall of Fame evaluation.
+ * <p>
+ * Based on:
+ * - García-Sánchez &amp; Tonda (2019) "Optimizing Hearthstone agents using an
+ *   evolutionary algorithm" — competitive coevolution for card game heuristics
+ * - Rosin &amp; Belew (1997) "New Methods for Competitive Coevolution" — Hall of
+ *   Fame archive to prevent overfitting to a single opponent
+ * - Hansen (2016) "The CMA Evolution Strategy: A Tutorial" — IPOP-CMA-ES
+ * <p>
+ * Fitness = win rate against all Hall of Fame members across sampled deck matchups.
+ * The HoF grows as training discovers stronger solutions, so evaluation gets
+ * progressively harder and win rates remain meaningful.
  */
 public class CmaesTrainer {
 	private static final Logger LOG = Logger.getLogger(CmaesTrainer.class.getName());
 	private static final int DIMENSION = WeightedFeature.values().length;
+	private static final int HOF_MAX_SIZE = 8;
 
 	private final int generations;
 	private final int populationSize;
@@ -36,7 +48,7 @@ public class CmaesTrainer {
 	private final double sigmaInit;
 	private final double[] initialPoint;
 
-	private FeatureVector baseline;
+	private final HallOfFame hof;
 	private FeatureVector bestSoFar;
 	private double bestWinRate = 0.0;
 	private int evaluationCounter = 0;
@@ -45,12 +57,12 @@ public class CmaesTrainer {
 	                     List<GameDeck> decks, FitnessEvaluator evaluator, MlflowReporter mlflow, RedisQueue redis,
 	                     Long seed, double sigmaInit) {
 		this(generations, populationSize, matchupsPerEval, gamesPerMatchup,
-				decks, evaluator, mlflow, redis, seed, sigmaInit, null);
+				decks, evaluator, mlflow, redis, seed, sigmaInit, null, 0.0);
 	}
 
 	public CmaesTrainer(int generations, int populationSize, int matchupsPerEval, int gamesPerMatchup,
 	                     List<GameDeck> decks, FitnessEvaluator evaluator, MlflowReporter mlflow, RedisQueue redis,
-	                     Long seed, double sigmaInit, double[] initialPoint) {
+	                     Long seed, double sigmaInit, double[] initialPoint, double restoredBestWinRate) {
 		this.generations = generations;
 		this.populationSize = populationSize;
 		this.matchupsPerEval = matchupsPerEval;
@@ -63,8 +75,17 @@ public class CmaesTrainer {
 		this.sigmaInit = sigmaInit;
 		this.initialPoint = initialPoint;
 
-		this.baseline = FeatureVector.getFittest();
-		this.bestSoFar = baseline.clone();
+		this.hof = new HallOfFame(HOF_MAX_SIZE);
+		hof.seed(FeatureVector.getFittest());
+		// If resuming from MLflow, seed HoF with the loaded best weights too
+		if (initialPoint != null && initialPoint.length == DIMENSION) {
+			FeatureVector loaded = arrayToFeatureVector(initialPoint);
+			hof.add(loaded);
+			this.bestSoFar = loaded.clone();
+			this.bestWinRate = restoredBestWinRate;
+		} else {
+			this.bestSoFar = FeatureVector.getFittest();
+		}
 	}
 
 	private static final int STAGNATION_LIMIT = 5; // generations without improvement before IPOP restart
@@ -82,8 +103,9 @@ public class CmaesTrainer {
 		if (initialPoint != null && initialPoint.length == DIMENSION) {
 			System.arraycopy(initialPoint, 0, startPoint, 0, DIMENSION);
 		} else {
+			FeatureVector defaultWeights = FeatureVector.getFittest();
 			for (int i = 0; i < DIMENSION; i++) {
-				startPoint[i] = baseline.get(features[i]);
+				startPoint[i] = defaultWeights.get(features[i]);
 			}
 		}
 
@@ -95,10 +117,11 @@ public class CmaesTrainer {
 		int currentPopulation = populationSize;
 		int restartCount = 0;
 
-		LOG.info(String.format("Starting IPOP-CMA-ES with migration: %d dimensions, population=%d, budget=%d, sigma=%.1f, seed=%s, startPoint=%s",
+		LOG.info(String.format("Starting IPOP-CMA-ES with HoF evaluation: %d dimensions, population=%d, budget=%d, sigma=%.1f, seed=%s, startPoint=%s, hofMaxSize=%d",
 				DIMENSION, populationSize, totalBudget, sigmaInit,
 				seed != null ? seed.toString() : "random",
-				initialPoint != null ? "mlflow_best" : "getFittest()"));
+				initialPoint != null ? "mlflow_best" : "getFittest()",
+				HOF_MAX_SIZE));
 
 		while (evaluationCounter < totalBudget) {
 			int gensWithoutImprovement = 0;
@@ -168,7 +191,7 @@ public class CmaesTrainer {
 
 	/**
 	 * Checks MLflow for better solutions from other islands.
-	 * If found, updates bestSoFar and baseline.
+	 * Migrated solutions are added to the Hall of Fame.
 	 */
 	private void checkMigration() {
 		if (mlflow == null) {
@@ -181,9 +204,9 @@ public class CmaesTrainer {
 				double oldBest = bestWinRate;
 				bestWinRate = migration.winRate();
 				bestSoFar = migrated.clone();
-				baseline = migrated.clone();
-				LOG.info(String.format("Migration: adopted %.1f%% solution from %s (was %.1f%%)",
-						migration.winRate() * 100, migration.sourceIsland(), oldBest * 100));
+				hof.add(migrated);
+				LOG.info(String.format("Migration: adopted %.1f%% solution from %s (was %.1f%%), HoF=%d",
+						migration.winRate() * 100, migration.sourceIsland(), oldBest * 100, hof.size()));
 			}
 		} catch (Exception e) {
 			LOG.warning("Migration check error: " + e.getMessage());
@@ -228,16 +251,13 @@ public class CmaesTrainer {
 			if (winRate > bestWinRate) {
 				bestWinRate = winRate;
 				bestSoFar = candidate.clone();
-				LOG.info(String.format("New best: %.1f%% win rate (eval %d)", winRate * 100, evaluationCounter));
+				hof.add(candidate);
+				LOG.info(String.format("New best: %.1f%% win rate (eval %d), HoF=%d members",
+						winRate * 100, evaluationCounter, hof.size()));
 
 				if (mlflow != null) {
 					mlflow.logBestSoFar(bestSoFar, bestWinRate, evaluationCounter);
 				}
-			}
-
-			if (winRate > 0.55) {
-				baseline = candidate.clone();
-				LOG.info("Baseline updated to new candidate");
 			}
 
 			// CMA-ES minimizes, so negate win rate
@@ -246,16 +266,20 @@ public class CmaesTrainer {
 	}
 
 	private double evaluateLocal(String candidateId, FeatureVector candidate) {
-		EvalResult result = evaluator.evaluate(candidateId, candidate, baseline, decks, matchupsPerEval, gamesPerMatchup);
+		List<FeatureVector> opponents = hof.getMembers();
+		EvalResult result = evaluator.evaluate(candidateId, candidate, opponents, decks, matchupsPerEval, gamesPerMatchup);
 		return result.winRate();
 	}
 
 	private double evaluateDistributed(String candidateId, FeatureVector candidate) {
+		// For distributed workers, send the current best as the baseline opponent.
+		// Workers use single-opponent evaluation; the coordinator uses the full pool locally.
+		FeatureVector opponent = bestSoFar != null ? bestSoFar : FeatureVector.getFittest();
 		EvalRequest request = new EvalRequest(
 				candidateId,
 				evaluationCounter,
 				FitnessEvaluator.toWeightMap(candidate),
-				FitnessEvaluator.toWeightMap(baseline),
+				FitnessEvaluator.toWeightMap(opponent),
 				matchupsPerEval,
 				gamesPerMatchup,
 				evaluator.getGsvbDepth(),
@@ -273,6 +297,15 @@ public class CmaesTrainer {
 			fv.set(features[i], values[i]);
 		}
 		return fv;
+	}
+
+	/**
+	 * Seeds the Hall of Fame with an additional member (e.g. from another island on resume).
+	 */
+	public void seedHofMember(double[] weights) {
+		if (weights != null && weights.length == DIMENSION) {
+			hof.add(arrayToFeatureVector(weights));
+		}
 	}
 
 	public FeatureVector getBestSoFar() {

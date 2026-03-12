@@ -37,37 +37,28 @@ public class FeatureVector implements Cloneable, Serializable {
 		defaultVector.set(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE, -16);
 		defaultVector.set(WeightedFeature.OWN_ROASTED_VALUE, -15);
 		defaultVector.set(WeightedFeature.OPPONENT_ROASTED_VALUE, 31);
+		defaultVector.set(WeightedFeature.OWN_ARMOR_FACTOR, 0.5);
+		defaultVector.set(WeightedFeature.WEAPON_VALUE, 1);
+		defaultVector.set(WeightedFeature.OWN_DECK_COUNT, 0.1);
+		defaultVector.set(WeightedFeature.OPPONENT_DECK_COUNT, -0.1);
+		defaultVector.set(WeightedFeature.OWN_SECRET_COUNT, 3);
+		defaultVector.set(WeightedFeature.OPPONENT_SECRET_COUNT, -3);
+		defaultVector.set(WeightedFeature.MINION_POISONOUS_MODIFIER, 5);
+		defaultVector.set(WeightedFeature.MINION_LIFESTEAL_MODIFIER, 2);
+		defaultVector.set(WeightedFeature.MINION_REBORN_MODIFIER, 3);
+		defaultVector.set(WeightedFeature.MINION_FROZEN_MODIFIER, -3);
+		defaultVector.set(WeightedFeature.MINION_DEATHRATTLE_MODIFIER, 2);
+		defaultVector.set(WeightedFeature.MINION_RUSH_MODIFIER, 1);
+		defaultVector.set(WeightedFeature.MINION_IMMUNE_MODIFIER, 8);
+		defaultVector.set(WeightedFeature.MINION_CANNOT_ATTACK_MODIFIER, -5);
+		defaultVector.set(WeightedFeature.LOCKED_MANA_VALUE, -5);
+		defaultVector.set(WeightedFeature.CORPSE_COUNT_VALUE, 0.5);
+		defaultVector.set(WeightedFeature.OWN_MINION_COUNT, 1);
 		return defaultVector;
 	}
 
 	public static FeatureVector getFittest() {
-		FeatureVector defaultVector = new FeatureVector();
-		defaultVector.set(WeightedFeature.RED_MODIFIER, -43);
-		defaultVector.set(WeightedFeature.YELLOW_MODIFIER, -17);
-		defaultVector.set(WeightedFeature.OWN_HP_FACTOR, 0.214);
-		defaultVector.set(WeightedFeature.CURSED_FACTOR, -11.912);
-		defaultVector.set(WeightedFeature.OPPONENT_HP_FACTOR, -1.115);
-		defaultVector.set(WeightedFeature.OWN_CARD_COUNT, 3.572);
-		defaultVector.set(WeightedFeature.OPPONENT_CARD_COUNT, 0);
-		defaultVector.set(WeightedFeature.MINION_INTRINSIC_VALUE, 1.181);
-		defaultVector.set(WeightedFeature.MINION_ATTACK_FACTOR, 2.419);
-		defaultVector.set(WeightedFeature.MINION_HP_FACTOR, 3);
-		defaultVector.set(WeightedFeature.MINION_RED_TAUNT_MODIFIER, 10.1);
-		defaultVector.set(WeightedFeature.MINION_YELLOW_TAUNT_MODIFIER, 7.1);
-		defaultVector.set(WeightedFeature.MINION_DEFAULT_TAUNT_MODIFIER, 0.671);
-		defaultVector.set(WeightedFeature.MINION_WINDFURY_MODIFIER, 15.71);
-		defaultVector.set(WeightedFeature.MINION_DIVINE_SHIELD_MODIFIER, 6.1);
-		defaultVector.set(WeightedFeature.MINION_SPELL_POWER_MODIFIER, 3.841);
-		defaultVector.set(WeightedFeature.MINION_STEALTHED_MODIFIER, 1.281);
-		defaultVector.set(WeightedFeature.MINION_UNTARGETABLE_BY_SPELLS_MODIFIER, 0);
-		defaultVector.set(WeightedFeature.HARD_REMOVAL_VALUE, 2);
-		defaultVector.set(WeightedFeature.QUEST_COUNTER_VALUE, 33.3);
-		defaultVector.set(WeightedFeature.QUEST_REWARD_VALUE, 55.7);
-		defaultVector.set(WeightedFeature.EMPTY_MANA_CRYSTAL_VALUE, 15.5);
-		defaultVector.set(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE, -31);
-		defaultVector.set(WeightedFeature.OWN_ROASTED_VALUE, -15);
-		defaultVector.set(WeightedFeature.OPPONENT_ROASTED_VALUE, 31);
-		return defaultVector;
+		return getDefault();
 	}
 
 	private final Map<WeightedFeature, Double> values = new EnumMap<WeightedFeature, Double>(WeightedFeature.class);

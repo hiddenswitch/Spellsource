@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A base map wrapping extending a {@link HashMap} or {@link EnumMap} depending on the memory needs of this server
@@ -44,16 +43,14 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 		return super.toString();
 	}
 
-	/* TODO: To switch to a different implementation, re-enable this
 	@Override
 	public V getOrDefault(Object key, V defaultValue) {
-		V val = get(key);
-		if (val == null) {
+		int ordinal = ordinalOf(key);
+		if (ordinal < 0 || !data.present[ordinal]) {
 			return defaultValue;
 		}
-		return val;
+		return data.get(ordinal);
 	}
-	*/
 
 	protected void checkNotFrozen() {
 		if (readOnly) {
@@ -189,10 +186,11 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 	}
 
 	private int ordinalOf(Object key) {
-		if (!keyType.isInstance(key)) {
-			return -1;
+		int ordinal = ((Enum<?>) key).ordinal();
+		if (ordinal < keyUniverse.length && keyUniverse[ordinal] == key) {
+			return ordinal;
 		}
-		return ((Enum<?>) key).ordinal();
+		return -1;
 	}
 
 	private final class EntrySet extends AbstractSet<Entry<K, V>> {
@@ -287,7 +285,7 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 	private static final class SharedData<V> implements Serializable {
 		private final Object[] values;
 		private final boolean[] present;
-		private final AtomicInteger references;
+		private volatile int references;
 		private int size;
 
 		private SharedData(int capacity) {
@@ -298,20 +296,20 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 			this.values = values;
 			this.present = present;
 			this.size = size;
-			this.references = new AtomicInteger(1);
+			this.references = 1;
 		}
 
 		private SharedData<V> retain() {
-			references.incrementAndGet();
+			references++;
 			return this;
 		}
 
 		private void release() {
-			references.decrementAndGet();
+			references--;
 		}
 
 		private boolean isShared() {
-			return references.get() > 1;
+			return references > 1;
 		}
 
 		private SharedData<V> copy() {

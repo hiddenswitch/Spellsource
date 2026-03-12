@@ -24,11 +24,11 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		List<E>, Iterable<E>, Cloneable, Serializable, Comparable<EntityZone<? extends Entity>> {
 
 	protected final Zones zone;
-	protected Map<Integer, Entity> lookup;
+	protected EntityLookup lookup;
 	protected int player = -1;
 	protected final List<E> internal;
 
-	public EntityZone(int player, Zones zone, Map<Integer, Entity> lookup) {
+	public EntityZone(int player, Zones zone, EntityLookup lookup) {
 		switch (zone) {
 			case DECK:
 				this.internal = new ArrayList<>(30);
@@ -61,15 +61,18 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	@SuppressWarnings("unchecked")
 	public EntityZone<E> clone() {
 		// Clone all the cards too
-		EntityZone<E> zone = new EntityZone<>(getPlayer(), getZone(), null);
-		for (E e : this) {
-			zone.uncheckedAdd(zone.size(), (E) e.clone());
+		EntityZone<E> cloneZone = new EntityZone<>(getPlayer(), getZone(), null);
+		int size = internal.size();
+		for (int i = 0; i < size; i++) {
+			E cloned = (E) internal.get(i).clone();
+			cloneZone.internal.add(cloned);
+			cloned.setEntityLocation(new EntityLocation(zone, player, i));
 		}
-		return zone;
+		return cloneZone;
 	}
 
 	@Override
-	public E get(int index) {
+	public final E get(int index) {
 		return internal.get(index);
 	}
 
@@ -125,7 +128,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		updateLookup(element);
 	}
 
-	private void updateLookup(E element) {
+	protected void updateLookup(E element) {
 		if (lookup != null && element.getId() != IdFactory.UNASSIGNED) {
 			lookup.put(element.getId(), element);
 		}
@@ -277,7 +280,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		return this.size() - o.size();
 	}
 
-	public EntityZone<E> setLookup(Map<Integer, Entity> lookup) {
+	public EntityZone<E> setLookup(EntityLookup lookup) {
 		this.lookup = lookup;
 		return this;
 	}

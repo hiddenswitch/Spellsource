@@ -84,6 +84,7 @@ import static com.google.common.collect.Maps.immutableEntry;
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class OpenerDesc implements Serializable, HasEntrySet<BattlecryDescArg, Object>, Cloneable, AbstractEnchantmentDesc<Opener>, Freezable {
+	@JsonIgnore
 	private transient boolean readOnly;
 	public SpellDesc spell;
 	public TargetSelection targetSelection = TargetSelection.NONE;

@@ -260,8 +260,12 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 		setPlayer2(player2Clone);
 
 		setTempCards(fromContext.getTempCards().clone());
-		var triggers = fromContext.getTriggers().stream().map(Trigger::clone).collect(toList());
-		setTriggers(triggers);
+		var fromTriggers = fromContext.getTriggers();
+		var clonedTriggers = new ArrayList<Trigger>(fromTriggers.size());
+		for (var trigger : fromTriggers) {
+			clonedTriggers.add(trigger.clone());
+		}
+		setTriggers(clonedTriggers);
 		setActivePlayerId(fromContext.getActivePlayerId());
 		setTurn(fromContext.getTurn());
 		setActionsThisTurn(fromContext.getActionsThisTurn());
@@ -1244,8 +1248,8 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	@SuppressWarnings("unchecked")
 	public Stream<Entity> getEntities() {
 		return Stream.concat(
-				getPlayer1().getLookup().values().stream(),
-				getPlayer2().getLookup().values().stream());
+				getPlayer1().getLookup().stream(),
+				getPlayer2().getLookup().stream());
 	}
 
 	public void onWillPerformGameAction(int playerId, GameAction action) {

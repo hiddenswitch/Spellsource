@@ -2,21 +2,25 @@ package com.hiddenswitch.spellsource.game.benchmarks;
 
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.tests.util.TestBase;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Benchmark)
+@Fork(1)
 public class GameContextBenchmarks {
 
 	@Setup
 	public void setup() {
+		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
 	}
 
 	@Benchmark
 	@BenchmarkMode(Mode.Throughput)
-	@Measurement(time = 30, timeUnit = TimeUnit.SECONDS, iterations = 2)
+	@Warmup(iterations = 1, time = 30, timeUnit = TimeUnit.SECONDS)
+	@Measurement(time = 60, timeUnit = TimeUnit.SECONDS, iterations = 3)
 	@OutputTimeUnit(TimeUnit.MINUTES)
 	public void gameStateValueBehaviour() throws InterruptedException {
 		var gameContext = TestBase.fromTwoRandomDecks(10101L);

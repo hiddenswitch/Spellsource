@@ -395,10 +395,10 @@ message ClientToServerMessage {
     Emote emote = 3;
 
     // When specified with an entity ID, indicates the client is "touching" this entity.
-    google.protobuf.Int32Value entityTouch = 4;
+    optional int32 entityTouch = 4;
 
     // When specified with an entity ID, indicates the client is no longer touching the specified entity.
-    google.protobuf.Int32Value entityUntouch = 5;
+    optional int32 entityUntouch = 5;
     FirstMessageMessage firstMessage = 6;
     MessageTypeMessage.MessageType messageType = 7;
 
@@ -673,20 +673,20 @@ message Entity {
     int32 id = 1;
 
     // The entity's armor. Conventionally, this value should be rendered on a hero entity's armor token.
-    google.protobuf.Int32Value armor = 41;
+    optional int32 armor = 41;
     Art art = 2;
 
     // The entity's current attack value. Conventionally, this value should be rendered on the attack token.
-    google.protobuf.Int32Value attack = 3;
+    optional int32 attack = 3;
 
     // The entity's base attack value.
-    google.protobuf.Int32Value baseAttack = 4;
+    optional int32 baseAttack = 4;
 
     // The base hitpoints of the entity.
-    google.protobuf.Int32Value baseHp = 5;
+    optional int32 baseHp = 5;
 
     // The entity's base mana cost.
-    google.protobuf.Int32Value baseManaCost = 6;
+    optional int32 baseManaCost = 6;
 
     // When true, this entity has an effect that gets triggered when it is played from the hand.
     bool battlecry = 7;
@@ -711,7 +711,7 @@ message Entity {
     bool charge = 14;
 
     // An integer number of glowing orbs to render above the entity.
-    google.protobuf.Int32Value charges = 15;
+    optional int32 charges = 15;
 
     // Indicates this card has a choose-one effect.
     bool chooseOne = 16;
@@ -727,7 +727,7 @@ message Entity {
 
     // The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is
     // triggered.
-    google.protobuf.Int32Value countUntilCast = 20;
+    optional int32 countUntilCast = 20;
 
     // When true, this entity has an effect that gets triggered when it is destroyed.
     bool deathrattles = 23;
@@ -749,7 +749,7 @@ message Entity {
     bool divineShield = 28;
 
     // The durability (number of uses) that the weapon still has.
-    google.protobuf.Int32Value durability = 29;
+    optional int32 durability = 29;
 
     // The class hierarchy of this enchantment
     string enchantmentType = 30;
@@ -759,7 +759,7 @@ message Entity {
     EntityTypeMessage.EntityType entityType = 32;
 
     // The number of times this enchantment (secret, quest or trigger on card) has fired.
-    google.protobuf.Int32Value fires = 33;
+    optional int32 fires = 33;
 
     // When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when
     // it would normally be able to attack.
@@ -784,7 +784,7 @@ message Entity {
     bool hostsTrigger = 39;
 
     // The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token.
-    google.protobuf.Int32Value hp = 40;
+    optional int32 hp = 40;
 
     // Indicates the entity does not take damage.
     bool immune = 42;
@@ -803,10 +803,10 @@ message Entity {
     int32 mana = 47;
 
     // The entity's current mana cost. Conventionally, this value should be rendered on the mana token.
-    google.protobuf.Int32Value manaCost = 48;
+    optional int32 manaCost = 48;
 
     // The maximum number of hitpoints this entity can have.
-    google.protobuf.Int32Value maxHp = 49;
+    optional int32 maxHp = 49;
 
     // The player's maximum amount of mana.
     int32 maxMana = 50;
@@ -818,7 +818,7 @@ message Entity {
     string note = 52;
 
     // Indicates the amount of mana that would be locked if this card were played.
-    google.protobuf.Int32Value overload = 53;
+    optional int32 overload = 53;
 
     // An integer corresponding to the entity's owner.
     int32 owner = 54;
@@ -843,7 +843,7 @@ message Entity {
     bool silenced = 61;
 
     // Indicates the amount of additional spell damage this entity gives its owning player.
-    google.protobuf.Int32Value spellDamage = 62;
+    optional int32 spellDamage = 62;
 
     // When true, the minion cannot be targeted by the opponent until the entity attacks for the first time.
     bool stealth = 63;
@@ -874,7 +874,7 @@ message Entity {
     // Indicates the entity can attack twice a turn.
     bool windfury = 71;
 
-    google.protobuf.Int32Value extraAttack = 72;
+    optional int32 extraAttack = 72;
 }
 
 // An array that corresponds to the visible entities in this game state notification. The client is responsible for
@@ -1095,7 +1095,7 @@ message GameEvent {
 
     // When not null, indicates this game event comes with a value. This is typically the damage dealt, the amount of
     // healing, etc.
-    google.protobuf.Int32Value value = 18;
+    optional int32 value = 18;
 }
 
 // An object that describes the winner and loser of a game
@@ -1104,7 +1104,7 @@ message GameOver {
     bool localPlayerWon = 1;
 
     // The ID of the player who has won. Null if no player has won.
-    google.protobuf.Int32Value winningPlayerId = 2;
+    optional int32 winningPlayerId = 2;
 }
 
 message GameState {
