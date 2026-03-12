@@ -8,6 +8,7 @@ apply from: '../gradle/instrument.gradle'
 dependencies {
     implementation project(':spellsource-game')
     implementation project(':spellsource-cards-git')
+    implementation project(':spellsource-cards-private')
     implementation project(':spellsource-testutils')
     
 

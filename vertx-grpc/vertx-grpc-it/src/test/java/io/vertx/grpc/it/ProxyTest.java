@@ -33,6 +33,8 @@ public class ProxyTest extends ProxyTestBase {
 
   @Test
   public void testUnary(TestContext should) {
+    int upstreamPort = port;
+    int proxyPort = findFreePort();
 
     GrpcClient client = GrpcClient.client(vertx);
 
@@ -41,11 +43,11 @@ public class ProxyTest extends ProxyTestBase {
         HelloReply helloReply = HelloReply.newBuilder().setMessage("Hello " + helloRequest.getName()).build();
         call.response().end(helloReply);
       });
-    })).listen(8080, "localhost");
+    })).listen(upstreamPort, "localhost");
 
     Future<HttpServer> proxy = vertx.createHttpServer().requestHandler(GrpcServer.server(vertx).callHandler(clientReq -> {
       clientReq.pause();
-      client.request(SocketAddress.inetSocketAddress(8080, "localhost")).onComplete(should.asyncAssertSuccess(proxyReq -> {
+      client.request(SocketAddress.inetSocketAddress(upstreamPort, "localhost")).onComplete(should.asyncAssertSuccess(proxyReq -> {
         proxyReq.response().onSuccess(resp -> {
           GrpcServerResponse<Buffer, Buffer> bc = clientReq.response();
           resp.messageHandler(bc::writeMessage);
@@ -56,11 +58,11 @@ public class ProxyTest extends ProxyTestBase {
         clientReq.endHandler(v -> proxyReq.end());
         clientReq.resume();
       }));
-    })).listen(8081, "localhost");
+    })).listen(proxyPort, "localhost");
 
     Async test = should.async();
     server.flatMap(v -> proxy).onComplete(should.asyncAssertSuccess(v -> {
-      client.request(SocketAddress.inetSocketAddress(8081, "localhost"), GreeterGrpc.getSayHelloMethod())
+      client.request(SocketAddress.inetSocketAddress(proxyPort, "localhost"), GreeterGrpc.getSayHelloMethod())
         .onComplete(should.asyncAssertSuccess(callRequest -> {
           callRequest.response().onComplete(should.asyncAssertSuccess(callResponse -> {
             AtomicInteger count = new AtomicInteger();

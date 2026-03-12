@@ -445,6 +445,7 @@ public class ClientBridgeTest extends ClientTest {
   }
 
   private void testGrpcNetworkError(TestContext should, int numberOfMessages) throws Exception {
+    int proxyPort = findFreePort();
 
     Async listenLatch = should.async();
     NetServer proxy = vertx.createNetServer();
@@ -464,7 +465,7 @@ public class ClientBridgeTest extends ClientTest {
             inbound.close();
           }
         });
-    }).listen(port + 1, "localhost").onComplete(should.asyncAssertSuccess(v -> listenLatch.countDown()));
+    }).listen(proxyPort, "localhost").onComplete(should.asyncAssertSuccess(v -> listenLatch.countDown()));
     listenLatch.awaitSuccess(20_000);
 
     CountDownLatch latch = new CountDownLatch(1);
@@ -480,7 +481,7 @@ public class ClientBridgeTest extends ClientTest {
     startServer(called);
 
     client = GrpcClient.client(vertx);
-    GrpcClientChannel channel = new GrpcClientChannel(client, SocketAddress.inetSocketAddress(port + 1, "localhost"));
+    GrpcClientChannel channel = new GrpcClientChannel(client, SocketAddress.inetSocketAddress(proxyPort, "localhost"));
 
     StreamingGrpc.StreamingBlockingStub stub = StreamingGrpc.newBlockingStub(channel);
     try {

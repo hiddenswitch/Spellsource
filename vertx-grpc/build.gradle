@@ -33,4 +33,19 @@ subprojects {
   tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
   }
+
+  tasks.withType(Test).configureEach {
+    maxParallelForks = 1
+    systemProperty 'junit.jupiter.execution.parallel.enabled', 'false'
+  }
+}
+
+def orderedVertxTestProjects = subprojects.findAll { it.tasks.findByName('test') != null }.sort { it.path }
+orderedVertxTestProjects.eachWithIndex { project, index ->
+  if (index == 0) {
+    return
+  }
+  project.tasks.named('test') {
+    mustRunAfter orderedVertxTestProjects[index - 1].tasks.named('test')
+  }
 }

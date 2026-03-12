@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -36,7 +37,7 @@ public abstract class GrpcTestBase {
 
   @Before
   public void setUp() {
-    port = 8080;
+    port = findFreePort();
     vertx = Vertx.vertx();
   }
 
@@ -70,5 +71,14 @@ public abstract class GrpcTestBase {
       e.printStackTrace();
     }
     return Buffer.buffer(ret.toByteArray());
+  }
+
+  protected static int findFreePort() {
+    try (ServerSocket socket = new ServerSocket(0)) {
+      socket.setReuseAddress(true);
+      return socket.getLocalPort();
+    } catch (IOException e) {
+      throw new IllegalStateException("Could not allocate a free port", e);
+    }
   }
 }

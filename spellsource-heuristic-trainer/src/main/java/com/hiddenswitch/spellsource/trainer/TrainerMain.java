@@ -71,11 +71,10 @@ public class TrainerMain {
 			MlflowReporter mlflow = mlflowUri != null ? new MlflowReporter(mlflowUri) : null;
 
 			try {
-				// Load best weights from previous runs if available
 				double[] initialPoint = null;
 				if (mlflow != null) {
 					initialPoint = mlflow.loadBestWeights();
-					mlflow.startTrainingRun(generations, population, matchupsPerEval, gamesPerMatchup, seed);
+					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, seed);
 				}
 
 				CmaesTrainer trainer = new CmaesTrainer(
@@ -112,11 +111,10 @@ public class TrainerMain {
 			RedisQueue redis = new RedisQueue(redisUri);
 
 			try {
-				// Load best weights from previous runs if available
 				double[] initialPoint = null;
 				if (mlflow != null) {
 					initialPoint = mlflow.loadBestWeights();
-					mlflow.startTrainingRun(generations, population, matchupsPerEval, gamesPerMatchup, seed);
+					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, seed);
 				}
 				redis.clear();
 

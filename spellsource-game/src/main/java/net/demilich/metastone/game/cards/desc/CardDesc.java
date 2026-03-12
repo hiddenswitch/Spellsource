@@ -199,16 +199,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	@Override
 	public CardDesc clone() {
-		try {
-			CardDesc clone = (CardDesc) super.clone();
-			clone.readOnly = this.readOnly;
-			if (getAttributes() != null) {
-				clone.attributes = getAttributes().clone();
-			}
-			return clone;
-		} catch (CloneNotSupportedException e) {
-			return null;
-		}
+		return cloneAndUnfreeze();
 	}
 
 	protected void checkNotFrozen() {

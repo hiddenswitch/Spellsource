@@ -11,16 +11,20 @@ import java.util.logging.Logger;
 
 /**
  * Logs training progress to MLflow tracking server.
- * Each island is a single run with step metrics over time.
- * Loads previous best weights from metrics on startup.
+ * All islands share a single run with island-prefixed metrics.
+ * Best weights are stored as run tags for easy retrieval.
  */
 public class MlflowReporter implements AutoCloseable {
 	private static final Logger LOG = Logger.getLogger(MlflowReporter.class.getName());
 	private static final String EXPERIMENT_NAME = "spellsource-gsvb-training";
+	private static final String SESSION_TAG = "session_type";
+	private static final String SESSION_VALUE = "ipop_cmaes";
 
 	private final MlflowClient client;
 	private final String experimentId;
 	private String runId;
+	private String islandPrefix;
+	private int stepOffset;
 
 	private double bestWinRate = 0.0;
 	private double worstWinRate = 1.0;
@@ -36,7 +40,6 @@ public class MlflowReporter implements AutoCloseable {
 			this.client = new MlflowClient(trackingUri);
 		}
 
-		// Get or create experiment
 		String expId = null;
 		try {
 			expId = client.getExperimentByName(EXPERIMENT_NAME)
@@ -50,32 +53,78 @@ public class MlflowReporter implements AutoCloseable {
 	}
 
 	/**
-	 * Starts the single run for this island.
+	 * Joins or creates the single shared training run.
+	 * All islands log to the same run with prefixed metrics.
 	 */
-	public void startTrainingRun(int generations, int populationSize, int matchupsPerEval, int gamesPerMatchup, Long seed) {
-		Service.RunInfo runInfo = client.createRun(experimentId);
-		this.runId = runInfo.getRunId();
+	public void joinTrainingSession(int generations, int populationSize,
+	                                 int matchupsPerEval, int gamesPerMatchup, Long seed) {
+		this.islandPrefix = seed != null ? "island_" + seed + "/" : "";
 
-		client.logParam(runId, "generations", String.valueOf(generations));
-		client.logParam(runId, "population_size", String.valueOf(populationSize));
-		client.logParam(runId, "matchups_per_eval", String.valueOf(matchupsPerEval));
-		client.logParam(runId, "games_per_matchup", String.valueOf(gamesPerMatchup));
-		if (seed != null) {
-			client.logParam(runId, "seed", String.valueOf(seed));
-			client.setTag(runId, "mlflow.runName", "island_seed_" + seed);
+		// Look for an existing active training session
+		var runsPage = client.searchRuns(
+				List.of(experimentId),
+				"tags." + SESSION_TAG + " = '" + SESSION_VALUE + "' AND attributes.status = 'RUNNING'",
+				Service.ViewType.ACTIVE_ONLY,
+				1,
+				List.of("attributes.start_time DESC")
+		);
+
+		List<Service.Run> runs = runsPage.getItems();
+
+		if (!runs.isEmpty()) {
+			Service.Run existingRun = runs.get(0);
+			this.runId = existingRun.getInfo().getRunId();
+
+			// Restore step offset from tag
+			for (Service.RunTag tag : existingRun.getData().getTagsList()) {
+				if (tag.getKey().equals(islandPrefix + "last_step")) {
+					try {
+						this.stepOffset = Integer.parseInt(tag.getValue());
+					} catch (NumberFormatException e) {
+						this.stepOffset = 0;
+					}
+				}
+				if (tag.getKey().equals(islandPrefix + "best_win_rate")) {
+					try {
+						this.bestWinRate = Double.parseDouble(tag.getValue());
+					} catch (NumberFormatException e) {
+						// ignore
+					}
+				}
+			}
+
+			LOG.info(String.format("Joined existing training session: %s (step offset=%d, best=%.1f%%)",
+					runId, stepOffset, bestWinRate * 100));
+		} else {
+			// Create new training session
+			Service.RunInfo runInfo = client.createRun(experimentId);
+			this.runId = runInfo.getRunId();
+			client.setTag(runId, SESSION_TAG, SESSION_VALUE);
+			client.setTag(runId, "mlflow.runName", "GSVB Training");
+			client.logParam(runId, "generations", String.valueOf(generations));
+			client.logParam(runId, "population_size", String.valueOf(populationSize));
+			client.logParam(runId, "matchups_per_eval", String.valueOf(matchupsPerEval));
+			client.logParam(runId, "games_per_matchup", String.valueOf(gamesPerMatchup));
+			client.logParam(runId, "islands", "8");
+			LOG.info("Created new training session: " + runId);
 		}
 
-		LOG.info("Started MLflow training run: " + runId);
+		// Tag this island as active
+		if (seed != null) {
+			client.setTag(runId, islandPrefix + "seed", String.valueOf(seed));
+			client.setTag(runId, islandPrefix + "status", "running");
+		}
 	}
 
 	/**
-	 * Logs a candidate evaluation as step metrics on the single run.
+	 * Logs a candidate evaluation as step metrics.
 	 */
-	public void logCandidate(String candidateId, FeatureVector weights, double winRate, int step) {
+	public void logCandidate(String candidateId, FeatureVector weights, double winRate, int localStep) {
 		if (runId == null) {
 			return;
 		}
 		try {
+			int step = stepOffset + localStep;
 			evalCount++;
 			totalWinRate += winRate;
 			if (winRate > bestWinRate) {
@@ -86,26 +135,49 @@ public class MlflowReporter implements AutoCloseable {
 			}
 
 			long timestamp = System.currentTimeMillis();
-			client.logMetric(runId, "win_rate", winRate, timestamp, step);
-			client.logMetric(runId, "best_win_rate", bestWinRate, timestamp, step);
-			client.logMetric(runId, "worst_win_rate", worstWinRate, timestamp, step);
-			client.logMetric(runId, "avg_win_rate", totalWinRate / evalCount, timestamp, step);
+
+			// Per-island metrics
+			client.logMetric(runId, islandPrefix + "win_rate", winRate, timestamp, step);
+			client.logMetric(runId, islandPrefix + "best_win_rate", bestWinRate, timestamp, step);
+
+			// Save step offset for resume
+			client.setTag(runId, islandPrefix + "last_step", String.valueOf(step));
+			client.setTag(runId, islandPrefix + "best_win_rate", String.valueOf(bestWinRate));
 		} catch (Exception e) {
 			LOG.warning("Failed to log metrics to MLflow: " + e.getMessage());
 		}
 	}
 
 	/**
-	 * Logs the best-so-far weights as metrics.
+	 * Logs the best-so-far weights as tags and updates global best if this is the best across all islands.
 	 */
-	public void logBestSoFar(FeatureVector best, double winRate, int step) {
+	public void logBestSoFar(FeatureVector best, double winRate, int localStep) {
 		if (runId == null) {
 			return;
 		}
 		try {
+			int step = stepOffset + localStep;
 			long timestamp = System.currentTimeMillis();
+
+			// Store per-island best weights as tags
 			for (WeightedFeature feature : WeightedFeature.values()) {
-				client.logMetric(runId, "best_" + feature.name(), best.get(feature), timestamp, step);
+				client.setTag(runId, islandPrefix + "best_" + feature.name(), String.valueOf(best.get(feature)));
+			}
+
+			// Check if this is the global best
+			double currentGlobalBest = readGlobalBestWinRate();
+			if (winRate > currentGlobalBest) {
+				// Update global best metric (the one that shows on the chart)
+				client.logMetric(runId, "best_win_rate", winRate, timestamp, step);
+
+				// Store global best weights as tags
+				for (WeightedFeature feature : WeightedFeature.values()) {
+					client.setTag(runId, "best_" + feature.name(), String.valueOf(best.get(feature)));
+				}
+				client.setTag(runId, "best_win_rate_value", String.valueOf(winRate));
+				client.setTag(runId, "best_source_island", islandPrefix);
+
+				LOG.info(String.format("New global best: %.1f%% from %s", winRate * 100, islandPrefix));
 			}
 		} catch (Exception e) {
 			LOG.warning("Failed to log best-so-far to MLflow: " + e.getMessage());
@@ -113,60 +185,73 @@ public class MlflowReporter implements AutoCloseable {
 	}
 
 	/**
-	 * Loads the best weights from any previous completed run in the experiment.
-	 * Reads the best_&lt;feature&gt; metrics from the run with the highest best_win_rate.
-	 * Returns null if no previous run with weights exists.
+	 * Reads the current global best win rate from tags.
+	 */
+	private double readGlobalBestWinRate() {
+		try {
+			Service.Run run = client.getRun(runId);
+			for (Service.RunTag tag : run.getData().getTagsList()) {
+				if ("best_win_rate_value".equals(tag.getKey())) {
+					return Double.parseDouble(tag.getValue());
+				}
+			}
+		} catch (Exception e) {
+			// ignore
+		}
+		return 0.0;
+	}
+
+	/**
+	 * Loads the global best weights from the training session tags.
+	 * Returns null if no weights exist.
 	 */
 	public double[] loadBestWeights() {
 		try {
-			// Search for completed runs ordered by best_win_rate descending
+			// Find the active or most recent training session
 			var runsPage = client.searchRuns(
 					List.of(experimentId),
-					"attributes.status = 'FINISHED'",
+					"tags." + SESSION_TAG + " = '" + SESSION_VALUE + "'",
 					Service.ViewType.ACTIVE_ONLY,
 					1,
-					List.of("metrics.best_win_rate DESC")
+					List.of("attributes.start_time DESC")
 			);
 
 			List<Service.Run> runs = runsPage.getItems();
 			if (runs.isEmpty()) {
-				LOG.info("No previous completed runs found in MLflow");
+				LOG.info("No previous training sessions found in MLflow");
 				return null;
 			}
 
-			Service.Run bestRun = runs.get(0);
-			String bestRunId = bestRun.getInfo().getRunId();
+			Service.Run sessionRun = runs.get(0);
+			Map<String, String> tagMap = new HashMap<>();
+			for (Service.RunTag tag : sessionRun.getData().getTagsList()) {
+				tagMap.put(tag.getKey(), tag.getValue());
+			}
 
-			// Read the best_<feature> metrics from this run
-			Map<String, Double> metricMap = new HashMap<>();
-			double bestMetric = 0.0;
-			for (Service.Metric metric : bestRun.getData().getMetricsList()) {
-				metricMap.put(metric.getKey(), metric.getValue());
-				if ("best_win_rate".equals(metric.getKey())) {
-					bestMetric = metric.getValue();
-				}
+			String bestWinRateStr = tagMap.get("best_win_rate_value");
+			if (bestWinRateStr == null) {
+				LOG.info("Training session has no best weights yet");
+				return null;
 			}
 
 			WeightedFeature[] features = WeightedFeature.values();
 			double[] weights = new double[features.length];
 			int found = 0;
 			for (int i = 0; i < features.length; i++) {
-				Double val = metricMap.get("best_" + features[i].name());
+				String val = tagMap.get("best_" + features[i].name());
 				if (val != null) {
-					weights[i] = val;
+					weights[i] = Double.parseDouble(val);
 					found++;
 				}
 			}
 
-			if (found < features.length) {
-				LOG.warning(String.format("Best run %s only has %d/%d weight metrics", bestRunId, found, features.length));
-				if (found == 0) {
-					return null;
-				}
+			if (found == 0) {
+				return null;
 			}
 
-			LOG.info(String.format("Loaded weights from previous best run %s (%.1f%% win rate, %d/%d features)",
-					bestRunId, bestMetric * 100, found, features.length));
+			double bestRate = Double.parseDouble(bestWinRateStr);
+			LOG.info(String.format("Loaded global best weights (%.1f%% win rate, %d/%d features)",
+					bestRate * 100, found, features.length));
 			return weights;
 		} catch (Exception e) {
 			LOG.warning("Failed to load best weights from MLflow: " + e.getMessage());
@@ -175,21 +260,85 @@ public class MlflowReporter implements AutoCloseable {
 	}
 
 	/**
-	 * Ends the training run.
+	 * Returns the shared run ID.
 	 */
-	public void endTrainingRun() {
-		if (runId != null) {
-			try {
-				client.setTerminated(runId);
-				LOG.info("Ended MLflow training run: " + runId);
-			} catch (Exception e) {
-				LOG.warning("Failed to end MLflow run: " + e.getMessage());
+	public String getRunId() {
+		return runId;
+	}
+
+	/**
+	 * Loads the best weights from any other island in the shared run.
+	 * Used for inter-island migration.
+	 * Returns null if no other island has a better solution.
+	 */
+	public MigrationData loadBestFromOtherIslands(double currentBestWinRate) {
+		try {
+			Service.Run run = client.getRun(runId);
+			Map<String, String> tagMap = new HashMap<>();
+			for (Service.RunTag tag : run.getData().getTagsList()) {
+				tagMap.put(tag.getKey(), tag.getValue());
 			}
+
+			// Find the island with the highest best_win_rate (excluding ourselves)
+			String bestIslandPrefix = null;
+			double bestMetric = currentBestWinRate;
+
+			// Scan for island_N/best_win_rate tags
+			for (Map.Entry<String, String> entry : tagMap.entrySet()) {
+				String key = entry.getKey();
+				if (key.endsWith("/best_win_rate") && key.startsWith("island_") && !key.equals(islandPrefix + "best_win_rate")) {
+					try {
+						double rate = Double.parseDouble(entry.getValue());
+						if (rate > bestMetric) {
+							bestMetric = rate;
+							bestIslandPrefix = key.replace("best_win_rate", "");
+						}
+					} catch (NumberFormatException e) {
+						// skip
+					}
+				}
+			}
+
+			if (bestIslandPrefix == null) {
+				return null;
+			}
+
+			// Load weights from that island
+			WeightedFeature[] features = WeightedFeature.values();
+			double[] weights = new double[features.length];
+			int found = 0;
+			for (int i = 0; i < features.length; i++) {
+				String val = tagMap.get(bestIslandPrefix + "best_" + features[i].name());
+				if (val != null) {
+					weights[i] = Double.parseDouble(val);
+					found++;
+				}
+			}
+
+			if (found == 0) {
+				return null;
+			}
+
+			return new MigrationData(weights, bestMetric, bestIslandPrefix);
+		} catch (Exception e) {
+			LOG.warning("Migration check failed: " + e.getMessage());
+			return null;
 		}
 	}
 
+	public record MigrationData(double[] weights, double winRate, String sourceIsland) {}
+
+	/**
+	 * Marks this island as finished but does not terminate the shared run.
+	 */
 	@Override
 	public void close() {
-		endTrainingRun();
+		if (runId != null && islandPrefix != null) {
+			try {
+				client.setTag(runId, islandPrefix + "status", "finished");
+			} catch (Exception e) {
+				LOG.warning("Failed to update island status: " + e.getMessage());
+			}
+		}
 	}
 }

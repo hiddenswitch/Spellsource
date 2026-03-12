@@ -441,7 +441,7 @@ public class RogueManager {
 		var weightedOptions = LinkedHashMultiset.<Card>create();
 		cards.forEach(card -> {
 			var weight = 1;
-			if (card.getHeroClass().equals(heroClass)) {
+			if (Arrays.stream(card.getHeroClasses()).anyMatch(heroClass::equals)) {
 				weight *= 2;
 			}
 			if (card.getCardType() != CardType.MINION) {

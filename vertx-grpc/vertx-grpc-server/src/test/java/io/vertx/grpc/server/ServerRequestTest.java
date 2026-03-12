@@ -58,13 +58,14 @@ public class ServerRequestTest extends ServerTest {
 
   @Test
   public void testSSL(TestContext should) throws IOException {
+    int sslPort = findFreePort();
 
     SelfSignedCertificate cert = SelfSignedCertificate.create();
 
     startServer(new HttpServerOptions()
       .setSsl(true)
       .setUseAlpn(true)
-      .setPort(8443)
+      .setPort(sslPort)
       .setHost("localhost")
       .setPemKeyCertOptions(cert.keyCertOptions()), GrpcServer.server(vertx).callHandler(GreeterGrpc.getSayHelloMethod(), call -> {
       call.handler(helloRequest -> {
@@ -76,7 +77,7 @@ public class ServerRequestTest extends ServerTest {
     }));
 
     ChannelCredentials creds = TlsChannelCredentials.newBuilder().trustManager(new File(cert.certificatePath())).build();
-    channel = Grpc.newChannelBuilderForAddress("localhost", 8443, creds).build();
+    channel = Grpc.newChannelBuilderForAddress("localhost", sslPort, creds).build();
     GreeterGrpc.GreeterBlockingStub stub = GreeterGrpc.newBlockingStub(channel);
     HelloRequest request = HelloRequest.newBuilder().setName("Julien").build();
     HelloReply res = stub.sayHello(request);

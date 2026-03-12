@@ -88,7 +88,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	);
 
 	private CardDesc desc;
-
+	private boolean quest;
 	protected Card() {
 		attributes = new CardAttributeMap(this);
 	}
@@ -621,6 +621,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	public void setDesc(CardDesc desc) {
 		checkNotFrozen();
 		this.desc = desc;
+		quest = desc.getQuest() != null || Boolean.TRUE.equals(desc.getAttributes() == null ? null : desc.getAttributes().get(Attribute.QUEST));
 	}
 
 	/**
@@ -943,8 +944,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return
 	 */
 	public boolean isQuest() {
-		boolean hasQuestAttribute = getDesc().getAttributes() != null && (boolean) getDesc().getAttributes().getOrDefault(Attribute.QUEST, false);
-		return getDesc().getQuest() != null || hasQuestAttribute;
+		return quest;
 	}
 
 	/**

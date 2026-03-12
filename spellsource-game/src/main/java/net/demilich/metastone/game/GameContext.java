@@ -1633,9 +1633,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @see #play() to actually execute the game.
 	 */
 	public static GameContext fromDecks(List<GameDeck> decks, Behaviour behaviour1, Behaviour behaviour2, CardCatalogue cardCatalogue, DeckFormat deckFormat) {
-		GameContext context = new GameContext();
-		context.setCardCatalogue(cardCatalogue);
-		context.setDeckFormat(deckFormat);
+		GameContext context = new GameContext(cardCatalogue, deckFormat);
 		Behaviour[] behaviours = new Behaviour[]{behaviour1, behaviour2};
 		for (int i = 0; i < 2; i++) {
 			context.setPlayer(i, new Player(decks.get(i), "Player " + i, cardCatalogue));

@@ -67,8 +67,12 @@ public class CmaesTrainer {
 		this.bestSoFar = baseline.clone();
 	}
 
+	private static final int STAGNATION_LIMIT = 5; // generations without improvement before IPOP restart
+
 	/**
-	 * Runs the CMA-ES optimization. Returns the best FeatureVector found.
+	 * Runs IPOP-CMA-ES with inter-island migration.
+	 * Outer loop restarts CMA-ES with doubled population on stagnation.
+	 * Each generation checks MLflow for better solutions from other islands.
 	 */
 	public FeatureVector train() {
 		WeightedFeature[] features = WeightedFeature.values();
@@ -87,50 +91,103 @@ public class CmaesTrainer {
 			PRNG.setSeed(seed);
 		}
 
-		int maxEvaluations = generations * populationSize;
+		int totalBudget = generations * populationSize;
+		int currentPopulation = populationSize;
+		int restartCount = 0;
 
-		LOG.info(String.format("Starting CMA-ES (MOEAFramework): %d dimensions, population=%d, max evaluations=%d, sigma=%.1f, seed=%s, startPoint=%s",
-				DIMENSION, populationSize, maxEvaluations, sigmaInit,
+		LOG.info(String.format("Starting IPOP-CMA-ES with migration: %d dimensions, population=%d, budget=%d, sigma=%.1f, seed=%s, startPoint=%s",
+				DIMENSION, populationSize, totalBudget, sigmaInit,
 				seed != null ? seed.toString() : "random",
 				initialPoint != null ? "mlflow_best" : "getFittest()"));
 
-		GsvbProblem problem = new GsvbProblem();
+		while (evaluationCounter < totalBudget) {
+			int gensWithoutImprovement = 0;
+			int remainingBudget = totalBudget - evaluationCounter;
+			if (remainingBudget < currentPopulation) {
+				break;
+			}
 
-		CMAES optimizer = new CMAES(problem, populationSize, null, new NondominatedPopulation());
+			// Use current best as start point for restarts
+			double[] currentStart = bestWinRate > 0 ? getBestWeightsArray() : startPoint;
 
-		// Configure via TypedProperties so CMA-ES handles auto-computation of cc/cs/damps
-		TypedProperties props = new TypedProperties();
-		props.setDouble("sigma", sigmaInit);
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < startPoint.length; i++) {
-			if (i > 0) sb.append(',');
-			sb.append(startPoint[i]);
+			GsvbProblem problem = new GsvbProblem();
+			CMAES optimizer = new CMAES(problem, currentPopulation, null, new NondominatedPopulation());
+
+			TypedProperties props = new TypedProperties();
+			props.setDouble("sigma", sigmaInit);
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < currentStart.length; i++) {
+				if (i > 0) sb.append(',');
+				sb.append(currentStart[i]);
+			}
+			props.setString("initialSearchPoint", sb.toString());
+			optimizer.applyConfiguration(props);
+
+			LOG.info(String.format("CMA-ES run #%d: population=%d, remaining budget=%d",
+					restartCount, currentPopulation, remainingBudget));
+
+			optimizer.step(); // initialize
+
+			while (evaluationCounter < totalBudget) {
+				double bestBeforeGen = bestWinRate;
+				optimizer.step(); // one generation = currentPopulation evaluations
+
+				// Check stagnation
+				if (bestWinRate <= bestBeforeGen) {
+					gensWithoutImprovement++;
+				} else {
+					gensWithoutImprovement = 0;
+				}
+
+				// Migration check every generation
+				checkMigration();
+
+				// IPOP: restart with larger population on stagnation
+				if (gensWithoutImprovement >= STAGNATION_LIMIT) {
+					LOG.info(String.format("Stagnation after %d generations. Best=%.1f%%. Triggering IPOP restart.",
+							STAGNATION_LIMIT, bestWinRate * 100));
+					break;
+				}
+			}
+
+			optimizer.terminate();
+
+			// IPOP: double population on stagnation restart
+			if (gensWithoutImprovement >= STAGNATION_LIMIT && evaluationCounter < totalBudget) {
+				currentPopulation = Math.min(currentPopulation * 2, totalBudget - evaluationCounter);
+				restartCount++;
+				LOG.info(String.format("IPOP restart #%d: new population=%d", restartCount, currentPopulation));
+			}
 		}
-		props.setString("initialSearchPoint", sb.toString());
-		optimizer.applyConfiguration(props);
 
-		optimizer.step(); // initialize
-
-		while (optimizer.getNumberOfEvaluations() < maxEvaluations) {
-			optimizer.step();
-		}
-
-		NondominatedPopulation result = optimizer.getResult();
-		optimizer.terminate();
-
-		if (!result.isEmpty()) {
-			Solution best = result.get(0);
-			double[] bestPoint = EncodingUtils.getReal(best);
-			FeatureVector optimized = arrayToFeatureVector(bestPoint);
-			double finalFitness = -best.getObjective(0);
-
-			LOG.info(String.format("CMA-ES complete. Optimizer best: %.1f%%, tracked best: %.1f%%",
-					finalFitness * 100, bestWinRate * 100));
-
-			return bestWinRate > finalFitness ? bestSoFar : optimized;
-		}
+		LOG.info(String.format("IPOP-CMA-ES complete. Best: %.1f%% after %d evaluations, %d restarts",
+				bestWinRate * 100, evaluationCounter, restartCount));
 
 		return bestSoFar;
+	}
+
+	/**
+	 * Checks MLflow for better solutions from other islands.
+	 * If found, updates bestSoFar and baseline.
+	 */
+	private void checkMigration() {
+		if (mlflow == null) {
+			return;
+		}
+		try {
+			MlflowReporter.MigrationData migration = mlflow.loadBestFromOtherIslands(bestWinRate);
+			if (migration != null) {
+				FeatureVector migrated = arrayToFeatureVector(migration.weights());
+				double oldBest = bestWinRate;
+				bestWinRate = migration.winRate();
+				bestSoFar = migrated.clone();
+				baseline = migrated.clone();
+				LOG.info(String.format("Migration: adopted %.1f%% solution from %s (was %.1f%%)",
+						migration.winRate() * 100, migration.sourceIsland(), oldBest * 100));
+			}
+		} catch (Exception e) {
+			LOG.warning("Migration check error: " + e.getMessage());
+		}
 	}
 
 	/**

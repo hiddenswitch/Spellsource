@@ -57,7 +57,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_sayHello(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -88,7 +88,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_unaryCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -119,7 +119,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_unaryCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -148,7 +148,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_unaryCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -186,7 +186,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_streamingInputCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -230,7 +230,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_streamingInputCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -265,7 +265,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_streamingInputCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -308,7 +308,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_streamingOutputCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -352,7 +352,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_streamingOutputCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -387,7 +387,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_streamingOutputCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -427,7 +427,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_fullDuplexCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -477,7 +477,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_fullDuplexCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);
@@ -517,7 +517,7 @@ public class ProtocPluginTest extends ProxyTestBase {
     }.bind_fullDuplexCall(grpcServer);
     HttpServer httpServer = vertx.createHttpServer();
     httpServer.requestHandler(grpcServer)
-      .listen(8080).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
+      .listen(port).toCompletionStage().toCompletableFuture().get(20, TimeUnit.SECONDS);
 
     // Create gRPC Client
     GrpcClient grpcClient = GrpcClient.client(vertx);

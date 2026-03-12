@@ -89,7 +89,7 @@ public class ServerMessageEncodingTest extends ServerTestBase {
     Async done = should.async();
 
     client
-      .request(HttpMethod.POST, 8080, "localhost", "/")
+      .request(HttpMethod.POST, port, "localhost", "/")
       .onComplete(should.asyncAssertSuccess(request -> {
       request.putHeader("grpc-encoding", "identity");
       request.send(Buffer
@@ -200,7 +200,7 @@ public class ServerMessageEncodingTest extends ServerTestBase {
       .setHttp2ClearTextUpgrade(false)
     );
 
-    client.request(HttpMethod.POST, 8080, "localhost", "/").onComplete( should.asyncAssertSuccess(request -> {
+    client.request(HttpMethod.POST, port, "localhost", "/").onComplete( should.asyncAssertSuccess(request -> {
       request.putHeader("grpc-encoding", "gzip");
       request.end(Buffer
         .buffer()
@@ -232,7 +232,7 @@ public class ServerMessageEncodingTest extends ServerTestBase {
             done.complete();
           }
         });
-    }).listen(8080, "localhost")
+    }).listen(port, "localhost")
       .toCompletionStage()
       .toCompletableFuture()
       .get(20, TimeUnit.SECONDS);

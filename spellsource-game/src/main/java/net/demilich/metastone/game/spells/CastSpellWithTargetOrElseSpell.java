@@ -49,7 +49,7 @@ public class CastSpellWithTargetOrElseSpell extends Spell {
 			return;
 		}
 
-		SpellDesc orElse = desc.getSpell();
+		SpellDesc orElse = desc.getSpell() != null ? desc.getSpell().cloneAndUnfreeze() : null;
 
 		EnchantmentDesc trigger = (EnchantmentDesc) desc.get(SpellArg.TRIGGER);
 
@@ -62,8 +62,9 @@ public class CastSpellWithTargetOrElseSpell extends Spell {
 			thisButLater.put(SpellArg.TARGET, card.getReference());
 			// sometimes the card that this is cast on is from the catalogue, so we'll write down the card ID too
 			thisButLater.put(SpellArg.CARD, card.getCardId());
-			trigger.setSpell(thisButLater);
-			SpellDesc addEnchantmentSpellDesc = AddEnchantmentSpell.create(trigger);
+			EnchantmentDesc mutableTrigger = trigger.cloneAndUnfreeze();
+			mutableTrigger.setSpell(thisButLater);
+			SpellDesc addEnchantmentSpellDesc = AddEnchantmentSpell.create(mutableTrigger);
 			SpellUtils.castChildSpell(context, player, addEnchantmentSpellDesc, source, player);
 		} else {
 			if (secondaryTarget == null) {
@@ -74,7 +75,7 @@ public class CastSpellWithTargetOrElseSpell extends Spell {
 				if (targets.contains(secondaryTarget)) {
 					SpellUtils.castChildSpell(context, player, card.getSpell(), source, target);
 					context.getLogic().revealCard(player, card);
-				} else {
+				} else if (orElse != null) {
 					orElse.put(SpellArg.CARD, card.getCardId());
 					SpellUtils.castChildSpell(context, player, orElse, source, null);
 				}

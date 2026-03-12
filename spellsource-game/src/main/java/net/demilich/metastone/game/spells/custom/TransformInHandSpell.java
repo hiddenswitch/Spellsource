@@ -40,7 +40,10 @@ public class TransformInHandSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Card card = (Card) target;
+		if (!(target instanceof Card card)) {
+			logger.warn("onCast {} {}: Tried to transform non-card target {}", context.getGameId(), source, target);
+			return;
+		}
 		boolean startedInDeck = card.hasAttribute(Attribute.STARTED_IN_DECK);
 		boolean startedInHand = card.hasAttribute(Attribute.STARTED_IN_HAND);
 		boolean removesAtEndOfTurn = card.hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN);
@@ -52,7 +55,12 @@ public class TransformInHandSpell extends Spell {
 		Card newCard;
 		EntityReference secondaryTarget = (EntityReference) desc.get(SpellArg.SECONDARY_TARGET);
 		if (secondaryTarget != null) {
-			newCard = context.resolveSingleTarget(player, source, secondaryTarget);
+			Entity resolved = context.resolveSingleTarget(player, source, secondaryTarget);
+			if (!(resolved instanceof Card resolvedCard)) {
+				logger.warn("onCast {} {}: Tried to transform {} using non-card secondary target {}", context.getGameId(), source, target, resolved);
+				return;
+			}
+			newCard = resolvedCard;
 		} else {
 			CardList retrievedOneCard = SpellUtils.getCards(context, player, target, source, desc);
 			if (retrievedOneCard.size() == 0) {

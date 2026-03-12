@@ -151,7 +151,7 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 				clone.put(arg, value);
 			}
 		}
-		clone.setReadOnly(this.isReadOnly());
+		clone.setReadOnly(false);
 		return clone;
 	}
 

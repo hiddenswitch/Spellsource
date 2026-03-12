@@ -43,7 +43,7 @@ public abstract class ServerTestBase extends GrpcTestBase {
   }
 
   protected void startServer(GrpcServer server) {
-    startServer(new HttpServerOptions().setPort(8080).setHost("localhost"), server);
+    startServer(new HttpServerOptions().setPort(port).setHost("localhost"), server);
   }
 
   protected void startServer(HttpServerOptions options, GrpcServer server) {

@@ -76,6 +76,7 @@ public class ClientRequestTest extends ClientTest {
 
   @Test
   public void testSSL(TestContext should) throws IOException {
+    int sslPort = findFreePort();
 
     GreeterGrpc.GreeterImplBase called = new GreeterGrpc.GreeterImplBase() {
       @Override
@@ -90,13 +91,13 @@ public class ClientRequestTest extends ClientTest {
       .newBuilder()
       .keyManager(new File(cert.certificatePath()), new File(cert.privateKeyPath()))
       .build();
-    startServer(called, Grpc.newServerBuilderForPort(8443, creds));
+    startServer(called, Grpc.newServerBuilderForPort(sslPort, creds));
 
     Async test = should.async();
     client = GrpcClient.client(vertx, new HttpClientOptions().setSsl(true)
       .setUseAlpn(true)
       .setPemTrustOptions(cert.trustOptions()));
-    client.request(SocketAddress.inetSocketAddress(8443, "localhost"), GreeterGrpc.getSayHelloMethod())
+    client.request(SocketAddress.inetSocketAddress(sslPort, "localhost"), GreeterGrpc.getSayHelloMethod())
       .onComplete(should.asyncAssertSuccess(callRequest -> {
         callRequest.response().onComplete(should.asyncAssertSuccess(callResponse -> {
           AtomicInteger count = new AtomicInteger();
@@ -411,7 +412,7 @@ public class ClientRequestTest extends ClientTest {
           test.complete();
         }
       });
-    }).listen(8080, "localhost")
+    }).listen(port, "localhost")
       .toCompletionStage()
       .toCompletableFuture()
       .get(20, TimeUnit.SECONDS);

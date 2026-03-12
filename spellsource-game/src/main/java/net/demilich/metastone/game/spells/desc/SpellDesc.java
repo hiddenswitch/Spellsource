@@ -137,7 +137,8 @@ public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantm
 	@Override
 	@NotNull
 	public SpellDesc cloneAndUnfreeze() {
-		SpellDesc clone = new SpellDesc(getDescClass());
+		SpellDesc clone = clone();
+		clone.setReadOnly(false);
 		for (SpellArg arg : keySet()) {
 			Object value = get(arg);
 			if (value instanceof net.demilich.metastone.game.logic.CustomCloneable) {
@@ -148,7 +149,6 @@ public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantm
 				clone.put(arg, value);
 			}
 		}
-		clone.setReadOnly(false);
 		return clone;
 	}
 

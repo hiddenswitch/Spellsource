@@ -155,22 +155,25 @@ public class ListCardCatalogue implements CardCatalogue {
 		try {
 			CardList result = new CardArrayList();
 			for (var card : cards.values()) {
+				var desc = card.getDesc();
+				var actualCardType = card.getCardType();
 				if (!deckFormat.isInFormat(card)) {
 					continue;
 				}
-				if (!card.isCollectible()) {
+				if (!desc.isCollectible()) {
 					continue;
 				}
-				if (card.hasAttribute(Attribute.PERMANENT)) {
+				if (hasStaticAttribute(desc, Attribute.PERMANENT)) {
 					continue;
 				}
-				if (cardType != null && !GameLogic.isCardType(card.getCardType(), cardType)) {
+				if (cardType != null && !GameLogic.isCardType(actualCardType, cardType)) {
 					continue;
 				}
 				// per default, do not include hero powers, quests, classes, and formats
-				if (GameLogic.isCardType(card.getCardType(), Spellsource.CardTypeMessage.CardType.HERO_POWER) || card.isQuest() || (GameLogic.isCardType(card.getCardType(),
-						Spellsource.CardTypeMessage.CardType.CLASS) && cardType != Spellsource.CardTypeMessage.CardType.CLASS) || (GameLogic.isCardType(card.getCardType(),
-						Spellsource.CardTypeMessage.CardType.FORMAT) && cardType != Spellsource.CardTypeMessage.CardType.FORMAT)) {
+				if (actualCardType == Spellsource.CardTypeMessage.CardType.HERO_POWER
+						|| card.isQuest()
+						|| (actualCardType == Spellsource.CardTypeMessage.CardType.CLASS && cardType != Spellsource.CardTypeMessage.CardType.CLASS)
+						|| (actualCardType == Spellsource.CardTypeMessage.CardType.FORMAT && cardType != Spellsource.CardTypeMessage.CardType.FORMAT)) {
 					continue;
 				}
 				if (rarity != null && !GameLogic.isRarity(card.getRarity(), rarity)) {
@@ -297,7 +300,16 @@ public class ListCardCatalogue implements CardCatalogue {
 	public CardList queryClassCards(DeckFormat format, String hero, Set<String> bannedCards, Spellsource.RarityMessage.Rarity rarity, Set<Spellsource.CardTypeMessage.CardType> validCardTypes) {
 		lock.readLock().lock();
 		try {
-			return query(format, c -> c.hasHeroClass(hero) && !bannedCards.contains(c.getCardId()) && c.getRarity() == rarity && validCardTypes.contains(c.getCardType()) && c.isCollectible());
+			CardList result = new CardArrayList();
+			for (var card : cards.values()) {
+				if (isDeckCandidate(card, format, validCardTypes)
+						&& card.hasHeroClass(hero)
+						&& !bannedCards.contains(card.getCardId())
+						&& card.getRarity() == rarity) {
+					result.addCard(card.clone());
+				}
+			}
+			return result;
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -307,11 +319,79 @@ public class ListCardCatalogue implements CardCatalogue {
 	public CardList queryNeutrals(DeckFormat format, Set<String> bannedCards, Spellsource.RarityMessage.Rarity rarity, Set<Spellsource.CardTypeMessage.CardType> validCardTypes) {
 		lock.readLock().lock();
 		try {
-			return query(format,
-					c -> c.hasHeroClass(HeroClass.ANY) && !bannedCards.contains(c.getCardId()) && c.getRarity() == rarity && validCardTypes.contains(c.getCardType()) && c.isCollectible());
+			CardList result = new CardArrayList();
+			for (var card : cards.values()) {
+				if (isDeckCandidate(card, format, validCardTypes)
+						&& card.hasHeroClass(HeroClass.ANY)
+						&& !bannedCards.contains(card.getCardId())
+						&& card.getRarity() == rarity) {
+					result.addCard(card.clone());
+				}
+			}
+			return result;
 		} finally {
 			lock.readLock().unlock();
 		}
+	}
+
+	@Override
+	public List<Card> queryClassCards(DeckFormat deckFormat, String heroClass) {
+		lock.readLock().lock();
+		try {
+			var result = new ArrayList<Card>();
+			for (var card : cards.values()) {
+				if (isDeckCandidate(card, deckFormat, null) && card.hasHeroClass(heroClass)) {
+					result.add(card.clone());
+				}
+			}
+			return result;
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
+
+	@Override
+	public List<Card> queryNeutrals(DeckFormat deckFormat) {
+		lock.readLock().lock();
+		try {
+			var result = new ArrayList<Card>();
+			for (var card : cards.values()) {
+				if (isDeckCandidate(card, deckFormat, null) && card.hasHeroClass(HeroClass.ANY)) {
+					result.add(card.clone());
+				}
+			}
+			return result;
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
+
+	private static boolean hasStaticAttribute(CardDesc desc, Attribute attribute) {
+		if (desc.getAttributes() == null) {
+			return false;
+		}
+		Object value = desc.getAttributes().get(attribute);
+		if (value instanceof Boolean booleanValue) {
+			return booleanValue;
+		}
+		if (value instanceof Integer intValue) {
+			return intValue != 0;
+		}
+		return value != null;
+	}
+
+	private static boolean isDeckCandidate(Card card, DeckFormat deckFormat, Set<Spellsource.CardTypeMessage.CardType> validCardTypes) {
+		var desc = card.getDesc();
+		var cardType = card.getCardType();
+		if (!deckFormat.isInFormat(card) || !desc.isCollectible() || card.isQuest() || hasStaticAttribute(desc, Attribute.PERMANENT)) {
+			return false;
+		}
+		if (cardType == Spellsource.CardTypeMessage.CardType.HERO_POWER
+				|| cardType == Spellsource.CardTypeMessage.CardType.CLASS
+				|| cardType == Spellsource.CardTypeMessage.CardType.FORMAT) {
+			return false;
+		}
+		return validCardTypes == null || validCardTypes.contains(cardType);
 	}
 
 	@Override

@@ -13,7 +13,6 @@ import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -26,11 +25,11 @@ import java.util.Set;
 public final class CardAttributeMap extends AttributeMap implements Cloneable, JsonSerializable, Serializable {
 
 	@JsonIgnore
-	private WeakReference<Card> card;
+	private transient Card card;
 
 	public CardAttributeMap(Card card) {
 		super();
-		this.card = new WeakReference<>(card);
+		this.card = card;
 	}
 
 	public Set<Attribute> unsafeKeySet() {
@@ -89,9 +88,11 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 	@Override
 	public Object get(Object key) {
 		Attribute attr = (Attribute) key;
-		CardDesc desc = getCard().getDesc();
-		if (super.get(key) != null) {
-			return super.get(key);
+		Card card = getCard();
+		CardDesc desc = card.getDesc();
+		Object value = super.get(key);
+		if (value != null) {
+			return value;
 		} else {
 			// Retrieves things from the desc specified in the card
 
@@ -121,7 +122,7 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 					return desc.getQuest() != null;
 			}
 
-			CardType cardType = getCard().getCardType();
+			CardType cardType = card.getCardType();
 
 			switch (cardType) {
 				case WEAPON:
@@ -199,11 +200,11 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 	}
 
 	public Card getCard() {
-		return card.get();
+		return card;
 	}
 
 	public void setCard(Card card) {
-		this.card = new WeakReference<>(card);
+		this.card = card;
 	}
 
 	@Override

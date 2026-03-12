@@ -71,7 +71,7 @@ public class ClientMessageEncodingTest extends ClientTestBase {
           .putHeader("grpc-status", "" + GrpcStatus.CANCELLED.code)
           .end();
       });
-    }).listen(8080, "localhost")
+    }).listen(port, "localhost")
       .toCompletionStage()
       .toCompletableFuture()
       .get(20, TimeUnit.SECONDS);
@@ -95,7 +95,7 @@ public class ClientMessageEncodingTest extends ClientTestBase {
 
     vertx.createHttpServer().requestHandler(req -> {
       should.fail();
-      }).listen(8080, "localhost")
+      }).listen(port, "localhost")
       .toCompletionStage()
       .toCompletableFuture()
       .get(20, TimeUnit.SECONDS);
@@ -171,7 +171,7 @@ public class ClientMessageEncodingTest extends ClientTestBase {
             .appendBuffer(payload));
         });
         checker.accept(req);
-      }).listen(8080, "localhost")
+      }).listen(port, "localhost")
       .toCompletionStage()
       .toCompletableFuture()
       .get(20, TimeUnit.SECONDS);
