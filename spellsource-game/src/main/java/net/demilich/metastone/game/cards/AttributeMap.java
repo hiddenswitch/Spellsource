@@ -35,7 +35,7 @@ public class AttributeMap extends BaseMap<Attribute, Object> implements Serializ
 	}
 
 	public AttributeMap(Map<Attribute, Object> attributes) {
-		super(attributes == null ? Collections.emptyMap() : attributes);
+		super(Attribute.class, attributes == null ? Collections.emptyMap() : attributes);
 	}
 
 	@Override

@@ -50,8 +50,19 @@ public class TrainerMain {
 		@Option(names = "--output", description = "Write final weights as Java source file")
 		String output;
 
-		@Option(names = "--seed", description = "Random seed for CMA-ES (default: random)")
+		@Option(names = "--seed", description = "Random seed for CMA-ES (default: ISLAND_INDEX env or random)")
 		Long seed;
+
+		Long getEffectiveSeed() {
+			if (seed != null) {
+				return seed;
+			}
+			String islandIndex = System.getenv("ISLAND_INDEX");
+			if (islandIndex != null) {
+				return Long.parseLong(islandIndex);
+			}
+			return null;
+		}
 
 		@Option(names = "--sigma", description = "Initial CMA-ES step size", defaultValue = "5.0")
 		double sigma;
@@ -74,12 +85,12 @@ public class TrainerMain {
 				double[] initialPoint = null;
 				if (mlflow != null) {
 					initialPoint = mlflow.loadBestWeights();
-					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, seed);
+					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, getEffectiveSeed());
 				}
 
 				CmaesTrainer trainer = new CmaesTrainer(
 						generations, population, matchupsPerEval, gamesPerMatchup,
-						deckPool.getDecks(), evaluator, mlflow, null, seed, sigma, initialPoint
+						deckPool.getDecks(), evaluator, mlflow, null, getEffectiveSeed(), sigma, initialPoint
 				);
 
 				FeatureVector best = trainer.train();
@@ -114,13 +125,13 @@ public class TrainerMain {
 				double[] initialPoint = null;
 				if (mlflow != null) {
 					initialPoint = mlflow.loadBestWeights();
-					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, seed);
+					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, getEffectiveSeed());
 				}
 				redis.clear();
 
 				CmaesTrainer trainer = new CmaesTrainer(
 						generations, population, matchupsPerEval, gamesPerMatchup,
-						deckPool.getDecks(), evaluator, mlflow, redis, seed, sigma, initialPoint
+						deckPool.getDecks(), evaluator, mlflow, redis, getEffectiveSeed(), sigma, initialPoint
 				);
 
 				FeatureVector best = trainer.train();

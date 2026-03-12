@@ -30,6 +30,7 @@ public class MlflowReporter implements AutoCloseable {
 	private double worstWinRate = 1.0;
 	private double totalWinRate = 0.0;
 	private int evalCount = 0;
+	private double cachedGlobalBest = 0.0;
 
 	public MlflowReporter(String trackingUri) {
 		String username = System.getenv("MLFLOW_TRACKING_USERNAME");
@@ -75,7 +76,7 @@ public class MlflowReporter implements AutoCloseable {
 			Service.Run existingRun = runs.get(0);
 			this.runId = existingRun.getInfo().getRunId();
 
-			// Restore step offset from tag
+			// Restore state from tags
 			for (Service.RunTag tag : existingRun.getData().getTagsList()) {
 				if (tag.getKey().equals(islandPrefix + "last_step")) {
 					try {
@@ -87,6 +88,13 @@ public class MlflowReporter implements AutoCloseable {
 				if (tag.getKey().equals(islandPrefix + "best_win_rate")) {
 					try {
 						this.bestWinRate = Double.parseDouble(tag.getValue());
+					} catch (NumberFormatException e) {
+						// ignore
+					}
+				}
+				if (tag.getKey().equals("best_win_rate_value")) {
+					try {
+						this.cachedGlobalBest = Double.parseDouble(tag.getValue());
 					} catch (NumberFormatException e) {
 						// ignore
 					}
@@ -118,6 +126,7 @@ public class MlflowReporter implements AutoCloseable {
 
 	/**
 	 * Logs a candidate evaluation as step metrics.
+	 * Tags are updated every 10 evals to reduce HTTP overhead.
 	 */
 	public void logCandidate(String candidateId, FeatureVector weights, double winRate, int localStep) {
 		if (runId == null) {
@@ -136,13 +145,15 @@ public class MlflowReporter implements AutoCloseable {
 
 			long timestamp = System.currentTimeMillis();
 
-			// Per-island metrics
+			// Per-island metrics (2 HTTP calls)
 			client.logMetric(runId, islandPrefix + "win_rate", winRate, timestamp, step);
 			client.logMetric(runId, islandPrefix + "best_win_rate", bestWinRate, timestamp, step);
 
-			// Save step offset for resume
-			client.setTag(runId, islandPrefix + "last_step", String.valueOf(step));
-			client.setTag(runId, islandPrefix + "best_win_rate", String.valueOf(bestWinRate));
+			// Save step offset for resume (only every 10 evals to reduce overhead)
+			if (evalCount % 10 == 0) {
+				client.setTag(runId, islandPrefix + "last_step", String.valueOf(step));
+				client.setTag(runId, islandPrefix + "best_win_rate", String.valueOf(bestWinRate));
+			}
 		} catch (Exception e) {
 			LOG.warning("Failed to log metrics to MLflow: " + e.getMessage());
 		}
@@ -164,9 +175,9 @@ public class MlflowReporter implements AutoCloseable {
 				client.setTag(runId, islandPrefix + "best_" + feature.name(), String.valueOf(best.get(feature)));
 			}
 
-			// Check if this is the global best
-			double currentGlobalBest = readGlobalBestWinRate();
-			if (winRate > currentGlobalBest) {
+			// Check if this is the global best (use cached value to avoid HTTP call)
+			if (winRate > cachedGlobalBest) {
+				cachedGlobalBest = winRate;
 				// Update global best metric (the one that shows on the chart)
 				client.logMetric(runId, "best_win_rate", winRate, timestamp, step);
 
@@ -182,23 +193,6 @@ public class MlflowReporter implements AutoCloseable {
 		} catch (Exception e) {
 			LOG.warning("Failed to log best-so-far to MLflow: " + e.getMessage());
 		}
-	}
-
-	/**
-	 * Reads the current global best win rate from tags.
-	 */
-	private double readGlobalBestWinRate() {
-		try {
-			Service.Run run = client.getRun(runId);
-			for (Service.RunTag tag : run.getData().getTagsList()) {
-				if ("best_win_rate_value".equals(tag.getKey())) {
-					return Double.parseDouble(tag.getValue());
-				}
-			}
-		} catch (Exception e) {
-			// ignore
-		}
-		return 0.0;
 	}
 
 	/**
