@@ -102,14 +102,14 @@ public class AddDeathrattleSpell extends Spell {
 
 		Integer finalValue = value;
 		Streams.concat(
-				desc.spellStream(0, false).map(as -> new CardAftermathTuple(as, source.getSourceCard())),
-				Arrays.stream(SpellUtils.getCards(context, desc)).filter(c -> c.getDesc().getDeathrattle() != null).map(c -> new CardAftermathTuple(c.getDesc().getDeathrattle(), c))
+				desc.spellStream(0, false).map(as -> new CardAftermathTuple(as, source.getSourceCard(), true)),
+				Arrays.stream(SpellUtils.getCards(context, desc)).filter(c -> c.getDesc().getDeathrattle() != null).map(c -> new CardAftermathTuple(c.getDesc().getDeathrattle(), c, false))
 		).forEach(aftermathCandidate -> {
 			var spell = aftermathCandidate.spell();
 			if (finalValue != null) {
 				spell = spell.addArg(SpellArg.VALUE, finalValue);
 			}
-			if (desc.containsKey(SpellArg.CARD)) {
+			if (aftermathCandidate.propagateCard() && desc.containsKey(SpellArg.CARD)) {
 				spell = spell.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
 			}
 			var aftermath = spell.tryCreate(context, player, source, aftermathCandidate.enchantmentSource(), target, true);
@@ -117,7 +117,7 @@ public class AddDeathrattleSpell extends Spell {
 		});
 	}
 
-	public record CardAftermathTuple(SpellDesc spell, Card enchantmentSource) {
+	public record CardAftermathTuple(SpellDesc spell, Card enchantmentSource, boolean propagateCard) {
 	}
 }
 

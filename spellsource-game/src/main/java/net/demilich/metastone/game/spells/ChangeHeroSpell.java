@@ -89,6 +89,9 @@ public class ChangeHeroSpell extends Spell {
 		}
 
 		Card heroCard = heroCards.get(0);
+		if (heroCard.getCardType() != CardType.HERO) {
+			throw new RuntimeException("onCast " + context.getGameId() + " " + source + ": Expected HERO card but got " + heroCard.getCardType() + " (" + heroCard.getCardId() + ")");
+		}
 		Hero hero = heroCard.hero();
 		context.getLogic().changeHero(player, source, hero, !(boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, false));
 

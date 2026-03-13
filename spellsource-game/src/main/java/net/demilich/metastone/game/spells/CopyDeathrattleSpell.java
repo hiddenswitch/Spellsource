@@ -50,18 +50,18 @@ public class CopyDeathrattleSpell extends AddDeathrattleSpell {
 		var aftermathsStream = Stream.<CardAftermathTuple>empty();
 		CardList impliedCards = SpellUtils.getCards(context, player, target, source, desc, max);
 		if (target instanceof Actor) {
-			aftermathsStream = context.getLogic().getAftermaths((Actor) target).stream().map(a -> new CardAftermathTuple(a.getSpell(), a.getSourceCard()));
+			aftermathsStream = context.getLogic().getAftermaths((Actor) target).stream().map(a -> new CardAftermathTuple(a.getSpell(), a.getSourceCard(), false));
 		} else if (!impliedCards.isEmpty()) {
 			if (desc.containsKey(SpellArg.RANDOM_TARGET)) {
 				impliedCards.shuffle(context.getLogic().getRandom());
 			}
-			aftermathsStream = impliedCards.stream().filter(c -> c.getDesc().getDeathrattle() != null).map(c -> new CardAftermathTuple(c.getDesc().getDeathrattle(), c));
+			aftermathsStream = impliedCards.stream().filter(c -> c.getDesc().getDeathrattle() != null).map(c -> new CardAftermathTuple(c.getDesc().getDeathrattle(), c, false));
 		} else if (target instanceof Card card) {
 			if (card.getDesc().getDeathrattle() != null) {
-				aftermathsStream = Stream.of(new CardAftermathTuple(card.getDesc().getDeathrattle(), card));
+				aftermathsStream = Stream.of(new CardAftermathTuple(card.getDesc().getDeathrattle(), card, false));
 			}
 		}
-		var aftermaths = Streams.concat(aftermathsStream, desc.spellStream(0, false).map(s -> new CardAftermathTuple(s, source.getSourceCard()))).toList();
+		var aftermaths = Streams.concat(aftermathsStream, desc.spellStream(0, false).map(s -> new CardAftermathTuple(s, source.getSourceCard(), false))).toList();
 		Actor finalCopyTo = copyTo;
 		aftermaths.forEach(a -> {
 			if (context.getLogic().hasTooManyAftermaths(finalCopyTo)) {

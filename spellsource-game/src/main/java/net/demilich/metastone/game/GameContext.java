@@ -1416,6 +1416,9 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	public void resume() {
 		currentContext.set(this);
 		while (!updateAndGetGameOver()) {
+			if (Thread.currentThread().isInterrupted()) {
+				break;
+			}
 			startTurn(getActivePlayerId());
 			while (takeActionInTurn()) {
 				if (Thread.currentThread().isInterrupted()) {
@@ -1426,7 +1429,9 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 				break;
 			}
 		}
-		endGame();
+		if (!Thread.currentThread().isInterrupted()) {
+			endGame();
+		}
 	}
 
 	/**

@@ -52,6 +52,12 @@ public class TransformInHandSpell extends Spell {
 			return;
 		}
 
+		// Don't transform a card that is currently being played (e.g., a Corrupt trigger firing on its own
+		// CardPlayedEvent when the card's modified cost exceeds its base cost)
+		if (card.hasAttribute(Attribute.BEING_PLAYED)) {
+			return;
+		}
+
 		Card newCard;
 		EntityReference secondaryTarget = (EntityReference) desc.get(SpellArg.SECONDARY_TARGET);
 		if (secondaryTarget != null) {

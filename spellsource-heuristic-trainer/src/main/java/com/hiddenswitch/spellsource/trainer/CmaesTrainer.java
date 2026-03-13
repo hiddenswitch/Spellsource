@@ -77,12 +77,13 @@ public class CmaesTrainer {
 
 		this.hof = new HallOfFame(HOF_MAX_SIZE);
 		hof.seed(FeatureVector.getFittest());
-		// If resuming from MLflow, seed HoF with the loaded best weights too
+		// If resuming from MLflow, seed HoF with the loaded best weights
+		// but don't trust the stored win rate — it was measured against a different HoF.
+		// Let CMA-ES re-evaluate against the current HoF to establish an accurate baseline.
 		if (initialPoint != null && initialPoint.length == DIMENSION) {
 			FeatureVector loaded = arrayToFeatureVector(initialPoint);
 			hof.add(loaded);
 			this.bestSoFar = loaded.clone();
-			this.bestWinRate = restoredBestWinRate;
 		} else {
 			this.bestSoFar = FeatureVector.getFittest();
 		}
@@ -92,7 +93,7 @@ public class CmaesTrainer {
 
 	/**
 	 * Runs IPOP-CMA-ES with inter-island migration.
-	 * Outer loop restarts CMA-ES with doubled population on stagnation.
+	 * Outer loop restarts CMA-ES with doubled population and increased sigma on stagnation.
 	 * Each generation checks MLflow for better solutions from other islands.
 	 */
 	public FeatureVector train() {
@@ -115,6 +116,7 @@ public class CmaesTrainer {
 
 		int totalBudget = generations * populationSize;
 		int currentPopulation = populationSize;
+		double currentSigma = sigmaInit;
 		int restartCount = 0;
 
 		LOG.info(String.format("Starting IPOP-CMA-ES with HoF evaluation: %d dimensions, population=%d, budget=%d, sigma=%.1f, seed=%s, startPoint=%s, hofMaxSize=%d",
@@ -137,7 +139,7 @@ public class CmaesTrainer {
 			CMAES optimizer = new CMAES(problem, currentPopulation, null, new NondominatedPopulation());
 
 			TypedProperties props = new TypedProperties();
-			props.setDouble("sigma", sigmaInit);
+			props.setDouble("sigma", currentSigma);
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < currentStart.length; i++) {
 				if (i > 0) sb.append(',');
@@ -146,8 +148,8 @@ public class CmaesTrainer {
 			props.setString("initialSearchPoint", sb.toString());
 			optimizer.applyConfiguration(props);
 
-			LOG.info(String.format("CMA-ES run #%d: population=%d, remaining budget=%d",
-					restartCount, currentPopulation, remainingBudget));
+			LOG.info(String.format("CMA-ES run #%d: population=%d, sigma=%.1f, remaining budget=%d",
+					restartCount, currentPopulation, currentSigma, remainingBudget));
 
 			optimizer.step(); // initialize
 
@@ -175,11 +177,12 @@ public class CmaesTrainer {
 
 			optimizer.terminate();
 
-			// IPOP: double population on stagnation restart
+			// IPOP: double population and increase sigma on stagnation restart
 			if (gensWithoutImprovement >= STAGNATION_LIMIT && evaluationCounter < totalBudget) {
 				currentPopulation = Math.min(currentPopulation * 2, totalBudget - evaluationCounter);
+				currentSigma = Math.min(currentSigma * 1.5, 80.0);
 				restartCount++;
-				LOG.info(String.format("IPOP restart #%d: new population=%d", restartCount, currentPopulation));
+				LOG.info(String.format("IPOP restart #%d: new population=%d, sigma=%.1f", restartCount, currentPopulation, currentSigma));
 			}
 		}
 
@@ -191,22 +194,24 @@ public class CmaesTrainer {
 
 	/**
 	 * Checks MLflow for better solutions from other islands.
-	 * Migrated solutions are added to the Hall of Fame.
+	 * Migrated solutions are added to the Hall of Fame as opponents,
+	 * but we don't adopt their win rate — it was measured against a
+	 * different HoF and isn't comparable to ours.
 	 */
 	private void checkMigration() {
 		if (mlflow == null) {
 			return;
 		}
 		try {
-			MlflowReporter.MigrationData migration = mlflow.loadBestFromOtherIslands(bestWinRate);
+			// Always check for new opponents regardless of win rate comparison
+			MlflowReporter.MigrationData migration = mlflow.loadBestFromOtherIslands(0.0);
 			if (migration != null) {
 				FeatureVector migrated = arrayToFeatureVector(migration.weights());
-				double oldBest = bestWinRate;
-				bestWinRate = migration.winRate();
-				bestSoFar = migrated.clone();
-				hof.add(migrated);
-				LOG.info(String.format("Migration: adopted %.1f%% solution from %s (was %.1f%%), HoF=%d",
-						migration.winRate() * 100, migration.sourceIsland(), oldBest * 100, hof.size()));
+				boolean added = hof.add(migrated);
+				if (added) {
+					LOG.info(String.format("Migration: added %s solution to HoF (their win rate=%.1f%%), HoF=%d",
+							migration.sourceIsland(), migration.winRate() * 100, hof.size()));
+				}
 			}
 		} catch (Exception e) {
 			LOG.warning("Migration check error: " + e.getMessage());

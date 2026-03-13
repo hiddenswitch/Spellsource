@@ -86,7 +86,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		this.weights = vector;
 	}
 
-	private double calculateMinionScore(Minion minion, ThreatLevel threatLevel) {
+	private double calculateOwnMinionScore(Minion minion, ThreatLevel threatLevel) {
 		double minionScore = weights.get(WeightedFeature.MINION_INTRINSIC_VALUE);
 		minionScore += weights.get(WeightedFeature.MINION_ATTACK_FACTOR)
 				* (minion.getAttack() - minion.getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS));
@@ -157,6 +157,77 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		return minionScore;
 	}
 
+	private double calculateOpponentMinionScore(Minion minion, ThreatLevel threatLevel) {
+		double minionScore = weights.get(WeightedFeature.OPPONENT_MINION_INTRINSIC_VALUE);
+		minionScore += weights.get(WeightedFeature.OPPONENT_MINION_ATTACK_FACTOR)
+				* (minion.getAttack() - minion.getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS));
+		minionScore += weights.get(WeightedFeature.OPPONENT_MINION_HP_FACTOR) * minion.getHp();
+
+		if (minion.hasAttribute(Attribute.TAUNT) || minion.hasAttribute(Attribute.AURA_TAUNT)) {
+			switch (threatLevel) {
+				case RED:
+					minionScore += weights.get(WeightedFeature.OPPONENT_MINION_RED_TAUNT_MODIFIER);
+					break;
+				case YELLOW:
+					minionScore += weights.get(WeightedFeature.OPPONENT_MINION_YELLOW_TAUNT_MODIFIER);
+					break;
+				default:
+					minionScore += weights.get(WeightedFeature.OPPONENT_MINION_DEFAULT_TAUNT_MODIFIER);
+					break;
+			}
+		}
+
+		if (minion.hasAttribute(Attribute.WINDFURY) || minion.hasAttribute(Attribute.AURA_WINDFURY)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_WINDFURY_MODIFIER);
+		} else if (minion.hasAttribute(Attribute.MEGA_WINDFURY)) {
+			minionScore += 2 * weights.get(WeightedFeature.OPPONENT_MINION_WINDFURY_MODIFIER);
+		}
+
+		if (minion.hasAttribute(Attribute.DIVINE_SHIELD)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_DIVINE_SHIELD_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.SPELL_DAMAGE)) {
+			minionScore += minion.getAttributeValue(Attribute.SPELL_DAMAGE) * weights.get(WeightedFeature.OPPONENT_MINION_SPELL_POWER_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.AURA_SPELL_DAMAGE)) {
+			minionScore += minion.getAttributeValue(Attribute.AURA_SPELL_DAMAGE) * weights.get(WeightedFeature.OPPONENT_MINION_SPELL_POWER_MODIFIER);
+		}
+
+		if (minion.hasAttribute(Attribute.STEALTH) || minion.hasAttribute(Attribute.AURA_STEALTH)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_STEALTHED_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_UNTARGETABLE_BY_SPELLS_MODIFIER);
+		}
+
+		if (minion.hasAttribute(Attribute.POISONOUS) || minion.hasAttribute(Attribute.AURA_POISONOUS)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_POISONOUS_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.LIFESTEAL) || minion.hasAttribute(Attribute.AURA_LIFESTEAL)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_LIFESTEAL_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.REBORN)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_REBORN_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.FROZEN)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_FROZEN_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.DEATHRATTLES)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_DEATHRATTLE_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.RUSH) || minion.hasAttribute(Attribute.AURA_RUSH)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_RUSH_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.IMMUNE) || minion.hasAttribute(Attribute.AURA_IMMUNE)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_IMMUNE_MODIFIER);
+		}
+		if (minion.hasAttribute(Attribute.CANNOT_ATTACK) || minion.hasAttribute(Attribute.AURA_CANNOT_ATTACK)) {
+			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_CANNOT_ATTACK_MODIFIER);
+		}
+
+		return minionScore;
+	}
+
 	@Override
 	public double getScore(GameContext context, int playerId) {
 		Player player = context.getPlayer(playerId);
@@ -196,11 +267,11 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		score += opponent.getHand().getCount() * weights.get(WeightedFeature.OPPONENT_CARD_COUNT);
 
 		for (Minion minion : player.getMinions()) {
-			score += calculateMinionScore(minion, threatLevel);
+			score += calculateOwnMinionScore(minion, threatLevel);
 		}
 
 		for (Minion minion : opponent.getMinions()) {
-			score -= calculateMinionScore(minion, threatLevel);
+			score += calculateOpponentMinionScore(minion, threatLevel);
 		}
 
 		int questCount = player.getQuests().size();
@@ -232,15 +303,16 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
 		// Armor
 		score += player.getHero().getArmor() * weights.get(WeightedFeature.OWN_ARMOR_FACTOR);
+		score += opponent.getHero().getArmor() * weights.get(WeightedFeature.OPPONENT_ARMOR_FACTOR);
 
-		// Weapons: damage * durability as a single value
+		// Weapons
 		if (!player.getWeaponZone().isEmpty()) {
 			Weapon ownWeapon = player.getWeaponZone().get(0);
 			score += ownWeapon.getWeaponDamage() * ownWeapon.getDurability() * weights.get(WeightedFeature.WEAPON_VALUE);
 		}
 		if (!opponent.getWeaponZone().isEmpty()) {
 			Weapon oppWeapon = opponent.getWeaponZone().get(0);
-			score -= oppWeapon.getWeaponDamage() * oppWeapon.getDurability() * weights.get(WeightedFeature.WEAPON_VALUE);
+			score += oppWeapon.getWeaponDamage() * oppWeapon.getDurability() * weights.get(WeightedFeature.OPPONENT_WEAPON_VALUE);
 		}
 
 		// Deck size
@@ -253,6 +325,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
 		// Locked mana (overload)
 		score += player.getLockedMana() * weights.get(WeightedFeature.LOCKED_MANA_VALUE);
+		score += opponent.getLockedMana() * weights.get(WeightedFeature.OPPONENT_LOCKED_MANA_VALUE);
 
 		// Corpse count (graveyard minion count for Death Knight)
 		long ownCorpses = player.getGraveyard().stream()
@@ -262,6 +335,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
 		// Board width
 		score += player.getMinions().size() * weights.get(WeightedFeature.OWN_MINION_COUNT);
+		score += opponent.getMinions().size() * weights.get(WeightedFeature.OPPONENT_MINION_COUNT);
 
 		return score;
 	}

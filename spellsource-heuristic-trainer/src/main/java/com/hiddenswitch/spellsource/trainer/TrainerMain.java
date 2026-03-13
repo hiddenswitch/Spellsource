@@ -65,11 +65,14 @@ public class TrainerMain {
 			return null;
 		}
 
-		@Option(names = "--sigma", description = "Initial CMA-ES step size", defaultValue = "5.0")
+		@Option(names = "--sigma", description = "Initial CMA-ES step size", defaultValue = "20.0")
 		double sigma;
 
 		@Option(names = "--session", description = "MLflow session name (default: from MLFLOW_SESSION env or built-in)")
 		String session;
+
+		@Option(names = "--game-timeout", description = "Per-game timeout in ms (default: 90000)", defaultValue = "90000")
+		long gameTimeout;
 	}
 
 	@Command(name = "local", description = "Run everything in-process")
@@ -82,8 +85,9 @@ public class TrainerMain {
 			DeckPool deckPool = new DeckPool(mapper);
 			requireDecks(deckPool);
 
-			FitnessEvaluator evaluator = new FitnessEvaluator(gsvbDepth, gsvbTimeout);
+			FitnessEvaluator evaluator = new FitnessEvaluator(gsvbDepth, gsvbTimeout, gameTimeout);
 			MlflowReporter mlflow = mlflowUri != null ? new MlflowReporter(mlflowUri, session != null ? session : System.getenv("MLFLOW_SESSION")) : null;
+			evaluator.setMlflow(mlflow);
 
 			try {
 				double[] initialPoint = null;
@@ -131,8 +135,9 @@ public class TrainerMain {
 			DeckPool deckPool = new DeckPool(mapper);
 			requireDecks(deckPool);
 
-			FitnessEvaluator evaluator = new FitnessEvaluator(gsvbDepth, gsvbTimeout);
+			FitnessEvaluator evaluator = new FitnessEvaluator(gsvbDepth, gsvbTimeout, gameTimeout);
 			MlflowReporter mlflow = mlflowUri != null ? new MlflowReporter(mlflowUri, session != null ? session : System.getenv("MLFLOW_SESSION")) : null;
+			evaluator.setMlflow(mlflow);
 			RedisQueue redis = new RedisQueue(redisUri);
 
 			try {

@@ -8,6 +8,7 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.Statistic;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -31,16 +32,28 @@ public class FitnessEvaluator {
 
 	private final int gsvbDepth;
 	private final int gsvbTimeout;
+	private final long gameTimeoutMs;
+	private MlflowReporter mlflow;
 
-	public FitnessEvaluator(int gsvbDepth, int gsvbTimeout) {
+	public FitnessEvaluator(int gsvbDepth, int gsvbTimeout, long gameTimeoutMs) {
 		this.gsvbDepth = gsvbDepth;
 		this.gsvbTimeout = gsvbTimeout;
+		this.gameTimeoutMs = gameTimeoutMs;
+	}
+
+	public FitnessEvaluator(int gsvbDepth, int gsvbTimeout) {
+		this(gsvbDepth, gsvbTimeout, 90_000);
+	}
+
+	public void setMlflow(MlflowReporter mlflow) {
+		this.mlflow = mlflow;
 	}
 
 	/**
 	 * A single game task: deck pair, opponent weights, who is candidate (P1 or P2).
 	 */
-	private record GameTask(GameDeck deck1, GameDeck deck2, FeatureVector opponent, boolean candidateIsPlayer1) {
+	private record GameTask(GameDeck deck1, GameDeck deck2, FeatureVector opponent, boolean candidateIsPlayer1,
+	                         int gameIndex) {
 	}
 
 	/**
@@ -64,6 +77,7 @@ public class FitnessEvaluator {
 		// Flatten all games across all matchups into a single list
 		// Each matchup is assigned to a random opponent from the HoF
 		List<GameTask> allTasks = new ArrayList<>();
+		int gameIndex = 0;
 		for (int[] matchup : matchups) {
 			GameDeck deck1 = allDecks.get(matchup[0]);
 			GameDeck deck2 = allDecks.get(matchup[1]);
@@ -73,16 +87,17 @@ public class FitnessEvaluator {
 			int gamesAsP2 = gamesPerMatchup - gamesAsP1;
 
 			for (int i = 0; i < gamesAsP1; i++) {
-				allTasks.add(new GameTask(deck1, deck2, opponent, true));
+				allTasks.add(new GameTask(deck1, deck2, opponent, true, gameIndex++));
 			}
 			for (int i = 0; i < gamesAsP2; i++) {
-				allTasks.add(new GameTask(deck1, deck2, opponent, false));
+				allTasks.add(new GameTask(deck1, deck2, opponent, false, gameIndex++));
 			}
 		}
 
 		// Run all games in parallel
 		AtomicInteger wins = new AtomicInteger(0);
 		AtomicInteger completed = new AtomicInteger(0);
+		AtomicInteger timeouts = new AtomicInteger(0);
 
 		allTasks.parallelStream().forEach(task -> {
 			try {
@@ -94,7 +109,38 @@ public class FitnessEvaluator {
 				game.setBehaviour(1, createBehaviour(p2Weights));
 
 				game.init();
-				game.resume();
+
+				// Run with per-game timeout
+				ExecutorService executor = Executors.newSingleThreadExecutor();
+				Future<?> future = executor.submit(() -> game.resume());
+				try {
+					future.get(gameTimeoutMs, TimeUnit.MILLISECONDS);
+				} catch (TimeoutException e) {
+					future.cancel(true);
+					executor.shutdownNow();
+					try {
+						executor.awaitTermination(2, TimeUnit.SECONDS);
+					} catch (InterruptedException ie) {
+						Thread.currentThread().interrupt();
+					}
+					timeouts.incrementAndGet();
+					LOG.info(String.format("Game timeout: %s game %d (%s vs %s) at turn %d",
+							id, task.gameIndex,
+							task.deck1.getName(), task.deck2.getName(),
+							game.getTurn()));
+					if (mlflow != null) {
+						try {
+							String trace = game.getTrace().dump();
+							mlflow.logTimeoutTrace(id, task.gameIndex, trace);
+						} catch (Exception traceEx) {
+							// best effort
+						}
+					}
+					completed.incrementAndGet();
+					return;
+				} finally {
+					executor.shutdownNow();
+				}
 
 				boolean candidateWon;
 				if (task.candidateIsPlayer1) {
@@ -115,8 +161,9 @@ public class FitnessEvaluator {
 		double winRate = totalGames > 0 ? (double) wins.get() / totalGames : 0.5;
 		long duration = System.currentTimeMillis() - start;
 
-		LOG.info(String.format("Evaluated %s: %.1f%% win rate (%d/%d games, %d HoF opponents) in %ds",
-				id, winRate * 100, wins.get(), totalGames, opponents.size(), duration / 1000));
+		String timeoutStr = timeouts.get() > 0 ? String.format(", %d timeouts", timeouts.get()) : "";
+		LOG.info(String.format("Evaluated %s: %.1f%% win rate (%d/%d games, %d HoF opponents%s) in %ds",
+				id, winRate * 100, wins.get(), totalGames, opponents.size(), timeoutStr, duration / 1000));
 
 		return new EvalResult(id, winRate, totalGames, duration);
 	}
