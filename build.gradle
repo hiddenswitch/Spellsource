@@ -205,7 +205,12 @@ subprojects {
         }
 
         if (details.requested.group == 'org.infinispan') {
-          details.useVersion infinispanVersion
+          // Infinispan 15 merged -jakarta suffixed artifacts back to base names
+          if (details.requested.name.endsWith('-jakarta')) {
+            details.useTarget "${details.requested.group}:${details.requested.name.replace('-jakarta', '')}:${infinispanVersion}"
+          } else {
+            details.useVersion infinispanVersion
+          }
         }
 
         if (details.requested.group == 'org.objenesis') {

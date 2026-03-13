@@ -2,8 +2,8 @@ package io.vertx.await;
 
 
 import io.vertx.core.*;
-import io.vertx.core.impl.ContextInternal;
-import io.vertx.core.impl.VertxInternal;
+import io.vertx.core.internal.ContextInternal;
+import io.vertx.core.internal.VertxInternal;
 
 import java.lang.ref.WeakReference;
 import java.util.Objects;
@@ -68,7 +68,7 @@ public class Async {
 				var finalRef = ref;
 				vertxInternal.addCloseHook(prom -> {
 					finalRef.clear();
-					prom.complete(null);
+					prom.succeed();
 				});
 			} else {
 				context = ref.get();

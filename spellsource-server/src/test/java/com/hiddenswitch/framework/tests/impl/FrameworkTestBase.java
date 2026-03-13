@@ -4,10 +4,7 @@ import com.hiddenswitch.framework.Gateway;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import io.vertx.core.*;
-import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
-import io.vertx.core.impl.future.FutureInternal;
-import io.vertx.core.impl.future.Listener;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.AfterEach;
@@ -22,10 +19,10 @@ import java.util.Arrays;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static io.vertx.await.Async.await;
-import static io.vertx.core.CompositeFuture.all;
 import static org.testcontainers.Testcontainers.exposeHostPorts;
 
 @ExtendWith({VertxExtension.class})
@@ -75,7 +72,7 @@ public class FrameworkTestBase {
 				.onSuccess(vertx::undeploy);
 	}
 
-	public static class Checkpoint implements FutureInternal<Void> {
+	public static class Checkpoint implements Future<Void> {
 		private final Promise<Void> finished = Promise.promise();
 		private final Future<Void> future = finished.future();
 		private int times;
@@ -103,16 +100,6 @@ public class FrameworkTestBase {
 		}
 
 		@Override
-		public Future<Void> onSuccess(Handler<Void> handler) {
-			return future.onSuccess(handler);
-		}
-
-		@Override
-		public Future<Void> onFailure(Handler<Throwable> handler) {
-			return future.onFailure(handler);
-		}
-
-		@Override
 		public Void result() {
 			return future.result();
 		}
@@ -133,22 +120,7 @@ public class FrameworkTestBase {
 		}
 
 		@Override
-		public <U> Future<U> flatMap(Function<Void, Future<U>> mapper) {
-			return future.flatMap(mapper);
-		}
-
-		@Override
-		public <U> Future<U> compose(Function<Void, Future<U>> mapper) {
-			return future.compose(mapper);
-		}
-
-		@Override
-		public Future<Void> recover(Function<Throwable, Future<Void>> mapper) {
-			return future.recover(mapper);
-		}
-
-		@Override
-		public <U> Future<U> compose(Function<Void, Future<U>> successMapper, Function<Throwable, Future<U>> failureMapper) {
+		public <U> Future<U> compose(Function<? super Void, Future<U>> successMapper, Function<Throwable, Future<U>> failureMapper) {
 			return future.compose(successMapper, failureMapper);
 		}
 
@@ -158,23 +130,18 @@ public class FrameworkTestBase {
 		}
 
 		@Override
-		public <U> Future<Void> eventually(Function<Void, Future<U>> mapper) {
-			return future.eventually(mapper);
+		public <U> Future<Void> eventually(Supplier<Future<U>> supplier) {
+			return future.eventually(supplier);
 		}
 
 		@Override
-		public <U> Future<U> map(Function<Void, U> mapper) {
+		public <U> Future<U> map(Function<? super Void, U> mapper) {
 			return future.map(mapper);
 		}
 
 		@Override
 		public <V> Future<V> map(V value) {
 			return future.map(value);
-		}
-
-		@Override
-		public <V> Future<V> mapEmpty() {
-			return future.mapEmpty();
 		}
 
 		@Override
@@ -185,11 +152,6 @@ public class FrameworkTestBase {
 		@Override
 		public Future<Void> otherwise(Void value) {
 			return future.otherwise(value);
-		}
-
-		@Override
-		public Future<Void> otherwiseEmpty() {
-			return future.otherwiseEmpty();
 		}
 
 		@Override
@@ -217,21 +179,6 @@ public class FrameworkTestBase {
 				finished.tryComplete();
 			}
 			return Future.succeededFuture();
-		}
-
-		@Override
-		public ContextInternal context() {
-			return ((FutureInternal<Void>) future).context();
-		}
-
-		@Override
-		public void addListener(Listener<Void> listener) {
-			((FutureInternal<Void>) future).addListener(listener);
-		}
-
-		@Override
-		public void removeListener(Listener<Void> listener) {
-			((FutureInternal<Void>) future).removeListener(listener);
 		}
 	}
 }

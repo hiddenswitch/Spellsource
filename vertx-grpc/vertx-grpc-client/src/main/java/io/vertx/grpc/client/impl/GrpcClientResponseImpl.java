@@ -11,17 +11,18 @@
 package io.vertx.grpc.client.impl;
 
 import io.netty.handler.codec.http.QueryStringDecoder;
+import io.vertx.core.Expectation;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
-import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClientResponse;
+
+import io.vertx.core.internal.ContextInternal;
 import io.vertx.grpc.client.GrpcClientResponse;
-import io.vertx.grpc.common.CodecException;
-import io.vertx.grpc.common.GrpcException;
-import io.vertx.grpc.common.GrpcMessageDecoder;
-import io.vertx.grpc.common.GrpcStatus;
+import io.vertx.grpc.client.InvalidStatusException;
+import io.vertx.grpc.common.*;
 import io.vertx.grpc.common.impl.GrpcReadStreamBase;
+import io.vertx.grpc.common.impl.Http2GrpcMessageDeframer;
 
 import java.nio.charset.StandardCharsets;
 
@@ -34,24 +35,22 @@ public class GrpcClientResponseImpl<Req, Resp> extends GrpcReadStreamBase<GrpcCl
   private final HttpClientResponse httpResponse;
   private GrpcStatus status;
   private String statusMessage;
-  private String encoding;
 
-  public GrpcClientResponseImpl(GrpcClientRequestImpl<Req, Resp> request, HttpClientResponse httpResponse, GrpcMessageDecoder<Resp> messageDecoder) {
-    super(Vertx.currentContext(), httpResponse, httpResponse.headers().get("grpc-encoding"), messageDecoder); // A bit ugly
+  public GrpcClientResponseImpl(ContextInternal context,
+                                GrpcClientRequestImpl<Req, Resp> request,
+                                WireFormat format,
+                                GrpcStatus status,
+                                HttpClientResponse httpResponse, GrpcMessageDecoder<Resp> messageDecoder) {
+    super(
+      context,
+      httpResponse,
+      httpResponse.headers().get(GrpcHeaderNames.GRPC_ENCODING),
+      format,
+      new Http2GrpcMessageDeframer(httpResponse.headers().get(GrpcHeaderNames.GRPC_ENCODING), format),
+      messageDecoder);
     this.request = request;
-    this.encoding = httpResponse.headers().get("grpc-encoding");
     this.httpResponse = httpResponse;
-
-    String responseStatus = httpResponse.getHeader("grpc-status");
-    if (responseStatus != null) {
-      status = GrpcStatus.valueOf(Integer.parseInt(responseStatus));
-      if (status != GrpcStatus.OK) {
-        String msg = httpResponse.getHeader("grpc-message");
-        if (msg != null) {
-          statusMessage = QueryStringDecoder.decodeComponent(msg, StandardCharsets.UTF_8);
-        }
-      }
-    }
+    this.status = status;
   }
 
   @Override
@@ -60,25 +59,22 @@ public class GrpcClientResponseImpl<Req, Resp> extends GrpcReadStreamBase<GrpcCl
   }
 
   @Override
-  public String encoding() {
-    return encoding;
-  }
-
-  @Override
   public MultiMap trailers() {
     return httpResponse.trailers();
   }
 
   protected void handleEnd() {
-    String responseStatus = httpResponse.getTrailer("grpc-status");
-    if (responseStatus != null) {
-      status = GrpcStatus.valueOf(Integer.parseInt(responseStatus));
-      if (status != GrpcStatus.OK) {
-        statusMessage = httpResponse.getTrailer("grpc-message");
+    request.cancelTimeout();
+    if (status == null) {
+      String responseStatus = httpResponse.getTrailer("grpc-status");
+      if (responseStatus != null) {
+        status = GrpcStatus.valueOf(Integer.parseInt(responseStatus));
+      } else {
+        status = GrpcStatus.UNKNOWN;
       }
     }
     super.handleEnd();
-    if (!request.trailersSent) {
+    if (!request.isTrailersSent()) {
       request.cancel();
     }
   }
@@ -90,19 +86,28 @@ public class GrpcClientResponseImpl<Req, Resp> extends GrpcReadStreamBase<GrpcCl
 
   @Override
   public String statusMessage() {
+    if (status != null && status != GrpcStatus.OK) {
+      String msg = httpResponse.getHeader(GrpcHeaderNames.GRPC_MESSAGE);
+      if (msg != null) {
+        statusMessage = QueryStringDecoder.decodeComponent(msg, StandardCharsets.UTF_8);
+      }
+    }
     return statusMessage;
   }
 
   @Override
   public Future<Void> end() {
     return super.end()
-      .compose(v -> {
-      if (status == GrpcStatus.OK) {
-        return Future.succeededFuture();
-      } else {
-        return Future.failedFuture(new GrpcException(statusMessage, status, httpResponse));
-      }
-    });
+      .expecting(new Expectation<>() {
+        @Override
+        public boolean test(Void value) {
+          return status() == GrpcStatus.OK;
+        }
+        @Override
+        public Throwable describe(Void value) {
+          return new InvalidStatusException(GrpcStatus.OK, status());
+        }
+      });
   }
 
   @Override

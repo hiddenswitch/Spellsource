@@ -135,13 +135,7 @@ public class ServerGameContext extends GameContext implements Server {
 			// Save the information used to create this game
 			this.playerConfigurations.addAll(playerConfigurations);
 			this.context = Vertx.currentContext();
-			Function<Callable<GameAction>, Future<GameAction>> execBlockingOnContext = gameActionCallable -> context.executeBlocking(promise -> {
-				try {
-					promise.tryComplete(gameActionCallable.call());
-				} catch (Throwable t) {
-					promise.tryFail(t);
-				}
-			}, false);
+			Function<Callable<GameAction>, Future<GameAction>> execBlockingOnContext = gameActionCallable -> context.executeBlocking(gameActionCallable, false);
 
 			// The deck format will be the smallest one that can contain all the cards in the decks.
 			setDeckFormat(getCardCatalogue().getSmallestSupersetFormat(playerConfigurations
@@ -176,7 +170,7 @@ public class ServerGameContext extends GameContext implements Server {
 				var inGameConsumer = registerInGame(gameId, userId);
 				// Undeploying the verticle this is constructed in will automatically unregister the consumer
 				Promise<Void> inGameRegistration = Promise.promise();
-				inGameConsumer.completionHandler(inGameRegistration);
+				inGameConsumer.completion().onComplete(inGameRegistration);
 				registrationsReady.add(inGameRegistration);
 
 				// When the game ends remove the fact that the user is in this game
@@ -215,13 +209,13 @@ public class ServerGameContext extends GameContext implements Server {
 						public void startVirtual() {
 							var bus = Vertx.currentContext().owner().eventBus();
 							this.consumer = bus.consumer(getMessagesFromClientAddress(userId));
-							consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
+							// setMaxBufferedMessages removed in Vert.x 5
 							// By using a publisher, we do not require that there be a working connection while sending
 							this.producer = bus.publisher(getMessagesFromServerAddress(userId));
 							// The event bus
 
 							Promise<Void> registration = Promise.promise();
-							consumer.completionHandler(registration);
+							consumer.completion().onComplete(registration);
 							registrationsReady.add(registration);
 
 							// Create a client that handles game events and action/mulligan requests
@@ -313,9 +307,9 @@ public class ServerGameContext extends GameContext implements Server {
 			consumer.unregister();
 		});
 		consumer.pause();
-		consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
+		// setMaxBufferedMessages removed in Vert.x 5
 		consumer.bodyStream().pipeTo(response);
-		consumer.completionHandler(v -> consumer.resume());
+		consumer.completion().onSuccess(v -> consumer.resume());
 		request.resume();
 	}
 

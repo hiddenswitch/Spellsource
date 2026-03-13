@@ -2,7 +2,7 @@ package com.hiddenswitch.framework.impl;
 
 import io.vertx.core.Context;
 import io.vertx.core.Promise;
-import io.vertx.core.impl.ContextInternal;
+import io.vertx.core.internal.ContextInternal;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -13,7 +13,7 @@ public class KeepAliveManagerVertxScheduler implements ScheduledExecutorService 
 	private final ContextInternal context;
 
 	public KeepAliveManagerVertxScheduler(Context context) {
-		this.context = (ContextInternal) context;
+		this.context = ContextInternal.current();
 	}
 
 	@NotNull

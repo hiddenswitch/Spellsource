@@ -46,8 +46,8 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.vertx.await.Async.await;
-import static io.vertx.core.CompositeFuture.all;
-import static io.vertx.core.CompositeFuture.any;
+import static io.vertx.core.Future.all;
+import static io.vertx.core.Future.any;
 
 public class Client {
 	protected final AtomicReference<GrpcClientWithOptions> managedChannel = new AtomicReference<>();
@@ -153,7 +153,7 @@ public class Client {
 							.onFailure(gameOverPromise::tryFail);
 					return gameOverPromise
 							.future()
-							.eventually(v -> writer.end());
+							.eventually(() -> writer.end());
 				});
 	}
 
@@ -269,8 +269,7 @@ public class Client {
 	public Future<AccessTokenResponse> login(String emailOrUsername, String password) {
 		Objects.requireNonNull(webClient);
 		var serverConfiguration = Environment.getConfiguration();
-		var promise = Promise.<HttpResponse<Buffer>>promise();
-		webClient.postAbs(loginUri)
+		return webClient.postAbs(loginUri)
 				.sendForm(MultiMap.caseInsensitiveMultiMap()
 						.add("client_id", serverConfiguration.getKeycloak().getClientId())
 						.add("grant_type", "password")
@@ -278,8 +277,7 @@ public class Client {
 						.add("scope", "openid")
 						// username or password can be used here
 						.add("username", emailOrUsername)
-						.add("password", password), promise);
-		return promise.future()
+						.add("password", password))
 				.compose(res -> {
 					var object = res.bodyAsJsonObject();
 					if (object.containsKey("error")) {
@@ -348,7 +346,12 @@ public class Client {
 			jwtComplete = Future.succeededFuture(reply);
 		}
 		return jwtComplete.compose(v -> {
-			var jwtDecoded = this.jwt.decode(reply.getAccessTokenResponse().getToken());
+			JsonObject jwtDecoded;
+			try {
+				jwtDecoded = this.jwt.decode(reply.getAccessTokenResponse().getToken());
+			} catch (Exception e) {
+				return Future.failedFuture(e);
+			}
 			var atr = new AccessTokenResponse();
 			atr.setToken(reply.getAccessTokenResponse().getToken());
 			atr.setExpiresIn((jwtDecoded.getLong("exp") - jwtDecoded.getLong("iat")));

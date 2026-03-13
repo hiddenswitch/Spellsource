@@ -52,7 +52,7 @@ public class AccountsTests extends FrameworkTestBase {
 					});
 					return Future.succeededFuture(ue);
 				})
-				.eventually(v -> {
+				.eventually(() -> {
 					if (deploy.succeeded()) {
 						return deploy.result().close();
 					}
@@ -116,8 +116,8 @@ public class AccountsTests extends FrameworkTestBase {
 					});
 					return Future.succeededFuture(res);
 				})
-				.eventually(v -> vertx.close())
-				.eventually(v -> {
+				.eventually(() -> vertx.close())
+				.eventually(() -> {
 					if (deploy.succeeded()) {
 						return deploy.result().close();
 					}

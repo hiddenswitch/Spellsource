@@ -11,13 +11,14 @@
 package io.vertx.grpc.common;
 
 import io.vertx.codegen.annotations.CacheReturn;
+import io.vertx.codegen.annotations.DataObject;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.grpc.common.impl.ServiceNameImpl;
 
 /**
  * A gRPC service name.
  */
-@VertxGen
+@DataObject
 public interface ServiceName {
 
   /**
@@ -44,19 +45,16 @@ public interface ServiceName {
   /**
    * @return the name
    */
-  @CacheReturn
   String name();
 
   /**
    * @return the package name
    */
-  @CacheReturn
   String packageName();
 
   /**
    * @return the fully qualified name
    */
-  @CacheReturn
   String fullyQualifiedName();
 
   /**

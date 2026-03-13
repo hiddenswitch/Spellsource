@@ -1,15 +1,10 @@
 buildscript {
-  ext {
-    vertxJooqVersion = '6.5.5'
-  }
   repositories {
-    mavenLocal()
     mavenCentral()
   }
   dependencies {
-    classpath "io.github.jklingsporn:vertx-jooq-generate:$vertxJooqVersion"
+    classpath "org.jooq:jooq-codegen:3.17.3"
     classpath "org.postgresql:postgresql:$postgresqlVersion"
-    classpath "io.vertx:vertx-core:$vertxVersion"
   }
 }
 
@@ -33,14 +28,16 @@ repositories {
 
 evaluationDependsOn(':spellsource-containers')
 
+configurations {
+  jooqGenerator
+}
+
 import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerStopContainer
 import com.bmuschko.gradle.docker.tasks.image.DockerPullImage
 import com.kobylynskyi.graphql.codegen.model.ApiInterfaceStrategy
-import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConverter
-import io.vertx.core.json.JsonObject
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.jooq.codegen.GenerationTool
 import org.jooq.meta.jaxb.*
@@ -55,7 +52,7 @@ def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
 def jvmArgs = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=80.0', '-XX:+UseG1GC', '-XX:MinHeapFreeRatio=10', '-XX:MaxHeapFreeRatio=20', '-XX:-ShrinkHeapInSteps', '-XX:G1PeriodicGCInterval=10000']
 
 dependencies {
-  compileOnly 'org.infinispan:infinispan-component-annotations:15.0.0.Dev01'
+  compileOnly 'org.infinispan:infinispan-component-annotations:15.0.11.Final'
 
   implementation project(':spellsource-common')
   implementation project(':spellsource-game')
@@ -110,7 +107,7 @@ dependencies {
   implementation group: "io.netty", name: "netty-resolver-dns-native-macos", version: nettyVersion, classifier: "osx-aarch_64"
   implementation 'org.jooq:jooq:3.17.3'
   implementation "io.vertx:vertx-pg-client:$vertxVersion"
-  implementation("io.github.jklingsporn:vertx-jooq-classic-reactive:$vertxJooqVersion") {
+  implementation(project(':vertx-jooq-fork:vertx-jooq-classic-reactive')) {
     exclude group: "io.vertx", module: '*'
   }
 
@@ -156,6 +153,11 @@ dependencies {
   testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.2'
 
   testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+
+  jooqGenerator project(':vertx-jooq-fork:vertx-jooq-generate')
+  jooqGenerator project(':vertx-jooq-fork:vertx-jooq-shared')
+  jooqGenerator "org.postgresql:postgresql:$postgresqlVersion"
+  jooqGenerator "io.vertx:vertx-core:$vertxVersion"
 }
 
 javadoc {
@@ -302,8 +304,8 @@ tasks.register('jooqGenerate') {
                   new SchemaMappingType().withInputSchema("hiddenswitch").withOutputSchema("hiddenswitch"))
               .withForcedTypes(
                   new ForcedType()
-                      .withUserType(JsonObject.class.getName())
-                      .withConverter(JSONBToJsonObjectConverter.class.getName())
+                      .withUserType('io.vertx.core.json.JsonObject')
+                      .withConverter('io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConverter')
                       .withIncludeTypes("jsonb"))
               .withIncludeTables(true)
               .withIncludeRoutines(true)
@@ -326,6 +328,11 @@ tasks.register('jooqGenerate') {
               .withName('io.github.jklingsporn.vertx.jooq.generate.VertxGeneratorStrategy')))
 
   doLast() {
+    def cl = new URLClassLoader(
+        configurations.jooqGenerator.files.collect { it.toURI().toURL() } as URL[],
+        GenerationTool.classLoader
+    )
+    Thread.currentThread().setContextClassLoader(cl)
     GenerationTool.generate(configuration)
     exec {
       // dump the generated ddl to a file

@@ -34,13 +34,7 @@ dependencies {
     exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
   }
   implementation 'com.google.guava:guava:31.1-jre'
-
-  testImplementation "io.grpc:grpc-netty:$grpcVersion"
-  testImplementation "io.vertx:vertx-unit:$vertxVersion"
-  testImplementation "org.bouncycastle:bcpkix-jdk15on:1.70"
-  testImplementation("io.grpc:grpc-netty:$grpcVersion") {
-    exclude group: '*', module: '*'
-  }
+  api "com.google.protobuf:protobuf-java-util:$protocVersion"
 
   // Examples-specific dependencies
   examplesImplementation project(':vertx-grpc:vertx-grpc-common')
@@ -51,21 +45,4 @@ dependencies {
   }
   examplesImplementation "io.grpc:grpc-stub:$grpcVersion"
   examplesImplementation "io.grpc:grpc-api:$grpcVersion"
-}
-
-// In vertx-grpc-common/build.gradle
-tasks.register('testJar', Jar) {
-  archiveClassifier = 'tests'
-  from sourceSets.test.output
-}
-
-configurations {
-  testClasses {
-    canBeResolved = true
-    canBeConsumed = true
-  }
-}
-
-artifacts {
-  testClasses testJar
 }

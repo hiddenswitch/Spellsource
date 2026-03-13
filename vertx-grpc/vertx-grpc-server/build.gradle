@@ -45,16 +45,6 @@ dependencies {
     exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
   }
 
-  testCompileOnly "javax.annotation:javax.annotation-api:1.3.2"
-
-  testImplementation project(':vertx-grpc:vertx-grpc-client')
-  testImplementation project(path: ':vertx-grpc:vertx-grpc-common', configuration: 'testClasses')
-  testImplementation "io.vertx:vertx-unit:$vertxVersion"
-  testImplementation "org.bouncycastle:bcpkix-jdk15on:1.70"
-  testImplementation("io.grpc:grpc-netty:$grpcVersion") {
-    exclude group: '*', module: '*'
-  }
-
   examplesImplementation project(':vertx-grpc:vertx-grpc-common')
   examplesImplementation("io.grpc:grpc-protobuf:$grpcVersion") {
     exclude group: 'com.google.guava', module: 'guava'

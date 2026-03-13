@@ -10,20 +10,23 @@
  */
 package io.vertx.grpc.common.impl;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.CompositeByteBuf;
-import io.netty.buffer.Unpooled;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.internal.buffer.BufferInternal;
+import io.vertx.grpc.common.WireFormat;
 import io.vertx.grpc.common.GrpcMessage;
+
+import java.util.Objects;
 
 public class GrpcMessageImpl implements GrpcMessage {
 
   private final String encoding;
+  private final WireFormat format;
   private final Buffer payload;
 
-  public GrpcMessageImpl(String encoding, Buffer payload) {
-    this.encoding = encoding;
-    this.payload = payload;
+  public GrpcMessageImpl(String encoding, WireFormat format, Buffer payload) {
+    this.encoding = Objects.requireNonNull(encoding);
+    this.format = Objects.requireNonNull(format);
+    this.payload = Objects.requireNonNull(payload);
   }
 
   @Override
@@ -32,20 +35,45 @@ public class GrpcMessageImpl implements GrpcMessage {
   }
 
   @Override
+  public WireFormat format() {
+    return format;
+  }
+
+  @Override
   public Buffer payload() {
     return payload;
   }
 
   public static Buffer encode(GrpcMessage message) {
-    ByteBuf bbuf = ((Buffer)message.payload()).getByteBuf();
-    int len = bbuf.readableBytes();
+    return encode(message, false);
+  }
+
+  /**
+   * Encode a {@link GrpcMessage}.
+   *
+   * @param message the message
+   * @param trailer whether this message is a gRPC-Web trailer
+   * @return the encoded message
+   */
+  public static BufferInternal encode(GrpcMessage message, boolean trailer) {
     boolean compressed = !message.encoding().equals("identity");
-    ByteBuf prefix = Unpooled.buffer(5, 5);
-    prefix.writeByte(compressed ? 1 : 0);      // Compression flag
-    prefix.writeInt(len);                      // Length
-    CompositeByteBuf composite = Unpooled.compositeBuffer();
-    composite.addComponent(true, prefix);
-    composite.addComponent(true, bbuf);
-    return Buffer.buffer(composite);
+    return encode(message.payload(), compressed, trailer);
+  }
+
+  /**
+   * Encode a gRPC message;
+   *
+   * @param payload the message
+   * @param compressed wether the message is compressed
+   * @param trailer whether this message is a gRPC-Web trailer
+   * @return the encoded message
+   */
+  public static BufferInternal encode(Buffer payload, boolean compressed, boolean trailer) {
+    int len = payload.length();
+    BufferInternal encoded = BufferInternal.buffer(5 + len);
+    encoded.appendByte((byte) ((trailer ? 0x80 : 0x00) | (compressed ? 0x01 : 0x00)));
+    encoded.appendInt(len);
+    encoded.appendBuffer(payload);
+    return encoded;
   }
 }

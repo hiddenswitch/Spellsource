@@ -5,6 +5,7 @@ import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Matchmaking;
+import com.hiddenswitch.framework.impl.Clustered;
 import com.hiddenswitch.framework.impl.ClusteredGames;
 import com.hiddenswitch.framework.impl.Infinispan15ClusterManager;
 import com.hiddenswitch.framework.rpc.Hiddenswitch;
@@ -18,7 +19,7 @@ import com.hiddenswitch.framework.tests.impl.ToxiClient;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutRequest;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ServerToClientMessage;
 import io.vertx.core.*;
-import io.vertx.core.impl.VertxInternal;
+import io.vertx.core.internal.VertxInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.junit5.Timeout;
@@ -218,11 +219,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.compose(v -> client.closeFut())
 				.compose(v -> awaitCheckpoints(gameCreated))
 				.compose(v -> Matchmaking.deleteQueue(queueId))
-				.compose(v -> {
-					var promise = Promise.<Void>promise();
-					vertx.close(promise);
-					return promise.future();
-				});
+				.compose(v -> vertx.close());
 		// workaround for RejectedExecutionException
 		while (!fut.isComplete()) {
 			Thread.sleep(2000L);
@@ -414,11 +411,10 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	private long matchmakingCount(VertxInternal vertxInternal) {
-		return vertxInternal.deploymentIDs()
+		return vertxInternal.deploymentManager().deployments()
 				.stream()
-				.map(vertxInternal::getDeployment)
-				.flatMap(f -> f.getVerticles().stream())
-				.filter(verticle -> verticle instanceof Matchmaking).count();
+				.flatMap(dc -> dc.deployment().instances().stream())
+				.filter(deployable -> deployable instanceof Matchmaking).count();
 	}
 
 	@Test
@@ -489,7 +485,11 @@ public class MatchmakingTests extends FrameworkTestBase {
 								.setInfinspanPort(infinispanPort)
 								.build());
 						Environment.setConfiguration(thisConfiguration.build());
-						return Vertx.clusteredVertx(Environment.vertxOptions());
+						var cacheManager = Clustered.infinispanClusterManagerUdp(infinispanPort);
+						return Vertx.builder()
+								.with(Environment.vertxOptions())
+								.withClusterManager(new Infinispan15ClusterManager(cacheManager))
+								.buildClustered();
 					} else {
 						Environment.setConfiguration(thisConfiguration.build());
 						return Future.succeededFuture(Vertx.vertx(Environment.vertxOptions()));
@@ -504,7 +504,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 
 					return vt(vertx, () -> {
 						// wait for the infinispan membership to be correct
-						var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).getClusterManager();
+						var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).clusterManager();
 
 						while (clusterManager.getNodes().size() != serverVertices) {
 							await(Environment.sleep(vertx, 1000));
@@ -538,7 +538,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 					}
 					// assert they're actually clustered
 					testContext.verify(() -> {
-						assertEquals(serverVertices, ((VertxInternal) vertices.resultAt(0)).getClusterManager().getNodes().size());
+						assertEquals(serverVertices, ((VertxInternal) vertices.resultAt(0)).clusterManager().getNodes().size());
 					});
 					LOGGER.error("verticles ready");
 					return Future.succeededFuture();
@@ -580,32 +580,28 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.compose(v -> {
 					var closed = new ArrayList<Future<Void>>();
 					for (var clientVertx : clientVertices) {
-						var promise = Promise.<Void>promise();
-						closed.add(promise.future());
-						clientVertx.close(promise);
+						closed.add(clientVertx.close());
 					}
 					return join(closed);
 				})
 				.compose(v -> {
 					var closed = new ArrayList<Future<Void>>();
 					for (var vertx : vertexFuts.<Vertx>list()) {
-						var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).getClusterManager();
-						var promise = Promise.<Void>promise();
-
+						var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).clusterManager();
+						var closeFut = vertx.close();
 						if (clusterManager != null) {
 							var cacheManager = clusterManager.getCacheManager();
 							if (cacheManager != null) {
-								promise.future().onComplete(w -> {
+								closeFut = closeFut.andThen(w -> {
 									try {
 										cacheManager.close();
 									} catch (IOException e) {
-										promise.fail(e);
+										// ignore
 									}
 								});
 							}
 						}
-						closed.add(promise.future());
-						vertx.close(promise);
+						closed.add(closeFut);
 					}
 					System.getProperties().remove(GameLogic.GAMES_TURN_TIME_MILLIS);
 					Environment.setConfiguration(defaultConfiguration);

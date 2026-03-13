@@ -1,7 +1,7 @@
 package com.hiddenswitch.framework;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.CompositeFuture;
+import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Verticle;
 import io.vertx.core.datagram.DatagramSocket;
@@ -43,35 +43,35 @@ public class Broadcaster extends AbstractVerticle implements Verticle {
 	}
 
 	private DatagramSocket createDatagramSocket(final NetworkInterface networkInterface, Promise<Void> isListening) throws SocketException {
-		return vertx.createDatagramSocket(new DatagramSocketOptions()
+		var socket = vertx.createDatagramSocket(new DatagramSocketOptions()
 				.setReuseAddress(true)
-				.setReusePort(true))
-				.listen(getMulticastPort(), "0.0.0.0", next -> {
-					var socket = next.result();
-					socket.listenMulticastGroup(multicastAddress, networkInterface.getName(), null, multicastListen -> {
-						if (multicastListen.failed()) {
-							LOGGER.error("createDatagramSocket: Failed to listen to multicast group", multicastListen.cause());
-							isListening.fail(multicastListen.cause());
+				.setReusePort(true));
+		socket.listen(getMulticastPort(), "0.0.0.0")
+				.compose(s -> s.listenMulticastGroup(multicastAddress, networkInterface.getName(), null))
+				.onSuccess(v -> {
+					socket.handler(packet -> {
+						if (!packet.data().getString(0, clientCall.length()).equals(clientCall)) {
+							return;
 						}
-						socket.handler(packet -> {
-							if (!packet.data().getString(0, clientCall.length()).equals(clientCall)) {
-								return;
-							}
 
-							LOGGER.info("createDatagramSocket: Replying to datagram received from " + packet.sender().toString());
-							// Reply with the local base path
-							var host = Environment.getHostIpAddress();
-							socket.send(getResponsePrefix() + "http://" + host + ":" + Gateway.defaultGrpcPort(), packet.sender().port(), packet.sender().host(), Promise.promise());
-						});
-						isListening.complete();
-						LOGGER.info("Broadcaster listening on port " + multicastAddress + ":" + getMulticastPort());
+						LOGGER.info("createDatagramSocket: Replying to datagram received from " + packet.sender().toString());
+						// Reply with the local base path
+						var host = Environment.getHostIpAddress();
+						socket.send(getResponsePrefix() + "http://" + host + ":" + Gateway.defaultGrpcPort(), packet.sender().port(), packet.sender().host());
 					});
+					isListening.complete();
+					LOGGER.info("Broadcaster listening on port " + multicastAddress + ":" + getMulticastPort());
+				})
+				.onFailure(t -> {
+					LOGGER.error("createDatagramSocket: Failed to listen to multicast group", t);
+					isListening.fail(t);
 				});
+		return socket;
 	}
 
 	@Override
 	public void stop(Promise<Void> stopFuture) throws Exception {
-		CompositeFuture.join(hostSockets.values().stream()
+		Future.join(hostSockets.values().stream()
 				.map(DatagramSocket::close)
 				.collect(Collectors.toList()))
 				.map((Void) null)

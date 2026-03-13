@@ -19,7 +19,6 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGeneri
 import io.grpc.Status;
 import io.micrometer.core.instrument.LongTaskTimer;
 import io.micrometer.core.instrument.Metrics;
-import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
@@ -183,7 +182,7 @@ public class Legacy {
 					return getDeck(cardCatalogue, deckId, userId);
 				}
 
-				var futs = new ArrayList<Future>();
+				var futs = new ArrayList<Future<?>>();
 
 
 				// Assert that we have permissions to edit this deck
@@ -289,7 +288,7 @@ public class Legacy {
 								return Future.succeededFuture();
 							}
 
-							return CompositeFuture.all(futs);
+							return Future.all(futs);
 						})
 						.compose(v -> invalidateDeck(deckId))
 						.compose(v -> getDeck(cardCatalogue, deckId, userId))
@@ -532,7 +531,7 @@ public class Legacy {
 			var decksFut = decks.findOneById(deckId);
 			var playerEntityAttributesFut = playerEntityAttributesDao.findManyByDeckId(Collections.singletonList(deckId));
 
-			return CompositeFuture.join(cardsFut, decksFut, playerEntityAttributesFut)
+			return Future.join(cardsFut, decksFut, playerEntityAttributesFut)
 					.compose(res -> {
 						var cards = res.<List<Row>>resultAt(0);
 						var deck = res.<Decks>resultAt(1);

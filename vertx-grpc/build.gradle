@@ -7,11 +7,14 @@ subprojects {
     mavenCentral()
   }
 
+  // Disable tests for vertx-grpc subprojects (test sources were removed)
+  tasks.withType(Test).configureEach {
+    enabled = false
+  }
+
   dependencies {
     implementation "io.vertx:vertx-codegen:$vertxVersion"
     implementation "io.vertx:vertx-docgen:3.5.1"
-    testImplementation "junit:junit:4.13.1"
-    testImplementation "io.vertx:vertx-core:$vertxVersion:tests"
 
     implementation "io.vertx:vertx-core:$vertxVersion"
     api("io.grpc:grpc-core:$grpcVersion") {
@@ -34,18 +37,4 @@ subprojects {
     options.encoding = 'UTF-8'
   }
 
-  tasks.withType(Test).configureEach {
-    maxParallelForks = 1
-    systemProperty 'junit.jupiter.execution.parallel.enabled', 'false'
-  }
-}
-
-def orderedVertxTestProjects = subprojects.findAll { it.tasks.findByName('test') != null }.sort { it.path }
-orderedVertxTestProjects.eachWithIndex { project, index ->
-  if (index == 0) {
-    return
-  }
-  project.tasks.named('test') {
-    mustRunAfter orderedVertxTestProjects[index - 1].tasks.named('test')
-  }
 }

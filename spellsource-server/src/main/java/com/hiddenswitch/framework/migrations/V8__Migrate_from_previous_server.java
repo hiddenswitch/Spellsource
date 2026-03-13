@@ -10,7 +10,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.AuthProvider;
+// AuthProvider removed in Vert.x 5
 import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.authorization.Authorization;
 import io.vertx.ext.auth.authorization.Authorizations;
@@ -1290,39 +1290,9 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 		}
 
 		@Override
-		public User isAuthorized(Authorization authorization, Handler<AsyncResult<Boolean>> handler) {
-			handler.handle(Future.succeededFuture(true));
-			return this;
-		}
-
-		/**
-		 * Authorization checks are not supported.
-		 *
-		 * @param authority
-		 * @param resultHandler
-		 * @return
-		 */
-		@Override
-		@JsonIgnore
-		public UserRecord isAuthorized(String authority, Handler<AsyncResult<Boolean>> resultHandler) {
-			throw new UnsupportedOperationException("authorities are not supported");
-		}
-
-		@Override
-		@JsonIgnore
-		public User clearCache() {
-			return null;
-		}
-
-		@Override
 		@JsonIgnore
 		public JsonObject principal() {
 			return new JsonObject().put("_id", this._id);
-		}
-
-		@Override
-		@JsonIgnore
-		public void setAuthProvider(AuthProvider authProvider) {
 		}
 
 		@Override

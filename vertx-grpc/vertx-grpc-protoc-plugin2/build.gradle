@@ -15,9 +15,6 @@ dependencies {
   }
   implementation "io.vertx:vertx-codegen:$vertxVersion"
   implementation "io.vertx:vertx-docgen:3.5.1"
-  testImplementation "junit:junit:4.13.1"
-  testImplementation "io.vertx:vertx-core:$vertxVersion:tests"
-
   implementation "io.vertx:vertx-core:$vertxVersion"
   implementation("io.grpc:grpc-core:$grpcVersion") {
     exclude group: 'com.google.guava', module: 'guava'

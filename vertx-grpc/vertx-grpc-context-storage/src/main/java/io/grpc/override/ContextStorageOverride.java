@@ -2,9 +2,9 @@ package io.grpc.override;
 
 import io.grpc.Context;
 import io.vertx.core.Vertx;
-import io.vertx.core.impl.ContextInternal;
-import io.vertx.core.impl.logging.Logger;
-import io.vertx.core.impl.logging.LoggerFactory;
+import io.vertx.core.internal.ContextInternal;
+
+import java.util.logging.Logger;
 
 import java.util.concurrent.ConcurrentMap;
 
@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class ContextStorageOverride extends Context.Storage {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ContextStorageOverride.class);
+  private static final Logger LOG = Logger.getLogger(ContextStorageOverride.class.getName());
 
   private static final Object CONTEXT_KEY = new Object();
   private static final ThreadLocal<Context> fallback = new ThreadLocal<>();
@@ -53,8 +53,8 @@ public class ContextStorageOverride extends Context.Storage {
       fallback.set(toRestore == Context.ROOT ? null : toRestore);
     }
     if (rootIfNull(current) != toDetach) {
-      if (LOG.isWarnEnabled()) {
-        LOG.warn("Context was not attached when detaching", new Exception("Stack trace"));
+      if (LOG.isLoggable(java.util.logging.Level.WARNING)) {
+        LOG.log(java.util.logging.Level.WARNING, "Context was not attached when detaching", new Exception("Stack trace"));
       }
     }
   }

@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.virtual.concurrent;
 
 import io.vertx.core.Closeable;
+import io.vertx.core.Completable;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
@@ -78,9 +79,9 @@ public interface SuspendableLock extends Closeable {
 		}
 
 		@Override
-		public void close(Promise<Void> promise) {
+		public void close(Completable<Void> completable) {
 			release();
-			promise.complete();
+			completable.succeed();
 		}
 	}
 }

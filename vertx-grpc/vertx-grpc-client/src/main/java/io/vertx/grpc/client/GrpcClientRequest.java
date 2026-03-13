@@ -16,14 +16,14 @@ import io.vertx.codegen.annotations.Nullable;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.core.MultiMap;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.http.HttpClientResponse;
+import io.vertx.core.Timer;
 import io.vertx.core.http.HttpConnection;
-import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.streams.ReadStream;
+import io.vertx.grpc.common.WireFormat;
 import io.vertx.grpc.common.GrpcWriteStream;
 import io.vertx.grpc.common.ServiceName;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * A request to a gRPC server.
@@ -45,6 +45,9 @@ public interface GrpcClientRequest<Req, Resp> extends GrpcWriteStream<Req> {
 
   @Fluent
   GrpcClientRequest<Req, Resp> encoding(String encoding);
+
+  @Override
+  GrpcClientRequest<Req, Resp> format(WireFormat format);
 
   /**
    * Set the full method name to call, it must follow the format {@code package-name + '.' + service-name + '/' + method-name}
@@ -94,6 +97,35 @@ public interface GrpcClientRequest<Req, Resp> extends GrpcWriteStream<Req> {
 
   @Override
   GrpcClientRequest<Req, Resp> drainHandler(@Nullable Handler<Void> handler);
+
+  /**
+   * <p>Set a {@code grpc-timeout} header to be sent to the server to indicate the client expects a response with
+   * a timeout.</p>
+   *
+   * <p>When the request handle deadline a timer will be set when sending the request to cancel the request when the response
+   * has not been received in time.</p>
+   *
+   * @param timeout
+   * @param unit
+   * @return
+   */
+  @Fluent
+  GrpcClientRequest<Req, Resp> timeout(long timeout, TimeUnit unit);
+
+  /**
+   * @return the request deadline or {@code null} when no deadline has been scheduled
+   */
+  Timer deadline();
+
+  /**
+   * Sets the amount of time after which, if the request does not return any data within the timeout period,
+   * the request/response is cancelled and the related futures.
+   *
+   * @param timeout the amount of time in milliseconds.
+   * @return a reference to this, so the API can be used fluently
+   */
+  @Fluent
+  GrpcClientRequest<Req, Resp> idleTimeout(long timeout);
 
   /**
    * @return the underlying HTTP connection

@@ -10,52 +10,69 @@
  */
 package io.vertx.grpc.common.impl;
 
-import io.grpc.InternalMetadata;
-import io.grpc.Metadata;
-import io.netty.util.AsciiString;
-import io.vertx.core.MultiMap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.CompositeByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.embedded.EmbeddedChannel;
+import io.netty.handler.codec.compression.*;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.internal.buffer.BufferInternal;
+import io.vertx.grpc.common.CodecException;
 
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.Queue;
+import java.util.function.Function;
 
 public class Utils {
 
-  public static void writeMetadata(Metadata metadata, MultiMap mmap) {
-    byte[][] array = InternalMetadata.serialize(metadata);
-    for (int i = 0; i < array.length; i += 2) {
-      AsciiString key = new AsciiString(array[i], false);
-      AsciiString value;
-      if (key.endsWith("-bin")) {
-        value = new AsciiString(Base64.getEncoder().encode(array[i + 1]), false);
+  public static final Function<Buffer, Buffer> GZIP_DECODER = data -> {
+    EmbeddedChannel channel = new EmbeddedChannel(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP));
+    channel.config().setAllocator(BufferInternal.buffer().getByteBuf().alloc());
+    try {
+      ChannelFuture fut = channel.writeOneInbound(((BufferInternal)data).getByteBuf());
+      if (fut.isSuccess()) {
+        Buffer decoded = null;
+        while (true) {
+          ByteBuf buf = channel.readInbound();
+          if (buf == null) {
+            break;
+          }
+          if (decoded == null) {
+            decoded = BufferInternal.buffer(buf);
+          } else {
+            decoded.appendBuffer(BufferInternal.buffer(buf));
+          }
+        }
+        if (decoded == null) {
+          throw new CodecException("Invalid GZIP input");
+        }
+        return decoded;
       } else {
-        value = new AsciiString(array[i + 1], false);
+        throw new CodecException(fut.cause());
       }
-      mmap.add(key, value);
+    } finally {
+      channel.close();
     }
-  }
+  };
 
-  public static Metadata readMetadata(MultiMap headers) {
-    List<Map.Entry<String, String>> entries = headers.entries();
-    byte[][] array = new byte[entries.size() * 2][];
-    int idx = 0;
-    for (Map.Entry<String, String> entry : entries) {
-      String key = entry.getKey();
-      array[idx++] = key.getBytes(StandardCharsets.UTF_8);
-      String value = entry.getValue();
-      byte[] data;
-      if (key.endsWith("-bin")) {
-        data = Base64.getDecoder().decode(value);
-      } else {
-        data = value.getBytes(StandardCharsets.UTF_8);
-      }
-      array[idx++] = data;
+  public static final Function<Buffer, Buffer> GZIP_ENCODER = data -> {
+    CompositeByteBuf composite = Unpooled.compositeBuffer();
+    GzipOptions options = StandardCompressionOptions.gzip();
+    ZlibEncoder encoder = ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP, options.compressionLevel(), options.windowBits(), options.memLevel());
+    EmbeddedChannel channel = new EmbeddedChannel(encoder);
+    channel.config().setAllocator(BufferInternal.buffer().getByteBuf().alloc());
+    channel.writeOutbound(((BufferInternal) data).getByteBuf());
+    channel.finish();
+    Queue<Object> messages = channel.outboundMessages();
+    ByteBuf a;
+    while ((a = (ByteBuf) messages.poll()) != null) {
+      composite.addComponent(true, a);
     }
-    return InternalMetadata.newMetadata(array);
-  }
+    channel.close();
+    return BufferInternal.buffer(composite);
+  };
 
   public static String utf8PercentEncode(String s) {
     try {

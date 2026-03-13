@@ -10,24 +10,17 @@
  */
 package io.vertx.grpc.common.impl;
 
+import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.Context;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Promise;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.StreamResetException;
-import io.vertx.core.impl.ContextInternal;
-import io.vertx.core.impl.future.PromiseInternal;
+import io.vertx.core.internal.ContextInternal;
+import io.vertx.core.internal.concurrent.InboundMessageQueue;
 import io.vertx.core.streams.ReadStream;
-import io.vertx.core.streams.impl.InboundBuffer;
-import io.vertx.grpc.common.CodecException;
-import io.vertx.grpc.common.GrpcError;
-import io.vertx.grpc.common.GrpcMessage;
-import io.vertx.grpc.common.GrpcMessageDecoder;
-import io.vertx.grpc.common.GrpcReadStream;
-
-import java.util.function.BiConsumer;
-import java.util.stream.Collector;
+import io.vertx.grpc.common.*;
 
 import static io.vertx.grpc.common.GrpcError.mapHttp2ErrorCode;
 
@@ -44,6 +37,10 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
       return null;
     }
     @Override
+    public WireFormat format() {
+      return null;
+    }
+    @Override
     public Buffer payload() {
       return null;
     }
@@ -51,53 +48,80 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
 
   protected final ContextInternal context;
   private final String encoding;
+  private final WireFormat format;
   private final ReadStream<Buffer> stream;
-  private final InboundBuffer<GrpcMessage> queue;
-  private Buffer buffer;
-  private Handler<GrpcError> errorHandler;
+  private final GrpcMessageDeframer deframer;
+  private final InboundMessageQueue<GrpcMessage> queue;
   private Handler<Throwable> exceptionHandler;
   private Handler<GrpcMessage> messageHandler;
   private Handler<Void> endHandler;
+  private Handler<InvalidMessageException> invalidMessageHandler;
   private GrpcMessage last;
   private final GrpcMessageDecoder<T> messageDecoder;
   private final Promise<Void> end;
+  private GrpcWriteStreamBase<?, ?> ws;
 
-  protected GrpcReadStreamBase(Context context, ReadStream<Buffer> stream, String encoding, GrpcMessageDecoder<T> messageDecoder) {
-    this.context = (ContextInternal) context;
+  protected GrpcReadStreamBase(Context context,
+                               ReadStream<Buffer> stream,
+                               String encoding,
+                               WireFormat format,
+                               GrpcMessageDeframer messageDeframer,
+                               GrpcMessageDecoder<T> messageDecoder) {
+    ContextInternal ctx = (ContextInternal) context;
+    this.context = ctx;
     this.encoding = encoding;
     this.stream = stream;
-    this.queue = new InboundBuffer<>(context);
+    this.format = format;
+    this.queue = new InboundMessageQueue<>(ctx.executor(), ctx.executor(), 8, 16) {
+      @Override
+      protected void handleResume() {
+        stream.resume();
+      }
+      @Override
+      protected void handlePause() {
+        stream.pause();
+      }
+      @Override
+      protected void handleMessage(GrpcMessage msg) {
+        if (msg == END_SENTINEL) {
+          handleEnd();
+        } else {
+          GrpcReadStreamBase.this.handleMessage(msg);
+        }
+      }
+    };
     this.messageDecoder = messageDecoder;
-    this.end = ((ContextInternal) context).promise();
+    this.end = ctx.promise();
+    this.deframer = messageDeframer;
   }
 
-  public void init() {
+  public void init(GrpcWriteStreamBase<?, ?> ws, long maxMessageSize) {
+    this.ws = ws;
+    deframer.maxMessageSize(maxMessageSize);
     stream.handler(this);
-    stream.endHandler(v -> queue.write(END_SENTINEL));
+    stream.endHandler(v -> {
+      deframer.end();
+      deframe();
+      queue.write(END_SENTINEL);
+    });
     stream.exceptionHandler(err -> {
       if (err instanceof StreamResetException) {
-        handleReset(((StreamResetException)err).getCode());
+        StreamResetException reset = (StreamResetException) err;
+        GrpcError error = mapHttp2ErrorCode(reset.getCode());
+        ws.handleError(error);
       } else {
         handleException(err);
       }
     });
-    queue.drainHandler(v -> stream.resume());
-    queue.handler(msg -> {
-      if (msg == END_SENTINEL) {
-        handleEnd();
-      } else {
-        handleMessage(msg);
-      }
-    });
   }
 
-  protected T decodeMessage(GrpcMessage msg) throws CodecException {
+  protected final T decodeMessage(GrpcMessage msg) throws CodecException {
     switch (msg.encoding()) {
       case "identity":
         // Nothing to do
         break;
       case "gzip": {
-        msg = GrpcMessage.message("identity", GrpcMessageDecoder.GZIP.decode(msg));
+        msg = GrpcMessage.message("identity", msg.format(), Utils.GZIP_DECODER.apply(msg.payload()));
         break;
       }
       default:
@@ -106,110 +130,117 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
     return messageDecoder.decode(msg);
   }
 
-  public void handle(Buffer chunk) {
-    if (buffer == null) {
-      buffer = chunk;
-    } else {
-      buffer.appendBuffer(chunk);
-    }
-    int idx = 0;
-    boolean pause = false;
-    int len;
-    while (idx + 5 <= buffer.length() && (idx + 5 + (len = buffer.getInt(idx + 1)))<= buffer.length()) {
-      boolean compressed = buffer.getByte(idx) == 1;
-      if (compressed && encoding == null) {
-        throw new UnsupportedOperationException("Handle me");
-      }
-      Buffer payload = buffer.slice(idx + 5, idx + 5 + len);
-      GrpcMessage message = GrpcMessage.message(compressed ? encoding : "identity", payload);
-      pause |= !queue.write(message);
-      idx += 5 + len;
-    }
-    if (pause) {
-      stream.pause();
-    }
-    if (idx < buffer.length()) {
-      buffer = buffer.getBuffer(idx, buffer.length());
-    } else {
-      buffer = null;
-    }
+  @Override
+  public final WireFormat format() {
+    return format;
   }
 
-  public S pause() {
+  @Override
+  public final String encoding() {
+    return encoding;
+  }
+
+  public final S pause() {
     queue.pause();
     return (S) this;
   }
 
-  public S resume() {
-    queue.resume();
-    return (S) this;
+  public final S resume() {
+    return fetch(Long.MAX_VALUE);
   }
 
-  public S fetch(long amount) {
+  public final S fetch(long amount) {
     queue.fetch(amount);
     return (S) this;
   }
 
   @Override
-  public S errorHandler(Handler<GrpcError> handler) {
-    errorHandler = handler;
-    return (S) this;
-  }
-
-  @Override
-  public S exceptionHandler(Handler<Throwable> handler) {
+  public final S exceptionHandler(Handler<Throwable> handler) {
     exceptionHandler = handler;
     return (S) this;
   }
 
   @Override
-  public S messageHandler(Handler<GrpcMessage> handler) {
+  public final S errorHandler(@Nullable Handler<GrpcError> handler) {
+    ws.errorHandler(handler);
+    return (S) this;
+  }
+
+  @Override
+  public final S messageHandler(Handler<GrpcMessage> handler) {
     messageHandler = handler;
     return (S) this;
   }
 
   @Override
-  public S endHandler(Handler<Void> endHandler) {
+  public final S invalidMessageHandler(@Nullable Handler<InvalidMessageException> handler) {
+    invalidMessageHandler = handler;
+    return (S) this;
+  }
+
+  @Override
+  public abstract S handler(@Nullable Handler<T> handler);
+
+  @Override
+  public final S endHandler(Handler<Void> endHandler) {
     this.endHandler = endHandler;
     return (S) this;
   }
 
-  protected void handleReset(long code) {
-    Handler<GrpcError> handler = errorHandler;
-    if (handler != null) {
-      GrpcError error = mapHttp2ErrorCode(code);
-      if (error != null) {
-        handler.handle(error);
+  public void handle(Buffer chunk) {
+    deframer.update(chunk);
+    deframe();
+  }
+
+  private void deframe() {
+    while (true) {
+      Object ret = deframer.next();
+      if (ret == null) {
+        break;
+      } else if (ret instanceof MessageSizeOverflowException) {
+        MessageSizeOverflowException msoe = (MessageSizeOverflowException) ret;
+        Handler<InvalidMessageException> handler = invalidMessageHandler;
+        if (handler != null) {
+          context.dispatch(msoe, handler);
+        }
+      } else {
+        GrpcMessage msg = (GrpcMessage) ret;
+        queue.write(msg);
       }
     }
   }
 
-  protected void handleException(Throwable err) {
-    end.tryFail(err);
-    Handler<Throwable> handler = exceptionHandler;
-    if (handler != null) {
-      handler.handle(err);
+  public final void tryFail(Throwable err) {
+    if (end.tryFail(err)) {
+      Handler<Throwable> handler = exceptionHandler;
+      if (handler != null) {
+        context.dispatch(err, handler);
+      }
     }
+  }
+
+  protected final void handleException(Throwable err) {
+    tryFail(err);
   }
 
   protected void handleEnd() {
     end.tryComplete();
     Handler<Void> handler = endHandler;
     if (handler != null) {
-      handler.handle(null);
+      context.dispatch(handler);
     }
   }
 
-  protected void handleMessage(GrpcMessage msg) {
+  private void handleMessage(GrpcMessage msg) {
     last = msg;
     Handler<GrpcMessage> handler = messageHandler;
     if (handler != null) {
-      handler.handle(msg);
+      context.dispatch(msg, messageHandler);
     }
   }
 
   @Override
-  public Future<T> last() {
+  public final Future<T> last() {
     return end()
       .map(v -> decodeMessage(last));
   }
@@ -217,19 +248,5 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
   @Override
   public Future<Void> end() {
     return end.future();
-  }
-
-  @Override
-  public <R, C> Future<R> collecting(Collector<T, C, R> collector) {
-    PromiseInternal<R> promise = context.promise();
-    C cumulation = collector.supplier().get();
-    BiConsumer<C, T> accumulator = collector.accumulator();
-    handler(elt -> accumulator.accept(cumulation, elt));
-    endHandler(v -> {
-      R result = collector.finisher().apply(cumulation);
-      promise.tryComplete(result);
-    });
-    exceptionHandler(promise::tryFail);
-    return promise.future();
   }
 }

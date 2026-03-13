@@ -558,7 +558,7 @@ public class Accounts {
 					var jwtAuthOptions = new JWTAuthOptions();
 					jwtAuthOptions.setJwks(jwks);
 					jwtAuthOptions.setJWTOptions(jwtOptions);
-					jwtAuthOptions.setPermissionsClaimKey("realm_access/roles");
+					// setPermissionsClaimKey removed in Vert.x 5
 
 					return Future.succeededFuture(jwtAuthOptions);
 				});

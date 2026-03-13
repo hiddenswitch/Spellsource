@@ -80,8 +80,8 @@ public class Matchmaking extends AbstractVerticle {
 				.onSuccess(i -> LOGGER.debug("created queue {} ({})", configuration.getId(), i == 1))
 				.compose(ignored -> Future.succeededFuture(new Closeable() {
 					@Override
-					public void close(Promise<Void> completion) {
-						Matchmaking.deleteQueue(configuration.getId()).onComplete(completion);
+					public void close(Completable<Void> completion) {
+						Matchmaking.deleteQueue(configuration.getId()).onComplete(ar -> { if (ar.succeeded()) { completion.succeed(); } else { completion.fail(ar.cause()); } });
 					}
 				}));
 	}
@@ -230,11 +230,11 @@ public class Matchmaking extends AbstractVerticle {
 														createGame(configuration, thisGameTickets)
 																.onFailure(Environment.onFailure("could not create game"))
 																.compose(gameId -> {
-																	var notifications = new ArrayList<Future>();
+																	var notifications = new ArrayList<Future<?>>();
 																	for (var ticket : thisGameTickets) {
 																		notifications.add(Matchmaking.notifyGameReady(ticket.getUserId(), gameId));
 																	}
-																	return CompositeFuture.all(notifications);
+																	return Future.all(notifications);
 																})
 																.onFailure(Environment.onFailure("could not notify users"));
 
@@ -270,7 +270,7 @@ public class Matchmaking extends AbstractVerticle {
 		return withExecutor(executor -> executor.executeAny(dsl -> dsl.insertInto(GAMES).defaultValues().returning(GAMES.ID))
 				.compose(rowSet -> {
 					var gameId = Lists.newArrayList(rowSet.iterator()).get(0).getLong(GAMES.ID.getName());
-					var added = new ArrayList<Future>();
+					var added = new ArrayList<Future<?>>();
 					for (var i = 0; i < tickets.length; i++) {
 						var record = GAME_USERS.newRecord().setGameId(gameId)
 								.setUserId(tickets[i].getUserId())
@@ -278,7 +278,7 @@ public class Matchmaking extends AbstractVerticle {
 								.setPlayerIndex((short) i);
 						added.add(executor.execute(dsl -> dsl.insertInto(GAME_USERS).set(record)));
 					}
-					return CompositeFuture.all(added).map(gameId);
+					return Future.all(added).map(gameId);
 				})
 				.compose(gameId -> {
 					if (configuration.getBotOpponent()) {

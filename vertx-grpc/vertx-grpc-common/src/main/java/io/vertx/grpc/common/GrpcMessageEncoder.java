@@ -1,76 +1,139 @@
 package io.vertx.grpc.common;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.MessageLite;
+import com.google.protobuf.MessageOrBuilder;
+import com.google.protobuf.util.JsonFormat;
 import io.grpc.MethodDescriptor;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.CompositeByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.embedded.EmbeddedChannel;
-import io.netty.handler.codec.compression.GzipOptions;
-import io.netty.handler.codec.compression.StandardCompressionOptions;
-import io.netty.handler.codec.compression.ZlibCodecFactory;
-import io.netty.handler.codec.compression.ZlibEncoder;
-import io.netty.handler.codec.compression.ZlibWrapper;
 import io.vertx.codegen.annotations.GenIgnore;
-import io.vertx.codegen.annotations.VertxGen;
-import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.buffer.impl.VertxByteBufAllocator;
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Queue;
 
-@VertxGen
 public interface GrpcMessageEncoder<T> {
 
-  GrpcMessageEncoder<Buffer> IDENTITY = new GrpcMessageEncoder<Buffer>() {
-    @Override
-    public GrpcMessage encode(Buffer payload) {
-      return GrpcMessage.message("identity", payload);
-    }
-  };
-
-  GrpcMessageEncoder<Buffer> GZIP = new GrpcMessageEncoder<Buffer>() {
-    @Override
-    public GrpcMessage encode(Buffer payload) {
-      CompositeByteBuf composite = Unpooled.compositeBuffer();
-      GzipOptions options = StandardCompressionOptions.gzip();
-      ZlibEncoder encoder = ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP, options.compressionLevel(), options.windowBits(), options.memLevel());
-      EmbeddedChannel channel = new EmbeddedChannel(encoder);
-      channel.config().setAllocator(VertxByteBufAllocator.UNPOOLED_ALLOCATOR);
-      channel.writeOutbound(((Buffer) payload).getByteBuf());
-      channel.finish();
-      Queue<Object> messages = channel.outboundMessages();
-      ByteBuf a;
-      while ((a = (ByteBuf) messages.poll()) != null) {
-        composite.addComponent(true, a);
-      }
-      channel.close();
-      return GrpcMessage.message("gzip", Buffer.buffer(composite));
-    }
-  };
-
-  @GenIgnore(GenIgnore.PERMITTED_TYPE)
-  static <T> GrpcMessageEncoder<T> marshaller(MethodDescriptor.Marshaller<T> desc) {
+  /**
+   * Create an encoder for arbitrary message extending {@link MessageLite}.
+   * @return the message encoder
+   */
+  @GenIgnore
+  static <T extends MessageLite> GrpcMessageEncoder<T> encoder() {
     return new GrpcMessageEncoder<T>() {
       @Override
-      public GrpcMessage encode(T msg) {
-        Buffer encoded = Buffer.buffer();
-        InputStream stream = desc.stream(msg);
-        byte[] tmp = new byte[256];
-        int i;
-        try {
-          while ((i = stream.read(tmp)) != -1) {
-            encoded.appendBytes(tmp, 0, i);
-          }
-        } catch (IOException e) {
-          throw new VertxException(e);
+      public GrpcMessage encode(T msg, WireFormat format) throws CodecException {
+        switch (format) {
+          case PROTOBUF:
+            byte[] bytes = msg.toByteArray();
+            return GrpcMessage.message("identity", Buffer.buffer(bytes));
+          case JSON:
+            if (msg instanceof MessageOrBuilder) {
+              MessageOrBuilder mob = (MessageOrBuilder) msg;
+              try {
+                String res = JsonFormat.printer().print(mob);
+                return GrpcMessage.message("identity", WireFormat.JSON, Buffer.buffer(res));
+              } catch (InvalidProtocolBufferException e) {
+                throw new CodecException(e);
+              }
+            }
+            return GrpcMessage.message(
+              "identity",
+              WireFormat.JSON,
+              Json.encodeToBuffer(msg));
+          default:
+            throw new IllegalArgumentException("Invalid wire format: " + format);
         }
-        return GrpcMessage.message("identity", encoded);
+      }
+      @Override
+      public boolean accepts(WireFormat format) {
+        return true;
       }
     };
   }
 
-  GrpcMessage encode(T msg);
+  GrpcMessageEncoder<Buffer> IDENTITY = new GrpcMessageEncoder<>() {
+    @Override
+    public GrpcMessage encode(Buffer msg, WireFormat format) throws CodecException {
+      return GrpcMessage.message("identity", format, msg);
+    }
+    @Override
+    public boolean accepts(WireFormat format) {
+      return true;
+    }
+  };
+
+  /**
+   * Create and reutrn an encoder in JSON format encoding instances of {@link MessageOrBuilder} using the protobuf-java-util library
+   * otherwise using {@link Json#encodeToBuffer(Object)} (Jackson Databind is required).
+   *
+   * @return an encoder in JSON format encoding instances of {@code <T>}.
+   */
+  static <T> GrpcMessageEncoder<T> json() {
+    return new GrpcMessageEncoder<>() {
+      @Override
+      public GrpcMessage encode(T msg, WireFormat format) throws CodecException {
+        if (msg instanceof MessageOrBuilder) {
+          MessageOrBuilder mob = (MessageOrBuilder) msg;
+          try {
+            String res = JsonFormat.printer().print(mob);
+            return GrpcMessage.message("identity", WireFormat.JSON, Buffer.buffer(res));
+          } catch (InvalidProtocolBufferException e) {
+            throw new CodecException(e);
+          }
+        }
+        return GrpcMessage.message(
+          "identity",
+          WireFormat.JSON,
+          Json.encodeToBuffer(msg));
+      }
+      @Override
+      public boolean accepts(WireFormat format) {
+        return format == WireFormat.JSON;
+      }
+    };
+  }
+
+  /**
+   * An encoder in JSON format encoding {@link JsonObject} instances.
+   */
+  GrpcMessageEncoder<JsonObject> JSON_OBJECT = new GrpcMessageEncoder<>() {
+    @Override
+    public GrpcMessage encode(JsonObject msg, WireFormat format) throws CodecException {
+      return GrpcMessage.message("identity", WireFormat.JSON, msg == null ? Buffer.buffer("null") : msg.toBuffer());
+    }
+    @Override
+    public boolean accepts(WireFormat format) {
+      return format == WireFormat.JSON;
+    }
+  };
+
+  GrpcMessage encode(T msg, WireFormat format) throws CodecException;
+
+  boolean accepts(WireFormat format);
+
+  /**
+   * Bridge from a gRPC-Java {@link MethodDescriptor.Marshaller} to a {@link GrpcMessageEncoder}.
+   * Backward compatibility for Vert.x gRPC v4 generated stubs.
+   */
+  static <T> GrpcMessageEncoder<T> marshaller(MethodDescriptor.Marshaller<T> marshaller) {
+    return new GrpcMessageEncoder<>() {
+      @Override
+      public GrpcMessage encode(T msg, WireFormat format) throws CodecException {
+        try {
+          InputStream stream = marshaller.stream(msg);
+          byte[] bytes = stream.readAllBytes();
+          return GrpcMessage.message("identity", Buffer.buffer(bytes));
+        } catch (Exception e) {
+          throw new CodecException(e);
+        }
+      }
+      @Override
+      public boolean accepts(WireFormat format) {
+        return true;
+      }
+    };
+  }
 
 }

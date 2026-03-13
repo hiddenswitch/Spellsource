@@ -15,8 +15,8 @@ import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.Handler;
+import io.vertx.core.Timer;
 import io.vertx.core.http.HttpConnection;
-import io.vertx.ext.auth.User;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.grpc.common.GrpcError;
 import io.vertx.grpc.common.GrpcMessage;
@@ -81,5 +81,19 @@ public interface GrpcServerRequest<Req, Resp> extends GrpcReadStream<Req> {
    */
   HttpConnection connection();
 
+  /**
+   * @return the request timeout sent by the client or {@code 0L} if none.
+   */
+  long timeout();
+
+  /**
+   * @return the request deadline or {@code null} when no deadline has been scheduled
+   */
+  Timer deadline();
+
+  /**
+   * @return the routing context, if this request was received through a Vert.x Web router
+   */
   RoutingContext routingContext();
+
 }

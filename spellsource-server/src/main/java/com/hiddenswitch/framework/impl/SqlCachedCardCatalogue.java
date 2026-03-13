@@ -16,7 +16,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.impl.ContextInternal;
+import io.vertx.core.internal.ContextInternal;
 import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.pgclient.pubsub.PgSubscriber;
 import io.vertx.rxjava3.RxHelper;
@@ -115,7 +115,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		// todo: pool these connections
 		this.subscriber = subscribers.get();
 		// todo: is this necessary? i think i am always on a proper context
-		var context = (ContextInternal) Vertx.currentContext();
+		var context = ContextInternal.current();
 		subscriber.channel(SPELLSOURCE_CARDS_CHANGES_CHANNEL_FROM_DDL)
 				.handler(payload -> context.runOnContext(v -> {
 					try {
@@ -139,7 +139,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 
 		context.addCloseHook(completion -> {
 			debounceInvalidations.dispose();
-			completion.tryComplete();
+			completion.succeed();
 		});
 
 		return subscriber.connect();

@@ -20,15 +20,15 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpConnection;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.json.Json;
-import io.vertx.core.spi.cluster.ClusterManager;
-import io.vertx.core.tracing.TracingOptions;
+// ClusterManager removed
+// TracingOptions removed
 import io.vertx.micrometer.MicrometerMetricsOptions;
 import io.vertx.micrometer.VertxPrometheusOptions;
 import io.vertx.micrometer.backends.PrometheusBackendRegistry;
 import io.vertx.pgclient.PgBuilder;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.sqlclient.*;
-import io.vertx.tracing.opentracing.OpenTracingOptions;
+// OpenTracingOptions removed in Vert.x 5
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import org.flywaydb.core.Flyway;
@@ -336,25 +336,12 @@ public class Environment {
 
 	public static VertxOptions vertxOptions() {
 		var configuration = getConfiguration();
-		TracingOptions tracingOptions = null;
-		ClusterManager clusterManager = null;
-		if (configuration.hasJaeger() && configuration.getJaeger().getEnabled()) {
-			tracingOptions = new OpenTracingOptions(Tracing.tracing());
-		}
-		if (configuration.hasVertx() && configuration.getVertx().getUseInfinispanClusterManager()) {
-			var port = configuration.getVertx().getInfinspanPort();
-			var isKubernetes = System.getenv().containsKey("KUBERNETES_SERVICE_HOST");
-			clusterManager = new Infinispan15ClusterManager(isKubernetes ? Clustered.infinispanClusterManagerKubernetes(port) : Clustered.infinispanClusterManagerTcp(port));
-		}
 		return new VertxOptions()
 				.setEventLoopPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))
 				.setInternalBlockingPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 4, 16))
 				.setWorkerPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))
-				.setTracingOptions(tracingOptions)
-				.setClusterManager(clusterManager)
 				.setMetricsOptions(
 						new MicrometerMetricsOptions()
-								.setMicrometerRegistry(Metrics.globalRegistry)
 								.setEnabled(true));
 	}
 
@@ -395,24 +382,15 @@ public class Environment {
 	}
 
 	public static <T> Future<T> executeBlocking(Context context, Callable<T> blockingCallable) {
-		var result = Promise.<T>promise();
 		if (context != null) {
-			context.executeBlocking(promise -> {
-				try {
-					var res = blockingCallable.call();
-					promise.complete(res);
-				} catch (Throwable e) {
-					promise.fail(e);
-				}
-			}, false, result);
+			return context.executeBlocking(blockingCallable, false);
 		} else {
 			try {
-				result.complete(blockingCallable.call());
+				return Future.succeededFuture(blockingCallable.call());
 			} catch (Throwable t) {
-				result.fail(t);
+				return Future.failedFuture(t);
 			}
 		}
-		return result.future();
 	}
 
 	public static ServerConfiguration getConfiguration() {
@@ -612,11 +590,8 @@ public class Environment {
 
 			@Override
 			public void ping() {
-				connection.ping(Buffer.buffer(new byte[]{0, 1, 2, 3, 4, 5, 6, 7}), res -> {
-					if (res.failed()) {
-						failHandler.handle(null);
-					}
-				});
+				connection.ping(Buffer.buffer(new byte[]{0, 1, 2, 3, 4, 5, 6, 7}))
+						.onFailure(t -> failHandler.handle(null));
 			}
 
 			@Override

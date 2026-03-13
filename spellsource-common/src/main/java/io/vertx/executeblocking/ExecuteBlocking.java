@@ -2,8 +2,8 @@ package io.vertx.executeblocking;
 
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.impl.ContextInternal;
-import io.vertx.core.impl.future.PromiseInternal;
+import io.vertx.core.internal.ContextInternal;
+import io.vertx.core.internal.PromiseInternal;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ThreadFactory;

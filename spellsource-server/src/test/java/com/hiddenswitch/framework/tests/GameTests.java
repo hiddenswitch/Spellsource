@@ -11,7 +11,10 @@ import com.hiddenswitch.framework.impl.ModelConversions;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MessageTypeMessage.MessageType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.*;
-import io.vertx.core.*;
+import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Future;
+import io.vertx.core.ThreadingModel;
+import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -56,7 +59,7 @@ public class GameTests extends FrameworkTestBase {
 					return Environment.sleep(vertx, 1000);
 				})
 				.onFailure(vertxTestContext::failNow)
-				.compose(res -> CompositeFuture.all(client1.connectToGame(), client2.connectToGame()).map(fut -> fut.<ServerToClientMessage>resultAt(0)))
+				.compose(res -> Future.all(client1.connectToGame(), client2.connectToGame()).map(fut -> fut.<ServerToClientMessage>resultAt(0)))
 				.compose(msg -> {
 					vertxTestContext.verify(() -> {
 						var validMessageTypes = EnumSet.of(MessageType.ON_UPDATE, MessageType.TIMER);

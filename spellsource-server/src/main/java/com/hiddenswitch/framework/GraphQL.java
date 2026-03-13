@@ -62,9 +62,9 @@ public class GraphQL extends AbstractVirtualThreadVerticle {
 						var json = ctx.body().asJsonObject();
 						var query = json.getString("query");
 
-						if (ctx.user() == null && query.startsWith("query IntrospectionQuery")) {
-							ctx.setUser(User.create(new JsonObject().put("name", "Introspection Query")));
-							ctx.reroute(ctx.normalizedPath());
+						if (ctx.user() == null && query != null && query.startsWith("query IntrospectionQuery")) {
+							// Allow introspection queries without authentication
+							handler.handle(RoutingContext.newInstance(ctx));
 							return;
 						}
 					}

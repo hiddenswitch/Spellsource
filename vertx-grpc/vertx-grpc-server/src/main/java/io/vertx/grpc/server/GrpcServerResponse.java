@@ -19,6 +19,9 @@ import io.vertx.core.MultiMap;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.grpc.common.GrpcStatus;
 import io.vertx.grpc.common.GrpcWriteStream;
+import io.vertx.grpc.common.WireFormat;
+
+import java.util.Set;
 
 @VertxGen
 public interface GrpcServerResponse<Req, Resp> extends GrpcWriteStream<Resp> {
@@ -44,6 +47,16 @@ public interface GrpcServerResponse<Req, Resp> extends GrpcWriteStream<Resp> {
   @Fluent
   GrpcServerResponse<Req, Resp> encoding(String encoding);
 
+  @Fluent
+  GrpcServerResponse<Req, Resp> format(WireFormat format);
+
+  /**
+   * @return the set of accepted encodings sent by the client, note that {@code identity} should not be part of this set.
+   *         This can be used to set the response {@link #encoding(String) encoding} to ensure the client will accept
+   *         the encoding. This is a glorified wrapper for the {@code grpc-accept-encoding} header.
+   */
+  Set<String> acceptedEncodings();
+
   /**
    * @return the {@link MultiMap} to write metadata trailers
    */
@@ -58,6 +71,13 @@ public interface GrpcServerResponse<Req, Resp> extends GrpcWriteStream<Resp> {
   @Override
   GrpcServerResponse<Req, Resp> drainHandler(@Nullable Handler<Void> handler);
 
+  /**
+   * Send the response headers.
+   *
+   * @return a future notified by the success or failure of the write
+   */
+  Future<Void> writeHead();
+
   default Future<Void> send(Resp item) {
     return end(item);
   }
@@ -65,4 +85,18 @@ public interface GrpcServerResponse<Req, Resp> extends GrpcWriteStream<Resp> {
   default Future<Void> send(ReadStream<Resp> body) {
     return body.pipeTo(this);
   }
+
+  /**
+   * End the stream with an appropriate status message, when {@code failure} is
+   *
+   * <ul>
+   *   <li>{@link StatusException}, set status to {@link StatusException#status()} and status message to {@link StatusException#message()}</li>
+   *   <li>{@link UnsupportedOperationException} returns {@link GrpcStatus#UNIMPLEMENTED}</li>
+   *   <li>otherwise returns {@link GrpcStatus#UNKNOWN}</li>
+   * </ul>
+   *
+   * @param failure the failure
+   */
+  void fail(Throwable failure);
+
 }

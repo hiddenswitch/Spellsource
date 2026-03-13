@@ -21,11 +21,7 @@ public class Application {
 
 	protected Future<Vertx> getVertx() {
 		var options = new VertxOptions(Environment.vertxOptions());
-		if (options.getClusterManager() != null) {
-			return Vertx.clusteredVertx(options);
-		} else {
-			return Future.succeededFuture(Vertx.vertx(options));
-		}
+		return Future.succeededFuture(Vertx.vertx(options));
 	}
 
 	protected Future<Vertx> deploy(Vertx vertx) {
@@ -44,7 +40,7 @@ public class Application {
 						return Future.succeededFuture();
 					})
 					.compose(w ->
-							Future.all(vertx.deployVerticle(Gateway::new, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))),
+							Future.all(vertx.deployVerticle(Gateway.class, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))),
 									vertx.deployVerticle(Matchmaking.class, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(1)),
 									vertx.deployVerticle(ClusteredGames.class, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(CpuCoreSensor.availableProcessors() * 2)),
 									broadcaster,

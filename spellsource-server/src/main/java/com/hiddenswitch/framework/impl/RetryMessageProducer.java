@@ -78,11 +78,6 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 	}
 
 	@Override
-	public void write(T body, Handler<AsyncResult<Void>> handler) {
-		write(body).onComplete(handler);
-	}
-
-	@Override
 	public Future<Void> write(T body) {
 		var result = Promise.<T>promise();
 		waiting.addLast(new QueueItem<>(body, result));
@@ -96,11 +91,6 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 	@Override
 	public Future<Void> close() {
 		return producer.close();
-	}
-
-	@Override
-	public void close(Handler<AsyncResult<Void>> handler) {
-		close().onComplete(handler);
 	}
 
 	public void trim() {

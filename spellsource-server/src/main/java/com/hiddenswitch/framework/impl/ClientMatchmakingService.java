@@ -30,7 +30,7 @@ import java.util.function.Function;
 import static com.hiddenswitch.framework.Environment.withDslContext;
 import static com.hiddenswitch.framework.Matchmaking.*;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS;
-import static io.vertx.core.CompositeFuture.join;
+import static io.vertx.core.Future.join;
 
 public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpcServer.MatchmakingApi {
 	private final static LongTaskTimer MATCHMAKING_TICKETS_DURATION = LongTaskTimer
@@ -120,14 +120,14 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 
 
 	@Override
-	public void close(Promise<Void> completion) {
+	public void close(Completable<Void> completion) {
 		// interrupt all the threads, runClientEnqueue will handle it appropriately
-		var closeAll = new ArrayList<Future>();
+		var closeAll = new ArrayList<Future<?>>();
 		for (var session : sessions) {
 			closeAll.add(session.close());
 		}
 
-		join(closeAll).onComplete(v -> completion.complete());
+		join(closeAll).onComplete(v -> completion.succeed());
 	}
 
 	public static final class Session {
@@ -179,7 +179,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 				return Future.succeededFuture();
 			}
 
-			var closedChannels = new ArrayList<Future>();
+			var closedChannels = new ArrayList<Future<?>>();
 			for (var channel : this.channels) {
 				closedChannels.add(channel.unregister());
 			}
@@ -189,7 +189,9 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 			var closedResponse = this.response.end();
 			this.timer.stop();
 			keepAliveManager.onTransportTermination();
-			return CompositeFuture.all(Lists.newArrayList(Iterables.concat(closedChannels, List.of(deletedTickets, closedResponse)))).mapEmpty();
+			closedChannels.add(deletedTickets);
+			closedChannels.add(closedResponse);
+			return Future.all(closedChannels).mapEmpty();
 		}
 
 		public Function<Session, Boolean> remover() {

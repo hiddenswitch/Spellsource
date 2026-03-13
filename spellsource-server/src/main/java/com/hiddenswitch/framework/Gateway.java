@@ -12,8 +12,8 @@ import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.JWTAuthHandler;
+import io.vertx.grpc.common.GrpcStatus;
 import io.vertx.grpc.server.GrpcServer;
-import io.vertx.grpc.server.impl.GrpcServerImpl;
 
 import static io.vertx.await.Async.await;
 
@@ -51,7 +51,7 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 				Games.services()
 		};
 
-		var server = GrpcServer.server(vertx);
+		var server = GrpcServer.server(vertx, new io.vertx.grpc.server.GrpcServerOptions().setMaxMessageSize(8 * 1024 * 1024));
 		var jwtAuth = JWTAuth.create(vertx, Accounts.jwtAuthOptions());
 		var router = Router.router(vertx);
 		this.httpServer = vertx.createHttpServer(new HttpServerOptions()
@@ -69,7 +69,7 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 					.route()
 					.path("/" + serviceName + "/*")
 					.handler(rc -> {
-						((GrpcServerImpl) server).handle(rc.request(), rc);
+						server.routeHandler().handle(rc);
 					});
 		}
 		for (var serviceName : new String[]{
@@ -84,7 +84,15 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 					.path("/" + serviceName + "/*")
 					.handler(JWTAuthHandler.create(jwtAuth, realm.toRepresentation().getRealm()))
 					.handler(rc -> {
-						((GrpcServerImpl) server).handle(rc.request(), rc);
+						server.routeHandler().handle(rc);
+					})
+					.failureHandler(rc -> {
+						var response = rc.response();
+						response.setStatusCode(200);
+						response.putHeader("content-type", "application/grpc");
+						response.putHeader("grpc-status", GrpcStatus.UNAUTHENTICATED.toString());
+						response.putHeader("grpc-message", "Unauthenticated");
+						response.end();
 					});
 		}
 

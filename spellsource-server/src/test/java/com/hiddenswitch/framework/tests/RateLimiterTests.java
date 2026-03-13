@@ -4,7 +4,6 @@ import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
-import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
@@ -25,7 +24,7 @@ public class RateLimiterTests extends FrameworkTestBase {
 		var client = new Client(vertx);
 		startGateway(vertx)
 				.compose(v -> client.createAndLogin())
-				.compose(ignored -> CompositeFuture.all(IntStream.range(0, 100).mapToObj(i -> createRandomDeck(client)).collect(Collectors.toList())))
+				.compose(ignored -> Future.all(IntStream.range(0, 100).mapToObj(i -> createRandomDeck(client)).collect(Collectors.toList())))
 				.recover(t -> {
 					testContext.verify(() -> {
 						var ex = (StatusRuntimeException) t;

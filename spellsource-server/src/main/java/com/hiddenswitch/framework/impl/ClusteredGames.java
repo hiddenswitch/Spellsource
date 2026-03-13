@@ -53,7 +53,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 		await(cardCatalogue.subscribe());
 
 		// should we wait for registration to finish?
-		registration.completionHandler(v -> {
+		registration.completion().onComplete(v -> {
 			if (v.succeeded()) {
 				registrationFut.complete();
 			} else if (v.failed()) {
@@ -76,7 +76,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 		// stuff about cards.
 		// Logic.triggers();
 		// Get the collection data from the configurations that are not yet populated with valid cards
-		var playerConfigurations = new ArrayList<Future>();
+		var playerConfigurations = new ArrayList<Future<?>>();
 		for (var configuration : request.getConfigurations()) {
 			var playerAttributes = new AttributeMap();
 
@@ -122,7 +122,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			RogueManager.handleGameStart(deckId, Long.parseLong(request.getGameId()));
 		}
 
-		return CompositeFuture.all(playerConfigurations)
+		return Future.all(playerConfigurations)
 				.compose(_ -> {
 					LOGGER.trace("loading player configurations for request {}", request);
 					var serverContextVerticle = new AbstractVirtualThreadVerticle() {

@@ -5,15 +5,15 @@ import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.diagnostics.Tracing;
-import io.micrometer.prometheus.PrometheusMeterRegistry;
-import io.prometheus.client.exporter.common.TextFormat;
+// PrometheusMeterRegistry and TextFormat removed - using PrometheusScrapingHandler
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.web.Router;
-import io.vertx.pgclient.PgPool;
+import io.vertx.pgclient.PgBuilder;
+import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.PoolOptions;
 import org.redisson.api.redisnode.RedisNodes;
 import org.slf4j.Logger;
@@ -49,11 +49,10 @@ public class Diagnostics {
 					// TODO: what should the redis nodes selection here be?
 					var client = new Client(vertx);
 
-					var protos = client.unauthenticated().getConfiguration(Empty.getDefaultInstance()).eventually(v -> client.closeFut());
+					var protos = client.unauthenticated().getConfiguration(Empty.getDefaultInstance()).eventually(client::closeFut);
 					var redis = Future.fromCompletionStage(Environment.redisson().getRedisNodes(RedisNodes.SINGLE).getInstance().pingAsync(200, TimeUnit.MILLISECONDS));
 					var pgConnectOptions = Environment.pgArgs().connectionOptions();
-					pgConnectOptions.setConnectTimeout(1000);
-					var pgClient = PgPool.client(vertx, pgConnectOptions, new PoolOptions());
+					var pgClient = PgBuilder.pool().using(vertx).connectingTo(pgConnectOptions).with(new PoolOptions()).build();
 					var postgres = pgClient.query("""
 									select success
 									     from hiddenswitch.flyway_schema_history
@@ -62,7 +61,7 @@ public class Diagnostics {
 									     """)
 							.execute()
 							.compose(res -> res.size() == 0 ? Future.failedFuture("migration not complete") : Future.succeededFuture())
-							.eventually(v -> pgClient.close());
+							.eventually(pgClient::close);
 
 					Future.all(redis, protos, postgres)
 							.onSuccess(v -> routingContext.end(Buffer.buffer("OK")))
@@ -73,12 +72,7 @@ public class Diagnostics {
 				});
 
 		router.get(configuration.getMetrics().getMetricsRoute())
-				.handler(routingContext -> {
-					var registry = (PrometheusMeterRegistry) Environment.registry().getMeterRegistry();
-					routingContext.response()
-							.putHeader(HttpHeaders.CONTENT_TYPE, TextFormat.CONTENT_TYPE_004)
-							.end(registry.scrape());
-				});
+				.handler(io.vertx.micrometer.PrometheusScrapingHandler.create());
 
 		var server = vertx.createHttpServer(new HttpServerOptions().setPort(configuration.getMetrics().getPort()));
 		server.requestHandler(router);

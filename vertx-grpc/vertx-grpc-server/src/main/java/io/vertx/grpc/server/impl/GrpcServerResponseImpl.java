@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2022 Contributors to the Eclipse Foundation
+ * Copyright (c) 2011-2024 Contributors to the Eclipse Foundation
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,46 +10,50 @@
  */
 package io.vertx.grpc.server.impl;
 
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
-import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerResponse;
-import io.vertx.grpc.common.CodecException;
+import io.vertx.core.internal.ContextInternal;
 import io.vertx.grpc.common.GrpcError;
+import io.vertx.grpc.common.GrpcHeaderNames;
 import io.vertx.grpc.common.GrpcMessage;
-import io.vertx.grpc.common.GrpcStatus;
-import io.vertx.grpc.common.GrpcMessageDecoder;
 import io.vertx.grpc.common.GrpcMessageEncoder;
+import io.vertx.grpc.common.GrpcStatus;
 import io.vertx.grpc.common.impl.GrpcMessageImpl;
+import io.vertx.grpc.common.impl.GrpcWriteStreamBase;
 import io.vertx.grpc.common.impl.Utils;
-import io.vertx.grpc.server.GrpcServerRequest;
+import io.vertx.grpc.server.GrpcProtocol;
 import io.vertx.grpc.server.GrpcServerResponse;
+import io.vertx.grpc.server.StatusException;
 
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
  */
-public class GrpcServerResponseImpl<Req, Resp> implements GrpcServerResponse<Req, Resp> {
+public abstract class GrpcServerResponseImpl<Req, Resp> extends GrpcWriteStreamBase<GrpcServerResponseImpl<Req, Resp>, Resp> implements GrpcServerResponse<Req, Resp> {
+
+  private static final Pattern COMMA_SEPARATOR = Pattern.compile(" *, *");
+  private static final Set<String> GZIP_ACCEPT_ENCODING = Collections.singleton("gzip");
 
   private final GrpcServerRequestImpl<Req, Resp> request;
   private final HttpServerResponse httpResponse;
-  private final GrpcMessageEncoder<Resp> encoder;
-  private String encoding;
   private GrpcStatus status = GrpcStatus.OK;
   private String statusMessage;
-  private boolean headersSent;
-  private boolean trailersSent;
+  private boolean trailersOnly;
   private boolean cancelled;
-  private MultiMap headers, trailers;
+  private Set<String> acceptedEncodings;
 
-  public GrpcServerResponseImpl(GrpcServerRequestImpl<Req, Resp> request, HttpServerResponse httpResponse, GrpcMessageEncoder<Resp> encoder) {
+  public GrpcServerResponseImpl(ContextInternal context,
+                                GrpcServerRequestImpl<Req, Resp> request,
+                                GrpcProtocol protocol,
+                                HttpServerResponse httpResponse,
+                                GrpcMessageEncoder<Resp> encoder) {
+    super(context, protocol.mediaType(), httpResponse, encoder);
     this.request = request;
     this.httpResponse = httpResponse;
-    this.encoder = encoder;
   }
 
   public GrpcServerResponse<Req, Resp> status(GrpcStatus status) {
@@ -64,88 +68,15 @@ public class GrpcServerResponseImpl<Req, Resp> implements GrpcServerResponse<Req
     return this;
   }
 
-  public GrpcServerResponse<Req, Resp> encoding(String encoding) {
-    this.encoding = encoding;
-    return this;
-  }
-
-  @Override
-  public MultiMap headers() {
-    if (headersSent) {
-      throw new IllegalStateException("Headers already sent");
+  public void handleTimeout() {
+    if (!isCancelled()) {
+      if (!isTrailersSent()) {
+        status(GrpcStatus.DEADLINE_EXCEEDED);
+        end();
+      } else {
+        cancel();
+      }
     }
-    if (headers == null) {
-      headers = MultiMap.caseInsensitiveMultiMap();
-    }
-    return headers;
-  }
-
-  @Override
-  public MultiMap trailers() {
-    if (trailersSent) {
-      throw new IllegalStateException("Trailers already sent");
-    }
-    if (trailers == null) {
-      trailers = MultiMap.caseInsensitiveMultiMap();
-    }
-    return trailers;
-  }
-
-  @Override
-  public GrpcServerResponseImpl<Req, Resp> exceptionHandler(Handler<Throwable> handler) {
-    httpResponse.exceptionHandler(handler);
-    return this;
-  }
-
-  @Override
-  public Future<Void> write(Resp message) {
-    return writeMessage(encoder.encode(message));
-  }
-
-  @Override
-  public void write(Resp resp, Handler<AsyncResult<Void>> handler) {
-    write(resp).onComplete(handler);
-  }
-
-  @Override
-  public Future<Void> end(Resp message) {
-    return endMessage(encoder.encode(message));
-  }
-
-  @Override
-  public Future<Void> writeMessage(GrpcMessage data) {
-    return writeMessage(data, false);
-  }
-
-  @Override
-  public Future<Void> endMessage(GrpcMessage message) {
-    return writeMessage(message, true);
-  }
-
-  public Future<Void> end() {
-    return writeMessage(null, true);
-  }
-
-  @Override
-  public void end(Handler<AsyncResult<Void>> handler) {
-    end().onComplete(handler);
-  }
-
-  @Override
-  public GrpcServerResponse<Req, Resp> setWriteQueueMaxSize(int maxSize) {
-    httpResponse.setWriteQueueMaxSize(maxSize);
-    return this;
-  }
-
-  @Override
-  public boolean writeQueueFull() {
-    return httpResponse.writeQueueFull();
-  }
-
-  @Override
-  public GrpcServerResponse<Req, Resp> drainHandler(Handler<Void> handler) {
-    httpResponse.drainHandler(handler);
-    return this;
   }
 
   @Override
@@ -161,95 +92,150 @@ public class GrpcServerResponseImpl<Req, Resp> implements GrpcServerResponse<Req
     } else {
       requestEnded = fut.succeeded();
     }
-    if (!requestEnded || !trailersSent) {
-      httpResponse.reset(GrpcError.CANCELLED.http2ResetCode);
+    if (!requestEnded || !isTrailersSent()) {
+      sendCancel();
     }
   }
 
-  private Future<Void> writeMessage(GrpcMessage message, boolean end) {
-
-    if (cancelled) {
-      throw new IllegalStateException("The stream has been cancelled");
+  public void fail(Throwable failure) {
+    if (failure instanceof StatusException) {
+      StatusException se = (StatusException) failure;
+      this.status = se.status();
+      this.statusMessage = se.message();
+    } else {
+      this.status = mapStatus(failure);
     }
-    if (trailersSent) {
-      throw new IllegalStateException("The stream has been closed");
+    end();
+  }
+
+  // TODO : remove this
+  public boolean isTrailersOnly() {
+    return trailersOnly;
+  }
+
+  public GrpcStatus status() {
+    return status;
+  }
+
+  protected void sendCancel() {
+    httpResponse
+      .reset(GrpcError.CANCELLED.http2ResetCode)
+      .onSuccess(v -> handleError(GrpcError.CANCELLED));
+  }
+
+  protected void setHeaders(String contentType, MultiMap grpcHeaders) {
+    MultiMap httpHeaders = httpResponse.headers();
+    httpHeaders.set("content-type", contentType);
+    encodeGrpcHeaders(grpcHeaders, httpHeaders);
+    if (trailersOnly) {
+      encodeGrpcStatus(httpHeaders);
     }
+  }
 
-    if (message == null && !end) {
-      throw new IllegalStateException();
-    }
-
-    if (encoding != null && message != null && !encoding.equals(message.encoding())) {
-      switch (encoding) {
-        case "gzip":
-          message = GrpcMessageEncoder.GZIP.encode(message.payload());
-          break;
-        case "identity":
-          if (!message.encoding().equals("identity")) {
-            if (!message.encoding().equals("gzip")) {
-              return Future.failedFuture("Encoding " + message.encoding() + " is not supported");
-            }
-            Buffer decoded;
-            try {
-              decoded = GrpcMessageDecoder.GZIP.decode(message);
-            } catch (CodecException e) {
-              return Future.failedFuture(e);
-            }
-            message = GrpcMessage.message("identity", decoded);
-          }
-          break;
+  protected void encodeGrpcHeaders(MultiMap grpcHeaders, MultiMap httpHeaders) {
+    if (grpcHeaders != null && !grpcHeaders.isEmpty()) {
+      for (Map.Entry<String, String> header : grpcHeaders) {
+        httpHeaders.add(header.getKey(), header.getValue());
       }
     }
+  }
 
-    boolean trailersOnly = status != GrpcStatus.OK && !headersSent && end;
-
-    MultiMap responseHeaders = httpResponse.headers();
-    if (!headersSent) {
-      headersSent = true;
-      if (headers != null && headers.size() > 0) {
-        for (Map.Entry<String, String> header : headers) {
-          responseHeaders.add(header.getKey(), header.getValue());
-        }
-      }
-      responseHeaders.set("content-type", "application/grpc");
-      responseHeaders.set("grpc-encoding", encoding);
-      responseHeaders.set("grpc-accept-encoding", "gzip");
+  protected void setTrailers(MultiMap grpcTrailers) {
+    MultiMap httpTrailers;
+    if (trailersOnly) {
+      httpTrailers = httpResponse.headers();
+    } else {
+      httpTrailers = httpResponse.trailers();
     }
+    encodeGrpcTrailers(grpcTrailers, httpTrailers);
+    encodeGrpcStatus(httpTrailers);
+  }
 
-    if (end) {
-      if (!trailersSent) {
-        trailersSent = true;
+  protected final void encodeGrpcTrailers(MultiMap grpcTrailers, MultiMap httpTrailers) {
+    if (grpcTrailers != null && !grpcTrailers.isEmpty()) {
+      for (Map.Entry<String, String> header : grpcTrailers) {
+        httpTrailers.add(header.getKey(), header.getValue());
       }
-      MultiMap responseTrailers;
-      if (trailersOnly) {
-        responseTrailers = httpResponse.headers();
-      } else {
-        responseTrailers = httpResponse.trailers();
-      }
+    }
+  }
 
-      if (trailers != null && trailers.size() > 0) {
-        for (Map.Entry<String, String> trailer : trailers) {
-          responseTrailers.add(trailer.getKey(), trailer.getValue());
-        }
-      }
-      if (!responseHeaders.contains("grpc-status")) {
-        responseTrailers.set("grpc-status", status.toString());
-      }
-      if (status != GrpcStatus.OK) {
-        String msg = statusMessage;
-        if (msg != null && !responseHeaders.contains("grpc-status-message")) {
-          responseTrailers.set("grpc-message", Utils.utf8PercentEncode(msg));
-        }
-      } else {
-        responseTrailers.remove("grpc-message");
-      }
-      if (message != null) {
-        return httpResponse.end(GrpcMessageImpl.encode(message));
-      } else {
-        return httpResponse.end();
+  /**
+   * Encode grpc status and status message in the specified {@code entries} map.
+   *
+   * @param entries the map updated with grpc specific headers
+   */
+  protected void encodeGrpcStatus(MultiMap entries) {
+    if (!entries.contains(GrpcHeaderNames.GRPC_STATUS)) {
+      entries.set(GrpcHeaderNames.GRPC_STATUS, status.toString());
+    }
+    if (status != GrpcStatus.OK) {
+      String msg = statusMessage;
+      if (msg != null && !entries.contains(GrpcHeaderNames.GRPC_MESSAGE)) {
+        entries.set(GrpcHeaderNames.GRPC_MESSAGE, Utils.utf8PercentEncode(msg));
       }
     } else {
-      return httpResponse.write(GrpcMessageImpl.encode(message));
+      entries.remove(GrpcHeaderNames.GRPC_MESSAGE);
     }
+  }
+
+  @Override
+  public Set<String> acceptedEncodings() {
+    if (acceptedEncodings == null) {
+      String acceptEncodingHeader = request.headers().get("grpc-accept-encoding");
+      if (acceptEncodingHeader != null) {
+        if (acceptEncodingHeader.equals("gzip")) {
+          acceptedEncodings = GZIP_ACCEPT_ENCODING;
+        } else {
+          acceptedEncodings = new HashSet<>(2);
+          String[] encodings = COMMA_SEPARATOR.split(acceptEncodingHeader);
+          for (String encoding : encodings) {
+            acceptedEncodings.add(encoding.trim());
+          }
+        }
+      } else {
+        acceptedEncodings = Collections.emptySet();
+      }
+    }
+    return acceptedEncodings;
+  }
+
+  @Override
+  protected Future<Void> sendMessage(Buffer message, boolean compressed) {
+    return httpResponse.write(encodeMessage(message, compressed, false));
+  }
+
+  protected Future<Void> sendEnd() {
+    request.cancelTimeout();
+    return httpResponse.end();
+  }
+
+  @Override
+  protected Future<Void> sendHead() {
+    return httpResponse.writeHead();
+  }
+
+  protected Buffer encodeMessage(Buffer message, boolean compressed, boolean trailer) {
+    return GrpcMessageImpl.encode(message, compressed, trailer);
+  }
+
+  private static GrpcStatus mapStatus(Throwable t) {
+    if (t instanceof StatusException) {
+      return ((StatusException)t).status();
+    } else if (t instanceof UnsupportedOperationException) {
+      return GrpcStatus.UNIMPLEMENTED;
+    } else {
+      return GrpcStatus.UNKNOWN;
+    }
+  }
+
+  private boolean headersSent;
+
+  @Override
+  protected Future<Void> writeMessage(GrpcMessage message, boolean end) {
+    if (!headersSent) {
+      headersSent = true;
+      trailersOnly = status != GrpcStatus.OK && end;
+    }
+    return super.writeMessage(message, end);
   }
 }

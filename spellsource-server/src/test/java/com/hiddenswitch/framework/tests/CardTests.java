@@ -47,7 +47,7 @@ public class CardTests extends FrameworkTestBase {
 						assertFalse(res.hasContent());
 					});
 				})
-				.eventually(v -> client.closeFut())
+				.eventually(() -> client.closeFut())
 				.onComplete(vertxTestContext.succeedingThenComplete());
 	}
 
@@ -74,7 +74,7 @@ public class CardTests extends FrameworkTestBase {
 						assertFalse(res.hasContent());
 					});
 				})
-				.eventually(v -> client.closeFut())
+				.eventually(() -> client.closeFut())
 				.onComplete(vertxTestContext.succeedingThenComplete());
 	}
 

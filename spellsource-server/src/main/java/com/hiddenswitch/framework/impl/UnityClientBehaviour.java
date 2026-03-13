@@ -844,7 +844,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Override
-	public void close(Promise<Void> completionHandler) {
+	public void close(Completable<Void> completionHandler) {
 		closeInboundMessages();
 		scheduler.cancelTimer(turnTimer);
 		for (var activityMonitor : getActivityMonitors()) {
@@ -853,7 +853,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		getActivityMonitors().clear();
 		requests.clear();
 		messageBuffer.clear();
-		completionHandler.handle(Future.succeededFuture());
+		completionHandler.succeed();
 	}
 
 	public Deque<GameplayRequest> getRequests() {
