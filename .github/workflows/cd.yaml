@@ -1,52 +1,52 @@
 name: Build Image
 on:
   push:
-    branches: [ 'master' ]
-    tags: [ '*' ]
+    branches: ['develop']
+    tags: ['*']
 
 jobs:
   build-and-deploy-server:
-    if: "startsWith(github.ref, 'refs/tags/')" # Deploy a new server version when a new tag is pushed
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true
+          submodules: recursive
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '23'
+          java-version: '24'
           distribution: temurin
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: |
-            6.x.x
       - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel test
-      - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build Server Image
+      - name: Build and push server image
         run: ./gradlew spellsource-server:githubDockerPush
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-and-deploy-website:
-    if: "!startsWith(github.ref, 'refs/tags/')" # Deploy a new website version for each push to master
+    if: "!startsWith(github.ref, 'refs/tags/')"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
         with:
-          lfs: true # TODO still needed just for website?
+          lfs: true
+          submodules: recursive
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '23'
+          java-version: '24'
           distribution: temurin
       - uses: actions/setup-node@v4
         with:
@@ -54,11 +54,13 @@ jobs:
       - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel :spellsource-web:yarnRunTest
-      - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build Website Image
+      - name: Set Project Version
+        run: |
+          COMMIT_SHA=$(git rev-parse --short=7 HEAD)
+          TIMESTAMP=$(date +%s)
+          echo "PROJECT_VERSION=${COMMIT_SHA}-${TIMESTAMP}" >> $GITHUB_ENV
+      - name: Build and push website image
         run: ./gradlew spellsource-web:githubDockerPush
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PROJECT_VERSION: ${{ env.PROJECT_VERSION }}

@@ -389,28 +389,26 @@ def spellsourceTags = ['latest', project.version.toString()]
 def spellsourceImage = 'ghcr.io/hiddenswitch/spellsource'
 jib {
   from {
-    image = "eclipse-temurin:21-ubi9-minimal"
+    image = "eclipse-temurin:24-ubi9-minimal"
   }
   to {
     image = spellsourceImage
     tags = spellsourceTags
+    if (System.getenv('GITHUB_ACTIONS') != null) {
+      auth {
+        username = System.getenv('GITHUB_ACTOR') ?: ''
+        password = System.getenv('GITHUB_TOKEN') ?: ''
+      }
+    }
   }
   container {
-    // todo: should this be 8081?
     ports = ['8080']
     jvmFlags = jvmArgs
   }
 }
 
 tasks.register('githubDockerPush') {
-  dependsOn jibDockerBuild
-  doLast {
-    for (def image : spellsourceTags.collect { tag -> "$spellsourceImage:$tag" }) {
-      exec {
-        commandLine(['docker', 'push'] + [image])
-      }
-    }
-  }
+  dependsOn jib
 }
 
 graphqlCodegen {

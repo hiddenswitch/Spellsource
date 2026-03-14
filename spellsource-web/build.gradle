@@ -135,6 +135,12 @@ tasks.register('githubDockerPush') {
   group "spellsource"
 
   doLast {
+    if (System.getenv('GITHUB_ACTIONS') != null) {
+      exec {
+        commandLine 'docker', 'login', 'ghcr.io', '-u', System.getenv('GITHUB_ACTOR') ?: '', '--password-stdin'
+        standardInput = new ByteArrayInputStream((System.getenv('GITHUB_TOKEN') ?: '').bytes)
+      }
+    }
     for (def image : spellsourceTags.collect { tag -> "$spellsourceImage:$tag" }) {
       exec {
         commandLine(['docker', 'push'] + [image])

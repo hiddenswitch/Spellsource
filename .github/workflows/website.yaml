@@ -1,7 +1,7 @@
 name: Build Website
 on:
   push:
-    branches: [ 'develop' ]
+    branches: ['develop']
     paths:
       - spellsource-web/**
       - build.gradle
@@ -11,14 +11,18 @@ on:
 jobs:
   build-and-deploy-website:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true
+          submodules: recursive
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '23'
+          java-version: '24'
           distribution: temurin
       - uses: actions/setup-node@v4
         with:
@@ -26,18 +30,13 @@ jobs:
       - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel :spellsource-web:yarnRunTest
-      - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set Project Version
         run: |
           COMMIT_SHA=$(git rev-parse --short=7 HEAD)
           TIMESTAMP=$(date +%s)
           echo "PROJECT_VERSION=${COMMIT_SHA}-${TIMESTAMP}" >> $GITHUB_ENV
-      - name: Build Website Image
+      - name: Build and push website image
         run: ./gradlew spellsource-web:githubDockerPush
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PROJECT_VERSION: ${{ env.PROJECT_VERSION }}

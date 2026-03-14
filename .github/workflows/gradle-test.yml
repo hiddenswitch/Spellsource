@@ -5,24 +5,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DOTNET_INSTALL_DIR: ~/.dotnet
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true
+          submodules: recursive
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '23'
+          java-version: '24'
           distribution: temurin
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: |
-            6.x.x
       - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel test
