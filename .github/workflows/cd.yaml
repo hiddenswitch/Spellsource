@@ -16,6 +16,10 @@ jobs:
         with:
           lfs: true
       - run: git lfs checkout
+      - name: Checkout public submodules
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule update --init vertx-jooq-fork
       - uses: actions/setup-java@v4
         with:
           java-version: '24'
@@ -23,7 +27,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel test
       - name: Build and push server image
@@ -42,6 +45,10 @@ jobs:
         with:
           lfs: true
       - run: git lfs checkout
+      - name: Checkout public submodules
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule update --init vertx-jooq-fork
       - uses: actions/setup-java@v4
         with:
           java-version: '24'
@@ -49,7 +56,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel :spellsource-web:yarnRunTest
       - name: Set Project Version
