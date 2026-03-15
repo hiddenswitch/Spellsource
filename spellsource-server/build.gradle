@@ -408,7 +408,7 @@ jib {
 }
 
 tasks.register('githubDockerPush') {
-  dependsOn jib
+  dependsOn 'jib'
 }
 
 graphqlCodegen {
