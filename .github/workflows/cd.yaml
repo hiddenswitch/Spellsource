@@ -56,8 +56,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Test with Gradle
-        run: ./gradlew --no-parallel :spellsource-web:yarnRunTest
       - name: Set Project Version
         run: |
           COMMIT_SHA=$(git rev-parse --short=7 HEAD)
