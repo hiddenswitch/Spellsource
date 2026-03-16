@@ -99,84 +99,86 @@ public class FeatureVector implements Cloneable, Serializable {
 
 	public static FeatureVector getFittest() {
 		FeatureVector v = new FeatureVector();
-		// Trained via IPOP-CMA-ES (85.8% raw, island 4, 65-dim, ipop_cmaes_hof_v2)
-		// Signs corrected where training signal was insufficient;
-		// rare features (0-3 deck instances) given sensible magnitudes.
+		// Merged from 7-island IPOP-CMA-ES (best: 87.5%, ipop_cmaes_hof_v2, 65-dim).
+		// Values averaged from top islands (I2=87.5%, I3=87.5%, I4=85.8%) where signs
+		// agree; corrected where training signal was weak; rare features (secrets,
+		// windfury, stealth, immune: 0-3 deck instances) given sensible defaults.
 		// Threat level
-		v.set(WeightedFeature.RED_MODIFIER, -66.553);
-		v.set(WeightedFeature.YELLOW_MODIFIER, 36.460);
+		v.set(WeightedFeature.RED_MODIFIER, -51.0);
+		v.set(WeightedFeature.YELLOW_MODIFIER, -30.0);
 		// Health
-		v.set(WeightedFeature.OWN_HP_FACTOR, 15.873);
-		v.set(WeightedFeature.OPPONENT_HP_FACTOR, -95.412);
+		v.set(WeightedFeature.OWN_HP_FACTOR, 37.0);
+		v.set(WeightedFeature.OPPONENT_HP_FACTOR, -59.0);
 		// Card advantage
-		v.set(WeightedFeature.OWN_CARD_COUNT, 60.154);
-		v.set(WeightedFeature.OPPONENT_CARD_COUNT, -64.930);
-		// Own minion stats
-		v.set(WeightedFeature.MINION_INTRINSIC_VALUE, 3.774);
-		v.set(WeightedFeature.MINION_ATTACK_FACTOR, 8.600);
-		v.set(WeightedFeature.MINION_HP_FACTOR, 22.118);
+		v.set(WeightedFeature.OWN_CARD_COUNT, 33.0);
+		v.set(WeightedFeature.OPPONENT_CARD_COUNT, -65.0);
+		// Own minion stats (7/7 consensus on sign)
+		v.set(WeightedFeature.MINION_INTRINSIC_VALUE, 8.0);
+		v.set(WeightedFeature.MINION_ATTACK_FACTOR, 46.0);
+		v.set(WeightedFeature.MINION_HP_FACTOR, 37.0);
 		// Own minion keywords
-		v.set(WeightedFeature.MINION_RED_TAUNT_MODIFIER, 57.455);
-		v.set(WeightedFeature.MINION_YELLOW_TAUNT_MODIFIER, 25.576);
-		v.set(WeightedFeature.MINION_DEFAULT_TAUNT_MODIFIER, 19.269);
-		v.set(WeightedFeature.MINION_WINDFURY_MODIFIER, 50.487);
-		v.set(WeightedFeature.MINION_DIVINE_SHIELD_MODIFIER, 57.090);
-		v.set(WeightedFeature.MINION_SPELL_POWER_MODIFIER, 19.895);
-		v.set(WeightedFeature.MINION_STEALTHED_MODIFIER, 55.751);
-		v.set(WeightedFeature.MINION_UNTARGETABLE_BY_SPELLS_MODIFIER, 5.678);
-		v.set(WeightedFeature.MINION_POISONOUS_MODIFIER, 17.395);
-		v.set(WeightedFeature.MINION_LIFESTEAL_MODIFIER, 48.507);
-		v.set(WeightedFeature.MINION_REBORN_MODIFIER, 22.470);
-		v.set(WeightedFeature.MINION_FROZEN_MODIFIER, -27.136);
-		v.set(WeightedFeature.MINION_DEATHRATTLE_MODIFIER, 20.385);
-		v.set(WeightedFeature.MINION_RUSH_MODIFIER, 20.831);
-		v.set(WeightedFeature.MINION_IMMUNE_MODIFIER, 62.493);
-		v.set(WeightedFeature.MINION_CANNOT_ATTACK_MODIFIER, -31.279);
+		v.set(WeightedFeature.MINION_RED_TAUNT_MODIFIER, -41.0);   // 7/7 negative: in RED despite taunt = losing
+		v.set(WeightedFeature.MINION_YELLOW_TAUNT_MODIFIER, 41.0);
+		v.set(WeightedFeature.MINION_DEFAULT_TAUNT_MODIFIER, 23.0);
+		v.set(WeightedFeature.MINION_WINDFURY_MODIFIER, 30.0);     // rare (3 cards)
+		v.set(WeightedFeature.MINION_DIVINE_SHIELD_MODIFIER, 40.0);
+		v.set(WeightedFeature.MINION_SPELL_POWER_MODIFIER, 11.0);
+		v.set(WeightedFeature.MINION_STEALTHED_MODIFIER, 32.0);    // rare (2 cards)
+		v.set(WeightedFeature.MINION_UNTARGETABLE_BY_SPELLS_MODIFIER, 10.0);
+		v.set(WeightedFeature.MINION_POISONOUS_MODIFIER, 37.0);
+		v.set(WeightedFeature.MINION_LIFESTEAL_MODIFIER, 35.0);
+		v.set(WeightedFeature.MINION_REBORN_MODIFIER, 35.0);
+		v.set(WeightedFeature.MINION_FROZEN_MODIFIER, -10.0);
+		v.set(WeightedFeature.MINION_DEATHRATTLE_MODIFIER, -20.0); // 6/7 negative: body understatted for cost
+		v.set(WeightedFeature.MINION_RUSH_MODIFIER, -20.0);        // 5/7 negative: rush spent on play turn
+		v.set(WeightedFeature.MINION_IMMUNE_MODIFIER, 27.0);       // rare (3 cards)
+		v.set(WeightedFeature.MINION_CANNOT_ATTACK_MODIFIER, -20.0);
 		// Hand/deck/resource
-		v.set(WeightedFeature.CURSED_FACTOR, -26.327);
-		v.set(WeightedFeature.HARD_REMOVAL_VALUE, 3.029);
-		v.set(WeightedFeature.QUEST_COUNTER_VALUE, 2.945);
-		v.set(WeightedFeature.QUEST_REWARD_VALUE, 71.150);
-		v.set(WeightedFeature.EMPTY_MANA_CRYSTAL_VALUE, 56.014);
-		v.set(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE, -20.392);
-		v.set(WeightedFeature.OWN_ROASTED_VALUE, -13.107);
-		v.set(WeightedFeature.OPPONENT_ROASTED_VALUE, 58.768);
-		v.set(WeightedFeature.OWN_ARMOR_FACTOR, 42.708);
-		v.set(WeightedFeature.WEAPON_VALUE, 58.292);
-		v.set(WeightedFeature.OWN_DECK_COUNT, 35.336);
-		v.set(WeightedFeature.OPPONENT_DECK_COUNT, -84.377);
-		v.set(WeightedFeature.OWN_SECRET_COUNT, 20.0);
-		v.set(WeightedFeature.OPPONENT_SECRET_COUNT, -20.0);
-		v.set(WeightedFeature.LOCKED_MANA_VALUE, -43.195);
-		v.set(WeightedFeature.OPPONENT_LOCKED_MANA_VALUE, 16.063);
-		v.set(WeightedFeature.CORPSE_COUNT_VALUE, 18.548);
+		v.set(WeightedFeature.CURSED_FACTOR, -26.0);
+		v.set(WeightedFeature.HARD_REMOVAL_VALUE, 5.0);
+		v.set(WeightedFeature.QUEST_COUNTER_VALUE, 3.0);
+		v.set(WeightedFeature.QUEST_REWARD_VALUE, 10.0);
+		v.set(WeightedFeature.EMPTY_MANA_CRYSTAL_VALUE, 41.0);
+		v.set(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE, -20.0);
+		v.set(WeightedFeature.OWN_ROASTED_VALUE, -45.0);
+		v.set(WeightedFeature.OPPONENT_ROASTED_VALUE, 20.0);
+		v.set(WeightedFeature.OWN_ARMOR_FACTOR, 31.0);
+		v.set(WeightedFeature.WEAPON_VALUE, 36.0);
+		v.set(WeightedFeature.OWN_DECK_COUNT, 20.0);
+		v.set(WeightedFeature.OPPONENT_DECK_COUNT, -79.0);
+		v.set(WeightedFeature.OWN_SECRET_COUNT, 20.0);             // rare (0 secret decks)
+		v.set(WeightedFeature.OPPONENT_SECRET_COUNT, -20.0);       // rare (0 secret decks)
+		v.set(WeightedFeature.LOCKED_MANA_VALUE, -30.0);
+		v.set(WeightedFeature.OPPONENT_LOCKED_MANA_VALUE, 20.0);
+		v.set(WeightedFeature.CORPSE_COUNT_VALUE, 28.0);
 		// Board width
-		v.set(WeightedFeature.OWN_MINION_COUNT, 78.758);
-		v.set(WeightedFeature.OPPONENT_MINION_COUNT, -66.374);
+		v.set(WeightedFeature.OWN_MINION_COUNT, 48.0);
+		v.set(WeightedFeature.OPPONENT_MINION_COUNT, -36.0);
 		// Opponent minion stats
-		v.set(WeightedFeature.OPPONENT_MINION_INTRINSIC_VALUE, -94.884);
-		v.set(WeightedFeature.OPPONENT_MINION_ATTACK_FACTOR, -71.455);
-		v.set(WeightedFeature.OPPONENT_MINION_HP_FACTOR, -10.597);
+		v.set(WeightedFeature.OPPONENT_MINION_INTRINSIC_VALUE, -20.0);
+		v.set(WeightedFeature.OPPONENT_MINION_ATTACK_FACTOR, -56.0);
+		v.set(WeightedFeature.OPPONENT_MINION_HP_FACTOR, -12.0);
 		// Opponent minion keywords
-		v.set(WeightedFeature.OPPONENT_MINION_RED_TAUNT_MODIFIER, -53.569);
-		v.set(WeightedFeature.OPPONENT_MINION_YELLOW_TAUNT_MODIFIER, -27.547);
-		v.set(WeightedFeature.OPPONENT_MINION_DEFAULT_TAUNT_MODIFIER, -39.826);
-		v.set(WeightedFeature.OPPONENT_MINION_WINDFURY_MODIFIER, -51.586);
-		v.set(WeightedFeature.OPPONENT_MINION_DIVINE_SHIELD_MODIFIER, -35.722);
-		v.set(WeightedFeature.OPPONENT_MINION_SPELL_POWER_MODIFIER, -68.364);
-		v.set(WeightedFeature.OPPONENT_MINION_STEALTHED_MODIFIER, -28.510);
-		v.set(WeightedFeature.OPPONENT_MINION_UNTARGETABLE_BY_SPELLS_MODIFIER, -69.403);
-		v.set(WeightedFeature.OPPONENT_MINION_POISONOUS_MODIFIER, -16.061);
-		v.set(WeightedFeature.OPPONENT_MINION_LIFESTEAL_MODIFIER, -49.679);
-		v.set(WeightedFeature.OPPONENT_MINION_REBORN_MODIFIER, -93.791);
-		v.set(WeightedFeature.OPPONENT_MINION_FROZEN_MODIFIER, 25.979);
-		v.set(WeightedFeature.OPPONENT_MINION_DEATHRATTLE_MODIFIER, -11.306);
-		v.set(WeightedFeature.OPPONENT_MINION_RUSH_MODIFIER, -37.503);
-		v.set(WeightedFeature.OPPONENT_MINION_IMMUNE_MODIFIER, -51.299);
-		v.set(WeightedFeature.OPPONENT_MINION_CANNOT_ATTACK_MODIFIER, 27.345);
+		v.set(WeightedFeature.OPPONENT_MINION_RED_TAUNT_MODIFIER, -51.0);
+		v.set(WeightedFeature.OPPONENT_MINION_YELLOW_TAUNT_MODIFIER, -27.0);
+		v.set(WeightedFeature.OPPONENT_MINION_DEFAULT_TAUNT_MODIFIER, -38.0);
+		v.set(WeightedFeature.OPPONENT_MINION_WINDFURY_MODIFIER, -22.0);    // rare (3 cards)
+		v.set(WeightedFeature.OPPONENT_MINION_DIVINE_SHIELD_MODIFIER, -29.0);
+		v.set(WeightedFeature.OPPONENT_MINION_SPELL_POWER_MODIFIER, -49.0);
+		v.set(WeightedFeature.OPPONENT_MINION_STEALTHED_MODIFIER, -20.0);   // rare (2 cards)
+		v.set(WeightedFeature.OPPONENT_MINION_UNTARGETABLE_BY_SPELLS_MODIFIER, -70.0);
+		v.set(WeightedFeature.OPPONENT_MINION_POISONOUS_MODIFIER, -20.0);
+		v.set(WeightedFeature.OPPONENT_MINION_LIFESTEAL_MODIFIER, -50.0);
+		v.set(WeightedFeature.OPPONENT_MINION_REBORN_MODIFIER, -50.0);
+		v.set(WeightedFeature.OPPONENT_MINION_FROZEN_MODIFIER, 30.0);
+		v.set(WeightedFeature.OPPONENT_MINION_DEATHRATTLE_MODIFIER, -15.0);
+		v.set(WeightedFeature.OPPONENT_MINION_RUSH_MODIFIER, -23.0);
+		v.set(WeightedFeature.OPPONENT_MINION_IMMUNE_MODIFIER, -50.0);      // rare (3 cards)
+		v.set(WeightedFeature.OPPONENT_MINION_CANNOT_ATTACK_MODIFIER, 20.0);
 		// Opponent weapon/armor
-		v.set(WeightedFeature.OPPONENT_WEAPON_VALUE, -30.829);
-		v.set(WeightedFeature.OPPONENT_ARMOR_FACTOR, -11.655);
+		v.set(WeightedFeature.OPPONENT_WEAPON_VALUE, -40.0);
+		v.set(WeightedFeature.OPPONENT_ARMOR_FACTOR, -21.0);
+		v.set(WeightedFeature.OPPONENT_LOCKED_MANA_VALUE, 20.0);
 		return v;
 	}
 
