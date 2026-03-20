@@ -1,0 +1,5 @@
+mutation rerollRogue($choiceId: BigInt!) {
+  reroll(choiceId: $choiceId) {
+    id
+  }
+}

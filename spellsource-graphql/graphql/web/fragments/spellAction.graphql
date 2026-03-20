@@ -1,0 +1,14 @@
+fragment spellAction on SpellAction {
+  action
+  actionType
+  sourceId
+  description
+  entity {
+    ...entitySummary
+  }
+  targetKeyToActions {
+    action
+    target
+    friendlyBattlefieldIndex
+  }
+}

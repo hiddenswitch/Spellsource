@@ -13,3 +13,7 @@
 [submodule "vertx-jooq-fork"]
 	path = vertx-jooq-fork
 	url = git@github.com:hiddenswitch/forks-jooq-vertx-5.git
+[submodule "spellsource-ts-proto/ts-proto"]
+	path = spellsource-ts-proto/ts-proto
+	url = git@github.com:AppMana/ts-proto.git
+	branch = main

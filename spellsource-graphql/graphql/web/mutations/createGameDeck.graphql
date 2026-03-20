@@ -1,0 +1,8 @@
+mutation createGameDeck($input: DecksPutInput!) {
+  createDeck(input: $input) {
+    deckId
+    collection {
+      ...inventoryCollection
+    }
+  }
+}

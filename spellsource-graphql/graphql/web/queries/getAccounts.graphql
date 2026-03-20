@@ -1,0 +1,5 @@
+query getAccounts($userIds: [String!]!) {
+  accounts(userIds: $userIds) {
+    ...userEntity
+  }
+}

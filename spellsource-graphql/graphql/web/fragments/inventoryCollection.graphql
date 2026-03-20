@@ -1,0 +1,21 @@
+fragment inventoryCollection on InventoryCollection {
+  id
+  name
+  heroClass
+  format
+  deckType
+  collectionType
+  userId
+  isStandardDeck
+  inventory {
+    ...cardRecord
+  }
+  playerEntityAttributes {
+    attribute
+    stringValue
+  }
+  validationReport {
+    valid
+    errors
+  }
+}

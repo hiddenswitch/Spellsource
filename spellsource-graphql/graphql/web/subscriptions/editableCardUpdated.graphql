@@ -1,0 +1,7 @@
+subscription editableCardUpdated {
+  editableCardUpdated {
+    id
+    ownerUserId
+    source
+  }
+}

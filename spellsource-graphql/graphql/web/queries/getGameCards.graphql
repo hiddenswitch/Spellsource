@@ -1,0 +1,9 @@
+query getGameCards($ifNoneMatch: String) {
+  cards(ifNoneMatch: $ifNoneMatch) {
+    cards {
+      ...cardRecord
+    }
+    version
+    cachedOk
+  }
+}

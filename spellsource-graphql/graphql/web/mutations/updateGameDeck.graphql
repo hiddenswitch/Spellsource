@@ -1,0 +1,8 @@
+mutation updateGameDeck($input: DecksUpdateInput!) {
+  updateDeck(input: $input) {
+    collection {
+      ...inventoryCollection
+    }
+    inventoryIdsSize
+  }
+}

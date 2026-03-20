@@ -1,0 +1,8 @@
+mutation duplicateGameDeck($deckId: String!) {
+  duplicateDeck(deckId: $deckId) {
+    collection {
+      ...inventoryCollection
+    }
+    inventoryIdsSize
+  }
+}

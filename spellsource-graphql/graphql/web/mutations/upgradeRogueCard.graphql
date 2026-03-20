@@ -1,0 +1,5 @@
+mutation upgradeRogueCard($rogueId: BigInt!, $cardId: String!) {
+  upgradeCard(rogueId: $rogueId, cardId: $cardId) {
+    id
+  }
+}

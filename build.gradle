@@ -15,6 +15,7 @@ plugins {
   id "com.github.node-gradle.node"
 }
 
+apply from: "gradle/shell.gradle"
 apply from: "gradle/node.gradle"
 
 dependencies {

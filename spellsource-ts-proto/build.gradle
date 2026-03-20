@@ -1,0 +1,22 @@
+plugins {
+  id "base"
+  id "com.github.node-gradle.node"
+}
+
+apply from: "../gradle/node.gradle"
+
+clean {
+  delete 'ts-proto/node_modules/'
+}
+
+tasks.register('compileTypescript', YarnTask) {
+  dependsOn ':yarnWorkspace'
+
+  args = ['--cwd', 'ts-proto', 'run', 'build']
+  inputs.dir('ts-proto/src/')
+  outputs.dir('ts-proto/build/')
+}
+
+node {
+  nodeProjectDir = file("${projectDir}/ts-proto")
+}

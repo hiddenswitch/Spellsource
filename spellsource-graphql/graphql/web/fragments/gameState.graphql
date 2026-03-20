@@ -1,0 +1,9 @@
+fragment gameState on GameState {
+  entities {
+    ...entity
+  }
+  isLocalPlayerTurn
+  turnNumber
+  turnState
+  timestamp
+}

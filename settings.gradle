@@ -54,4 +54,4 @@ include 'vertx-jooq-fork:vertx-jooq-mutiny'
 include 'vertx-jooq-fork:vertx-jooq-mutiny-jdbc'
 include 'vertx-jooq-fork:vertx-jooq-mutiny-reactive'
 include 'vertx-jooq-fork:vertx-jooq-generate'
-
+include 'spellsource-ts-proto'

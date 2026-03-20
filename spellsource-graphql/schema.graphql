@@ -1,3 +1,4 @@
+"""─── Query ────────────────────────────────────────────────────"""
 type Query implements Node {
   """
   Exposes the root query type nested one level down. This is helpful for Relay 1
@@ -73,11 +74,8 @@ type Query implements Node {
     nodeId: ID!
   ): CardsInDeck
 
-  """Reads a single `Deck` using its globally unique `ID`."""
-  deck(
-    """The globally unique `ID` to be used in selecting a single `Deck`."""
-    nodeId: ID!
-  ): Deck
+  """decks"""
+  deck(deckId: String!): DecksGetResponse!
 
   """Reads a single `Card` using its globally unique `ID`."""
   card(
@@ -448,11 +446,46 @@ type Query implements Node {
     """
     filter: RogueRunFilter
   ): RogueRunsConnection
+
+  """auth"""
   currentUserId: String
-  rerollCost(rogueId: BigInt!): Int!
+  configuration: ClientConfiguration!
+
+  """cards"""
+  cards(ifNoneMatch: String): GetCardsResponse!
+  cardsByUser(ifNoneMatch: String): GetCardsResponse!
+
+  """account"""
+  account: UserEntity
+  accounts(userIds: [String!]!): [UserEntity!]!
+  decks: [DecksGetResponse!]!
+
+  """drafts"""
+  draft: DraftState!
+
+  """friends (snapshot, use subscription for live updates)"""
+  friends: [Friend!]!
+
+  """invites"""
+  invite(inviteId: String!): InviteResponse!
+  invites: [Invite!]!
+
+  """matchmaking"""
+  matchmakingQueues: [MatchmakingQueue!]!
+  isInMatch: String
+
+  """game records"""
+  gameRecord(gameId: String!): GameRecord
+  gameRecordIds: [String!]!
+
+  """rogue (existing)"""
   currentRogueClasses: [String!]!
+  rerollCost(rogueId: BigInt!): Int!
+  trashCardCost(rogueId: BigInt!, cardId: String!): Int!
+  upgradeCardCost(rogueId: BigInt!, cardId: String!): Int!
 }
 
+"""─── Mutation ─────────────────────────────────────────────────"""
 type Mutation {
   archiveCard(
     """
@@ -525,13 +558,8 @@ type Mutation {
     input: CreateCardsInDeckInput!
   ): CreateCardsInDeckPayload
 
-  """Creates a single `Deck`."""
-  createDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateDeckInput!
-  ): CreateDeckPayload
+  """decks"""
+  createDeck(input: DecksPutInput!): DecksPutResponse!
 
   """Creates a single `Card`."""
   createCard(
@@ -584,14 +612,7 @@ type Mutation {
     """
     input: UpdateCardsInDeckByIdInput!
   ): UpdateCardsInDeckPayload
-
-  """Updates a single `Deck` using its globally unique id and a patch."""
-  updateDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateDeckInput!
-  ): UpdateDeckPayload
+  updateDeck(input: DecksUpdateInput!): DecksGetResponse!
 
   """Updates a single `Deck` using a unique key and a patch."""
   updateDeckById(
@@ -656,11 +677,61 @@ type Mutation {
     """
     input: DeleteCardsInDeckByIdInput!
   ): DeleteCardsInDeckPayload
+
+  """auth"""
+  createAccount(input: CreateAccountInput!): LoginOrCreateReply!
+  login(input: LoginInput!): LoginOrCreateReply!
+  changePassword(newPassword: String!): LoginOrCreateReply!
+  requestPasswordResetEmail: Boolean!
+  deleteDeck(deckId: String!): Boolean!
+  duplicateDeck(deckId: String!): DecksGetResponse!
+
+  """drafts"""
+  startOrModifyDraft(input: DraftsPostInput!): DraftState!
+  draftsChooseHero(heroIndex: Int!): DraftState!
+  draftsChooseCard(cardIndex: Int!): DraftState!
+
+  """friends"""
+  addFriend(friendId: String, usernameWithToken: String): Friend!
+  removeFriend(friendId: String!): Boolean!
+
+  """invites"""
+  sendInvite(input: InvitePostInput!): InviteResponse!
+  acceptInvite(input: AcceptInviteInput!): InviteResponse!
+  deleteInvite(inviteId: String!): InviteResponse!
+
+  """matchmaking"""
+  enqueueMatchmaking(input: MatchmakingEnqueueInput!): Boolean!
+  cancelMatchmaking: Boolean!
+
+  """
+  Connect to an active game. Must be called before gameMessages subscription will emit.
+  """
+  connectToGame(playerKey: String!, playerSecret: String!): Boolean!
+
+  """Send a game action in response to an ON_REQUEST_ACTION message."""
+  sendGameAction(actionIndex: Int!, repliesTo: String!): Boolean!
+
+  """Send a mulligan response in response to an ON_MULLIGAN message."""
+  sendMulligan(discardedCardIndices: [Int!]!, repliesTo: String!): Boolean!
+
+  """Send an emote during a game."""
+  sendEmote(entityId: Int!, message: EmoteType!): Boolean!
+
+  """Concede the current game."""
+  concedeGame: Boolean!
+
+  """cards (editable)"""
+  putCard(input: PutCardInput!): PutCardResult!
+  deleteCard(editableCardId: String!): Boolean!
+
+  """rogue (existing)"""
   startRogueRun(heroClass: String!, seed: BigInt): RogueRun!
   makeRogueChoice(choiceId: BigInt!, choices: [Int!]!): RogueRun!
   reroll(choiceId: BigInt!): RogueRun!
   trashCard(rogueId: BigInt!, cardId: String!): RogueRun!
   skipBoss(rogueId: BigInt!): RogueRun!
+  upgradeCard(rogueId: BigInt!, cardId: String!): RogueRun!
 }
 
 """An object with a globally unique `ID`."""
@@ -1373,6 +1444,9 @@ input RogueRunFilter {
   """Filter by the object’s `lives` field."""
   lives: IntFilter
 
+  """Filter by the object’s `rerollsThisRound` field."""
+  rerollsThisRound: IntFilter
+
   """Filter by the object’s `opponentInfo` field."""
   opponentInfo: StringFilter
 
@@ -2071,6 +2145,7 @@ input DeckShareCondition {
   trashedByRecipient: Boolean
 }
 
+"""─── Rogue types (existing) ──────────────────────────────────"""
 type RogueRun implements Node {
   """
   A globally unique identifier. Can be used in various places throughout the system to identify this single value.
@@ -2092,6 +2167,7 @@ type RogueRun implements Node {
   seedState: BigInt!
   gold: Int!
   lives: Int!
+  rerollsThisRound: Int!
 
   """Reads a single `Deck` that is related to this `RogueRun`."""
   deckByDeck: Deck
@@ -2288,6 +2364,8 @@ enum RogueRunsOrderBy {
   GOLD_DESC
   LIVES_ASC
   LIVES_DESC
+  REROLLS_THIS_ROUND_ASC
+  REROLLS_THIS_ROUND_DESC
 }
 
 """
@@ -2336,6 +2414,9 @@ input RogueRunCondition {
 
   """Checks for equality with the object’s `lives` field."""
   lives: Int
+
+  """Checks for equality with the object’s `rerollsThisRound` field."""
+  rerollsThisRound: Int
 
   """Checks for equality with the object’s `opponentInfo` field."""
   opponentInfo: String
@@ -3882,4 +3963,639 @@ input DeleteCardsInDeckByIdInput {
   """
   clientMutationId: String
   id: BigInt!
+}
+
+"""─── Subscription ─────────────────────────────────────────────"""
+type Subscription {
+  """
+  Streams game messages for the authenticated user's active game.
+  Call connectToGame mutation first to initiate the game connection.
+  Emits ServerGameMessage for each game state change, action request,
+  mulligan, event, and game over.
+  """
+  gameMessages: ServerGameMessage!
+
+  """Emits when the current user is matched into a game."""
+  matchFound: MatchFound!
+
+  """Emits friend list changes (added, removed, presence updates)."""
+  friendUpdated: Friend!
+
+  """Emits when an invite is received or its status changes."""
+  inviteUpdated: Invite!
+
+  """Emits when an editable card is added, changed, or removed."""
+  editableCardUpdated: EditableCard!
+}
+
+input AcceptInviteInput {
+  inviteId: String!
+  deckId: String
+  queueId: String
+}
+
+type AccessToken {
+  token: String!
+}
+
+enum ActionType {
+  SYSTEM
+  END_TURN
+  PHYSICAL_ATTACK
+  SPELL
+  SUMMON
+  HERO_POWER
+  BATTLECRY
+  EQUIP_WEAPON
+  DISCOVER
+  HERO
+  TAP
+}
+
+input AttributeValueInput {
+  attribute: PlayerEntityAttribute!
+  stringValue: String!
+}
+
+"""─── Deck types ───────────────────────────────────────────────"""
+type AttributeValueTuple {
+  attribute: PlayerEntityAttribute!
+  stringValue: String!
+}
+
+"""─── Card catalogue ───────────────────────────────────────────"""
+type CardRecord {
+  id: BigInt!
+  entity: Entity!
+  cardId: String
+  userId: String
+  count: Int!
+  collectionIds: [String!]!
+}
+
+"""─── Enums ────────────────────────────────────────────────────"""
+enum CardType {
+  HERO
+  MINION
+  SPELL
+  WEAPON
+  HERO_POWER
+  GROUP
+  CHOOSE_ONE
+  ENCHANTMENT
+  CLASS
+  FORMAT
+  ROGUE_CHOICE
+}
+
+type ClientConfiguration {
+  keycloakResetPasswordUrl: String
+  keycloakAccountManagementUrl: String
+  graphQlUrl: String
+}
+
+enum CollectionType {
+  USER
+  ALLIANCE
+  DECK
+}
+
+"""─── Input types ──────────────────────────────────────────────"""
+input CreateAccountInput {
+  email: String!
+  username: String!
+  password: String!
+  decks: Boolean
+  guest: Boolean
+}
+
+enum DeckType {
+  DRAFT
+  CONSTRUCTED
+  ROGUE
+}
+
+type DecksGetResponse {
+  collection: InventoryCollection
+  inventoryIdsSize: Int!
+}
+
+input DecksPutInput {
+  name: String!
+  heroClass: String!
+  format: String
+  deckList: String
+  cardIds: [String!]
+}
+
+type DecksPutResponse {
+  collection: InventoryCollection
+  deckId: String!
+}
+
+input DecksUpdateInput {
+  deckId: String!
+  pullAllCardIds: [String!]
+  pushCardIds: [String!]
+  setHeroClass: String
+  setName: String
+  setPlayerEntityAttribute: AttributeValueInput
+  unsetPlayerEntityAttribute: String
+}
+
+"""─── Draft types ──────────────────────────────────────────────"""
+type DraftState {
+  cardsRemaining: Int!
+  currentCardChoices: [Entity!]!
+  deckId: String!
+  draftIndex: Int!
+  heroClass: Entity
+  heroClassChoices: [Entity!]!
+  losses: Int!
+  selectedCardIds: [String!]!
+  status: DraftStatus!
+  wins: Int!
+}
+
+enum DraftStatus {
+  IN_PROGRESS
+  SELECT_HERO
+  COMPLETE
+  RETIRED
+}
+
+input DraftsPostInput {
+  startDraft: Boolean
+  retireEarly: Boolean
+}
+
+"""─── Editable card types ─────────────────────────────────────"""
+type EditableCard {
+  id: String!
+  ownerUserId: String!
+  source: String!
+}
+
+type Emote {
+  entityId: Int!
+  message: EmoteType!
+}
+
+enum EmoteType {
+  HELLO
+  AMAZING
+  WHOOPS
+  GOOD_GAME
+  FACE_MY_WRATH
+  WELL_PLAYED
+}
+
+type Entity {
+  id: Int!
+  name: String!
+  description: String!
+  cardId: String!
+  cardType: CardType!
+  entityType: EntityType!
+  rarity: Rarity!
+  location: EntityLocation
+  owner: Int!
+  boardPosition: Int!
+
+  """stats"""
+  attack: Int
+  baseAttack: Int
+  hp: Int
+  baseHp: Int
+  maxHp: Int
+  armor: Int
+  manaCost: Int
+  baseManaCost: Int
+  durability: Int
+  spellDamage: Int
+  overload: Int
+  extraAttack: Int
+
+  """player resource fields"""
+  mana: Int!
+  maxMana: Int!
+  lockedMana: Int!
+
+  """boolean flags"""
+  battlecry: Boolean!
+  cannotAttack: Boolean!
+  charge: Boolean!
+  chooseOne: Boolean!
+  collectible: Boolean!
+  combo: Boolean!
+  conditionMet: Boolean!
+  deathrattles: Boolean!
+  deflect: Boolean!
+  destroyed: Boolean!
+  discarded: Boolean!
+  divineShield: Boolean!
+  enraged: Boolean!
+  frozen: Boolean!
+  gameStarted: Boolean!
+  gold: Boolean!
+  hostsTrigger: Boolean!
+  immune: Boolean!
+  isStartingTurn: Boolean!
+  lifesteal: Boolean!
+  permanent: Boolean!
+  playable: Boolean!
+  poisonous: Boolean!
+  roasted: Boolean!
+  rush: Boolean!
+  silenced: Boolean!
+  stealth: Boolean!
+  summoningSickness: Boolean!
+  taunt: Boolean!
+  uncensored: Boolean!
+  underAura: Boolean!
+  untargetableBySpells: Boolean!
+  windfury: Boolean!
+
+  """misc"""
+  charges: Int
+  countUntilCast: Int
+  fires: Int
+  host: Int!
+  heroClasses: [String!]!
+  cardSet: String!
+  cardSets: [String!]!
+  enchantmentType: String!
+  tribes: [String!]!
+  tooltips: [Tooltip!]!
+  note: String!
+}
+
+"""─── Core game entity types ──────────────────────────────────"""
+type EntityLocation {
+  index: Int!
+  zone: Zone!
+  player: Int!
+}
+
+enum EntityType {
+  ANY
+  ACTOR
+  HERO
+  MINION
+  WEAPON
+  CARD
+  PLAYER
+  ENCHANTMENT
+  QUEST
+  SECRET
+}
+
+type Friend {
+  friendId: String!
+  friendName: String!
+  presence: Presence!
+  since: BigInt!
+}
+
+type GameActions {
+  all: [SpellAction!]!
+  compatibility: [Int!]!
+}
+
+type GameEvent {
+  eventType: GameEventType!
+  id: Int!
+  description: String!
+  isPowerHistory: Boolean!
+  isSourcePlayerLocal: Boolean!
+  isTargetPlayerLocal: Boolean!
+  source: Entity
+  target: Entity
+  targets: [Entity!]!
+  value: Int
+}
+
+enum GameEventType {
+  ALL
+  AFTER_PHYSICAL_ATTACK
+  AFTER_PLAY_CARD
+  AFTER_SPELL_CASTED
+  AFTER_SUMMON
+  ATTRIBUTE_APPLIED
+  ARMOR_GAINED
+  BEFORE_PHYSICAL_ATTACK
+  BEFORE_SUMMON
+  BOARD_CHANGED
+  CARD_ADDED_TO_DECK
+  CARD_SHUFFLED
+  DAMAGE
+  DECAY
+  DID_END_SEQUENCE
+  DISCARD
+  DISCOVER
+  DRAIN
+  DRAW_CARD
+  ENRAGE_CHANGED
+  ENTITY_TOUCHED
+  ENTITY_UNTOUCHED
+  EXCESS_HEAL
+  FATIGUE
+  GAME_START
+  HEAL
+  HERO_POWER_USED
+  INVOKED
+  JOUST
+  KILL
+  LOSE_DIVINE_SHIELD
+  LOSE_DEFLECT
+  LOSE_STEALTH
+  MAX_HP_INCREASED
+  MAX_MANA
+  MANA_MODIFIED
+  MISSILE_FIRED
+  OVERLOAD
+  PERFORMED_GAME_ACTION
+  PHYSICAL_ATTACK
+  PLAY_CARD
+  PRE_DAMAGE
+  PRE_GAME_START
+  QUEST_PLAYED
+  QUEST_SUCCESSFUL
+  RETURNED_TO_HAND
+  ROASTED
+  REVEAL_CARD
+  SECRET_PLAYED
+  SECRET_REVEALED
+  SPELL_CASTED
+  SUMMON
+  TARGET_ACQUISITION
+  TRIGGER_FIRED
+  TURN_END
+  TURN_START
+  SILENCE
+  WEAPON_DESTROYED
+  WEAPON_EQUIPPED
+  WILL_END_SEQUENCE
+  DESTROY_WILL_QUEUE
+  TAP_ACTIVATED
+  HONORABLE_KILL
+  ROGUE_CHOICE
+  GAME_INITIALIZED
+}
+
+type GameOver {
+  localPlayerWon: Boolean!
+  winningPlayerId: Int
+}
+
+"""─── Game record types ────────────────────────────────────────"""
+type GameRecord {
+  completedAt: BigInt!
+  completedAtLocalized: String
+  isBotGame: Boolean!
+  playerNames: [String!]!
+}
+
+type GameState {
+  entities: [Entity!]!
+  isLocalPlayerTurn: Boolean!
+  turnNumber: Int!
+  turnState: String!
+  timestamp: BigInt!
+}
+
+type GetCardsResponse {
+  cards: [CardRecord!]!
+  version: String!
+  cachedOk: Boolean!
+}
+
+type InventoryCollection {
+  id: String!
+  name: String!
+  heroClass: String!
+  format: String!
+  deckType: DeckType!
+  collectionType: CollectionType!
+  userId: String
+  isStandardDeck: Boolean!
+  inventory: [CardRecord!]!
+  playerEntityAttributes: [AttributeValueTuple!]!
+  validationReport: ValidationReport
+}
+
+"""─── Invite types ─────────────────────────────────────────────"""
+type Invite {
+  id: String!
+  expiresAt: BigInt
+  fromName: String
+  fromUserId: String!
+  toName: String
+  toUserId: String!
+  friendId: String
+  message: String
+  queueId: String
+  status: InviteStatus!
+}
+
+input InvitePostInput {
+  toUserId: String
+  toUserNameWithToken: String
+  deckId: String
+  queueId: String
+  friend: Boolean
+  message: String
+}
+
+type InviteResponse {
+  invite: Invite
+}
+
+enum InviteStatus {
+  UNDELIVERED
+  PENDING
+  TIMEOUT
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+input LoginInput {
+  usernameOrEmail: String!
+  password: String!
+}
+
+type LoginOrCreateReply {
+  accessToken: AccessToken
+  userEntity: UserEntity
+}
+
+type MatchFound {
+  gameId: String!
+  url: String!
+  playerKey: String!
+  playerSecret: String!
+}
+
+input MatchmakingEnqueueInput {
+  deckId: String!
+  queueId: String!
+  botDeckId: String
+}
+
+type MatchmakingQueue {
+  queueId: String!
+  name: String!
+  description: String!
+  tooltip: String!
+  requires: MatchmakingQueueRequires
+}
+
+"""─── Matchmaking types ────────────────────────────────────────"""
+type MatchmakingQueueRequires {
+  deck: Boolean!
+  heroClass: Boolean!
+  deckIdChoices: [String!]!
+}
+
+enum MessageType {
+  UPDATE_ACTION
+  ON_GAME_EVENT
+  ON_GAME_END
+  ON_UPDATE
+  ON_REQUEST_ACTION
+  FIRST_MESSAGE
+  ON_MULLIGAN
+  UPDATE_MULLIGAN
+  EMOTE
+  TOUCH
+  CONCEDE
+  PINGPONG
+  TIMER
+}
+
+enum PlayerEntityAttribute {
+  SIGNATURE
+}
+
+enum Presence {
+  UNKNOWN
+  OFFLINE
+  IN_GAME
+  ONLINE
+}
+
+input PutCardInput {
+  editableCardId: String
+  source: String!
+  draw: Boolean
+}
+
+type PutCardResult {
+  cardId: String!
+  editableCardId: String!
+  cardScriptErrors: [String!]!
+}
+
+enum Rarity {
+  FREE
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+  ALLIANCE
+}
+
+"""
+A message from the server during a game. The messageType field indicates which
+fields are populated. Clients should switch on messageType to process the message.
+"""
+type ServerGameMessage {
+  messageType: MessageType!
+  id: String
+  localPlayerId: Int!
+  isReplayMessage: Boolean!
+
+  """Present on ON_UPDATE and ON_REQUEST_ACTION messages."""
+  gameState: GameState
+
+  """
+  Present on ON_REQUEST_ACTION messages. The actions the player can take.
+  """
+  actions: GameActions
+
+  """
+  Present on ON_MULLIGAN messages. The starting cards to consider discarding.
+  """
+  startingCards: [Entity!]
+
+  """Present on ON_GAME_EVENT messages."""
+  event: GameEvent
+
+  """Present on ON_GAME_END messages."""
+  gameOver: GameOver
+
+  """Present on EMOTE messages."""
+  emote: Emote
+
+  """Present on TIMER messages."""
+  timers: Timers
+}
+
+type SpellAction {
+  action: Int!
+  actionType: ActionType!
+  sourceId: Int!
+  description: String!
+  choices: [SpellAction!]!
+  entity: Entity
+  targetKeyToActions: [TargetActionPair!]!
+}
+
+"""─── Game types (real-time game state) ────────────────────────"""
+type TargetActionPair {
+  action: Int!
+  target: Int!
+  friendlyBattlefieldIndex: Int!
+}
+
+type Timers {
+  millisRemaining: BigInt!
+}
+
+type Tooltip {
+  keywords: [String!]!
+  text: String!
+}
+
+"""─── Account / Auth types ─────────────────────────────────────"""
+type UserEntity {
+  id: String!
+  email: String!
+  username: String!
+  privacyToken: String!
+}
+
+type ValidationReport {
+  errors: [String!]!
+  valid: Boolean!
+}
+
+enum Zone {
+  NONE
+  HAND
+  DECK
+  GRAVEYARD
+  BATTLEFIELD
+  SECRET
+  QUEST
+  HERO_POWER
+  HERO
+  WEAPON
+  SET_ASIDE_ZONE
+  HIDDEN
+  DISCOVER
+  REMOVED_FROM_PLAY
+  PLAYER
+  ENCHANTMENT
 }

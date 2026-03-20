@@ -125,7 +125,7 @@ public class Accounts {
 	 * @return a user ID, or {@code null} if no token was retrieved
 	 */
 	public static String userId() {
-		var user = VirtualThreadRoutingContextHandler.current().user();
+		var user = VirtualThreadRoutingContextHandler.user();
 		if (user == null) {
 			return null;
 		}

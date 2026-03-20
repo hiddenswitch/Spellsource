@@ -1,0 +1,3 @@
+query getTrashCardCost($rogueId: BigInt!, $cardId: String!) {
+  trashCardCost(rogueId: $rogueId, cardId: $cardId)
+}

@@ -1,3 +1,4 @@
+import com.github.gradle.node.yarn.task.YarnTask
 import groovy.json.JsonSlurper
 
 def packageJson = new JsonSlurper().parseText(rootProject.file('package.json').text)
@@ -7,4 +8,17 @@ node {
   download = false
   yarnVersion = yarnVersionStr
   yarnWorkDir.set(rootProject.layout.projectDirectory.dir(".gradle/yarn"))
+}
+
+def isLinux = org.gradle.internal.os.OperatingSystem.current().isLinux()
+def isWindows = org.gradle.internal.os.OperatingSystem.current().isWindows()
+
+if (isLinux || isWindows) {
+  afterEvaluate {
+    tasks.withType(YarnTask).configureEach {
+      execOverrides {
+        it.commandLine = rootProject.shell + [it.commandLine.join(' ').replace('\\', '/')]
+      }
+    }
+  }
 }

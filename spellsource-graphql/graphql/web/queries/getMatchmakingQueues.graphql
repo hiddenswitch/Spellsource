@@ -1,0 +1,13 @@
+query getMatchmakingQueues {
+  matchmakingQueues {
+    queueId
+    name
+    description
+    tooltip
+    requires {
+      deck
+      heroClass
+      deckIdChoices
+    }
+  }
+}

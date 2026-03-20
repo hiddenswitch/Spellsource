@@ -1,0 +1,3 @@
+query getRerollCost($rogueId: BigInt!) {
+  rerollCost(rogueId: $rogueId)
+}
