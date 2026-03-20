@@ -1,0 +1,13 @@
+def isWindows = org.gradle.internal.os.OperatingSystem.current().isWindows()
+
+def userShell = System.getenv("SHELL") ?: "/bin/bash"
+
+// -X is needed for compatibility
+ext.shell = isWindows ?
+  ["${rootProject.projectDir}/bin/windows/amd64/busybox64.exe", "bash", "-icX"] :
+  [userShell, "-ic"]
+
+// fixes choco issues
+if (isWindows) {
+  ext.chocoEnv = ['CHOCOLATEYINSTALL': 'C:\\ProgramData\\chocolatey']
+}

@@ -30,6 +30,32 @@ export type Scalars = {
   JSON: any;
 };
 
+export type AcceptInviteInput = {
+  deckId?: InputMaybe<Scalars['String']>;
+  inviteId: Scalars['String'];
+  queueId?: InputMaybe<Scalars['String']>;
+};
+
+export type AccessToken = {
+  __typename?: 'AccessToken';
+  token: Scalars['String'];
+};
+
+export const ActionType = {
+  Battlecry: 'BATTLECRY',
+  Discover: 'DISCOVER',
+  EndTurn: 'END_TURN',
+  EquipWeapon: 'EQUIP_WEAPON',
+  Hero: 'HERO',
+  HeroPower: 'HERO_POWER',
+  PhysicalAttack: 'PHYSICAL_ATTACK',
+  Spell: 'SPELL',
+  Summon: 'SUMMON',
+  System: 'SYSTEM',
+  Tap: 'TAP'
+} as const;
+
+export type ActionType = typeof ActionType[keyof typeof ActionType];
 /** All input for the `archiveCard` mutation. */
 export type ArchiveCardInput = {
   cardId?: InputMaybe<Scalars['String']>;
@@ -50,6 +76,18 @@ export type ArchiveCardPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
+};
+
+export type AttributeValueInput = {
+  attribute: PlayerEntityAttribute;
+  stringValue: Scalars['String'];
+};
+
+/** ─── Deck types ─────────────────────────────────────────────── */
+export type AttributeValueTuple = {
+  __typename?: 'AttributeValueTuple';
+  attribute: PlayerEntityAttribute;
+  stringValue: Scalars['String'];
 };
 
 /** A filter to be used against BigInt fields. All fields are combined with a logical ‘and.’ */
@@ -233,6 +271,17 @@ export type CardPatch = {
   uri?: InputMaybe<Scalars['String']>;
 };
 
+/** ─── Card catalogue ─────────────────────────────────────────── */
+export type CardRecord = {
+  __typename?: 'CardRecord';
+  cardId?: Maybe<Scalars['String']>;
+  collectionIds: Array<Scalars['String']>;
+  count: Scalars['Int'];
+  entity: Entity;
+  id: Scalars['BigInt'];
+  userId?: Maybe<Scalars['String']>;
+};
+
 /** A filter to be used against many `PublishedCard` object types. All fields are combined with a logical ‘and.’ */
 export type CardToManyPublishedCardFilter = {
   /** Every related `PublishedCard` matches the filter criteria. All fields are combined with a logical ‘and.’ */
@@ -243,6 +292,22 @@ export type CardToManyPublishedCardFilter = {
   some?: InputMaybe<PublishedCardFilter>;
 };
 
+/** ─── Enums ──────────────────────────────────────────────────── */
+export const CardType = {
+  ChooseOne: 'CHOOSE_ONE',
+  Class: 'CLASS',
+  Enchantment: 'ENCHANTMENT',
+  Format: 'FORMAT',
+  Group: 'GROUP',
+  Hero: 'HERO',
+  HeroPower: 'HERO_POWER',
+  Minion: 'MINION',
+  RogueChoice: 'ROGUE_CHOICE',
+  Spell: 'SPELL',
+  Weapon: 'WEAPON'
+} as const;
+
+export type CardType = typeof CardType[keyof typeof CardType];
 /** A connection to a list of `Card` values. */
 export type CardsConnection = {
   __typename?: 'CardsConnection';
@@ -488,6 +553,13 @@ export const ClassesOrderBy = {
 } as const;
 
 export type ClassesOrderBy = typeof ClassesOrderBy[keyof typeof ClassesOrderBy];
+export type ClientConfiguration = {
+  __typename?: 'ClientConfiguration';
+  graphQlUrl?: Maybe<Scalars['String']>;
+  keycloakAccountManagementUrl?: Maybe<Scalars['String']>;
+  keycloakResetPasswordUrl?: Maybe<Scalars['String']>;
+};
+
 export type CollectionCard = {
   __typename?: 'CollectionCard';
   blocklyWorkspace?: Maybe<Scalars['JSON']>;
@@ -621,6 +693,22 @@ export const CollectionCardsOrderBy = {
 } as const;
 
 export type CollectionCardsOrderBy = typeof CollectionCardsOrderBy[keyof typeof CollectionCardsOrderBy];
+export const CollectionType = {
+  Alliance: 'ALLIANCE',
+  Deck: 'DECK',
+  User: 'USER'
+} as const;
+
+export type CollectionType = typeof CollectionType[keyof typeof CollectionType];
+/** ─── Input types ────────────────────────────────────────────── */
+export type CreateAccountInput = {
+  decks?: InputMaybe<Scalars['Boolean']>;
+  email: Scalars['String'];
+  guest?: InputMaybe<Scalars['Boolean']>;
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
+
 /** All input for the create `Card` mutation. */
 export type CreateCardInput = {
   /** The `Card` to be created by this mutation. */
@@ -1119,6 +1207,13 @@ export type DeckToManyRogueRunFilter = {
   some?: InputMaybe<RogueRunFilter>;
 };
 
+export const DeckType = {
+  Constructed: 'CONSTRUCTED',
+  Draft: 'DRAFT',
+  Rogue: 'ROGUE'
+} as const;
+
+export type DeckType = typeof DeckType[keyof typeof DeckType];
 /** A connection to a list of `Deck` values. */
 export type DecksConnection = {
   __typename?: 'DecksConnection';
@@ -1139,6 +1234,12 @@ export type DecksEdge = {
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `Deck` at the end of the edge. */
   node?: Maybe<Deck>;
+};
+
+export type DecksGetResponse = {
+  __typename?: 'DecksGetResponse';
+  collection?: Maybe<InventoryCollection>;
+  inventoryIdsSize: Scalars['Int'];
 };
 
 /** Methods to use when ordering `Deck`. */
@@ -1169,6 +1270,30 @@ export const DecksOrderBy = {
 } as const;
 
 export type DecksOrderBy = typeof DecksOrderBy[keyof typeof DecksOrderBy];
+export type DecksPutInput = {
+  cardIds?: InputMaybe<Array<Scalars['String']>>;
+  deckList?: InputMaybe<Scalars['String']>;
+  format?: InputMaybe<Scalars['String']>;
+  heroClass: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type DecksPutResponse = {
+  __typename?: 'DecksPutResponse';
+  collection?: Maybe<InventoryCollection>;
+  deckId: Scalars['String'];
+};
+
+export type DecksUpdateInput = {
+  deckId: Scalars['String'];
+  pullAllCardIds?: InputMaybe<Array<Scalars['String']>>;
+  pushCardIds?: InputMaybe<Array<Scalars['String']>>;
+  setHeroClass?: InputMaybe<Scalars['String']>;
+  setName?: InputMaybe<Scalars['String']>;
+  setPlayerEntityAttribute?: InputMaybe<AttributeValueInput>;
+  unsetPlayerEntityAttribute?: InputMaybe<Scalars['String']>;
+};
+
 /** All input for the `deleteCardsInDeckById` mutation. */
 export type DeleteCardsInDeckByIdInput = {
   /**
@@ -1261,6 +1386,313 @@ export type DeletePublishedCardPayload = {
 /** The output of our delete `PublishedCard` mutation. */
 export type DeletePublishedCardPayloadPublishedCardEdgeArgs = {
   orderBy?: Array<PublishedCardsOrderBy>;
+};
+
+/** ─── Draft types ────────────────────────────────────────────── */
+export type DraftState = {
+  __typename?: 'DraftState';
+  cardsRemaining: Scalars['Int'];
+  currentCardChoices: Array<Entity>;
+  deckId: Scalars['String'];
+  draftIndex: Scalars['Int'];
+  heroClass?: Maybe<Entity>;
+  heroClassChoices: Array<Entity>;
+  losses: Scalars['Int'];
+  selectedCardIds: Array<Scalars['String']>;
+  status: DraftStatus;
+  wins: Scalars['Int'];
+};
+
+export const DraftStatus = {
+  Complete: 'COMPLETE',
+  InProgress: 'IN_PROGRESS',
+  Retired: 'RETIRED',
+  SelectHero: 'SELECT_HERO'
+} as const;
+
+export type DraftStatus = typeof DraftStatus[keyof typeof DraftStatus];
+export type DraftsPostInput = {
+  retireEarly?: InputMaybe<Scalars['Boolean']>;
+  startDraft?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** ─── Editable card types ───────────────────────────────────── */
+export type EditableCard = {
+  __typename?: 'EditableCard';
+  id: Scalars['String'];
+  ownerUserId: Scalars['String'];
+  source: Scalars['String'];
+};
+
+export type Emote = {
+  __typename?: 'Emote';
+  entityId: Scalars['Int'];
+  message: EmoteType;
+};
+
+export const EmoteType = {
+  Amazing: 'AMAZING',
+  FaceMyWrath: 'FACE_MY_WRATH',
+  GoodGame: 'GOOD_GAME',
+  Hello: 'HELLO',
+  WellPlayed: 'WELL_PLAYED',
+  Whoops: 'WHOOPS'
+} as const;
+
+export type EmoteType = typeof EmoteType[keyof typeof EmoteType];
+/** All input for the `endRogueRun` mutation. */
+export type EndRogueRunInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  rogueId?: InputMaybe<Scalars['BigInt']>;
+};
+
+/** The output of our `endRogueRun` mutation. */
+export type EndRogueRunPayload = {
+  __typename?: 'EndRogueRunPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `RogueRun`. */
+  deckByDeck?: Maybe<Deck>;
+  /** Reads a single `Deck` that is related to this `RogueRun`. */
+  deckByOpponentDeck?: Maybe<Deck>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  rogueRun?: Maybe<RogueRun>;
+  /** An edge for our `RogueRun`. May be used by Relay 1. */
+  rogueRunEdge?: Maybe<RogueRunsEdge>;
+};
+
+
+/** The output of our `endRogueRun` mutation. */
+export type EndRogueRunPayloadRogueRunEdgeArgs = {
+  orderBy?: Array<RogueRunsOrderBy>;
+};
+
+export type Entity = {
+  __typename?: 'Entity';
+  armor?: Maybe<Scalars['Int']>;
+  /** stats */
+  attack?: Maybe<Scalars['Int']>;
+  baseAttack?: Maybe<Scalars['Int']>;
+  baseHp?: Maybe<Scalars['Int']>;
+  baseManaCost?: Maybe<Scalars['Int']>;
+  /** boolean flags */
+  battlecry: Scalars['Boolean'];
+  boardPosition: Scalars['Int'];
+  cannotAttack: Scalars['Boolean'];
+  cardId: Scalars['String'];
+  cardSet: Scalars['String'];
+  cardSets: Array<Scalars['String']>;
+  cardType: CardType;
+  charge: Scalars['Boolean'];
+  /** misc */
+  charges?: Maybe<Scalars['Int']>;
+  chooseOne: Scalars['Boolean'];
+  collectible: Scalars['Boolean'];
+  combo: Scalars['Boolean'];
+  conditionMet: Scalars['Boolean'];
+  countUntilCast?: Maybe<Scalars['Int']>;
+  deathrattles: Scalars['Boolean'];
+  deflect: Scalars['Boolean'];
+  description: Scalars['String'];
+  destroyed: Scalars['Boolean'];
+  discarded: Scalars['Boolean'];
+  divineShield: Scalars['Boolean'];
+  durability?: Maybe<Scalars['Int']>;
+  enchantmentType: Scalars['String'];
+  enraged: Scalars['Boolean'];
+  entityType: EntityType;
+  extraAttack?: Maybe<Scalars['Int']>;
+  fires?: Maybe<Scalars['Int']>;
+  frozen: Scalars['Boolean'];
+  gameStarted: Scalars['Boolean'];
+  gold: Scalars['Boolean'];
+  heroClasses: Array<Scalars['String']>;
+  host: Scalars['Int'];
+  hostsTrigger: Scalars['Boolean'];
+  hp?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
+  immune: Scalars['Boolean'];
+  isStartingTurn: Scalars['Boolean'];
+  lifesteal: Scalars['Boolean'];
+  location?: Maybe<EntityLocation>;
+  lockedMana: Scalars['Int'];
+  /** player resource fields */
+  mana: Scalars['Int'];
+  manaCost?: Maybe<Scalars['Int']>;
+  maxHp?: Maybe<Scalars['Int']>;
+  maxMana: Scalars['Int'];
+  name: Scalars['String'];
+  note: Scalars['String'];
+  overload?: Maybe<Scalars['Int']>;
+  owner: Scalars['Int'];
+  permanent: Scalars['Boolean'];
+  playable: Scalars['Boolean'];
+  poisonous: Scalars['Boolean'];
+  rarity: Rarity;
+  roasted: Scalars['Boolean'];
+  rush: Scalars['Boolean'];
+  silenced: Scalars['Boolean'];
+  spellDamage?: Maybe<Scalars['Int']>;
+  stealth: Scalars['Boolean'];
+  summoningSickness: Scalars['Boolean'];
+  taunt: Scalars['Boolean'];
+  tooltips: Array<Tooltip>;
+  tribes: Array<Scalars['String']>;
+  uncensored: Scalars['Boolean'];
+  underAura: Scalars['Boolean'];
+  untargetableBySpells: Scalars['Boolean'];
+  windfury: Scalars['Boolean'];
+};
+
+/** ─── Core game entity types ────────────────────────────────── */
+export type EntityLocation = {
+  __typename?: 'EntityLocation';
+  index: Scalars['Int'];
+  player: Scalars['Int'];
+  zone: Zone;
+};
+
+export const EntityType = {
+  Actor: 'ACTOR',
+  Any: 'ANY',
+  Card: 'CARD',
+  Enchantment: 'ENCHANTMENT',
+  Hero: 'HERO',
+  Minion: 'MINION',
+  Player: 'PLAYER',
+  Quest: 'QUEST',
+  Secret: 'SECRET',
+  Weapon: 'WEAPON'
+} as const;
+
+export type EntityType = typeof EntityType[keyof typeof EntityType];
+export type Friend = {
+  __typename?: 'Friend';
+  friendId: Scalars['String'];
+  friendName: Scalars['String'];
+  presence: Presence;
+  since: Scalars['BigInt'];
+};
+
+export type GameActions = {
+  __typename?: 'GameActions';
+  all: Array<SpellAction>;
+  compatibility: Array<Scalars['Int']>;
+};
+
+export type GameEvent = {
+  __typename?: 'GameEvent';
+  description: Scalars['String'];
+  eventType: GameEventType;
+  id: Scalars['Int'];
+  isPowerHistory: Scalars['Boolean'];
+  isSourcePlayerLocal: Scalars['Boolean'];
+  isTargetPlayerLocal: Scalars['Boolean'];
+  source?: Maybe<Entity>;
+  target?: Maybe<Entity>;
+  targets: Array<Entity>;
+  value?: Maybe<Scalars['Int']>;
+};
+
+export const GameEventType = {
+  AfterPhysicalAttack: 'AFTER_PHYSICAL_ATTACK',
+  AfterPlayCard: 'AFTER_PLAY_CARD',
+  AfterSpellCasted: 'AFTER_SPELL_CASTED',
+  AfterSummon: 'AFTER_SUMMON',
+  All: 'ALL',
+  ArmorGained: 'ARMOR_GAINED',
+  AttributeApplied: 'ATTRIBUTE_APPLIED',
+  BeforePhysicalAttack: 'BEFORE_PHYSICAL_ATTACK',
+  BeforeSummon: 'BEFORE_SUMMON',
+  BoardChanged: 'BOARD_CHANGED',
+  CardAddedToDeck: 'CARD_ADDED_TO_DECK',
+  CardShuffled: 'CARD_SHUFFLED',
+  Damage: 'DAMAGE',
+  Decay: 'DECAY',
+  DestroyWillQueue: 'DESTROY_WILL_QUEUE',
+  DidEndSequence: 'DID_END_SEQUENCE',
+  Discard: 'DISCARD',
+  Discover: 'DISCOVER',
+  Drain: 'DRAIN',
+  DrawCard: 'DRAW_CARD',
+  EnrageChanged: 'ENRAGE_CHANGED',
+  EntityTouched: 'ENTITY_TOUCHED',
+  EntityUntouched: 'ENTITY_UNTOUCHED',
+  ExcessHeal: 'EXCESS_HEAL',
+  Fatigue: 'FATIGUE',
+  GameInitialized: 'GAME_INITIALIZED',
+  GameStart: 'GAME_START',
+  Heal: 'HEAL',
+  HeroPowerUsed: 'HERO_POWER_USED',
+  HonorableKill: 'HONORABLE_KILL',
+  Invoked: 'INVOKED',
+  Joust: 'JOUST',
+  Kill: 'KILL',
+  LoseDeflect: 'LOSE_DEFLECT',
+  LoseDivineShield: 'LOSE_DIVINE_SHIELD',
+  LoseStealth: 'LOSE_STEALTH',
+  ManaModified: 'MANA_MODIFIED',
+  MaxHpIncreased: 'MAX_HP_INCREASED',
+  MaxMana: 'MAX_MANA',
+  MissileFired: 'MISSILE_FIRED',
+  Overload: 'OVERLOAD',
+  PerformedGameAction: 'PERFORMED_GAME_ACTION',
+  PhysicalAttack: 'PHYSICAL_ATTACK',
+  PlayCard: 'PLAY_CARD',
+  PreDamage: 'PRE_DAMAGE',
+  PreGameStart: 'PRE_GAME_START',
+  QuestPlayed: 'QUEST_PLAYED',
+  QuestSuccessful: 'QUEST_SUCCESSFUL',
+  ReturnedToHand: 'RETURNED_TO_HAND',
+  RevealCard: 'REVEAL_CARD',
+  Roasted: 'ROASTED',
+  RogueChoice: 'ROGUE_CHOICE',
+  SecretPlayed: 'SECRET_PLAYED',
+  SecretRevealed: 'SECRET_REVEALED',
+  Silence: 'SILENCE',
+  SpellCasted: 'SPELL_CASTED',
+  Summon: 'SUMMON',
+  TapActivated: 'TAP_ACTIVATED',
+  TargetAcquisition: 'TARGET_ACQUISITION',
+  TriggerFired: 'TRIGGER_FIRED',
+  TurnEnd: 'TURN_END',
+  TurnStart: 'TURN_START',
+  WeaponDestroyed: 'WEAPON_DESTROYED',
+  WeaponEquipped: 'WEAPON_EQUIPPED',
+  WillEndSequence: 'WILL_END_SEQUENCE'
+} as const;
+
+export type GameEventType = typeof GameEventType[keyof typeof GameEventType];
+export type GameOver = {
+  __typename?: 'GameOver';
+  localPlayerWon: Scalars['Boolean'];
+  winningPlayerId?: Maybe<Scalars['Int']>;
+};
+
+/** ─── Game record types ──────────────────────────────────────── */
+export type GameRecord = {
+  __typename?: 'GameRecord';
+  completedAt: Scalars['BigInt'];
+  completedAtLocalized?: Maybe<Scalars['String']>;
+  isBotGame: Scalars['Boolean'];
+  playerNames: Array<Scalars['String']>;
+};
+
+export type GameState = {
+  __typename?: 'GameState';
+  entities: Array<Entity>;
+  isLocalPlayerTurn: Scalars['Boolean'];
+  timestamp: Scalars['BigInt'];
+  turnNumber: Scalars['Int'];
+  turnState: Scalars['String'];
 };
 
 export type GeneratedArt = {
@@ -1363,6 +1795,13 @@ export const GeneratedArtsOrderBy = {
 } as const;
 
 export type GeneratedArtsOrderBy = typeof GeneratedArtsOrderBy[keyof typeof GeneratedArtsOrderBy];
+export type GetCardsResponse = {
+  __typename?: 'GetCardsResponse';
+  cachedOk: Scalars['Boolean'];
+  cards: Array<CardRecord>;
+  version: Scalars['String'];
+};
+
 /** All input for the `getClasses` mutation. */
 export type GetClassesInput = {
   /**
@@ -1473,6 +1912,60 @@ export type IntFilter = {
   notIn?: InputMaybe<Array<Scalars['Int']>>;
 };
 
+export type InventoryCollection = {
+  __typename?: 'InventoryCollection';
+  collectionType: CollectionType;
+  deckType: DeckType;
+  format: Scalars['String'];
+  heroClass: Scalars['String'];
+  id: Scalars['String'];
+  inventory: Array<CardRecord>;
+  isStandardDeck: Scalars['Boolean'];
+  name: Scalars['String'];
+  playerEntityAttributes: Array<AttributeValueTuple>;
+  userId?: Maybe<Scalars['String']>;
+  validationReport?: Maybe<ValidationReport>;
+};
+
+/** ─── Invite types ───────────────────────────────────────────── */
+export type Invite = {
+  __typename?: 'Invite';
+  expiresAt?: Maybe<Scalars['BigInt']>;
+  friendId?: Maybe<Scalars['String']>;
+  fromName?: Maybe<Scalars['String']>;
+  fromUserId: Scalars['String'];
+  id: Scalars['String'];
+  message?: Maybe<Scalars['String']>;
+  queueId?: Maybe<Scalars['String']>;
+  status: InviteStatus;
+  toName?: Maybe<Scalars['String']>;
+  toUserId: Scalars['String'];
+};
+
+export type InvitePostInput = {
+  deckId?: InputMaybe<Scalars['String']>;
+  friend?: InputMaybe<Scalars['Boolean']>;
+  message?: InputMaybe<Scalars['String']>;
+  queueId?: InputMaybe<Scalars['String']>;
+  toUserId?: InputMaybe<Scalars['String']>;
+  toUserNameWithToken?: InputMaybe<Scalars['String']>;
+};
+
+export type InviteResponse = {
+  __typename?: 'InviteResponse';
+  invite?: Maybe<Invite>;
+};
+
+export const InviteStatus = {
+  Accepted: 'ACCEPTED',
+  Cancelled: 'CANCELLED',
+  Pending: 'PENDING',
+  Rejected: 'REJECTED',
+  Timeout: 'TIMEOUT',
+  Undelivered: 'UNDELIVERED'
+} as const;
+
+export type InviteStatus = typeof InviteStatus[keyof typeof InviteStatus];
 /** A filter to be used against JSON fields. All fields are combined with a logical ‘and.’ */
 export type JsonFilter = {
   /** Contained by the specified JSON. */
@@ -1509,37 +2002,135 @@ export type JsonFilter = {
   notIn?: InputMaybe<Array<Scalars['JSON']>>;
 };
 
+export type LoginInput = {
+  password: Scalars['String'];
+  usernameOrEmail: Scalars['String'];
+};
+
+export type LoginOrCreateReply = {
+  __typename?: 'LoginOrCreateReply';
+  accessToken?: Maybe<AccessToken>;
+  userEntity?: Maybe<UserEntity>;
+};
+
+export type MatchFound = {
+  __typename?: 'MatchFound';
+  gameId: Scalars['String'];
+  playerKey: Scalars['String'];
+  playerSecret: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type MatchmakingEnqueueInput = {
+  botDeckId?: InputMaybe<Scalars['String']>;
+  deckId: Scalars['String'];
+  queueId: Scalars['String'];
+};
+
+export type MatchmakingQueue = {
+  __typename?: 'MatchmakingQueue';
+  description: Scalars['String'];
+  name: Scalars['String'];
+  queueId: Scalars['String'];
+  requires?: Maybe<MatchmakingQueueRequires>;
+  tooltip: Scalars['String'];
+};
+
+/** ─── Matchmaking types ──────────────────────────────────────── */
+export type MatchmakingQueueRequires = {
+  __typename?: 'MatchmakingQueueRequires';
+  deck: Scalars['Boolean'];
+  deckIdChoices: Array<Scalars['String']>;
+  heroClass: Scalars['Boolean'];
+};
+
+export const MessageType = {
+  Concede: 'CONCEDE',
+  Emote: 'EMOTE',
+  FirstMessage: 'FIRST_MESSAGE',
+  OnGameEnd: 'ON_GAME_END',
+  OnGameEvent: 'ON_GAME_EVENT',
+  OnMulligan: 'ON_MULLIGAN',
+  OnRequestAction: 'ON_REQUEST_ACTION',
+  OnUpdate: 'ON_UPDATE',
+  Pingpong: 'PINGPONG',
+  Timer: 'TIMER',
+  Touch: 'TOUCH',
+  UpdateAction: 'UPDATE_ACTION',
+  UpdateMulligan: 'UPDATE_MULLIGAN'
+} as const;
+
+export type MessageType = typeof MessageType[keyof typeof MessageType];
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type Mutation = {
   __typename?: 'Mutation';
+  acceptInvite: InviteResponse;
+  /** friends */
+  addFriend: Friend;
   archiveCard?: Maybe<ArchiveCardPayload>;
+  cancelMatchmaking: Scalars['Boolean'];
+  changePassword: LoginOrCreateReply;
+  /** Concede the current game. */
+  concedeGame: Scalars['Boolean'];
+  /** Connect to an active game. Must be called before gameMessages subscription will emit. */
+  connectToGame: Scalars['Boolean'];
+  /** auth */
+  createAccount: LoginOrCreateReply;
   /** Creates a single `Card`. */
   createCard?: Maybe<CreateCardPayload>;
   /** Creates a single `CardsInDeck`. */
   createCardsInDeck?: Maybe<CreateCardsInDeckPayload>;
-  /** Creates a single `Deck`. */
-  createDeck?: Maybe<CreateDeckPayload>;
+  /** decks */
+  createDeck: DecksPutResponse;
   createDeckWithCards?: Maybe<CreateDeckWithCardsPayload>;
   /** Creates a single `GeneratedArt`. */
   createGeneratedArt?: Maybe<CreateGeneratedArtPayload>;
   /** Creates a single `PublishedCard`. */
   createPublishedCard?: Maybe<CreatePublishedCardPayload>;
+  deleteCard: Scalars['Boolean'];
   /** Deletes a single `CardsInDeck` using its globally unique id. */
   deleteCardsInDeck?: Maybe<DeleteCardsInDeckPayload>;
   /** Deletes a single `CardsInDeck` using a unique key. */
   deleteCardsInDeckById?: Maybe<DeleteCardsInDeckPayload>;
+  deleteDeck: Scalars['Boolean'];
+  deleteInvite: InviteResponse;
   /** Deletes a single `PublishedCard` using its globally unique id. */
   deletePublishedCard?: Maybe<DeletePublishedCardPayload>;
   /** Deletes a single `PublishedCard` using a unique key. */
   deletePublishedCardById?: Maybe<DeletePublishedCardPayload>;
+  draftsChooseCard: DraftState;
+  draftsChooseHero: DraftState;
+  duplicateDeck: DecksGetResponse;
+  endRogueRun?: Maybe<EndRogueRunPayload>;
+  /** matchmaking */
+  enqueueMatchmaking: Scalars['Boolean'];
   getClasses?: Maybe<GetClassesPayload>;
   getCollectionCards?: Maybe<GetCollectionCardsPayload>;
-  /** TODO can we return as RogueRun object? */
+  login: LoginOrCreateReply;
   makeRogueChoice: RogueRun;
   publishCard?: Maybe<PublishCardPayload>;
+  /** cards (editable) */
+  putCard: PutCardResult;
+  removeFriend: Scalars['Boolean'];
+  requestPasswordResetEmail: Scalars['Boolean'];
+  reroll: RogueRun;
   saveCard?: Maybe<SaveCardPayload>;
   saveGeneratedArt?: Maybe<SaveGeneratedArtPayload>;
+  /** Send an emote during a game. */
+  sendEmote: Scalars['Boolean'];
+  /** Send a game action in response to an ON_REQUEST_ACTION message. */
+  sendGameAction: Scalars['Boolean'];
+  /** invites */
+  sendInvite: InviteResponse;
+  /** Send a mulligan response in response to an ON_MULLIGAN message. */
+  sendMulligan: Scalars['Boolean'];
   setCardsInDeck?: Maybe<SetCardsInDeckPayload>;
+  skipBoss: RogueRun;
+  /** drafts */
+  startOrModifyDraft: DraftState;
+  /** rogue (existing) */
   startRogueRun: RogueRun;
+  trashCard: RogueRun;
   /** Updates a single `Card` using its globally unique id and a patch. */
   updateCard?: Maybe<UpdateCardPayload>;
   /** Updates a single `Card` using a unique key and a patch. */
@@ -1548,8 +2139,7 @@ export type Mutation = {
   updateCardsInDeck?: Maybe<UpdateCardsInDeckPayload>;
   /** Updates a single `CardsInDeck` using a unique key and a patch. */
   updateCardsInDeckById?: Maybe<UpdateCardsInDeckPayload>;
-  /** Updates a single `Deck` using its globally unique id and a patch. */
-  updateDeck?: Maybe<UpdateDeckPayload>;
+  updateDeck: DecksGetResponse;
   /** Updates a single `Deck` using a unique key and a patch. */
   updateDeckById?: Maybe<UpdateDeckPayload>;
   /** Updates a single `GeneratedArt` using a unique key and a patch. */
@@ -1558,148 +2148,334 @@ export type Mutation = {
   updatePublishedCard?: Maybe<UpdatePublishedCardPayload>;
   /** Updates a single `PublishedCard` using a unique key and a patch. */
   updatePublishedCardById?: Maybe<UpdatePublishedCardPayload>;
+  upgradeCard: RogueRun;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationAcceptInviteArgs = {
+  input: AcceptInviteInput;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationAddFriendArgs = {
+  friendId?: InputMaybe<Scalars['String']>;
+  usernameWithToken?: InputMaybe<Scalars['String']>;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationArchiveCardArgs = {
   input: ArchiveCardInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationChangePasswordArgs = {
+  newPassword: Scalars['String'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationConnectToGameArgs = {
+  playerKey: Scalars['String'];
+  playerSecret: Scalars['String'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationCreateAccountArgs = {
+  input: CreateAccountInput;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationCreateCardArgs = {
   input: CreateCardInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationCreateCardsInDeckArgs = {
   input: CreateCardsInDeckInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationCreateDeckArgs = {
-  input: CreateDeckInput;
+  input: DecksPutInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationCreateDeckWithCardsArgs = {
   input: CreateDeckWithCardsInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationCreateGeneratedArtArgs = {
   input: CreateGeneratedArtInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationCreatePublishedCardArgs = {
   input: CreatePublishedCardInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationDeleteCardArgs = {
+  editableCardId: Scalars['String'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationDeleteCardsInDeckArgs = {
   input: DeleteCardsInDeckInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationDeleteCardsInDeckByIdArgs = {
   input: DeleteCardsInDeckByIdInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationDeleteDeckArgs = {
+  deckId: Scalars['String'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationDeleteInviteArgs = {
+  inviteId: Scalars['String'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationDeletePublishedCardArgs = {
   input: DeletePublishedCardInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationDeletePublishedCardByIdArgs = {
   input: DeletePublishedCardByIdInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationDraftsChooseCardArgs = {
+  cardIndex: Scalars['Int'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationDraftsChooseHeroArgs = {
+  heroIndex: Scalars['Int'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationDuplicateDeckArgs = {
+  deckId: Scalars['String'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationEndRogueRunArgs = {
+  input: EndRogueRunInput;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationEnqueueMatchmakingArgs = {
+  input: MatchmakingEnqueueInput;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationGetClassesArgs = {
   input: GetClassesInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationGetCollectionCardsArgs = {
   input: GetCollectionCardsInput;
 };
 
 
-export type MutationMakeRogueChoiceArgs = {
-  choiceIndex: Scalars['Int'];
-  rogueId: Scalars['BigInt'];
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationLoginArgs = {
+  input: LoginInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationMakeRogueChoiceArgs = {
+  choiceId: Scalars['BigInt'];
+  choices: Array<Scalars['Int']>;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationPublishCardArgs = {
   input: PublishCardInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationPutCardArgs = {
+  input: PutCardInput;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationRemoveFriendArgs = {
+  friendId: Scalars['String'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationRerollArgs = {
+  choiceId: Scalars['BigInt'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationSaveCardArgs = {
   input: SaveCardInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationSaveGeneratedArtArgs = {
   input: SaveGeneratedArtInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationSendEmoteArgs = {
+  entityId: Scalars['Int'];
+  message: EmoteType;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationSendGameActionArgs = {
+  actionIndex: Scalars['Int'];
+  repliesTo: Scalars['String'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationSendInviteArgs = {
+  input: InvitePostInput;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationSendMulliganArgs = {
+  discardedCardIndices: Array<Scalars['Int']>;
+  repliesTo: Scalars['String'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationSetCardsInDeckArgs = {
   input: SetCardsInDeckInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationSkipBossArgs = {
+  rogueId: Scalars['BigInt'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationStartOrModifyDraftArgs = {
+  input: DraftsPostInput;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationStartRogueRunArgs = {
   heroClass: Scalars['String'];
   seed?: InputMaybe<Scalars['BigInt']>;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationTrashCardArgs = {
+  cardId: Scalars['String'];
+  rogueId: Scalars['BigInt'];
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationUpdateCardArgs = {
   input: UpdateCardInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationUpdateCardBySuccessionArgs = {
   input: UpdateCardBySuccessionInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationUpdateCardsInDeckArgs = {
   input: UpdateCardsInDeckInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationUpdateCardsInDeckByIdArgs = {
   input: UpdateCardsInDeckByIdInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationUpdateDeckArgs = {
-  input: UpdateDeckInput;
+  input: DecksUpdateInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationUpdateDeckByIdArgs = {
   input: UpdateDeckByIdInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationUpdateGeneratedArtByHashAndOwnerArgs = {
   input: UpdateGeneratedArtByHashAndOwnerInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationUpdatePublishedCardArgs = {
   input: UpdatePublishedCardInput;
 };
 
 
+/** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationUpdatePublishedCardByIdArgs = {
   input: UpdatePublishedCardByIdInput;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationUpgradeCardArgs = {
+  cardId: Scalars['String'];
+  rogueId: Scalars['BigInt'];
 };
 
 /** An object with a globally unique `ID`. */
@@ -1721,6 +2497,19 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['Cursor']>;
 };
 
+export const PlayerEntityAttribute = {
+  Signature: 'SIGNATURE'
+} as const;
+
+export type PlayerEntityAttribute = typeof PlayerEntityAttribute[keyof typeof PlayerEntityAttribute];
+export const Presence = {
+  InGame: 'IN_GAME',
+  Offline: 'OFFLINE',
+  Online: 'ONLINE',
+  Unknown: 'UNKNOWN'
+} as const;
+
+export type Presence = typeof Presence[keyof typeof Presence];
 /** All input for the `publishCard` mutation. */
 export type PublishCardInput = {
   cardId?: InputMaybe<Scalars['String']>;
@@ -1855,8 +2644,25 @@ export const PublishedCardsOrderBy = {
 } as const;
 
 export type PublishedCardsOrderBy = typeof PublishedCardsOrderBy[keyof typeof PublishedCardsOrderBy];
+export type PutCardInput = {
+  draw?: InputMaybe<Scalars['Boolean']>;
+  editableCardId?: InputMaybe<Scalars['String']>;
+  source: Scalars['String'];
+};
+
+export type PutCardResult = {
+  __typename?: 'PutCardResult';
+  cardId: Scalars['String'];
+  cardScriptErrors: Array<Scalars['String']>;
+  editableCardId: Scalars['String'];
+};
+
+/** ─── Query ──────────────────────────────────────────────────── */
 export type Query = Node & {
   __typename?: 'Query';
+  /** account */
+  account?: Maybe<UserEntity>;
+  accounts: Array<UserEntity>;
   /** Reads and enables pagination through a set of `Card`. */
   allCards?: Maybe<CardsConnection>;
   /** Reads and enables pagination through a set of `CardsInDeck`. */
@@ -1873,6 +2679,8 @@ export type Query = Node & {
   allGeneratedArts?: Maybe<GeneratedArtsConnection>;
   /** Reads and enables pagination through a set of `PublishedCard`. */
   allPublishedCards?: Maybe<PublishedCardsConnection>;
+  /** Reads and enables pagination through a set of `RogueChoice`. */
+  allRogueChoices?: Maybe<RogueChoicesConnection>;
   /** Reads and enables pagination through a set of `RogueRun`. */
   allRogueRuns?: Maybe<RogueRunsConnection>;
   canSeeDeck?: Maybe<Scalars['Boolean']>;
@@ -1880,23 +2688,46 @@ export type Query = Node & {
   card?: Maybe<Card>;
   /** Get a single `Card`. */
   cardBySuccession?: Maybe<Card>;
+  /** cards */
+  cards: GetCardsResponse;
+  cardsByUser: GetCardsResponse;
   /** Reads a single `CardsInDeck` using its globally unique `ID`. */
   cardsInDeck?: Maybe<CardsInDeck>;
   /** Get a single `CardsInDeck`. */
   cardsInDeckById?: Maybe<CardsInDeck>;
+  configuration: ClientConfiguration;
+  currentRogueChoice?: Maybe<RogueChoice>;
+  /** rogue (existing) */
+  currentRogueClasses: Array<Scalars['String']>;
+  currentRogueRun?: Maybe<RogueRun>;
+  /** auth */
   currentUserId?: Maybe<Scalars['String']>;
-  /** Reads a single `Deck` using its globally unique `ID`. */
-  deck?: Maybe<Deck>;
+  /** decks */
+  deck: DecksGetResponse;
   /** Get a single `Deck`. */
   deckById?: Maybe<Deck>;
   /** Reads a single `DeckShare` using its globally unique `ID`. */
   deckShare?: Maybe<DeckShare>;
   /** Get a single `DeckShare`. */
   deckShareByDeckIdAndShareRecipientId?: Maybe<DeckShare>;
+  decks: Array<DecksGetResponse>;
+  /** drafts */
+  draft: DraftState;
+  /** friends (snapshot, use subscription for live updates) */
+  friends: Array<Friend>;
+  /** game records */
+  gameRecord?: Maybe<GameRecord>;
+  gameRecordIds: Array<Scalars['String']>;
   /** Get a single `GeneratedArt`. */
   generatedArtByHashAndOwner?: Maybe<GeneratedArt>;
   getLatestCard?: Maybe<Card>;
   getUserId?: Maybe<Scalars['String']>;
+  /** invites */
+  invite: InviteResponse;
+  invites: Array<Invite>;
+  isInMatch?: Maybe<Scalars['String']>;
+  /** matchmaking */
+  matchmakingQueues: Array<MatchmakingQueue>;
   /** Fetches an object given its globally unique `ID`. */
   node?: Maybe<Node>;
   /** The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`. */
@@ -1910,6 +2741,11 @@ export type Query = Node & {
    * which can only query top level fields if they are in a particular form.
    */
   query: Query;
+  rerollCost: Scalars['Int'];
+  /** Reads a single `RogueChoice` using its globally unique `ID`. */
+  rogueChoice?: Maybe<RogueChoice>;
+  /** Get a single `RogueChoice`. */
+  rogueChoiceById?: Maybe<RogueChoice>;
   /** Reads a single `RogueRun` using its globally unique `ID`. */
   rogueRun?: Maybe<RogueRun>;
   /** Get a single `RogueRun`. */
@@ -1918,9 +2754,18 @@ export type Query = Node & {
   rogueRunByGame?: Maybe<RogueRun>;
   /** Get a single `RogueRun`. */
   rogueRunById?: Maybe<RogueRun>;
+  trashCardCost: Scalars['Int'];
+  upgradeCardCost: Scalars['Int'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryAccountsArgs = {
+  userIds: Array<Scalars['String']>;
+};
+
+
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryAllCardsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -1934,6 +2779,7 @@ export type QueryAllCardsArgs = {
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryAllCardsInDecksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -1946,6 +2792,7 @@ export type QueryAllCardsInDecksArgs = {
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryAllClassesArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -1958,6 +2805,7 @@ export type QueryAllClassesArgs = {
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryAllCollectionCardsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -1970,6 +2818,7 @@ export type QueryAllCollectionCardsArgs = {
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryAllDeckSharesArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -1982,6 +2831,7 @@ export type QueryAllDeckSharesArgs = {
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryAllDecksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -1994,6 +2844,7 @@ export type QueryAllDecksArgs = {
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryAllGeneratedArtsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -2007,6 +2858,7 @@ export type QueryAllGeneratedArtsArgs = {
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryAllPublishedCardsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -2019,6 +2871,20 @@ export type QueryAllPublishedCardsArgs = {
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryAllRogueChoicesArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<RogueChoiceCondition>;
+  filter?: InputMaybe<RogueChoiceFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<RogueChoicesOrderBy>>;
+};
+
+
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryAllRogueRunsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -2031,103 +2897,337 @@ export type QueryAllRogueRunsArgs = {
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryCanSeeDeckArgs = {
   deck?: InputMaybe<DeckInput>;
   userId?: InputMaybe<Scalars['String']>;
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryCardArgs = {
   nodeId: Scalars['ID'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryCardBySuccessionArgs = {
   succession: Scalars['BigInt'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryCardsArgs = {
+  ifNoneMatch?: InputMaybe<Scalars['String']>;
+};
+
+
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryCardsByUserArgs = {
+  ifNoneMatch?: InputMaybe<Scalars['String']>;
+};
+
+
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryCardsInDeckArgs = {
   nodeId: Scalars['ID'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryCardsInDeckByIdArgs = {
   id: Scalars['BigInt'];
 };
 
 
-export type QueryDeckArgs = {
-  nodeId: Scalars['ID'];
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryCurrentRogueChoiceArgs = {
+  rogueId?: InputMaybe<Scalars['BigInt']>;
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryDeckArgs = {
+  deckId: Scalars['String'];
+};
+
+
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryDeckByIdArgs = {
   id: Scalars['String'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryDeckShareArgs = {
   nodeId: Scalars['ID'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryDeckShareByDeckIdAndShareRecipientIdArgs = {
   deckId: Scalars['String'];
   shareRecipientId: Scalars['String'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryGameRecordArgs = {
+  gameId: Scalars['String'];
+};
+
+
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryGeneratedArtByHashAndOwnerArgs = {
   hash: Scalars['String'];
   owner: Scalars['String'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryGetLatestCardArgs = {
   cardId?: InputMaybe<Scalars['String']>;
   published?: InputMaybe<Scalars['Boolean']>;
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryInviteArgs = {
+  inviteId: Scalars['String'];
+};
+
+
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryNodeArgs = {
   nodeId: Scalars['ID'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryPublishedCardArgs = {
   nodeId: Scalars['ID'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryPublishedCardByIdArgs = {
   id: Scalars['String'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryRerollCostArgs = {
+  rogueId: Scalars['BigInt'];
+};
+
+
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryRogueChoiceArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryRogueChoiceByIdArgs = {
+  id: Scalars['BigInt'];
+};
+
+
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryRogueRunArgs = {
   nodeId: Scalars['ID'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryRogueRunByDeckArgs = {
   deck: Scalars['String'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryRogueRunByGameArgs = {
   game: Scalars['BigInt'];
 };
 
 
+/** ─── Query ──────────────────────────────────────────────────── */
 export type QueryRogueRunByIdArgs = {
   id: Scalars['BigInt'];
 };
 
+
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryTrashCardCostArgs = {
+  cardId: Scalars['String'];
+  rogueId: Scalars['BigInt'];
+};
+
+
+/** ─── Query ──────────────────────────────────────────────────── */
+export type QueryUpgradeCardCostArgs = {
+  cardId: Scalars['String'];
+  rogueId: Scalars['BigInt'];
+};
+
+export const Rarity = {
+  Alliance: 'ALLIANCE',
+  Common: 'COMMON',
+  Epic: 'EPIC',
+  Free: 'FREE',
+  Legendary: 'LEGENDARY',
+  Rare: 'RARE'
+} as const;
+
+export type Rarity = typeof Rarity[keyof typeof Rarity];
+export type RogueChoice = Node & {
+  __typename?: 'RogueChoice';
+  canPick: Scalars['Int'];
+  canReroll: Scalars['Boolean'];
+  cards: Array<Maybe<Scalars['String']>>;
+  id: Scalars['BigInt'];
+  index: Scalars['Int'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
+  repopulate: Scalars['Boolean'];
+  rogueRun: Scalars['BigInt'];
+  /** Reads a single `RogueRun` that is related to this `RogueChoice`. */
+  rogueRunByRogueRun?: Maybe<RogueRun>;
+  type: RogueChoiceType;
+};
+
+/**
+ * A condition to be used against `RogueChoice` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
+export type RogueChoiceCondition = {
+  /** Checks for equality with the object’s `canPick` field. */
+  canPick?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `canReroll` field. */
+  canReroll?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `cards` field. */
+  cards?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `id` field. */
+  id?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `index` field. */
+  index?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `repopulate` field. */
+  repopulate?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `rogueRun` field. */
+  rogueRun?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `type` field. */
+  type?: InputMaybe<RogueChoiceType>;
+};
+
+/** A filter to be used against `RogueChoice` object types. All fields are combined with a logical ‘and.’ */
+export type RogueChoiceFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<RogueChoiceFilter>>;
+  /** Filter by the object’s `canPick` field. */
+  canPick?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `canReroll` field. */
+  canReroll?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `cards` field. */
+  cards?: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<BigIntFilter>;
+  /** Filter by the object’s `index` field. */
+  index?: InputMaybe<IntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<RogueChoiceFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<RogueChoiceFilter>>;
+  /** Filter by the object’s `repopulate` field. */
+  repopulate?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `rogueRun` field. */
+  rogueRun?: InputMaybe<BigIntFilter>;
+  /** Filter by the object’s `rogueRunByRogueRun` relation. */
+  rogueRunByRogueRun?: InputMaybe<RogueRunFilter>;
+  /** Filter by the object’s `type` field. */
+  type?: InputMaybe<RogueChoiceTypeFilter>;
+};
+
+export const RogueChoiceType = {
+  Equipment: 'EQUIPMENT',
+  Standard: 'STANDARD'
+} as const;
+
+export type RogueChoiceType = typeof RogueChoiceType[keyof typeof RogueChoiceType];
+/** A filter to be used against RogueChoiceType fields. All fields are combined with a logical ‘and.’ */
+export type RogueChoiceTypeFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<RogueChoiceType>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<RogueChoiceType>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<RogueChoiceType>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<RogueChoiceType>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<RogueChoiceType>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<RogueChoiceType>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<RogueChoiceType>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<RogueChoiceType>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<RogueChoiceType>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<RogueChoiceType>>;
+};
+
+/** A connection to a list of `RogueChoice` values. */
+export type RogueChoicesConnection = {
+  __typename?: 'RogueChoicesConnection';
+  /** A list of edges which contains the `RogueChoice` and cursor to aid in pagination. */
+  edges: Array<Maybe<RogueChoicesEdge>>;
+  /** A list of `RogueChoice` objects. */
+  nodes: Array<Maybe<RogueChoice>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `RogueChoice` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `RogueChoice` edge in the connection. */
+export type RogueChoicesEdge = {
+  __typename?: 'RogueChoicesEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `RogueChoice` at the end of the edge. */
+  node?: Maybe<RogueChoice>;
+};
+
+/** Methods to use when ordering `RogueChoice`. */
+export const RogueChoicesOrderBy = {
+  CanPickAsc: 'CAN_PICK_ASC',
+  CanPickDesc: 'CAN_PICK_DESC',
+  CanRerollAsc: 'CAN_REROLL_ASC',
+  CanRerollDesc: 'CAN_REROLL_DESC',
+  IdAsc: 'ID_ASC',
+  IdDesc: 'ID_DESC',
+  IndexAsc: 'INDEX_ASC',
+  IndexDesc: 'INDEX_DESC',
+  Natural: 'NATURAL',
+  PrimaryKeyAsc: 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc: 'PRIMARY_KEY_DESC',
+  RepopulateAsc: 'REPOPULATE_ASC',
+  RepopulateDesc: 'REPOPULATE_DESC',
+  RogueRunAsc: 'ROGUE_RUN_ASC',
+  RogueRunDesc: 'ROGUE_RUN_DESC',
+  TypeAsc: 'TYPE_ASC',
+  TypeDesc: 'TYPE_DESC'
+} as const;
+
+export type RogueChoicesOrderBy = typeof RogueChoicesOrderBy[keyof typeof RogueChoicesOrderBy];
+/** ─── Rogue types (existing) ────────────────────────────────── */
 export type RogueRun = Node & {
   __typename?: 'RogueRun';
   bossesDefeated: Scalars['Int'];
-  choices?: Maybe<Array<Maybe<Scalars['String']>>>;
+  currentChoice?: Maybe<RogueChoice>;
   deck: Scalars['String'];
   /** Reads a single `Deck` that is related to this `RogueRun`. */
   deckByDeck?: Maybe<Deck>;
@@ -2135,14 +3235,35 @@ export type RogueRun = Node & {
   deckByOpponentDeck?: Maybe<Deck>;
   endedAt?: Maybe<Scalars['Datetime']>;
   game?: Maybe<Scalars['BigInt']>;
+  gold: Scalars['Int'];
+  heroClass: Scalars['String'];
   id: Scalars['BigInt'];
+  lives: Scalars['Int'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   opponentDeck?: Maybe<Scalars['String']>;
+  opponentInfo?: Maybe<Scalars['String']>;
   player: Scalars['String'];
+  rerollsThisRound: Scalars['Int'];
+  /** Reads and enables pagination through a set of `RogueChoice`. */
+  rogueChoicesByRogueRun: RogueChoicesConnection;
   seed: Scalars['BigInt'];
+  seedState: Scalars['BigInt'];
   startedAt: Scalars['Datetime'];
   state: RogueRunState;
+};
+
+
+/** ─── Rogue types (existing) ────────────────────────────────── */
+export type RogueRunRogueChoicesByRogueRunArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<RogueChoiceCondition>;
+  filter?: InputMaybe<RogueChoiceFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<RogueChoicesOrderBy>>;
 };
 
 /**
@@ -2152,22 +3273,32 @@ export type RogueRun = Node & {
 export type RogueRunCondition = {
   /** Checks for equality with the object’s `bossesDefeated` field. */
   bossesDefeated?: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `choices` field. */
-  choices?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `deck` field. */
   deck?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `endedAt` field. */
   endedAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `game` field. */
   game?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `gold` field. */
+  gold?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `heroClass` field. */
+  heroClass?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `lives` field. */
+  lives?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `opponentDeck` field. */
   opponentDeck?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `opponentInfo` field. */
+  opponentInfo?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `player` field. */
   player?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `rerollsThisRound` field. */
+  rerollsThisRound?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `seed` field. */
   seed?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `seedState` field. */
+  seedState?: InputMaybe<Scalars['BigInt']>;
   /** Checks for equality with the object’s `startedAt` field. */
   startedAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `state` field. */
@@ -2180,8 +3311,6 @@ export type RogueRunFilter = {
   and?: InputMaybe<Array<RogueRunFilter>>;
   /** Filter by the object’s `bossesDefeated` field. */
   bossesDefeated?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `choices` field. */
-  choices?: InputMaybe<StringListFilter>;
   /** Filter by the object’s `deck` field. */
   deck?: InputMaybe<StringFilter>;
   /** Filter by the object’s `deckByDeck` relation. */
@@ -2194,18 +3323,34 @@ export type RogueRunFilter = {
   endedAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `game` field. */
   game?: InputMaybe<BigIntFilter>;
+  /** Filter by the object’s `gold` field. */
+  gold?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `heroClass` field. */
+  heroClass?: InputMaybe<StringFilter>;
   /** Filter by the object’s `id` field. */
   id?: InputMaybe<BigIntFilter>;
+  /** Filter by the object’s `lives` field. */
+  lives?: InputMaybe<IntFilter>;
   /** Negates the expression. */
   not?: InputMaybe<RogueRunFilter>;
   /** Filter by the object’s `opponentDeck` field. */
   opponentDeck?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `opponentInfo` field. */
+  opponentInfo?: InputMaybe<StringFilter>;
   /** Checks for any expressions in this list. */
   or?: InputMaybe<Array<RogueRunFilter>>;
   /** Filter by the object’s `player` field. */
   player?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `rerollsThisRound` field. */
+  rerollsThisRound?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `rogueChoicesByRogueRun` relation. */
+  rogueChoicesByRogueRun?: InputMaybe<RogueRunToManyRogueChoiceFilter>;
+  /** Some related `rogueChoicesByRogueRun` exist. */
+  rogueChoicesByRogueRunExist?: InputMaybe<Scalars['Boolean']>;
   /** Filter by the object’s `seed` field. */
   seed?: InputMaybe<BigIntFilter>;
+  /** Filter by the object’s `seedState` field. */
+  seedState?: InputMaybe<BigIntFilter>;
   /** Filter by the object’s `startedAt` field. */
   startedAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `state` field. */
@@ -2247,6 +3392,16 @@ export type RogueRunStateFilter = {
   notIn?: InputMaybe<Array<RogueRunState>>;
 };
 
+/** A filter to be used against many `RogueChoice` object types. All fields are combined with a logical ‘and.’ */
+export type RogueRunToManyRogueChoiceFilter = {
+  /** Every related `RogueChoice` matches the filter criteria. All fields are combined with a logical ‘and.’ */
+  every?: InputMaybe<RogueChoiceFilter>;
+  /** No related `RogueChoice` matches the filter criteria. All fields are combined with a logical ‘and.’ */
+  none?: InputMaybe<RogueChoiceFilter>;
+  /** Some related `RogueChoice` matches the filter criteria. All fields are combined with a logical ‘and.’ */
+  some?: InputMaybe<RogueChoiceFilter>;
+};
+
 /** A connection to a list of `RogueRun` values. */
 export type RogueRunsConnection = {
   __typename?: 'RogueRunsConnection';
@@ -2279,8 +3434,14 @@ export const RogueRunsOrderBy = {
   EndedAtDesc: 'ENDED_AT_DESC',
   GameAsc: 'GAME_ASC',
   GameDesc: 'GAME_DESC',
+  GoldAsc: 'GOLD_ASC',
+  GoldDesc: 'GOLD_DESC',
+  HeroClassAsc: 'HERO_CLASS_ASC',
+  HeroClassDesc: 'HERO_CLASS_DESC',
   IdAsc: 'ID_ASC',
   IdDesc: 'ID_DESC',
+  LivesAsc: 'LIVES_ASC',
+  LivesDesc: 'LIVES_DESC',
   Natural: 'NATURAL',
   OpponentDeckAsc: 'OPPONENT_DECK_ASC',
   OpponentDeckDesc: 'OPPONENT_DECK_DESC',
@@ -2288,8 +3449,12 @@ export const RogueRunsOrderBy = {
   PlayerDesc: 'PLAYER_DESC',
   PrimaryKeyAsc: 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc: 'PRIMARY_KEY_DESC',
+  RerollsThisRoundAsc: 'REROLLS_THIS_ROUND_ASC',
+  RerollsThisRoundDesc: 'REROLLS_THIS_ROUND_DESC',
   SeedAsc: 'SEED_ASC',
   SeedDesc: 'SEED_DESC',
+  SeedStateAsc: 'SEED_STATE_ASC',
+  SeedStateDesc: 'SEED_STATE_DESC',
   StartedAtAsc: 'STARTED_AT_ASC',
   StartedAtDesc: 'STARTED_AT_DESC',
   StateAsc: 'STATE_ASC',
@@ -2355,6 +3520,32 @@ export type SaveGeneratedArtPayload = {
   query?: Maybe<Query>;
 };
 
+/**
+ * A message from the server during a game. The messageType field indicates which
+ * fields are populated. Clients should switch on messageType to process the message.
+ */
+export type ServerGameMessage = {
+  __typename?: 'ServerGameMessage';
+  /** Present on ON_REQUEST_ACTION messages. The actions the player can take. */
+  actions?: Maybe<GameActions>;
+  /** Present on EMOTE messages. */
+  emote?: Maybe<Emote>;
+  /** Present on ON_GAME_EVENT messages. */
+  event?: Maybe<GameEvent>;
+  /** Present on ON_GAME_END messages. */
+  gameOver?: Maybe<GameOver>;
+  /** Present on ON_UPDATE and ON_REQUEST_ACTION messages. */
+  gameState?: Maybe<GameState>;
+  id?: Maybe<Scalars['String']>;
+  isReplayMessage: Scalars['Boolean'];
+  localPlayerId: Scalars['Int'];
+  messageType: MessageType;
+  /** Present on ON_MULLIGAN messages. The starting cards to consider discarding. */
+  startingCards?: Maybe<Array<Entity>>;
+  /** Present on TIMER messages. */
+  timers?: Maybe<Timers>;
+};
+
 /** All input for the `setCardsInDeck` mutation. */
 export type SetCardsInDeckInput = {
   cardIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -2377,6 +3568,17 @@ export type SetCardsInDeckPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
+};
+
+export type SpellAction = {
+  __typename?: 'SpellAction';
+  action: Scalars['Int'];
+  actionType: ActionType;
+  choices: Array<SpellAction>;
+  description: Scalars['String'];
+  entity?: Maybe<Entity>;
+  sourceId: Scalars['Int'];
+  targetKeyToActions: Array<TargetActionPair>;
 };
 
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
@@ -2495,6 +3697,45 @@ export type StringListFilter = {
   notEqualTo?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Overlaps the specified list of values. */
   overlaps?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** ─── Subscription ───────────────────────────────────────────── */
+export type Subscription = {
+  __typename?: 'Subscription';
+  /** Emits when an editable card is added, changed, or removed. */
+  editableCardUpdated: EditableCard;
+  /** Emits friend list changes (added, removed, presence updates). */
+  friendUpdated: Friend;
+  /**
+   * Streams game messages for the authenticated user's active game.
+   * Call connectToGame mutation first to initiate the game connection.
+   * Emits ServerGameMessage for each game state change, action request,
+   * mulligan, event, and game over.
+   */
+  gameMessages: ServerGameMessage;
+  /** Emits when an invite is received or its status changes. */
+  inviteUpdated: Invite;
+  /** Emits when the current user is matched into a game. */
+  matchFound: MatchFound;
+};
+
+/** ─── Game types (real-time game state) ──────────────────────── */
+export type TargetActionPair = {
+  __typename?: 'TargetActionPair';
+  action: Scalars['Int'];
+  friendlyBattlefieldIndex: Scalars['Int'];
+  target: Scalars['Int'];
+};
+
+export type Timers = {
+  __typename?: 'Timers';
+  millisRemaining: Scalars['BigInt'];
+};
+
+export type Tooltip = {
+  __typename?: 'Tooltip';
+  keywords: Array<Scalars['String']>;
+  text: Scalars['String'];
 };
 
 /** All input for the `updateCardBySuccession` mutation. */
@@ -2718,6 +3959,41 @@ export type UpdatePublishedCardPayloadPublishedCardEdgeArgs = {
   orderBy?: Array<PublishedCardsOrderBy>;
 };
 
+/** ─── Account / Auth types ───────────────────────────────────── */
+export type UserEntity = {
+  __typename?: 'UserEntity';
+  email: Scalars['String'];
+  id: Scalars['String'];
+  privacyToken: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type ValidationReport = {
+  __typename?: 'ValidationReport';
+  errors: Array<Scalars['String']>;
+  valid: Scalars['Boolean'];
+};
+
+export const Zone = {
+  Battlefield: 'BATTLEFIELD',
+  Deck: 'DECK',
+  Discover: 'DISCOVER',
+  Enchantment: 'ENCHANTMENT',
+  Graveyard: 'GRAVEYARD',
+  Hand: 'HAND',
+  Hero: 'HERO',
+  HeroPower: 'HERO_POWER',
+  Hidden: 'HIDDEN',
+  None: 'NONE',
+  Player: 'PLAYER',
+  Quest: 'QUEST',
+  RemovedFromPlay: 'REMOVED_FROM_PLAY',
+  Secret: 'SECRET',
+  SetAsideZone: 'SET_ASIDE_ZONE',
+  Weapon: 'WEAPON'
+} as const;
+
+export type Zone = typeof Zone[keyof typeof Zone];
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -2789,8 +4065,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AcceptInviteInput: ResolverTypeWrapper<Partial<AcceptInviteInput>>;
+  AccessToken: ResolverTypeWrapper<Partial<AccessToken>>;
+  ActionType: ResolverTypeWrapper<Partial<ActionType>>;
   ArchiveCardInput: ResolverTypeWrapper<Partial<ArchiveCardInput>>;
   ArchiveCardPayload: ResolverTypeWrapper<Partial<ArchiveCardPayload>>;
+  AttributeValueInput: ResolverTypeWrapper<Partial<AttributeValueInput>>;
+  AttributeValueTuple: ResolverTypeWrapper<Partial<AttributeValueTuple>>;
   BigInt: ResolverTypeWrapper<Partial<Scalars['BigInt']>>;
   BigIntFilter: ResolverTypeWrapper<Partial<BigIntFilter>>;
   Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>;
@@ -2800,7 +4081,9 @@ export type ResolversTypes = {
   CardFilter: ResolverTypeWrapper<Partial<CardFilter>>;
   CardInput: ResolverTypeWrapper<Partial<CardInput>>;
   CardPatch: ResolverTypeWrapper<Partial<CardPatch>>;
+  CardRecord: ResolverTypeWrapper<Partial<CardRecord>>;
   CardToManyPublishedCardFilter: ResolverTypeWrapper<Partial<CardToManyPublishedCardFilter>>;
+  CardType: ResolverTypeWrapper<Partial<CardType>>;
   CardsConnection: ResolverTypeWrapper<Partial<CardsConnection>>;
   CardsEdge: ResolverTypeWrapper<Partial<CardsEdge>>;
   CardsInDeck: ResolverTypeWrapper<Partial<CardsInDeck>>;
@@ -2818,12 +4101,15 @@ export type ResolversTypes = {
   ClassesConnection: ResolverTypeWrapper<Partial<ClassesConnection>>;
   ClassesEdge: ResolverTypeWrapper<Partial<ClassesEdge>>;
   ClassesOrderBy: ResolverTypeWrapper<Partial<ClassesOrderBy>>;
+  ClientConfiguration: ResolverTypeWrapper<Partial<ClientConfiguration>>;
   CollectionCard: ResolverTypeWrapper<Partial<CollectionCard>>;
   CollectionCardCondition: ResolverTypeWrapper<Partial<CollectionCardCondition>>;
   CollectionCardFilter: ResolverTypeWrapper<Partial<CollectionCardFilter>>;
   CollectionCardsConnection: ResolverTypeWrapper<Partial<CollectionCardsConnection>>;
   CollectionCardsEdge: ResolverTypeWrapper<Partial<CollectionCardsEdge>>;
   CollectionCardsOrderBy: ResolverTypeWrapper<Partial<CollectionCardsOrderBy>>;
+  CollectionType: ResolverTypeWrapper<Partial<CollectionType>>;
+  CreateAccountInput: ResolverTypeWrapper<Partial<CreateAccountInput>>;
   CreateCardInput: ResolverTypeWrapper<Partial<CreateCardInput>>;
   CreateCardPayload: ResolverTypeWrapper<Partial<CreateCardPayload>>;
   CreateCardsInDeckInput: ResolverTypeWrapper<Partial<CreateCardsInDeckInput>>;
@@ -2853,15 +4139,38 @@ export type ResolversTypes = {
   DeckToManyCardsInDeckFilter: ResolverTypeWrapper<Partial<DeckToManyCardsInDeckFilter>>;
   DeckToManyDeckShareFilter: ResolverTypeWrapper<Partial<DeckToManyDeckShareFilter>>;
   DeckToManyRogueRunFilter: ResolverTypeWrapper<Partial<DeckToManyRogueRunFilter>>;
+  DeckType: ResolverTypeWrapper<Partial<DeckType>>;
   DecksConnection: ResolverTypeWrapper<Partial<DecksConnection>>;
   DecksEdge: ResolverTypeWrapper<Partial<DecksEdge>>;
+  DecksGetResponse: ResolverTypeWrapper<Partial<DecksGetResponse>>;
   DecksOrderBy: ResolverTypeWrapper<Partial<DecksOrderBy>>;
+  DecksPutInput: ResolverTypeWrapper<Partial<DecksPutInput>>;
+  DecksPutResponse: ResolverTypeWrapper<Partial<DecksPutResponse>>;
+  DecksUpdateInput: ResolverTypeWrapper<Partial<DecksUpdateInput>>;
   DeleteCardsInDeckByIdInput: ResolverTypeWrapper<Partial<DeleteCardsInDeckByIdInput>>;
   DeleteCardsInDeckInput: ResolverTypeWrapper<Partial<DeleteCardsInDeckInput>>;
   DeleteCardsInDeckPayload: ResolverTypeWrapper<Partial<DeleteCardsInDeckPayload>>;
   DeletePublishedCardByIdInput: ResolverTypeWrapper<Partial<DeletePublishedCardByIdInput>>;
   DeletePublishedCardInput: ResolverTypeWrapper<Partial<DeletePublishedCardInput>>;
   DeletePublishedCardPayload: ResolverTypeWrapper<Partial<DeletePublishedCardPayload>>;
+  DraftState: ResolverTypeWrapper<Partial<DraftState>>;
+  DraftStatus: ResolverTypeWrapper<Partial<DraftStatus>>;
+  DraftsPostInput: ResolverTypeWrapper<Partial<DraftsPostInput>>;
+  EditableCard: ResolverTypeWrapper<Partial<EditableCard>>;
+  Emote: ResolverTypeWrapper<Partial<Emote>>;
+  EmoteType: ResolverTypeWrapper<Partial<EmoteType>>;
+  EndRogueRunInput: ResolverTypeWrapper<Partial<EndRogueRunInput>>;
+  EndRogueRunPayload: ResolverTypeWrapper<Partial<EndRogueRunPayload>>;
+  Entity: ResolverTypeWrapper<Partial<Entity>>;
+  EntityLocation: ResolverTypeWrapper<Partial<EntityLocation>>;
+  EntityType: ResolverTypeWrapper<Partial<EntityType>>;
+  Friend: ResolverTypeWrapper<Partial<Friend>>;
+  GameActions: ResolverTypeWrapper<Partial<GameActions>>;
+  GameEvent: ResolverTypeWrapper<Partial<GameEvent>>;
+  GameEventType: ResolverTypeWrapper<Partial<GameEventType>>;
+  GameOver: ResolverTypeWrapper<Partial<GameOver>>;
+  GameRecord: ResolverTypeWrapper<Partial<GameRecord>>;
+  GameState: ResolverTypeWrapper<Partial<GameState>>;
   GeneratedArt: ResolverTypeWrapper<Partial<GeneratedArt>>;
   GeneratedArtCondition: ResolverTypeWrapper<Partial<GeneratedArtCondition>>;
   GeneratedArtFilter: ResolverTypeWrapper<Partial<GeneratedArtFilter>>;
@@ -2870,6 +4179,7 @@ export type ResolversTypes = {
   GeneratedArtsConnection: ResolverTypeWrapper<Partial<GeneratedArtsConnection>>;
   GeneratedArtsEdge: ResolverTypeWrapper<Partial<GeneratedArtsEdge>>;
   GeneratedArtsOrderBy: ResolverTypeWrapper<Partial<GeneratedArtsOrderBy>>;
+  GetCardsResponse: ResolverTypeWrapper<Partial<GetCardsResponse>>;
   GetClassesInput: ResolverTypeWrapper<Partial<GetClassesInput>>;
   GetClassesPayload: ResolverTypeWrapper<Partial<GetClassesPayload>>;
   GetClassesRecord: ResolverTypeWrapper<Partial<GetClassesRecord>>;
@@ -2880,11 +4190,25 @@ export type ResolversTypes = {
   IncludeArchivedOption: ResolverTypeWrapper<Partial<IncludeArchivedOption>>;
   Int: ResolverTypeWrapper<Partial<Scalars['Int']>>;
   IntFilter: ResolverTypeWrapper<Partial<IntFilter>>;
+  InventoryCollection: ResolverTypeWrapper<Partial<InventoryCollection>>;
+  Invite: ResolverTypeWrapper<Partial<Invite>>;
+  InvitePostInput: ResolverTypeWrapper<Partial<InvitePostInput>>;
+  InviteResponse: ResolverTypeWrapper<Partial<InviteResponse>>;
+  InviteStatus: ResolverTypeWrapper<Partial<InviteStatus>>;
   JSON: ResolverTypeWrapper<Partial<Scalars['JSON']>>;
   JSONFilter: ResolverTypeWrapper<Partial<JsonFilter>>;
+  LoginInput: ResolverTypeWrapper<Partial<LoginInput>>;
+  LoginOrCreateReply: ResolverTypeWrapper<Partial<LoginOrCreateReply>>;
+  MatchFound: ResolverTypeWrapper<Partial<MatchFound>>;
+  MatchmakingEnqueueInput: ResolverTypeWrapper<Partial<MatchmakingEnqueueInput>>;
+  MatchmakingQueue: ResolverTypeWrapper<Partial<MatchmakingQueue>>;
+  MatchmakingQueueRequires: ResolverTypeWrapper<Partial<MatchmakingQueueRequires>>;
+  MessageType: ResolverTypeWrapper<Partial<MessageType>>;
   Mutation: ResolverTypeWrapper<{}>;
-  Node: ResolversTypes['Card'] | ResolversTypes['CardsInDeck'] | ResolversTypes['Deck'] | ResolversTypes['DeckShare'] | ResolversTypes['PublishedCard'] | ResolversTypes['Query'] | ResolversTypes['RogueRun'];
+  Node: ResolversTypes['Card'] | ResolversTypes['CardsInDeck'] | ResolversTypes['Deck'] | ResolversTypes['DeckShare'] | ResolversTypes['PublishedCard'] | ResolversTypes['Query'] | ResolversTypes['RogueChoice'] | ResolversTypes['RogueRun'];
   PageInfo: ResolverTypeWrapper<Partial<PageInfo>>;
+  PlayerEntityAttribute: ResolverTypeWrapper<Partial<PlayerEntityAttribute>>;
+  Presence: ResolverTypeWrapper<Partial<Presence>>;
   PublishCardInput: ResolverTypeWrapper<Partial<PublishCardInput>>;
   PublishCardPayload: ResolverTypeWrapper<Partial<PublishCardPayload>>;
   PublishedCard: ResolverTypeWrapper<Partial<PublishedCard>>;
@@ -2896,12 +4220,24 @@ export type ResolversTypes = {
   PublishedCardsConnection: ResolverTypeWrapper<Partial<PublishedCardsConnection>>;
   PublishedCardsEdge: ResolverTypeWrapper<Partial<PublishedCardsEdge>>;
   PublishedCardsOrderBy: ResolverTypeWrapper<Partial<PublishedCardsOrderBy>>;
+  PutCardInput: ResolverTypeWrapper<Partial<PutCardInput>>;
+  PutCardResult: ResolverTypeWrapper<Partial<PutCardResult>>;
   Query: ResolverTypeWrapper<{}>;
+  Rarity: ResolverTypeWrapper<Partial<Rarity>>;
+  RogueChoice: ResolverTypeWrapper<Partial<RogueChoice>>;
+  RogueChoiceCondition: ResolverTypeWrapper<Partial<RogueChoiceCondition>>;
+  RogueChoiceFilter: ResolverTypeWrapper<Partial<RogueChoiceFilter>>;
+  RogueChoiceType: ResolverTypeWrapper<Partial<RogueChoiceType>>;
+  RogueChoiceTypeFilter: ResolverTypeWrapper<Partial<RogueChoiceTypeFilter>>;
+  RogueChoicesConnection: ResolverTypeWrapper<Partial<RogueChoicesConnection>>;
+  RogueChoicesEdge: ResolverTypeWrapper<Partial<RogueChoicesEdge>>;
+  RogueChoicesOrderBy: ResolverTypeWrapper<Partial<RogueChoicesOrderBy>>;
   RogueRun: ResolverTypeWrapper<Partial<RogueRun>>;
   RogueRunCondition: ResolverTypeWrapper<Partial<RogueRunCondition>>;
   RogueRunFilter: ResolverTypeWrapper<Partial<RogueRunFilter>>;
   RogueRunState: ResolverTypeWrapper<Partial<RogueRunState>>;
   RogueRunStateFilter: ResolverTypeWrapper<Partial<RogueRunStateFilter>>;
+  RogueRunToManyRogueChoiceFilter: ResolverTypeWrapper<Partial<RogueRunToManyRogueChoiceFilter>>;
   RogueRunsConnection: ResolverTypeWrapper<Partial<RogueRunsConnection>>;
   RogueRunsEdge: ResolverTypeWrapper<Partial<RogueRunsEdge>>;
   RogueRunsOrderBy: ResolverTypeWrapper<Partial<RogueRunsOrderBy>>;
@@ -2909,11 +4245,17 @@ export type ResolversTypes = {
   SaveCardPayload: ResolverTypeWrapper<Partial<SaveCardPayload>>;
   SaveGeneratedArtInput: ResolverTypeWrapper<Partial<SaveGeneratedArtInput>>;
   SaveGeneratedArtPayload: ResolverTypeWrapper<Partial<SaveGeneratedArtPayload>>;
+  ServerGameMessage: ResolverTypeWrapper<Partial<ServerGameMessage>>;
   SetCardsInDeckInput: ResolverTypeWrapper<Partial<SetCardsInDeckInput>>;
   SetCardsInDeckPayload: ResolverTypeWrapper<Partial<SetCardsInDeckPayload>>;
+  SpellAction: ResolverTypeWrapper<Partial<SpellAction>>;
   String: ResolverTypeWrapper<Partial<Scalars['String']>>;
   StringFilter: ResolverTypeWrapper<Partial<StringFilter>>;
   StringListFilter: ResolverTypeWrapper<Partial<StringListFilter>>;
+  Subscription: ResolverTypeWrapper<{}>;
+  TargetActionPair: ResolverTypeWrapper<Partial<TargetActionPair>>;
+  Timers: ResolverTypeWrapper<Partial<Timers>>;
+  Tooltip: ResolverTypeWrapper<Partial<Tooltip>>;
   UpdateCardBySuccessionInput: ResolverTypeWrapper<Partial<UpdateCardBySuccessionInput>>;
   UpdateCardInput: ResolverTypeWrapper<Partial<UpdateCardInput>>;
   UpdateCardPayload: ResolverTypeWrapper<Partial<UpdateCardPayload>>;
@@ -2928,12 +4270,19 @@ export type ResolversTypes = {
   UpdatePublishedCardByIdInput: ResolverTypeWrapper<Partial<UpdatePublishedCardByIdInput>>;
   UpdatePublishedCardInput: ResolverTypeWrapper<Partial<UpdatePublishedCardInput>>;
   UpdatePublishedCardPayload: ResolverTypeWrapper<Partial<UpdatePublishedCardPayload>>;
+  UserEntity: ResolverTypeWrapper<Partial<UserEntity>>;
+  ValidationReport: ResolverTypeWrapper<Partial<ValidationReport>>;
+  Zone: ResolverTypeWrapper<Partial<Zone>>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AcceptInviteInput: Partial<AcceptInviteInput>;
+  AccessToken: Partial<AccessToken>;
   ArchiveCardInput: Partial<ArchiveCardInput>;
   ArchiveCardPayload: Partial<ArchiveCardPayload>;
+  AttributeValueInput: Partial<AttributeValueInput>;
+  AttributeValueTuple: Partial<AttributeValueTuple>;
   BigInt: Partial<Scalars['BigInt']>;
   BigIntFilter: Partial<BigIntFilter>;
   Boolean: Partial<Scalars['Boolean']>;
@@ -2943,6 +4292,7 @@ export type ResolversParentTypes = {
   CardFilter: Partial<CardFilter>;
   CardInput: Partial<CardInput>;
   CardPatch: Partial<CardPatch>;
+  CardRecord: Partial<CardRecord>;
   CardToManyPublishedCardFilter: Partial<CardToManyPublishedCardFilter>;
   CardsConnection: Partial<CardsConnection>;
   CardsEdge: Partial<CardsEdge>;
@@ -2958,11 +4308,13 @@ export type ResolversParentTypes = {
   ClassFilter: Partial<ClassFilter>;
   ClassesConnection: Partial<ClassesConnection>;
   ClassesEdge: Partial<ClassesEdge>;
+  ClientConfiguration: Partial<ClientConfiguration>;
   CollectionCard: Partial<CollectionCard>;
   CollectionCardCondition: Partial<CollectionCardCondition>;
   CollectionCardFilter: Partial<CollectionCardFilter>;
   CollectionCardsConnection: Partial<CollectionCardsConnection>;
   CollectionCardsEdge: Partial<CollectionCardsEdge>;
+  CreateAccountInput: Partial<CreateAccountInput>;
   CreateCardInput: Partial<CreateCardInput>;
   CreateCardPayload: Partial<CreateCardPayload>;
   CreateCardsInDeckInput: Partial<CreateCardsInDeckInput>;
@@ -2993,12 +4345,30 @@ export type ResolversParentTypes = {
   DeckToManyRogueRunFilter: Partial<DeckToManyRogueRunFilter>;
   DecksConnection: Partial<DecksConnection>;
   DecksEdge: Partial<DecksEdge>;
+  DecksGetResponse: Partial<DecksGetResponse>;
+  DecksPutInput: Partial<DecksPutInput>;
+  DecksPutResponse: Partial<DecksPutResponse>;
+  DecksUpdateInput: Partial<DecksUpdateInput>;
   DeleteCardsInDeckByIdInput: Partial<DeleteCardsInDeckByIdInput>;
   DeleteCardsInDeckInput: Partial<DeleteCardsInDeckInput>;
   DeleteCardsInDeckPayload: Partial<DeleteCardsInDeckPayload>;
   DeletePublishedCardByIdInput: Partial<DeletePublishedCardByIdInput>;
   DeletePublishedCardInput: Partial<DeletePublishedCardInput>;
   DeletePublishedCardPayload: Partial<DeletePublishedCardPayload>;
+  DraftState: Partial<DraftState>;
+  DraftsPostInput: Partial<DraftsPostInput>;
+  EditableCard: Partial<EditableCard>;
+  Emote: Partial<Emote>;
+  EndRogueRunInput: Partial<EndRogueRunInput>;
+  EndRogueRunPayload: Partial<EndRogueRunPayload>;
+  Entity: Partial<Entity>;
+  EntityLocation: Partial<EntityLocation>;
+  Friend: Partial<Friend>;
+  GameActions: Partial<GameActions>;
+  GameEvent: Partial<GameEvent>;
+  GameOver: Partial<GameOver>;
+  GameRecord: Partial<GameRecord>;
+  GameState: Partial<GameState>;
   GeneratedArt: Partial<GeneratedArt>;
   GeneratedArtCondition: Partial<GeneratedArtCondition>;
   GeneratedArtFilter: Partial<GeneratedArtFilter>;
@@ -3006,6 +4376,7 @@ export type ResolversParentTypes = {
   GeneratedArtPatch: Partial<GeneratedArtPatch>;
   GeneratedArtsConnection: Partial<GeneratedArtsConnection>;
   GeneratedArtsEdge: Partial<GeneratedArtsEdge>;
+  GetCardsResponse: Partial<GetCardsResponse>;
   GetClassesInput: Partial<GetClassesInput>;
   GetClassesPayload: Partial<GetClassesPayload>;
   GetClassesRecord: Partial<GetClassesRecord>;
@@ -3015,10 +4386,20 @@ export type ResolversParentTypes = {
   ID: Partial<Scalars['ID']>;
   Int: Partial<Scalars['Int']>;
   IntFilter: Partial<IntFilter>;
+  InventoryCollection: Partial<InventoryCollection>;
+  Invite: Partial<Invite>;
+  InvitePostInput: Partial<InvitePostInput>;
+  InviteResponse: Partial<InviteResponse>;
   JSON: Partial<Scalars['JSON']>;
   JSONFilter: Partial<JsonFilter>;
+  LoginInput: Partial<LoginInput>;
+  LoginOrCreateReply: Partial<LoginOrCreateReply>;
+  MatchFound: Partial<MatchFound>;
+  MatchmakingEnqueueInput: Partial<MatchmakingEnqueueInput>;
+  MatchmakingQueue: Partial<MatchmakingQueue>;
+  MatchmakingQueueRequires: Partial<MatchmakingQueueRequires>;
   Mutation: {};
-  Node: ResolversParentTypes['Card'] | ResolversParentTypes['CardsInDeck'] | ResolversParentTypes['Deck'] | ResolversParentTypes['DeckShare'] | ResolversParentTypes['PublishedCard'] | ResolversParentTypes['Query'] | ResolversParentTypes['RogueRun'];
+  Node: ResolversParentTypes['Card'] | ResolversParentTypes['CardsInDeck'] | ResolversParentTypes['Deck'] | ResolversParentTypes['DeckShare'] | ResolversParentTypes['PublishedCard'] | ResolversParentTypes['Query'] | ResolversParentTypes['RogueChoice'] | ResolversParentTypes['RogueRun'];
   PageInfo: Partial<PageInfo>;
   PublishCardInput: Partial<PublishCardInput>;
   PublishCardPayload: Partial<PublishCardPayload>;
@@ -3030,22 +4411,37 @@ export type ResolversParentTypes = {
   PublishedCardToManyCardsInDeckFilter: Partial<PublishedCardToManyCardsInDeckFilter>;
   PublishedCardsConnection: Partial<PublishedCardsConnection>;
   PublishedCardsEdge: Partial<PublishedCardsEdge>;
+  PutCardInput: Partial<PutCardInput>;
+  PutCardResult: Partial<PutCardResult>;
   Query: {};
+  RogueChoice: Partial<RogueChoice>;
+  RogueChoiceCondition: Partial<RogueChoiceCondition>;
+  RogueChoiceFilter: Partial<RogueChoiceFilter>;
+  RogueChoiceTypeFilter: Partial<RogueChoiceTypeFilter>;
+  RogueChoicesConnection: Partial<RogueChoicesConnection>;
+  RogueChoicesEdge: Partial<RogueChoicesEdge>;
   RogueRun: Partial<RogueRun>;
   RogueRunCondition: Partial<RogueRunCondition>;
   RogueRunFilter: Partial<RogueRunFilter>;
   RogueRunStateFilter: Partial<RogueRunStateFilter>;
+  RogueRunToManyRogueChoiceFilter: Partial<RogueRunToManyRogueChoiceFilter>;
   RogueRunsConnection: Partial<RogueRunsConnection>;
   RogueRunsEdge: Partial<RogueRunsEdge>;
   SaveCardInput: Partial<SaveCardInput>;
   SaveCardPayload: Partial<SaveCardPayload>;
   SaveGeneratedArtInput: Partial<SaveGeneratedArtInput>;
   SaveGeneratedArtPayload: Partial<SaveGeneratedArtPayload>;
+  ServerGameMessage: Partial<ServerGameMessage>;
   SetCardsInDeckInput: Partial<SetCardsInDeckInput>;
   SetCardsInDeckPayload: Partial<SetCardsInDeckPayload>;
+  SpellAction: Partial<SpellAction>;
   String: Partial<Scalars['String']>;
   StringFilter: Partial<StringFilter>;
   StringListFilter: Partial<StringListFilter>;
+  Subscription: {};
+  TargetActionPair: Partial<TargetActionPair>;
+  Timers: Partial<Timers>;
+  Tooltip: Partial<Tooltip>;
   UpdateCardBySuccessionInput: Partial<UpdateCardBySuccessionInput>;
   UpdateCardInput: Partial<UpdateCardInput>;
   UpdateCardPayload: Partial<UpdateCardPayload>;
@@ -3060,11 +4456,24 @@ export type ResolversParentTypes = {
   UpdatePublishedCardByIdInput: Partial<UpdatePublishedCardByIdInput>;
   UpdatePublishedCardInput: Partial<UpdatePublishedCardInput>;
   UpdatePublishedCardPayload: Partial<UpdatePublishedCardPayload>;
+  UserEntity: Partial<UserEntity>;
+  ValidationReport: Partial<ValidationReport>;
+};
+
+export type AccessTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['AccessToken'] = ResolversParentTypes['AccessToken']> = {
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ArchiveCardPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['ArchiveCardPayload'] = ResolversParentTypes['ArchiveCardPayload']> = {
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AttributeValueTupleResolvers<ContextType = any, ParentType extends ResolversParentTypes['AttributeValueTuple'] = ResolversParentTypes['AttributeValueTuple']> = {
+  attribute?: Resolver<ResolversTypes['PlayerEntityAttribute'], ParentType, ContextType>;
+  stringValue?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3085,6 +4494,16 @@ export type CardResolvers<ContextType = any, ParentType extends ResolversParentT
   publishedCardsBySuccession?: Resolver<ResolversTypes['PublishedCardsConnection'], ParentType, ContextType, RequireFields<CardPublishedCardsBySuccessionArgs, 'orderBy'>>;
   succession?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   uri?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CardRecordResolvers<ContextType = any, ParentType extends ResolversParentTypes['CardRecord'] = ResolversParentTypes['CardRecord']> = {
+  cardId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  collectionIds?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  entity?: Resolver<ResolversTypes['Entity'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3148,6 +4567,13 @@ export type ClassesConnectionResolvers<ContextType = any, ParentType extends Res
 export type ClassesEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClassesEdge'] = ResolversParentTypes['ClassesEdge']> = {
   cursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
   node?: Resolver<Maybe<ResolversTypes['Class']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClientConfigurationResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClientConfiguration'] = ResolversParentTypes['ClientConfiguration']> = {
+  graphQlUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  keycloakAccountManagementUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  keycloakResetPasswordUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3295,6 +4721,18 @@ export type DecksEdgeResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type DecksGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['DecksGetResponse'] = ResolversParentTypes['DecksGetResponse']> = {
+  collection?: Resolver<Maybe<ResolversTypes['InventoryCollection']>, ParentType, ContextType>;
+  inventoryIdsSize?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DecksPutResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['DecksPutResponse'] = ResolversParentTypes['DecksPutResponse']> = {
+  collection?: Resolver<Maybe<ResolversTypes['InventoryCollection']>, ParentType, ContextType>;
+  deckId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type DeleteCardsInDeckPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteCardsInDeckPayload'] = ResolversParentTypes['DeleteCardsInDeckPayload']> = {
   cardsInDeck?: Resolver<Maybe<ResolversTypes['CardsInDeck']>, ParentType, ContextType>;
   cardsInDeckEdge?: Resolver<Maybe<ResolversTypes['CardsInDecksEdge']>, ParentType, ContextType, RequireFields<DeleteCardsInDeckPayloadCardsInDeckEdgeArgs, 'orderBy'>>;
@@ -3313,6 +4751,174 @@ export type DeletePublishedCardPayloadResolvers<ContextType = any, ParentType ex
   publishedCard?: Resolver<Maybe<ResolversTypes['PublishedCard']>, ParentType, ContextType>;
   publishedCardEdge?: Resolver<Maybe<ResolversTypes['PublishedCardsEdge']>, ParentType, ContextType, RequireFields<DeletePublishedCardPayloadPublishedCardEdgeArgs, 'orderBy'>>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DraftStateResolvers<ContextType = any, ParentType extends ResolversParentTypes['DraftState'] = ResolversParentTypes['DraftState']> = {
+  cardsRemaining?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  currentCardChoices?: Resolver<Array<ResolversTypes['Entity']>, ParentType, ContextType>;
+  deckId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  draftIndex?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  heroClass?: Resolver<Maybe<ResolversTypes['Entity']>, ParentType, ContextType>;
+  heroClassChoices?: Resolver<Array<ResolversTypes['Entity']>, ParentType, ContextType>;
+  losses?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  selectedCardIds?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['DraftStatus'], ParentType, ContextType>;
+  wins?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EditableCardResolvers<ContextType = any, ParentType extends ResolversParentTypes['EditableCard'] = ResolversParentTypes['EditableCard']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  ownerUserId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EmoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Emote'] = ResolversParentTypes['Emote']> = {
+  entityId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['EmoteType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EndRogueRunPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['EndRogueRunPayload'] = ResolversParentTypes['EndRogueRunPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deckByDeck?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
+  deckByOpponentDeck?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  rogueRun?: Resolver<Maybe<ResolversTypes['RogueRun']>, ParentType, ContextType>;
+  rogueRunEdge?: Resolver<Maybe<ResolversTypes['RogueRunsEdge']>, ParentType, ContextType, RequireFields<EndRogueRunPayloadRogueRunEdgeArgs, 'orderBy'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EntityResolvers<ContextType = any, ParentType extends ResolversParentTypes['Entity'] = ResolversParentTypes['Entity']> = {
+  armor?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  attack?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  baseAttack?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  baseHp?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  baseManaCost?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  battlecry?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  boardPosition?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  cannotAttack?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  cardId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  cardSet?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  cardSets?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  cardType?: Resolver<ResolversTypes['CardType'], ParentType, ContextType>;
+  charge?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  charges?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  chooseOne?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  collectible?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  combo?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  conditionMet?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  countUntilCast?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  deathrattles?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  deflect?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  destroyed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  discarded?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  divineShield?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  durability?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  enchantmentType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  enraged?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  entityType?: Resolver<ResolversTypes['EntityType'], ParentType, ContextType>;
+  extraAttack?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  fires?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  frozen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  gameStarted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  gold?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  heroClasses?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  host?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  hostsTrigger?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  hp?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  immune?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isStartingTurn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  lifesteal?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  location?: Resolver<Maybe<ResolversTypes['EntityLocation']>, ParentType, ContextType>;
+  lockedMana?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  mana?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  manaCost?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  maxHp?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  maxMana?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  note?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  overload?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  permanent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  playable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  poisonous?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  rarity?: Resolver<ResolversTypes['Rarity'], ParentType, ContextType>;
+  roasted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  rush?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  silenced?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  spellDamage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  stealth?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  summoningSickness?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  taunt?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  tooltips?: Resolver<Array<ResolversTypes['Tooltip']>, ParentType, ContextType>;
+  tribes?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  uncensored?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  underAura?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  untargetableBySpells?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  windfury?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EntityLocationResolvers<ContextType = any, ParentType extends ResolversParentTypes['EntityLocation'] = ResolversParentTypes['EntityLocation']> = {
+  index?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  player?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  zone?: Resolver<ResolversTypes['Zone'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FriendResolvers<ContextType = any, ParentType extends ResolversParentTypes['Friend'] = ResolversParentTypes['Friend']> = {
+  friendId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  friendName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  presence?: Resolver<ResolversTypes['Presence'], ParentType, ContextType>;
+  since?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GameActionsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GameActions'] = ResolversParentTypes['GameActions']> = {
+  all?: Resolver<Array<ResolversTypes['SpellAction']>, ParentType, ContextType>;
+  compatibility?: Resolver<Array<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GameEventResolvers<ContextType = any, ParentType extends ResolversParentTypes['GameEvent'] = ResolversParentTypes['GameEvent']> = {
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  eventType?: Resolver<ResolversTypes['GameEventType'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  isPowerHistory?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isSourcePlayerLocal?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isTargetPlayerLocal?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  source?: Resolver<Maybe<ResolversTypes['Entity']>, ParentType, ContextType>;
+  target?: Resolver<Maybe<ResolversTypes['Entity']>, ParentType, ContextType>;
+  targets?: Resolver<Array<ResolversTypes['Entity']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GameOverResolvers<ContextType = any, ParentType extends ResolversParentTypes['GameOver'] = ResolversParentTypes['GameOver']> = {
+  localPlayerWon?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  winningPlayerId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GameRecordResolvers<ContextType = any, ParentType extends ResolversParentTypes['GameRecord'] = ResolversParentTypes['GameRecord']> = {
+  completedAt?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  completedAtLocalized?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isBotGame?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  playerNames?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GameStateResolvers<ContextType = any, ParentType extends ResolversParentTypes['GameState'] = ResolversParentTypes['GameState']> = {
+  entities?: Resolver<Array<ResolversTypes['Entity']>, ParentType, ContextType>;
+  isLocalPlayerTurn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  turnNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  turnState?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3336,6 +4942,13 @@ export type GeneratedArtsConnectionResolvers<ContextType = any, ParentType exten
 export type GeneratedArtsEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneratedArtsEdge'] = ResolversParentTypes['GeneratedArtsEdge']> = {
   cursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
   node?: Resolver<Maybe<ResolversTypes['GeneratedArt']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GetCardsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetCardsResponse'] = ResolversParentTypes['GetCardsResponse']> = {
+  cachedOk?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  cards?: Resolver<Array<ResolversTypes['CardRecord']>, ParentType, ContextType>;
+  version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3380,43 +4993,135 @@ export type GetCollectionCardsRecordResolvers<ContextType = any, ParentType exte
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type InventoryCollectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['InventoryCollection'] = ResolversParentTypes['InventoryCollection']> = {
+  collectionType?: Resolver<ResolversTypes['CollectionType'], ParentType, ContextType>;
+  deckType?: Resolver<ResolversTypes['DeckType'], ParentType, ContextType>;
+  format?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  heroClass?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  inventory?: Resolver<Array<ResolversTypes['CardRecord']>, ParentType, ContextType>;
+  isStandardDeck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  playerEntityAttributes?: Resolver<Array<ResolversTypes['AttributeValueTuple']>, ParentType, ContextType>;
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  validationReport?: Resolver<Maybe<ResolversTypes['ValidationReport']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type InviteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Invite'] = ResolversParentTypes['Invite']> = {
+  expiresAt?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  friendId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  fromName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  fromUserId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  queueId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['InviteStatus'], ParentType, ContextType>;
+  toName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  toUserId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type InviteResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['InviteResponse'] = ResolversParentTypes['InviteResponse']> = {
+  invite?: Resolver<Maybe<ResolversTypes['Invite']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
   name: 'JSON';
 }
 
+export type LoginOrCreateReplyResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginOrCreateReply'] = ResolversParentTypes['LoginOrCreateReply']> = {
+  accessToken?: Resolver<Maybe<ResolversTypes['AccessToken']>, ParentType, ContextType>;
+  userEntity?: Resolver<Maybe<ResolversTypes['UserEntity']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MatchFoundResolvers<ContextType = any, ParentType extends ResolversParentTypes['MatchFound'] = ResolversParentTypes['MatchFound']> = {
+  gameId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  playerKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  playerSecret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MatchmakingQueueResolvers<ContextType = any, ParentType extends ResolversParentTypes['MatchmakingQueue'] = ResolversParentTypes['MatchmakingQueue']> = {
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  queueId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  requires?: Resolver<Maybe<ResolversTypes['MatchmakingQueueRequires']>, ParentType, ContextType>;
+  tooltip?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MatchmakingQueueRequiresResolvers<ContextType = any, ParentType extends ResolversParentTypes['MatchmakingQueueRequires'] = ResolversParentTypes['MatchmakingQueueRequires']> = {
+  deck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  deckIdChoices?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  heroClass?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  acceptInvite?: Resolver<ResolversTypes['InviteResponse'], ParentType, ContextType, RequireFields<MutationAcceptInviteArgs, 'input'>>;
+  addFriend?: Resolver<ResolversTypes['Friend'], ParentType, ContextType, Partial<MutationAddFriendArgs>>;
   archiveCard?: Resolver<Maybe<ResolversTypes['ArchiveCardPayload']>, ParentType, ContextType, RequireFields<MutationArchiveCardArgs, 'input'>>;
+  cancelMatchmaking?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  changePassword?: Resolver<ResolversTypes['LoginOrCreateReply'], ParentType, ContextType, RequireFields<MutationChangePasswordArgs, 'newPassword'>>;
+  concedeGame?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  connectToGame?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationConnectToGameArgs, 'playerKey' | 'playerSecret'>>;
+  createAccount?: Resolver<ResolversTypes['LoginOrCreateReply'], ParentType, ContextType, RequireFields<MutationCreateAccountArgs, 'input'>>;
   createCard?: Resolver<Maybe<ResolversTypes['CreateCardPayload']>, ParentType, ContextType, RequireFields<MutationCreateCardArgs, 'input'>>;
   createCardsInDeck?: Resolver<Maybe<ResolversTypes['CreateCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationCreateCardsInDeckArgs, 'input'>>;
-  createDeck?: Resolver<Maybe<ResolversTypes['CreateDeckPayload']>, ParentType, ContextType, RequireFields<MutationCreateDeckArgs, 'input'>>;
+  createDeck?: Resolver<ResolversTypes['DecksPutResponse'], ParentType, ContextType, RequireFields<MutationCreateDeckArgs, 'input'>>;
   createDeckWithCards?: Resolver<Maybe<ResolversTypes['CreateDeckWithCardsPayload']>, ParentType, ContextType, RequireFields<MutationCreateDeckWithCardsArgs, 'input'>>;
   createGeneratedArt?: Resolver<Maybe<ResolversTypes['CreateGeneratedArtPayload']>, ParentType, ContextType, RequireFields<MutationCreateGeneratedArtArgs, 'input'>>;
   createPublishedCard?: Resolver<Maybe<ResolversTypes['CreatePublishedCardPayload']>, ParentType, ContextType, RequireFields<MutationCreatePublishedCardArgs, 'input'>>;
+  deleteCard?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCardArgs, 'editableCardId'>>;
   deleteCardsInDeck?: Resolver<Maybe<ResolversTypes['DeleteCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationDeleteCardsInDeckArgs, 'input'>>;
   deleteCardsInDeckById?: Resolver<Maybe<ResolversTypes['DeleteCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationDeleteCardsInDeckByIdArgs, 'input'>>;
+  deleteDeck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteDeckArgs, 'deckId'>>;
+  deleteInvite?: Resolver<ResolversTypes['InviteResponse'], ParentType, ContextType, RequireFields<MutationDeleteInviteArgs, 'inviteId'>>;
   deletePublishedCard?: Resolver<Maybe<ResolversTypes['DeletePublishedCardPayload']>, ParentType, ContextType, RequireFields<MutationDeletePublishedCardArgs, 'input'>>;
   deletePublishedCardById?: Resolver<Maybe<ResolversTypes['DeletePublishedCardPayload']>, ParentType, ContextType, RequireFields<MutationDeletePublishedCardByIdArgs, 'input'>>;
+  draftsChooseCard?: Resolver<ResolversTypes['DraftState'], ParentType, ContextType, RequireFields<MutationDraftsChooseCardArgs, 'cardIndex'>>;
+  draftsChooseHero?: Resolver<ResolversTypes['DraftState'], ParentType, ContextType, RequireFields<MutationDraftsChooseHeroArgs, 'heroIndex'>>;
+  duplicateDeck?: Resolver<ResolversTypes['DecksGetResponse'], ParentType, ContextType, RequireFields<MutationDuplicateDeckArgs, 'deckId'>>;
+  endRogueRun?: Resolver<Maybe<ResolversTypes['EndRogueRunPayload']>, ParentType, ContextType, RequireFields<MutationEndRogueRunArgs, 'input'>>;
+  enqueueMatchmaking?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationEnqueueMatchmakingArgs, 'input'>>;
   getClasses?: Resolver<Maybe<ResolversTypes['GetClassesPayload']>, ParentType, ContextType, RequireFields<MutationGetClassesArgs, 'input'>>;
   getCollectionCards?: Resolver<Maybe<ResolversTypes['GetCollectionCardsPayload']>, ParentType, ContextType, RequireFields<MutationGetCollectionCardsArgs, 'input'>>;
-  makeRogueChoice?: Resolver<ResolversTypes['RogueRun'], ParentType, ContextType, RequireFields<MutationMakeRogueChoiceArgs, 'choiceIndex' | 'rogueId'>>;
+  login?: Resolver<ResolversTypes['LoginOrCreateReply'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
+  makeRogueChoice?: Resolver<ResolversTypes['RogueRun'], ParentType, ContextType, RequireFields<MutationMakeRogueChoiceArgs, 'choiceId' | 'choices'>>;
   publishCard?: Resolver<Maybe<ResolversTypes['PublishCardPayload']>, ParentType, ContextType, RequireFields<MutationPublishCardArgs, 'input'>>;
+  putCard?: Resolver<ResolversTypes['PutCardResult'], ParentType, ContextType, RequireFields<MutationPutCardArgs, 'input'>>;
+  removeFriend?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemoveFriendArgs, 'friendId'>>;
+  requestPasswordResetEmail?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  reroll?: Resolver<ResolversTypes['RogueRun'], ParentType, ContextType, RequireFields<MutationRerollArgs, 'choiceId'>>;
   saveCard?: Resolver<Maybe<ResolversTypes['SaveCardPayload']>, ParentType, ContextType, RequireFields<MutationSaveCardArgs, 'input'>>;
   saveGeneratedArt?: Resolver<Maybe<ResolversTypes['SaveGeneratedArtPayload']>, ParentType, ContextType, RequireFields<MutationSaveGeneratedArtArgs, 'input'>>;
+  sendEmote?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSendEmoteArgs, 'entityId' | 'message'>>;
+  sendGameAction?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSendGameActionArgs, 'actionIndex' | 'repliesTo'>>;
+  sendInvite?: Resolver<ResolversTypes['InviteResponse'], ParentType, ContextType, RequireFields<MutationSendInviteArgs, 'input'>>;
+  sendMulligan?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSendMulliganArgs, 'discardedCardIndices' | 'repliesTo'>>;
   setCardsInDeck?: Resolver<Maybe<ResolversTypes['SetCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationSetCardsInDeckArgs, 'input'>>;
+  skipBoss?: Resolver<ResolversTypes['RogueRun'], ParentType, ContextType, RequireFields<MutationSkipBossArgs, 'rogueId'>>;
+  startOrModifyDraft?: Resolver<ResolversTypes['DraftState'], ParentType, ContextType, RequireFields<MutationStartOrModifyDraftArgs, 'input'>>;
   startRogueRun?: Resolver<ResolversTypes['RogueRun'], ParentType, ContextType, RequireFields<MutationStartRogueRunArgs, 'heroClass'>>;
+  trashCard?: Resolver<ResolversTypes['RogueRun'], ParentType, ContextType, RequireFields<MutationTrashCardArgs, 'cardId' | 'rogueId'>>;
   updateCard?: Resolver<Maybe<ResolversTypes['UpdateCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdateCardArgs, 'input'>>;
   updateCardBySuccession?: Resolver<Maybe<ResolversTypes['UpdateCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdateCardBySuccessionArgs, 'input'>>;
   updateCardsInDeck?: Resolver<Maybe<ResolversTypes['UpdateCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationUpdateCardsInDeckArgs, 'input'>>;
   updateCardsInDeckById?: Resolver<Maybe<ResolversTypes['UpdateCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationUpdateCardsInDeckByIdArgs, 'input'>>;
-  updateDeck?: Resolver<Maybe<ResolversTypes['UpdateDeckPayload']>, ParentType, ContextType, RequireFields<MutationUpdateDeckArgs, 'input'>>;
+  updateDeck?: Resolver<ResolversTypes['DecksGetResponse'], ParentType, ContextType, RequireFields<MutationUpdateDeckArgs, 'input'>>;
   updateDeckById?: Resolver<Maybe<ResolversTypes['UpdateDeckPayload']>, ParentType, ContextType, RequireFields<MutationUpdateDeckByIdArgs, 'input'>>;
   updateGeneratedArtByHashAndOwner?: Resolver<Maybe<ResolversTypes['UpdateGeneratedArtPayload']>, ParentType, ContextType, RequireFields<MutationUpdateGeneratedArtByHashAndOwnerArgs, 'input'>>;
   updatePublishedCard?: Resolver<Maybe<ResolversTypes['UpdatePublishedCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdatePublishedCardArgs, 'input'>>;
   updatePublishedCardById?: Resolver<Maybe<ResolversTypes['UpdatePublishedCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdatePublishedCardByIdArgs, 'input'>>;
+  upgradeCard?: Resolver<ResolversTypes['RogueRun'], ParentType, ContextType, RequireFields<MutationUpgradeCardArgs, 'cardId' | 'rogueId'>>;
 };
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
-  __resolveType: TypeResolveFn<'Card' | 'CardsInDeck' | 'Deck' | 'DeckShare' | 'PublishedCard' | 'Query' | 'RogueRun', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'Card' | 'CardsInDeck' | 'Deck' | 'DeckShare' | 'PublishedCard' | 'Query' | 'RogueChoice' | 'RogueRun', ParentType, ContextType>;
   nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 };
 
@@ -3458,7 +5163,16 @@ export type PublishedCardsEdgeResolvers<ContextType = any, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PutCardResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['PutCardResult'] = ResolversParentTypes['PutCardResult']> = {
+  cardId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  cardScriptErrors?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  editableCardId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  account?: Resolver<Maybe<ResolversTypes['UserEntity']>, ParentType, ContextType>;
+  accounts?: Resolver<Array<ResolversTypes['UserEntity']>, ParentType, ContextType, RequireFields<QueryAccountsArgs, 'userIds'>>;
   allCards?: Resolver<Maybe<ResolversTypes['CardsConnection']>, ParentType, ContextType, RequireFields<QueryAllCardsArgs, 'includeArchived' | 'orderBy'>>;
   allCardsInDecks?: Resolver<Maybe<ResolversTypes['CardsInDecksConnection']>, ParentType, ContextType, RequireFields<QueryAllCardsInDecksArgs, 'orderBy'>>;
   allClasses?: Resolver<Maybe<ResolversTypes['ClassesConnection']>, ParentType, ContextType, RequireFields<QueryAllClassesArgs, 'orderBy'>>;
@@ -3467,44 +5181,100 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   allDecks?: Resolver<Maybe<ResolversTypes['DecksConnection']>, ParentType, ContextType, RequireFields<QueryAllDecksArgs, 'orderBy'>>;
   allGeneratedArts?: Resolver<Maybe<ResolversTypes['GeneratedArtsConnection']>, ParentType, ContextType, RequireFields<QueryAllGeneratedArtsArgs, 'includeArchived' | 'orderBy'>>;
   allPublishedCards?: Resolver<Maybe<ResolversTypes['PublishedCardsConnection']>, ParentType, ContextType, RequireFields<QueryAllPublishedCardsArgs, 'orderBy'>>;
+  allRogueChoices?: Resolver<Maybe<ResolversTypes['RogueChoicesConnection']>, ParentType, ContextType, RequireFields<QueryAllRogueChoicesArgs, 'orderBy'>>;
   allRogueRuns?: Resolver<Maybe<ResolversTypes['RogueRunsConnection']>, ParentType, ContextType, RequireFields<QueryAllRogueRunsArgs, 'orderBy'>>;
   canSeeDeck?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<QueryCanSeeDeckArgs>>;
   card?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType, RequireFields<QueryCardArgs, 'nodeId'>>;
   cardBySuccession?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType, RequireFields<QueryCardBySuccessionArgs, 'succession'>>;
+  cards?: Resolver<ResolversTypes['GetCardsResponse'], ParentType, ContextType, Partial<QueryCardsArgs>>;
+  cardsByUser?: Resolver<ResolversTypes['GetCardsResponse'], ParentType, ContextType, Partial<QueryCardsByUserArgs>>;
   cardsInDeck?: Resolver<Maybe<ResolversTypes['CardsInDeck']>, ParentType, ContextType, RequireFields<QueryCardsInDeckArgs, 'nodeId'>>;
   cardsInDeckById?: Resolver<Maybe<ResolversTypes['CardsInDeck']>, ParentType, ContextType, RequireFields<QueryCardsInDeckByIdArgs, 'id'>>;
+  configuration?: Resolver<ResolversTypes['ClientConfiguration'], ParentType, ContextType>;
+  currentRogueChoice?: Resolver<Maybe<ResolversTypes['RogueChoice']>, ParentType, ContextType, Partial<QueryCurrentRogueChoiceArgs>>;
+  currentRogueClasses?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  currentRogueRun?: Resolver<Maybe<ResolversTypes['RogueRun']>, ParentType, ContextType>;
   currentUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  deck?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType, RequireFields<QueryDeckArgs, 'nodeId'>>;
+  deck?: Resolver<ResolversTypes['DecksGetResponse'], ParentType, ContextType, RequireFields<QueryDeckArgs, 'deckId'>>;
   deckById?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType, RequireFields<QueryDeckByIdArgs, 'id'>>;
   deckShare?: Resolver<Maybe<ResolversTypes['DeckShare']>, ParentType, ContextType, RequireFields<QueryDeckShareArgs, 'nodeId'>>;
   deckShareByDeckIdAndShareRecipientId?: Resolver<Maybe<ResolversTypes['DeckShare']>, ParentType, ContextType, RequireFields<QueryDeckShareByDeckIdAndShareRecipientIdArgs, 'deckId' | 'shareRecipientId'>>;
+  decks?: Resolver<Array<ResolversTypes['DecksGetResponse']>, ParentType, ContextType>;
+  draft?: Resolver<ResolversTypes['DraftState'], ParentType, ContextType>;
+  friends?: Resolver<Array<ResolversTypes['Friend']>, ParentType, ContextType>;
+  gameRecord?: Resolver<Maybe<ResolversTypes['GameRecord']>, ParentType, ContextType, RequireFields<QueryGameRecordArgs, 'gameId'>>;
+  gameRecordIds?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   generatedArtByHashAndOwner?: Resolver<Maybe<ResolversTypes['GeneratedArt']>, ParentType, ContextType, RequireFields<QueryGeneratedArtByHashAndOwnerArgs, 'hash' | 'owner'>>;
   getLatestCard?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType, Partial<QueryGetLatestCardArgs>>;
   getUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  invite?: Resolver<ResolversTypes['InviteResponse'], ParentType, ContextType, RequireFields<QueryInviteArgs, 'inviteId'>>;
+  invites?: Resolver<Array<ResolversTypes['Invite']>, ParentType, ContextType>;
+  isInMatch?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  matchmakingQueues?: Resolver<Array<ResolversTypes['MatchmakingQueue']>, ParentType, ContextType>;
   node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QueryNodeArgs, 'nodeId'>>;
   nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   publishedCard?: Resolver<Maybe<ResolversTypes['PublishedCard']>, ParentType, ContextType, RequireFields<QueryPublishedCardArgs, 'nodeId'>>;
   publishedCardById?: Resolver<Maybe<ResolversTypes['PublishedCard']>, ParentType, ContextType, RequireFields<QueryPublishedCardByIdArgs, 'id'>>;
   query?: Resolver<ResolversTypes['Query'], ParentType, ContextType>;
+  rerollCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<QueryRerollCostArgs, 'rogueId'>>;
+  rogueChoice?: Resolver<Maybe<ResolversTypes['RogueChoice']>, ParentType, ContextType, RequireFields<QueryRogueChoiceArgs, 'nodeId'>>;
+  rogueChoiceById?: Resolver<Maybe<ResolversTypes['RogueChoice']>, ParentType, ContextType, RequireFields<QueryRogueChoiceByIdArgs, 'id'>>;
   rogueRun?: Resolver<Maybe<ResolversTypes['RogueRun']>, ParentType, ContextType, RequireFields<QueryRogueRunArgs, 'nodeId'>>;
   rogueRunByDeck?: Resolver<Maybe<ResolversTypes['RogueRun']>, ParentType, ContextType, RequireFields<QueryRogueRunByDeckArgs, 'deck'>>;
   rogueRunByGame?: Resolver<Maybe<ResolversTypes['RogueRun']>, ParentType, ContextType, RequireFields<QueryRogueRunByGameArgs, 'game'>>;
   rogueRunById?: Resolver<Maybe<ResolversTypes['RogueRun']>, ParentType, ContextType, RequireFields<QueryRogueRunByIdArgs, 'id'>>;
+  trashCardCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<QueryTrashCardCostArgs, 'cardId' | 'rogueId'>>;
+  upgradeCardCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<QueryUpgradeCardCostArgs, 'cardId' | 'rogueId'>>;
+};
+
+export type RogueChoiceResolvers<ContextType = any, ParentType extends ResolversParentTypes['RogueChoice'] = ResolversParentTypes['RogueChoice']> = {
+  canPick?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  canReroll?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  cards?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  index?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  repopulate?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  rogueRun?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  rogueRunByRogueRun?: Resolver<Maybe<ResolversTypes['RogueRun']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['RogueChoiceType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RogueChoicesConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['RogueChoicesConnection'] = ResolversParentTypes['RogueChoicesConnection']> = {
+  edges?: Resolver<Array<Maybe<ResolversTypes['RogueChoicesEdge']>>, ParentType, ContextType>;
+  nodes?: Resolver<Array<Maybe<ResolversTypes['RogueChoice']>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RogueChoicesEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['RogueChoicesEdge'] = ResolversParentTypes['RogueChoicesEdge']> = {
+  cursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
+  node?: Resolver<Maybe<ResolversTypes['RogueChoice']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type RogueRunResolvers<ContextType = any, ParentType extends ResolversParentTypes['RogueRun'] = ResolversParentTypes['RogueRun']> = {
   bossesDefeated?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  choices?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  currentChoice?: Resolver<Maybe<ResolversTypes['RogueChoice']>, ParentType, ContextType>;
   deck?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   deckByDeck?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
   deckByOpponentDeck?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
   endedAt?: Resolver<Maybe<ResolversTypes['Datetime']>, ParentType, ContextType>;
   game?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  gold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  heroClass?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  lives?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   opponentDeck?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  opponentInfo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   player?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  rerollsThisRound?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rogueChoicesByRogueRun?: Resolver<ResolversTypes['RogueChoicesConnection'], ParentType, ContextType, RequireFields<RogueRunRogueChoicesByRogueRunArgs, 'orderBy'>>;
   seed?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  seedState?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   startedAt?: Resolver<ResolversTypes['Datetime'], ParentType, ContextType>;
   state?: Resolver<ResolversTypes['RogueRunState'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3539,10 +5309,62 @@ export type SaveGeneratedArtPayloadResolvers<ContextType = any, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ServerGameMessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['ServerGameMessage'] = ResolversParentTypes['ServerGameMessage']> = {
+  actions?: Resolver<Maybe<ResolversTypes['GameActions']>, ParentType, ContextType>;
+  emote?: Resolver<Maybe<ResolversTypes['Emote']>, ParentType, ContextType>;
+  event?: Resolver<Maybe<ResolversTypes['GameEvent']>, ParentType, ContextType>;
+  gameOver?: Resolver<Maybe<ResolversTypes['GameOver']>, ParentType, ContextType>;
+  gameState?: Resolver<Maybe<ResolversTypes['GameState']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isReplayMessage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  localPlayerId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  messageType?: Resolver<ResolversTypes['MessageType'], ParentType, ContextType>;
+  startingCards?: Resolver<Maybe<Array<ResolversTypes['Entity']>>, ParentType, ContextType>;
+  timers?: Resolver<Maybe<ResolversTypes['Timers']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SetCardsInDeckPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['SetCardsInDeckPayload'] = ResolversParentTypes['SetCardsInDeckPayload']> = {
   cardsInDecks?: Resolver<Maybe<Array<Maybe<ResolversTypes['CardsInDeck']>>>, ParentType, ContextType>;
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SpellActionResolvers<ContextType = any, ParentType extends ResolversParentTypes['SpellAction'] = ResolversParentTypes['SpellAction']> = {
+  action?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  actionType?: Resolver<ResolversTypes['ActionType'], ParentType, ContextType>;
+  choices?: Resolver<Array<ResolversTypes['SpellAction']>, ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  entity?: Resolver<Maybe<ResolversTypes['Entity']>, ParentType, ContextType>;
+  sourceId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  targetKeyToActions?: Resolver<Array<ResolversTypes['TargetActionPair']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  editableCardUpdated?: SubscriptionResolver<ResolversTypes['EditableCard'], "editableCardUpdated", ParentType, ContextType>;
+  friendUpdated?: SubscriptionResolver<ResolversTypes['Friend'], "friendUpdated", ParentType, ContextType>;
+  gameMessages?: SubscriptionResolver<ResolversTypes['ServerGameMessage'], "gameMessages", ParentType, ContextType>;
+  inviteUpdated?: SubscriptionResolver<ResolversTypes['Invite'], "inviteUpdated", ParentType, ContextType>;
+  matchFound?: SubscriptionResolver<ResolversTypes['MatchFound'], "matchFound", ParentType, ContextType>;
+};
+
+export type TargetActionPairResolvers<ContextType = any, ParentType extends ResolversParentTypes['TargetActionPair'] = ResolversParentTypes['TargetActionPair']> = {
+  action?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  friendlyBattlefieldIndex?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  target?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TimersResolvers<ContextType = any, ParentType extends ResolversParentTypes['Timers'] = ResolversParentTypes['Timers']> = {
+  millisRemaining?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TooltipResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tooltip'] = ResolversParentTypes['Tooltip']> = {
+  keywords?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3588,10 +5410,27 @@ export type UpdatePublishedCardPayloadResolvers<ContextType = any, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserEntityResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserEntity'] = ResolversParentTypes['UserEntity']> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  privacyToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ValidationReportResolvers<ContextType = any, ParentType extends ResolversParentTypes['ValidationReport'] = ResolversParentTypes['ValidationReport']> = {
+  errors?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
+  AccessToken?: AccessTokenResolvers<ContextType>;
   ArchiveCardPayload?: ArchiveCardPayloadResolvers<ContextType>;
+  AttributeValueTuple?: AttributeValueTupleResolvers<ContextType>;
   BigInt?: GraphQLScalarType;
   Card?: CardResolvers<ContextType>;
+  CardRecord?: CardRecordResolvers<ContextType>;
   CardsConnection?: CardsConnectionResolvers<ContextType>;
   CardsEdge?: CardsEdgeResolvers<ContextType>;
   CardsInDeck?: CardsInDeckResolvers<ContextType>;
@@ -3600,6 +5439,7 @@ export type Resolvers<ContextType = any> = {
   Class?: ClassResolvers<ContextType>;
   ClassesConnection?: ClassesConnectionResolvers<ContextType>;
   ClassesEdge?: ClassesEdgeResolvers<ContextType>;
+  ClientConfiguration?: ClientConfigurationResolvers<ContextType>;
   CollectionCard?: CollectionCardResolvers<ContextType>;
   CollectionCardsConnection?: CollectionCardsConnectionResolvers<ContextType>;
   CollectionCardsEdge?: CollectionCardsEdgeResolvers<ContextType>;
@@ -3617,16 +5457,38 @@ export type Resolvers<ContextType = any> = {
   DeckSharesEdge?: DeckSharesEdgeResolvers<ContextType>;
   DecksConnection?: DecksConnectionResolvers<ContextType>;
   DecksEdge?: DecksEdgeResolvers<ContextType>;
+  DecksGetResponse?: DecksGetResponseResolvers<ContextType>;
+  DecksPutResponse?: DecksPutResponseResolvers<ContextType>;
   DeleteCardsInDeckPayload?: DeleteCardsInDeckPayloadResolvers<ContextType>;
   DeletePublishedCardPayload?: DeletePublishedCardPayloadResolvers<ContextType>;
+  DraftState?: DraftStateResolvers<ContextType>;
+  EditableCard?: EditableCardResolvers<ContextType>;
+  Emote?: EmoteResolvers<ContextType>;
+  EndRogueRunPayload?: EndRogueRunPayloadResolvers<ContextType>;
+  Entity?: EntityResolvers<ContextType>;
+  EntityLocation?: EntityLocationResolvers<ContextType>;
+  Friend?: FriendResolvers<ContextType>;
+  GameActions?: GameActionsResolvers<ContextType>;
+  GameEvent?: GameEventResolvers<ContextType>;
+  GameOver?: GameOverResolvers<ContextType>;
+  GameRecord?: GameRecordResolvers<ContextType>;
+  GameState?: GameStateResolvers<ContextType>;
   GeneratedArt?: GeneratedArtResolvers<ContextType>;
   GeneratedArtsConnection?: GeneratedArtsConnectionResolvers<ContextType>;
   GeneratedArtsEdge?: GeneratedArtsEdgeResolvers<ContextType>;
+  GetCardsResponse?: GetCardsResponseResolvers<ContextType>;
   GetClassesPayload?: GetClassesPayloadResolvers<ContextType>;
   GetClassesRecord?: GetClassesRecordResolvers<ContextType>;
   GetCollectionCardsPayload?: GetCollectionCardsPayloadResolvers<ContextType>;
   GetCollectionCardsRecord?: GetCollectionCardsRecordResolvers<ContextType>;
+  InventoryCollection?: InventoryCollectionResolvers<ContextType>;
+  Invite?: InviteResolvers<ContextType>;
+  InviteResponse?: InviteResponseResolvers<ContextType>;
   JSON?: GraphQLScalarType;
+  LoginOrCreateReply?: LoginOrCreateReplyResolvers<ContextType>;
+  MatchFound?: MatchFoundResolvers<ContextType>;
+  MatchmakingQueue?: MatchmakingQueueResolvers<ContextType>;
+  MatchmakingQueueRequires?: MatchmakingQueueRequiresResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Node?: NodeResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
@@ -3634,18 +5496,30 @@ export type Resolvers<ContextType = any> = {
   PublishedCard?: PublishedCardResolvers<ContextType>;
   PublishedCardsConnection?: PublishedCardsConnectionResolvers<ContextType>;
   PublishedCardsEdge?: PublishedCardsEdgeResolvers<ContextType>;
+  PutCardResult?: PutCardResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  RogueChoice?: RogueChoiceResolvers<ContextType>;
+  RogueChoicesConnection?: RogueChoicesConnectionResolvers<ContextType>;
+  RogueChoicesEdge?: RogueChoicesEdgeResolvers<ContextType>;
   RogueRun?: RogueRunResolvers<ContextType>;
   RogueRunsConnection?: RogueRunsConnectionResolvers<ContextType>;
   RogueRunsEdge?: RogueRunsEdgeResolvers<ContextType>;
   SaveCardPayload?: SaveCardPayloadResolvers<ContextType>;
   SaveGeneratedArtPayload?: SaveGeneratedArtPayloadResolvers<ContextType>;
+  ServerGameMessage?: ServerGameMessageResolvers<ContextType>;
   SetCardsInDeckPayload?: SetCardsInDeckPayloadResolvers<ContextType>;
+  SpellAction?: SpellActionResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  TargetActionPair?: TargetActionPairResolvers<ContextType>;
+  Timers?: TimersResolvers<ContextType>;
+  Tooltip?: TooltipResolvers<ContextType>;
   UpdateCardPayload?: UpdateCardPayloadResolvers<ContextType>;
   UpdateCardsInDeckPayload?: UpdateCardsInDeckPayloadResolvers<ContextType>;
   UpdateDeckPayload?: UpdateDeckPayloadResolvers<ContextType>;
   UpdateGeneratedArtPayload?: UpdateGeneratedArtPayloadResolvers<ContextType>;
   UpdatePublishedCardPayload?: UpdatePublishedCardPayloadResolvers<ContextType>;
+  UserEntity?: UserEntityResolvers<ContextType>;
+  ValidationReport?: ValidationReportResolvers<ContextType>;
 };
 
 
@@ -3658,8 +5532,6 @@ export type CollectionCardFragment = { __typename?: 'CollectionCard', id?: strin
 export type DeckFragment = { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number };
 
 export type DeckCardsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, publishedCardByCardId?: { __typename?: 'PublishedCard', cardBySuccession?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null } | null> } };
-
-export type RogueRunFragment = { __typename?: 'RogueRun', id: any, player: string, seed: any, choices?: Array<string | null> | null, bossesDefeated: number, deckByDeck?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, publishedCardByCardId?: { __typename?: 'PublishedCard', cardBySuccession?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null } | null> } } | null };
 
 export type CreateDeckMutationVariables = Exact<{
   deckName: Scalars['String'];
@@ -3692,14 +5564,6 @@ export type SetCardsInDeckMutationVariables = Exact<{
 
 
 export type SetCardsInDeckMutation = { __typename?: 'Mutation', setCardsInDeck?: { __typename?: 'SetCardsInDeckPayload', cardsInDecks?: Array<{ __typename?: 'CardsInDeck', id: any, cardId: string } | null> | null } | null };
-
-export type StartRogueRunMutationVariables = Exact<{
-  heroClass: Scalars['String'];
-  seed: Scalars['BigInt'];
-}>;
-
-
-export type StartRogueRunMutation = { __typename?: 'Mutation', startRogueRun: { __typename?: 'RogueRun', id: any, player: string, seed: any, choices?: Array<string | null> | null, bossesDefeated: number, deckByDeck?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, publishedCardByCardId?: { __typename?: 'PublishedCard', cardBySuccession?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null } | null> } } | null } };
 
 export type GetCardQueryVariables = Exact<{
   id: Scalars['String'];
@@ -3749,7 +5613,64 @@ export type GetDecksQueryVariables = Exact<{
 
 export type GetDecksQuery = { __typename?: 'Query', allDecks?: { __typename?: 'DecksConnection', nodes: Array<{ __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number } | null> } | null, allDeckShares?: { __typename?: 'DeckSharesConnection', nodes: Array<{ __typename?: 'DeckShare', deckByDeckId?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number } | null } | null> } | null };
 
+export type CardRecordFragment = { __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } };
+
+export type EntityFragment = { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> };
+
+export type EntitySummaryFragment = { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> };
+
+export type GameStateFragment = { __typename?: 'GameState', isLocalPlayerTurn: boolean, turnNumber: number, turnState: string, timestamp: any, entities: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> }> };
+
 export type GeneratedArtFragment = { __typename?: 'GeneratedArt', hash: string, owner: string, urls: Array<string | null>, info?: any | null, isArchived: boolean };
+
+export type InventoryCollectionFragment = { __typename?: 'InventoryCollection', id: string, name: string, heroClass: string, format: string, deckType: DeckType, collectionType: CollectionType, userId?: string | null, isStandardDeck: boolean, inventory: Array<{ __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } }>, playerEntityAttributes: Array<{ __typename?: 'AttributeValueTuple', attribute: PlayerEntityAttribute, stringValue: string }>, validationReport?: { __typename?: 'ValidationReport', valid: boolean, errors: Array<string> } | null };
+
+export type LoginOrCreateReplyFragment = { __typename?: 'LoginOrCreateReply', accessToken?: { __typename?: 'AccessToken', token: string } | null, userEntity?: { __typename?: 'UserEntity', id: string, email: string, username: string, privacyToken: string } | null };
+
+export type ServerGameMessageFragment = { __typename?: 'ServerGameMessage', messageType: MessageType, id?: string | null, localPlayerId: number, isReplayMessage: boolean, gameState?: { __typename?: 'GameState', isLocalPlayerTurn: boolean, turnNumber: number, turnState: string, timestamp: any, entities: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> }> } | null, actions?: { __typename?: 'GameActions', compatibility: Array<number>, all: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }> }> } | null, startingCards?: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }> | null, event?: { __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }> } | null, gameOver?: { __typename?: 'GameOver', localPlayerWon: boolean, winningPlayerId?: number | null } | null, emote?: { __typename?: 'Emote', entityId: number, message: EmoteType } | null, timers?: { __typename?: 'Timers', millisRemaining: any } | null };
+
+export type SpellActionFragment = { __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }> };
+
+export type UserEntityFragment = { __typename?: 'UserEntity', id: string, email: string, username: string, privacyToken: string };
+
+export type CancelMatchmakingMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CancelMatchmakingMutation = { __typename?: 'Mutation', cancelMatchmaking: boolean };
+
+export type ChangePasswordMutationVariables = Exact<{
+  newPassword: Scalars['String'];
+}>;
+
+
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'LoginOrCreateReply', accessToken?: { __typename?: 'AccessToken', token: string } | null, userEntity?: { __typename?: 'UserEntity', id: string, email: string, username: string, privacyToken: string } | null } };
+
+export type ConcedeGameMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ConcedeGameMutation = { __typename?: 'Mutation', concedeGame: boolean };
+
+export type ConnectToGameMutationVariables = Exact<{
+  playerKey: Scalars['String'];
+  playerSecret: Scalars['String'];
+}>;
+
+
+export type ConnectToGameMutation = { __typename?: 'Mutation', connectToGame: boolean };
+
+export type CreateAccountMutationVariables = Exact<{
+  input: CreateAccountInput;
+}>;
+
+
+export type CreateAccountMutation = { __typename?: 'Mutation', createAccount: { __typename?: 'LoginOrCreateReply', accessToken?: { __typename?: 'AccessToken', token: string } | null, userEntity?: { __typename?: 'UserEntity', id: string, email: string, username: string, privacyToken: string } | null } };
+
+export type CreateGameDeckMutationVariables = Exact<{
+  input: DecksPutInput;
+}>;
+
+
+export type CreateGameDeckMutation = { __typename?: 'Mutation', createDeck: { __typename?: 'DecksPutResponse', deckId: string, collection?: { __typename?: 'InventoryCollection', id: string, name: string, heroClass: string, format: string, deckType: DeckType, collectionType: CollectionType, userId?: string | null, isStandardDeck: boolean, inventory: Array<{ __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } }>, playerEntityAttributes: Array<{ __typename?: 'AttributeValueTuple', attribute: PlayerEntityAttribute, stringValue: string }>, validationReport?: { __typename?: 'ValidationReport', valid: boolean, errors: Array<string> } | null } | null } };
 
 export type DeleteArtMutationVariables = Exact<{
   hash: Scalars['String'];
@@ -3758,6 +5679,42 @@ export type DeleteArtMutationVariables = Exact<{
 
 
 export type DeleteArtMutation = { __typename?: 'Mutation', updateGeneratedArtByHashAndOwner?: { __typename?: 'UpdateGeneratedArtPayload', generatedArt?: { __typename?: 'GeneratedArt', hash: string, owner: string, urls: Array<string | null>, info?: any | null, isArchived: boolean } | null } | null };
+
+export type DeleteGameDeckMutationVariables = Exact<{
+  deckId: Scalars['String'];
+}>;
+
+
+export type DeleteGameDeckMutation = { __typename?: 'Mutation', deleteDeck: boolean };
+
+export type DuplicateGameDeckMutationVariables = Exact<{
+  deckId: Scalars['String'];
+}>;
+
+
+export type DuplicateGameDeckMutation = { __typename?: 'Mutation', duplicateDeck: { __typename?: 'DecksGetResponse', inventoryIdsSize: number, collection?: { __typename?: 'InventoryCollection', id: string, name: string, heroClass: string, format: string, deckType: DeckType, collectionType: CollectionType, userId?: string | null, isStandardDeck: boolean, inventory: Array<{ __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } }>, playerEntityAttributes: Array<{ __typename?: 'AttributeValueTuple', attribute: PlayerEntityAttribute, stringValue: string }>, validationReport?: { __typename?: 'ValidationReport', valid: boolean, errors: Array<string> } | null } | null } };
+
+export type EnqueueMatchmakingMutationVariables = Exact<{
+  input: MatchmakingEnqueueInput;
+}>;
+
+
+export type EnqueueMatchmakingMutation = { __typename?: 'Mutation', enqueueMatchmaking: boolean };
+
+export type LoginMutationVariables = Exact<{
+  input: LoginInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginOrCreateReply', accessToken?: { __typename?: 'AccessToken', token: string } | null, userEntity?: { __typename?: 'UserEntity', id: string, email: string, username: string, privacyToken: string } | null } };
+
+export type MakeRogueChoiceMutationVariables = Exact<{
+  choiceId: Scalars['BigInt'];
+  choices: Array<Scalars['Int']> | Scalars['Int'];
+}>;
+
+
+export type MakeRogueChoiceMutation = { __typename?: 'Mutation', makeRogueChoice: { __typename?: 'RogueRun', id: any } };
 
 export type PublishCardMutationVariables = Exact<{
   cardId: Scalars['String'];
@@ -3773,6 +5730,18 @@ export type RenameDeckMutationVariables = Exact<{
 
 
 export type RenameDeckMutation = { __typename?: 'Mutation', updateDeckById?: { __typename?: 'UpdateDeckPayload', deck?: { __typename?: 'Deck', id: string, name?: string | null } | null } | null };
+
+export type RequestPasswordResetEmailMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RequestPasswordResetEmailMutation = { __typename?: 'Mutation', requestPasswordResetEmail: boolean };
+
+export type RerollRogueMutationVariables = Exact<{
+  choiceId: Scalars['BigInt'];
+}>;
+
+
+export type RerollRogueMutation = { __typename?: 'Mutation', reroll: { __typename?: 'RogueRun', id: any } };
 
 export type SaveCardMutationVariables = Exact<{
   cardId: Scalars['String'];
@@ -3792,15 +5761,183 @@ export type SaveGeneratedArtMutationVariables = Exact<{
 
 export type SaveGeneratedArtMutation = { __typename?: 'Mutation', saveGeneratedArt?: { __typename?: 'SaveGeneratedArtPayload', generatedArt?: { __typename?: 'GeneratedArt', hash: string, owner: string, urls: Array<string | null>, info?: any | null, isArchived: boolean } | null } | null };
 
+export type SendEmoteMutationVariables = Exact<{
+  entityId: Scalars['Int'];
+  message: EmoteType;
+}>;
+
+
+export type SendEmoteMutation = { __typename?: 'Mutation', sendEmote: boolean };
+
+export type SendGameActionMutationVariables = Exact<{
+  actionIndex: Scalars['Int'];
+  repliesTo: Scalars['String'];
+}>;
+
+
+export type SendGameActionMutation = { __typename?: 'Mutation', sendGameAction: boolean };
+
+export type SendMulliganMutationVariables = Exact<{
+  discardedCardIndices: Array<Scalars['Int']> | Scalars['Int'];
+  repliesTo: Scalars['String'];
+}>;
+
+
+export type SendMulliganMutation = { __typename?: 'Mutation', sendMulligan: boolean };
+
+export type SkipRogueBossMutationVariables = Exact<{
+  rogueId: Scalars['BigInt'];
+}>;
+
+
+export type SkipRogueBossMutation = { __typename?: 'Mutation', skipBoss: { __typename?: 'RogueRun', id: any } };
+
+export type StartRogueRunMutationVariables = Exact<{
+  heroClass: Scalars['String'];
+  seed?: InputMaybe<Scalars['BigInt']>;
+}>;
+
+
+export type StartRogueRunMutation = { __typename?: 'Mutation', startRogueRun: { __typename?: 'RogueRun', id: any } };
+
+export type TrashRogueCardMutationVariables = Exact<{
+  rogueId: Scalars['BigInt'];
+  cardId: Scalars['String'];
+}>;
+
+
+export type TrashRogueCardMutation = { __typename?: 'Mutation', trashCard: { __typename?: 'RogueRun', id: any } };
+
+export type UpdateGameDeckMutationVariables = Exact<{
+  input: DecksUpdateInput;
+}>;
+
+
+export type UpdateGameDeckMutation = { __typename?: 'Mutation', updateDeck: { __typename?: 'DecksGetResponse', inventoryIdsSize: number, collection?: { __typename?: 'InventoryCollection', id: string, name: string, heroClass: string, format: string, deckType: DeckType, collectionType: CollectionType, userId?: string | null, isStandardDeck: boolean, inventory: Array<{ __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } }>, playerEntityAttributes: Array<{ __typename?: 'AttributeValueTuple', attribute: PlayerEntityAttribute, stringValue: string }>, validationReport?: { __typename?: 'ValidationReport', valid: boolean, errors: Array<string> } | null } | null } };
+
+export type UpgradeRogueCardMutationVariables = Exact<{
+  rogueId: Scalars['BigInt'];
+  cardId: Scalars['String'];
+}>;
+
+
+export type UpgradeRogueCardMutation = { __typename?: 'Mutation', upgradeCard: { __typename?: 'RogueRun', id: any } };
+
+export type GetAccountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAccountQuery = { __typename?: 'Query', account?: { __typename?: 'UserEntity', id: string, email: string, username: string, privacyToken: string } | null };
+
+export type GetAccountsQueryVariables = Exact<{
+  userIds: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type GetAccountsQuery = { __typename?: 'Query', accounts: Array<{ __typename?: 'UserEntity', id: string, email: string, username: string, privacyToken: string }> };
+
+export type GetConfigurationQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetConfigurationQuery = { __typename?: 'Query', configuration: { __typename?: 'ClientConfiguration', keycloakResetPasswordUrl?: string | null, keycloakAccountManagementUrl?: string | null, graphQlUrl?: string | null } };
+
+export type GetCurrentRogueClassesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCurrentRogueClassesQuery = { __typename?: 'Query', currentRogueClasses: Array<string> };
+
+export type GetGameCardsQueryVariables = Exact<{
+  ifNoneMatch?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetGameCardsQuery = { __typename?: 'Query', cards: { __typename?: 'GetCardsResponse', version: string, cachedOk: boolean, cards: Array<{ __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } }> } };
+
+export type GetGameCardsByUserQueryVariables = Exact<{
+  ifNoneMatch?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetGameCardsByUserQuery = { __typename?: 'Query', cardsByUser: { __typename?: 'GetCardsResponse', version: string, cachedOk: boolean, cards: Array<{ __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } }> } };
+
+export type GetGameDeckQueryVariables = Exact<{
+  deckId: Scalars['String'];
+}>;
+
+
+export type GetGameDeckQuery = { __typename?: 'Query', deck: { __typename?: 'DecksGetResponse', inventoryIdsSize: number, collection?: { __typename?: 'InventoryCollection', id: string, name: string, heroClass: string, format: string, deckType: DeckType, collectionType: CollectionType, userId?: string | null, isStandardDeck: boolean, inventory: Array<{ __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } }>, playerEntityAttributes: Array<{ __typename?: 'AttributeValueTuple', attribute: PlayerEntityAttribute, stringValue: string }>, validationReport?: { __typename?: 'ValidationReport', valid: boolean, errors: Array<string> } | null } | null } };
+
+export type GetGameDecksQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetGameDecksQuery = { __typename?: 'Query', decks: Array<{ __typename?: 'DecksGetResponse', inventoryIdsSize: number, collection?: { __typename?: 'InventoryCollection', id: string, name: string, heroClass: string, format: string, deckType: DeckType, collectionType: CollectionType, userId?: string | null, isStandardDeck: boolean, inventory: Array<{ __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } }>, playerEntityAttributes: Array<{ __typename?: 'AttributeValueTuple', attribute: PlayerEntityAttribute, stringValue: string }>, validationReport?: { __typename?: 'ValidationReport', valid: boolean, errors: Array<string> } | null } | null }> };
+
 export type GetGeneratedArtQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetGeneratedArtQuery = { __typename?: 'Query', allGeneratedArts?: { __typename?: 'GeneratedArtsConnection', nodes: Array<{ __typename?: 'GeneratedArt', hash: string, owner: string, urls: Array<string | null>, info?: any | null, isArchived: boolean } | null> } | null };
 
+export type GetMatchmakingQueuesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMatchmakingQueuesQuery = { __typename?: 'Query', matchmakingQueues: Array<{ __typename?: 'MatchmakingQueue', queueId: string, name: string, description: string, tooltip: string, requires?: { __typename?: 'MatchmakingQueueRequires', deck: boolean, heroClass: boolean, deckIdChoices: Array<string> } | null }> };
+
+export type GetRerollCostQueryVariables = Exact<{
+  rogueId: Scalars['BigInt'];
+}>;
+
+
+export type GetRerollCostQuery = { __typename?: 'Query', rerollCost: number };
+
+export type GetTrashCardCostQueryVariables = Exact<{
+  rogueId: Scalars['BigInt'];
+  cardId: Scalars['String'];
+}>;
+
+
+export type GetTrashCardCostQuery = { __typename?: 'Query', trashCardCost: number };
+
+export type GetUpgradeCardCostQueryVariables = Exact<{
+  rogueId: Scalars['BigInt'];
+  cardId: Scalars['String'];
+}>;
+
+
+export type GetUpgradeCardCostQuery = { __typename?: 'Query', upgradeCardCost: number };
+
 export type GetUserIdTestQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUserIdTestQuery = { __typename?: 'Query', currentUserId?: string | null };
+
+export type IsInMatchQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IsInMatchQuery = { __typename?: 'Query', isInMatch?: string | null };
+
+export type EditableCardUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EditableCardUpdatedSubscription = { __typename?: 'Subscription', editableCardUpdated: { __typename?: 'EditableCard', id: string, ownerUserId: string, source: string } };
+
+export type FriendUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FriendUpdatedSubscription = { __typename?: 'Subscription', friendUpdated: { __typename?: 'Friend', friendId: string, friendName: string, presence: Presence, since: any } };
+
+export type GameMessagesSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GameMessagesSubscription = { __typename?: 'Subscription', gameMessages: { __typename?: 'ServerGameMessage', messageType: MessageType, id?: string | null, localPlayerId: number, isReplayMessage: boolean, gameState?: { __typename?: 'GameState', isLocalPlayerTurn: boolean, turnNumber: number, turnState: string, timestamp: any, entities: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> }> } | null, actions?: { __typename?: 'GameActions', compatibility: Array<number>, all: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }> }> } | null, startingCards?: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }> | null, event?: { __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }> } | null, gameOver?: { __typename?: 'GameOver', localPlayerWon: boolean, winningPlayerId?: number | null } | null, emote?: { __typename?: 'Emote', entityId: number, message: EmoteType } | null, timers?: { __typename?: 'Timers', millisRemaining: any } | null } };
+
+export type InviteUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InviteUpdatedSubscription = { __typename?: 'Subscription', inviteUpdated: { __typename?: 'Invite', id: string, expiresAt?: any | null, fromName?: string | null, fromUserId: string, toName?: string | null, toUserId: string, friendId?: string | null, message?: string | null, queueId?: string | null, status: InviteStatus } };
+
+export type MatchFoundSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MatchFoundSubscription = { __typename?: 'Subscription', matchFound: { __typename?: 'MatchFound', gameId: string, url: string, playerKey: string, playerSecret: string } };
 
 export const ClassFragmentDoc = gql`
     fragment class on Class {
@@ -3858,20 +5995,6 @@ export const DeckCardsFragmentDoc = gql`
   }
 }
     ${CardFragmentDoc}`;
-export const RogueRunFragmentDoc = gql`
-    fragment rogueRun on RogueRun {
-  id
-  player
-  seed
-  choices
-  bossesDefeated
-  deckByDeck {
-    ...deck
-    ...deckCards
-  }
-}
-    ${DeckFragmentDoc}
-${DeckCardsFragmentDoc}`;
 export const GeneratedArtFragmentDoc = gql`
     fragment generatedArt on GeneratedArt {
   hash
@@ -3881,6 +6004,248 @@ export const GeneratedArtFragmentDoc = gql`
   isArchived
 }
     `;
+export const EntitySummaryFragmentDoc = gql`
+    fragment entitySummary on Entity {
+  id
+  name
+  description
+  cardId
+  cardType
+  entityType
+  rarity
+  owner
+  manaCost
+  attack
+  hp
+  maxHp
+  armor
+  playable
+  taunt
+  charge
+  rush
+  divineShield
+  stealth
+  lifesteal
+  poisonous
+  deathrattles
+  battlecry
+  windfury
+  collectible
+  heroClasses
+  tribes
+}
+    `;
+export const CardRecordFragmentDoc = gql`
+    fragment cardRecord on CardRecord {
+  id
+  cardId
+  userId
+  count
+  collectionIds
+  entity {
+    ...entitySummary
+  }
+}
+    ${EntitySummaryFragmentDoc}`;
+export const InventoryCollectionFragmentDoc = gql`
+    fragment inventoryCollection on InventoryCollection {
+  id
+  name
+  heroClass
+  format
+  deckType
+  collectionType
+  userId
+  isStandardDeck
+  inventory {
+    ...cardRecord
+  }
+  playerEntityAttributes {
+    attribute
+    stringValue
+  }
+  validationReport {
+    valid
+    errors
+  }
+}
+    ${CardRecordFragmentDoc}`;
+export const UserEntityFragmentDoc = gql`
+    fragment userEntity on UserEntity {
+  id
+  email
+  username
+  privacyToken
+}
+    `;
+export const LoginOrCreateReplyFragmentDoc = gql`
+    fragment loginOrCreateReply on LoginOrCreateReply {
+  accessToken {
+    token
+  }
+  userEntity {
+    ...userEntity
+  }
+}
+    ${UserEntityFragmentDoc}`;
+export const EntityFragmentDoc = gql`
+    fragment entity on Entity {
+  id
+  name
+  description
+  cardId
+  cardType
+  entityType
+  rarity
+  location {
+    index
+    zone
+    player
+  }
+  owner
+  boardPosition
+  attack
+  baseAttack
+  hp
+  baseHp
+  maxHp
+  armor
+  manaCost
+  baseManaCost
+  durability
+  spellDamage
+  overload
+  extraAttack
+  mana
+  maxMana
+  lockedMana
+  battlecry
+  cannotAttack
+  charge
+  chooseOne
+  collectible
+  combo
+  conditionMet
+  deathrattles
+  deflect
+  destroyed
+  discarded
+  divineShield
+  enraged
+  frozen
+  gameStarted
+  gold
+  hostsTrigger
+  immune
+  isStartingTurn
+  lifesteal
+  permanent
+  playable
+  poisonous
+  roasted
+  rush
+  silenced
+  stealth
+  summoningSickness
+  taunt
+  uncensored
+  underAura
+  untargetableBySpells
+  windfury
+  charges
+  countUntilCast
+  fires
+  host
+  heroClasses
+  cardSet
+  cardSets
+  enchantmentType
+  tribes
+  tooltips {
+    text
+    keywords
+  }
+  note
+}
+    `;
+export const GameStateFragmentDoc = gql`
+    fragment gameState on GameState {
+  entities {
+    ...entity
+  }
+  isLocalPlayerTurn
+  turnNumber
+  turnState
+  timestamp
+}
+    ${EntityFragmentDoc}`;
+export const SpellActionFragmentDoc = gql`
+    fragment spellAction on SpellAction {
+  action
+  actionType
+  sourceId
+  description
+  entity {
+    ...entitySummary
+  }
+  targetKeyToActions {
+    action
+    target
+    friendlyBattlefieldIndex
+  }
+}
+    ${EntitySummaryFragmentDoc}`;
+export const ServerGameMessageFragmentDoc = gql`
+    fragment serverGameMessage on ServerGameMessage {
+  messageType
+  id
+  localPlayerId
+  isReplayMessage
+  gameState {
+    ...gameState
+  }
+  actions {
+    all {
+      ...spellAction
+    }
+    compatibility
+  }
+  startingCards {
+    ...entitySummary
+  }
+  event {
+    eventType
+    id
+    description
+    isPowerHistory
+    isSourcePlayerLocal
+    isTargetPlayerLocal
+    source {
+      ...entitySummary
+    }
+    target {
+      ...entitySummary
+    }
+    targets {
+      ...entitySummary
+    }
+    value
+  }
+  gameOver {
+    localPlayerWon
+    winningPlayerId
+  }
+  emote {
+    entityId
+    message
+  }
+  timers {
+    millisRemaining
+  }
+}
+    ${GameStateFragmentDoc}
+${SpellActionFragmentDoc}
+${EntitySummaryFragmentDoc}`;
 export const CreateDeckDocument = gql`
     mutation createDeck($deckName: String!, $heroClass: String!, $cardIds: [String!], $format: String!) {
   createDeckWithCards(
@@ -4028,40 +6393,6 @@ export function useSetCardsInDeckMutation(baseOptions?: Apollo.MutationHookOptio
 export type SetCardsInDeckMutationHookResult = ReturnType<typeof useSetCardsInDeckMutation>;
 export type SetCardsInDeckMutationResult = Apollo.MutationResult<SetCardsInDeckMutation>;
 export type SetCardsInDeckMutationOptions = Apollo.BaseMutationOptions<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>;
-export const StartRogueRunDocument = gql`
-    mutation startRogueRun($heroClass: String!, $seed: BigInt!) {
-  startRogueRun(heroClass: $heroClass, seed: $seed) {
-    ...rogueRun
-  }
-}
-    ${RogueRunFragmentDoc}`;
-export type StartRogueRunMutationFn = Apollo.MutationFunction<StartRogueRunMutation, StartRogueRunMutationVariables>;
-
-/**
- * __useStartRogueRunMutation__
- *
- * To run a mutation, you first call `useStartRogueRunMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useStartRogueRunMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [startRogueRunMutation, { data, loading, error }] = useStartRogueRunMutation({
- *   variables: {
- *      heroClass: // value for 'heroClass'
- *      seed: // value for 'seed'
- *   },
- * });
- */
-export function useStartRogueRunMutation(baseOptions?: Apollo.MutationHookOptions<StartRogueRunMutation, StartRogueRunMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<StartRogueRunMutation, StartRogueRunMutationVariables>(StartRogueRunDocument, options);
-      }
-export type StartRogueRunMutationHookResult = ReturnType<typeof useStartRogueRunMutation>;
-export type StartRogueRunMutationResult = Apollo.MutationResult<StartRogueRunMutation>;
-export type StartRogueRunMutationOptions = Apollo.BaseMutationOptions<StartRogueRunMutation, StartRogueRunMutationVariables>;
 export const GetCardDocument = gql`
     query getCard($id: String!) {
   getLatestCard(cardId: $id, published: true) {
@@ -4261,7 +6592,7 @@ export type GetDeckLazyQueryHookResult = ReturnType<typeof useGetDeckLazyQuery>;
 export type GetDeckQueryResult = Apollo.QueryResult<GetDeckQuery, GetDeckQueryVariables>;
 export const GetDecksDocument = gql`
     query getDecks($user: String) {
-  allDecks(condition: {trashed: false}) {
+  allDecks(condition: {trashed: false, deckType: 1}) {
     nodes {
       ...deck
     }
@@ -4303,6 +6634,200 @@ export function useGetDecksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetDecksQueryHookResult = ReturnType<typeof useGetDecksQuery>;
 export type GetDecksLazyQueryHookResult = ReturnType<typeof useGetDecksLazyQuery>;
 export type GetDecksQueryResult = Apollo.QueryResult<GetDecksQuery, GetDecksQueryVariables>;
+export const CancelMatchmakingDocument = gql`
+    mutation cancelMatchmaking {
+  cancelMatchmaking
+}
+    `;
+export type CancelMatchmakingMutationFn = Apollo.MutationFunction<CancelMatchmakingMutation, CancelMatchmakingMutationVariables>;
+
+/**
+ * __useCancelMatchmakingMutation__
+ *
+ * To run a mutation, you first call `useCancelMatchmakingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelMatchmakingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelMatchmakingMutation, { data, loading, error }] = useCancelMatchmakingMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCancelMatchmakingMutation(baseOptions?: Apollo.MutationHookOptions<CancelMatchmakingMutation, CancelMatchmakingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelMatchmakingMutation, CancelMatchmakingMutationVariables>(CancelMatchmakingDocument, options);
+      }
+export type CancelMatchmakingMutationHookResult = ReturnType<typeof useCancelMatchmakingMutation>;
+export type CancelMatchmakingMutationResult = Apollo.MutationResult<CancelMatchmakingMutation>;
+export type CancelMatchmakingMutationOptions = Apollo.BaseMutationOptions<CancelMatchmakingMutation, CancelMatchmakingMutationVariables>;
+export const ChangePasswordDocument = gql`
+    mutation changePassword($newPassword: String!) {
+  changePassword(newPassword: $newPassword) {
+    ...loginOrCreateReply
+  }
+}
+    ${LoginOrCreateReplyFragmentDoc}`;
+export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
+
+/**
+ * __useChangePasswordMutation__
+ *
+ * To run a mutation, you first call `useChangePasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangePasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changePasswordMutation, { data, loading, error }] = useChangePasswordMutation({
+ *   variables: {
+ *      newPassword: // value for 'newPassword'
+ *   },
+ * });
+ */
+export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, options);
+      }
+export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
+export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
+export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export const ConcedeGameDocument = gql`
+    mutation concedeGame {
+  concedeGame
+}
+    `;
+export type ConcedeGameMutationFn = Apollo.MutationFunction<ConcedeGameMutation, ConcedeGameMutationVariables>;
+
+/**
+ * __useConcedeGameMutation__
+ *
+ * To run a mutation, you first call `useConcedeGameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConcedeGameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [concedeGameMutation, { data, loading, error }] = useConcedeGameMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useConcedeGameMutation(baseOptions?: Apollo.MutationHookOptions<ConcedeGameMutation, ConcedeGameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ConcedeGameMutation, ConcedeGameMutationVariables>(ConcedeGameDocument, options);
+      }
+export type ConcedeGameMutationHookResult = ReturnType<typeof useConcedeGameMutation>;
+export type ConcedeGameMutationResult = Apollo.MutationResult<ConcedeGameMutation>;
+export type ConcedeGameMutationOptions = Apollo.BaseMutationOptions<ConcedeGameMutation, ConcedeGameMutationVariables>;
+export const ConnectToGameDocument = gql`
+    mutation connectToGame($playerKey: String!, $playerSecret: String!) {
+  connectToGame(playerKey: $playerKey, playerSecret: $playerSecret)
+}
+    `;
+export type ConnectToGameMutationFn = Apollo.MutationFunction<ConnectToGameMutation, ConnectToGameMutationVariables>;
+
+/**
+ * __useConnectToGameMutation__
+ *
+ * To run a mutation, you first call `useConnectToGameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConnectToGameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [connectToGameMutation, { data, loading, error }] = useConnectToGameMutation({
+ *   variables: {
+ *      playerKey: // value for 'playerKey'
+ *      playerSecret: // value for 'playerSecret'
+ *   },
+ * });
+ */
+export function useConnectToGameMutation(baseOptions?: Apollo.MutationHookOptions<ConnectToGameMutation, ConnectToGameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ConnectToGameMutation, ConnectToGameMutationVariables>(ConnectToGameDocument, options);
+      }
+export type ConnectToGameMutationHookResult = ReturnType<typeof useConnectToGameMutation>;
+export type ConnectToGameMutationResult = Apollo.MutationResult<ConnectToGameMutation>;
+export type ConnectToGameMutationOptions = Apollo.BaseMutationOptions<ConnectToGameMutation, ConnectToGameMutationVariables>;
+export const CreateAccountDocument = gql`
+    mutation createAccount($input: CreateAccountInput!) {
+  createAccount(input: $input) {
+    ...loginOrCreateReply
+  }
+}
+    ${LoginOrCreateReplyFragmentDoc}`;
+export type CreateAccountMutationFn = Apollo.MutationFunction<CreateAccountMutation, CreateAccountMutationVariables>;
+
+/**
+ * __useCreateAccountMutation__
+ *
+ * To run a mutation, you first call `useCreateAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAccountMutation, { data, loading, error }] = useCreateAccountMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateAccountMutation(baseOptions?: Apollo.MutationHookOptions<CreateAccountMutation, CreateAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAccountMutation, CreateAccountMutationVariables>(CreateAccountDocument, options);
+      }
+export type CreateAccountMutationHookResult = ReturnType<typeof useCreateAccountMutation>;
+export type CreateAccountMutationResult = Apollo.MutationResult<CreateAccountMutation>;
+export type CreateAccountMutationOptions = Apollo.BaseMutationOptions<CreateAccountMutation, CreateAccountMutationVariables>;
+export const CreateGameDeckDocument = gql`
+    mutation createGameDeck($input: DecksPutInput!) {
+  createDeck(input: $input) {
+    deckId
+    collection {
+      ...inventoryCollection
+    }
+  }
+}
+    ${InventoryCollectionFragmentDoc}`;
+export type CreateGameDeckMutationFn = Apollo.MutationFunction<CreateGameDeckMutation, CreateGameDeckMutationVariables>;
+
+/**
+ * __useCreateGameDeckMutation__
+ *
+ * To run a mutation, you first call `useCreateGameDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateGameDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createGameDeckMutation, { data, loading, error }] = useCreateGameDeckMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateGameDeckMutation(baseOptions?: Apollo.MutationHookOptions<CreateGameDeckMutation, CreateGameDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateGameDeckMutation, CreateGameDeckMutationVariables>(CreateGameDeckDocument, options);
+      }
+export type CreateGameDeckMutationHookResult = ReturnType<typeof useCreateGameDeckMutation>;
+export type CreateGameDeckMutationResult = Apollo.MutationResult<CreateGameDeckMutation>;
+export type CreateGameDeckMutationOptions = Apollo.BaseMutationOptions<CreateGameDeckMutation, CreateGameDeckMutationVariables>;
 export const DeleteArtDocument = gql`
     mutation deleteArt($hash: String!, $owner: String!) {
   updateGeneratedArtByHashAndOwner(
@@ -4341,6 +6866,171 @@ export function useDeleteArtMutation(baseOptions?: Apollo.MutationHookOptions<De
 export type DeleteArtMutationHookResult = ReturnType<typeof useDeleteArtMutation>;
 export type DeleteArtMutationResult = Apollo.MutationResult<DeleteArtMutation>;
 export type DeleteArtMutationOptions = Apollo.BaseMutationOptions<DeleteArtMutation, DeleteArtMutationVariables>;
+export const DeleteGameDeckDocument = gql`
+    mutation deleteGameDeck($deckId: String!) {
+  deleteDeck(deckId: $deckId)
+}
+    `;
+export type DeleteGameDeckMutationFn = Apollo.MutationFunction<DeleteGameDeckMutation, DeleteGameDeckMutationVariables>;
+
+/**
+ * __useDeleteGameDeckMutation__
+ *
+ * To run a mutation, you first call `useDeleteGameDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteGameDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteGameDeckMutation, { data, loading, error }] = useDeleteGameDeckMutation({
+ *   variables: {
+ *      deckId: // value for 'deckId'
+ *   },
+ * });
+ */
+export function useDeleteGameDeckMutation(baseOptions?: Apollo.MutationHookOptions<DeleteGameDeckMutation, DeleteGameDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteGameDeckMutation, DeleteGameDeckMutationVariables>(DeleteGameDeckDocument, options);
+      }
+export type DeleteGameDeckMutationHookResult = ReturnType<typeof useDeleteGameDeckMutation>;
+export type DeleteGameDeckMutationResult = Apollo.MutationResult<DeleteGameDeckMutation>;
+export type DeleteGameDeckMutationOptions = Apollo.BaseMutationOptions<DeleteGameDeckMutation, DeleteGameDeckMutationVariables>;
+export const DuplicateGameDeckDocument = gql`
+    mutation duplicateGameDeck($deckId: String!) {
+  duplicateDeck(deckId: $deckId) {
+    collection {
+      ...inventoryCollection
+    }
+    inventoryIdsSize
+  }
+}
+    ${InventoryCollectionFragmentDoc}`;
+export type DuplicateGameDeckMutationFn = Apollo.MutationFunction<DuplicateGameDeckMutation, DuplicateGameDeckMutationVariables>;
+
+/**
+ * __useDuplicateGameDeckMutation__
+ *
+ * To run a mutation, you first call `useDuplicateGameDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDuplicateGameDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [duplicateGameDeckMutation, { data, loading, error }] = useDuplicateGameDeckMutation({
+ *   variables: {
+ *      deckId: // value for 'deckId'
+ *   },
+ * });
+ */
+export function useDuplicateGameDeckMutation(baseOptions?: Apollo.MutationHookOptions<DuplicateGameDeckMutation, DuplicateGameDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DuplicateGameDeckMutation, DuplicateGameDeckMutationVariables>(DuplicateGameDeckDocument, options);
+      }
+export type DuplicateGameDeckMutationHookResult = ReturnType<typeof useDuplicateGameDeckMutation>;
+export type DuplicateGameDeckMutationResult = Apollo.MutationResult<DuplicateGameDeckMutation>;
+export type DuplicateGameDeckMutationOptions = Apollo.BaseMutationOptions<DuplicateGameDeckMutation, DuplicateGameDeckMutationVariables>;
+export const EnqueueMatchmakingDocument = gql`
+    mutation enqueueMatchmaking($input: MatchmakingEnqueueInput!) {
+  enqueueMatchmaking(input: $input)
+}
+    `;
+export type EnqueueMatchmakingMutationFn = Apollo.MutationFunction<EnqueueMatchmakingMutation, EnqueueMatchmakingMutationVariables>;
+
+/**
+ * __useEnqueueMatchmakingMutation__
+ *
+ * To run a mutation, you first call `useEnqueueMatchmakingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEnqueueMatchmakingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [enqueueMatchmakingMutation, { data, loading, error }] = useEnqueueMatchmakingMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useEnqueueMatchmakingMutation(baseOptions?: Apollo.MutationHookOptions<EnqueueMatchmakingMutation, EnqueueMatchmakingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EnqueueMatchmakingMutation, EnqueueMatchmakingMutationVariables>(EnqueueMatchmakingDocument, options);
+      }
+export type EnqueueMatchmakingMutationHookResult = ReturnType<typeof useEnqueueMatchmakingMutation>;
+export type EnqueueMatchmakingMutationResult = Apollo.MutationResult<EnqueueMatchmakingMutation>;
+export type EnqueueMatchmakingMutationOptions = Apollo.BaseMutationOptions<EnqueueMatchmakingMutation, EnqueueMatchmakingMutationVariables>;
+export const LoginDocument = gql`
+    mutation login($input: LoginInput!) {
+  login(input: $input) {
+    ...loginOrCreateReply
+  }
+}
+    ${LoginOrCreateReplyFragmentDoc}`;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const MakeRogueChoiceDocument = gql`
+    mutation makeRogueChoice($choiceId: BigInt!, $choices: [Int!]!) {
+  makeRogueChoice(choiceId: $choiceId, choices: $choices) {
+    id
+  }
+}
+    `;
+export type MakeRogueChoiceMutationFn = Apollo.MutationFunction<MakeRogueChoiceMutation, MakeRogueChoiceMutationVariables>;
+
+/**
+ * __useMakeRogueChoiceMutation__
+ *
+ * To run a mutation, you first call `useMakeRogueChoiceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMakeRogueChoiceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [makeRogueChoiceMutation, { data, loading, error }] = useMakeRogueChoiceMutation({
+ *   variables: {
+ *      choiceId: // value for 'choiceId'
+ *      choices: // value for 'choices'
+ *   },
+ * });
+ */
+export function useMakeRogueChoiceMutation(baseOptions?: Apollo.MutationHookOptions<MakeRogueChoiceMutation, MakeRogueChoiceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MakeRogueChoiceMutation, MakeRogueChoiceMutationVariables>(MakeRogueChoiceDocument, options);
+      }
+export type MakeRogueChoiceMutationHookResult = ReturnType<typeof useMakeRogueChoiceMutation>;
+export type MakeRogueChoiceMutationResult = Apollo.MutationResult<MakeRogueChoiceMutation>;
+export type MakeRogueChoiceMutationOptions = Apollo.BaseMutationOptions<MakeRogueChoiceMutation, MakeRogueChoiceMutationVariables>;
 export const PublishCardDocument = gql`
     mutation publishCard($cardId: String!) {
   publishCard(input: {cardId: $cardId}) {
@@ -4411,6 +7101,69 @@ export function useRenameDeckMutation(baseOptions?: Apollo.MutationHookOptions<R
 export type RenameDeckMutationHookResult = ReturnType<typeof useRenameDeckMutation>;
 export type RenameDeckMutationResult = Apollo.MutationResult<RenameDeckMutation>;
 export type RenameDeckMutationOptions = Apollo.BaseMutationOptions<RenameDeckMutation, RenameDeckMutationVariables>;
+export const RequestPasswordResetEmailDocument = gql`
+    mutation requestPasswordResetEmail {
+  requestPasswordResetEmail
+}
+    `;
+export type RequestPasswordResetEmailMutationFn = Apollo.MutationFunction<RequestPasswordResetEmailMutation, RequestPasswordResetEmailMutationVariables>;
+
+/**
+ * __useRequestPasswordResetEmailMutation__
+ *
+ * To run a mutation, you first call `useRequestPasswordResetEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRequestPasswordResetEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [requestPasswordResetEmailMutation, { data, loading, error }] = useRequestPasswordResetEmailMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRequestPasswordResetEmailMutation(baseOptions?: Apollo.MutationHookOptions<RequestPasswordResetEmailMutation, RequestPasswordResetEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RequestPasswordResetEmailMutation, RequestPasswordResetEmailMutationVariables>(RequestPasswordResetEmailDocument, options);
+      }
+export type RequestPasswordResetEmailMutationHookResult = ReturnType<typeof useRequestPasswordResetEmailMutation>;
+export type RequestPasswordResetEmailMutationResult = Apollo.MutationResult<RequestPasswordResetEmailMutation>;
+export type RequestPasswordResetEmailMutationOptions = Apollo.BaseMutationOptions<RequestPasswordResetEmailMutation, RequestPasswordResetEmailMutationVariables>;
+export const RerollRogueDocument = gql`
+    mutation rerollRogue($choiceId: BigInt!) {
+  reroll(choiceId: $choiceId) {
+    id
+  }
+}
+    `;
+export type RerollRogueMutationFn = Apollo.MutationFunction<RerollRogueMutation, RerollRogueMutationVariables>;
+
+/**
+ * __useRerollRogueMutation__
+ *
+ * To run a mutation, you first call `useRerollRogueMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRerollRogueMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [rerollRogueMutation, { data, loading, error }] = useRerollRogueMutation({
+ *   variables: {
+ *      choiceId: // value for 'choiceId'
+ *   },
+ * });
+ */
+export function useRerollRogueMutation(baseOptions?: Apollo.MutationHookOptions<RerollRogueMutation, RerollRogueMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RerollRogueMutation, RerollRogueMutationVariables>(RerollRogueDocument, options);
+      }
+export type RerollRogueMutationHookResult = ReturnType<typeof useRerollRogueMutation>;
+export type RerollRogueMutationResult = Apollo.MutationResult<RerollRogueMutation>;
+export type RerollRogueMutationOptions = Apollo.BaseMutationOptions<RerollRogueMutation, RerollRogueMutationVariables>;
 export const SaveCardDocument = gql`
     mutation saveCard($cardId: String!, $blocklyWorkspace: JSON, $cardScript: JSON) {
   saveCard(
@@ -4487,6 +7240,563 @@ export function useSaveGeneratedArtMutation(baseOptions?: Apollo.MutationHookOpt
 export type SaveGeneratedArtMutationHookResult = ReturnType<typeof useSaveGeneratedArtMutation>;
 export type SaveGeneratedArtMutationResult = Apollo.MutationResult<SaveGeneratedArtMutation>;
 export type SaveGeneratedArtMutationOptions = Apollo.BaseMutationOptions<SaveGeneratedArtMutation, SaveGeneratedArtMutationVariables>;
+export const SendEmoteDocument = gql`
+    mutation sendEmote($entityId: Int!, $message: EmoteType!) {
+  sendEmote(entityId: $entityId, message: $message)
+}
+    `;
+export type SendEmoteMutationFn = Apollo.MutationFunction<SendEmoteMutation, SendEmoteMutationVariables>;
+
+/**
+ * __useSendEmoteMutation__
+ *
+ * To run a mutation, you first call `useSendEmoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendEmoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendEmoteMutation, { data, loading, error }] = useSendEmoteMutation({
+ *   variables: {
+ *      entityId: // value for 'entityId'
+ *      message: // value for 'message'
+ *   },
+ * });
+ */
+export function useSendEmoteMutation(baseOptions?: Apollo.MutationHookOptions<SendEmoteMutation, SendEmoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendEmoteMutation, SendEmoteMutationVariables>(SendEmoteDocument, options);
+      }
+export type SendEmoteMutationHookResult = ReturnType<typeof useSendEmoteMutation>;
+export type SendEmoteMutationResult = Apollo.MutationResult<SendEmoteMutation>;
+export type SendEmoteMutationOptions = Apollo.BaseMutationOptions<SendEmoteMutation, SendEmoteMutationVariables>;
+export const SendGameActionDocument = gql`
+    mutation sendGameAction($actionIndex: Int!, $repliesTo: String!) {
+  sendGameAction(actionIndex: $actionIndex, repliesTo: $repliesTo)
+}
+    `;
+export type SendGameActionMutationFn = Apollo.MutationFunction<SendGameActionMutation, SendGameActionMutationVariables>;
+
+/**
+ * __useSendGameActionMutation__
+ *
+ * To run a mutation, you first call `useSendGameActionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendGameActionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendGameActionMutation, { data, loading, error }] = useSendGameActionMutation({
+ *   variables: {
+ *      actionIndex: // value for 'actionIndex'
+ *      repliesTo: // value for 'repliesTo'
+ *   },
+ * });
+ */
+export function useSendGameActionMutation(baseOptions?: Apollo.MutationHookOptions<SendGameActionMutation, SendGameActionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendGameActionMutation, SendGameActionMutationVariables>(SendGameActionDocument, options);
+      }
+export type SendGameActionMutationHookResult = ReturnType<typeof useSendGameActionMutation>;
+export type SendGameActionMutationResult = Apollo.MutationResult<SendGameActionMutation>;
+export type SendGameActionMutationOptions = Apollo.BaseMutationOptions<SendGameActionMutation, SendGameActionMutationVariables>;
+export const SendMulliganDocument = gql`
+    mutation sendMulligan($discardedCardIndices: [Int!]!, $repliesTo: String!) {
+  sendMulligan(discardedCardIndices: $discardedCardIndices, repliesTo: $repliesTo)
+}
+    `;
+export type SendMulliganMutationFn = Apollo.MutationFunction<SendMulliganMutation, SendMulliganMutationVariables>;
+
+/**
+ * __useSendMulliganMutation__
+ *
+ * To run a mutation, you first call `useSendMulliganMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendMulliganMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendMulliganMutation, { data, loading, error }] = useSendMulliganMutation({
+ *   variables: {
+ *      discardedCardIndices: // value for 'discardedCardIndices'
+ *      repliesTo: // value for 'repliesTo'
+ *   },
+ * });
+ */
+export function useSendMulliganMutation(baseOptions?: Apollo.MutationHookOptions<SendMulliganMutation, SendMulliganMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendMulliganMutation, SendMulliganMutationVariables>(SendMulliganDocument, options);
+      }
+export type SendMulliganMutationHookResult = ReturnType<typeof useSendMulliganMutation>;
+export type SendMulliganMutationResult = Apollo.MutationResult<SendMulliganMutation>;
+export type SendMulliganMutationOptions = Apollo.BaseMutationOptions<SendMulliganMutation, SendMulliganMutationVariables>;
+export const SkipRogueBossDocument = gql`
+    mutation skipRogueBoss($rogueId: BigInt!) {
+  skipBoss(rogueId: $rogueId) {
+    id
+  }
+}
+    `;
+export type SkipRogueBossMutationFn = Apollo.MutationFunction<SkipRogueBossMutation, SkipRogueBossMutationVariables>;
+
+/**
+ * __useSkipRogueBossMutation__
+ *
+ * To run a mutation, you first call `useSkipRogueBossMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSkipRogueBossMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [skipRogueBossMutation, { data, loading, error }] = useSkipRogueBossMutation({
+ *   variables: {
+ *      rogueId: // value for 'rogueId'
+ *   },
+ * });
+ */
+export function useSkipRogueBossMutation(baseOptions?: Apollo.MutationHookOptions<SkipRogueBossMutation, SkipRogueBossMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SkipRogueBossMutation, SkipRogueBossMutationVariables>(SkipRogueBossDocument, options);
+      }
+export type SkipRogueBossMutationHookResult = ReturnType<typeof useSkipRogueBossMutation>;
+export type SkipRogueBossMutationResult = Apollo.MutationResult<SkipRogueBossMutation>;
+export type SkipRogueBossMutationOptions = Apollo.BaseMutationOptions<SkipRogueBossMutation, SkipRogueBossMutationVariables>;
+export const StartRogueRunDocument = gql`
+    mutation startRogueRun($heroClass: String!, $seed: BigInt) {
+  startRogueRun(heroClass: $heroClass, seed: $seed) {
+    id
+  }
+}
+    `;
+export type StartRogueRunMutationFn = Apollo.MutationFunction<StartRogueRunMutation, StartRogueRunMutationVariables>;
+
+/**
+ * __useStartRogueRunMutation__
+ *
+ * To run a mutation, you first call `useStartRogueRunMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartRogueRunMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startRogueRunMutation, { data, loading, error }] = useStartRogueRunMutation({
+ *   variables: {
+ *      heroClass: // value for 'heroClass'
+ *      seed: // value for 'seed'
+ *   },
+ * });
+ */
+export function useStartRogueRunMutation(baseOptions?: Apollo.MutationHookOptions<StartRogueRunMutation, StartRogueRunMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StartRogueRunMutation, StartRogueRunMutationVariables>(StartRogueRunDocument, options);
+      }
+export type StartRogueRunMutationHookResult = ReturnType<typeof useStartRogueRunMutation>;
+export type StartRogueRunMutationResult = Apollo.MutationResult<StartRogueRunMutation>;
+export type StartRogueRunMutationOptions = Apollo.BaseMutationOptions<StartRogueRunMutation, StartRogueRunMutationVariables>;
+export const TrashRogueCardDocument = gql`
+    mutation trashRogueCard($rogueId: BigInt!, $cardId: String!) {
+  trashCard(rogueId: $rogueId, cardId: $cardId) {
+    id
+  }
+}
+    `;
+export type TrashRogueCardMutationFn = Apollo.MutationFunction<TrashRogueCardMutation, TrashRogueCardMutationVariables>;
+
+/**
+ * __useTrashRogueCardMutation__
+ *
+ * To run a mutation, you first call `useTrashRogueCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTrashRogueCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [trashRogueCardMutation, { data, loading, error }] = useTrashRogueCardMutation({
+ *   variables: {
+ *      rogueId: // value for 'rogueId'
+ *      cardId: // value for 'cardId'
+ *   },
+ * });
+ */
+export function useTrashRogueCardMutation(baseOptions?: Apollo.MutationHookOptions<TrashRogueCardMutation, TrashRogueCardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TrashRogueCardMutation, TrashRogueCardMutationVariables>(TrashRogueCardDocument, options);
+      }
+export type TrashRogueCardMutationHookResult = ReturnType<typeof useTrashRogueCardMutation>;
+export type TrashRogueCardMutationResult = Apollo.MutationResult<TrashRogueCardMutation>;
+export type TrashRogueCardMutationOptions = Apollo.BaseMutationOptions<TrashRogueCardMutation, TrashRogueCardMutationVariables>;
+export const UpdateGameDeckDocument = gql`
+    mutation updateGameDeck($input: DecksUpdateInput!) {
+  updateDeck(input: $input) {
+    collection {
+      ...inventoryCollection
+    }
+    inventoryIdsSize
+  }
+}
+    ${InventoryCollectionFragmentDoc}`;
+export type UpdateGameDeckMutationFn = Apollo.MutationFunction<UpdateGameDeckMutation, UpdateGameDeckMutationVariables>;
+
+/**
+ * __useUpdateGameDeckMutation__
+ *
+ * To run a mutation, you first call `useUpdateGameDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateGameDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateGameDeckMutation, { data, loading, error }] = useUpdateGameDeckMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateGameDeckMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGameDeckMutation, UpdateGameDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateGameDeckMutation, UpdateGameDeckMutationVariables>(UpdateGameDeckDocument, options);
+      }
+export type UpdateGameDeckMutationHookResult = ReturnType<typeof useUpdateGameDeckMutation>;
+export type UpdateGameDeckMutationResult = Apollo.MutationResult<UpdateGameDeckMutation>;
+export type UpdateGameDeckMutationOptions = Apollo.BaseMutationOptions<UpdateGameDeckMutation, UpdateGameDeckMutationVariables>;
+export const UpgradeRogueCardDocument = gql`
+    mutation upgradeRogueCard($rogueId: BigInt!, $cardId: String!) {
+  upgradeCard(rogueId: $rogueId, cardId: $cardId) {
+    id
+  }
+}
+    `;
+export type UpgradeRogueCardMutationFn = Apollo.MutationFunction<UpgradeRogueCardMutation, UpgradeRogueCardMutationVariables>;
+
+/**
+ * __useUpgradeRogueCardMutation__
+ *
+ * To run a mutation, you first call `useUpgradeRogueCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpgradeRogueCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [upgradeRogueCardMutation, { data, loading, error }] = useUpgradeRogueCardMutation({
+ *   variables: {
+ *      rogueId: // value for 'rogueId'
+ *      cardId: // value for 'cardId'
+ *   },
+ * });
+ */
+export function useUpgradeRogueCardMutation(baseOptions?: Apollo.MutationHookOptions<UpgradeRogueCardMutation, UpgradeRogueCardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpgradeRogueCardMutation, UpgradeRogueCardMutationVariables>(UpgradeRogueCardDocument, options);
+      }
+export type UpgradeRogueCardMutationHookResult = ReturnType<typeof useUpgradeRogueCardMutation>;
+export type UpgradeRogueCardMutationResult = Apollo.MutationResult<UpgradeRogueCardMutation>;
+export type UpgradeRogueCardMutationOptions = Apollo.BaseMutationOptions<UpgradeRogueCardMutation, UpgradeRogueCardMutationVariables>;
+export const GetAccountDocument = gql`
+    query getAccount {
+  account {
+    ...userEntity
+  }
+}
+    ${UserEntityFragmentDoc}`;
+
+/**
+ * __useGetAccountQuery__
+ *
+ * To run a query within a React component, call `useGetAccountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAccountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAccountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAccountQuery(baseOptions?: Apollo.QueryHookOptions<GetAccountQuery, GetAccountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAccountQuery, GetAccountQueryVariables>(GetAccountDocument, options);
+      }
+export function useGetAccountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAccountQuery, GetAccountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAccountQuery, GetAccountQueryVariables>(GetAccountDocument, options);
+        }
+export type GetAccountQueryHookResult = ReturnType<typeof useGetAccountQuery>;
+export type GetAccountLazyQueryHookResult = ReturnType<typeof useGetAccountLazyQuery>;
+export type GetAccountQueryResult = Apollo.QueryResult<GetAccountQuery, GetAccountQueryVariables>;
+export const GetAccountsDocument = gql`
+    query getAccounts($userIds: [String!]!) {
+  accounts(userIds: $userIds) {
+    ...userEntity
+  }
+}
+    ${UserEntityFragmentDoc}`;
+
+/**
+ * __useGetAccountsQuery__
+ *
+ * To run a query within a React component, call `useGetAccountsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAccountsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAccountsQuery({
+ *   variables: {
+ *      userIds: // value for 'userIds'
+ *   },
+ * });
+ */
+export function useGetAccountsQuery(baseOptions: Apollo.QueryHookOptions<GetAccountsQuery, GetAccountsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAccountsQuery, GetAccountsQueryVariables>(GetAccountsDocument, options);
+      }
+export function useGetAccountsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAccountsQuery, GetAccountsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAccountsQuery, GetAccountsQueryVariables>(GetAccountsDocument, options);
+        }
+export type GetAccountsQueryHookResult = ReturnType<typeof useGetAccountsQuery>;
+export type GetAccountsLazyQueryHookResult = ReturnType<typeof useGetAccountsLazyQuery>;
+export type GetAccountsQueryResult = Apollo.QueryResult<GetAccountsQuery, GetAccountsQueryVariables>;
+export const GetConfigurationDocument = gql`
+    query getConfiguration {
+  configuration {
+    keycloakResetPasswordUrl
+    keycloakAccountManagementUrl
+    graphQlUrl
+  }
+}
+    `;
+
+/**
+ * __useGetConfigurationQuery__
+ *
+ * To run a query within a React component, call `useGetConfigurationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetConfigurationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetConfigurationQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetConfigurationQuery(baseOptions?: Apollo.QueryHookOptions<GetConfigurationQuery, GetConfigurationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetConfigurationQuery, GetConfigurationQueryVariables>(GetConfigurationDocument, options);
+      }
+export function useGetConfigurationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetConfigurationQuery, GetConfigurationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetConfigurationQuery, GetConfigurationQueryVariables>(GetConfigurationDocument, options);
+        }
+export type GetConfigurationQueryHookResult = ReturnType<typeof useGetConfigurationQuery>;
+export type GetConfigurationLazyQueryHookResult = ReturnType<typeof useGetConfigurationLazyQuery>;
+export type GetConfigurationQueryResult = Apollo.QueryResult<GetConfigurationQuery, GetConfigurationQueryVariables>;
+export const GetCurrentRogueClassesDocument = gql`
+    query getCurrentRogueClasses {
+  currentRogueClasses
+}
+    `;
+
+/**
+ * __useGetCurrentRogueClassesQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentRogueClassesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentRogueClassesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentRogueClassesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrentRogueClassesQuery(baseOptions?: Apollo.QueryHookOptions<GetCurrentRogueClassesQuery, GetCurrentRogueClassesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCurrentRogueClassesQuery, GetCurrentRogueClassesQueryVariables>(GetCurrentRogueClassesDocument, options);
+      }
+export function useGetCurrentRogueClassesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCurrentRogueClassesQuery, GetCurrentRogueClassesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCurrentRogueClassesQuery, GetCurrentRogueClassesQueryVariables>(GetCurrentRogueClassesDocument, options);
+        }
+export type GetCurrentRogueClassesQueryHookResult = ReturnType<typeof useGetCurrentRogueClassesQuery>;
+export type GetCurrentRogueClassesLazyQueryHookResult = ReturnType<typeof useGetCurrentRogueClassesLazyQuery>;
+export type GetCurrentRogueClassesQueryResult = Apollo.QueryResult<GetCurrentRogueClassesQuery, GetCurrentRogueClassesQueryVariables>;
+export const GetGameCardsDocument = gql`
+    query getGameCards($ifNoneMatch: String) {
+  cards(ifNoneMatch: $ifNoneMatch) {
+    cards {
+      ...cardRecord
+    }
+    version
+    cachedOk
+  }
+}
+    ${CardRecordFragmentDoc}`;
+
+/**
+ * __useGetGameCardsQuery__
+ *
+ * To run a query within a React component, call `useGetGameCardsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGameCardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGameCardsQuery({
+ *   variables: {
+ *      ifNoneMatch: // value for 'ifNoneMatch'
+ *   },
+ * });
+ */
+export function useGetGameCardsQuery(baseOptions?: Apollo.QueryHookOptions<GetGameCardsQuery, GetGameCardsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGameCardsQuery, GetGameCardsQueryVariables>(GetGameCardsDocument, options);
+      }
+export function useGetGameCardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGameCardsQuery, GetGameCardsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGameCardsQuery, GetGameCardsQueryVariables>(GetGameCardsDocument, options);
+        }
+export type GetGameCardsQueryHookResult = ReturnType<typeof useGetGameCardsQuery>;
+export type GetGameCardsLazyQueryHookResult = ReturnType<typeof useGetGameCardsLazyQuery>;
+export type GetGameCardsQueryResult = Apollo.QueryResult<GetGameCardsQuery, GetGameCardsQueryVariables>;
+export const GetGameCardsByUserDocument = gql`
+    query getGameCardsByUser($ifNoneMatch: String) {
+  cardsByUser(ifNoneMatch: $ifNoneMatch) {
+    cards {
+      ...cardRecord
+    }
+    version
+    cachedOk
+  }
+}
+    ${CardRecordFragmentDoc}`;
+
+/**
+ * __useGetGameCardsByUserQuery__
+ *
+ * To run a query within a React component, call `useGetGameCardsByUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGameCardsByUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGameCardsByUserQuery({
+ *   variables: {
+ *      ifNoneMatch: // value for 'ifNoneMatch'
+ *   },
+ * });
+ */
+export function useGetGameCardsByUserQuery(baseOptions?: Apollo.QueryHookOptions<GetGameCardsByUserQuery, GetGameCardsByUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGameCardsByUserQuery, GetGameCardsByUserQueryVariables>(GetGameCardsByUserDocument, options);
+      }
+export function useGetGameCardsByUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGameCardsByUserQuery, GetGameCardsByUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGameCardsByUserQuery, GetGameCardsByUserQueryVariables>(GetGameCardsByUserDocument, options);
+        }
+export type GetGameCardsByUserQueryHookResult = ReturnType<typeof useGetGameCardsByUserQuery>;
+export type GetGameCardsByUserLazyQueryHookResult = ReturnType<typeof useGetGameCardsByUserLazyQuery>;
+export type GetGameCardsByUserQueryResult = Apollo.QueryResult<GetGameCardsByUserQuery, GetGameCardsByUserQueryVariables>;
+export const GetGameDeckDocument = gql`
+    query getGameDeck($deckId: String!) {
+  deck(deckId: $deckId) {
+    collection {
+      ...inventoryCollection
+    }
+    inventoryIdsSize
+  }
+}
+    ${InventoryCollectionFragmentDoc}`;
+
+/**
+ * __useGetGameDeckQuery__
+ *
+ * To run a query within a React component, call `useGetGameDeckQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGameDeckQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGameDeckQuery({
+ *   variables: {
+ *      deckId: // value for 'deckId'
+ *   },
+ * });
+ */
+export function useGetGameDeckQuery(baseOptions: Apollo.QueryHookOptions<GetGameDeckQuery, GetGameDeckQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGameDeckQuery, GetGameDeckQueryVariables>(GetGameDeckDocument, options);
+      }
+export function useGetGameDeckLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGameDeckQuery, GetGameDeckQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGameDeckQuery, GetGameDeckQueryVariables>(GetGameDeckDocument, options);
+        }
+export type GetGameDeckQueryHookResult = ReturnType<typeof useGetGameDeckQuery>;
+export type GetGameDeckLazyQueryHookResult = ReturnType<typeof useGetGameDeckLazyQuery>;
+export type GetGameDeckQueryResult = Apollo.QueryResult<GetGameDeckQuery, GetGameDeckQueryVariables>;
+export const GetGameDecksDocument = gql`
+    query getGameDecks {
+  decks {
+    collection {
+      ...inventoryCollection
+    }
+    inventoryIdsSize
+  }
+}
+    ${InventoryCollectionFragmentDoc}`;
+
+/**
+ * __useGetGameDecksQuery__
+ *
+ * To run a query within a React component, call `useGetGameDecksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGameDecksQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGameDecksQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetGameDecksQuery(baseOptions?: Apollo.QueryHookOptions<GetGameDecksQuery, GetGameDecksQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGameDecksQuery, GetGameDecksQueryVariables>(GetGameDecksDocument, options);
+      }
+export function useGetGameDecksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGameDecksQuery, GetGameDecksQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGameDecksQuery, GetGameDecksQueryVariables>(GetGameDecksDocument, options);
+        }
+export type GetGameDecksQueryHookResult = ReturnType<typeof useGetGameDecksQuery>;
+export type GetGameDecksLazyQueryHookResult = ReturnType<typeof useGetGameDecksLazyQuery>;
+export type GetGameDecksQueryResult = Apollo.QueryResult<GetGameDecksQuery, GetGameDecksQueryVariables>;
 export const GetGeneratedArtDocument = gql`
     query getGeneratedArt {
   allGeneratedArts {
@@ -4523,6 +7833,149 @@ export function useGetGeneratedArtLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetGeneratedArtQueryHookResult = ReturnType<typeof useGetGeneratedArtQuery>;
 export type GetGeneratedArtLazyQueryHookResult = ReturnType<typeof useGetGeneratedArtLazyQuery>;
 export type GetGeneratedArtQueryResult = Apollo.QueryResult<GetGeneratedArtQuery, GetGeneratedArtQueryVariables>;
+export const GetMatchmakingQueuesDocument = gql`
+    query getMatchmakingQueues {
+  matchmakingQueues {
+    queueId
+    name
+    description
+    tooltip
+    requires {
+      deck
+      heroClass
+      deckIdChoices
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetMatchmakingQueuesQuery__
+ *
+ * To run a query within a React component, call `useGetMatchmakingQueuesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMatchmakingQueuesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMatchmakingQueuesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMatchmakingQueuesQuery(baseOptions?: Apollo.QueryHookOptions<GetMatchmakingQueuesQuery, GetMatchmakingQueuesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMatchmakingQueuesQuery, GetMatchmakingQueuesQueryVariables>(GetMatchmakingQueuesDocument, options);
+      }
+export function useGetMatchmakingQueuesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMatchmakingQueuesQuery, GetMatchmakingQueuesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMatchmakingQueuesQuery, GetMatchmakingQueuesQueryVariables>(GetMatchmakingQueuesDocument, options);
+        }
+export type GetMatchmakingQueuesQueryHookResult = ReturnType<typeof useGetMatchmakingQueuesQuery>;
+export type GetMatchmakingQueuesLazyQueryHookResult = ReturnType<typeof useGetMatchmakingQueuesLazyQuery>;
+export type GetMatchmakingQueuesQueryResult = Apollo.QueryResult<GetMatchmakingQueuesQuery, GetMatchmakingQueuesQueryVariables>;
+export const GetRerollCostDocument = gql`
+    query getRerollCost($rogueId: BigInt!) {
+  rerollCost(rogueId: $rogueId)
+}
+    `;
+
+/**
+ * __useGetRerollCostQuery__
+ *
+ * To run a query within a React component, call `useGetRerollCostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRerollCostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRerollCostQuery({
+ *   variables: {
+ *      rogueId: // value for 'rogueId'
+ *   },
+ * });
+ */
+export function useGetRerollCostQuery(baseOptions: Apollo.QueryHookOptions<GetRerollCostQuery, GetRerollCostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRerollCostQuery, GetRerollCostQueryVariables>(GetRerollCostDocument, options);
+      }
+export function useGetRerollCostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRerollCostQuery, GetRerollCostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRerollCostQuery, GetRerollCostQueryVariables>(GetRerollCostDocument, options);
+        }
+export type GetRerollCostQueryHookResult = ReturnType<typeof useGetRerollCostQuery>;
+export type GetRerollCostLazyQueryHookResult = ReturnType<typeof useGetRerollCostLazyQuery>;
+export type GetRerollCostQueryResult = Apollo.QueryResult<GetRerollCostQuery, GetRerollCostQueryVariables>;
+export const GetTrashCardCostDocument = gql`
+    query getTrashCardCost($rogueId: BigInt!, $cardId: String!) {
+  trashCardCost(rogueId: $rogueId, cardId: $cardId)
+}
+    `;
+
+/**
+ * __useGetTrashCardCostQuery__
+ *
+ * To run a query within a React component, call `useGetTrashCardCostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTrashCardCostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTrashCardCostQuery({
+ *   variables: {
+ *      rogueId: // value for 'rogueId'
+ *      cardId: // value for 'cardId'
+ *   },
+ * });
+ */
+export function useGetTrashCardCostQuery(baseOptions: Apollo.QueryHookOptions<GetTrashCardCostQuery, GetTrashCardCostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTrashCardCostQuery, GetTrashCardCostQueryVariables>(GetTrashCardCostDocument, options);
+      }
+export function useGetTrashCardCostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTrashCardCostQuery, GetTrashCardCostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTrashCardCostQuery, GetTrashCardCostQueryVariables>(GetTrashCardCostDocument, options);
+        }
+export type GetTrashCardCostQueryHookResult = ReturnType<typeof useGetTrashCardCostQuery>;
+export type GetTrashCardCostLazyQueryHookResult = ReturnType<typeof useGetTrashCardCostLazyQuery>;
+export type GetTrashCardCostQueryResult = Apollo.QueryResult<GetTrashCardCostQuery, GetTrashCardCostQueryVariables>;
+export const GetUpgradeCardCostDocument = gql`
+    query getUpgradeCardCost($rogueId: BigInt!, $cardId: String!) {
+  upgradeCardCost(rogueId: $rogueId, cardId: $cardId)
+}
+    `;
+
+/**
+ * __useGetUpgradeCardCostQuery__
+ *
+ * To run a query within a React component, call `useGetUpgradeCardCostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUpgradeCardCostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUpgradeCardCostQuery({
+ *   variables: {
+ *      rogueId: // value for 'rogueId'
+ *      cardId: // value for 'cardId'
+ *   },
+ * });
+ */
+export function useGetUpgradeCardCostQuery(baseOptions: Apollo.QueryHookOptions<GetUpgradeCardCostQuery, GetUpgradeCardCostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUpgradeCardCostQuery, GetUpgradeCardCostQueryVariables>(GetUpgradeCardCostDocument, options);
+      }
+export function useGetUpgradeCardCostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUpgradeCardCostQuery, GetUpgradeCardCostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUpgradeCardCostQuery, GetUpgradeCardCostQueryVariables>(GetUpgradeCardCostDocument, options);
+        }
+export type GetUpgradeCardCostQueryHookResult = ReturnType<typeof useGetUpgradeCardCostQuery>;
+export type GetUpgradeCardCostLazyQueryHookResult = ReturnType<typeof useGetUpgradeCardCostLazyQuery>;
+export type GetUpgradeCardCostQueryResult = Apollo.QueryResult<GetUpgradeCardCostQuery, GetUpgradeCardCostQueryVariables>;
 export const GetUserIdTestDocument = gql`
     query getUserIdTest {
   currentUserId
@@ -4555,3 +8008,197 @@ export function useGetUserIdTestLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetUserIdTestQueryHookResult = ReturnType<typeof useGetUserIdTestQuery>;
 export type GetUserIdTestLazyQueryHookResult = ReturnType<typeof useGetUserIdTestLazyQuery>;
 export type GetUserIdTestQueryResult = Apollo.QueryResult<GetUserIdTestQuery, GetUserIdTestQueryVariables>;
+export const IsInMatchDocument = gql`
+    query isInMatch {
+  isInMatch
+}
+    `;
+
+/**
+ * __useIsInMatchQuery__
+ *
+ * To run a query within a React component, call `useIsInMatchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsInMatchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsInMatchQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useIsInMatchQuery(baseOptions?: Apollo.QueryHookOptions<IsInMatchQuery, IsInMatchQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IsInMatchQuery, IsInMatchQueryVariables>(IsInMatchDocument, options);
+      }
+export function useIsInMatchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsInMatchQuery, IsInMatchQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IsInMatchQuery, IsInMatchQueryVariables>(IsInMatchDocument, options);
+        }
+export type IsInMatchQueryHookResult = ReturnType<typeof useIsInMatchQuery>;
+export type IsInMatchLazyQueryHookResult = ReturnType<typeof useIsInMatchLazyQuery>;
+export type IsInMatchQueryResult = Apollo.QueryResult<IsInMatchQuery, IsInMatchQueryVariables>;
+export const EditableCardUpdatedDocument = gql`
+    subscription editableCardUpdated {
+  editableCardUpdated {
+    id
+    ownerUserId
+    source
+  }
+}
+    `;
+
+/**
+ * __useEditableCardUpdatedSubscription__
+ *
+ * To run a query within a React component, call `useEditableCardUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useEditableCardUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEditableCardUpdatedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useEditableCardUpdatedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<EditableCardUpdatedSubscription, EditableCardUpdatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<EditableCardUpdatedSubscription, EditableCardUpdatedSubscriptionVariables>(EditableCardUpdatedDocument, options);
+      }
+export type EditableCardUpdatedSubscriptionHookResult = ReturnType<typeof useEditableCardUpdatedSubscription>;
+export type EditableCardUpdatedSubscriptionResult = Apollo.SubscriptionResult<EditableCardUpdatedSubscription>;
+export const FriendUpdatedDocument = gql`
+    subscription friendUpdated {
+  friendUpdated {
+    friendId
+    friendName
+    presence
+    since
+  }
+}
+    `;
+
+/**
+ * __useFriendUpdatedSubscription__
+ *
+ * To run a query within a React component, call `useFriendUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFriendUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFriendUpdatedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFriendUpdatedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<FriendUpdatedSubscription, FriendUpdatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<FriendUpdatedSubscription, FriendUpdatedSubscriptionVariables>(FriendUpdatedDocument, options);
+      }
+export type FriendUpdatedSubscriptionHookResult = ReturnType<typeof useFriendUpdatedSubscription>;
+export type FriendUpdatedSubscriptionResult = Apollo.SubscriptionResult<FriendUpdatedSubscription>;
+export const GameMessagesDocument = gql`
+    subscription gameMessages {
+  gameMessages {
+    ...serverGameMessage
+  }
+}
+    ${ServerGameMessageFragmentDoc}`;
+
+/**
+ * __useGameMessagesSubscription__
+ *
+ * To run a query within a React component, call `useGameMessagesSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGameMessagesSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGameMessagesSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGameMessagesSubscription(baseOptions?: Apollo.SubscriptionHookOptions<GameMessagesSubscription, GameMessagesSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<GameMessagesSubscription, GameMessagesSubscriptionVariables>(GameMessagesDocument, options);
+      }
+export type GameMessagesSubscriptionHookResult = ReturnType<typeof useGameMessagesSubscription>;
+export type GameMessagesSubscriptionResult = Apollo.SubscriptionResult<GameMessagesSubscription>;
+export const InviteUpdatedDocument = gql`
+    subscription inviteUpdated {
+  inviteUpdated {
+    id
+    expiresAt
+    fromName
+    fromUserId
+    toName
+    toUserId
+    friendId
+    message
+    queueId
+    status
+  }
+}
+    `;
+
+/**
+ * __useInviteUpdatedSubscription__
+ *
+ * To run a query within a React component, call `useInviteUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useInviteUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInviteUpdatedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useInviteUpdatedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<InviteUpdatedSubscription, InviteUpdatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<InviteUpdatedSubscription, InviteUpdatedSubscriptionVariables>(InviteUpdatedDocument, options);
+      }
+export type InviteUpdatedSubscriptionHookResult = ReturnType<typeof useInviteUpdatedSubscription>;
+export type InviteUpdatedSubscriptionResult = Apollo.SubscriptionResult<InviteUpdatedSubscription>;
+export const MatchFoundDocument = gql`
+    subscription matchFound {
+  matchFound {
+    gameId
+    url
+    playerKey
+    playerSecret
+  }
+}
+    `;
+
+/**
+ * __useMatchFoundSubscription__
+ *
+ * To run a query within a React component, call `useMatchFoundSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMatchFoundSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMatchFoundSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMatchFoundSubscription(baseOptions?: Apollo.SubscriptionHookOptions<MatchFoundSubscription, MatchFoundSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<MatchFoundSubscription, MatchFoundSubscriptionVariables>(MatchFoundDocument, options);
+      }
+export type MatchFoundSubscriptionHookResult = ReturnType<typeof useMatchFoundSubscription>;
+export type MatchFoundSubscriptionResult = Apollo.SubscriptionResult<MatchFoundSubscription>;
