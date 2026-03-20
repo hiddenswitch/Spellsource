@@ -1,0 +1,47 @@
+fragment serverGameMessage on ServerGameMessage {
+  messageType
+  id
+  localPlayerId
+  isReplayMessage
+  gameState {
+    ...gameState
+  }
+  actions {
+    all {
+      ...spellAction
+    }
+    compatibility
+  }
+  startingCards {
+    ...entitySummary
+  }
+  event {
+    eventType
+    id
+    description
+    isPowerHistory
+    isSourcePlayerLocal
+    isTargetPlayerLocal
+    source {
+      ...entitySummary
+    }
+    target {
+      ...entitySummary
+    }
+    targets {
+      ...entitySummary
+    }
+    value
+  }
+  gameOver {
+    localPlayerWon
+    winningPlayerId
+  }
+  emote {
+    entityId
+    message
+  }
+  timers {
+    millisRemaining
+  }
+}

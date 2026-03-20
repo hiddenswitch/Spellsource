@@ -7,7 +7,9 @@
   },
   "workspaces": [
     "spellsource-graphql",
-    "spellsource-web"
+    "spellsource-web",
+    "spellsource-protos",
+    "spellsource-ts-proto/ts-proto"
   ],
   "resolutions": {
     "blockly": "10.0.0",

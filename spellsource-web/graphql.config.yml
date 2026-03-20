@@ -1,4 +1,4 @@
-schema: src/__generated__/schema.graphql
+schema: ../spellsource-graphql/schema.graphql
 extensions:
   endpoints:
     Default GraphQL Endpoint:

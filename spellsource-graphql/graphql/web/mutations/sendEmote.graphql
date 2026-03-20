@@ -1,0 +1,3 @@
+mutation sendEmote($entityId: Int!, $message: EmoteType!) {
+  sendEmote(entityId: $entityId, message: $message)
+}

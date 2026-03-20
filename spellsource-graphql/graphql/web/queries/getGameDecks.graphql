@@ -1,0 +1,8 @@
+query getGameDecks {
+  decks {
+    collection {
+      ...inventoryCollection
+    }
+    inventoryIdsSize
+  }
+}

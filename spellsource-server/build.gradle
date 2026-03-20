@@ -429,6 +429,7 @@ graphqlCodegen {
   typeResolverSuffix = "TypeResolver"
   apiInterfaceStrategy = ApiInterfaceStrategy.DO_NOT_GENERATE
   apiReturnType = "io.vertx.core.Future"
+  subscriptionReturnType = "org.reactivestreams.Publisher"
   // generateDataFetchingEnvironmentArgumentInApis = true
   
   doLast {

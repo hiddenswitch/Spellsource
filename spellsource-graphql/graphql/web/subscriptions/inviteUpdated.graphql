@@ -1,0 +1,14 @@
+subscription inviteUpdated {
+  inviteUpdated {
+    id
+    expiresAt
+    fromName
+    fromUserId
+    toName
+    toUserId
+    friendId
+    message
+    queueId
+    status
+  }
+}

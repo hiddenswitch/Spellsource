@@ -15,6 +15,7 @@ plugins {
   id 'idea'
   id 'com.google.protobuf' version '0.9.4'
   id 'java-library'
+  id "com.github.node-gradle.node"
 }
 
 configurations {
@@ -22,11 +23,13 @@ configurations {
 }
 
 apply from: "../gradle/instrument.gradle"
+apply from: "../gradle/node.gradle"
 
+def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def csharpRootDir = 'src/main/csharp/HiddenSwitch'
 def dotnetCmd = ["dotnet"]
 def csharpGrpcPath = "";
-if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+if (isWindows) {
   csharpGrpcPath = "$project.rootProject.projectDir/bin/grpc_csharp_plugin.exe"
 } else if (Os.isFamily(Os.FAMILY_MAC)) {
   dotnetCmd = ["/opt/homebrew/bin/dotnet"]
@@ -34,8 +37,10 @@ if (Os.isFamily(Os.FAMILY_WINDOWS)) {
 } else {
   csharpGrpcPath = "$project.rootProject.projectDir/bin/linux/grpc_csharp_plugin"
 }
+def protocGenTsProtoPath = "$rootProject.projectDir/node_modules/.bin/protoc-gen-ts_proto" + (isWindows ? ".cmd" : "")
 
 evaluationDependsOn(":vertx-grpc:vertx-grpc-protoc-plugin2")
+evaluationDependsOn(':spellsource-ts-proto')
 
 dependencies {
   implementation "io.vertx:vertx-core:$vertxVersion"
@@ -146,6 +151,12 @@ protobuf {
     grpc_csharp {
       path = csharpGrpcPath
     }
+    grpc_ts_client {
+      path = protocGenTsProtoPath
+    }
+    grpc_ts_server {
+      path = protocGenTsProtoPath
+    }
   }
   generateProtoTasks {
     all().each { task ->
@@ -169,6 +180,26 @@ protobuf {
       grpc_csharp {
         outputSubDir = "csharp/Hiddenswitch/Framework/Sources"
       }
+      grpc_ts_client {
+        outputSubDir = "ts-client"
+        option "outputClientImpl=grpc-web"
+        option "forceLong=number"
+        option "esModuleInterop=true"
+        option "oneof=unions"
+        option "outputJsonMethods=false"
+        option "exportCommonSymbols=true"
+        option "lowerCaseServiceMethods=true"
+      }
+      grpc_ts_server {
+        outputSubDir = "ts-server"
+        option "outputServices=grpc-js"
+        option "esModuleInterop=true"
+        option "forceLong=number"
+        option "oneof=unions"
+        option "outputJsonMethods=false"
+        option "exportCommonSymbols=true"
+        option "lowerCaseServiceMethods=true"
+      }
     }
   }
 }
@@ -176,4 +207,113 @@ protobuf {
 
 compileJava {
   dependsOn += [':spellsource-protos:generateProto']
+}
+
+
+// --- REFACTORED BLOCK ---
+// Define layout properties at the top for clarity and reuse.
+// These represent the intermediate directories for our task pipeline.
+def copiedProtosDir = layout.buildDirectory.dir('copied-protos')
+def formattedSourcesDir = layout.buildDirectory.dir('formatted-sources-for-tsc')
+
+afterEvaluate {
+  /**
+   * TASK 1: generateProto
+   * This task is configured by the protobuf plugin. We ensure its dependencies are set.
+   */
+  tasks.named('generateProto').configure {
+    dependsOn ':spellsource-ts-proto:compileTypescript', ':yarnWorkspace'
+  }
+
+  tasks.register('copyAndModifyProto', Copy) {
+    dependsOn tasks.named('generateProto')
+
+    from("$buildDir/generated/source/proto/main/ts-client") {
+      into 'experimental/client'
+    }
+    from("$buildDir/generated/source/proto/main/ts-server") {
+      into 'experimental/server'
+    }
+    into("$buildDir/dist")
+
+    // Use filter to perform the text replacement during the copy action.
+    // This is more efficient and reliable than a separate doLast block.
+    filter { line ->
+      line.replace("export class MatchmakingClientImpl", "// @ts-ignore\nexport class MatchmakingClientImpl")
+          .replace("export class HiddenSwitchSpellsourceAPIServiceClientImpl", "// @ts-ignore\nexport class HiddenSwitchSpellsourceAPIServiceClientImpl")
+          .replace("string | undefined.fromPartial(request)", "request")
+    }
+
+    outputs.dir("$buildDir/dist/experimental")
+  }
+
+  /**
+   * TASK 3: prettierFormat
+   * Takes modified generated files and project source files, formats them into a new directory.
+   * READS FROM: build/copied-protos/ AND src/main/javascript/
+   * WRITES TO: build/formatted-sources-for-tsc/
+   */
+  tasks.register('prettierFormat', YarnTask) {
+    def copyAndModifyProtoTask = tasks.named('copyAndModifyProto')
+    dependsOn copyAndModifyProtoTask
+
+    // --- FIX: Use a lazy provider for the input files ---
+    // This prevents Gradle from checking for the directory's existence during the configuration phase.
+    // It correctly wires the output of the previous task as the input for this one.
+    inputs.files(copyAndModifyProtoTask)
+    inputs.dir('src/main/javascript')
+    outputs.dir(formattedSourcesDir)
+    outputs.cacheIf { true }
+
+    // This doFirst block prepares the directory that Prettier will operate on.
+    doFirst {
+      // Clean the output directory before copying
+      project.delete(formattedSourcesDir)
+      // Copy all necessary source files into the clean output directory.
+      copy {
+        from(inputs.files)
+        into(formattedSourcesDir)
+      }
+    }
+
+    // Point prettier to our clean, prepared directory to format the files in-place there.
+    args = ["--cwd", "$projectDir", "prettier", "--write", formattedSourcesDir.get().asFile.absolutePath]
+  }
+
+  /**
+   * TASK 4: compileTypescript
+   * Compiles the final, formatted TypeScript files from the intermediate directory.
+   * READS FROM: build/formatted-sources-for-tsc/
+   * WRITES TO: build/dist/ and build/src/main/javascript/
+   */
+  tasks.register('compileTypescript', YarnTask) {
+    dependsOn tasks.named('prettierFormat')
+
+    // Its ONLY input is the clean output from the previous step in the chain.
+    inputs.dir(formattedSourcesDir)
+
+    // Outputs remain the same.
+    outputs.dir('build/compiled')
+    outputs.cacheIf { true }
+
+    // The tsc command remains the same.
+    args = ["run", "-T", "tsc"]
+
+    doFirst {
+      copy {
+        from "$buildDir/formatted-sources-for-tsc"
+        into "$buildDir/compiled"
+      }
+    }
+
+    doLast {
+      copy {
+        from "$buildDir/compiled"
+        into "dist"
+      }
+      // todo: ugh
+      delete "dist/client"
+      delete "dist/server"
+    }
+  }
 }

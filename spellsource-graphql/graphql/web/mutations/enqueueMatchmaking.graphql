@@ -1,0 +1,3 @@
+mutation enqueueMatchmaking($input: MatchmakingEnqueueInput!) {
+  enqueueMatchmaking(input: $input)
+}

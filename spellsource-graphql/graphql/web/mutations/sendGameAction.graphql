@@ -1,0 +1,3 @@
+mutation sendGameAction($actionIndex: Int!, $repliesTo: String!) {
+  sendGameAction(actionIndex: $actionIndex, repliesTo: $repliesTo)
+}

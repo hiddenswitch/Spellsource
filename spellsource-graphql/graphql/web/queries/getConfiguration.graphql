@@ -1,0 +1,7 @@
+query getConfiguration {
+  configuration {
+    keycloakResetPasswordUrl
+    keycloakAccountManagementUrl
+    graphQlUrl
+  }
+}

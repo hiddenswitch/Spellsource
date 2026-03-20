@@ -1,6 +1,9 @@
 package com.hiddenswitch.framework.graphql;
 
 
+/**
+ * ─── Rogue types (existing) ──────────────────────────────────
+ */
 public class RogueRun implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;

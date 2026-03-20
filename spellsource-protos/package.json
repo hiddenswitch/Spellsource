@@ -1,0 +1,25 @@
+{
+  "name": "spellsource-protos",
+  "version": "1.0.0",
+  "description": "The protobuf files for SpellSource services, compatible with browser and server",
+  "main": "dist/experimental/client/spellsource.js",
+  "dependencies": {
+    "@appmana/ts-proto": "1.165.1",
+    "@grpc/grpc-js": "^1.9.13",
+    "@improbable-eng/grpc-web": "^0.15.0",
+    "cross-fetch": "^3.1.4",
+    "google-protobuf": "^3.21.2",
+    "long": "^5.2.3",
+    "protobufjs": "^7.2.5",
+    "rxjs": "^7.8.1"
+  },
+  "author": "",
+  "license": "",
+  "private": true,
+  "devDependencies": {
+    "prettier": "^3.1.1"
+  },
+  "scripts": {
+    "build": "yarn run -T tsc"
+  }
+}

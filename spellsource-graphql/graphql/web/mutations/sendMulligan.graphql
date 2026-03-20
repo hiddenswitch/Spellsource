@@ -1,0 +1,3 @@
+mutation sendMulligan($discardedCardIndices: [Int!]!, $repliesTo: String!) {
+  sendMulligan(discardedCardIndices: $discardedCardIndices, repliesTo: $repliesTo)
+}

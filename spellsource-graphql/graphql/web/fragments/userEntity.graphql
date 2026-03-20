@@ -1,0 +1,6 @@
+fragment userEntity on UserEntity {
+  id
+  email
+  username
+  privacyToken
+}

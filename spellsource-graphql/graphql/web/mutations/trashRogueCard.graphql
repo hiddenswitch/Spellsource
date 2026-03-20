@@ -1,0 +1,5 @@
+mutation trashRogueCard($rogueId: BigInt!, $cardId: String!) {
+  trashCard(rogueId: $rogueId, cardId: $cardId) {
+    id
+  }
+}

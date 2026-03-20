@@ -1,0 +1,8 @@
+fragment loginOrCreateReply on LoginOrCreateReply {
+  accessToken {
+    token
+  }
+  userEntity {
+    ...userEntity
+  }
+}

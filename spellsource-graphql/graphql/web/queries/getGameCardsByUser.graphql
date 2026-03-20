@@ -1,0 +1,9 @@
+query getGameCardsByUser($ifNoneMatch: String) {
+  cardsByUser(ifNoneMatch: $ifNoneMatch) {
+    cards {
+      ...cardRecord
+    }
+    version
+    cachedOk
+  }
+}

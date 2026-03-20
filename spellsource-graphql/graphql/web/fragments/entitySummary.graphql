@@ -1,0 +1,29 @@
+fragment entitySummary on Entity {
+  id
+  name
+  description
+  cardId
+  cardType
+  entityType
+  rarity
+  owner
+  manaCost
+  attack
+  hp
+  maxHp
+  armor
+  playable
+  taunt
+  charge
+  rush
+  divineShield
+  stealth
+  lifesteal
+  poisonous
+  deathrattles
+  battlecry
+  windfury
+  collectible
+  heroClasses
+  tribes
+}

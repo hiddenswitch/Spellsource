@@ -1,0 +1,8 @@
+query getGameDeck($deckId: String!) {
+  deck(deckId: $deckId) {
+    collection {
+      ...inventoryCollection
+    }
+    inventoryIdsSize
+  }
+}

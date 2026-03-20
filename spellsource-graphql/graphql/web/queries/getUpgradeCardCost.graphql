@@ -1,0 +1,3 @@
+query getUpgradeCardCost($rogueId: BigInt!, $cardId: String!) {
+  upgradeCardCost(rogueId: $rogueId, cardId: $cardId)
+}

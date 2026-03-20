@@ -1,0 +1,10 @@
+fragment cardRecord on CardRecord {
+  id
+  cardId
+  userId
+  count
+  collectionIds
+  entity {
+    ...entitySummary
+  }
+}
