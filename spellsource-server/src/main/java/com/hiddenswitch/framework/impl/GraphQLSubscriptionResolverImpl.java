@@ -1,13 +1,18 @@
 package com.hiddenswitch.framework.impl;
 
 import com.hiddenswitch.framework.Accounts;
+import com.hiddenswitch.framework.Matchmaking;
 import com.hiddenswitch.framework.graphql.*;
 import graphql.kickstart.tools.GraphQLSubscriptionResolver;
-import io.vertx.core.Future;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.MessageConsumer;
 import org.apache.commons.lang3.NotImplementedException;
 import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import javax.naming.AuthenticationException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * GraphQL subscription resolver.
@@ -37,9 +42,19 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 		return GraphQLGameBridge.gameMessagesPublisher(userId);
 	}
 
+	/**
+	 * Emits a {@link MatchFound} when the matchmaking system creates a game for the
+	 * authenticated user. Listens on the event bus address
+	 * {@code matchmaking:enqueue:{userId}} which is published to by
+	 * {@link Matchmaking#notifyGameReady(String, String)}.
+	 */
 	@Override
 	public Publisher<MatchFound> matchFound() throws Exception {
-		throw new NotImplementedException();
+		var userId = Accounts.userId();
+		if (userId == null) {
+			throw new AuthenticationException("must be authenticated");
+		}
+		return new MatchFoundPublisher(userId);
 	}
 
 	@Override
@@ -55,5 +70,67 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 	@Override
 	public Publisher<EditableCard> editableCardUpdated() throws Exception {
 		throw new NotImplementedException();
+	}
+
+	/**
+	 * A Publisher that listens on the event bus for matchmaking notifications and emits
+	 * {@link MatchFound} when the user is matched into a game.
+	 * <p>
+	 * The event bus message body is the gameId string. The publisher replies to the
+	 * event bus message to acknowledge receipt (the matchmaker waits for this reply
+	 * before proceeding).
+	 */
+	private static class MatchFoundPublisher implements Publisher<MatchFound> {
+		private final String userId;
+
+		MatchFoundPublisher(String userId) {
+			this.userId = userId;
+		}
+
+		@Override
+		public void subscribe(Subscriber<? super MatchFound> subscriber) {
+			var cancelled = new AtomicBoolean(false);
+			var address = Matchmaking.MATCHMAKING_ENQUEUE + userId;
+			var vertx = Vertx.currentContext().owner();
+			var eventBus = vertx.eventBus();
+
+			MessageConsumer<String> consumer = eventBus.consumer(address);
+
+			subscriber.onSubscribe(new Subscription() {
+				@Override
+				public void request(long n) {
+					// backpressure not needed; match events are rare
+				}
+
+				@Override
+				public void cancel() {
+					cancelled.set(true);
+					consumer.unregister();
+				}
+			});
+
+			consumer.handler(message -> {
+				if (cancelled.get()) return;
+
+				var gameId = message.body();
+				// Reply to acknowledge receipt so the matchmaker knows the player was notified
+				message.reply("ok");
+
+				var matchFound = MatchFound.builder()
+						.setGameId(gameId)
+						.setUrl("")
+						.setPlayerKey("")
+						.setPlayerSecret("")
+						.build();
+
+				subscriber.onNext(matchFound);
+			});
+
+			consumer.exceptionHandler(err -> {
+				if (!cancelled.get()) {
+					subscriber.onError(err);
+				}
+			});
+		}
 	}
 }

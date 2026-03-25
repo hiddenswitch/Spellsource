@@ -1,9 +1,21 @@
-import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloProvider,
+  createHttpLink,
+  InMemoryCache,
+  split,
+} from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { createClient } from "graphql-ws";
 import { FunctionComponent, PropsWithChildren, RefObject, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { graphqlHost } from "./config";
-import { useUpdateEffect } from "react-use";
+
+function wsUrl(): string {
+  return graphqlHost.replace(/^http/, "ws") + "/subscriptions";
+}
 
 export const ApolloClientProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const { data: session, status } = useSession();
@@ -18,19 +30,51 @@ export const ApolloClientProvider: FunctionComponent<PropsWithChildren> = ({ chi
 };
 
 export const createApolloClient = (tokenRef: RefObject<string>) => {
+  const httpLink = setContext((_, { headers, ...context }) => ({
+    headers: {
+      ...headers,
+      Authorization: tokenRef.current ? `Bearer ${tokenRef.current}` : "",
+    },
+    ...context,
+  })).concat(
+    createHttpLink({
+      uri: graphqlHost + "/graphql",
+      fetch,
+    })
+  );
+
+  const wsLink =
+    typeof window !== "undefined"
+      ? new GraphQLWsLink(
+          createClient({
+            url: wsUrl(),
+            connectionParams: () => ({
+              Authorization: tokenRef.current
+                ? `Bearer ${tokenRef.current}`
+                : "",
+            }),
+            shouldRetry: () => true,
+            retryAttempts: Infinity,
+          })
+        )
+      : null;
+
+  const link = wsLink
+    ? split(
+        ({ query }) => {
+          const definition = getMainDefinition(query);
+          return (
+            definition.kind === "OperationDefinition" &&
+            definition.operation === "subscription"
+          );
+        },
+        wsLink,
+        httpLink
+      )
+    : httpLink;
+
   return new ApolloClient({
-    link: setContext((_, { headers, ...context }) => ({
-      headers: {
-        ...headers,
-        Authorization: tokenRef.current ? `Bearer ${tokenRef.current}` : "",
-      },
-      ...context,
-    })).concat(
-      createHttpLink({
-        uri: graphqlHost + "/graphql",
-        fetch,
-      })
-    ),
+    link,
     connectToDevTools: process.env.NODE_ENV !== "production",
     cache: new InMemoryCache(),
     defaultOptions: {

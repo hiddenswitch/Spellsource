@@ -805,7 +805,9 @@ public class ModelConversions {
 	static EntityLocation toClientLocation(net.demilich.metastone.game.entities.EntityLocation location) {
 		return EntityLocation.newBuilder()
 				.setZone(location.getZone())
-				.setIndex(location.getIndex()).build();
+				.setIndex(location.getIndex())
+				.setPlayer(location.getPlayer())
+				.build();
 	}
 
 	/**

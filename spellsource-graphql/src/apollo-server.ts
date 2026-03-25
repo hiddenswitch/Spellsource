@@ -14,14 +14,23 @@ type Handler = (req: Request, res: Response, next: NextFunction) => void;
 export const setupApolloServer = async (app: Application, httpServer: Server): Promise<ApolloServer> => {
   const schema = await createFullSchema();
 
-  // const subscriptionServer = SubscriptionServer.create({ schema, execute, subscribe }, { server, path });
-
   const wsServer = new WebSocketServer({
     server: httpServer,
     path: "/subscriptions",
   });
 
-  const serverCleanup = useServer({ schema }, wsServer);
+  const serverCleanup = useServer(
+    {
+      schema,
+      context: (ctx) => {
+        // Forward connectionParams so stitched subscribers can access auth tokens
+        return {
+          connectionParams: ctx.connectionParams ?? {},
+        };
+      },
+    },
+    wsServer,
+  );
 
   const apolloServer = new ApolloServer({
     schema,

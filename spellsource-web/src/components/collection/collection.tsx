@@ -145,6 +145,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
     },
   });
 
+  // @ts-ignore
   return (
     <div ref={collectionDrop as any} className={"h-100"}>
       <div id={"Top Bar"} className={"d-flex flex-row flex-wrap gap-2 pt-2 ps-2 align-items-center"}>
@@ -165,6 +166,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           <DropdownMenu>
             <div className={"d-flex flex-column gap-1"}>
               {limitOptions.map((value, i) => (
+                // @ts-ignore
                 <DropdownItem key={i} as={Button} active={limit === value} onClick={() => setLimit(value)}>
                   {value}
                 </DropdownItem>
@@ -172,9 +174,12 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
             </div>
           </DropdownMenu>
         </Dropdown>
-        <Button disabled={!getCards.data || offset <= 0} variant={"secondary"} onClick={() => changeOffset(-limit)}>
-          Prev
-        </Button>
+        {
+          // @ts-ignore
+          <Button disabled={!getCards.data || offset <= 0} variant={"secondary"} onClick={() => changeOffset(-limit)}>
+            Prev
+          </Button>
+        }
         <div className={"mb-1 text-center user-select-none"}>
           {cards?.length ? offset + 1 : "0"}-{cards?.length ? offset + showing : "0"} of {cards?.length ? total : "0"}
         </div>

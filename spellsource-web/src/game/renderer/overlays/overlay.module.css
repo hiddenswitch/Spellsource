@@ -1,0 +1,513 @@
+/* Stat badge — circle showing a number */
+.statBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 11px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.statBadge.mana {
+  background: #2266dd;
+}
+
+.statBadge.attack {
+  background: #cc8822;
+}
+
+.statBadge.hp {
+  background: #cc2222;
+}
+
+.statBadge.armor {
+  background: #888888;
+}
+
+.statBadge.durability {
+  background: #888888;
+}
+
+.statBadge.buffed {
+  color: #44ff44;
+}
+
+.statBadge.damaged {
+  color: #ff4444;
+}
+
+/* (Card/hero/weapon overlays are now 3D geometry — see stat-badge-3d.tsx) */
+
+/* Card tooltip */
+.cardTooltip {
+  background: rgba(20, 15, 10, 0.95);
+  border: 1px solid #665533;
+  border-radius: 6px;
+  padding: 10px 12px;
+  color: #e0d8c0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 12px;
+  width: 200px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cardTooltip .tooltipName {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.cardTooltip .tooltipType {
+  font-size: 10px;
+  color: #aaa;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.cardTooltip .tooltipDesc {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #ccc;
+}
+
+.cardTooltip .tooltipStats {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* tooltip stat badges are larger since they're in screen-space DOM */
+.cardTooltip .statBadge {
+  width: 22px;
+  height: 22px;
+  font-size: 13px;
+}
+
+/* Power history panel */
+.powerHistory {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 220px;
+  height: 100%;
+  overflow-y: auto;
+  background: rgba(10, 8, 5, 0.8);
+  border-left: 1px solid #333;
+  padding: 8px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 11px;
+  color: #bbb;
+  pointer-events: auto;
+  scrollbar-width: thin;
+}
+
+.powerHistory .historyEntry {
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Turn timer */
+.turnTimer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.turnTimerBar {
+  height: 100%;
+  background: linear-gradient(90deg, #44aa44, #aacc44);
+  transition: width 1s linear;
+}
+
+.turnTimerBar.warning {
+  background: linear-gradient(90deg, #cc4444, #ccaa44);
+}
+
+/* Game over screen */
+.gameOverScreen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 100;
+}
+
+.gameOverTitle {
+  font-size: 48px;
+  font-weight: 700;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  margin-bottom: 24px;
+}
+
+.gameOverTitle.win {
+  color: #ffcc00;
+}
+
+.gameOverTitle.loss {
+  color: #cc4444;
+}
+
+.gameOverButton {
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #44aa44;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.gameOverButton:hover {
+  background: #55bb55;
+}
+
+/* Mulligan overlay */
+.mulliganOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 50;
+}
+
+.mulliganTitle {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.mulliganCards {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.mulliganCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  border: 2px solid #555;
+  border-radius: 8px;
+  background: rgba(40, 30, 20, 0.9);
+  cursor: pointer;
+  transition: border-color 0.15s, opacity 0.15s, transform 0.15s;
+  width: 120px;
+}
+
+.mulliganCard:hover {
+  border-color: #888;
+}
+
+.mulliganCard.discarding {
+  border-color: #cc4444;
+  opacity: 0.5;
+  transform: translateY(-8px);
+}
+
+.mulliganCardName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.mulliganCardCost {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2266dd;
+  margin-bottom: 4px;
+}
+
+.mulliganCardStats {
+  font-size: 11px;
+  color: #aaa;
+}
+
+.mulliganConfirm {
+  padding: 10px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #44aa44;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.mulliganConfirm:hover {
+  background: #55bb55;
+}
+
+/* Discover overlay */
+.discoverOverlay {
+  position: absolute;
+  bottom: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  z-index: 40;
+}
+
+.discoverCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  border: 2px solid #665533;
+  border-radius: 8px;
+  background: rgba(40, 30, 20, 0.95);
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+  width: 130px;
+}
+
+.discoverCard:hover {
+  border-color: #ffcc00;
+  transform: translateY(-4px);
+}
+
+.discoverCardName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.discoverCardCost {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2266dd;
+  margin-bottom: 4px;
+}
+
+.discoverCardDesc {
+  font-size: 10px;
+  color: #bbb;
+  text-align: center;
+}
+
+/* Concede button */
+.concedeButton {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+  background: rgba(80, 30, 30, 0.8);
+  color: #ccc;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.concedeButton:hover {
+  background: rgba(120, 40, 40, 0.9);
+  color: #fff;
+}
+
+/* Deck count */
+.deckCount {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Queue / matchmaking screen */
+.queueScreen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #e0d8c0;
+  z-index: 60;
+}
+
+.queueTitle {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.queueSubtitle {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 32px;
+}
+
+.queueButton {
+  padding: 14px 40px;
+  font-size: 18px;
+  font-weight: 600;
+  background: #44aa44;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-bottom: 12px;
+}
+
+.queueButton:hover {
+  background: #55bb55;
+}
+
+.queueButton:disabled {
+  background: #555;
+  cursor: default;
+}
+
+.queueButtonSecondary {
+  padding: 10px 28px;
+  font-size: 14px;
+  font-weight: 500;
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #555;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.queueButtonSecondary:hover {
+  border-color: #888;
+  color: #fff;
+}
+
+.queueStatus {
+  font-size: 16px;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+.queueSpinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #555;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: queueSpin 0.8s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes queueSpin {
+  to { transform: rotate(360deg); }
+}
+
+.queueError {
+  font-size: 13px;
+  color: #cc4444;
+  margin-top: 12px;
+}
+
+.queueDemoLink {
+  position: absolute;
+  bottom: 16px;
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.queueDemoLink:hover {
+  color: #999;
+}
+
+/* Card reveal panel (left side, shows opponent's played card) */
+.cardReveal {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  width: 180px;
+  background: rgba(15, 12, 8, 0.92);
+  border: 1px solid #554422;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  pointer-events: none;
+  user-select: none;
+  z-index: 20;
+  transition: opacity 0.3s ease;
+}
+
+.cardRevealHeader {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.cardRevealName {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 3px;
+}
+
+.cardRevealType {
+  font-size: 10px;
+  color: #999;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.cardRevealDesc {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #ccc;
+  margin-bottom: 8px;
+}
+
+.cardRevealStats {
+  display: flex;
+  gap: 6px;
+}
+
+/* Override stat badge sizes inside reveal panel for readability */
+.cardReveal .statBadge {
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+}

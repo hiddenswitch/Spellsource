@@ -3,6 +3,7 @@ import type { PlayerEntities } from '../types'
 import type { PlayerSide } from '../types'
 import * as C from './constants'
 import { manaPosition } from './board-layout'
+import { ManaTextOverlay } from './overlays/hero-overlay'
 
 interface ManaDisplayProps {
   bottom: PlayerEntities
@@ -43,6 +44,11 @@ export const ManaDisplay: React.FC<ManaDisplayProps> = ({ bottom, top }) => (
               </mesh>
             )
           })}
+
+          {/* Mana text: current/max */}
+          <group position={[basePos[0], basePos[1] + 0.3, basePos[2] - (side === 'bottom' ? 0.4 : -0.4)]}>
+            <ManaTextOverlay mana={mana} maxMana={maxMana} />
+          </group>
         </group>
       )
     })}

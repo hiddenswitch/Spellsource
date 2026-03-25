@@ -10,7 +10,7 @@ function Footer({ pages }: { pages?: any }) {
       <Container className={styles.footer}>
         <Row className={cx("justify-content-around", "w-100")}>
           <Col xs={"auto"}>
-            <a href="https://hiddenswitch.com/">2023 HiddenSwitch, Inc</a>
+            <a href="https://hiddenswitch.com/">{new Date().getFullYear()} HiddenSwitch, Inc</a>
           </Col>
           <Col xs={"auto"}>
             <a href="/javadoc">Developer API</a>

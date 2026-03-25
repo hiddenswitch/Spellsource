@@ -13,6 +13,7 @@
   "dependencies": {
     "@apollo/server": "^4.12.2",
     "@graphile-contrib/pg-omit-archived": "^4.0.0-beta.2",
+    "@graphql-tools/executor-graphql-ws": "^3.1.5",
     "@graphql-tools/schema": "^10.0.23",
     "@graphql-tools/stitch": "^9.4.25",
     "@graphql-tools/utils": "^10.8.6",
