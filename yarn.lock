@@ -333,7 +333,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@appmana/ts-proto@npm:1.165.1, @appmana/ts-proto@workspace:spellsource-ts-proto/ts-proto":
+"@appmana/ts-proto@workspace:spellsource-ts-proto/ts-proto":
   version: 0.0.0-use.local
   resolution: "@appmana/ts-proto@workspace:spellsource-ts-proto/ts-proto"
   dependencies:
@@ -21189,7 +21189,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "spellsource-protos@workspace:spellsource-protos"
   dependencies:
-    "@appmana/ts-proto": "npm:1.165.1"
     "@grpc/grpc-js": "npm:^1.9.13"
     "@improbable-eng/grpc-web": "npm:^0.15.0"
     cross-fetch: "npm:^3.1.4"

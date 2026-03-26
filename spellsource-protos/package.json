@@ -4,7 +4,6 @@
   "description": "The protobuf files for SpellSource services, compatible with browser and server",
   "main": "dist/experimental/client/spellsource.js",
   "dependencies": {
-    "@appmana/ts-proto": "1.165.1",
     "@grpc/grpc-js": "^1.9.13",
     "@improbable-eng/grpc-web": "^0.15.0",
     "cross-fetch": "^3.1.4",
