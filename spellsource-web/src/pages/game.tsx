@@ -68,7 +68,7 @@ const ConnectedGameView: FunctionComponent = () => {
       <CardReveal revealedCard={revealedCard} />
       <TurnTimer timers={state.timers} isLocalPlayerTurn={state.isLocalPlayerTurn} />
 
-      {state.phase === "mulligan" && state.mulliganCards.length > 0 && <MulliganOverlay cards={state.mulliganCards} onConfirm={sendMulligan} />}
+      {state.phase === "mulligan" && state.mulliganCards.length > 0 && <MulliganOverlay cards={state.mulliganCards} onConfirm={sendMulligan} onHoverStart={setHoveredEntity} onHoverEnd={() => setHoveredEntity(null)} />}
 
       {discoverCards.length > 0 && <DiscoverOverlay cards={discoverCards} actions={state.actions} onAction={sendAction} />}
 
@@ -121,14 +121,17 @@ const GamePage: FunctionComponent = () => {
   const isDemo = router.query.demo === "true";
 
   return (
-    <>
-      <Layout>
-        <Head>
-          <title>Spellsource — Game</title>
-        </Head>
-        <div className={"bg-black d-flex flex-grow-1"}>{isDemo ? <DemoGameView /> : <LiveGameView />}</div>
-      </Layout>
-    </>
+    <Layout>
+      <Head>
+        <title>Spellsource — Game</title>
+      </Head>
+      <div
+        className="bg-black d-flex flex-grow-1 position-relative"
+        style={{ minHeight: 0, flex: "1 1 0%" }}
+      >
+        {isDemo ? <DemoGameView /> : <LiveGameView />}
+      </div>
+    </Layout>
   );
 };
 

@@ -5,9 +5,11 @@ import styles from './overlay.module.css'
 interface MulliganOverlayProps {
   cards: Entity[]
   onConfirm: (discardedIndices: number[]) => void
+  onHoverStart?: (entity: Entity) => void
+  onHoverEnd?: () => void
 }
 
-export const MulliganOverlay: React.FC<MulliganOverlayProps> = ({ cards, onConfirm }) => {
+export const MulliganOverlay: React.FC<MulliganOverlayProps> = ({ cards, onConfirm, onHoverStart, onHoverEnd }) => {
   const [discarded, setDiscarded] = useState<Set<number>>(new Set())
 
   const toggleCard = useCallback((index: number) => {
@@ -35,14 +37,16 @@ export const MulliganOverlay: React.FC<MulliganOverlayProps> = ({ cards, onConfi
             key={card.id}
             className={`${styles.mulliganCard} ${discarded.has(i) ? styles.discarding : ''}`}
             onClick={() => toggleCard(i)}
+            onMouseEnter={() => onHoverStart?.(card)}
+            onMouseLeave={() => onHoverEnd?.()}
           >
             <div className={styles.mulliganCardCost}>
               {card.manaCost ?? 0}
             </div>
             <div className={styles.mulliganCardName}>{card.name}</div>
             <div className={styles.mulliganCardStats}>
-              {card.attack !== undefined && card.attack !== null && `${card.attack} / `}
-              {card.hp !== undefined && card.hp !== null && `${card.hp}`}
+              {card.attack != null && `${card.attack} / `}
+              {card.hp != null && `${card.hp}`}
             </div>
           </div>
         ))}

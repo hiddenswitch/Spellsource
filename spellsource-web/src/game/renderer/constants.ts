@@ -49,7 +49,11 @@ export const END_TURN_X = -5.8;
 export const END_TURN_Z = 0;
 
 // Camera (orthographic)
-export const CAMERA_FRUSTUM_SIZE = 4;
+// These define the desired world-space extents the camera must show.
+// The CameraRig dynamically computes the frustum to fit the board
+// regardless of screen aspect ratio.
+export const CAMERA_FIT_HALF_WIDTH = 6.5; // half of horizontal extent to always show
+export const CAMERA_FIT_HALF_HEIGHT = 4.2; // half of vertical extent to always show
 export const CAMERA_POSITION = { x: 0, y: 9, z: -4.5 } as const;
 export const CAMERA_LOOK_AT = { x: 0, y: 0, z: -0.2 } as const;
 

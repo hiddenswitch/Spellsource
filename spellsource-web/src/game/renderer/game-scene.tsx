@@ -31,18 +31,39 @@ interface GameSceneProps {
   onHoverEnd?: () => void;
 }
 
-/** Keeps the orthographic frustum sized to show CAMERA_FRUSTUM_SIZE world units vertically */
+/**
+ * Fits the orthographic frustum so the board always fills the screen width.
+ * Uses a "contain" strategy: the frustum is sized to guarantee both
+ * CAMERA_FIT_HALF_WIDTH and CAMERA_FIT_HALF_HEIGHT are visible,
+ * whichever is the tighter constraint for the current aspect ratio.
+ */
 const CameraRig: React.FC = () => {
   const { camera, size } = useThree();
 
   useEffect(() => {
     const cam = camera as OrthographicCamera;
-    const d = C.CAMERA_FRUSTUM_SIZE;
     const aspect = size.width / size.height;
-    cam.left = -d * aspect;
-    cam.right = d * aspect;
-    cam.top = d;
-    cam.bottom = -d;
+
+    // The aspect ratio that exactly fits both constraints
+    const targetAspect = C.CAMERA_FIT_HALF_WIDTH / C.CAMERA_FIT_HALF_HEIGHT;
+
+    let halfW: number;
+    let halfH: number;
+
+    if (aspect >= targetAspect) {
+      // Screen is wider than the board — fit height, expand width
+      halfH = C.CAMERA_FIT_HALF_HEIGHT;
+      halfW = halfH * aspect;
+    } else {
+      // Screen is narrower than the board — fit width, expand height
+      halfW = C.CAMERA_FIT_HALF_WIDTH;
+      halfH = halfW / aspect;
+    }
+
+    cam.left = -halfW;
+    cam.right = halfW;
+    cam.top = halfH;
+    cam.bottom = -halfH;
     cam.updateProjectionMatrix();
   }, [camera, size]);
 
@@ -112,6 +133,8 @@ export const GameScene: FunctionComponent<GameSceneProps> = ({ state, interactio
   <div
     className={className}
     style={{
+      position: "absolute",
+      inset: 0,
       overflow: "hidden",
       ...style,
     }}
