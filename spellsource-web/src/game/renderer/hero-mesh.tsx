@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useSpring, animated } from '@react-spring/three'
 import type { ThreeEvent } from '@react-three/fiber'
 import type { Entity } from '../../__generated__/client'
@@ -25,32 +25,25 @@ function getEmissive(
   return [0x000000, 0]
 }
 
-/** Check if this entity has an active attack effect and compute lunge offset */
-function getAttackOffset(
+/** Find attack lunge target position (90% of the way to defender) */
+function getAttackLungeTarget(
   entityId: number,
+  basePos: Vec3,
   effects: ActiveEffect[] | undefined,
-  entityPositions: Map<number, Vec3> | undefined,
-  basePos: Vec3
-): Vec3 {
-  if (!effects || !entityPositions) return basePos
+  entityPositions: Map<number, Vec3> | undefined
+): Vec3 | null {
+  if (!effects || !entityPositions) return null
   for (const e of effects) {
     if (e.type !== 'attack' || e.entityId !== entityId || !e.targetEntityId) continue
-    const targetPos = entityPositions.get(e.targetEntityId)
-    if (!targetPos) continue
-
-    const progress = Math.min(1, (Date.now() - e.createdAt) / e.duration)
-    const t = progress < 0.6
-      ? progress / 0.6
-      : 1 - (progress - 0.6) / 0.4
-    const ease = t * t * (3 - 2 * t)
-
+    const tp = entityPositions.get(e.targetEntityId)
+    if (!tp) continue
     return [
-      basePos[0] + (targetPos[0] - basePos[0]) * ease * 0.5,
+      basePos[0] + (tp[0] - basePos[0]) * 0.9,
       basePos[1],
-      basePos[2] + (targetPos[2] - basePos[2]) * ease * 0.5,
+      basePos[2] + (tp[2] - basePos[2]) * 0.9,
     ]
   }
-  return basePos
+  return null
 }
 
 interface HeroPortraitProps {
@@ -77,11 +70,34 @@ const HeroPortrait: React.FC<HeroPortraitProps> = ({ entity, side, interaction, 
     }
   }, [entity.id, basePos, onPositionReady])
 
-  const pos = getAttackOffset(entity.id, effects, entityPositions, basePos)
+  // Two-phase attack lunge
+  const lungeTarget = getAttackLungeTarget(entity.id, basePos, effects, entityPositions)
+  const isLunging = lungeTarget !== null
+  const prevLungeRef = useRef(false)
+  const [lungePhase, setLungePhase] = useState<'idle' | 'forward' | 'back'>('idle')
+
+  useEffect(() => {
+    if (isLunging && !prevLungeRef.current) {
+      setLungePhase('forward')
+      const timer = setTimeout(() => setLungePhase('back'), 200)
+      return () => clearTimeout(timer)
+    }
+    if (!isLunging && prevLungeRef.current) {
+      setLungePhase('idle')
+    }
+    prevLungeRef.current = isLunging
+  }, [isLunging])
+
+  const effectivePos: Vec3 =
+    lungePhase === 'forward' && lungeTarget ? lungeTarget : basePos
 
   const spring = useSpring({
-    pos,
-    config: { tension: 300, friction: 20 },
+    pos: effectivePos,
+    config: lungePhase === 'forward'
+      ? { tension: 400, friction: 18 }
+      : lungePhase === 'back'
+        ? { tension: 300, friction: 22 }
+        : { tension: 200, friction: 22 },
   })
 
   const handleClick = useCallback(

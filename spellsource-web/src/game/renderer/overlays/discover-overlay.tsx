@@ -7,12 +7,16 @@ interface DiscoverOverlayProps {
   cards: Entity[]
   actions: GameActions | undefined
   onAction: (actionIndex: number) => void
+  onHoverStart?: (entity: Entity) => void
+  onHoverEnd?: () => void
 }
 
 export const DiscoverOverlay: React.FC<DiscoverOverlayProps> = ({
   cards,
   actions,
   onAction,
+  onHoverStart,
+  onHoverEnd,
 }) => {
   const handlePick = useCallback(
     (entity: Entity) => {
@@ -36,6 +40,8 @@ export const DiscoverOverlay: React.FC<DiscoverOverlayProps> = ({
           key={card.id}
           className={styles.discoverCard}
           onClick={() => handlePick(card)}
+          onMouseEnter={() => onHoverStart?.(card)}
+          onMouseLeave={() => onHoverEnd?.()}
         >
           <div className={styles.discoverCardCost}>{card.manaCost ?? 0}</div>
           <div className={styles.discoverCardName}>{card.name}</div>

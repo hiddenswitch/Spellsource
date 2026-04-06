@@ -64,6 +64,12 @@ export function useGameConnection(options?: UseGameConnectionOptions): GameConne
   const sendMulligan = useCallback(
     (discardedCardIndices: number[]) => {
       if (!state.mulliganMessageId) return
+      // Clear mulligan UI immediately to prevent lingering overlay
+      dispatch({
+        messageType: 'ON_UPDATE',
+        localPlayerId: state.localPlayerId,
+        isReplayMessage: false,
+      } as ServerGameMessage)
       sendMulliganMutation({
         variables: {
           discardedCardIndices,
@@ -71,7 +77,7 @@ export function useGameConnection(options?: UseGameConnectionOptions): GameConne
         },
       })
     },
-    [state.mulliganMessageId, sendMulliganMutation]
+    [state.mulliganMessageId, state.localPlayerId, sendMulliganMutation]
   )
 
   const concedeGame = useCallback(() => {

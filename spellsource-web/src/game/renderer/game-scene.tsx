@@ -16,6 +16,7 @@ import { ManaDisplay } from "./mana-display";
 import { EndTurnButton } from "./end-turn-button";
 import { DamageNumberLayer } from "./effects/damage-number";
 import { SummonSlots } from "./summon-slots";
+import { EntityPositionProvider } from "./entity-positions"
 
 interface GameSceneProps {
   state?: ManagedGameState;
@@ -154,7 +155,9 @@ export const GameScene: FunctionComponent<GameSceneProps> = ({ state, interactio
       gl={{ antialias: true }}
       style={{ background: `#${C.COLOR_BACKGROUND.toString(16).padStart(6, "0")}` }}
     >
-      <SceneContents state={state} interaction={interaction} activeEffects={activeEffects} onEntityClicked={onEntityClicked} onBoardClicked={onBoardClicked} onEndTurnClicked={onEndTurnClicked} onSummonSlotClicked={onSummonSlotClicked} onHoverStart={onHoverStart} onHoverEnd={onHoverEnd} />
+      <EntityPositionProvider>
+        <SceneContents state={state} interaction={interaction} activeEffects={activeEffects} onEntityClicked={onEntityClicked} onBoardClicked={onBoardClicked} onEndTurnClicked={onEndTurnClicked} onSummonSlotClicked={onSummonSlotClicked} onHoverStart={onHoverStart} onHoverEnd={onHoverEnd} />
+      </EntityPositionProvider>
     </Canvas>
   </div>
 );

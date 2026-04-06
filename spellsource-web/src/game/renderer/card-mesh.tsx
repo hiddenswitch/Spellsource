@@ -8,8 +8,9 @@ import type { InteractionState } from '../state/interaction-state'
 import type { ActiveEffect } from '../hooks/use-animation-queue'
 import * as C from './constants'
 import type { Vec3 } from './board-layout'
-import { handPosition, handRotation, battlefieldPosition } from './board-layout'
+import { handPosition, handRotation, battlefieldPosition, deckPosition } from './board-layout'
 import { CardOverlay } from './overlays/card-overlay'
+import { useEntityPositionStore } from './entity-positions'
 
 interface CardProps {
   entity: Entity
@@ -58,19 +59,40 @@ function getEffectScale(entityId: number, effects?: ActiveEffect[]): [number, nu
     if (e.entityId !== entityId) continue
     const progress = Math.min(1, (Date.now() - e.createdAt) / e.duration)
     if (e.type === 'summon') {
-      // Pulse up then settle: 1 → 1.3 → 1
       const s = progress < 0.5
         ? 1 + 0.3 * (progress * 2)
         : 1.3 - 0.3 * ((progress - 0.5) * 2)
       return [s, s, s]
     }
     if (e.type === 'death') {
-      // Shrink to 0
       const s = 1 - progress
       return [s, s, s]
     }
   }
   return [1, 1, 1]
+}
+
+/** Find active attack effect for this entity and compute lunge target offset */
+function getAttackLungeTarget(
+  entityId: number,
+  basePos: Vec3,
+  effects: ActiveEffect[] | undefined,
+  entityStore: { entities: Map<number, { pos: Vec3 }> }
+): Vec3 | null {
+  if (!effects) return null
+  for (const e of effects) {
+    if (e.type !== 'attack' || e.entityId !== entityId || !e.targetEntityId) continue
+    const targetRec = entityStore.entities.get(e.targetEntityId)
+    if (!targetRec) continue
+    const tp = targetRec.pos
+    // Lunge to 90% of the way to the target (stop just short of overlapping)
+    return [
+      basePos[0] + (tp[0] - basePos[0]) * 0.9,
+      basePos[1],
+      basePos[2] + (tp[2] - basePos[2]) * 0.9,
+    ]
+  }
+  return null
 }
 
 const CardMesh: React.FC<CardProps> = ({
@@ -94,21 +116,89 @@ const CardMesh: React.FC<CardProps> = ({
     hovered
   )
 
-  // Report position to parent for effect positioning
-  const prevPosRef = useRef<string>('')
-  useEffect(() => {
-    const key = position.join(',')
-    if (key !== prevPosRef.current) {
-      prevPosRef.current = key
-      onPositionReady?.(entity.id, position)
-    }
-  }, [entity.id, position, onPositionReady])
+  const storeRef = useEntityPositionStore()
 
-  // Spring-animate position changes (zone transitions)
+  // Determine the starting "from" position for the spring animation.
+  // Cards from the initial deal (before any game actions) start in place — no animation.
+  const initialFrom = useRef<Vec3 | null>(null)
+  if (initialFrom.current === null) {
+    const store = storeRef.current
+
+    if (!store.initialRenderComplete) {
+      // Initial board — no entrance animation
+      initialFrom.current = position
+    } else {
+      const prev = store.entities.get(entity.id)
+      if (prev) {
+        initialFrom.current = prev.pos
+      } else if (zone === Zone.Hand) {
+        initialFrom.current = deckPosition(side)
+      } else if (zone === Zone.Battlefield) {
+        // Pop the oldest removed hand position for this side
+        const queue = store.removedHandPositions[side]
+        const fromHand = queue.length > 0 ? queue.shift()! : null
+        initialFrom.current = fromHand ?? handPosition(side, 0, 1)
+      } else {
+        initialFrom.current = position
+      }
+    }
+  }
+
+  // Record position and track hand removals
+  useEffect(() => {
+    const store = storeRef.current
+    store.entities.set(entity.id, { pos: position, zone })
+    // Mark initial render complete after the first batch of cards register
+    if (!store.initialRenderComplete) {
+      store.initialRenderComplete = true
+    }
+    onPositionReady?.(entity.id, position)
+
+    return () => {
+      if (zone === Zone.Hand) {
+        storeRef.current.removedHandPositions[side].push(position)
+      }
+    }
+  }, [entity.id, position, zone, side, storeRef, onPositionReady])
+
+  // Attack lunge: detect active attack effect and compute lunge target
+  const lungeTarget = getAttackLungeTarget(entity.id, position, effects, storeRef.current)
+  const prevLungeRef = useRef<boolean>(false)
+  const isLunging = lungeTarget !== null
+
+  // Track lunge state transitions for the spring
+  const [lungePhase, setLungePhase] = useState<'idle' | 'forward' | 'back'>('idle')
+
+  useEffect(() => {
+    if (isLunging && !prevLungeRef.current) {
+      // Attack just started — lunge forward
+      setLungePhase('forward')
+      // After reaching the target, snap back
+      const timer = setTimeout(() => setLungePhase('back'), 200)
+      return () => clearTimeout(timer)
+    }
+    if (!isLunging && prevLungeRef.current) {
+      setLungePhase('idle')
+    }
+    prevLungeRef.current = isLunging
+  }, [isLunging])
+
+  // Compute the effective spring target
+  const effectivePos: Vec3 =
+    lungePhase === 'forward' && lungeTarget
+      ? lungeTarget
+      : position
+
+  // Base position spring
   const spring = useSpring({
-    pos: position,
+    pos: effectivePos,
     rotY: rotationY,
-    config: { tension: 200, friction: 22 },
+    from: { pos: initialFrom.current!, rotY: rotationY },
+    config: lungePhase === 'forward'
+      ? { tension: 400, friction: 18 }  // fast snap forward
+      : lungePhase === 'back'
+        ? { tension: 300, friction: 22 }  // brisk return
+        : { tension: 170, friction: 24 }, // normal movement
   })
 
   const effectScale = getEffectScale(entity.id, effects)

@@ -123,16 +123,19 @@ export function reduceGameMessage(current: ManagedGameState, msg: ServerGameMess
     case MessageType.OnUpdate: {
       const gameState = msg.gameState ?? undefined;
       const board = gameState ? groupEntities(gameState.entities, localPlayerId) : current.board;
+      const phase = current.phase === "loading" || current.phase === "mulligan" ? "playing" : current.phase;
 
       return {
         ...current,
-        phase: current.phase === "loading" ? "playing" : current.phase,
+        phase,
         gameState,
         board,
         localPlayerId,
         isLocalPlayerTurn: gameState?.isLocalPlayerTurn ?? current.isLocalPlayerTurn,
         turnNumber: gameState?.turnNumber ?? current.turnNumber,
         timers: msg.timers ?? current.timers,
+        // Clear mulligan state when transitioning out
+        ...(current.phase === "mulligan" ? { mulliganCards: [], mulliganMessageId: undefined } : {}),
       };
     }
 

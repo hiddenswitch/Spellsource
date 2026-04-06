@@ -8,13 +8,19 @@ export interface RevealedCard {
 }
 
 /** How long a revealed card stays visible (ms) */
-const REVEAL_DURATION = 3000
+const REVEAL_DURATION = 2000
 
-/** Duration in ms to wait after dispatching each message type */
+/**
+ * Duration in ms to wait after dispatching each message type.
+ *
+ * ON_UPDATE triggers board state changes (entities appearing/disappearing in zones)
+ * which drive spring animations. The delay must be long enough for zone transition
+ * springs (tension 170, friction 24) to mostly settle before the next event fires.
+ */
 function messageDuration(msg: ServerGameMessage): number {
   switch (msg.messageType) {
     case MessageType.OnUpdate:
-      return 200
+      return 400
     case MessageType.OnGameEvent:
       return eventDuration(msg.event)
     case MessageType.OnGameEnd:
@@ -27,41 +33,58 @@ function messageDuration(msg: ServerGameMessage): number {
   }
 }
 
-/** Visible gameplay events get delays; internal bookkeeping events get 0. */
+/**
+ * Visible gameplay events get delays; internal bookkeeping events get 0.
+ *
+ * The delays here control pacing between sequential events. They should be
+ * long enough to let the corresponding animation play out visually but
+ * short enough that the game doesn't feel sluggish.
+ */
 function eventDuration(event: GameEvent | null | undefined): number {
   if (!event) return 0
   switch (event.eventType) {
-    // Visible combat events
+    // ── Combat ──
     case GameEventType.PhysicalAttack:
-      return 450
+      return 500  // lunge forward (200ms) + hold + return
     case GameEventType.Damage:
-      return 200
+      return 250  // floating number needs time to read
     case GameEventType.Heal:
-      return 150
+      return 200
     case GameEventType.Kill:
-      return 250
+      return 350  // death shrink animation
 
-    // Visible card/board events
-    case GameEventType.Summon:
-      return 200
-    case GameEventType.DrawCard:
-      return 120
+    // ── Card/board zone changes ──
+    // These precede or coincide with ON_UPDATE which actually moves entities.
+    // The delay here gives the reveal panel time to show, then ON_UPDATE delay
+    // gives the spring animation time to settle.
     case GameEventType.PlayCard:
-      return 250
+      return 300  // card reveal + anticipation before the board updates
+    case GameEventType.Summon:
+      return 250  // summon pulse effect
+    case GameEventType.DrawCard:
+      return 300  // card sliding from deck to hand
     case GameEventType.SpellCasted:
-      return 200
+      return 250
     case GameEventType.WeaponEquipped:
-      return 150
+      return 200
     case GameEventType.SecretPlayed:
-      return 150
+      return 200
     case GameEventType.SecretRevealed:
-      return 300
+      return 350
     case GameEventType.HeroPowerUsed:
-      return 150
+      return 200
     case GameEventType.WeaponDestroyed:
-      return 150
+      return 200
 
-    // Events with no visual — zero delay
+    // ── Turn boundaries ──
+    // Extra breathing room between turns so the last action of one turn
+    // finishes animating before the first action of the next.
+    case GameEventType.TurnEnd:
+      return 300
+    case GameEventType.TurnStart:
+      return 200
+
+    // ── Internal bookkeeping — no visual, no delay ──
     case GameEventType.AfterPhysicalAttack:
     case GameEventType.AfterPlayCard:
     case GameEventType.AfterSpellCasted:
@@ -94,21 +117,18 @@ function eventDuration(event: GameEvent | null | undefined): number {
     case GameEventType.All:
       return 0
 
-    // Minor visible events — short delay
-    case GameEventType.TurnEnd:
-    case GameEventType.TurnStart:
-      return 100
+    // ── Minor visible events ──
     case GameEventType.ArmorGained:
-      return 100
+      return 150
     case GameEventType.Silence:
-      return 150
+      return 200
     case GameEventType.Fatigue:
-      return 150
+      return 200
     case GameEventType.Discard:
     case GameEventType.Roasted:
-      return 100
+      return 150
     case GameEventType.MissileFired:
-      return 80
+      return 100
 
     default:
       return 0
@@ -215,18 +235,22 @@ export function useAnimationQueue({ dispatch }: AnimationQueueOptions) {
   dispatchRef.current = dispatch
   const [activeEffects, setActiveEffects] = useState<ActiveEffect[]>([])
   const [revealedCard, setRevealedCard] = useState<RevealedCard | null>(null)
+  const revealQueueRef = useRef<RevealedCard[]>([])
 
-  // Garbage collect expired effects and revealed card
+  // Garbage collect expired effects and advance reveal queue
   useEffect(() => {
-    if (activeEffects.length === 0 && !revealedCard) return
+    if (activeEffects.length === 0 && !revealedCard && revealQueueRef.current.length === 0) return
     const interval = setInterval(() => {
       const now = Date.now()
       setActiveEffects((prev) =>
         prev.filter((e) => now - e.createdAt < e.duration)
       )
-      setRevealedCard((prev) =>
-        prev && now - prev.createdAt < REVEAL_DURATION ? prev : null
-      )
+      setRevealedCard((prev) => {
+        if (prev && now - prev.createdAt < REVEAL_DURATION) return prev
+        // Current reveal expired — show next in queue if any
+        const next = revealQueueRef.current.shift()
+        return next ? { ...next, createdAt: now } : null
+      })
     }, 100)
     return () => clearInterval(interval)
   }, [activeEffects.length, !!revealedCard])
@@ -263,7 +287,16 @@ export function useAnimationQueue({ dispatch }: AnimationQueueOptions) {
           // The played card is in target (not source) for these events
           const card = evt.target ?? evt.source
           if (card && card.name && card.name.length > 0 && card.cardId !== 'hidden') {
-            setRevealedCard({ entity: card, createdAt: Date.now() })
+            const reveal: RevealedCard = { entity: card, createdAt: Date.now() }
+            setRevealedCard((prev) => {
+              if (!prev) {
+                // No active reveal — show immediately
+                return reveal
+              }
+              // Already showing a reveal — queue this one
+              revealQueueRef.current.push(reveal)
+              return prev
+            })
           }
         }
       }

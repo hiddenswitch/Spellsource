@@ -70,7 +70,7 @@ const ConnectedGameView: FunctionComponent = () => {
 
       {state.phase === "mulligan" && state.mulliganCards.length > 0 && <MulliganOverlay cards={state.mulliganCards} onConfirm={sendMulligan} onHoverStart={setHoveredEntity} onHoverEnd={() => setHoveredEntity(null)} />}
 
-      {discoverCards.length > 0 && <DiscoverOverlay cards={discoverCards} actions={state.actions} onAction={sendAction} />}
+      {discoverCards.length > 0 && <DiscoverOverlay cards={discoverCards} actions={state.actions} onAction={sendAction} onHoverStart={setHoveredEntity} onHoverEnd={() => setHoveredEntity(null)} />}
 
       {interaction.phase === "awaiting_choice" && interaction.pendingChoices.length > 0 && <ChooseOneOverlay choices={interaction.pendingChoices} onPick={onChoicePicked} onCancel={onCancel} />}
 
