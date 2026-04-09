@@ -54,6 +54,7 @@ new JsonSlurper().parseText(file('package.json').text).scripts.each { String scr
 }*/
 
 tasks.named("yarnRunCodegen").configure {
+  inputs.file("schema.graphql")
   inputs.dir("graphql/web")
   inputs.dir("graphql/shared")
   // TODO manually specify outputs as well?
@@ -66,6 +67,7 @@ tasks.register("toolRestore", Exec) {
 
 tasks.named("yarnRunStrawberryShake").configure {
   dependsOn "toolRestore"
+  inputs.file("schema.graphql")
   inputs.dir("graphql/client")
   inputs.dir("graphql/shared")
   inputs.file(".graphqlrc.json")
@@ -90,4 +92,17 @@ tasks.named("createDist").configure {
   outputs.dir("docker/spellsource/graphql")
 
   group "spellsource"
+}
+
+tasks.register("generateSchema") {
+  group('spellsource')
+  description("Generates the stitched GraphQL schema by starting the full server stack.")
+  dependsOn ":spellsource-server:generateSchema"
+}
+
+tasks.register("regenerate") {
+  group('spellsource')
+  description("Full cycle: generate stitched schema then run all codegen.")
+  dependsOn generateSchema, generateAll
+  generateAll.mustRunAfter(generateSchema)
 }

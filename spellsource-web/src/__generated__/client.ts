@@ -3521,6 +3521,7 @@ export type SaveGeneratedArtPayload = {
 };
 
 /**
+ * 
  * A message from the server during a game. The messageType field indicates which
  * fields are populated. Clients should switch on messageType to process the message.
  */
@@ -3528,6 +3529,13 @@ export type ServerGameMessage = {
   __typename?: 'ServerGameMessage';
   /** Present on ON_REQUEST_ACTION messages. The actions the player can take. */
   actions?: Maybe<GameActions>;
+  /**
+   * 
+   * IDs of entities that changed in this message. Present on ON_UPDATE and
+   * ON_REQUEST_ACTION messages. Clients use this to diff zones efficiently
+   * instead of comparing the full entity list.
+   */
+  changedEntityIds?: Maybe<Array<Scalars['Int']>>;
   /** Present on EMOTE messages. */
   emote?: Maybe<Emote>;
   /** Present on ON_GAME_EVENT messages. */
@@ -3707,6 +3715,7 @@ export type Subscription = {
   /** Emits friend list changes (added, removed, presence updates). */
   friendUpdated: Friend;
   /**
+   * 
    * Streams game messages for the authenticated user's active game.
    * Call connectToGame mutation first to initiate the game connection.
    * Emits ServerGameMessage for each game state change, action request,
@@ -5311,6 +5320,7 @@ export type SaveGeneratedArtPayloadResolvers<ContextType = any, ParentType exten
 
 export type ServerGameMessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['ServerGameMessage'] = ResolversParentTypes['ServerGameMessage']> = {
   actions?: Resolver<Maybe<ResolversTypes['GameActions']>, ParentType, ContextType>;
+  changedEntityIds?: Resolver<Maybe<Array<ResolversTypes['Int']>>, ParentType, ContextType>;
   emote?: Resolver<Maybe<ResolversTypes['Emote']>, ParentType, ContextType>;
   event?: Resolver<Maybe<ResolversTypes['GameEvent']>, ParentType, ContextType>;
   gameOver?: Resolver<Maybe<ResolversTypes['GameOver']>, ParentType, ContextType>;
@@ -5525,6 +5535,8 @@ export type Resolvers<ContextType = any> = {
 
 export type CardFragment = { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null };
 
+export type CardRecordFragment = { __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } };
+
 export type ClassFragment = { __typename?: 'Class', class?: string | null, collectible?: boolean | null, isPublished?: boolean | null, cardScript?: any | null, id?: string | null, name?: string | null };
 
 export type CollectionCardFragment = { __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: any | null, collectible?: boolean | null, cost?: number | null, type?: string | null, lastModified?: any | null };
@@ -5532,88 +5544,6 @@ export type CollectionCardFragment = { __typename?: 'CollectionCard', id?: strin
 export type DeckFragment = { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number };
 
 export type DeckCardsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, publishedCardByCardId?: { __typename?: 'PublishedCard', cardBySuccession?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null } | null> } };
-
-export type CreateDeckMutationVariables = Exact<{
-  deckName: Scalars['String'];
-  heroClass: Scalars['String'];
-  cardIds?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
-  format: Scalars['String'];
-}>;
-
-
-export type CreateDeckMutation = { __typename?: 'Mutation', createDeckWithCards?: { __typename?: 'CreateDeckWithCardsPayload', deck?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, publishedCardByCardId?: { __typename?: 'PublishedCard', cardBySuccession?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null } | null> } } | null } | null };
-
-export type DeleteCardMutationVariables = Exact<{
-  cardId: Scalars['String'];
-}>;
-
-
-export type DeleteCardMutation = { __typename?: 'Mutation', archiveCard?: { __typename?: 'ArchiveCardPayload', clientMutationId?: string | null } | null };
-
-export type DeleteDeckMutationVariables = Exact<{
-  deckId: Scalars['String'];
-}>;
-
-
-export type DeleteDeckMutation = { __typename?: 'Mutation', updateDeckById?: { __typename?: 'UpdateDeckPayload', deck?: { __typename?: 'Deck', trashed: boolean } | null } | null };
-
-export type SetCardsInDeckMutationVariables = Exact<{
-  deckId: Scalars['String'];
-  cardIds?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
-}>;
-
-
-export type SetCardsInDeckMutation = { __typename?: 'Mutation', setCardsInDeck?: { __typename?: 'SetCardsInDeckPayload', cardsInDecks?: Array<{ __typename?: 'CardsInDeck', id: any, cardId: string } | null> | null } | null };
-
-export type GetCardQueryVariables = Exact<{
-  id: Scalars['String'];
-}>;
-
-
-export type GetCardQuery = { __typename?: 'Query', getLatestCard?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null };
-
-export type GetCardsQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  filter?: InputMaybe<CardFilter>;
-  offset?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<CardsOrderBy> | CardsOrderBy>;
-}>;
-
-
-export type GetCardsQuery = { __typename?: 'Query', allCards?: { __typename?: 'CardsConnection', totalCount: number, nodes: Array<{ __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null> } | null };
-
-export type GetClassesQueryVariables = Exact<{
-  filter?: InputMaybe<ClassFilter>;
-}>;
-
-
-export type GetClassesQuery = { __typename?: 'Query', allClasses?: { __typename?: 'ClassesConnection', totalCount: number, nodes: Array<{ __typename?: 'Class', class?: string | null, collectible?: boolean | null, isPublished?: boolean | null, cardScript?: any | null, id?: string | null, name?: string | null } | null> } | null };
-
-export type GetCollectionCardsQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  filter?: InputMaybe<CollectionCardFilter>;
-  offset?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<CollectionCardsOrderBy> | CollectionCardsOrderBy>;
-}>;
-
-
-export type GetCollectionCardsQuery = { __typename?: 'Query', allCollectionCards?: { __typename?: 'CollectionCardsConnection', totalCount: number, nodes: Array<{ __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: any | null, collectible?: boolean | null, cost?: number | null, type?: string | null, lastModified?: any | null } | null> } | null };
-
-export type GetDeckQueryVariables = Exact<{
-  deckId: Scalars['String'];
-}>;
-
-
-export type GetDeckQuery = { __typename?: 'Query', deckById?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, publishedCardByCardId?: { __typename?: 'PublishedCard', cardBySuccession?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null } | null> } } | null };
-
-export type GetDecksQueryVariables = Exact<{
-  user?: InputMaybe<Scalars['String']>;
-}>;
-
-
-export type GetDecksQuery = { __typename?: 'Query', allDecks?: { __typename?: 'DecksConnection', nodes: Array<{ __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number } | null> } | null, allDeckShares?: { __typename?: 'DeckSharesConnection', nodes: Array<{ __typename?: 'DeckShare', deckByDeckId?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number } | null } | null> } | null };
-
-export type CardRecordFragment = { __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } };
 
 export type EntityFragment = { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> };
 
@@ -5626,6 +5556,10 @@ export type GeneratedArtFragment = { __typename?: 'GeneratedArt', hash: string, 
 export type InventoryCollectionFragment = { __typename?: 'InventoryCollection', id: string, name: string, heroClass: string, format: string, deckType: DeckType, collectionType: CollectionType, userId?: string | null, isStandardDeck: boolean, inventory: Array<{ __typename?: 'CardRecord', id: any, cardId?: string | null, userId?: string | null, count: number, collectionIds: Array<string>, entity: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } }>, playerEntityAttributes: Array<{ __typename?: 'AttributeValueTuple', attribute: PlayerEntityAttribute, stringValue: string }>, validationReport?: { __typename?: 'ValidationReport', valid: boolean, errors: Array<string> } | null };
 
 export type LoginOrCreateReplyFragment = { __typename?: 'LoginOrCreateReply', accessToken?: { __typename?: 'AccessToken', token: string } | null, userEntity?: { __typename?: 'UserEntity', id: string, email: string, username: string, privacyToken: string } | null };
+
+export type RogueChoiceFragment = { __typename?: 'RogueChoice', id: any, cards: Array<string | null>, canPick: number, canReroll: boolean };
+
+export type RogueRunFragment = { __typename?: 'RogueRun', id: any, player: string, state: RogueRunState, bossesDefeated: number, heroClass: string, startedAt: any, gold: number, deck: string, lives: number, opponentDeck?: string | null, opponentInfo?: string | null, currentChoice?: { __typename?: 'RogueChoice', id: any, cards: Array<string | null>, canPick: number, canReroll: boolean } | null };
 
 export type ServerGameMessageFragment = { __typename?: 'ServerGameMessage', messageType: MessageType, id?: string | null, localPlayerId: number, isReplayMessage: boolean, gameState?: { __typename?: 'GameState', isLocalPlayerTurn: boolean, turnNumber: number, turnState: string, timestamp: any, entities: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> }> } | null, actions?: { __typename?: 'GameActions', compatibility: Array<number>, all: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }> }> } | null, startingCards?: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }> | null, event?: { __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }> } | null, gameOver?: { __typename?: 'GameOver', localPlayerWon: boolean, winningPlayerId?: number | null } | null, emote?: { __typename?: 'Emote', entityId: number, message: EmoteType } | null, timers?: { __typename?: 'Timers', millisRemaining: any } | null };
 
@@ -5665,6 +5599,16 @@ export type CreateAccountMutationVariables = Exact<{
 
 export type CreateAccountMutation = { __typename?: 'Mutation', createAccount: { __typename?: 'LoginOrCreateReply', accessToken?: { __typename?: 'AccessToken', token: string } | null, userEntity?: { __typename?: 'UserEntity', id: string, email: string, username: string, privacyToken: string } | null } };
 
+export type CreateDeckMutationVariables = Exact<{
+  deckName: Scalars['String'];
+  heroClass: Scalars['String'];
+  cardIds?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  format: Scalars['String'];
+}>;
+
+
+export type CreateDeckMutation = { __typename?: 'Mutation', createDeckWithCards?: { __typename?: 'CreateDeckWithCardsPayload', deck?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, publishedCardByCardId?: { __typename?: 'PublishedCard', cardBySuccession?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null } | null> } } | null } | null };
+
 export type CreateGameDeckMutationVariables = Exact<{
   input: DecksPutInput;
 }>;
@@ -5679,6 +5623,20 @@ export type DeleteArtMutationVariables = Exact<{
 
 
 export type DeleteArtMutation = { __typename?: 'Mutation', updateGeneratedArtByHashAndOwner?: { __typename?: 'UpdateGeneratedArtPayload', generatedArt?: { __typename?: 'GeneratedArt', hash: string, owner: string, urls: Array<string | null>, info?: any | null, isArchived: boolean } | null } | null };
+
+export type DeleteCardMutationVariables = Exact<{
+  cardId: Scalars['String'];
+}>;
+
+
+export type DeleteCardMutation = { __typename?: 'Mutation', archiveCard?: { __typename?: 'ArchiveCardPayload', clientMutationId?: string | null } | null };
+
+export type DeleteDeckMutationVariables = Exact<{
+  deckId: Scalars['String'];
+}>;
+
+
+export type DeleteDeckMutation = { __typename?: 'Mutation', updateDeckById?: { __typename?: 'UpdateDeckPayload', deck?: { __typename?: 'Deck', trashed: boolean } | null } | null };
 
 export type DeleteGameDeckMutationVariables = Exact<{
   deckId: Scalars['String'];
@@ -5714,7 +5672,7 @@ export type MakeRogueChoiceMutationVariables = Exact<{
 }>;
 
 
-export type MakeRogueChoiceMutation = { __typename?: 'Mutation', makeRogueChoice: { __typename?: 'RogueRun', id: any } };
+export type MakeRogueChoiceMutation = { __typename?: 'Mutation', makeRogueChoice: { __typename?: 'RogueRun', id: any, player: string, state: RogueRunState, bossesDefeated: number, heroClass: string, startedAt: any, gold: number, deck: string, lives: number, opponentDeck?: string | null, opponentInfo?: string | null, currentChoice?: { __typename?: 'RogueChoice', id: any, cards: Array<string | null>, canPick: number, canReroll: boolean } | null } };
 
 export type PublishCardMutationVariables = Exact<{
   cardId: Scalars['String'];
@@ -5785,6 +5743,14 @@ export type SendMulliganMutationVariables = Exact<{
 
 export type SendMulliganMutation = { __typename?: 'Mutation', sendMulligan: boolean };
 
+export type SetCardsInDeckMutationVariables = Exact<{
+  deckId: Scalars['String'];
+  cardIds?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
+
+
+export type SetCardsInDeckMutation = { __typename?: 'Mutation', setCardsInDeck?: { __typename?: 'SetCardsInDeckPayload', cardsInDecks?: Array<{ __typename?: 'CardsInDeck', id: any, cardId: string } | null> | null } | null };
+
 export type SkipRogueBossMutationVariables = Exact<{
   rogueId: Scalars['BigInt'];
 }>;
@@ -5798,7 +5764,7 @@ export type StartRogueRunMutationVariables = Exact<{
 }>;
 
 
-export type StartRogueRunMutation = { __typename?: 'Mutation', startRogueRun: { __typename?: 'RogueRun', id: any } };
+export type StartRogueRunMutation = { __typename?: 'Mutation', startRogueRun: { __typename?: 'RogueRun', id: any, player: string, state: RogueRunState, bossesDefeated: number, heroClass: string, startedAt: any, gold: number, deck: string, lives: number, opponentDeck?: string | null, opponentInfo?: string | null, currentChoice?: { __typename?: 'RogueChoice', id: any, cards: Array<string | null>, canPick: number, canReroll: boolean } | null } };
 
 export type TrashRogueCardMutationVariables = Exact<{
   rogueId: Scalars['BigInt'];
@@ -5835,6 +5801,40 @@ export type GetAccountsQueryVariables = Exact<{
 
 export type GetAccountsQuery = { __typename?: 'Query', accounts: Array<{ __typename?: 'UserEntity', id: string, email: string, username: string, privacyToken: string }> };
 
+export type GetCardQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetCardQuery = { __typename?: 'Query', getLatestCard?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null };
+
+export type GetCardsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  filter?: InputMaybe<CardFilter>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<CardsOrderBy> | CardsOrderBy>;
+}>;
+
+
+export type GetCardsQuery = { __typename?: 'Query', allCards?: { __typename?: 'CardsConnection', totalCount: number, nodes: Array<{ __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null> } | null };
+
+export type GetClassesQueryVariables = Exact<{
+  filter?: InputMaybe<ClassFilter>;
+}>;
+
+
+export type GetClassesQuery = { __typename?: 'Query', allClasses?: { __typename?: 'ClassesConnection', totalCount: number, nodes: Array<{ __typename?: 'Class', class?: string | null, collectible?: boolean | null, isPublished?: boolean | null, cardScript?: any | null, id?: string | null, name?: string | null } | null> } | null };
+
+export type GetCollectionCardsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  filter?: InputMaybe<CollectionCardFilter>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<CollectionCardsOrderBy> | CollectionCardsOrderBy>;
+}>;
+
+
+export type GetCollectionCardsQuery = { __typename?: 'Query', allCollectionCards?: { __typename?: 'CollectionCardsConnection', totalCount: number, nodes: Array<{ __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: any | null, collectible?: boolean | null, cost?: number | null, type?: string | null, lastModified?: any | null } | null> } | null };
+
 export type GetConfigurationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -5844,6 +5844,20 @@ export type GetCurrentRogueClassesQueryVariables = Exact<{ [key: string]: never;
 
 
 export type GetCurrentRogueClassesQuery = { __typename?: 'Query', currentRogueClasses: Array<string> };
+
+export type GetDeckQueryVariables = Exact<{
+  deckId: Scalars['String'];
+}>;
+
+
+export type GetDeckQuery = { __typename?: 'Query', deckById?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, publishedCardByCardId?: { __typename?: 'PublishedCard', cardBySuccession?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null } | null> } } | null };
+
+export type GetDecksQueryVariables = Exact<{
+  user?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetDecksQuery = { __typename?: 'Query', allDecks?: { __typename?: 'DecksConnection', nodes: Array<{ __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number } | null> } | null, allDeckShares?: { __typename?: 'DeckSharesConnection', nodes: Array<{ __typename?: 'DeckShare', deckByDeckId?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, deckType: number } | null } | null> } | null };
 
 export type GetGameCardsQueryVariables = Exact<{
   ifNoneMatch?: InputMaybe<Scalars['String']>;
@@ -6088,6 +6102,32 @@ export const LoginOrCreateReplyFragmentDoc = gql`
   }
 }
     ${UserEntityFragmentDoc}`;
+export const RogueChoiceFragmentDoc = gql`
+    fragment rogueChoice on RogueChoice {
+  id
+  cards
+  canPick
+  canReroll
+}
+    `;
+export const RogueRunFragmentDoc = gql`
+    fragment rogueRun on RogueRun {
+  id
+  player
+  state
+  bossesDefeated
+  heroClass
+  startedAt
+  gold
+  deck
+  lives
+  currentChoice {
+    ...rogueChoice
+  }
+  opponentDeck
+  opponentInfo
+}
+    ${RogueChoiceFragmentDoc}`;
 export const EntityFragmentDoc = gql`
     fragment entity on Entity {
   id
@@ -6246,394 +6286,6 @@ export const ServerGameMessageFragmentDoc = gql`
     ${GameStateFragmentDoc}
 ${SpellActionFragmentDoc}
 ${EntitySummaryFragmentDoc}`;
-export const CreateDeckDocument = gql`
-    mutation createDeck($deckName: String!, $heroClass: String!, $cardIds: [String!], $format: String!) {
-  createDeckWithCards(
-    input: {deckName: $deckName, classHero: $heroClass, cardIds: $cardIds, formatName: $format}
-  ) {
-    deck {
-      ...deck
-      ...deckCards
-    }
-  }
-}
-    ${DeckFragmentDoc}
-${DeckCardsFragmentDoc}`;
-export type CreateDeckMutationFn = Apollo.MutationFunction<CreateDeckMutation, CreateDeckMutationVariables>;
-
-/**
- * __useCreateDeckMutation__
- *
- * To run a mutation, you first call `useCreateDeckMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDeckMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDeckMutation, { data, loading, error }] = useCreateDeckMutation({
- *   variables: {
- *      deckName: // value for 'deckName'
- *      heroClass: // value for 'heroClass'
- *      cardIds: // value for 'cardIds'
- *      format: // value for 'format'
- *   },
- * });
- */
-export function useCreateDeckMutation(baseOptions?: Apollo.MutationHookOptions<CreateDeckMutation, CreateDeckMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateDeckMutation, CreateDeckMutationVariables>(CreateDeckDocument, options);
-      }
-export type CreateDeckMutationHookResult = ReturnType<typeof useCreateDeckMutation>;
-export type CreateDeckMutationResult = Apollo.MutationResult<CreateDeckMutation>;
-export type CreateDeckMutationOptions = Apollo.BaseMutationOptions<CreateDeckMutation, CreateDeckMutationVariables>;
-export const DeleteCardDocument = gql`
-    mutation deleteCard($cardId: String!) {
-  archiveCard(input: {cardId: $cardId}) {
-    clientMutationId
-  }
-}
-    `;
-export type DeleteCardMutationFn = Apollo.MutationFunction<DeleteCardMutation, DeleteCardMutationVariables>;
-
-/**
- * __useDeleteCardMutation__
- *
- * To run a mutation, you first call `useDeleteCardMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCardMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteCardMutation, { data, loading, error }] = useDeleteCardMutation({
- *   variables: {
- *      cardId: // value for 'cardId'
- *   },
- * });
- */
-export function useDeleteCardMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCardMutation, DeleteCardMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteCardMutation, DeleteCardMutationVariables>(DeleteCardDocument, options);
-      }
-export type DeleteCardMutationHookResult = ReturnType<typeof useDeleteCardMutation>;
-export type DeleteCardMutationResult = Apollo.MutationResult<DeleteCardMutation>;
-export type DeleteCardMutationOptions = Apollo.BaseMutationOptions<DeleteCardMutation, DeleteCardMutationVariables>;
-export const DeleteDeckDocument = gql`
-    mutation deleteDeck($deckId: String!) {
-  updateDeckById(input: {id: $deckId, deckPatch: {trashed: true}}) {
-    deck {
-      trashed
-    }
-  }
-}
-    `;
-export type DeleteDeckMutationFn = Apollo.MutationFunction<DeleteDeckMutation, DeleteDeckMutationVariables>;
-
-/**
- * __useDeleteDeckMutation__
- *
- * To run a mutation, you first call `useDeleteDeckMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteDeckMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteDeckMutation, { data, loading, error }] = useDeleteDeckMutation({
- *   variables: {
- *      deckId: // value for 'deckId'
- *   },
- * });
- */
-export function useDeleteDeckMutation(baseOptions?: Apollo.MutationHookOptions<DeleteDeckMutation, DeleteDeckMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteDeckMutation, DeleteDeckMutationVariables>(DeleteDeckDocument, options);
-      }
-export type DeleteDeckMutationHookResult = ReturnType<typeof useDeleteDeckMutation>;
-export type DeleteDeckMutationResult = Apollo.MutationResult<DeleteDeckMutation>;
-export type DeleteDeckMutationOptions = Apollo.BaseMutationOptions<DeleteDeckMutation, DeleteDeckMutationVariables>;
-export const SetCardsInDeckDocument = gql`
-    mutation setCardsInDeck($deckId: String!, $cardIds: [String!]) {
-  setCardsInDeck(input: {deck: $deckId, cardIds: $cardIds}) {
-    cardsInDecks {
-      id
-      cardId
-    }
-  }
-}
-    `;
-export type SetCardsInDeckMutationFn = Apollo.MutationFunction<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>;
-
-/**
- * __useSetCardsInDeckMutation__
- *
- * To run a mutation, you first call `useSetCardsInDeckMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSetCardsInDeckMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [setCardsInDeckMutation, { data, loading, error }] = useSetCardsInDeckMutation({
- *   variables: {
- *      deckId: // value for 'deckId'
- *      cardIds: // value for 'cardIds'
- *   },
- * });
- */
-export function useSetCardsInDeckMutation(baseOptions?: Apollo.MutationHookOptions<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>(SetCardsInDeckDocument, options);
-      }
-export type SetCardsInDeckMutationHookResult = ReturnType<typeof useSetCardsInDeckMutation>;
-export type SetCardsInDeckMutationResult = Apollo.MutationResult<SetCardsInDeckMutation>;
-export type SetCardsInDeckMutationOptions = Apollo.BaseMutationOptions<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>;
-export const GetCardDocument = gql`
-    query getCard($id: String!) {
-  getLatestCard(cardId: $id, published: true) {
-    ...card
-  }
-}
-    ${CardFragmentDoc}`;
-
-/**
- * __useGetCardQuery__
- *
- * To run a query within a React component, call `useGetCardQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCardQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCardQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetCardQuery(baseOptions: Apollo.QueryHookOptions<GetCardQuery, GetCardQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCardQuery, GetCardQueryVariables>(GetCardDocument, options);
-      }
-export function useGetCardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCardQuery, GetCardQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCardQuery, GetCardQueryVariables>(GetCardDocument, options);
-        }
-export type GetCardQueryHookResult = ReturnType<typeof useGetCardQuery>;
-export type GetCardLazyQueryHookResult = ReturnType<typeof useGetCardLazyQuery>;
-export type GetCardQueryResult = Apollo.QueryResult<GetCardQuery, GetCardQueryVariables>;
-export const GetCardsDocument = gql`
-    query getCards($limit: Int, $filter: CardFilter, $offset: Int, $orderBy: [CardsOrderBy!]) {
-  allCards(offset: $offset, filter: $filter, first: $limit, orderBy: $orderBy) {
-    nodes {
-      ...card
-    }
-    totalCount
-  }
-}
-    ${CardFragmentDoc}`;
-
-/**
- * __useGetCardsQuery__
- *
- * To run a query within a React component, call `useGetCardsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCardsQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      filter: // value for 'filter'
- *      offset: // value for 'offset'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useGetCardsQuery(baseOptions?: Apollo.QueryHookOptions<GetCardsQuery, GetCardsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCardsQuery, GetCardsQueryVariables>(GetCardsDocument, options);
-      }
-export function useGetCardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCardsQuery, GetCardsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCardsQuery, GetCardsQueryVariables>(GetCardsDocument, options);
-        }
-export type GetCardsQueryHookResult = ReturnType<typeof useGetCardsQuery>;
-export type GetCardsLazyQueryHookResult = ReturnType<typeof useGetCardsLazyQuery>;
-export type GetCardsQueryResult = Apollo.QueryResult<GetCardsQuery, GetCardsQueryVariables>;
-export const GetClassesDocument = gql`
-    query getClasses($filter: ClassFilter) {
-  allClasses(filter: $filter) {
-    nodes {
-      ...class
-    }
-    totalCount
-  }
-}
-    ${ClassFragmentDoc}`;
-
-/**
- * __useGetClassesQuery__
- *
- * To run a query within a React component, call `useGetClassesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetClassesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetClassesQuery({
- *   variables: {
- *      filter: // value for 'filter'
- *   },
- * });
- */
-export function useGetClassesQuery(baseOptions?: Apollo.QueryHookOptions<GetClassesQuery, GetClassesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetClassesQuery, GetClassesQueryVariables>(GetClassesDocument, options);
-      }
-export function useGetClassesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetClassesQuery, GetClassesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetClassesQuery, GetClassesQueryVariables>(GetClassesDocument, options);
-        }
-export type GetClassesQueryHookResult = ReturnType<typeof useGetClassesQuery>;
-export type GetClassesLazyQueryHookResult = ReturnType<typeof useGetClassesLazyQuery>;
-export type GetClassesQueryResult = Apollo.QueryResult<GetClassesQuery, GetClassesQueryVariables>;
-export const GetCollectionCardsDocument = gql`
-    query getCollectionCards($limit: Int, $filter: CollectionCardFilter, $offset: Int, $orderBy: [CollectionCardsOrderBy!]) {
-  allCollectionCards(
-    offset: $offset
-    filter: $filter
-    first: $limit
-    orderBy: $orderBy
-  ) {
-    nodes {
-      ...collectionCard
-    }
-    totalCount
-  }
-}
-    ${CollectionCardFragmentDoc}`;
-
-/**
- * __useGetCollectionCardsQuery__
- *
- * To run a query within a React component, call `useGetCollectionCardsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCollectionCardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCollectionCardsQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      filter: // value for 'filter'
- *      offset: // value for 'offset'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useGetCollectionCardsQuery(baseOptions?: Apollo.QueryHookOptions<GetCollectionCardsQuery, GetCollectionCardsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCollectionCardsQuery, GetCollectionCardsQueryVariables>(GetCollectionCardsDocument, options);
-      }
-export function useGetCollectionCardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCollectionCardsQuery, GetCollectionCardsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCollectionCardsQuery, GetCollectionCardsQueryVariables>(GetCollectionCardsDocument, options);
-        }
-export type GetCollectionCardsQueryHookResult = ReturnType<typeof useGetCollectionCardsQuery>;
-export type GetCollectionCardsLazyQueryHookResult = ReturnType<typeof useGetCollectionCardsLazyQuery>;
-export type GetCollectionCardsQueryResult = Apollo.QueryResult<GetCollectionCardsQuery, GetCollectionCardsQueryVariables>;
-export const GetDeckDocument = gql`
-    query getDeck($deckId: String!) {
-  deckById(id: $deckId) {
-    ...deck
-    ...deckCards
-  }
-}
-    ${DeckFragmentDoc}
-${DeckCardsFragmentDoc}`;
-
-/**
- * __useGetDeckQuery__
- *
- * To run a query within a React component, call `useGetDeckQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetDeckQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetDeckQuery({
- *   variables: {
- *      deckId: // value for 'deckId'
- *   },
- * });
- */
-export function useGetDeckQuery(baseOptions: Apollo.QueryHookOptions<GetDeckQuery, GetDeckQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetDeckQuery, GetDeckQueryVariables>(GetDeckDocument, options);
-      }
-export function useGetDeckLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDeckQuery, GetDeckQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetDeckQuery, GetDeckQueryVariables>(GetDeckDocument, options);
-        }
-export type GetDeckQueryHookResult = ReturnType<typeof useGetDeckQuery>;
-export type GetDeckLazyQueryHookResult = ReturnType<typeof useGetDeckLazyQuery>;
-export type GetDeckQueryResult = Apollo.QueryResult<GetDeckQuery, GetDeckQueryVariables>;
-export const GetDecksDocument = gql`
-    query getDecks($user: String) {
-  allDecks(condition: {trashed: false, deckType: 1}) {
-    nodes {
-      ...deck
-    }
-  }
-  allDeckShares(condition: {shareRecipientId: $user, trashedByRecipient: false}) {
-    nodes {
-      deckByDeckId {
-        ...deck
-      }
-    }
-  }
-}
-    ${DeckFragmentDoc}`;
-
-/**
- * __useGetDecksQuery__
- *
- * To run a query within a React component, call `useGetDecksQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetDecksQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetDecksQuery({
- *   variables: {
- *      user: // value for 'user'
- *   },
- * });
- */
-export function useGetDecksQuery(baseOptions?: Apollo.QueryHookOptions<GetDecksQuery, GetDecksQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetDecksQuery, GetDecksQueryVariables>(GetDecksDocument, options);
-      }
-export function useGetDecksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDecksQuery, GetDecksQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetDecksQuery, GetDecksQueryVariables>(GetDecksDocument, options);
-        }
-export type GetDecksQueryHookResult = ReturnType<typeof useGetDecksQuery>;
-export type GetDecksLazyQueryHookResult = ReturnType<typeof useGetDecksLazyQuery>;
-export type GetDecksQueryResult = Apollo.QueryResult<GetDecksQuery, GetDecksQueryVariables>;
 export const CancelMatchmakingDocument = gql`
     mutation cancelMatchmaking {
   cancelMatchmaking
@@ -6792,6 +6444,48 @@ export function useCreateAccountMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateAccountMutationHookResult = ReturnType<typeof useCreateAccountMutation>;
 export type CreateAccountMutationResult = Apollo.MutationResult<CreateAccountMutation>;
 export type CreateAccountMutationOptions = Apollo.BaseMutationOptions<CreateAccountMutation, CreateAccountMutationVariables>;
+export const CreateDeckDocument = gql`
+    mutation createDeck($deckName: String!, $heroClass: String!, $cardIds: [String!], $format: String!) {
+  createDeckWithCards(
+    input: {deckName: $deckName, classHero: $heroClass, cardIds: $cardIds, formatName: $format}
+  ) {
+    deck {
+      ...deck
+      ...deckCards
+    }
+  }
+}
+    ${DeckFragmentDoc}
+${DeckCardsFragmentDoc}`;
+export type CreateDeckMutationFn = Apollo.MutationFunction<CreateDeckMutation, CreateDeckMutationVariables>;
+
+/**
+ * __useCreateDeckMutation__
+ *
+ * To run a mutation, you first call `useCreateDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDeckMutation, { data, loading, error }] = useCreateDeckMutation({
+ *   variables: {
+ *      deckName: // value for 'deckName'
+ *      heroClass: // value for 'heroClass'
+ *      cardIds: // value for 'cardIds'
+ *      format: // value for 'format'
+ *   },
+ * });
+ */
+export function useCreateDeckMutation(baseOptions?: Apollo.MutationHookOptions<CreateDeckMutation, CreateDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDeckMutation, CreateDeckMutationVariables>(CreateDeckDocument, options);
+      }
+export type CreateDeckMutationHookResult = ReturnType<typeof useCreateDeckMutation>;
+export type CreateDeckMutationResult = Apollo.MutationResult<CreateDeckMutation>;
+export type CreateDeckMutationOptions = Apollo.BaseMutationOptions<CreateDeckMutation, CreateDeckMutationVariables>;
 export const CreateGameDeckDocument = gql`
     mutation createGameDeck($input: DecksPutInput!) {
   createDeck(input: $input) {
@@ -6866,6 +6560,74 @@ export function useDeleteArtMutation(baseOptions?: Apollo.MutationHookOptions<De
 export type DeleteArtMutationHookResult = ReturnType<typeof useDeleteArtMutation>;
 export type DeleteArtMutationResult = Apollo.MutationResult<DeleteArtMutation>;
 export type DeleteArtMutationOptions = Apollo.BaseMutationOptions<DeleteArtMutation, DeleteArtMutationVariables>;
+export const DeleteCardDocument = gql`
+    mutation deleteCard($cardId: String!) {
+  archiveCard(input: {cardId: $cardId}) {
+    clientMutationId
+  }
+}
+    `;
+export type DeleteCardMutationFn = Apollo.MutationFunction<DeleteCardMutation, DeleteCardMutationVariables>;
+
+/**
+ * __useDeleteCardMutation__
+ *
+ * To run a mutation, you first call `useDeleteCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCardMutation, { data, loading, error }] = useDeleteCardMutation({
+ *   variables: {
+ *      cardId: // value for 'cardId'
+ *   },
+ * });
+ */
+export function useDeleteCardMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCardMutation, DeleteCardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCardMutation, DeleteCardMutationVariables>(DeleteCardDocument, options);
+      }
+export type DeleteCardMutationHookResult = ReturnType<typeof useDeleteCardMutation>;
+export type DeleteCardMutationResult = Apollo.MutationResult<DeleteCardMutation>;
+export type DeleteCardMutationOptions = Apollo.BaseMutationOptions<DeleteCardMutation, DeleteCardMutationVariables>;
+export const DeleteDeckDocument = gql`
+    mutation deleteDeck($deckId: String!) {
+  updateDeckById(input: {id: $deckId, deckPatch: {trashed: true}}) {
+    deck {
+      trashed
+    }
+  }
+}
+    `;
+export type DeleteDeckMutationFn = Apollo.MutationFunction<DeleteDeckMutation, DeleteDeckMutationVariables>;
+
+/**
+ * __useDeleteDeckMutation__
+ *
+ * To run a mutation, you first call `useDeleteDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteDeckMutation, { data, loading, error }] = useDeleteDeckMutation({
+ *   variables: {
+ *      deckId: // value for 'deckId'
+ *   },
+ * });
+ */
+export function useDeleteDeckMutation(baseOptions?: Apollo.MutationHookOptions<DeleteDeckMutation, DeleteDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteDeckMutation, DeleteDeckMutationVariables>(DeleteDeckDocument, options);
+      }
+export type DeleteDeckMutationHookResult = ReturnType<typeof useDeleteDeckMutation>;
+export type DeleteDeckMutationResult = Apollo.MutationResult<DeleteDeckMutation>;
+export type DeleteDeckMutationOptions = Apollo.BaseMutationOptions<DeleteDeckMutation, DeleteDeckMutationVariables>;
 export const DeleteGameDeckDocument = gql`
     mutation deleteGameDeck($deckId: String!) {
   deleteDeck(deckId: $deckId)
@@ -7000,10 +6762,10 @@ export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, Log
 export const MakeRogueChoiceDocument = gql`
     mutation makeRogueChoice($choiceId: BigInt!, $choices: [Int!]!) {
   makeRogueChoice(choiceId: $choiceId, choices: $choices) {
-    id
+    ...rogueRun
   }
 }
-    `;
+    ${RogueRunFragmentDoc}`;
 export type MakeRogueChoiceMutationFn = Apollo.MutationFunction<MakeRogueChoiceMutation, MakeRogueChoiceMutationVariables>;
 
 /**
@@ -7336,6 +7098,43 @@ export function useSendMulliganMutation(baseOptions?: Apollo.MutationHookOptions
 export type SendMulliganMutationHookResult = ReturnType<typeof useSendMulliganMutation>;
 export type SendMulliganMutationResult = Apollo.MutationResult<SendMulliganMutation>;
 export type SendMulliganMutationOptions = Apollo.BaseMutationOptions<SendMulliganMutation, SendMulliganMutationVariables>;
+export const SetCardsInDeckDocument = gql`
+    mutation setCardsInDeck($deckId: String!, $cardIds: [String!]) {
+  setCardsInDeck(input: {deck: $deckId, cardIds: $cardIds}) {
+    cardsInDecks {
+      id
+      cardId
+    }
+  }
+}
+    `;
+export type SetCardsInDeckMutationFn = Apollo.MutationFunction<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>;
+
+/**
+ * __useSetCardsInDeckMutation__
+ *
+ * To run a mutation, you first call `useSetCardsInDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetCardsInDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setCardsInDeckMutation, { data, loading, error }] = useSetCardsInDeckMutation({
+ *   variables: {
+ *      deckId: // value for 'deckId'
+ *      cardIds: // value for 'cardIds'
+ *   },
+ * });
+ */
+export function useSetCardsInDeckMutation(baseOptions?: Apollo.MutationHookOptions<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>(SetCardsInDeckDocument, options);
+      }
+export type SetCardsInDeckMutationHookResult = ReturnType<typeof useSetCardsInDeckMutation>;
+export type SetCardsInDeckMutationResult = Apollo.MutationResult<SetCardsInDeckMutation>;
+export type SetCardsInDeckMutationOptions = Apollo.BaseMutationOptions<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>;
 export const SkipRogueBossDocument = gql`
     mutation skipRogueBoss($rogueId: BigInt!) {
   skipBoss(rogueId: $rogueId) {
@@ -7372,10 +7171,10 @@ export type SkipRogueBossMutationOptions = Apollo.BaseMutationOptions<SkipRogueB
 export const StartRogueRunDocument = gql`
     mutation startRogueRun($heroClass: String!, $seed: BigInt) {
   startRogueRun(heroClass: $heroClass, seed: $seed) {
-    id
+    ...rogueRun
   }
 }
-    `;
+    ${RogueRunFragmentDoc}`;
 export type StartRogueRunMutationFn = Apollo.MutationFunction<StartRogueRunMutation, StartRogueRunMutationVariables>;
 
 /**
@@ -7576,6 +7375,166 @@ export function useGetAccountsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetAccountsQueryHookResult = ReturnType<typeof useGetAccountsQuery>;
 export type GetAccountsLazyQueryHookResult = ReturnType<typeof useGetAccountsLazyQuery>;
 export type GetAccountsQueryResult = Apollo.QueryResult<GetAccountsQuery, GetAccountsQueryVariables>;
+export const GetCardDocument = gql`
+    query getCard($id: String!) {
+  getLatestCard(cardId: $id, published: true) {
+    ...card
+  }
+}
+    ${CardFragmentDoc}`;
+
+/**
+ * __useGetCardQuery__
+ *
+ * To run a query within a React component, call `useGetCardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCardQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCardQuery(baseOptions: Apollo.QueryHookOptions<GetCardQuery, GetCardQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCardQuery, GetCardQueryVariables>(GetCardDocument, options);
+      }
+export function useGetCardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCardQuery, GetCardQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCardQuery, GetCardQueryVariables>(GetCardDocument, options);
+        }
+export type GetCardQueryHookResult = ReturnType<typeof useGetCardQuery>;
+export type GetCardLazyQueryHookResult = ReturnType<typeof useGetCardLazyQuery>;
+export type GetCardQueryResult = Apollo.QueryResult<GetCardQuery, GetCardQueryVariables>;
+export const GetCardsDocument = gql`
+    query getCards($limit: Int, $filter: CardFilter, $offset: Int, $orderBy: [CardsOrderBy!]) {
+  allCards(offset: $offset, filter: $filter, first: $limit, orderBy: $orderBy) {
+    nodes {
+      ...card
+    }
+    totalCount
+  }
+}
+    ${CardFragmentDoc}`;
+
+/**
+ * __useGetCardsQuery__
+ *
+ * To run a query within a React component, call `useGetCardsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCardsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      filter: // value for 'filter'
+ *      offset: // value for 'offset'
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useGetCardsQuery(baseOptions?: Apollo.QueryHookOptions<GetCardsQuery, GetCardsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCardsQuery, GetCardsQueryVariables>(GetCardsDocument, options);
+      }
+export function useGetCardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCardsQuery, GetCardsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCardsQuery, GetCardsQueryVariables>(GetCardsDocument, options);
+        }
+export type GetCardsQueryHookResult = ReturnType<typeof useGetCardsQuery>;
+export type GetCardsLazyQueryHookResult = ReturnType<typeof useGetCardsLazyQuery>;
+export type GetCardsQueryResult = Apollo.QueryResult<GetCardsQuery, GetCardsQueryVariables>;
+export const GetClassesDocument = gql`
+    query getClasses($filter: ClassFilter) {
+  allClasses(filter: $filter) {
+    nodes {
+      ...class
+    }
+    totalCount
+  }
+}
+    ${ClassFragmentDoc}`;
+
+/**
+ * __useGetClassesQuery__
+ *
+ * To run a query within a React component, call `useGetClassesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClassesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClassesQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useGetClassesQuery(baseOptions?: Apollo.QueryHookOptions<GetClassesQuery, GetClassesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetClassesQuery, GetClassesQueryVariables>(GetClassesDocument, options);
+      }
+export function useGetClassesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetClassesQuery, GetClassesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetClassesQuery, GetClassesQueryVariables>(GetClassesDocument, options);
+        }
+export type GetClassesQueryHookResult = ReturnType<typeof useGetClassesQuery>;
+export type GetClassesLazyQueryHookResult = ReturnType<typeof useGetClassesLazyQuery>;
+export type GetClassesQueryResult = Apollo.QueryResult<GetClassesQuery, GetClassesQueryVariables>;
+export const GetCollectionCardsDocument = gql`
+    query getCollectionCards($limit: Int, $filter: CollectionCardFilter, $offset: Int, $orderBy: [CollectionCardsOrderBy!]) {
+  allCollectionCards(
+    offset: $offset
+    filter: $filter
+    first: $limit
+    orderBy: $orderBy
+  ) {
+    nodes {
+      ...collectionCard
+    }
+    totalCount
+  }
+}
+    ${CollectionCardFragmentDoc}`;
+
+/**
+ * __useGetCollectionCardsQuery__
+ *
+ * To run a query within a React component, call `useGetCollectionCardsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCollectionCardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCollectionCardsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      filter: // value for 'filter'
+ *      offset: // value for 'offset'
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useGetCollectionCardsQuery(baseOptions?: Apollo.QueryHookOptions<GetCollectionCardsQuery, GetCollectionCardsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCollectionCardsQuery, GetCollectionCardsQueryVariables>(GetCollectionCardsDocument, options);
+      }
+export function useGetCollectionCardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCollectionCardsQuery, GetCollectionCardsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCollectionCardsQuery, GetCollectionCardsQueryVariables>(GetCollectionCardsDocument, options);
+        }
+export type GetCollectionCardsQueryHookResult = ReturnType<typeof useGetCollectionCardsQuery>;
+export type GetCollectionCardsLazyQueryHookResult = ReturnType<typeof useGetCollectionCardsLazyQuery>;
+export type GetCollectionCardsQueryResult = Apollo.QueryResult<GetCollectionCardsQuery, GetCollectionCardsQueryVariables>;
 export const GetConfigurationDocument = gql`
     query getConfiguration {
   configuration {
@@ -7644,6 +7603,87 @@ export function useGetCurrentRogueClassesLazyQuery(baseOptions?: Apollo.LazyQuer
 export type GetCurrentRogueClassesQueryHookResult = ReturnType<typeof useGetCurrentRogueClassesQuery>;
 export type GetCurrentRogueClassesLazyQueryHookResult = ReturnType<typeof useGetCurrentRogueClassesLazyQuery>;
 export type GetCurrentRogueClassesQueryResult = Apollo.QueryResult<GetCurrentRogueClassesQuery, GetCurrentRogueClassesQueryVariables>;
+export const GetDeckDocument = gql`
+    query getDeck($deckId: String!) {
+  deckById(id: $deckId) {
+    ...deck
+    ...deckCards
+  }
+}
+    ${DeckFragmentDoc}
+${DeckCardsFragmentDoc}`;
+
+/**
+ * __useGetDeckQuery__
+ *
+ * To run a query within a React component, call `useGetDeckQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDeckQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDeckQuery({
+ *   variables: {
+ *      deckId: // value for 'deckId'
+ *   },
+ * });
+ */
+export function useGetDeckQuery(baseOptions: Apollo.QueryHookOptions<GetDeckQuery, GetDeckQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDeckQuery, GetDeckQueryVariables>(GetDeckDocument, options);
+      }
+export function useGetDeckLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDeckQuery, GetDeckQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDeckQuery, GetDeckQueryVariables>(GetDeckDocument, options);
+        }
+export type GetDeckQueryHookResult = ReturnType<typeof useGetDeckQuery>;
+export type GetDeckLazyQueryHookResult = ReturnType<typeof useGetDeckLazyQuery>;
+export type GetDeckQueryResult = Apollo.QueryResult<GetDeckQuery, GetDeckQueryVariables>;
+export const GetDecksDocument = gql`
+    query getDecks($user: String) {
+  allDecks(condition: {trashed: false, deckType: 1}) {
+    nodes {
+      ...deck
+    }
+  }
+  allDeckShares(condition: {shareRecipientId: $user, trashedByRecipient: false}) {
+    nodes {
+      deckByDeckId {
+        ...deck
+      }
+    }
+  }
+}
+    ${DeckFragmentDoc}`;
+
+/**
+ * __useGetDecksQuery__
+ *
+ * To run a query within a React component, call `useGetDecksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDecksQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDecksQuery({
+ *   variables: {
+ *      user: // value for 'user'
+ *   },
+ * });
+ */
+export function useGetDecksQuery(baseOptions?: Apollo.QueryHookOptions<GetDecksQuery, GetDecksQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDecksQuery, GetDecksQueryVariables>(GetDecksDocument, options);
+      }
+export function useGetDecksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDecksQuery, GetDecksQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDecksQuery, GetDecksQueryVariables>(GetDecksDocument, options);
+        }
+export type GetDecksQueryHookResult = ReturnType<typeof useGetDecksQuery>;
+export type GetDecksLazyQueryHookResult = ReturnType<typeof useGetDecksLazyQuery>;
+export type GetDecksQueryResult = Apollo.QueryResult<GetDecksQuery, GetDecksQueryVariables>;
 export const GetGameCardsDocument = gql`
     query getGameCards($ifNoneMatch: String) {
   cards(ifNoneMatch: $ifNoneMatch) {

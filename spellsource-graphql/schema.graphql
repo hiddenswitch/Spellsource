@@ -3967,12 +3967,7 @@ input DeleteCardsInDeckByIdInput {
 
 """─── Subscription ─────────────────────────────────────────────"""
 type Subscription {
-  """
-  Streams game messages for the authenticated user's active game.
-  Call connectToGame mutation first to initiate the game connection.
-  Emits ServerGameMessage for each game state change, action request,
-  mulligan, event, and game over.
-  """
+  "\r\nStreams game messages for the authenticated user's active game.\r\nCall connectToGame mutation first to initiate the game connection.\r\nEmits ServerGameMessage for each game state change, action request,\r\nmulligan, event, and game over.\r"
   gameMessages: ServerGameMessage!
 
   """Emits when the current user is matched into a game."""
@@ -4506,10 +4501,7 @@ enum Rarity {
   ALLIANCE
 }
 
-"""
-A message from the server during a game. The messageType field indicates which
-fields are populated. Clients should switch on messageType to process the message.
-"""
+"\r\nA message from the server during a game. The messageType field indicates which\r\nfields are populated. Clients should switch on messageType to process the message.\r"
 type ServerGameMessage {
   messageType: MessageType!
   id: String
@@ -4540,6 +4532,9 @@ type ServerGameMessage {
 
   """Present on TIMER messages."""
   timers: Timers
+
+  "\r\nIDs of entities that changed in this message. Present on ON_UPDATE and\r\nON_REQUEST_ACTION messages. Clients use this to diff zones efficiently\r\ninstead of comparing the full entity list.\r"
+  changedEntityIds: [Int!]
 }
 
 type SpellAction {

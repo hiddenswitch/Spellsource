@@ -44,4 +44,5 @@ fragment serverGameMessage on ServerGameMessage {
   timers {
     millisRemaining
   }
+  changedEntityIds
 }

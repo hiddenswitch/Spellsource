@@ -20,11 +20,12 @@ public class ServerGameMessage implements java.io.Serializable {
     private GameOver gameOver;
     private Emote emote;
     private Timers timers;
+    private java.util.List<Integer> changedEntityIds;
 
     public ServerGameMessage() {
     }
 
-    public ServerGameMessage(MessageType messageType, String id, int localPlayerId, boolean isReplayMessage, GameState gameState, GameActions actions, java.util.List<Entity> startingCards, GameEvent event, GameOver gameOver, Emote emote, Timers timers) {
+    public ServerGameMessage(MessageType messageType, String id, int localPlayerId, boolean isReplayMessage, GameState gameState, GameActions actions, java.util.List<Entity> startingCards, GameEvent event, GameOver gameOver, Emote emote, Timers timers, java.util.List<Integer> changedEntityIds) {
         this.messageType = messageType;
         this.id = id;
         this.localPlayerId = localPlayerId;
@@ -36,6 +37,7 @@ public class ServerGameMessage implements java.io.Serializable {
         this.gameOver = gameOver;
         this.emote = emote;
         this.timers = timers;
+        this.changedEntityIds = changedEntityIds;
     }
 
     public MessageType getMessageType() {
@@ -157,6 +159,23 @@ public class ServerGameMessage implements java.io.Serializable {
         this.timers = timers;
     }
 
+    /**
+     * IDs of entities that changed in this message. Present on ON_UPDATE and
+ON_REQUEST_ACTION messages. Clients use this to diff zones efficiently
+instead of comparing the full entity list.
+     */
+    public java.util.List<Integer> getChangedEntityIds() {
+        return changedEntityIds;
+    }
+    /**
+     * IDs of entities that changed in this message. Present on ON_UPDATE and
+ON_REQUEST_ACTION messages. Clients use this to diff zones efficiently
+instead of comparing the full entity list.
+     */
+    public void setChangedEntityIds(java.util.List<Integer> changedEntityIds) {
+        this.changedEntityIds = changedEntityIds;
+    }
+
 
 
     public static ServerGameMessage.Builder builder() {
@@ -176,6 +195,7 @@ public class ServerGameMessage implements java.io.Serializable {
         private GameOver gameOver;
         private Emote emote;
         private Timers timers;
+        private java.util.List<Integer> changedEntityIds;
 
         public Builder() {
         }
@@ -256,9 +276,19 @@ public class ServerGameMessage implements java.io.Serializable {
             return this;
         }
 
+        /**
+         * IDs of entities that changed in this message. Present on ON_UPDATE and
+ON_REQUEST_ACTION messages. Clients use this to diff zones efficiently
+instead of comparing the full entity list.
+         */
+        public Builder setChangedEntityIds(java.util.List<Integer> changedEntityIds) {
+            this.changedEntityIds = changedEntityIds;
+            return this;
+        }
+
 
         public ServerGameMessage build() {
-            return new ServerGameMessage(messageType, id, localPlayerId, isReplayMessage, gameState, actions, startingCards, event, gameOver, emote, timers);
+            return new ServerGameMessage(messageType, id, localPlayerId, isReplayMessage, gameState, actions, startingCards, event, gameOver, emote, timers, changedEntityIds);
         }
 
     }

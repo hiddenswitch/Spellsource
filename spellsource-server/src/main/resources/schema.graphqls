@@ -560,6 +560,13 @@ type ServerGameMessage {
 
     """Present on TIMER messages."""
     timers: Timers
+
+    """
+    IDs of entities that changed in this message. Present on ON_UPDATE and
+    ON_REQUEST_ACTION messages. Clients use this to diff zones efficiently
+    instead of comparing the full entity list.
+    """
+    changedEntityIds: [Int!]
 }
 
 # ─── Rogue types (existing) ──────────────────────────────────

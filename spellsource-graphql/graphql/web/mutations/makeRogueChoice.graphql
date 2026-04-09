@@ -1,5 +1,0 @@
-mutation makeRogueChoice($choiceId: BigInt!, $choices: [Int!]!) {
-  makeRogueChoice(choiceId: $choiceId, choices: $choices) {
-    id
-  }
-}

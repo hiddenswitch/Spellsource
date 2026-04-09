@@ -98,6 +98,10 @@ public class GraphQLGameBridge {
 					.build());
 		}
 
+		if (proto.hasChanges() && proto.getChanges().getIdsCount() > 0) {
+			builder.setChangedEntityIds(proto.getChanges().getIdsList());
+		}
+
 		return builder.build();
 	}
 
@@ -168,6 +172,11 @@ public class GraphQLGameBridge {
 				.setCardType(CardType.valueOf(proto.getCardType().name()))
 				.setEntityType(EntityType.valueOf(proto.getEntityType().name()))
 				.setRarity(Rarity.valueOf(proto.getRarity().name()))
+				.setLocation(proto.hasLocation() ? new EntityLocation.Builder()
+						.setIndex(proto.getLocation().getIndex())
+						.setZone(Zone.valueOf(proto.getLocation().getZone().name()))
+						.setPlayer(proto.getLocation().getPlayer())
+						.build() : null)
 				.setOwner(proto.getOwner())
 				.setBoardPosition(proto.getBoardPosition())
 				.setAttack(proto.hasAttack() ? proto.getAttack() : null)

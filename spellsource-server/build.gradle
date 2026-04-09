@@ -440,3 +440,14 @@ graphqlCodegen {
     delete "${outputDir.path}/com"
   }
 }
+
+tasks.register("generateSchema", JavaExec) {
+  group('spellsource')
+  description("Starts the full server stack, waits for the stitched GraphQL schema to be generated, then exits.")
+  dependsOn += [classes, testClasses]
+  classpath sourceSets.test.runtimeClasspath
+  mainClass.set('com.hiddenswitch.framework.tests.applications.SchemaGeneratorEntryPoint')
+  environment("TESTCONTAINERS_REUSE_ENABLE", "true")
+  jvmArgs.addAll(jvmArgs)
+  outputs.file(rootProject.file("spellsource-graphql/schema.graphql"))
+}
