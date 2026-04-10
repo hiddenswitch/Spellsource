@@ -32,6 +32,14 @@ fragment serverGameMessage on ServerGameMessage {
       ...entitySummary
     }
     value
+    cardEvent {
+      card {
+        ...entitySummary
+      }
+      showLocal
+    }
+    entityTouched
+    entityUntouched
   }
   gameOver {
     localPlayerWon

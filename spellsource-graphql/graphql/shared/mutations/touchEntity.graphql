@@ -1,0 +1,3 @@
+mutation touchEntity($entityId: Int!) {
+  touchEntity(entityId: $entityId)
+}

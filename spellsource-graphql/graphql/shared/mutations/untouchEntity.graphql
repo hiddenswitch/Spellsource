@@ -1,0 +1,3 @@
+mutation untouchEntity($entityId: Int!) {
+  untouchEntity(entityId: $entityId)
+}

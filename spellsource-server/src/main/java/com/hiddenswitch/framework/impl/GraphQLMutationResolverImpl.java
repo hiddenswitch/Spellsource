@@ -492,6 +492,34 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 		return Future.succeededFuture(true);
 	}
 
+	@Override
+	public Future<Boolean> touchEntity(int entityId) throws Exception {
+		var userId = Accounts.userId();
+		if (userId == null) {
+			return Future.failedFuture("must be authenticated");
+		}
+		var message = Spellsource.ClientToServerMessage.newBuilder()
+				.setMessageType(Spellsource.MessageTypeMessage.MessageType.TOUCH)
+				.setEntityTouch(entityId)
+				.build();
+		GraphQLGameBridge.sendClientMessage(userId, message);
+		return Future.succeededFuture(true);
+	}
+
+	@Override
+	public Future<Boolean> untouchEntity(int entityId) throws Exception {
+		var userId = Accounts.userId();
+		if (userId == null) {
+			return Future.failedFuture("must be authenticated");
+		}
+		var message = Spellsource.ClientToServerMessage.newBuilder()
+				.setMessageType(Spellsource.MessageTypeMessage.MessageType.TOUCH)
+				.setEntityUntouch(entityId)
+				.build();
+		GraphQLGameBridge.sendClientMessage(userId, message);
+		return Future.succeededFuture(true);
+	}
+
 	// ── cards (editable) ─────────────────────────────────────
 
 	@Override

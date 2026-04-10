@@ -11,6 +11,61 @@ fragment entity on Entity {
     zone
     player
   }
+  art {
+    body {
+      vertex {
+        r
+        g
+        b
+        a
+      }
+    }
+    highlight {
+      r
+      g
+      b
+      a
+    }
+    loop {
+      named
+    }
+    missile {
+      named
+    }
+    onCast {
+      named
+    }
+    onHit {
+      named
+    }
+    primary {
+      r
+      g
+      b
+      a
+    }
+    secondary {
+      r
+      g
+      b
+      a
+    }
+    shadow {
+      r
+      g
+      b
+      a
+    }
+    spell {
+      named
+    }
+    sprite {
+      named
+    }
+    spriteShadow {
+      named
+    }
+  }
   owner
   boardPosition
   attack

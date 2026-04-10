@@ -215,6 +215,42 @@ enum PlayerEntityAttribute {
     SIGNATURE
 }
 
+# ─── Art types ────────────────────────────────────────────────
+
+type ArtColor {
+    r: Float!
+    g: Float!
+    b: Float!
+    a: Float!
+}
+
+type ArtFont {
+    vertex: ArtColor
+}
+
+type ArtPrefab {
+    named: String
+}
+
+type ArtSprite {
+    named: String
+}
+
+type Art {
+    body: ArtFont
+    highlight: ArtColor
+    loop: ArtPrefab
+    missile: ArtPrefab
+    onCast: ArtPrefab
+    onHit: ArtPrefab
+    primary: ArtColor
+    secondary: ArtColor
+    shadow: ArtColor
+    spell: ArtPrefab
+    sprite: ArtSprite
+    spriteShadow: ArtSprite
+}
+
 # ─── Core game entity types ──────────────────────────────────
 
 type EntityLocation {
@@ -237,6 +273,7 @@ type Entity {
     entityType: EntityType!
     rarity: Rarity!
     location: EntityLocation
+    art: Art
     owner: Int!
     boardPosition: Int!
 
@@ -517,6 +554,11 @@ type Emote {
     message: EmoteType!
 }
 
+type CardEvent {
+    card: Entity
+    showLocal: Boolean!
+}
+
 type GameEvent {
     eventType: GameEventType!
     id: Int!
@@ -528,6 +570,9 @@ type GameEvent {
     target: Entity
     targets: [Entity!]!
     value: Int
+    cardEvent: CardEvent
+    entityTouched: Int
+    entityUntouched: Int
 }
 
 """
@@ -737,6 +782,10 @@ type Mutation {
     sendEmote(entityId: Int!, message: EmoteType!): Boolean!
     """Concede the current game."""
     concedeGame: Boolean!
+    """Notify the opponent that a local entity is being hovered."""
+    touchEntity(entityId: Int!): Boolean!
+    """Notify the opponent that a local entity is no longer being hovered."""
+    untouchEntity(entityId: Int!): Boolean!
 
     # cards (editable)
     putCard(input: PutCardInput!): PutCardResult!

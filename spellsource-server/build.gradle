@@ -449,5 +449,6 @@ tasks.register("generateSchema", JavaExec) {
   mainClass.set('com.hiddenswitch.framework.tests.applications.SchemaGeneratorEntryPoint')
   environment("TESTCONTAINERS_REUSE_ENABLE", "true")
   jvmArgs.addAll(jvmArgs)
+  inputs.file("src/main/resources/schema.graphqls")
   outputs.file(rootProject.file("spellsource-graphql/schema.graphql"))
 }

@@ -13,6 +13,7 @@ public class Entity implements java.io.Serializable {
     private EntityType entityType;
     private Rarity rarity;
     private EntityLocation location;
+    private Art art;
     private int owner;
     private int boardPosition;
     private Integer attack;
@@ -78,7 +79,7 @@ public class Entity implements java.io.Serializable {
     public Entity() {
     }
 
-    public Entity(int id, String name, String description, String cardId, CardType cardType, EntityType entityType, Rarity rarity, EntityLocation location, int owner, int boardPosition, Integer attack, Integer baseAttack, Integer hp, Integer baseHp, Integer maxHp, Integer armor, Integer manaCost, Integer baseManaCost, Integer durability, Integer spellDamage, Integer overload, Integer extraAttack, int mana, int maxMana, int lockedMana, boolean battlecry, boolean cannotAttack, boolean charge, boolean chooseOne, boolean collectible, boolean combo, boolean conditionMet, boolean deathrattles, boolean deflect, boolean destroyed, boolean discarded, boolean divineShield, boolean enraged, boolean frozen, boolean gameStarted, boolean gold, boolean hostsTrigger, boolean immune, boolean isStartingTurn, boolean lifesteal, boolean permanent, boolean playable, boolean poisonous, boolean roasted, boolean rush, boolean silenced, boolean stealth, boolean summoningSickness, boolean taunt, boolean uncensored, boolean underAura, boolean untargetableBySpells, boolean windfury, Integer charges, Integer countUntilCast, Integer fires, int host, java.util.List<String> heroClasses, String cardSet, java.util.List<String> cardSets, String enchantmentType, java.util.List<String> tribes, java.util.List<Tooltip> tooltips, String note) {
+    public Entity(int id, String name, String description, String cardId, CardType cardType, EntityType entityType, Rarity rarity, EntityLocation location, Art art, int owner, int boardPosition, Integer attack, Integer baseAttack, Integer hp, Integer baseHp, Integer maxHp, Integer armor, Integer manaCost, Integer baseManaCost, Integer durability, Integer spellDamage, Integer overload, Integer extraAttack, int mana, int maxMana, int lockedMana, boolean battlecry, boolean cannotAttack, boolean charge, boolean chooseOne, boolean collectible, boolean combo, boolean conditionMet, boolean deathrattles, boolean deflect, boolean destroyed, boolean discarded, boolean divineShield, boolean enraged, boolean frozen, boolean gameStarted, boolean gold, boolean hostsTrigger, boolean immune, boolean isStartingTurn, boolean lifesteal, boolean permanent, boolean playable, boolean poisonous, boolean roasted, boolean rush, boolean silenced, boolean stealth, boolean summoningSickness, boolean taunt, boolean uncensored, boolean underAura, boolean untargetableBySpells, boolean windfury, Integer charges, Integer countUntilCast, Integer fires, int host, java.util.List<String> heroClasses, String cardSet, java.util.List<String> cardSets, String enchantmentType, java.util.List<String> tribes, java.util.List<Tooltip> tooltips, String note) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -87,6 +88,7 @@ public class Entity implements java.io.Serializable {
         this.entityType = entityType;
         this.rarity = rarity;
         this.location = location;
+        this.art = art;
         this.owner = owner;
         this.boardPosition = boardPosition;
         this.attack = attack;
@@ -204,6 +206,13 @@ public class Entity implements java.io.Serializable {
     }
     public void setLocation(EntityLocation location) {
         this.location = location;
+    }
+
+    public Art getArt() {
+        return art;
+    }
+    public void setArt(Art art) {
+        this.art = art;
     }
 
     public int getOwner() {
@@ -673,6 +682,7 @@ public class Entity implements java.io.Serializable {
         private EntityType entityType;
         private Rarity rarity;
         private EntityLocation location;
+        private Art art;
         private int owner;
         private int boardPosition;
         private Integer attack;
@@ -775,6 +785,11 @@ public class Entity implements java.io.Serializable {
 
         public Builder setLocation(EntityLocation location) {
             this.location = location;
+            return this;
+        }
+
+        public Builder setArt(Art art) {
+            this.art = art;
             return this;
         }
 
@@ -1097,7 +1112,7 @@ public class Entity implements java.io.Serializable {
 
 
         public Entity build() {
-            return new Entity(id, name, description, cardId, cardType, entityType, rarity, location, owner, boardPosition, attack, baseAttack, hp, baseHp, maxHp, armor, manaCost, baseManaCost, durability, spellDamage, overload, extraAttack, mana, maxMana, lockedMana, battlecry, cannotAttack, charge, chooseOne, collectible, combo, conditionMet, deathrattles, deflect, destroyed, discarded, divineShield, enraged, frozen, gameStarted, gold, hostsTrigger, immune, isStartingTurn, lifesteal, permanent, playable, poisonous, roasted, rush, silenced, stealth, summoningSickness, taunt, uncensored, underAura, untargetableBySpells, windfury, charges, countUntilCast, fires, host, heroClasses, cardSet, cardSets, enchantmentType, tribes, tooltips, note);
+            return new Entity(id, name, description, cardId, cardType, entityType, rarity, location, art, owner, boardPosition, attack, baseAttack, hp, baseHp, maxHp, armor, manaCost, baseManaCost, durability, spellDamage, overload, extraAttack, mana, maxMana, lockedMana, battlecry, cannotAttack, charge, chooseOne, collectible, combo, conditionMet, deathrattles, deflect, destroyed, discarded, divineShield, enraged, frozen, gameStarted, gold, hostsTrigger, immune, isStartingTurn, lifesteal, permanent, playable, poisonous, roasted, rush, silenced, stealth, summoningSickness, taunt, uncensored, underAura, untargetableBySpells, windfury, charges, countUntilCast, fires, host, heroClasses, cardSet, cardSets, enchantmentType, tribes, tooltips, note);
         }
 
     }

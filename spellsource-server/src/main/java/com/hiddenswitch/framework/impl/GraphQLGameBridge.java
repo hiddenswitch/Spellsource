@@ -160,6 +160,12 @@ public class GraphQLGameBridge {
 						.map(GraphQLGameBridge::toGraphQLEntity)
 						.collect(Collectors.toList()))
 				.setValue(proto.hasValue() ? proto.getValue() : null)
+				.setCardEvent(proto.hasCardEvent() ? new CardEvent.Builder()
+						.setCard(proto.getCardEvent().hasCard() ? toGraphQLEntity(proto.getCardEvent().getCard()) : null)
+						.setShowLocal(proto.getCardEvent().getShowLocal())
+						.build() : null)
+				.setEntityTouched(proto.getEntityTouched() != 0 ? proto.getEntityTouched() : null)
+				.setEntityUntouched(proto.getEntityUntouched() != 0 ? proto.getEntityUntouched() : null)
 				.build();
 	}
 
@@ -177,6 +183,7 @@ public class GraphQLGameBridge {
 						.setZone(Zone.valueOf(proto.getLocation().getZone().name()))
 						.setPlayer(proto.getLocation().getPlayer())
 						.build() : null)
+				.setArt(proto.hasArt() ? toGraphQLArt(proto.getArt()) : null)
 				.setOwner(proto.getOwner())
 				.setBoardPosition(proto.getBoardPosition())
 				.setAttack(proto.hasAttack() ? proto.getAttack() : null)
@@ -240,6 +247,34 @@ public class GraphQLGameBridge {
 				.setTooltips(proto.getTooltipsList().stream()
 						.map(t -> new Tooltip.Builder().setText(t.getText()).setKeywords(t.getKeywordsList()).build())
 						.collect(Collectors.toList()))
+				.build();
+	}
+
+	private static Art toGraphQLArt(Spellsource.Art proto) {
+		return new Art.Builder()
+				.setBody(proto.hasBody() ? new ArtFont.Builder()
+						.setVertex(proto.getBody().hasVertex() ? toGraphQLColor(proto.getBody().getVertex()) : null)
+						.build() : null)
+				.setHighlight(proto.hasHighlight() ? toGraphQLColor(proto.getHighlight()) : null)
+				.setLoop(proto.hasLoop() ? new ArtPrefab.Builder().setNamed(proto.getLoop().getNamed()).build() : null)
+				.setMissile(proto.hasMissile() ? new ArtPrefab.Builder().setNamed(proto.getMissile().getNamed()).build() : null)
+				.setOnCast(proto.hasOnCast() ? new ArtPrefab.Builder().setNamed(proto.getOnCast().getNamed()).build() : null)
+				.setOnHit(proto.hasOnHit() ? new ArtPrefab.Builder().setNamed(proto.getOnHit().getNamed()).build() : null)
+				.setPrimary(proto.hasPrimary() ? toGraphQLColor(proto.getPrimary()) : null)
+				.setSecondary(proto.hasSecondary() ? toGraphQLColor(proto.getSecondary()) : null)
+				.setShadow(proto.hasShadow() ? toGraphQLColor(proto.getShadow()) : null)
+				.setSpell(proto.hasSpell() ? new ArtPrefab.Builder().setNamed(proto.getSpell().getNamed()).build() : null)
+				.setSprite(proto.hasSprite() ? new ArtSprite.Builder().setNamed(proto.getSprite().getNamed()).build() : null)
+				.setSpriteShadow(proto.hasSpriteShadow() ? new ArtSprite.Builder().setNamed(proto.getSpriteShadow().getNamed()).build() : null)
+				.build();
+	}
+
+	private static ArtColor toGraphQLColor(Spellsource.Color proto) {
+		return new ArtColor.Builder()
+				.setR(proto.getR())
+				.setG(proto.getG())
+				.setB(proto.getB())
+				.setA(proto.getA())
 				.build();
 	}
 

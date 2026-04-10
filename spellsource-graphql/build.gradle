@@ -57,6 +57,8 @@ tasks.named("yarnRunCodegen").configure {
   inputs.file("schema.graphql")
   inputs.dir("graphql/web")
   inputs.dir("graphql/shared")
+  
+  mustRunAfter ":spellsource-server:generateSchema"
   // TODO manually specify outputs as well?
 }
 
@@ -80,6 +82,8 @@ tasks.named("yarnRunStrawberryShake").configure {
       into "../spellsource-client/src/unity/Assets/Scripts/"
     }
   }
+  
+  mustRunAfter ":spellsource-server:generateSchema"
 }
 
 tasks.register("generateAll") {
@@ -103,6 +107,6 @@ tasks.register("generateSchema") {
 tasks.register("regenerate") {
   group('spellsource')
   description("Full cycle: generate stitched schema then run all codegen.")
-  dependsOn generateSchema, generateAll
-  generateAll.mustRunAfter(generateSchema)
+  dependsOn generateSchema
+  finalizedBy generateAll
 }

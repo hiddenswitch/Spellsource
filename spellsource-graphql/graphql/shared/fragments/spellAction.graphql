@@ -11,4 +11,18 @@ fragment spellAction on SpellAction {
     target
     friendlyBattlefieldIndex
   }
+  choices {
+    action
+    actionType
+    sourceId
+    description
+    entity {
+      ...entitySummary
+    }
+    targetKeyToActions {
+      action
+      target
+      friendlyBattlefieldIndex
+    }
+  }
 }

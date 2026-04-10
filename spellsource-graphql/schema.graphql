@@ -721,6 +721,12 @@ type Mutation {
   """Concede the current game."""
   concedeGame: Boolean!
 
+  """Notify the opponent that a local entity is being hovered."""
+  touchEntity(entityId: Int!): Boolean!
+
+  """Notify the opponent that a local entity is no longer being hovered."""
+  untouchEntity(entityId: Int!): Boolean!
+
   """cards (editable)"""
   putCard(input: PutCardInput!): PutCardResult!
   deleteCard(editableCardId: String!): Boolean!
@@ -4007,6 +4013,41 @@ enum ActionType {
   TAP
 }
 
+type Art {
+  body: ArtFont
+  highlight: ArtColor
+  loop: ArtPrefab
+  missile: ArtPrefab
+  onCast: ArtPrefab
+  onHit: ArtPrefab
+  primary: ArtColor
+  secondary: ArtColor
+  shadow: ArtColor
+  spell: ArtPrefab
+  sprite: ArtSprite
+  spriteShadow: ArtSprite
+}
+
+"""─── Art types ────────────────────────────────────────────────"""
+type ArtColor {
+  r: Float!
+  g: Float!
+  b: Float!
+  a: Float!
+}
+
+type ArtFont {
+  vertex: ArtColor
+}
+
+type ArtPrefab {
+  named: String
+}
+
+type ArtSprite {
+  named: String
+}
+
 input AttributeValueInput {
   attribute: PlayerEntityAttribute!
   stringValue: String!
@@ -4016,6 +4057,11 @@ input AttributeValueInput {
 type AttributeValueTuple {
   attribute: PlayerEntityAttribute!
   stringValue: String!
+}
+
+type CardEvent {
+  card: Entity
+  showLocal: Boolean!
 }
 
 """─── Card catalogue ───────────────────────────────────────────"""
@@ -4154,6 +4200,7 @@ type Entity {
   entityType: EntityType!
   rarity: Rarity!
   location: EntityLocation
+  art: Art
   owner: Int!
   boardPosition: Int!
 
@@ -4268,6 +4315,9 @@ type GameEvent {
   target: Entity
   targets: [Entity!]!
   value: Int
+  cardEvent: CardEvent
+  entityTouched: Int
+  entityUntouched: Int
 }
 
 enum GameEventType {

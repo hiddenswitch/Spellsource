@@ -86,6 +86,16 @@ public interface MutationResolver {
     io.vertx.core.Future<Boolean> concedeGame() throws Exception;
 
     /**
+     * Notify the opponent that a local entity is being hovered.
+     */
+    io.vertx.core.Future<Boolean> touchEntity(int entityId) throws Exception;
+
+    /**
+     * Notify the opponent that a local entity is no longer being hovered.
+     */
+    io.vertx.core.Future<Boolean> untouchEntity(int entityId) throws Exception;
+
+    /**
      * cards (editable)
      */
     io.vertx.core.Future<PutCardResult> putCard(PutCardInput input) throws Exception;
