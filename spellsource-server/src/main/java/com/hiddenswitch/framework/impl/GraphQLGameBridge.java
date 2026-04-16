@@ -114,6 +114,10 @@ public class GraphQLGameBridge {
 				.setTurnNumber(proto.getTurnNumber())
 				.setTurnState(proto.getTurnState())
 				.setTimestamp(proto.getTimestamp())
+				.setPowerHistory(proto.getPowerHistoryList().stream()
+						.map(GraphQLGameBridge::toGraphQLEvent)
+						.collect(Collectors.toList()))
+				.setHasPowerHistory(proto.getHasPowerHistory())
 				.build();
 	}
 

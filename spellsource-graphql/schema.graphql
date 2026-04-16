@@ -707,7 +707,7 @@ type Mutation {
   """
   Connect to an active game. Must be called before gameMessages subscription will emit.
   """
-  connectToGame(playerKey: String!, playerSecret: String!): Boolean!
+  connectToGame(playerKey: String, playerSecret: String): Boolean!
 
   """Send a game action in response to an ON_REQUEST_ACTION message."""
   sendGameAction(actionIndex: Int!, repliesTo: String!): Boolean!
@@ -794,6 +794,7 @@ type PublishedCard implements Node {
   ): CardsInDecksConnection!
 }
 
+"""A 64-bit integer serialized as a string for JavaScript compatibility"""
 scalar BigInt
 
 type Card implements Node {
@@ -4407,6 +4408,8 @@ type GameState {
   turnNumber: Int!
   turnState: String!
   timestamp: BigInt!
+  powerHistory: [GameEvent!]
+  hasPowerHistory: Boolean!
 }
 
 type GetCardsResponse {

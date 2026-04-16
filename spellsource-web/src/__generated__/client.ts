@@ -15,6 +15,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A 64-bit integer serialized as a string for JavaScript compatibility */
   BigInt: any;
   /** A location in a connection that can be used for resuming pagination. */
   Cursor: any;
@@ -1739,7 +1740,9 @@ export type GameRecord = {
 export type GameState = {
   __typename?: 'GameState';
   entities: Array<Entity>;
+  hasPowerHistory: Scalars['Boolean'];
   isLocalPlayerTurn: Scalars['Boolean'];
+  powerHistory?: Maybe<Array<GameEvent>>;
   timestamp: Scalars['BigInt'];
   turnNumber: Scalars['Int'];
   turnState: Scalars['String'];
@@ -2233,8 +2236,8 @@ export type MutationChangePasswordArgs = {
 
 /** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationConnectToGameArgs = {
-  playerKey: Scalars['String'];
-  playerSecret: Scalars['String'];
+  playerKey?: InputMaybe<Scalars['String']>;
+  playerSecret?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -5053,7 +5056,9 @@ export type GameRecordResolvers<ContextType = any, ParentType extends ResolversP
 
 export type GameStateResolvers<ContextType = any, ParentType extends ResolversParentTypes['GameState'] = ResolversParentTypes['GameState']> = {
   entities?: Resolver<Array<ResolversTypes['Entity']>, ParentType, ContextType>;
+  hasPowerHistory?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isLocalPlayerTurn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  powerHistory?: Resolver<Maybe<Array<ResolversTypes['GameEvent']>>, ParentType, ContextType>;
   timestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   turnNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   turnState?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -5206,7 +5211,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   cancelMatchmaking?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   changePassword?: Resolver<ResolversTypes['LoginOrCreateReply'], ParentType, ContextType, RequireFields<MutationChangePasswordArgs, 'newPassword'>>;
   concedeGame?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  connectToGame?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationConnectToGameArgs, 'playerKey' | 'playerSecret'>>;
+  connectToGame?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<MutationConnectToGameArgs>>;
   createAccount?: Resolver<ResolversTypes['LoginOrCreateReply'], ParentType, ContextType, RequireFields<MutationCreateAccountArgs, 'input'>>;
   createCard?: Resolver<Maybe<ResolversTypes['CreateCardPayload']>, ParentType, ContextType, RequireFields<MutationCreateCardArgs, 'input'>>;
   createCardsInDeck?: Resolver<Maybe<ResolversTypes['CreateCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationCreateCardsInDeckArgs, 'input'>>;
@@ -5686,7 +5691,7 @@ export type EntityFragment = { __typename?: 'Entity', id: number, name: string, 
 
 export type EntitySummaryFragment = { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> };
 
-export type GameStateFragment = { __typename?: 'GameState', isLocalPlayerTurn: boolean, turnNumber: number, turnState: string, timestamp: any, entities: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> }> };
+export type GameStateFragment = { __typename?: 'GameState', isLocalPlayerTurn: boolean, turnNumber: number, turnState: string, timestamp: any, hasPowerHistory: boolean, entities: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> }>, powerHistory?: Array<{ __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }>, cardEvent?: { __typename?: 'CardEvent', showLocal: boolean, card?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null } | null }> | null };
 
 export type GeneratedArtFragment = { __typename?: 'GeneratedArt', hash: string, owner: string, urls: Array<string | null>, info?: any | null, isArchived: boolean };
 
@@ -5698,11 +5703,19 @@ export type RogueChoiceFragment = { __typename?: 'RogueChoice', id: any, cards: 
 
 export type RogueRunFragment = { __typename?: 'RogueRun', id: any, player: string, state: RogueRunState, bossesDefeated: number, heroClass: string, startedAt: any, gold: number, deck: string, lives: number, opponentDeck?: string | null, opponentInfo?: string | null, currentChoice?: { __typename?: 'RogueChoice', id: any, cards: Array<string | null>, canPick: number, canReroll: boolean } | null };
 
-export type ServerGameMessageFragment = { __typename?: 'ServerGameMessage', messageType: MessageType, id?: string | null, localPlayerId: number, isReplayMessage: boolean, changedEntityIds?: Array<number> | null, gameState?: { __typename?: 'GameState', isLocalPlayerTurn: boolean, turnNumber: number, turnState: string, timestamp: any, entities: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> }> } | null, actions?: { __typename?: 'GameActions', compatibility: Array<number>, all: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }>, choices: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }> }> }> } | null, startingCards?: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }> | null, event?: { __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, entityTouched?: number | null, entityUntouched?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }>, cardEvent?: { __typename?: 'CardEvent', showLocal: boolean, card?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null } | null } | null, gameOver?: { __typename?: 'GameOver', localPlayerWon: boolean, winningPlayerId?: number | null } | null, emote?: { __typename?: 'Emote', entityId: number, message: EmoteType } | null, timers?: { __typename?: 'Timers', millisRemaining: any } | null };
+export type ServerGameMessageFragment = { __typename?: 'ServerGameMessage', messageType: MessageType, id?: string | null, localPlayerId: number, isReplayMessage: boolean, changedEntityIds?: Array<number> | null, gameState?: { __typename?: 'GameState', isLocalPlayerTurn: boolean, turnNumber: number, turnState: string, timestamp: any, hasPowerHistory: boolean, entities: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> }>, powerHistory?: Array<{ __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }>, cardEvent?: { __typename?: 'CardEvent', showLocal: boolean, card?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null } | null }> | null } | null, actions?: { __typename?: 'GameActions', compatibility: Array<number>, all: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }>, choices: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }> }> }> } | null, startingCards?: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }> | null, event?: { __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, entityTouched?: number | null, entityUntouched?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }>, cardEvent?: { __typename?: 'CardEvent', showLocal: boolean, card?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null } | null } | null, gameOver?: { __typename?: 'GameOver', localPlayerWon: boolean, winningPlayerId?: number | null } | null, emote?: { __typename?: 'Emote', entityId: number, message: EmoteType } | null, timers?: { __typename?: 'Timers', millisRemaining: any } | null };
 
 export type SpellActionFragment = { __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }>, choices: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }> }> };
 
 export type UserEntityFragment = { __typename?: 'UserEntity', id: string, email: string, username: string, privacyToken: string };
+
+export type AddFriendMutationVariables = Exact<{
+  friendId?: InputMaybe<Scalars['String']>;
+  usernameWithToken?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type AddFriendMutation = { __typename?: 'Mutation', addFriend: { __typename?: 'Friend', friendId: string, friendName: string, presence: Presence, since: any } };
 
 export type CancelMatchmakingMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -5722,8 +5735,8 @@ export type ConcedeGameMutationVariables = Exact<{ [key: string]: never; }>;
 export type ConcedeGameMutation = { __typename?: 'Mutation', concedeGame: boolean };
 
 export type ConnectToGameMutationVariables = Exact<{
-  playerKey: Scalars['String'];
-  playerSecret: Scalars['String'];
+  playerKey?: InputMaybe<Scalars['String']>;
+  playerSecret?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -5775,6 +5788,13 @@ export type DeleteDeckMutationVariables = Exact<{
 
 export type DeleteDeckMutation = { __typename?: 'Mutation', updateDeckById?: { __typename?: 'UpdateDeckPayload', deck?: { __typename?: 'Deck', trashed: boolean } | null } | null };
 
+export type DeleteEditableCardMutationVariables = Exact<{
+  editableCardId: Scalars['String'];
+}>;
+
+
+export type DeleteEditableCardMutation = { __typename?: 'Mutation', deleteCard: boolean };
+
 export type DeleteGameDeckMutationVariables = Exact<{
   deckId: Scalars['String'];
 }>;
@@ -5817,6 +5837,20 @@ export type PublishCardMutationVariables = Exact<{
 
 
 export type PublishCardMutation = { __typename?: 'Mutation', publishCard?: { __typename?: 'PublishCardPayload', bigInt?: any | null } | null };
+
+export type PutCardMutationVariables = Exact<{
+  input: PutCardInput;
+}>;
+
+
+export type PutCardMutation = { __typename?: 'Mutation', putCard: { __typename?: 'PutCardResult', cardId: string, editableCardId: string, cardScriptErrors: Array<string> } };
+
+export type RemoveFriendMutationVariables = Exact<{
+  friendId: Scalars['String'];
+}>;
+
+
+export type RemoveFriendMutation = { __typename?: 'Mutation', removeFriend: boolean };
 
 export type RenameDeckMutationVariables = Exact<{
   deckId: Scalars['String'];
@@ -6092,7 +6126,7 @@ export type FriendUpdatedSubscription = { __typename?: 'Subscription', friendUpd
 export type GameMessagesSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GameMessagesSubscription = { __typename?: 'Subscription', gameMessages: { __typename?: 'ServerGameMessage', messageType: MessageType, id?: string | null, localPlayerId: number, isReplayMessage: boolean, changedEntityIds?: Array<number> | null, gameState?: { __typename?: 'GameState', isLocalPlayerTurn: boolean, turnNumber: number, turnState: string, timestamp: any, entities: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> }> } | null, actions?: { __typename?: 'GameActions', compatibility: Array<number>, all: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }>, choices: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }> }> }> } | null, startingCards?: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }> | null, event?: { __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, entityTouched?: number | null, entityUntouched?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }>, cardEvent?: { __typename?: 'CardEvent', showLocal: boolean, card?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null } | null } | null, gameOver?: { __typename?: 'GameOver', localPlayerWon: boolean, winningPlayerId?: number | null } | null, emote?: { __typename?: 'Emote', entityId: number, message: EmoteType } | null, timers?: { __typename?: 'Timers', millisRemaining: any } | null } };
+export type GameMessagesSubscription = { __typename?: 'Subscription', gameMessages: { __typename?: 'ServerGameMessage', messageType: MessageType, id?: string | null, localPlayerId: number, isReplayMessage: boolean, changedEntityIds?: Array<number> | null, gameState?: { __typename?: 'GameState', isLocalPlayerTurn: boolean, turnNumber: number, turnState: string, timestamp: any, hasPowerHistory: boolean, entities: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, boardPosition: number, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, manaCost?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, battlecry: boolean, cannotAttack: boolean, charge: boolean, chooseOne: boolean, collectible: boolean, combo: boolean, conditionMet: boolean, deathrattles: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, divineShield: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, lifesteal: boolean, permanent: boolean, playable: boolean, poisonous: boolean, roasted: boolean, rush: boolean, silenced: boolean, stealth: boolean, summoningSickness: boolean, taunt: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, windfury: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, heroClasses: Array<string>, cardSet: string, cardSets: Array<string>, enchantmentType: string, tribes: Array<string>, note: string, location?: { __typename?: 'EntityLocation', index: number, zone: Zone, player: number } | null, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }> }>, powerHistory?: Array<{ __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }>, cardEvent?: { __typename?: 'CardEvent', showLocal: boolean, card?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null } | null }> | null } | null, actions?: { __typename?: 'GameActions', compatibility: Array<number>, all: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }>, choices: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }> }> }> } | null, startingCards?: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }> | null, event?: { __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, entityTouched?: number | null, entityUntouched?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> }>, cardEvent?: { __typename?: 'CardEvent', showLocal: boolean, card?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string> } | null } | null } | null, gameOver?: { __typename?: 'GameOver', localPlayerWon: boolean, winningPlayerId?: number | null } | null, emote?: { __typename?: 'Emote', entityId: number, message: EmoteType } | null, timers?: { __typename?: 'Timers', millisRemaining: any } | null } };
 
 export type InviteUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -6423,8 +6457,34 @@ export const GameStateFragmentDoc = gql`
   turnNumber
   turnState
   timestamp
+  hasPowerHistory
+  powerHistory {
+    eventType
+    id
+    description
+    isPowerHistory
+    isSourcePlayerLocal
+    isTargetPlayerLocal
+    source {
+      ...entitySummary
+    }
+    target {
+      ...entitySummary
+    }
+    targets {
+      ...entitySummary
+    }
+    value
+    cardEvent {
+      card {
+        ...entitySummary
+      }
+      showLocal
+    }
+  }
 }
-    ${EntityFragmentDoc}`;
+    ${EntityFragmentDoc}
+${EntitySummaryFragmentDoc}`;
 export const SpellActionFragmentDoc = gql`
     fragment spellAction on SpellAction {
   action
@@ -6515,6 +6575,43 @@ export const ServerGameMessageFragmentDoc = gql`
     ${GameStateFragmentDoc}
 ${SpellActionFragmentDoc}
 ${EntitySummaryFragmentDoc}`;
+export const AddFriendDocument = gql`
+    mutation addFriend($friendId: String, $usernameWithToken: String) {
+  addFriend(friendId: $friendId, usernameWithToken: $usernameWithToken) {
+    friendId
+    friendName
+    presence
+    since
+  }
+}
+    `;
+export type AddFriendMutationFn = Apollo.MutationFunction<AddFriendMutation, AddFriendMutationVariables>;
+
+/**
+ * __useAddFriendMutation__
+ *
+ * To run a mutation, you first call `useAddFriendMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddFriendMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addFriendMutation, { data, loading, error }] = useAddFriendMutation({
+ *   variables: {
+ *      friendId: // value for 'friendId'
+ *      usernameWithToken: // value for 'usernameWithToken'
+ *   },
+ * });
+ */
+export function useAddFriendMutation(baseOptions?: Apollo.MutationHookOptions<AddFriendMutation, AddFriendMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddFriendMutation, AddFriendMutationVariables>(AddFriendDocument, options);
+      }
+export type AddFriendMutationHookResult = ReturnType<typeof useAddFriendMutation>;
+export type AddFriendMutationResult = Apollo.MutationResult<AddFriendMutation>;
+export type AddFriendMutationOptions = Apollo.BaseMutationOptions<AddFriendMutation, AddFriendMutationVariables>;
 export const CancelMatchmakingDocument = gql`
     mutation cancelMatchmaking {
   cancelMatchmaking
@@ -6609,7 +6706,7 @@ export type ConcedeGameMutationHookResult = ReturnType<typeof useConcedeGameMuta
 export type ConcedeGameMutationResult = Apollo.MutationResult<ConcedeGameMutation>;
 export type ConcedeGameMutationOptions = Apollo.BaseMutationOptions<ConcedeGameMutation, ConcedeGameMutationVariables>;
 export const ConnectToGameDocument = gql`
-    mutation connectToGame($playerKey: String!, $playerSecret: String!) {
+    mutation connectToGame($playerKey: String, $playerSecret: String) {
   connectToGame(playerKey: $playerKey, playerSecret: $playerSecret)
 }
     `;
@@ -6857,6 +6954,37 @@ export function useDeleteDeckMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteDeckMutationHookResult = ReturnType<typeof useDeleteDeckMutation>;
 export type DeleteDeckMutationResult = Apollo.MutationResult<DeleteDeckMutation>;
 export type DeleteDeckMutationOptions = Apollo.BaseMutationOptions<DeleteDeckMutation, DeleteDeckMutationVariables>;
+export const DeleteEditableCardDocument = gql`
+    mutation deleteEditableCard($editableCardId: String!) {
+  deleteCard(editableCardId: $editableCardId)
+}
+    `;
+export type DeleteEditableCardMutationFn = Apollo.MutationFunction<DeleteEditableCardMutation, DeleteEditableCardMutationVariables>;
+
+/**
+ * __useDeleteEditableCardMutation__
+ *
+ * To run a mutation, you first call `useDeleteEditableCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEditableCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEditableCardMutation, { data, loading, error }] = useDeleteEditableCardMutation({
+ *   variables: {
+ *      editableCardId: // value for 'editableCardId'
+ *   },
+ * });
+ */
+export function useDeleteEditableCardMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEditableCardMutation, DeleteEditableCardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteEditableCardMutation, DeleteEditableCardMutationVariables>(DeleteEditableCardDocument, options);
+      }
+export type DeleteEditableCardMutationHookResult = ReturnType<typeof useDeleteEditableCardMutation>;
+export type DeleteEditableCardMutationResult = Apollo.MutationResult<DeleteEditableCardMutation>;
+export type DeleteEditableCardMutationOptions = Apollo.BaseMutationOptions<DeleteEditableCardMutation, DeleteEditableCardMutationVariables>;
 export const DeleteGameDeckDocument = gql`
     mutation deleteGameDeck($deckId: String!) {
   deleteDeck(deckId: $deckId)
@@ -7055,6 +7183,72 @@ export function usePublishCardMutation(baseOptions?: Apollo.MutationHookOptions<
 export type PublishCardMutationHookResult = ReturnType<typeof usePublishCardMutation>;
 export type PublishCardMutationResult = Apollo.MutationResult<PublishCardMutation>;
 export type PublishCardMutationOptions = Apollo.BaseMutationOptions<PublishCardMutation, PublishCardMutationVariables>;
+export const PutCardDocument = gql`
+    mutation putCard($input: PutCardInput!) {
+  putCard(input: $input) {
+    cardId
+    editableCardId
+    cardScriptErrors
+  }
+}
+    `;
+export type PutCardMutationFn = Apollo.MutationFunction<PutCardMutation, PutCardMutationVariables>;
+
+/**
+ * __usePutCardMutation__
+ *
+ * To run a mutation, you first call `usePutCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePutCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [putCardMutation, { data, loading, error }] = usePutCardMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePutCardMutation(baseOptions?: Apollo.MutationHookOptions<PutCardMutation, PutCardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PutCardMutation, PutCardMutationVariables>(PutCardDocument, options);
+      }
+export type PutCardMutationHookResult = ReturnType<typeof usePutCardMutation>;
+export type PutCardMutationResult = Apollo.MutationResult<PutCardMutation>;
+export type PutCardMutationOptions = Apollo.BaseMutationOptions<PutCardMutation, PutCardMutationVariables>;
+export const RemoveFriendDocument = gql`
+    mutation removeFriend($friendId: String!) {
+  removeFriend(friendId: $friendId)
+}
+    `;
+export type RemoveFriendMutationFn = Apollo.MutationFunction<RemoveFriendMutation, RemoveFriendMutationVariables>;
+
+/**
+ * __useRemoveFriendMutation__
+ *
+ * To run a mutation, you first call `useRemoveFriendMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveFriendMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeFriendMutation, { data, loading, error }] = useRemoveFriendMutation({
+ *   variables: {
+ *      friendId: // value for 'friendId'
+ *   },
+ * });
+ */
+export function useRemoveFriendMutation(baseOptions?: Apollo.MutationHookOptions<RemoveFriendMutation, RemoveFriendMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveFriendMutation, RemoveFriendMutationVariables>(RemoveFriendDocument, options);
+      }
+export type RemoveFriendMutationHookResult = ReturnType<typeof useRemoveFriendMutation>;
+export type RemoveFriendMutationResult = Apollo.MutationResult<RemoveFriendMutation>;
+export type RemoveFriendMutationOptions = Apollo.BaseMutationOptions<RemoveFriendMutation, RemoveFriendMutationVariables>;
 export const RenameDeckDocument = gql`
     mutation renameDeck($deckId: String!, $deckName: String!) {
   updateDeckById(input: {id: $deckId, deckPatch: {name: $deckName}}) {

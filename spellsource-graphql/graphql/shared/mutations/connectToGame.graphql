@@ -1,3 +1,3 @@
-mutation connectToGame($playerKey: String!, $playerSecret: String!) {
+mutation connectToGame($playerKey: String, $playerSecret: String) {
   connectToGame(playerKey: $playerKey, playerSecret: $playerSecret)
 }

@@ -10,16 +10,20 @@ public class GameState implements java.io.Serializable {
     private int turnNumber;
     private String turnState;
     private java.lang.Long timestamp;
+    private java.util.List<GameEvent> powerHistory;
+    private boolean hasPowerHistory;
 
     public GameState() {
     }
 
-    public GameState(java.util.List<Entity> entities, boolean isLocalPlayerTurn, int turnNumber, String turnState, java.lang.Long timestamp) {
+    public GameState(java.util.List<Entity> entities, boolean isLocalPlayerTurn, int turnNumber, String turnState, java.lang.Long timestamp, java.util.List<GameEvent> powerHistory, boolean hasPowerHistory) {
         this.entities = entities;
         this.isLocalPlayerTurn = isLocalPlayerTurn;
         this.turnNumber = turnNumber;
         this.turnState = turnState;
         this.timestamp = timestamp;
+        this.powerHistory = powerHistory;
+        this.hasPowerHistory = hasPowerHistory;
     }
 
     public java.util.List<Entity> getEntities() {
@@ -57,6 +61,20 @@ public class GameState implements java.io.Serializable {
         this.timestamp = timestamp;
     }
 
+    public java.util.List<GameEvent> getPowerHistory() {
+        return powerHistory;
+    }
+    public void setPowerHistory(java.util.List<GameEvent> powerHistory) {
+        this.powerHistory = powerHistory;
+    }
+
+    public boolean getHasPowerHistory() {
+        return hasPowerHistory;
+    }
+    public void setHasPowerHistory(boolean hasPowerHistory) {
+        this.hasPowerHistory = hasPowerHistory;
+    }
+
 
 
     public static GameState.Builder builder() {
@@ -70,6 +88,8 @@ public class GameState implements java.io.Serializable {
         private int turnNumber;
         private String turnState;
         private java.lang.Long timestamp;
+        private java.util.List<GameEvent> powerHistory;
+        private boolean hasPowerHistory;
 
         public Builder() {
         }
@@ -99,9 +119,19 @@ public class GameState implements java.io.Serializable {
             return this;
         }
 
+        public Builder setPowerHistory(java.util.List<GameEvent> powerHistory) {
+            this.powerHistory = powerHistory;
+            return this;
+        }
+
+        public Builder setHasPowerHistory(boolean hasPowerHistory) {
+            this.hasPowerHistory = hasPowerHistory;
+            return this;
+        }
+
 
         public GameState build() {
-            return new GameState(entities, isLocalPlayerTurn, turnNumber, turnState, timestamp);
+            return new GameState(entities, isLocalPlayerTurn, turnNumber, turnState, timestamp, powerHistory, hasPowerHistory);
         }
 
     }

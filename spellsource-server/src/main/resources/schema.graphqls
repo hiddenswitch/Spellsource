@@ -547,6 +547,8 @@ type GameState {
     turnNumber: Int!
     turnState: String!
     timestamp: BigInt!
+    powerHistory: [GameEvent!]
+    hasPowerHistory: Boolean!
 }
 
 type Emote {
@@ -773,7 +775,7 @@ type Mutation {
 
     # game actions (send during an active game)
     """Connect to an active game. Must be called before gameMessages subscription will emit."""
-    connectToGame(playerKey: String!, playerSecret: String!): Boolean!
+    connectToGame(playerKey: String, playerSecret: String): Boolean!
     """Send a game action in response to an ON_REQUEST_ACTION message."""
     sendGameAction(actionIndex: Int!, repliesTo: String!): Boolean!
     """Send a mulligan response in response to an ON_MULLIGAN message."""

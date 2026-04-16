@@ -1,0 +1,8 @@
+mutation addFriend($friendId: String, $usernameWithToken: String) {
+  addFriend(friendId: $friendId, usernameWithToken: $usernameWithToken) {
+    friendId
+    friendName
+    presence
+    since
+  }
+}

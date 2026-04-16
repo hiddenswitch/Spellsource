@@ -6,4 +6,29 @@ fragment gameState on GameState {
   turnNumber
   turnState
   timestamp
+  hasPowerHistory
+  powerHistory {
+    eventType
+    id
+    description
+    isPowerHistory
+    isSourcePlayerLocal
+    isTargetPlayerLocal
+    source {
+      ...entitySummary
+    }
+    target {
+      ...entitySummary
+    }
+    targets {
+      ...entitySummary
+    }
+    value
+    cardEvent {
+      card {
+        ...entitySummary
+      }
+      showLocal
+    }
+  }
 }

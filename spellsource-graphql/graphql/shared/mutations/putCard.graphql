@@ -1,0 +1,7 @@
+mutation putCard($input: PutCardInput!) {
+  putCard(input: $input) {
+    cardId
+    editableCardId
+    cardScriptErrors
+  }
+}

@@ -9,7 +9,14 @@ import com.hiddenswitch.framework.virtual.VirtualThreadRoutingContextHandler;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import graphql.kickstart.tools.SchemaParser;
 import graphql.kickstart.tools.SchemaParserOptions;
+import graphql.language.IntValue;
+import graphql.language.StringValue;
 import graphql.scalars.ExtendedScalars;
+import graphql.schema.Coercing;
+import graphql.schema.CoercingParseLiteralException;
+import graphql.schema.CoercingParseValueException;
+import graphql.schema.CoercingSerializeException;
+import graphql.schema.GraphQLScalarType;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
@@ -50,7 +57,36 @@ public class GraphQL extends AbstractVirtualThreadVerticle {
 						.build())
 				.resolvers(new GraphQLQueryResolverImpl(cardCatalogue), new GraphQLMutationResolverImpl(cardCatalogue), new GraphQLSubscriptionResolverImpl())
 				.scalars(
-						ExtendedScalars.newAliasedScalar("BigInt").aliasedScalar(ExtendedScalars.GraphQLLong).build(),
+						GraphQLScalarType.newScalar()
+								.name("BigInt")
+								.description("A 64-bit integer serialized as a string for JavaScript compatibility")
+								.coercing(new Coercing<Long, String>() {
+									@Override
+									public String serialize(Object input) throws CoercingSerializeException {
+										if (input instanceof Long l) return l.toString();
+										if (input instanceof Integer i) return Integer.toString(i);
+										if (input instanceof Number n) return Long.toString(n.longValue());
+										if (input instanceof String s) return s;
+										throw new CoercingSerializeException("Cannot serialize " + input + " as BigInt");
+									}
+
+									@Override
+									public Long parseValue(Object input) throws CoercingParseValueException {
+										if (input instanceof Long l) return l;
+										if (input instanceof Integer i) return i.longValue();
+										if (input instanceof Number n) return n.longValue();
+										if (input instanceof String s) return Long.parseLong(s);
+										throw new CoercingParseValueException("Cannot parse " + input + " as BigInt");
+									}
+
+									@Override
+									public Long parseLiteral(Object input) throws CoercingParseLiteralException {
+										if (input instanceof IntValue v) return v.getValue().longValueExact();
+										if (input instanceof StringValue v) return Long.parseLong(v.getValue());
+										throw new CoercingParseLiteralException("Cannot parse literal " + input + " as BigInt");
+									}
+								})
+								.build(),
 						ExtendedScalars.DateTime
 				)
 				.build()

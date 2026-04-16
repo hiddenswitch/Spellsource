@@ -6,7 +6,10 @@ import { createFullSchema } from "./schema/stitching";
 import { AuthRequest } from "./auth";
 import { WebSocketServer } from "ws";
 import { Server } from "node:http";
+import { GRAPHQL_TRANSPORT_WS_PROTOCOL } from "graphql-ws";
 import { useServer } from "graphql-ws/use/ws";
+import { execute, subscribe } from "graphql";
+import { GRAPHQL_WS, SubscriptionServer } from "subscriptions-transport-ws";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
 type Handler = (req: Request, res: Response, next: NextFunction) => void;
@@ -14,14 +17,39 @@ type Handler = (req: Request, res: Response, next: NextFunction) => void;
 export const setupApolloServer = async (app: Application, httpServer: Server): Promise<ApolloServer> => {
   const schema = await createFullSchema();
 
-  // const subscriptionServer = SubscriptionServer.create({ schema, execute, subscribe }, { server, path });
+  // Modern graphql-transport-ws protocol (graphql-ws library)
+  const graphqlWsServer = new WebSocketServer({ noServer: true });
+  const serverCleanup = useServer({ schema }, graphqlWsServer);
 
-  const wsServer = new WebSocketServer({
-    server: httpServer,
-    path: "/subscriptions",
+  // Legacy graphql-ws subprotocol (subscriptions-transport-ws library) — for Strawberry Shake clients
+  const legacyWsServer = new WebSocketServer({ noServer: true });
+  SubscriptionServer.create(
+    {
+      schema,
+      execute: execute as any,
+      subscribe: subscribe as any,
+    },
+    legacyWsServer,
+  );
+
+  // Route WebSocket upgrade requests to the correct subprotocol handler
+  httpServer.on("upgrade", (req, socket, head) => {
+    if (!req.url?.startsWith("/subscriptions")) return;
+
+    const protocolHeader = req.headers["sec-websocket-protocol"];
+    const protocols = Array.isArray(protocolHeader)
+      ? protocolHeader
+      : protocolHeader?.split(",").map((p) => p.trim());
+
+    const wss =
+      protocols?.includes(GRAPHQL_WS) && !protocols.includes(GRAPHQL_TRANSPORT_WS_PROTOCOL)
+        ? legacyWsServer
+        : graphqlWsServer;
+
+    wss.handleUpgrade(req, socket, head, (ws) => {
+      wss.emit("connection", ws, req);
+    });
   });
-
-  const serverCleanup = useServer({ schema }, wsServer);
 
   const apolloServer = new ApolloServer({
     schema,

@@ -1,0 +1,3 @@
+mutation deleteEditableCard($editableCardId: String!) {
+  deleteCard(editableCardId: $editableCardId)
+}

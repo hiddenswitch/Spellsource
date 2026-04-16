@@ -354,12 +354,59 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 
 	@Override
 	public Future<Friend> addFriend(String friendId, String usernameWithToken) throws Exception {
-		return Future.failedFuture("not yet implemented");
+		var userId = Accounts.userId();
+		if (userId == null) {
+			return Future.failedFuture("must be authenticated");
+		}
+
+		// Resolve the friend's user ID — either directly or by username#token lookup
+		Future<String> resolvedFriendId;
+		if (friendId != null && !friendId.isEmpty()) {
+			resolvedFriendId = Future.succeededFuture(friendId);
+		} else if (usernameWithToken != null && !usernameWithToken.isEmpty()) {
+			var parts = usernameWithToken.split("#");
+			var username = parts[0];
+			var dao = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+			resolvedFriendId = dao.findManyByUsername(List.of(username))
+					.map(users -> {
+						if (users.isEmpty()) {
+							throw new RuntimeException("user not found: " + username);
+						}
+						return users.get(0).getId();
+					});
+		} else {
+			return Future.failedFuture("must provide friendId or usernameWithToken");
+		}
+
+		return resolvedFriendId.compose(resolvedId -> withDslContext(dsl -> dsl
+				.insertInto(com.hiddenswitch.framework.schema.spellsource.tables.Friends.FRIENDS,
+						com.hiddenswitch.framework.schema.spellsource.tables.Friends.FRIENDS.ID,
+						com.hiddenswitch.framework.schema.spellsource.tables.Friends.FRIENDS.FRIEND)
+				.values(userId, resolvedId)
+				.onConflictDoNothing())
+				.compose(v -> {
+					var dao = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+					return dao.findOneById(resolvedId);
+				})
+				.map(userEntity -> new Friend.Builder()
+						.setFriendId(userEntity.getId())
+						.setFriendName(userEntity.getUsername())
+						.setPresence(Presence.OFFLINE)
+						.setSince(System.currentTimeMillis())
+						.build()));
 	}
 
 	@Override
 	public Future<Boolean> removeFriend(String friendId) throws Exception {
-		return Future.failedFuture("not yet implemented");
+		var userId = Accounts.userId();
+		if (userId == null) {
+			return Future.failedFuture("must be authenticated");
+		}
+		return withDslContext(dsl -> dsl
+				.deleteFrom(com.hiddenswitch.framework.schema.spellsource.tables.Friends.FRIENDS)
+				.where(com.hiddenswitch.framework.schema.spellsource.tables.Friends.FRIENDS.ID.eq(userId)
+						.and(com.hiddenswitch.framework.schema.spellsource.tables.Friends.FRIENDS.FRIEND.eq(friendId))))
+				.map(deleted -> deleted > 0);
 	}
 
 	// ── invites ──────────────────────────────────────────────
@@ -423,11 +470,16 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 		if (userId == null) {
 			return Future.failedFuture("must be authenticated");
 		}
+		var firstMessageBuilder = Spellsource.ClientToServerMessage.FirstMessageMessage.newBuilder();
+		if (playerKey != null) {
+			firstMessageBuilder.setPlayerKey(playerKey);
+		}
+		if (playerSecret != null) {
+			firstMessageBuilder.setPlayerSecret(playerSecret);
+		}
 		var firstMessage = Spellsource.ClientToServerMessage.newBuilder()
 				.setMessageType(Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE)
-				.setFirstMessage(Spellsource.ClientToServerMessage.FirstMessageMessage.newBuilder()
-						.setPlayerKey(playerKey)
-						.setPlayerSecret(playerSecret))
+				.setFirstMessage(firstMessageBuilder)
 				.build();
 		GraphQLGameBridge.sendClientMessage(userId, firstMessage);
 		return Future.succeededFuture(true);
@@ -524,12 +576,68 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 
 	@Override
 	public Future<PutCardResult> putCard(PutCardInput input) throws Exception {
-		return Future.failedFuture("not yet implemented");
+		var userId = Accounts.userId();
+		if (userId == null) {
+			return Future.failedFuture("must be authenticated");
+		}
+
+		var cardId = input.getEditableCardId();
+		var source = input.getSource();
+		var errors = new java.util.ArrayList<String>();
+
+		// Parse the card source as JSON
+		io.vertx.core.json.JsonObject cardScript;
+		try {
+			cardScript = new io.vertx.core.json.JsonObject(source);
+		} catch (Exception e) {
+			return Future.succeededFuture(new PutCardResult.Builder()
+					.setCardId("")
+					.setEditableCardId(cardId != null ? cardId : "")
+					.setCardScriptErrors(List.of("invalid JSON: " + e.getMessage()))
+					.build());
+		}
+
+		var isNew = cardId == null || cardId.isEmpty();
+		var resolvedCardId = isNew
+				? java.util.UUID.randomUUID().toString()
+				: cardId;
+
+		return withExecutor(queryExecutor -> {
+			if (isNew) {
+				return queryExecutor.execute(dsl -> dsl
+						.insertInto(com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS,
+								com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS.ID,
+								com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS.CREATED_BY,
+								com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS.CARD_SCRIPT)
+						.values(resolvedCardId, userId, cardScript));
+			} else {
+				return queryExecutor.execute(dsl -> dsl
+						.update(com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS)
+						.set(com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS.CARD_SCRIPT, cardScript)
+						.set(com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS.LAST_MODIFIED,
+								java.time.OffsetDateTime.now())
+						.where(com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS.ID.eq(resolvedCardId)
+								.and(com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS.CREATED_BY.eq(userId))));
+			}
+		}).map(v -> new PutCardResult.Builder()
+				.setCardId(resolvedCardId)
+				.setEditableCardId(resolvedCardId)
+				.setCardScriptErrors(errors)
+				.build());
 	}
 
 	@Override
 	public Future<Boolean> deleteCard(String editableCardId) throws Exception {
-		return Future.failedFuture("not yet implemented");
+		var userId = Accounts.userId();
+		if (userId == null) {
+			return Future.failedFuture("must be authenticated");
+		}
+		return withDslContext(dsl -> dsl
+				.update(com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS)
+				.set(com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS.IS_ARCHIVED, true)
+				.where(com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS.ID.eq(editableCardId)
+						.and(com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS.CREATED_BY.eq(userId))))
+				.map(deleted -> deleted > 0);
 	}
 
 	// ── rogue (existing) ─────────────────────────────────────
