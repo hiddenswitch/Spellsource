@@ -15,11 +15,8 @@ import io.vertx.ext.web.Router;
 import io.vertx.pgclient.PgBuilder;
 import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.PoolOptions;
-import org.redisson.api.redisnode.RedisNodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.TimeUnit;
 
 public class Diagnostics {
 	private final static Logger LOGGER = LoggerFactory.getLogger(Diagnostics.class);
@@ -50,7 +47,10 @@ public class Diagnostics {
 					var client = new Client(vertx);
 
 					var protos = client.unauthenticated().getConfiguration(Empty.getDefaultInstance()).eventually(client::closeFut);
-					var redis = Future.fromCompletionStage(Environment.redisson().getRedisNodes(RedisNodes.SINGLE).getInstance().pingAsync(200, TimeUnit.MILLISECONDS));
+					// Works for single-server, sentinel, cluster, and replication — issues a lightweight
+					// EXISTS against an arbitrary key. Avoids Redisson.getRedisNodes() which is typed per
+					// topology and throws on the wrong configuration.
+					var redis = Future.fromCompletionStage(Environment.redisson().getBucket("_healthz").isExistsAsync().toCompletableFuture());
 					var pgConnectOptions = Environment.pgArgs().connectionOptions();
 					var pgClient = PgBuilder.pool().using(vertx).connectingTo(pgConnectOptions).with(new PoolOptions()).build();
 					var postgres = pgClient.query("""
