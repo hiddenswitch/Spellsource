@@ -95,8 +95,9 @@ configmap:
     authUrl: "http://keycloak.default.svc.cluster.local:9090/"
     adminUsername: "admin"
     adminPassword: "password"
-  redis:
-    uri: "redis://redis-master.default.svc.cluster.local:6379"
+  # redis connection: set one of `uri: redis://host:port` or
+  # `sentinelServers: {masterName: x, sentinelAddresses: [...]}` via values override.
+  redis: {}
 extraJavaOptions: ""
 extraEnv: [ ]
 extraPorts: [ ]
