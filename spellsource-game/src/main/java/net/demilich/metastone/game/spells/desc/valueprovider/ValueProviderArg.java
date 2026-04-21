@@ -21,5 +21,11 @@ public enum ValueProviderArg {
 	MIN,
 	MAX,
 	CARD_SOURCE,
-	CARD_FILTER
+	CARD_FILTER,
+	/**
+	 * Deprecated. Retained so Jackson can still deserialize card documents
+	 * persisted in Postgres before this arg was removed; the R__ card-catalogue
+	 * migration will rewrite those rows with fresh card content and drop it.
+	 */
+	EVALUATE_ONCE
 }
