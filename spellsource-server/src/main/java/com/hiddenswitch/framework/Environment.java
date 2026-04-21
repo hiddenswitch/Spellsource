@@ -98,10 +98,20 @@ public class Environment {
 	}
 
 	private static RedissonClient redissonClientConstructor(Vertx vertx) {
-		var configuration = getConfiguration();
+		var redisConf = getConfiguration().getRedis();
 		var config = new Config();
-		// todo: this should probably come out of the configuration, shouldn't it?
-		config.useSingleServer().setAddress(configuration.getRedis().getUri());
+		switch (redisConf.getConnectionCase()) {
+			case SENTINELSERVERS -> {
+				var sentinel = redisConf.getSentinelServers();
+				var sentinelConf = config.useSentinelServers().setMasterName(sentinel.getMasterName());
+				sentinel.getSentinelAddressesList().forEach(sentinelConf::addSentinelAddress);
+			}
+			case HOSTPORTUSER -> {
+				var hpu = redisConf.getHostPortUser();
+				config.useSingleServer().setAddress("redis://" + hpu.getHost() + ":" + hpu.getPort());
+			}
+			case URI, CONNECTION_NOT_SET -> config.useSingleServer().setAddress(redisConf.getUri());
+		}
 		return Redisson.create(config);
 	}
 

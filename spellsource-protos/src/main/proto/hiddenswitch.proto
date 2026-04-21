@@ -37,9 +37,15 @@ message ServerConfiguration {
       string user = 3;
     }
 
+    message SentinelServers {
+      repeated string sentinelAddresses = 1;
+      string masterName = 2;
+    }
+
     oneof connection {
       HostPortUser hostPortUser = 1;
       string uri = 2;
+      SentinelServers sentinelServers = 3;
     }
   }
 
