@@ -99,7 +99,7 @@ public class GraphQL extends AbstractVirtualThreadVerticle {
 		var handler = GraphQLHandler.create(gql);
 
 		router.post("/graphql")
-				.handler(BodyHandler.create())
+				.handler(BodyHandler.create().setBodyLimit(10 * 1024 * 1024))
 				.handler(JWTAuthHandler.create(jwtAuth, realm.toRepresentation().getRealm()))
 				.handler(VirtualThreadRoutingContextHandler.create(ctx -> handler.handle(RoutingContext.newInstance(ctx))))
 				.failureHandler(ctx -> {

@@ -211,14 +211,14 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 			var updateCommand = protoRequest.getUpdateCommand();
 			var futs = new java.util.ArrayList<Future<?>>();
 
-			return queryExecutor.execute(dsl -> dsl
+			return queryExecutor.findOneRow(dsl -> dsl
 							.select(com.hiddenswitch.framework.schema.spellsource.tables.Decks.DECKS.ID)
 							.from(com.hiddenswitch.framework.schema.spellsource.tables.Decks.DECKS)
 							.where(com.hiddenswitch.framework.schema.spellsource.tables.Decks.DECKS.ID.eq(deckId)
 									.and(com.hiddenswitch.framework.schema.spellsource.tables.Decks.DECKS.CREATED_BY.eq(userId)))
 							.limit(1))
-					.compose(authedCount -> {
-						if (authedCount < 1) {
+					.compose(row -> {
+						if (row == null) {
 							return Future.failedFuture("not authorized to edit this deck");
 						}
 
@@ -328,9 +328,27 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 		if (cardCatalogue == null) {
 			return Future.failedFuture("card catalogue not initialized");
 		}
-		// Delegate to Legacy's static duplicate logic via the proto-based path
-		// This is complex enough that reusing the existing impl is the safest approach
-		return Future.failedFuture("not yet implemented — requires transaction refactoring");
+
+		// Fetch the source deck, then create a copy owned by the current user
+		return Legacy.getDeck(cardCatalogue, deckId, userId)
+				.compose(sourceDeck -> {
+					var coll = sourceDeck.getCollection();
+					var cardIds = coll.getInventoryList().stream()
+							.map(Spellsource.CardRecord::getEntity)
+							.map(Spellsource.Entity::getCardId)
+							.collect(Collectors.toList());
+
+					var createRequest = new DeckCreateRequest()
+							.withName(coll.getName() + " Copy")
+							.withHeroClass(coll.getHeroClass())
+							.withFormat(coll.getFormat())
+							.withCardIds(cardIds);
+
+					return Legacy.createDeck(cardCatalogue, userId, createRequest);
+				})
+				.map(putResponse -> new DecksGetResponse.Builder()
+						.setCollection(protoToGraphqlCollection(putResponse.getCollection()))
+						.build());
 	}
 
 	// ── drafts ───────────────────────────────────────────────

@@ -1,6 +1,9 @@
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
-import { ApolloServerPluginLandingPageDisabled } from "@apollo/server/plugin/disabled";
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault,
+} from "@apollo/server/plugin/landingPage/default";
 import express, { Application, NextFunction, Request, Response } from "express";
 import { createFullSchema } from "./schema/stitching";
 import { AuthRequest } from "./auth";
@@ -54,7 +57,9 @@ export const setupApolloServer = async (app: Application, httpServer: Server): P
   const apolloServer = new ApolloServer({
     schema,
     plugins: [
-      ApolloServerPluginLandingPageDisabled(),
+      process.env.NODE_ENV === "production"
+        ? ApolloServerPluginLandingPageProductionDefault()
+        : ApolloServerPluginLandingPageLocalDefault({ embed: true }),
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {
         async serverWillStart() {
@@ -75,7 +80,7 @@ export const setupApolloServer = async (app: Application, httpServer: Server): P
   }
   app.use(
     "/graphql",
-    express.json(),
+    express.json({ limit: "10mb" }),
     expressMiddleware(apolloServer, {
       context: async ({ req }) => req as AuthRequest,
     }),

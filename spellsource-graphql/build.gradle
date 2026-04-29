@@ -55,7 +55,6 @@ new JsonSlurper().parseText(file('package.json').text).scripts.each { String scr
 
 tasks.named("yarnRunCodegen").configure {
   inputs.file("schema.graphql")
-  inputs.dir("graphql/web")
   inputs.dir("graphql/shared")
   
   mustRunAfter ":spellsource-server:generateSchema"

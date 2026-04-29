@@ -1,80 +1,11 @@
 fragment entity on Entity {
-  id
-  name
-  description
-  cardId
-  cardType
-  entityType
-  rarity
+  ...entitySummary
   location {
-    index
-    zone
-    player
+    ...entityLocation
   }
-  art {
-    body {
-      vertex {
-        r
-        g
-        b
-        a
-      }
-    }
-    highlight {
-      r
-      g
-      b
-      a
-    }
-    loop {
-      named
-    }
-    missile {
-      named
-    }
-    onCast {
-      named
-    }
-    onHit {
-      named
-    }
-    primary {
-      r
-      g
-      b
-      a
-    }
-    secondary {
-      r
-      g
-      b
-      a
-    }
-    shadow {
-      r
-      g
-      b
-      a
-    }
-    spell {
-      named
-    }
-    sprite {
-      named
-    }
-    spriteShadow {
-      named
-    }
-  }
-  owner
   boardPosition
-  attack
   baseAttack
-  hp
   baseHp
-  maxHp
-  armor
-  manaCost
   baseManaCost
   durability
   spellDamage
@@ -83,18 +14,13 @@ fragment entity on Entity {
   mana
   maxMana
   lockedMana
-  battlecry
   cannotAttack
-  charge
   chooseOne
-  collectible
   combo
   conditionMet
-  deathrattles
   deflect
   destroyed
   discarded
-  divineShield
   enraged
   frozen
   gameStarted
@@ -102,29 +28,20 @@ fragment entity on Entity {
   hostsTrigger
   immune
   isStartingTurn
-  lifesteal
   permanent
-  playable
-  poisonous
   roasted
-  rush
   silenced
-  stealth
   summoningSickness
-  taunt
   uncensored
   underAura
   untargetableBySpells
-  windfury
   charges
   countUntilCast
   fires
   host
-  heroClasses
   cardSet
   cardSets
   enchantmentType
-  tribes
   tooltips {
     text
     keywords

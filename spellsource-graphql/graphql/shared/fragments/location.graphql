@@ -1,0 +1,5 @@
+fragment entityLocation on EntityLocation {
+    index
+    player
+    zone
+}
