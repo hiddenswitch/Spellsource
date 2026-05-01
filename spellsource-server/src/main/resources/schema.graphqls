@@ -561,6 +561,10 @@ type CardEvent {
     showLocal: Boolean!
 }
 
+type PerformedGameActionEvent {
+    actionType: ActionType!
+}
+
 type GameEvent {
     eventType: GameEventType!
     id: Int!
@@ -573,6 +577,7 @@ type GameEvent {
     targets: [Entity!]!
     value: Int
     cardEvent: CardEvent
+    performedGameAction: PerformedGameActionEvent
     entityTouched: Int
     entityUntouched: Int
 }

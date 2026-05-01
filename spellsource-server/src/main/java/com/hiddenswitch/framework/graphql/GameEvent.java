@@ -16,13 +16,14 @@ public class GameEvent implements java.io.Serializable {
     private java.util.List<Entity> targets;
     private Integer value;
     private CardEvent cardEvent;
+    private PerformedGameActionEvent performedGameAction;
     private Integer entityTouched;
     private Integer entityUntouched;
 
     public GameEvent() {
     }
 
-    public GameEvent(GameEventType eventType, int id, String description, boolean isPowerHistory, boolean isSourcePlayerLocal, boolean isTargetPlayerLocal, Entity source, Entity target, java.util.List<Entity> targets, Integer value, CardEvent cardEvent, Integer entityTouched, Integer entityUntouched) {
+    public GameEvent(GameEventType eventType, int id, String description, boolean isPowerHistory, boolean isSourcePlayerLocal, boolean isTargetPlayerLocal, Entity source, Entity target, java.util.List<Entity> targets, Integer value, CardEvent cardEvent, PerformedGameActionEvent performedGameAction, Integer entityTouched, Integer entityUntouched) {
         this.eventType = eventType;
         this.id = id;
         this.description = description;
@@ -34,6 +35,7 @@ public class GameEvent implements java.io.Serializable {
         this.targets = targets;
         this.value = value;
         this.cardEvent = cardEvent;
+        this.performedGameAction = performedGameAction;
         this.entityTouched = entityTouched;
         this.entityUntouched = entityUntouched;
     }
@@ -115,6 +117,13 @@ public class GameEvent implements java.io.Serializable {
         this.cardEvent = cardEvent;
     }
 
+    public PerformedGameActionEvent getPerformedGameAction() {
+        return performedGameAction;
+    }
+    public void setPerformedGameAction(PerformedGameActionEvent performedGameAction) {
+        this.performedGameAction = performedGameAction;
+    }
+
     public Integer getEntityTouched() {
         return entityTouched;
     }
@@ -148,6 +157,7 @@ public class GameEvent implements java.io.Serializable {
         private java.util.List<Entity> targets;
         private Integer value;
         private CardEvent cardEvent;
+        private PerformedGameActionEvent performedGameAction;
         private Integer entityTouched;
         private Integer entityUntouched;
 
@@ -209,6 +219,11 @@ public class GameEvent implements java.io.Serializable {
             return this;
         }
 
+        public Builder setPerformedGameAction(PerformedGameActionEvent performedGameAction) {
+            this.performedGameAction = performedGameAction;
+            return this;
+        }
+
         public Builder setEntityTouched(Integer entityTouched) {
             this.entityTouched = entityTouched;
             return this;
@@ -221,7 +236,7 @@ public class GameEvent implements java.io.Serializable {
 
 
         public GameEvent build() {
-            return new GameEvent(eventType, id, description, isPowerHistory, isSourcePlayerLocal, isTargetPlayerLocal, source, target, targets, value, cardEvent, entityTouched, entityUntouched);
+            return new GameEvent(eventType, id, description, isPowerHistory, isSourcePlayerLocal, isTargetPlayerLocal, source, target, targets, value, cardEvent, performedGameAction, entityTouched, entityUntouched);
         }
 
     }

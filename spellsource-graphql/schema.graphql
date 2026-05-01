@@ -4317,6 +4317,7 @@ type GameEvent {
   targets: [Entity!]!
   value: Int
   cardEvent: CardEvent
+  performedGameAction: PerformedGameActionEvent
   entityTouched: Int
   entityUntouched: Int
 }
@@ -4520,6 +4521,10 @@ enum MessageType {
   CONCEDE
   PINGPONG
   TIMER
+}
+
+type PerformedGameActionEvent {
+  actionType: ActionType!
 }
 
 enum PlayerEntityAttribute {

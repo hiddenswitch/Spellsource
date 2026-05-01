@@ -168,6 +168,9 @@ public class GraphQLGameBridge {
 						.setCard(proto.getCardEvent().hasCard() ? toGraphQLEntity(proto.getCardEvent().getCard()) : null)
 						.setShowLocal(proto.getCardEvent().getShowLocal())
 						.build() : null)
+				.setPerformedGameAction(proto.hasPerformedGameAction() ? new PerformedGameActionEvent.Builder()
+						.setActionType(ActionType.valueOf(proto.getPerformedGameAction().getActionType().name()))
+						.build() : null)
 				.setEntityTouched(proto.getEntityTouched() != 0 ? proto.getEntityTouched() : null)
 				.setEntityUntouched(proto.getEntityUntouched() != 0 ? proto.getEntityUntouched() : null)
 				.build();

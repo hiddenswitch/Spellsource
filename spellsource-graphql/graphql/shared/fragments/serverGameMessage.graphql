@@ -38,6 +38,9 @@ fragment serverGameMessage on ServerGameMessage {
       }
       showLocal
     }
+    performedGameAction {
+      actionType
+    }
     entityTouched
     entityUntouched
   }
