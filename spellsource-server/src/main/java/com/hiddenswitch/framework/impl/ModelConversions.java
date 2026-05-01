@@ -65,14 +65,14 @@ import static java.util.stream.Collectors.toList;
 public class ModelConversions {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ModelConversions.class);
 	private static ObjectMapper ignoreUnknownFieldsMapper =
-			JsonMapper.builder()
-					.addModule(MessageMarshallerModule.of(Serialization.getMarshallerBuilder().ignoringUnknownFields(true).build()))
-					.annotationIntrospector(new JacksonAnnotationIntrospector())
-					.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-					.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-					.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
-					.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-					.build();
+		JsonMapper.builder()
+			.addModule(MessageMarshallerModule.of(Serialization.getMarshallerBuilder().ignoringUnknownFields(true).build()))
+			.annotationIntrospector(new JacksonAnnotationIntrospector())
+			.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+			.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+			.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
+			.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+			.build();
 
 	/**
 	 * Get an entity representing a censored secret card.
@@ -83,16 +83,18 @@ public class ModelConversions {
 	 * @param heroClasses The hero classes of the secret
 	 * @return A censored secret card.
 	 */
-	static Entity.Builder getCensoredCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, String[] heroClasses) {
+	static Entity.Builder getCensoredCard(int id, int owner,
+																				net.demilich.metastone.game.entities.EntityLocation location,
+																				String[] heroClasses) {
 		var builder = Entity.newBuilder()
-				.setCardId("hidden")
-				.setEntityType(EntityType.CARD)
-				.setDescription("A secret! This card will be revealed when a certain action occurs.")
-				.setName("Secret")
-				.setId(id)
-				.setOwner(owner)
-				.setCardType(CardType.SPELL)
-				.setLocation(toClientLocation(location));
+			.setCardId("hidden")
+			.setEntityType(EntityType.CARD)
+			.setDescription("A secret! This card will be revealed when a certain action occurs.")
+			.setName("Secret")
+			.setId(id)
+			.setOwner(owner)
+			.setCardType(CardType.SPELL)
+			.setLocation(toClientLocation(location));
 		if (heroClasses != null) {
 			builder.addAllHeroClasses(Arrays.asList(heroClasses));
 		}
@@ -100,14 +102,16 @@ public class ModelConversions {
 	}
 
 	/**
-	 * Converts an inventory record into a {@link CardDesc}, that eventually gets turned into an {@link net.demilich.metastone.game.cards.Card} in the game.
+	 * Converts an inventory record into a {@link CardDesc}, that eventually gets turned into an
+	 * {@link net.demilich.metastone.game.cards.Card} in the game.
 	 *
 	 * @param cardRecord The record from the database describing a card in a player's collection.
 	 * @param userId     The player to whom this card belongs.
 	 * @param deckId     The deck that the caller is requesting this description record for.
 	 * @return A completed card description.
 	 */
-	public static CardDesc getDescriptionFromRecord(ICardsInDeck cardRecord, String userId, String deckId, CardCatalogue cardCatalogue) {
+	public static CardDesc getDescriptionFromRecord(ICardsInDeck cardRecord, String userId, String deckId,
+																									CardCatalogue cardCatalogue) {
 		// Set up the attributes
 		var cardId = cardRecord.getCardId();
 
@@ -157,7 +161,7 @@ public class ModelConversions {
 				if (!(o instanceof ActionKey)) return false;
 				var actionKey = (ActionKey) o;
 				return sourceReference == actionKey.sourceReference &&
-						actionType == actionKey.actionType;
+					actionType == actionKey.actionType;
 			}
 
 			@Override
@@ -167,64 +171,67 @@ public class ModelConversions {
 		}
 
 		var actionMap = actions.stream()
-				.unordered()
-				.collect(Collectors.groupingBy(ActionKey::new));
+			.unordered()
+			.collect(Collectors.groupingBy(ActionKey::new));
 		var friendlyMinions = workingContext.getPlayer(playerId).getMinions();
 		var discovers = workingContext.getPlayer(playerId).getDiscoverZone();
 		var clientActions = GameActions.newBuilder()
-				.addAllAll(
-						actionMap.entrySet()
-								.stream()
-								.unordered()
-								.flatMap(kv -> {
-									if (kv.getKey().actionType == ActionType.SUMMON) {
-										return Stream.of(SpellAction.newBuilder()
-												.setSourceId(kv.getKey().sourceReference)
-												.setActionType(kv.getKey().actionType)
-												.addAllTargetKeyToActions(kv.getValue().stream().map(ga -> TargetActionPair.newBuilder()
-														.setAction(ga.getId())
-														.setFriendlyBattlefieldIndex(friendlyMinions.stream().filter(m -> Objects.equals(m.getReference(), ga.getTargetReference())).map(Minion::getIndex).findFirst().orElse(friendlyMinions.size()))
-														.setTarget((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(), EntityReference.NONE)) ? -1 :
-																ga.getTargetReference().getId())
-														.build()
-												).collect(toList())).build());
-									} else if (kv.getKey().actionType == ActionType.DISCOVER) {
-										// Find the corresponding cards in the discover zone
-										kv.getValue().sort(Comparator.comparingInt(GameAction::getId));
-										return IntStream.range(0, discovers.size())
-												.mapToObj(i -> {
-													var sourceAction = kv.getValue().get(i);
-													return SpellAction.newBuilder()
-															.setSourceId(discovers.get(i).getId())
-															.setAction(sourceAction.getId())
-															.setActionType(ActionType.DISCOVER).build();
-												});
-									} else if (kv.getValue().get(0).getTargetRequirement() == TargetSelection.NONE) {
-										var ga = kv.getValue().get(0);
-										return Stream.of(SpellAction.newBuilder()
-												.setSourceId(kv.getKey().sourceReference)
-												.setAction(ga.getId())
-												.setEntity(ga instanceof HasCard ?
-														getEntity(workingContext, ((HasCard) ga).getSourceCard(), playerId) : Entity.newBuilder())
-												.setDescription(ga.getDescription(workingContext, playerId))
-												.setActionType(ga.getActionType()).build());
-									} else {
-										return Stream.of(SpellAction.newBuilder()
-												.setSourceId(kv.getKey().sourceReference)
-												.setActionType(kv.getKey().actionType)
-												.addAllTargetKeyToActions(kv.getValue().stream().map(ga -> TargetActionPair.newBuilder()
-														.setAction(ga.getId())
-														.setTarget((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(), EntityReference.NONE)) ? -1 :
-																ga.getTargetReference().getId()).build()).collect(toList())).build());
-									}
-								})
-								.collect(toList())
-				);
+			.addAllAll(
+				actionMap.entrySet()
+					.stream()
+					.unordered()
+					.flatMap(kv -> {
+						if (kv.getKey().actionType == ActionType.SUMMON) {
+							return Stream.of(SpellAction.newBuilder()
+								.setSourceId(kv.getKey().sourceReference)
+								.setActionType(kv.getKey().actionType)
+								.addAllTargetKeyToActions(kv.getValue().stream().map(ga -> TargetActionPair.newBuilder()
+									.setAction(ga.getId())
+									.setFriendlyBattlefieldIndex(friendlyMinions.stream().filter(m -> Objects.equals(m.getReference(),
+										ga.getTargetReference())).map(Minion::getIndex).findFirst().orElse(friendlyMinions.size()))
+									.setTarget((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(),
+										EntityReference.NONE)) ? -1 :
+										ga.getTargetReference().getId())
+									.build()
+								).collect(toList())).build());
+						} else if (kv.getKey().actionType == ActionType.DISCOVER) {
+							// Find the corresponding cards in the discover zone
+							kv.getValue().sort(Comparator.comparingInt(GameAction::getId));
+							return IntStream.range(0, discovers.size())
+								.mapToObj(i -> {
+									var sourceAction = kv.getValue().get(i);
+									return SpellAction.newBuilder()
+										.setSourceId(discovers.get(i).getId())
+										.setAction(sourceAction.getId())
+										.setActionType(ActionType.DISCOVER).build();
+								});
+						} else if (kv.getValue().get(0).getTargetRequirement() == TargetSelection.NONE) {
+							var ga = kv.getValue().get(0);
+							return Stream.of(SpellAction.newBuilder()
+								.setSourceId(kv.getKey().sourceReference)
+								.setAction(ga.getId())
+								.setEntity(ga instanceof HasCard ?
+									getEntity(workingContext, ((HasCard) ga).getSourceCard(), playerId) : Entity.newBuilder())
+								.setDescription(ga.getDescription(workingContext, playerId))
+								.setActionType(ga.getActionType()).build());
+						} else {
+							return Stream.of(SpellAction.newBuilder()
+								.setSourceId(kv.getKey().sourceReference)
+								.setActionType(kv.getKey().actionType)
+								.addAllTargetKeyToActions(kv.getValue().stream().map(ga -> TargetActionPair.newBuilder()
+									.setAction(ga.getId())
+									.setTarget((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(),
+										EntityReference.NONE)) ? -1 :
+										ga.getTargetReference().getId()).build()).collect(toList())).build());
+						}
+					})
+					.collect(toList())
+			);
 
 		// Add all the action indices for compatibility purposes
 		clientActions.addAllCompatibility(actions.stream()
-				.map(GameAction::getId)
-				.collect(toList()));
+			.map(GameAction::getId)
+			.collect(toList()));
 
 		return clientActions.build();
 	}
@@ -232,7 +239,8 @@ public class ModelConversions {
 	/**
 	 * Gets a client view of a game event.
 	 * <p>
-	 * This method does not correctly consider security issues accurately. It leaks which cards the opponent draws and which secrets the opponent plays. In the future, it will respect these limitations.
+	 * This method does not correctly consider security issues accurately. It leaks which cards the opponent draws and 
+	 * which secrets the opponent plays. In the future, it will respect these limitations.
 	 *
 	 * @param event    A game engine event.
 	 * @param playerId The player requesting the view.
@@ -270,11 +278,12 @@ public class ModelConversions {
 		if (card != null) {
 			var cardEvent = CardEvent.newBuilder();
 			if (card.getCardType() == CardType.SPELL
-					&& card.isSecret()
-					&& card.getOwner() != playerId
-					&& !(event instanceof SecretRevealedEvent)) {
+				&& card.isSecret()
+				&& card.getOwner() != playerId
+				&& !(event instanceof SecretRevealedEvent)) {
 				String[] cardClasses = card.getHeroClasses();
-				var censoredCard = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), cardClasses != null && cardClasses.length > 0 ? cardClasses : new String[]{HeroClass.ANY});
+				var censoredCard = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(),
+					cardClasses != null && cardClasses.length > 0 ? cardClasses : new String[]{HeroClass.ANY});
 				if (source != null) {
 					clientEvent.setSource(censoredCard);
 				}
@@ -306,8 +315,8 @@ public class ModelConversions {
 		}
 
 		clientEvent
-				.setIsTargetPlayerLocal(isTargetPlayerLocal)
-				.setIsSourcePlayerLocal(isSourcePlayerLocal);
+			.setIsTargetPlayerLocal(isTargetPlayerLocal)
+			.setIsSourcePlayerLocal(isSourcePlayerLocal);
 
 		// Only a handful of special cases need to be dealt with
 		if (event instanceof DamageEvent) {
@@ -318,15 +327,17 @@ public class ModelConversions {
 		if (event instanceof JoustEvent) {
 			var joustEvent = (JoustEvent) event;
 			clientEvent
-					.setJoust(GameEvent.JoustMessage.newBuilder().setOpponentCard(getEntity(workingContext, joustEvent.getOpponentCard(), playerId))
-							.setOwnCard(getEntity(workingContext, joustEvent.getOwnCard(), playerId)));
+				.setJoust(GameEvent.JoustMessage.newBuilder().setOpponentCard(getEntity(workingContext,
+						joustEvent.getOpponentCard(), playerId))
+					.setOwnCard(getEntity(workingContext, joustEvent.getOwnCard(), playerId)));
 		}
 
 		return clientEvent;
 	}
 
 	/**
-	 * Given a context and a specification of who the local and opposing players are, generate a client game state view. This view does not leak secure information.
+	 * Given a context and a specification of who the local and opposing players are, generate a client game state view.
+	 * This view does not leak secure information.
 	 *
 	 * @param workingContext A context containing the complete game state.
 	 * @param local          The local player.
@@ -374,12 +385,13 @@ public class ModelConversions {
 		for (var secret : opponent.getSecrets()) {
 			var secretClasses = secret.getSourceCard().getHeroClasses();
 			var entity = Entity.newBuilder()
-					.setId(secret.getId())
-					.setEntityType(EntityType.SECRET)
-					.setOwner(secret.getOwner())
-					.addAllHeroClasses(Arrays.asList(secretClasses != null && secretClasses.length > 0 ? secretClasses : new String[]{HeroClass.ANY}))
-					.setLocation(toClientLocation(secret.getEntityLocation()))
-					.build();
+				.setId(secret.getId())
+				.setEntityType(EntityType.SECRET)
+				.setOwner(secret.getOwner())
+				.addAllHeroClasses(Arrays.asList(secretClasses != null && secretClasses.length > 0 ? secretClasses :
+					new String[]{HeroClass.ANY}))
+				.setLocation(toClientLocation(secret.getEntityLocation()))
+				.build();
 			opposingSecrets.add(entity);
 		}
 
@@ -387,25 +399,25 @@ public class ModelConversions {
 
 		// Get all quest information
 		entities.addAll(
-				Stream.concat(local.getQuests().stream(), opponent.getQuests().stream())
-						.map(e -> getEntity(workingContext, e, localPlayerId).build())
-						.collect(toList())
+			Stream.concat(local.getQuests().stream(), opponent.getQuests().stream())
+				.map(e -> getEntity(workingContext, e, localPlayerId).build())
+				.collect(toList())
 		);
 
 		List<Entity> playerEntities = new ArrayList<>();
 		// Create the heroes
 		for (var player : Arrays.asList(local, opponent)) {
 			var playerEntity = Entity.newBuilder()
-					.setId(player.getId())
-					.setName(player.getName())
-					.setEntityType(EntityType.PLAYER)
-					.setOwner(player.getId())
-					.setLockedMana(player.getLockedMana())
-					.setMaxMana(player.getMaxMana())
-					.setMana(player.getMana())
-					.setLocation(toClientLocation(player.getEntityLocation()))
-					.setIsStartingTurn(player.hasAttribute(Attribute.STARTING_TURN))
-					.setGameStarted(player.hasAttribute(Attribute.GAME_STARTED));
+				.setId(player.getId())
+				.setName(player.getName())
+				.setEntityType(EntityType.PLAYER)
+				.setOwner(player.getId())
+				.setLockedMana(player.getLockedMana())
+				.setMaxMana(player.getMaxMana())
+				.setMana(player.getMana())
+				.setLocation(toClientLocation(player.getEntityLocation()))
+				.setIsStartingTurn(player.hasAttribute(Attribute.STARTING_TURN))
+				.setGameStarted(player.hasAttribute(Attribute.GAME_STARTED));
 			playerEntities.add(playerEntity.build());
 			// The heroes may have wound up in the graveyard
 			var heroEntity = getEntity(workingContext, player.getHero(), localPlayerId);
@@ -421,9 +433,9 @@ public class ModelConversions {
 				heroEntity.setCharges(player.getAttributeValue(Attribute.IMBUE));
 			}
 			heroEntity
-					.setMana(player.getMana())
-					.setMaxMana(player.getMaxMana())
-					.setLockedMana(player.getLockedMana());
+				.setMana(player.getMana())
+				.setMaxMana(player.getMaxMana())
+				.setLockedMana(player.getLockedMana());
 			playerEntities.add(heroEntity.build());
 			if (!player.getHeroPowerZone().isEmpty()) {
 				var heroPowerEntity = getEntity(workingContext, player.getHeroPowerZone().get(0), localPlayerId);
@@ -439,78 +451,81 @@ public class ModelConversions {
 
 		// Get local discoveries
 		entities.addAll(local.getDiscoverZone().stream()
-				.map(c -> getEntity(workingContext, c, localPlayerId).build())
-				.collect(toList()));
+			.map(c -> getEntity(workingContext, c, localPlayerId).build())
+			.collect(toList()));
 
 		// If the opponent's discovers are uncensored, add them
 		entities.addAll(opponent.getDiscoverZone().stream()
-				.filter(c -> c.hasAttribute(Attribute.UNCENSORED))
-				.map(c -> getEntity(workingContext, c, localPlayerId).build())
-				.collect(toList()));
+			.filter(c -> c.hasAttribute(Attribute.UNCENSORED))
+			.map(c -> getEntity(workingContext, c, localPlayerId).build())
+			.collect(toList()));
 
 		// Get the heroes that may have wound up in the graveyard
-		var graveyardHeroes = Stream.of(local.getGraveyard().stream(), opponent.getGraveyard().stream(), local.getRemovedFromPlay().stream(), opponent.getRemovedFromPlay().stream()).flatMap(e -> e)
-				.filter(e -> e.getEntityType() == EntityType.HERO)
-				.map(h -> {
-					var e = getEntity(workingContext, h, localPlayerId);
-					var owner = h.getOwner() == local.getId() ? local : opponent;
-					e
-							.setMana(owner.getMana())
-							.setMaxMana(owner.getMaxMana())
-							.setLockedMana(owner.getLockedMana());
-					return e.build();
-				})
-				// Don't include heroes that have already been added
-				.filter(e -> playerEntities.stream().noneMatch(v -> v.getId() == e.getId()))
-				.collect(toList());
+		var graveyardHeroes = Stream.of(local.getGraveyard().stream(), opponent.getGraveyard().stream(),
+				local.getRemovedFromPlay().stream(), opponent.getRemovedFromPlay().stream()).flatMap(e -> e)
+			.filter(e -> e.getEntityType() == EntityType.HERO)
+			.map(h -> {
+				var e = getEntity(workingContext, h, localPlayerId);
+				var owner = h.getOwner() == local.getId() ? local : opponent;
+				e
+					.setMana(owner.getMana())
+					.setMaxMana(owner.getMaxMana())
+					.setLockedMana(owner.getLockedMana());
+				return e.build();
+			})
+			// Don't include heroes that have already been added
+			.filter(e -> playerEntities.stream().noneMatch(v -> v.getId() == e.getId()))
+			.collect(toList());
 		entities.addAll(graveyardHeroes);
 
 		// Include local set aside zone
 		entities.addAll(local.getSetAsideZone().stream()
-				.map(c -> getEntity(workingContext, c, localPlayerId).build())
-				.collect(toList()));
+			.map(c -> getEntity(workingContext, c, localPlayerId).build())
+			.collect(toList()));
 
 		var visibleEntityIds = entities.stream().map(Entity::getId).collect(Collectors.toSet());
 
 		entities.addAll(workingContext.getTriggers()
-				.stream()
-				.filter(f -> f instanceof Enchantment && visibleEntityIds.contains(f.getHostReference().getId()))
-				.map(t -> getEntity(workingContext, (Enchantment) t, localPlayerId).build())
-				.collect(toList()));
+			.stream()
+			.filter(f -> f instanceof Enchantment && visibleEntityIds.contains(f.getHostReference().getId()))
+			.map(t -> getEntity(workingContext, (Enchantment) t, localPlayerId).build())
+			.collect(toList()));
 
 		// Any missing entities will get a stand-in entry
 		entities.addAll(workingContext.getEntities().filter(e -> !visibleEntityIds.contains(e.getId()))
-				.map(e -> Entity.newBuilder()
-						.setId(e.getId())
-						.setOwner(e.getOwner())
-						.setLocation(toClientLocation(e.getEntityLocation()))
-						.setEntityType(e.getEntityType()).build())
-				.collect(toList()));
+			.map(e -> Entity.newBuilder()
+				.setId(e.getId())
+				.setOwner(e.getOwner())
+				.setLocation(toClientLocation(e.getEntityLocation()))
+				.setEntityType(e.getEntityType()).build())
+			.collect(toList()));
 
 		// Sort the entities by ID
 		entities.sort(Comparator.comparingInt(Entity::getId));
 
 		return GameState.newBuilder()
-				.setIsLocalPlayerTurn(localPlayerId == workingContext.getActivePlayerId())
-				.addAllEntities(entities)
-				.setTurnNumber(workingContext.getTurn())
-				// Always use millis consistently everywhere
-				.setTimestamp(System.currentTimeMillis())
-				.setTurnState(workingContext.getTurnState().toString());
+			.setIsLocalPlayerTurn(localPlayerId == workingContext.getActivePlayerId())
+			.addAllEntities(entities)
+			.setTurnNumber(workingContext.getTurn())
+			// Always use millis consistently everywhere
+			.setTimestamp(System.currentTimeMillis())
+			.setTurnState(workingContext.getTurnState().toString());
 	}
 
 	/**
-	 * Gets a client view of the specified game engine entity. Tries its best to not leak information given the specified user.
+	 * Gets a client view of the specified game engine entity. Tries its best to not leak information given the 
+	 * specified user.
 	 *
 	 * @param workingContext A context to generate the entity view for.
 	 * @param entity         The entity.
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
-	static Entity.Builder getEntity(GameContext workingContext, net.demilich.metastone.game.entities.Entity entity, int localPlayerId) {
+	static Entity.Builder getEntity(GameContext workingContext, net.demilich.metastone.game.entities.Entity entity,
+																	int localPlayerId) {
 		if (entity == null) {
 			return Entity.newBuilder()
-					.setId(-1);
+				.setId(-1);
 		}
 
 		// TODO: Shouldn't this use isAssignableFrom?
@@ -525,8 +540,8 @@ public class ModelConversions {
 		}
 
 		return Entity.newBuilder().setId(entity.getId())
-				.setOwner(entity.getOwner())
-				.setLocation(toClientLocation(entity.getEntityLocation()));
+			.setOwner(entity.getOwner())
+			.setLocation(toClientLocation(entity.getEntityLocation()));
 	}
 
 	/**
@@ -540,7 +555,7 @@ public class ModelConversions {
 	static Entity.Builder getEntity(GameContext workingContext, Actor actor, int localPlayerId) {
 		if (actor == null) {
 			return Entity.newBuilder()
-					.setId(-1);
+				.setId(-1);
 		}
 
 		// For the purposes of determining whether or not the game is over, we will calculate the match result once
@@ -552,11 +567,11 @@ public class ModelConversions {
 
 		var card = actor.getSourceCard();
 		var entity = Entity.newBuilder()
-				.setDescription(actor.getDescription(workingContext, workingContext.getPlayer(actor.getOwner())))
-				.setName(actor.getName())
-				.setId(actor.getId())
-				.setEntityType(actor.getEntityType())
-				.setCardId(card.getCardId());
+			.setDescription(actor.getDescription(workingContext, workingContext.getPlayer(actor.getOwner())))
+			.setName(actor.getName())
+			.setId(actor.getId())
+			.setEntityType(actor.getEntityType())
+			.setCardId(card.getCardId());
 
 		// TODO: Why are we computing extra attack?
 		var extraAttack = 0;
@@ -574,7 +589,8 @@ public class ModelConversions {
 		entity.setLocation(toClientLocation(actor.getEntityLocation()));
 		entity.setManaCost(card.getBaseManaCost());
 		String[] cardClasses = card.getHeroClasses();
-		entity.addAllHeroClasses(Arrays.asList(cardClasses != null && cardClasses.length > 0 ? cardClasses : new String[]{HeroClass.ANY}));
+		entity.addAllHeroClasses(Arrays.asList(cardClasses != null && cardClasses.length > 0 ? cardClasses :
+			new String[]{HeroClass.ANY}));
 		entity.setCardSet(Objects.toString(card.getCardSet()));
 		entity.setRarity(card.getRarity());
 		entity.setBaseManaCost(card.getBaseManaCost());
@@ -582,9 +598,9 @@ public class ModelConversions {
 		entity.setDeathrattles(actor.hasAttribute(Attribute.DEATHRATTLES));
 		entity.setCardType(card.getCardType());
 		var playable = actor.getOwner() == workingContext.getActivePlayerId()
-				&& actor.getOwner() == localPlayerId
-				&& workingContext.getStatus() == GameStatus.RUNNING
-				&& actor.canAttackThisTurn(workingContext);
+			&& actor.getOwner() == localPlayerId
+			&& workingContext.getStatus() == GameStatus.RUNNING
+			&& actor.canAttackThisTurn(workingContext);
 		entity.setPlayable(playable);
 		entity.setAttack(actor.getAttack());
 		entity.setBaseAttack(actor.getBaseAttack());
@@ -592,14 +608,14 @@ public class ModelConversions {
 		entity.setHp(actor.getHp());
 		entity.setMaxHp(actor.getMaxHp());
 		entity.setUnderAura(actor.hasAttribute(Attribute.AURA_ATTACK_BONUS)
-				|| actor.hasAttribute(Attribute.AURA_HP_BONUS)
-				|| actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)
-				|| actor.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS)
-				|| actor.hasAttribute(Attribute.AURA_TAUNT)
-				|| actor.hasAttribute(Attribute.HP_BONUS)
-				|| actor.hasAttribute(Attribute.ATTACK_BONUS)
-				|| actor.hasAttribute(Attribute.CONDITIONAL_ATTACK_BONUS)
-				|| actor.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS));
+			|| actor.hasAttribute(Attribute.AURA_HP_BONUS)
+			|| actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)
+			|| actor.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS)
+			|| actor.hasAttribute(Attribute.AURA_TAUNT)
+			|| actor.hasAttribute(Attribute.HP_BONUS)
+			|| actor.hasAttribute(Attribute.ATTACK_BONUS)
+			|| actor.hasAttribute(Attribute.CONDITIONAL_ATTACK_BONUS)
+			|| actor.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS));
 		entity.setFrozen(actor.hasAttribute(Attribute.FROZEN));
 		entity.setCharge(actor.hasAttribute(Attribute.CHARGE) || actor.hasAttribute(Attribute.AURA_CHARGE));
 		entity.setImmune(actor.hasAttribute(Attribute.IMMUNE) || actor.hasAttribute(Attribute.AURA_IMMUNE));
@@ -635,17 +651,17 @@ public class ModelConversions {
 	static Entity.Builder getEntity(GameContext workingContext, Enchantment enchantment, int localPlayerId) {
 		if (enchantment == null) {
 			return Entity.newBuilder()
-					.setId(-1);
+				.setId(-1);
 		}
 
 		var entity = getEntity(workingContext, enchantment.getSourceCard(), localPlayerId);
 		if (enchantment instanceof Secret
-				&& localPlayerId != enchantment.getOwner()) {
+			&& localPlayerId != enchantment.getOwner()) {
 			// Censor information about the secret if it does not belong to the player.
 			entity
-					.setName("Secret")
-					.setDescription("Secret")
-					.setCardId("hidden");
+				.setName("Secret")
+				.setDescription("Secret")
+				.setCardId("hidden");
 		}
 		EntityType entityType;
 		if (enchantment instanceof Secret) {
@@ -657,19 +673,20 @@ public class ModelConversions {
 		}
 
 		entity
-				.setId(enchantment.getId())
-				.setFires(enchantment.getFires())
-				.setEntityType(entityType)
-				.setLocation(toClientLocation(enchantment.getEntityLocation()))
-				.setOwner(enchantment.getOwner())
-				.setHost(enchantment.getHostReference() != null ? enchantment.getHostReference().getId() : -1)
-				.setEnchantmentType(enchantment.getClass().getSimpleName())
-				.setPlayable(false);
+			.setId(enchantment.getId())
+			.setFires(enchantment.getFires())
+			.setEntityType(entityType)
+			.setLocation(toClientLocation(enchantment.getEntityLocation()))
+			.setOwner(enchantment.getOwner())
+			.setHost(enchantment.getHostReference() != null ? enchantment.getHostReference().getId() : -1)
+			.setEnchantmentType(enchantment.getClass().getSimpleName())
+			.setPlayable(false);
 		return entity;
 	}
 
 	/**
-	 * A view of a card. This does not censor information from opposing player's--the calling method should handle the censoring.
+	 * A view of a card. This does not censor information from opposing player's--the calling method should handle the 
+	 * censoring.
 	 *
 	 * @param workingContext The context to generate the client view for.
 	 * @param card           The card entity.
@@ -679,25 +696,25 @@ public class ModelConversions {
 	public static Entity.Builder getEntity(GameContext workingContext, Card card, int localPlayerId) {
 		if (card == null) {
 			return Entity.newBuilder()
-					.setId(-1);
+				.setId(-1);
 		}
 
 		var entity = Entity.newBuilder()
-				.setEntityType(EntityType.CARD)
-				.setName(card.getName())
-				.setId(card.getId())
-				.setCardId(card.getCardId());
+			.setEntityType(EntityType.CARD)
+			.setName(card.getName())
+			.setId(card.getId())
+			.setCardId(card.getCardId());
 		var owner = card.getOwner();
 		Player owningPlayer;
 		var description = card.getDescription();
 		if (owner != -1) {
 			if (card.getZone() == com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones.HAND
-					|| card.getZone() == com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones.SET_ASIDE_ZONE
-					|| card.getZone() == com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones.HERO_POWER
-					&& owner == localPlayerId) {
+				|| card.getZone() == com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones.SET_ASIDE_ZONE
+				|| card.getZone() == com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones.HERO_POWER
+				&& owner == localPlayerId) {
 				var playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
-						&& card.getOwner() == workingContext.getActivePlayerId()
-						&& localPlayerId == card.getOwner();
+					&& card.getOwner() == workingContext.getActivePlayerId()
+					&& localPlayerId == card.getOwner();
 				entity.setPlayable(playable);
 				entity.setManaCost(workingContext.getLogic().getModifiedManaCost(workingContext.getPlayer(owner), card));
 			} else {
@@ -715,7 +732,7 @@ public class ModelConversions {
 		}
 
 		entity.setDescription(description.replace("$", "").replace("#", "")
-				.replace("[", "").replace("]", ""));
+			.replace("[", "").replace("]", ""));
 
 		entity.setCardSet(Objects.toString(card.getCardSet()));
 		entity.setRarity(card.getRarity());
@@ -737,7 +754,8 @@ public class ModelConversions {
 		entity.addAllTooltips(Arrays.asList(card.getDesc().getTooltips()));
 
 		String[] cardHeroClasses = card.getHeroClasses();
-		entity.addAllHeroClasses(Arrays.asList(cardHeroClasses != null && cardHeroClasses.length > 0 ? cardHeroClasses : new String[]{HeroClass.ANY}));
+		entity.addAllHeroClasses(Arrays.asList(cardHeroClasses != null && cardHeroClasses.length > 0 ? cardHeroClasses :
+			new String[]{HeroClass.ANY}));
 
 		// Put the condition met glow on the card
 		if (card.getZone() == Zones.HAND && entity.getPlayable()) {
@@ -745,8 +763,10 @@ public class ModelConversions {
 		}
 		entity.setCardType(card.getCardType());
 		var hostsTrigger = !workingContext.getLogic().getActiveTriggers(card.getReference()).isEmpty();
-		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
-		// I'd personally recommend making the glowing border effect be a custom programmable part of the .json file -doombubbles
+		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its 
+		//  border yellow.
+		// I'd personally recommend making the glowing border effect be a custom programmable part of the .json file 
+		// -doombubbles
 		switch (card.getCardType()) {
 			case HERO:
 				// Retrieve the weapon attack
@@ -764,8 +784,8 @@ public class ModelConversions {
 				entity.setBaseHp(card.getBaseHp());
 				entity.setMaxHp(card.getBaseHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS));
 				entity.setUnderAura(card.getBonusAttack() > 0
-						|| card.getBonusAttack() > 0
-						|| hostsTrigger);
+					|| card.getBonusAttack() > 0
+					|| hostsTrigger);
 				entity.addAllTribes(Arrays.asList(card.getRaces()));
 				// Include handbuffs from WhereverTheyAre enchantments. Also use this for other effects!
 				visualizeEffectsInHand(workingContext, owningPlayer.getId(), card, entity);
@@ -776,8 +796,8 @@ public class ModelConversions {
 				entity.setMaxHp(card.getBaseDurability() + card.getBonusDurability());
 				entity.setAttack(card.getDamage() + card.getBonusDamage());
 				entity.setUnderAura(card.getBonusDamage() > 0
-						|| card.getBonusDurability() > 0
-						|| hostsTrigger);
+					|| card.getBonusDurability() > 0
+					|| hostsTrigger);
 				break;
 			case SPELL:
 			case HERO_POWER:
@@ -804,28 +824,33 @@ public class ModelConversions {
 	 */
 	static EntityLocation toClientLocation(net.demilich.metastone.game.entities.EntityLocation location) {
 		return EntityLocation.newBuilder()
-				.setZone(location.getZone())
-				.setIndex(location.getIndex()).build();
+			.setZone(location.getZone())
+			.setIndex(location.getIndex())
+			.setPlayer(location.getPlayer())
+			.build();
 	}
 
 	/**
-	 * Uses information from enchantments like {@link net.demilich.metastone.game.spells.aura.BuffAura} and {@link WhereverTheyAreEnchantment} to add the appropriate hand buff stats.
+	 * Uses information from enchantments like {@link net.demilich.metastone.game.spells.aura.BuffAura} and
+	 * {@link WhereverTheyAreEnchantment} to add the appropriate hand buff stats.
 	 *
 	 * @param context
 	 * @param playerId
 	 * @param entity
 	 * @param state
 	 */
-	static void visualizeEffectsInHand(@NotNull GameContext context, int playerId, @NotNull net.demilich.metastone.game.entities.Entity entity, @NotNull Entity.Builder state) {
+	static void visualizeEffectsInHand(@NotNull GameContext context, int playerId,
+																		 @NotNull net.demilich.metastone.game.entities.Entity entity,
+																		 @NotNull Entity.Builder state) {
 		var attackBonus = 0;
 		var hpBonus = 0;
 		var hasTaunt = false;
 		hasTaunt |= entity.hasAttribute(Attribute.CARD_TAUNT);
 		for (var e : context.getTriggers()
-				.stream()
-				.filter(e -> !e.isExpired() && e.getOwner() == playerId && e instanceof WhereverTheyAreEnchantment)
-				.map(WhereverTheyAreEnchantment.class::cast)
-				.collect(Collectors.toList())) {
+			.stream()
+			.filter(e -> !e.isExpired() && e.getOwner() == playerId && e instanceof WhereverTheyAreEnchantment)
+			.map(WhereverTheyAreEnchantment.class::cast)
+			.collect(Collectors.toList())) {
 			List<SpellDesc> spells;
 			if (e.getSpell() == null) {
 				return;
@@ -837,9 +862,12 @@ public class ModelConversions {
 			}
 			for (var desc : spells) {
 				if (BuffSpell.class.isAssignableFrom(desc.getDescClass())) {
-					attackBonus += desc.getValue(SpellArg.ATTACK_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
-					hpBonus += desc.getValue(SpellArg.HP_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
-					var value = desc.getValue(SpellArg.HP_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
+					attackBonus += desc.getValue(SpellArg.ATTACK_BONUS, context, context.getPlayer(playerId), entity,
+						context.getPlayer(playerId), 0);
+					hpBonus += desc.getValue(SpellArg.HP_BONUS, context, context.getPlayer(playerId), entity,
+						context.getPlayer(playerId), 0);
+					var value = desc.getValue(SpellArg.HP_BONUS, context, context.getPlayer(playerId), entity,
+						context.getPlayer(playerId), 0);
 					attackBonus += value;
 					hpBonus += value;
 				}
@@ -863,17 +891,18 @@ public class ModelConversions {
 	}
 
 	@NotNull
-	public static GameDeck getGameDeck(String userId, DecksGetResponse deckCollection, @NotNull CardCatalogue cardCatalogue) {
+	public static GameDeck getGameDeck(String userId, DecksGetResponse deckCollection,
+																		 @NotNull CardCatalogue cardCatalogue) {
 		var deckId = deckCollection.getCollection().getId();
 		var deck = new GameDeck();
 		deck.setDeckId(deckCollection.getCollection().getId());
 		// TODO: Deal with how we retrieve cards here
 		deck.setCards(deckCollection.getCollection().getInventoryList().stream()
-				.map(cr -> Objects.requireNonNull(getDescriptionFromRecord(new CardsInDeck()
-						.setCardId(cr.getEntity().getCardId())
-						.setId(cr.getId())
-						.setDeckId(deckId), userId, deckId, cardCatalogue)).create())
-				.collect(Collectors.toCollection(CardArrayList::new)));
+			.map(cr -> Objects.requireNonNull(getDescriptionFromRecord(new CardsInDeck()
+				.setCardId(cr.getEntity().getCardId())
+				.setId(cr.getId())
+				.setDeckId(deckId), userId, deckId, cardCatalogue)).create())
+			.collect(Collectors.toCollection(CardArrayList::new)));
 		deck.setFormat(cardCatalogue.getFormat(deckCollection.getCollection().getFormat()));
 		deck.setHeroClass(deckCollection.getCollection().getHeroClass());
 		deck.setName(deckCollection.getCollection().getName());
@@ -887,12 +916,13 @@ public class ModelConversions {
 	 * @return
 	 */
 	static EntityChangeSet visibleEntities(
-			com.hiddenswitch.spellsource.common.GameState gameState) {
+		com.hiddenswitch.spellsource.common.GameState gameState) {
 		// TODO: Return array of indices
-		return EntityChangeSet.newBuilder().addAllIds(Stream.concat(gameState.getPlayer1().getLookup().stream(), gameState.getPlayer2().getLookup().stream())
-				.sorted(Games.ENTITY_NATURAL_ORDER)
-				.map(net.demilich.metastone.game.entities.Entity::getId)
-				.collect(toList())).build();
+		return EntityChangeSet.newBuilder().addAllIds(Stream.concat(gameState.getPlayer1().getLookup().stream(),
+				gameState.getPlayer2().getLookup().stream())
+			.sorted(Games.ENTITY_NATURAL_ORDER)
+			.map(net.demilich.metastone.game.entities.Entity::getId)
+			.collect(toList())).build();
 	}
 
 	/**
@@ -930,8 +960,8 @@ public class ModelConversions {
 		try {
 			// Replay the game from a trace while capturing the {@link Replay} object.
 			var replayCtx = originalCtx.getTrace().replayContext(
-					false,
-					augmentReplayWithCtx
+				false,
+				augmentReplayWithCtx
 			);
 
 			// Append the final game states / deltas.
@@ -944,7 +974,8 @@ public class ModelConversions {
 	}
 
 	@NotNull
-	public static <T extends Message> T fromStringMap(T existing, String prefix, String separator, Map<String, String> map) {
+	public static <T extends Message> T fromStringMap(T existing, String prefix, String separator,
+																										Map<String, String> map) {
 		// process environment variables into jackson object
 		prefix = prefix.toLowerCase(Locale.ROOT);
 		// first decode into a map

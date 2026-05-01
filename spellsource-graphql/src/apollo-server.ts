@@ -20,9 +20,28 @@ type Handler = (req: Request, res: Response, next: NextFunction) => void;
 export const setupApolloServer = async (app: Application, httpServer: Server): Promise<ApolloServer> => {
   const schema = await createFullSchema();
 
+  // Strawberry Shake passes the auth token via `?accessToken=<jwt>` on the WS URL
+  // (see SpellsourceClient.ConfigureWebSocketClient on the client). Extract it during
+  // upgrade so subscription operations can forward it to the Java backend.
+  const tokenFromUrl = (url: string | undefined): string | undefined => {
+    if (!url) return undefined;
+    const parsed = new URL(url, "http://localhost");
+    const token = parsed.searchParams.get("accessToken");
+    return token && token !== "0" ? token : undefined;
+  };
+
   // Modern graphql-transport-ws protocol (graphql-ws library)
   const graphqlWsServer = new WebSocketServer({ noServer: true });
-  const serverCleanup = useServer({ schema }, graphqlWsServer);
+  const serverCleanup = useServer(
+    {
+      schema,
+      // The context returned here is passed as `executionRequest.context` to
+      // schema executors — including the wsExecutor in spellsource.ts which
+      // reads `token` to forward auth to the Java backend's connection_init.
+      context: (ctx) => ({ token: tokenFromUrl(ctx.extra.request.url) }),
+    },
+    graphqlWsServer,
+  );
 
   // Legacy graphql-ws subprotocol (subscriptions-transport-ws library) — for Strawberry Shake clients
   const legacyWsServer = new WebSocketServer({ noServer: true });
@@ -31,6 +50,19 @@ export const setupApolloServer = async (app: Application, httpServer: Server): P
       schema,
       execute: execute as any,
       subscribe: subscribe as any,
+      onConnect: (_params: any, _ws: any, connectionContext: any) => {
+        // onConnect's return value becomes the operation context for execute/subscribe.
+        const token = tokenFromUrl(connectionContext?.request?.url);
+        console.log(`[legacy-ws] client connected, hasToken=${!!token}`);
+        return { token };
+      },
+      onOperation: (_msg: any, params: any) => {
+        console.log("[legacy-ws] operation started:", JSON.stringify(params.query?.substring(0, 200)));
+        return params;
+      },
+      onDisconnect: () => {
+        console.log("[legacy-ws] client disconnected");
+      },
     },
     legacyWsServer,
   );
@@ -44,12 +76,20 @@ export const setupApolloServer = async (app: Application, httpServer: Server): P
       ? protocolHeader
       : protocolHeader?.split(",").map((p) => p.trim());
 
+    console.log(`[ws-upgrade] protocols requested: ${JSON.stringify(protocols)}`);
+
     const wss =
       protocols?.includes(GRAPHQL_WS) && !protocols.includes(GRAPHQL_TRANSPORT_WS_PROTOCOL)
         ? legacyWsServer
         : graphqlWsServer;
 
+    console.log(`[ws-upgrade] routing to: ${wss === legacyWsServer ? "legacy" : "modern"}`);
+
     wss.handleUpgrade(req, socket, head, (ws) => {
+      // Log raw messages from the client
+      ws.on("message", (data) => {
+        console.log(`[ws-message] ${data.toString().substring(0, 500)}`);
+      });
       wss.emit("connection", ws, req);
     });
   });
