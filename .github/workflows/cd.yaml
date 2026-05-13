@@ -19,7 +19,7 @@ jobs:
       - name: Checkout public submodules
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"
-          git submodule update --init vertx-jooq-fork
+          git submodule update --init vertx-jooq-fork spellsource-ts-proto/ts-proto
       - uses: actions/setup-java@v4
         with:
           java-version: '24'
@@ -48,7 +48,7 @@ jobs:
       - name: Checkout public submodules
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"
-          git submodule update --init vertx-jooq-fork
+          git submodule update --init vertx-jooq-fork spellsource-ts-proto/ts-proto
       - uses: actions/setup-java@v4
         with:
           java-version: '24'
