@@ -3,7 +3,8 @@ import React, { FunctionComponent, useContext, useEffect, useState } from "react
 import { CardType } from "../../__generated__/spellsource-game";
 import { CollectionCardFragment, CollectionCardsOrderBy, useGetCollectionCardsQuery } from "../../__generated__/client";
 import { CardDef } from "./card-display";
-import { Button as RBButton, Dropdown, Form, Table } from "react-bootstrap";
+import { Dropdown, Form, Table } from "react-bootstrap";
+import { Button } from "../typed-bootstrap";
 import { toTitleCaseCorrected } from "../../lib/blockly-spellsource-utils";
 import { clamp } from "lodash";
 import DropdownToggle from "react-bootstrap/DropdownToggle";
@@ -15,8 +16,6 @@ import { useDebounce } from "react-use";
 import Link from "next/link";
 import { useDrag, useDrop } from "react-dnd";
 import { CardCache } from "../../pages/collection";
-
-const Button = RBButton as React.ComponentType<any>;
 
 const ShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON", "HERO", "HERO_POWER", "CLASS"];
 const DefaultShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON"];

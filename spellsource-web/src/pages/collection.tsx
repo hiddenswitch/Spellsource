@@ -10,7 +10,8 @@ import React, { createContext, FunctionComponent, useEffect, useMemo, useRef, us
 import { getSession, useSession } from "next-auth/react";
 import Collection, { textDecorationStyle } from "../components/collection/collection";
 import Head from "next/head";
-import { Button, Col, Container, Dropdown, Offcanvas, OffcanvasBody, Row } from "react-bootstrap";
+import { Col, Container, Dropdown, Offcanvas, OffcanvasBody, Row } from "react-bootstrap";
+import { Button } from "../components/typed-bootstrap";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { CardDef, toRgbaString } from "../components/collection/card-display";

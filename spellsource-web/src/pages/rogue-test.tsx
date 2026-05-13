@@ -2,7 +2,8 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import Layout from "../components/creative-layout";
 import { useGetClassesQuery, useGetUserIdTestQuery, useStartRogueRunMutation } from "../__generated__/client";
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+import { Button } from "../components/typed-bootstrap";
 
 export const getServerSideProps: GetServerSideProps = async (context) => ({
   props: { session: await getSession(context) },
