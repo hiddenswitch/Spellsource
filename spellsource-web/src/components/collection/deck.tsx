@@ -1,7 +1,9 @@
 import React, { FunctionComponent, useContext } from "react";
 import _, { isEqual } from "lodash";
 import { textDecorationStyle } from "./collection";
-import { Button } from "react-bootstrap";
+import { Button as RBButton } from "react-bootstrap";
+
+const Button = RBButton as React.ComponentType<any>;
 import { useDrag, useDrop } from "react-dnd";
 import { GetDeckQuery, GetDeckQueryVariables, GetDecksQuery, GetDecksQueryVariables, useCreateDeckMutation, useDeleteDeckMutation, useRenameDeckMutation, useSetCardsInDeckMutation } from "../../__generated__/client";
 import { ListActions } from "react-use/lib/useList";
