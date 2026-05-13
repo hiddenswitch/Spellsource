@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "ANY",
   "rarity": "LEGENDARY",
-  "description": "",
+  "description": "At the end of your turns, reduce the cost of cards in your hand by (1).",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

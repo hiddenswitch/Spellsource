@@ -8,8 +8,11 @@ fragment entitySummary on Entity {
     rarity
     owner
     manaCost
+    baseManaCost
     attack
+    baseAttack
     hp
+    baseHp
     maxHp
     armor
     playable

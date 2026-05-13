@@ -152,7 +152,7 @@ public class RogueManager {
 		} else {
 			var random = new XORShiftRandom(seedState);
 			var newCards = getCardChoices(random, rogueRun.getHeroClass(), choice.getType(),
-				choice.getCanPick() - choices.size(), deck);
+				choices.size(), deck);
 			seedState = random.getState();
 
 			var newChoices = choice.getCards();
