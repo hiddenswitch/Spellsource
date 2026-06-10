@@ -1,0 +1,66 @@
+apiVersion: jobset.x-k8s.io/v1alpha2
+kind: JobSet
+metadata:
+  name: gsvb-trainer
+  namespace: ${NAMESPACE}
+spec:
+  suspend: false
+  replicatedJobs:
+    - name: island
+      replicas: ${REPLICAS}
+      template:
+        spec:
+          completionMode: Indexed
+          completions: 1
+          parallelism: 1
+          template:
+            spec:
+              restartPolicy: Never
+              containers:
+                - name: trainer
+                  image: ${IMAGE}
+                  args:
+                    - local
+                    - --generations=${GENERATIONS}
+                    - --population=${POPULATION}
+                    - --matchups-per-eval=${MATCHUPS_PER_EVAL}
+                    - --games-per-matchup=${GAMES_PER_MATCHUP}
+                    - --gsvb-depth=${GSVB_DEPTH}
+                    - --gsvb-timeout=${GSVB_TIMEOUT}
+                    - --sigma=${SIGMA}
+                    - --mlflow-uri=${MLFLOW_URI}
+                    - --session=${SESSION}
+                    - --game-timeout=${GAME_TIMEOUT}
+                  env:
+                    - name: ISLAND_INDEX
+                      valueFrom:
+                        fieldRef:
+                          fieldPath: metadata.labels['jobset.sigs.k8s.io/job-index']
+                    - name: MLFLOW_TRACKING_USERNAME
+                      valueFrom:
+                        secretKeyRef:
+                          name: mlflow-auth-admin-secret
+                          key: username
+                    - name: MLFLOW_TRACKING_PASSWORD
+                      valueFrom:
+                        secretKeyRef:
+                          name: mlflow-auth-admin-secret
+                          key: password
+                  resources:
+                    requests:
+                      cpu: "${CPU_REQUEST}"
+                      memory: ${MEMORY_REQUEST}
+                    limits:
+                      cpu: "${CPU_LIMIT}"
+                      memory: ${MEMORY_LIMIT}
+              imagePullSecrets:
+                - name: harbor
+              nodeSelector:
+                kubernetes.io/os: linux
+              topologySpreadConstraints:
+                - maxSkew: 1
+                  topologyKey: kubernetes.io/hostname
+                  whenUnsatisfiable: ScheduleAnyway
+                  labelSelector:
+                    matchLabels:
+                      jobset.sigs.k8s.io/jobset-name: gsvb-trainer
