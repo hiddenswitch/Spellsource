@@ -3,6 +3,9 @@ package com.hiddenswitch.containers;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.SelinuxContext;
+import org.testcontainers.containers.wait.strategy.Wait;
+
+import java.time.Duration;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,6 +31,8 @@ public class GraphQLContainer extends GenericContainer<GraphQLContainer> {
 		addFileSystemBind(repositoryRoot().toString(), "/spellsource", BindMode.READ_WRITE, SelinuxContext.NONE);
 		setWorkingDirectory("/spellsource/spellsource-graphql");
 		setCommand("yarn", "develop");
+		waitingFor(Wait.forLogMessage(".*Server listening at .*", 1)
+				.withStartupTimeout(Duration.ofMinutes(5)));
 	}
 
 	private static Path repositoryRoot() {

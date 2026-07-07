@@ -1,15 +1,19 @@
 import { buildHTTPExecutor } from "@graphql-tools/executor-http";
 import { schemaFromExecutor, wrapSchema } from "@graphql-tools/wrap";
 import { Executor, observableToAsyncIterable } from "@graphql-tools/utils";
-import { getOperationAST, print } from "graphql";
+import { GraphQLSchema, getOperationAST, print } from "graphql";
 import { createClient } from "graphql-ws";
 import WebSocket from "ws";
 import { spellsourceHost, spellsourcePort } from "../config";
 import { AuthRequest } from "../auth";
 
+const spellsourceEndpoint = `http://${spellsourceHost}:${spellsourcePort}/graphql`;
+const schemaRetryAttempts = parseInt(process.env.SPELLSOURCE_SCHEMA_RETRY_ATTEMPTS || "60");
+const schemaRetryDelayMs = parseInt(process.env.SPELLSOURCE_SCHEMA_RETRY_DELAY_MS || "2000");
+
 // HTTP executor — used for queries and mutations.
 const httpExecutor = buildHTTPExecutor({
-  endpoint: `http://${spellsourceHost}:${spellsourcePort}/graphql`,
+  endpoint: spellsourceEndpoint,
   fetch: (url, init, context, info) => {
     const req = context as AuthRequest;
 
@@ -80,16 +84,31 @@ const executor: Executor = (executionRequest) => {
   return httpExecutor(executionRequest);
 };
 
-export const createSpellsourceSchema = async () => {
-  while (true) {
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const createBackendSchema = async (): Promise<GraphQLSchema> => {
+  for (let attempt = 1; attempt <= schemaRetryAttempts; attempt++) {
     try {
-      return wrapSchema({
-        schema: await schemaFromExecutor(httpExecutor),
-        executor,
-      });
-    } catch (e) {
-      console.log("Spellsource backend not ready yet, retrying in 5s");
-      await new Promise((resolve) => setTimeout(resolve, 5e3));
+      return await schemaFromExecutor(httpExecutor);
+    } catch (error) {
+      if (attempt === schemaRetryAttempts) {
+        throw error;
+      }
+
+      const message = error instanceof Error ? error.message : String(error);
+      console.log(
+        `Spellsource backend schema not ready at ${spellsourceEndpoint}; retrying in ${schemaRetryDelayMs}ms ` +
+          `(${attempt}/${schemaRetryAttempts}): ${message}`,
+      );
+      await delay(schemaRetryDelayMs);
     }
   }
+
+  throw new Error("Unreachable schema retry state");
 };
+
+export const createSpellsourceSchema = async () =>
+  wrapSchema({
+    schema: await createBackendSchema(),
+    executor,
+  });
