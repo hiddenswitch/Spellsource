@@ -80,8 +80,16 @@ const executor: Executor = (executionRequest) => {
   return httpExecutor(executionRequest);
 };
 
-export const createSpellsourceSchema = async () =>
-  wrapSchema({
-    schema: await schemaFromExecutor(httpExecutor),
-    executor,
-  });
+export const createSpellsourceSchema = async () => {
+  while (true) {
+    try {
+      return wrapSchema({
+        schema: await schemaFromExecutor(httpExecutor),
+        executor,
+      });
+    } catch (e) {
+      console.log("Spellsource backend not ready yet, retrying in 5s");
+      await new Promise((resolve) => setTimeout(resolve, 5e3));
+    }
+  }
+};

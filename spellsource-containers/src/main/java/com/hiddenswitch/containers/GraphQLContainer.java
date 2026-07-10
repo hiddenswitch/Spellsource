@@ -16,6 +16,9 @@ public class GraphQLContainer extends GenericContainer<GraphQLContainer> {
 		addEnv("SLEEP", "30"); // Allow the full pg schema to be setup before postgraphile introspection
 		addExposedPort(GRAPHQL_PORT);
 		addExposedPort(NODE_INSPECTOR_PORT);
+		// host.docker.internal is only provided automatically by Docker Desktop; native Linux
+		// engines need it mapped to the host gateway for the stitched backend fetch to work
+		withExtraHost("host.docker.internal", "host-gateway");
 		addFileSystemBind("..", "/spellsource", BindMode.READ_WRITE, SelinuxContext.NONE);
 		setWorkingDirectory("/spellsource/spellsource-graphql");
 		setCommand("yarn", "develop");

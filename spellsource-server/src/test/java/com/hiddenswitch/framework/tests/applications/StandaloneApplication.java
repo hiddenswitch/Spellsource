@@ -2,6 +2,7 @@ package com.hiddenswitch.framework.tests.applications;
 
 import com.hiddenswitch.containers.GraphQLContainer;
 import com.hiddenswitch.containers.KeycloakContainer;
+import com.hiddenswitch.containers.PersistentNetwork;
 import com.hiddenswitch.containers.PostgresContainer;
 import com.hiddenswitch.containers.RedisContainer;
 import com.hiddenswitch.framework.Application;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.Network;
 import org.testcontainers.lifecycle.Startables;
+import org.testcontainers.utility.TestcontainersConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,20 +33,35 @@ public class StandaloneApplication extends Application {
 	protected static final String GRAPHQL_HOST = "graphql";
 	protected static final String KEYCLOAK_HOST = "keycloak";
 	private static final Logger LOGGER = LoggerFactory.getLogger(StandaloneApplication.class);
+	// when the environment enables testcontainers reuse (TESTCONTAINERS_REUSE_ENABLE=true, set by
+	// gradlew spellsource-server:run, or testcontainers.reuse.enable in ~/.testcontainers.properties),
+	// postgres, keycloak and redis survive JVM exit and are reattached by subsequent runs. they must
+	// live on a network whose id is stable across JVMs (Network.SHARED is recreated per JVM and would
+	// invalidate the reuse hash). the graphql container always starts fresh because it runs the
+	// working tree's code, but joins the same network to reach the others by alias.
+	protected static final boolean REUSE = TestcontainersConfiguration.getInstance().environmentSupportsReuse();
+	protected static final String REUSE_LABEL = "com.hiddenswitch.spellsource";
+	protected static final Network NETWORK = REUSE ? new PersistentNetwork("spellsource-dev") : Network.SHARED;
 	public static RedisContainer REDIS = new RedisContainer()
-			.withNetwork(Network.SHARED);
+			.withNetwork(NETWORK)
+			.withLabel(REUSE_LABEL, "localdev")
+			.withReuse(REUSE);
 	protected static PostgresContainer POSTGRES = new PostgresContainer(PGUSER, PGPASSWORD, PGDATABASE)
-			.withNetwork(Network.SHARED)
+			.withNetwork(NETWORK)
 			.withNetworkAliases(PGHOST)
-			.withExposedPorts(PostgresContainer.POSTGRESQL_PORT);
+			.withExposedPorts(PostgresContainer.POSTGRESQL_PORT)
+			.withLabel(REUSE_LABEL, "localdev")
+			.withReuse(REUSE);
 	public static KeycloakContainer KEYCLOAK = new KeycloakContainer()
 			.dependsOn(POSTGRES)
-			.withNetwork(Network.SHARED)
+			.withNetwork(NETWORK)
 			.withNetworkAliases(KEYCLOAK_HOST)
-			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD);
+			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD)
+			.withLabel(REUSE_LABEL, "localdev")
+			.withReuse(REUSE);
 	public static GraphQLContainer GRAPHQL = new GraphQLContainer()
 			.dependsOn(POSTGRES)
-			.withNetwork(Network.SHARED)
+			.withNetwork(NETWORK)
 			.withNetworkAliases(GRAPHQL_HOST)
 			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD)
 			.withKeycloak(KEYCLOAK_HOST, KeycloakContainer.KEYCLOAK_PORT_HTTP);

@@ -182,13 +182,20 @@ shadowJar {
 
 run {
   group('spellsource')
-  description("Starts the Spellsource server locally. Starts all dependencies using Docker (must be installed).")
+  description("Starts the Spellsource server locally. Starts all dependencies using Docker (must be installed). Postgres, Keycloak and Redis are reused across runs; use purgeLocalServices to remove them.")
   dependsOn += [classes, testClasses]
   classpath sourceSets.test.runtimeClasspath
   mainClass.set('com.hiddenswitch.framework.tests.applications.EntryPoint')
-  // to preserve sql db for keycloak as a practical matter
+  // opts postgres, keycloak and redis into testcontainers reuse so they and their data survive
+  // between runs (see StandaloneApplication)
   environment("TESTCONTAINERS_REUSE_ENABLE", "true")
   jvmArgs.addAll(jvmArgs)
+}
+
+tasks.register('purgeLocalServices', Exec) {
+  group('spellsource')
+  description("Removes the reused local dev containers (postgres, keycloak, redis) and their data, plus the spellsource-dev network. Run this for a clean slate before the next spellsource-server:run.")
+  commandLine 'bash', '-c', 'docker ps -aq --filter label=com.hiddenswitch.spellsource=localdev | xargs -r docker rm -f; docker network rm spellsource-dev 2>/dev/null || true'
 }
 
 artifacts {

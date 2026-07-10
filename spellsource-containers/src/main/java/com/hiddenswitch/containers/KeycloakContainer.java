@@ -31,7 +31,6 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 		super("quay.io/keycloak/keycloak:22.0.3");
 		withCommand("start-dev", "--features=declarative-user-profile");
 		withExposedPorts(KEYCLOAK_PORT_HTTP);
-		withReuse(false);
 		setWaitStrategy(Wait
 				.forHttp("/")
 				.forPort(KEYCLOAK_PORT_HTTP)

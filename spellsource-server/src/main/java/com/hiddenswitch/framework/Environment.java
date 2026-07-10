@@ -328,6 +328,11 @@ public class Environment {
 					.mixed(true)
 					.schemas("hiddenswitch")
 					.locations("classpath:db/migration", "classpath:com/hiddenswitch/framework/migrations")
+					// repair() below realigns every checksum it can, so validation would only ever fail on
+					// java migration checksums, which flyway 9 repair does not realign - historical databases
+					// recorded V7 with load-state-dependent values and would never start otherwise. repeatable
+					// migrations still rerun on checksum changes, that is planning, not validation
+					.validateOnMigrate(false)
 					.dataSource(url, username, password)
 					.load();
 			flyway.repair();
@@ -635,6 +640,10 @@ public class Environment {
 	 * @return
 	 */
 	public static int cardsChecksum() {
+		// the checksum must be a function of the cards alone, not of whatever happens to be loaded
+		// when flyway resolves a migration - apply-time and validate-time calls see different states
+		// otherwise, which permanently fails validation on persistent databases
+		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
 		var checksum = Hashing.crc32().newHasher();
 		ClasspathCardCatalogue.INSTANCE.getRecords().values().stream()
 				.sorted(Comparator.comparing(CardCatalogueRecord::getId))
