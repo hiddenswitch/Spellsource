@@ -41,6 +41,6 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.HIDDENSWITCH_TOKEN }}
       - name: Build and push GraphQL gateway image
         run: ./gradlew spellsource-graphql:pushImage_spellsource_graphql_linux_amd64
