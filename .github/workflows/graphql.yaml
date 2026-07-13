@@ -1,0 +1,46 @@
+name: Build GraphQL Gateway
+
+on:
+  push:
+    branches: ['develop']
+    paths:
+      - spellsource-graphql/**
+      - spellsource-server/src/main/resources/schema.graphqls
+      - build.gradle
+      - gradle/**
+      - buildSrc/**
+      - package.json
+      - yarn.lock
+      - .yarnrc.yml
+      - .github/workflows/graphql.yaml
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy-graphql:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - run: git lfs checkout
+      - name: Checkout public submodules
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule update --init vertx-jooq-fork spellsource-ts-proto/ts-proto
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: temurin
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push GraphQL gateway image
+        run: ./gradlew spellsource-graphql:pushImage_spellsource_graphql_linux_amd64

@@ -10,5 +10,5 @@ RUN apk add --no-cache --virtual .build-deps alpine-sdk \
     && apk del .build-deps \
     && yarn cache clean
   
-EXPOSE 3000
+EXPOSE 5678
 ENTRYPOINT yarn start

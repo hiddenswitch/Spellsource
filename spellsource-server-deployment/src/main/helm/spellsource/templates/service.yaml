@@ -15,6 +15,10 @@ spec:
       targetPort: grpc
       protocol: TCP
       name: grpc
+    - port: 4000
+      targetPort: graphql
+      protocol: TCP
+      name: graphql
   selector:
     {{- include "spellsource.selectorLabels" . | nindent 4 }}
 ---

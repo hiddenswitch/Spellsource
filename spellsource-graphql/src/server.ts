@@ -10,8 +10,16 @@ import { setupApolloServer } from "./apollo-server";
 (async () => {
   console.log("Starting express server");
   const app = express();
+  let ready = false;
   app.get("/", (req, res) => {
     res.send("Healthy");
+  });
+  app.get("/readiness", (req, res) => {
+    if (ready) {
+      res.send("Ready");
+    } else {
+      res.status(503).send("GraphQL schema is not ready");
+    }
   });
 
   if (process.env.NODE_ENV !== "production") {
@@ -42,6 +50,7 @@ import { setupApolloServer } from "./apollo-server";
   }
 
   await setupApolloServer(app, server);
+  ready = true;
 
   console.log("Postgraphile ready");
 })();
