@@ -41,6 +41,16 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.HIDDENSWITCH_TOKEN }}
-      - name: Build and push GraphQL gateway image
-        run: ./gradlew spellsource-graphql:pushImage_spellsource_graphql_linux_amd64
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build GraphQL gateway image
+        run: ./gradlew spellsource-graphql:createImage_spellsource_graphql_linux_amd64
+      - name: Tag and push GraphQL gateway image
+        shell: bash
+        run: |
+          VERSION=$(./gradlew properties -q | sed -n 's/^version: //p' | head -n 1)
+          SOURCE_IMAGE="spellsource/graphql:${VERSION}"
+          TARGET_IMAGE="ghcr.io/hiddenswitch/spellsource-graphql"
+          docker tag "${SOURCE_IMAGE}" "${TARGET_IMAGE}:${VERSION}"
+          docker tag "${SOURCE_IMAGE}" "${TARGET_IMAGE}:latest"
+          docker push "${TARGET_IMAGE}:${VERSION}"
+          docker push "${TARGET_IMAGE}:latest"

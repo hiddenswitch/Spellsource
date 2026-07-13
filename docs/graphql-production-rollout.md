@@ -5,7 +5,7 @@ This checklist covers the production cutover from the legacy gRPC-facing Unity c
 ## Rollout order
 
 1. Merge the main repository changes that expose the Java GraphQL service port, publish the gateway image, and add the gateway readiness endpoint.
-2. Confirm CI publishes `ghcr.io/hiddenswitch/spellsource/graphql` with a version newer than `0.10.4`.
+2. Confirm CI publishes `ghcr.io/hiddenswitch/spellsource-graphql` with a version newer than `0.10.4`.
 3. Confirm Flux deploys the updated Helm chart and the `spellsource` service exposes TCP port `4000` as `graphql`.
 4. Merge the private GitOps change that sets `SPELLSOURCE_HOST=spellsource`, `SPELLSOURCE_PORT=4000`, and probes `/readiness`.
 5. Wait for the `spellsource-graphql` rollout and require its readiness probe to pass.
