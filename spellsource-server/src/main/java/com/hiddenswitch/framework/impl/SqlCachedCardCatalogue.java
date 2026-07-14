@@ -44,6 +44,7 @@ import static io.micrometer.core.instrument.Metrics.globalRegistry;
 import static io.vertx.await.Async.await;
 
 public class SqlCachedCardCatalogue extends ListCardCatalogue {
+	private static final String CARD_CACHE_FORMAT_VERSION = "2";
 	public static final RedissonProtobufCodec GET_CARDS_RESPONSE_CODEC = new RedissonProtobufCodec(Hiddenswitch.GetCardsResponse.parser());
 	private static final String SPELLSOURCE_CARDS_CHANGES_CHANNEL_FROM_DDL = "spellsource_cards_changes_v0";
 	private static final Counter.Builder REQUESTS = Counter.builder("cards.cached.request.count")
@@ -78,8 +79,8 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 
 	private static Buckets getBucketsForUser(String userId) {
 		var redisson = Environment.redisson();
-		var head = redisson.<Hiddenswitch.GetCardsResponse>getBucket(String.format("Spellsource:cards:%s:head", userId), GET_CARDS_RESPONSE_CODEC);
-		var data = redisson.<Hiddenswitch.GetCardsResponse>getBucket(String.format("Spellsource:cards:%s:data", userId), GET_CARDS_RESPONSE_CODEC);
+		var head = redisson.<Hiddenswitch.GetCardsResponse>getBucket(String.format("Spellsource:cards:%s:%s:head", CARD_CACHE_FORMAT_VERSION, userId), GET_CARDS_RESPONSE_CODEC);
+		var data = redisson.<Hiddenswitch.GetCardsResponse>getBucket(String.format("Spellsource:cards:%s:%s:data", CARD_CACHE_FORMAT_VERSION, userId), GET_CARDS_RESPONSE_CODEC);
 		return new Buckets(head, data);
 	}
 
