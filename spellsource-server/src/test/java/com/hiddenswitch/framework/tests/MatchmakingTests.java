@@ -9,6 +9,8 @@ import com.hiddenswitch.framework.impl.Clustered;
 import com.hiddenswitch.framework.impl.ClusteredGames;
 import com.hiddenswitch.framework.impl.Infinispan15ClusterManager;
 import com.hiddenswitch.framework.rpc.Hiddenswitch;
+import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
+import com.hiddenswitch.framework.schema.spellsource.tables.daos.GamesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.GameUsersDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingTicketsDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers;
@@ -623,11 +625,10 @@ public class MatchmakingTests extends FrameworkTestBase {
 					var gameId1 = response.getUnityConnection().getGameId();
 					return client.connectToGame()
 							.compose(v -> Environment.sleep(vertx, 4000L * 2))
-							.compose(v -> client.matchmake(queueId))
-							.compose(response2 -> {
-								var gameId2 = response2.getUnityConnection().getGameId();
+							.compose(v -> new GamesDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient()).findOneById(Long.valueOf(gameId1)))
+							.compose(game -> {
 								testContext.verify(() -> {
-									assertNotEquals(gameId1, gameId2, "gameIds should be different after timing out");
+									assertEquals(GameStateEnum.STARTED, game.getStatus(), "bot matches should remain active after inactivity");
 								});
 								return Future.succeededFuture();
 							});
