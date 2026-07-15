@@ -6,10 +6,13 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.logic.Trace;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -25,10 +28,12 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @Execution(ExecutionMode.CONCURRENT)
@@ -105,6 +110,42 @@ public class TraceTests extends TestBase {
 			assertEquals(context1.getTurn(), context2.getTurn());
 			return null;
 		}, "timeout");
+	}
+
+	/**
+	 * A saved trace is also a valid in-progress checkpoint: replaying its prefix reconstructs the same engine state
+	 * reached by the uninterrupted replay after that action sequence.
+	 */
+	@Test
+	public void testCheckpointTraceCanContinueToTheUninterruptedResult() {
+		// Empty decks make every choice an End Turn, keeping this continuation test independent of card effects.
+		GameContext uninterrupted = new GameContext(cardCatalogue);
+		uninterrupted.setPlayer(0, new Player(new GameDeck("ANY"), cardCatalogue));
+		uninterrupted.setPlayer(1, new Player(new GameDeck("ANY"), cardCatalogue));
+		uninterrupted.setBehaviour(0, new PlayRandomBehaviour());
+		uninterrupted.setBehaviour(1, new PlayRandomBehaviour());
+		uninterrupted.play();
+		Trace completeTrace = uninterrupted.getTrace().clone();
+		assertTrue(completeTrace.getActions().size() > 2, "random game should provide a meaningful checkpoint");
+
+		var checkpointActionCount = completeTrace.getActions().size() / 2;
+		Trace checkpoint = completeTrace.clone()
+				.setActions(new ArrayList<>(completeTrace.getActions().subList(0, checkpointActionCount)));
+		var expectedCheckpoint = new AtomicReference<GameContext>();
+		completeTrace.replayContext(false, context -> {
+			if (context.getTrace().getActions().size() == checkpointActionCount) {
+				expectedCheckpoint.compareAndSet(null, new GameContext(context));
+			}
+		}, cardCatalogue);
+		assertTrue(expectedCheckpoint.get() != null, "full replay should reach the checkpoint");
+
+		GameContext restored = checkpoint.replayContext(false, null, cardCatalogue);
+		assertEquals(expectedCheckpoint.get().getTurn(), restored.getTurn());
+		assertEquals(expectedCheckpoint.get().getActivePlayerId(), restored.getActivePlayerId());
+		assertEquals(expectedCheckpoint.get().getPlayer1().getHero().getHp(), restored.getPlayer1().getHero().getHp());
+		assertEquals(expectedCheckpoint.get().getPlayer2().getHero().getHp(), restored.getPlayer2().getHero().getHp());
+		assertEquals(expectedCheckpoint.get().getPlayer1().getHand().size(), restored.getPlayer1().getHand().size());
+		assertEquals(expectedCheckpoint.get().getPlayer2().getHand().size(), restored.getPlayer2().getHand().size());
 	}
 
 	@ParameterizedTest

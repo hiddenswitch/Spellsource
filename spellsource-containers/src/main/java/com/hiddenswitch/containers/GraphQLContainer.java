@@ -4,6 +4,10 @@ import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.SelinuxContext;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+
 public class GraphQLContainer extends GenericContainer<GraphQLContainer> {
 
 	public static final int GRAPHQL_PORT = 5678;
@@ -16,12 +20,25 @@ public class GraphQLContainer extends GenericContainer<GraphQLContainer> {
 		addEnv("SLEEP", "30"); // Allow the full pg schema to be setup before postgraphile introspection
 		addExposedPort(GRAPHQL_PORT);
 		addExposedPort(NODE_INSPECTOR_PORT);
+		// The development server waits for migrations and starts ts-node before opening either port.
+		withStartupTimeout(Duration.ofMinutes(3));
 		// host.docker.internal is only provided automatically by Docker Desktop; native Linux
 		// engines need it mapped to the host gateway for the stitched backend fetch to work
 		withExtraHost("host.docker.internal", "host-gateway");
-		addFileSystemBind("..", "/spellsource", BindMode.READ_WRITE, SelinuxContext.NONE);
+		addFileSystemBind(repositoryRoot().toString(), "/spellsource", BindMode.READ_WRITE, SelinuxContext.NONE);
 		setWorkingDirectory("/spellsource/spellsource-graphql");
 		setCommand("yarn", "develop");
+	}
+
+	private static Path repositoryRoot() {
+		Path directory = Path.of(System.getProperty("user.dir")).toAbsolutePath().normalize();
+		while (directory != null && !Files.isRegularFile(directory.resolve("settings.gradle"))) {
+			directory = directory.getParent();
+		}
+		if (directory == null) {
+			throw new IllegalStateException("Could not locate repository root from " + System.getProperty("user.dir"));
+		}
+		return directory;
 	}
 
 	public GraphQLContainer withPostgres(String postgresHostPort, String databaseName, String username, String password) {

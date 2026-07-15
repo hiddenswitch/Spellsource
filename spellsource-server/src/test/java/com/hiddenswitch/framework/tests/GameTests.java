@@ -15,6 +15,8 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.ThreadingModel;
 import io.vertx.core.Vertx;
+import io.vertx.core.Promise;
+import io.vertx.core.streams.WriteStream;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -25,10 +27,74 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.hiddenswitch.framework.schema.spellsource.Tables.GAMES;
+import static com.hiddenswitch.framework.schema.spellsource.Tables.GAME_USERS;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTests extends FrameworkTestBase {
+	@Test
+	public void testBotMatchCheckpointsTraceAfterMulliganAndAction(Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
+		startGateway(vertx)
+				.compose(ignored -> client.createAndLogin())
+				.compose(ignored -> vertx.deployVerticle(new ClusteredGames(), new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD)))
+				.compose(ignored -> client.legacy().decksGetAll(Empty.getDefaultInstance()))
+				.compose(decks -> Environment.query(dsl -> dsl.insertInto(GAMES).defaultValues().returning(GAMES.ID))
+						.compose(rows -> {
+							var gameId = rows.iterator().next().getLong("id");
+							var deckId = decks.getDecks(0).getCollection().getId();
+							return Environment.withDslContext(dsl -> dsl.insertInto(GAME_USERS)
+									.set(GAME_USERS.GAME_ID, gameId)
+									.set(GAME_USERS.USER_ID, client.getUserEntity().getId())
+									.set(GAME_USERS.DECK_ID, deckId)
+									.set(GAME_USERS.PLAYER_INDEX, (short) 0))
+									.map(ignored -> new Object[]{gameId, deckId});
+						}))
+				.compose(game -> {
+					var gameId = (Long) game[0];
+					var deckId = (String) game[1];
+					return Games.createGame(ConfigurationRequest.botMatch(gameId.toString(), client.getUserEntity().getId(), client.getUserEntity().getId(), deckId, deckId))
+							.compose(ignored -> playThroughOneAction(client))
+							.compose(ignored -> Environment.sleep(vertx, 250L))
+							.compose(ignored -> Environment.query(dsl -> dsl.select(GAMES.TRACE).from(GAMES).where(GAMES.ID.eq(gameId))))
+							.map(rows -> rows.iterator().next().getJsonObject("trace"));
+				})
+				.onSuccess(trace -> testContext.verify(() -> {
+					assertNotNull(trace, "bot match should checkpoint its trace");
+					var persisted = net.demilich.metastone.game.logic.Trace.load(trace.encode());
+					assertNotNull(persisted.getMulligans(), "mulligan completion should be checkpointed");
+					assertFalse(persisted.getActions().isEmpty(), "the resolved player action should be checkpointed");
+				}))
+				.eventually(client::closeFut)
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	private Future<Void> playThroughOneAction(Client client) {
+		var writer = Promise.<WriteStream<ClientToServerMessage>>promise();
+		var actionSent = new AtomicBoolean();
+		var completed = Promise.<Void>promise();
+		client.legacy().subscribeGame(writer::tryComplete).onSuccess(reader -> {
+			reader.exceptionHandler(completed::tryFail);
+			reader.handler(message -> {
+				var stream = writer.future().result();
+				switch (message.getMessageType()) {
+					case ON_MULLIGAN -> stream.write(ClientToServerMessage.newBuilder()
+							.setMessageType(MessageType.UPDATE_MULLIGAN).setRepliesTo(message.getId()).build()).onFailure(completed::tryFail);
+					case ON_REQUEST_ACTION -> {
+						if (actionSent.compareAndSet(false, true)) {
+							stream.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.UPDATE_ACTION)
+									.setRepliesTo(message.getId()).setActionIndex(0).build())
+									.onSuccess(ignored -> completed.tryComplete()).onFailure(completed::tryFail);
+						}
+					}
+				}
+			});
+		}).onFailure(completed::tryFail);
+		return writer.future().compose(stream -> stream.write(ClientToServerMessage.newBuilder()
+				.setMessageType(MessageType.FIRST_MESSAGE).build()).mapEmpty()).compose(ignored -> completed.future());
+	}
 
 	@Test
 	public void testCreatesGame(Vertx vertx, VertxTestContext vertxTestContext) {

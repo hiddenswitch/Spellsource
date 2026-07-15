@@ -37,8 +37,8 @@ public class StandaloneApplication extends Application {
 	// gradlew spellsource-server:run, or testcontainers.reuse.enable in ~/.testcontainers.properties),
 	// postgres, keycloak and redis survive JVM exit and are reattached by subsequent runs. they must
 	// live on a network whose id is stable across JVMs (Network.SHARED is recreated per JVM and would
-	// invalidate the reuse hash). the graphql container always starts fresh because it runs the
-	// working tree's code, but joins the same network to reach the others by alias.
+	// invalidate the reuse hash). GraphQL runs nodemon against the working tree, so it can safely
+	// be reused too while restarting only the Java server.
 	protected static final boolean REUSE = TestcontainersConfiguration.getInstance().environmentSupportsReuse();
 	protected static final String REUSE_LABEL = "com.hiddenswitch.spellsource";
 	protected static final Network NETWORK = REUSE ? new PersistentNetwork("spellsource-dev") : Network.SHARED;
@@ -64,7 +64,9 @@ public class StandaloneApplication extends Application {
 			.withNetwork(NETWORK)
 			.withNetworkAliases(GRAPHQL_HOST)
 			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD)
-			.withKeycloak(KEYCLOAK_HOST, KeycloakContainer.KEYCLOAK_PORT_HTTP);
+			.withKeycloak(KEYCLOAK_HOST, KeycloakContainer.KEYCLOAK_PORT_HTTP)
+			.withLabel(REUSE_LABEL, "localdev")
+			.withReuse(REUSE);
 	protected static AtomicBoolean STARTED = new AtomicBoolean(false);
 
 	public static boolean defaultConfigurationAndServices() {

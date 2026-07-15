@@ -118,3 +118,16 @@ A single test class:
 ## TraceTests
 
 `TraceTests` replays recorded failure traces from `src/test/resources/traces/`. When MassTest or production games crash, a trace JSON file captures the exact game state and actions that led to the crash. TraceTests replays these to verify fixes.
+# Persistent single-player matches
+
+Quick Play and Rogue Run matches with one human and one bot are checkpointed after mulligan and after every resolved action.  The checkpoint is the deterministic engine trace in `games.trace`; the game remains `STARTED` until it ends or the player explicitly concedes.  Closing a client therefore does not trigger the normal inactivity concession for these matches.
+
+On the next `isInMatch` request the server first checks hosted contexts, then lazily restores the newest checkpointed `STARTED` game owned by that player.  Restoration replays against the current SQL card catalogue, waits for the usual `FIRST_MESSAGE`, and sends the reconstructed state before accepting another action.  A malformed or incompatible trace is logged and marked as an abandoned loss, so it cannot leave the client indefinitely loading.  Human-versus-human matches retain their normal timeout behavior.
+
+For a local check, run `./gradlew.bat :spellsource-server:run`, start a bot match, finish mulligan and take an action, then restart Unity.  Repeat after restarting the server; the same game ID and board should return automatically.  Repeat the flow from a Rogue Run and confirm its run progresses only when the restored match ends.
+
+Server coverage can be run with `./gradlew.bat :spellsource-server:test --tests "com.hiddenswitch.framework.tests.GraphQLTests"` and `./gradlew.bat :spellsource-server:test --tests "com.hiddenswitch.framework.tests.MatchmakingTests"`; engine trace coverage is `./gradlew.bat :spellsource-cards-git:test --tests "*.TraceTests"`.
+
+The current Vert.x gRPC code generator requires JDK 24 or newer. On Windows, set `JAVA_HOME` to a JDK 24 installation before running Gradle.
+
+For manual restart/restore testing, start the stack once with `./gradlew.bat :spellsource-server:run`. After reaching a checkpoint in a bot match, stop only that Java process with `Ctrl+C`, then run the same command again. PostgreSQL, Redis, Keycloak, and GraphQL stay running through the restart; use `./gradlew.bat :spellsource-server:purgeLocalServices` only when a clean local state is wanted.

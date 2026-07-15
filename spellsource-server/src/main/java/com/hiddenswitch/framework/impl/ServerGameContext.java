@@ -39,6 +39,7 @@ import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.TurnState;
+import net.demilich.metastone.game.logic.Trace;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import org.jetbrains.annotations.NotNull;
@@ -98,6 +99,7 @@ public class ServerGameContext extends GameContext implements Server {
 	private Long timerStartTimeMillis;
 	private Long timerLengthMillis;
 	private boolean interrupted;
+	private boolean restored;
 
 	/**
 	 * {@inheritDoc}
@@ -524,6 +526,7 @@ public class ServerGameContext extends GameContext implements Server {
 			getLogic().handleMulligan(getNonActivePlayer(), false, discardedCardsNonActive);
 
 			traceMulligans(mulligansActive.future().result(), mulligansNonActive.future().result());
+			checkpoint();
 
 			try {
 				startGame();
@@ -576,7 +579,15 @@ public class ServerGameContext extends GameContext implements Server {
 				this.interrupted = false;
 				try {
 					LOGGER.trace("play: Starting forked game");
-					super.play(false);
+					if (restored) {
+						// A resumed match has no mulligan or game-start transition.  Do not request an
+						// action until the returning client has sent FIRST_MESSAGE.
+						await(Future.all(clientsReady.values().stream().map(Promise::future).toList()));
+						clientsReady.clear();
+						resume();
+					} else {
+						super.play(false);
+					}
 				} catch (Throwable throwable) {
 					var rootCause = Throwables.getRootCause(throwable);
 					if (rootCause instanceof InterruptedException) {
@@ -818,6 +829,43 @@ public class ServerGameContext extends GameContext implements Server {
 		for (var client : getClients()) {
 			client.sendNotification(action, gameStateCopy);
 		}
+	}
+
+	@Override
+	public void onDidPerformGameAction(int playerId, GameAction action) {
+		super.onDidPerformGameAction(playerId, action);
+		checkpoint();
+	}
+
+	/** Installs an engine state rebuilt from a persisted deterministic trace. */
+	public void restoreFromTrace(@NotNull Trace trace) {
+		var replayed = trace.replayContext(false, null, getCardCatalogue());
+		if (replayed.updateAndGetGameOver()) {
+			throw new IllegalStateException("persisted trace already represents a finished game");
+		}
+		setGameState(replayed.getGameStateCopy());
+		setTrace(trace);
+		for (var configuration : playerConfigurations) {
+			var player = getPlayer(configuration.getPlayerId());
+			player.getAttributes().put(Attribute.USER_ID, configuration.getUserId());
+			player.getAttributes().put(Attribute.DECK_ID, configuration.getDeck().getDeckId());
+		}
+		restored = true;
+	}
+
+	private boolean isResumableBotMatch() {
+		return playerConfigurations.size() == 2
+				&& playerConfigurations.stream().filter(Configuration::isBot).count() == 1;
+	}
+
+	/** Trace writes are intentionally synchronous with game mutation, so a shutdown cannot outrun a checkpoint. */
+	public void checkpoint() {
+		if (!isResumableBotMatch() || getTrace().getMulligans() == null) {
+			return;
+		}
+		await(withDslContext(dsl -> dsl.update(Tables.GAMES)
+				.set(Tables.GAMES.TRACE, getTrace().toJson())
+				.where(Tables.GAMES.ID.eq(Long.valueOf(gameId)))));
 	}
 
 	@Override

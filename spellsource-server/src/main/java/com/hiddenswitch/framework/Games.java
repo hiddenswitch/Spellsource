@@ -29,6 +29,8 @@ public class Games {
 			.thenComparingInt(net.demilich.metastone.game.entities.Entity::getIndex);
 	public static final String GAMES_CREATE_GAME_SESSION = "games:createGameSession";
 	public static final String ADDRESS_IS_IN_GAME = "games:isInGame:";
+	/** Lazily hosts a persisted single-player match. Internal cluster API. */
+	public static final String GAMES_RESTORE_GAME = "games:restoreGame";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	public static final String GAMES_DEFAULT_NO_ACTIVITY_TIMEOUT = "games.defaultNoActivityTimeout";
 
@@ -60,7 +62,10 @@ public class Games {
 		var eb = Vertx.currentContext().owner().eventBus();
 		return eb.<String>request(ADDRESS_IS_IN_GAME + userId, "", new DeliveryOptions().setSendTimeout(100L))
 				.otherwiseEmpty()
-				.map(res -> res != null ? res.body() : null);
+				.compose(res -> res != null
+						? Future.succeededFuture(res.body())
+						: eb.<String>request(GAMES_RESTORE_GAME, userId).map(Message::body).otherwiseEmpty())
+				.map(res -> res != null ? res : null);
 	}
 
 	/**
