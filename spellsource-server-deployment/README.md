@@ -1,5 +1,16 @@
 # spellsource-server-deployment
 
+## Production delivery
+
+Production server releases are delivered by CI and GitOps rather than by running a local cluster-restart task.
+
+1. Bump the semantic version in the root `build.gradle` for a server release.
+2. Commit the release and push it to `develop`.
+3. The **Build Server** workflow runs the server test suite and publishes the versioned server image.
+4. Image automation detects the new semantic tag and reconciles the production Helm release.
+
+Monitor the CI workflow and the approved deployment dashboard until the new release is healthy. Do not document or commit credentials, cluster configuration, or private GitOps locations here.
+
 ## Preview Helm Chart
 
 ```shell
