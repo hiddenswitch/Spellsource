@@ -1,7 +1,7 @@
 /**
  * Style variables
  */
-$base-font-family: 'Space Grotesk', sans-serif;
+$base-font-family: "Space Grotesk", sans-serif;
 $base-font-size: 22px !default;
 $font-size-footer: 16px;
 $mobile-font-size: 18px !default;
@@ -16,7 +16,6 @@ $main-width: 700px !default;
 .loginButton {
   cursor: pointer;
 }
-
 
 .emphasis-gif {
   width: $main-width;
@@ -105,10 +104,9 @@ h6:before { content: "######";  margin-right: 9px; }*/
     display: none !important;
   }
   .navbarContainer {
-
   }
   .heroButtonsContainer {
-    align-self: 'center' !important;
+    align-self: "center" !important;
   }
 }
 
@@ -158,6 +156,7 @@ h6:before { content: "######";  margin-right: 9px; }*/
   border-top: none;
   border-left: none;
   border-right: none;
+  background: linear-gradient(100deg, rgba(195, 234, 240, 0.52), rgba(255, 248, 242, 0.94) 46%, rgba(255, 193, 143, 0.38));
 }
 
 .navbarContainer {
@@ -165,7 +164,7 @@ h6:before { content: "######";  margin-right: 9px; }*/
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--header-background-color);
+  background: transparent;
 
   .search-results {
     background-color: var(--header-background-color);
@@ -202,8 +201,8 @@ h6:before { content: "######";  margin-right: 9px; }*/
       user-select: none;
 
       a {
-        text-decoration: none;
         color: var(--text-dark);
+        text-decoration: none;
 
         &:hover {
           text-decoration: none;
@@ -227,22 +226,22 @@ h6:before { content: "######";  margin-right: 9px; }*/
  */
 
 .backgroundGradient0 {
-  background-image: url('/static/assets/gradient-section-1.png');
+  background-image: url("/static/assets/gradient-section-1.png");
   background-size: 100% 100%;
 }
 
 .backgroundGradient1 {
-  background-image: url('/static/assets/gradient-section-3.png');
+  background-image: url("/static/assets/gradient-section-3.png");
   background-size: 100% 100%;
 }
 
 .backgroundGradient2 {
-  background-image: url('/static/assets/gradient-section-1.png');
+  background-image: url("/static/assets/gradient-section-1.png");
   background-size: 100% 100%;
 }
 
 .backgroundGradient3 {
-  background-image: url('/static/assets/gradient-section-2.png');
+  background-image: url("/static/assets/gradient-section-2.png");
   background-size: 100% 100%;
 }
 
@@ -265,7 +264,6 @@ h6:before { content: "######";  margin-right: 9px; }*/
   50% {
     transform: translateX(0);
   }
-
 }
 
 .cloud {
@@ -327,7 +325,7 @@ h6:before { content: "######";  margin-right: 9px; }*/
   position: relative;
   overflow-y: visible;
   height: calc(100vh - 76px);
-  background-image: url('/static/assets/gradient-section-4.png');
+  background-image: url("/static/assets/gradient-section-4.png");
   background-size: 100% 100%;
   padding: 0;
 }
@@ -365,12 +363,52 @@ h6:before { content: "######";  margin-right: 9px; }*/
   gap: 12px;
 }
 
+.heroGameButton {
+  --hero-button-text: #fff;
+
+  display: inline-flex;
+  min-width: 250px;
+  min-height: 64px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  border: 7px solid transparent;
+  border-image: url("/static/game-ui/slices/button-medium-raised.png") 5 5 6 6 / 7px / 0 stretch;
+  border-radius: 0;
+  background: rgba(48, 44, 78, 0.88);
+  background-clip: padding-box;
+  color: var(--hero-button-text);
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 2px 2px rgba(18, 16, 29, 0.92);
+  transition: filter 0.16s ease;
+}
+
+.heroGameButtonPrimary {
+  --hero-button-text: #fff0c4;
+}
+
+// The global link rule colors visited links dark; these are buttons, so their
+// game-UI text color must remain stable after visiting their destination.
+.heroGameButton:visited {
+  color: var(--hero-button-text);
+}
+
+.heroGameButton:hover,
+.heroGameButton:focus-visible {
+  border-image-source: url("/static/game-ui/slices/button-medium-pressed.png");
+  color: var(--hero-button-text);
+  filter: brightness(1.08);
+  outline: none;
+}
+
 .heroIntroSubText {
   color: var(--text-dark);
   font-size: 24px;
   font-weight: bold;
   padding-bottom: 10px;
-
 }
 
 .heroTextContainer {
@@ -440,7 +478,7 @@ h6:before { content: "######";  margin-right: 9px; }*/
 .heroImage {
   max-width: 100%;
   width: 800px;
-  border: '2px solid #fff';
+  border: "2px solid #fff";
   border-radius: 12px;
 }
 
@@ -455,7 +493,7 @@ h6:before { content: "######";  margin-right: 9px; }*/
   justify-content: space-between;
   padding: 25px 0;
   align-items: center;
-  background-color: var(--text-light);
+  background: transparent;
   font-size: $font-size-footer;
   text-decoration: none;
 
@@ -492,6 +530,7 @@ h6:before { content: "######";  margin-right: 9px; }*/
 
 .navbarFooter {
   border-top: 2px solid var(--text-dark);
+  background: linear-gradient(100deg, rgba(255, 193, 143, 0.38), rgba(255, 248, 242, 0.94) 54%, rgba(195, 234, 240, 0.52));
 }
 
 /**
@@ -512,7 +551,7 @@ figure.highlight {
 
 .highlight .c {
   color: var(--code-color-1);
-  font-style: italic
+  font-style: italic;
 }
 
 /* Comment */
@@ -529,7 +568,7 @@ figure.highlight {
 /* Keyword */
 .highlight .cm {
   color: var(--code-color-1);
-  font-style: italic
+  font-style: italic;
 }
 
 /* Comment.Multiline */
@@ -540,13 +579,13 @@ figure.highlight {
 /* Comment.Preproc */
 .highlight .c1 {
   color: var(--code-color-1);
-  font-style: italic
+  font-style: italic;
 }
 
 /* Comment.Single */
 .highlight .cs {
   color: var(--code-color-5);
-  font-style: italic
+  font-style: italic;
 }
 
 /* Comment.Special */
@@ -556,7 +595,7 @@ figure.highlight {
 
 /* Generic.Deleted */
 .highlight .ge {
-  font-style: italic
+  font-style: italic;
 }
 
 /* Generic.Emph */
@@ -567,7 +606,7 @@ figure.highlight {
 /* Generic.Error */
 .highlight .gh {
   color: var(--code-color-8);
-  font-weight: bold
+  font-weight: bold;
 }
 
 /* Generic.Heading */
@@ -587,13 +626,13 @@ figure.highlight {
 
 /* Generic.Prompt */
 .highlight .gs {
-  font-weight: bold
+  font-weight: bold;
 }
 
 /* Generic.Strong */
 .highlight .gu {
   color: var(--code-color-12);
-  font-weight: bold
+  font-weight: bold;
 }
 
 /* Generic.Subheading */
@@ -654,7 +693,7 @@ figure.highlight {
 /* Name.Builtin */
 .highlight .nc {
   color: var(--code-color-9);
-  text-decoration: underline
+  text-decoration: underline;
 }
 
 /* Name.Class */
@@ -670,7 +709,7 @@ figure.highlight {
 /* Name.Decorator */
 .highlight .ni {
   color: var(--code-color-17);
-  font-weight: bold
+  font-weight: bold;
 }
 
 /* Name.Entity */
@@ -681,13 +720,13 @@ figure.highlight {
 /* Name.Function */
 .highlight .nn {
   color: var(--code-color-13);
-  text-decoration: underline
+  text-decoration: underline;
 }
 
 /* Name.Namespace */
 .highlight .nt {
   color: var(--code-color-16);
-  font-weight: bold
+  font-weight: bold;
 }
 
 /* Name.Tag */
@@ -812,17 +851,17 @@ figure.highlight {
 }
 
 .collectionCardsSection {
-  flex: 3
+  flex: 3;
 }
 
 .collectionDecksSection {
-  flex: 1
+  flex: 1;
 }
 
 .collectionTopBar {
   display: flex;
   flex-direction: row;
-  padding: .5rem 1rem 0 1rem;
+  padding: 0.5rem 1rem 0 1rem;
   gap: 1rem;
 }
 

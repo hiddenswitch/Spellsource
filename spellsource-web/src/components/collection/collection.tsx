@@ -16,6 +16,7 @@ import { useDebounce } from "react-use";
 import Link from "next/link";
 import { useDrag, useDrop } from "react-dnd";
 import { CardCache } from "../../pages/collection";
+import * as publicStyles from "../public-site-layout.module.scss";
 
 const ShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON", "HERO", "HERO_POWER", "CLASS"];
 const DefaultShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON"];
@@ -33,7 +34,7 @@ const orderings = {
 
 export const textDecorationStyle = (heroClass: string | null | undefined, classColors: Record<string, string | undefined>) => ({
   textDecorationLine: "underline",
-  textDecorationColor: heroClass && heroClass in classColors ? classColors[heroClass!] : "rgba(#888888)",
+  textDecorationColor: heroClass && heroClass in classColors ? classColors[heroClass!] : "rgba(136, 136, 136, .75)",
 });
 
 const CardRow: FunctionComponent<{
@@ -75,6 +76,34 @@ const CardRow: FunctionComponent<{
   );
 };
 
+const CardTile: FunctionComponent<{ card: CollectionCardFragment; collection: CollectionProps }> = ({ card, collection }) => {
+  const cardScript = card.cardScript as CardDef;
+  const stats = !cardScript.baseAttack && !cardScript.baseHp && !cardScript.durability ? "" : `${cardScript.baseAttack ?? 0}/${cardScript.baseHp ?? cardScript.durability ?? 0}`;
+  const namedSprite = cardScript.art?.sprite?.named as unknown;
+  const typeArtwork = cardScript.type === "SPELL" ? "/static/assets/editor/Spell%20UI%20Icon%20Color.png" : cardScript.type === "WEAPON" ? "/static/assets/editor/Attack%20Icon%20Color.png" : cardScript.type === "HERO" || cardScript.type === "HERO_POWER" ? "/static/assets/editor/Supremacy%20Icon%20Color.png" : "/static/card-images/selkie.png";
+  const spriteUrl = typeof namedSprite === "string" ? `/api/art/${encodeURIComponent(namedSprite)}` : namedSprite && typeof namedSprite === "object" && "src" in namedSprite && typeof namedSprite.src === "string" ? namedSprite.src : typeArtwork;
+  const accentColor = cardScript.heroClass ? collection.classColors[cardScript.heroClass] : undefined;
+  return (
+    <article className={publicStyles.collectionTile} style={accentColor ? ({ "--collection-accent": accentColor } as React.CSSProperties) : undefined} onClick={() => collection.addToDeck?.(cardScript.id)}>
+      <div>
+        <span>{cardScript.baseManaCost ?? 0} cost</span>
+        <span>{collection.classes[cardScript.heroClass] ?? "Any"}</span>
+      </div>
+      <div className={publicStyles.collectionTileArtwork} aria-hidden="true">
+        <img src={spriteUrl} alt="" />
+      </div>
+      <h3>{cardScript.name}</h3>
+      <strong>
+        {toTitleCaseCorrected(cardScript.type)} {stats && `- ${stats}`}
+      </strong>
+      <p>{cardScript.description?.replaceAll(new RegExp("[$#\\[\\]]", "g"), "") ?? "No card text."}</p>
+      <Link href={`/card-editor?card=${encodeURIComponent(card.id!)}`} target="_blank">
+        {!collection.user ? "View card" : card.createdBy === collection.user ? "Edit card" : "Edit copy"}
+      </Link>
+    </article>
+  );
+};
+
 interface CollectionProps {
   classes: Record<string, string>;
   classColors: Record<string, string>;
@@ -103,6 +132,8 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
   const [uncollectible, setUncollectible] = useParamBool(router, "uncollectible", false);
   const [ownOnly, setOwnOnly] = useParamBool(router, "ownOnly", false);
   const [limit, setLimit] = useParamInt(router, "limit", defaultLimit);
+  const [view, setView] = useParam<"cards" | "table">(router, "view");
+  const activeView = view === "table" ? "table" : "cards";
 
   const [searchVisual, setSearchVisual] = useState(search);
 
@@ -148,8 +179,9 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
 
   return (
     <div ref={collectionDrop as any} className={"h-100"}>
-      <div id={"Top Bar"} className={"d-flex flex-row flex-wrap gap-2 pt-2 ps-2 align-items-center"}>
+      <div id={"Top Bar"} className={`${publicStyles.collectionToolbar} d-flex flex-row flex-wrap gap-2 align-items-center`}>
         <Form
+          role={"search"}
           onSubmit={(event) => {
             event.preventDefault();
             cancelDebounce();
@@ -157,7 +189,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           }}
           className={"flex-grow-1"}
         >
-          <Form.Control placeholder={"Search"} value={searchVisual} onChange={(event) => setSearchVisual(event.target.value)} />
+          <Form.Control aria-label={"Search collection cards"} placeholder={"Search"} value={searchVisual} onChange={(event) => setSearchVisual(event.target.value)} />
         </Form>
         <Dropdown>
           <DropdownToggle variant={"light"} disabled={!getCards.data}>
@@ -176,7 +208,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
         <Button disabled={!getCards.data || offset <= 0} variant={"secondary"} onClick={() => changeOffset(-limit)}>
           Prev
         </Button>
-        <div className={"mb-1 text-center user-select-none"}>
+        <div className={"mb-1 text-center user-select-none"} aria-live={"polite"}>
           {cards?.length ? offset + 1 : "0"}-{cards?.length ? offset + showing : "0"} of {cards?.length ? total : "0"}
         </div>
         <Button disabled={!getCards.data || offset >= total - limit} variant={"secondary"} onClick={() => changeOffset(limit)}>
@@ -241,27 +273,47 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
         <Button disabled={!getCards.data} variant={"light"} active={ownOnly} onClick={() => setOwnOnly(!ownOnly)}>
           {ownOnly ? "Your Cards" : "All Cards"}
         </Button>
+        <div className={`${publicStyles.viewToggle} d-flex gap-2 ms-auto`} aria-label="Collection result view">
+          <Button variant={activeView === "cards" ? "primary" : "light"} onClick={() => setView("cards")}>
+            Cards
+          </Button>
+          <Button variant={activeView === "table" ? "primary" : "light"} onClick={() => setView("table")}>
+            Table
+          </Button>
+        </div>
       </div>
-      <div className={"w-100 overflow-scroll mt-2"}>
-        <Table striped={true} className={`border-top table-responsive ${addToDeck && "table-hover"}`}>
-          <thead>
-            <tr>
-              <th>Cost</th>
-              <th>Name</th>
-              <th>Class</th>
-              <th>Type</th>
-              <th>Stats</th>
-              <th>Description</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {cards.map((card) => (
-              <CardRow key={card!.id} card={card!} collection={props} />
-            ))}
-          </tbody>
-        </Table>
-      </div>
+      {getCards.loading && !cards.length ? (
+        <div className={publicStyles.collectionLoading}>Loading cards...</div>
+      ) : !cards.length ? (
+        <div className={publicStyles.collectionLoading}>No cards match those filters.</div>
+      ) : activeView === "cards" ? (
+        <div className={publicStyles.collectionGrid}>
+          {cards.map((card) => (
+            <CardTile key={card!.id} card={card!} collection={props} />
+          ))}
+        </div>
+      ) : (
+        <div className={"w-100 overflow-scroll mt-2"}>
+          <Table striped={true} className={`border-top table-responsive ${addToDeck && "table-hover"}`}>
+            <thead>
+              <tr>
+                <th>Cost</th>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Type</th>
+                <th>Stats</th>
+                <th>Description</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {cards.map((card) => (
+                <CardRow key={card!.id} card={card!} collection={props} />
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      )}
     </div>
   );
 };

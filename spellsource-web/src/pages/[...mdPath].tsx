@@ -2,11 +2,9 @@ import { GetStaticPaths, GetStaticPropsContext, InferGetStaticPropsType } from "
 import React from "react";
 import path from "path";
 import * as glob from "glob-promise";
-import Layout from "../components/creative-layout";
-import * as styles from "../templates/template-styles.module.scss";
-import { Container } from "react-bootstrap";
-import cx from "classnames";
+import PublicSiteLayout, { ContentPanel, PublicPageHeader } from "../components/public-site-layout";
 import { getHtmlFromMd, useReactForHtml } from "../lib/markdown";
+import * as styles from "../components/public-site-layout.module.scss";
 
 const directory = path.join(process.cwd(), "src", "pages-markdown");
 
@@ -38,10 +36,20 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => ({
 
 export default ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const content = useReactForHtml(data?.contentHtml);
+  const metadata = data as typeof data & { title?: string; layout?: string; path?: string };
+  const isWikiHub = metadata?.layout === "wiki" && metadata?.path === "/wiki";
+  const isWikiPage = metadata?.layout === "wiki";
+  const isUpdatesPage = metadata?.path === "/whats-new";
+  const isCreditsPage = metadata?.path === "/credits";
+  const title = metadata?.title ?? "Spellsource";
+  const eyebrow = isWikiPage ? "World guide" : isUpdatesPage ? "Release notes" : isCreditsPage ? "Acknowledgements" : "Spellsource";
 
   return (
-    <Layout>
-      <Container className={cx(styles.templateContainer, "markdown")}>{content}</Container>
-    </Layout>
+    <PublicSiteLayout title={title}>
+      <PublicPageHeader eyebrow={eyebrow} title={title} />
+      <ContentPanel variant="document" className={`${isWikiHub ? styles.wikiHubPanel : ""} markdown`}>
+        {content}
+      </ContentPanel>
+    </PublicSiteLayout>
   );
 };

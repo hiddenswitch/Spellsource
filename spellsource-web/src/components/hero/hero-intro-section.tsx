@@ -1,4 +1,4 @@
-import React, { CSSProperties, FunctionComponent, ReactNode } from "react";
+import React, { FunctionComponent, ReactNode } from "react";
 import * as styles from "../creative-layout.module.scss";
 import harvard from "../../../public/static/assets/Harvard.png";
 import mit from "../../../public/static/assets/MIT.png";
@@ -27,8 +27,8 @@ function HeroIntroSection() {
         </div>
       </div>
       <div className={styles.heroButtonsContainer}>
-        <Button title="Play Now" buttonStyle="dark" route={"/download"} />
-        <Button title="Join Discord" buttonStyle="light" route={"https://discord.gg/HmbESh2"} />
+        <Button title="Play Now" primary route={"/download"} />
+        <Button title="Join Discord" route={"https://discord.gg/HmbESh2"} />
       </div>
       <div className={styles.heroIntroSubText}>Proudly supported by</div>
       <div className={styles.heroIntroLogos}>{images}</div>
@@ -39,35 +39,10 @@ function HeroIntroSection() {
 const Button: FunctionComponent<{
   title: string | ReactNode;
   route: string;
-  buttonStyle: "light" | "dark";
-}> = ({ title, route, buttonStyle }) => {
-  const light: CSSProperties = {
-    color: "#1B1B1B",
-    border: "2px solid #1B1B1B",
-    borderRadius: "12px",
-    fontSize: "32px",
-    fontWeight: "bold",
-    padding: "10px 22px",
-    textAlign: "center",
-    textDecoration: "none",
-    width: "250px",
-  };
-  const dark: CSSProperties = {
-    color: "#fff",
-    backgroundColor: "#2837FF",
-    border: "2px solid #2837FF",
-    borderRadius: "12px",
-    fontSize: "32px",
-    fontWeight: "bold",
-    padding: "10px 22px",
-    textAlign: "center",
-    textDecoration: "none",
-    marginRight: "30px",
-    width: "250px",
-  };
-
+  primary?: boolean;
+}> = ({ title, route, primary = false }) => {
   return (
-    <Link href={route} style={buttonStyle == "light" ? light : dark}>
+    <Link href={route} className={`${styles.heroGameButton} ${primary ? styles.heroGameButtonPrimary : ""}`}>
       {title}
     </Link>
   );

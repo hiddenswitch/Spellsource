@@ -51,7 +51,15 @@ const defaultArt = {
 };
 
 export const toRgbaString = (v?: { r: number; g: number; b: number; a: any }) => {
-  return v ? `rgba(${v.r * 255}, ${v.g * 255}, ${v.b * 255}, ${v.a})` : undefined;
+  if (!v) {
+    return undefined;
+  }
+
+  // Proto JSON omits zero-valued colour channels. Treat an omitted channel as
+  // zero rather than producing an invalid CSS `NaN` colour.
+  const channel = (value: unknown) => Number.isFinite(Number(value)) ? Number(value) * 255 : 0;
+  const alpha = Number.isFinite(Number(v.a)) ? Number(v.a) : 1;
+  return `rgba(${channel(v.r)}, ${channel(v.g)}, ${channel(v.b)}, ${alpha})`;
 };
 
 type FixCardDesc<T> = T extends object

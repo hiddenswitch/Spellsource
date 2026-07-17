@@ -25,7 +25,7 @@ $main-width: 700px !default;
   --text-dark: #1B1B1B;
   --text-light: #FCFCFC;
   --hover-color: #2837FF;
-  --header-background-color: #ffffff;
+  --header-background-color: #fff8f2;
   --placeholder-color: var(--base-color);
   --link-color: var(--base-color);
   --code-color-1: #aaaaaa;
@@ -279,6 +279,146 @@ pre {
 }
 
 .markdown img {
+}
+
+/**
+ * Public-site controls
+ *
+ * Bootstrap supplies the behavior; these rules give public pages the same inked,
+ * offset-surface language as the game art and content panels.
+ */
+.public-site {
+  --control-ink: #5b5374;
+  --control-blue: #2837ff;
+  --control-sky: #dff4f5;
+  --control-ivory: #fffdf8;
+  --control-peach: #ffc18f;
+}
+
+.public-site .btn,
+.public-site .dropdown-toggle {
+  min-height: 38px;
+  padding: .38rem .72rem;
+  border: 1px solid var(--control-ink);
+  border-radius: 10px;
+  background: linear-gradient(160deg, #fffdf8, #edf8f8);
+  box-shadow: 0 3px 0 rgba(195, 234, 240, .96), 0 7px 15px rgba(77, 64, 95, .1);
+  color: var(--control-ink);
+  font-weight: 600;
+  line-height: 1.25;
+  transition: background-color .14s ease, box-shadow .14s ease, transform .14s ease;
+}
+
+.public-site .btn:hover:not(:disabled),
+.public-site .dropdown-toggle:hover:not(:disabled),
+.public-site .btn:focus-visible,
+.public-site .dropdown-toggle:focus-visible {
+  border-color: #625179;
+  background: var(--control-sky);
+  box-shadow: 0 4px 0 rgba(195, 234, 240, .96), 0 10px 17px rgba(77, 64, 95, .15);
+  color: var(--control-ink);
+  transform: translate(-1px, -1px);
+}
+
+.public-site .btn:focus-visible,
+.public-site .dropdown-toggle:focus-visible,
+.public-site .form-control:focus-visible {
+  outline: 3px solid rgba(239, 166, 191, .9);
+  outline-offset: 2px;
+}
+
+.public-site .btn-primary,
+.public-site .btn-check:checked + .btn,
+.public-site .btn.active {
+  border-color: #34305f !important;
+  background: var(--control-blue) !important;
+  box-shadow: 0 3px 0 rgba(239, 166, 191, .8), 0 8px 16px rgba(40, 55, 255, .2);
+  color: #fff !important;
+}
+
+.public-site .dropdown-toggle {
+  background: var(--control-ivory) !important;
+  color: var(--control-ink) !important;
+}
+
+.public-site .dropdown-toggle.show {
+  background: var(--control-sky) !important;
+  box-shadow: 1px 1px 0 rgba(27, 27, 27, .2);
+  transform: translate(2px, 2px);
+}
+
+.public-site .btn-secondary {
+  background: #625179;
+  box-shadow: 3px 3px 0 rgba(255, 193, 143, .68);
+  color: #fff;
+}
+
+.public-site .btn-secondary:hover:not(:disabled) {
+  background: #4d405f;
+  color: #fff;
+}
+
+.public-site .btn:active:not(:disabled),
+.public-site .btn.active:active,
+.public-site .dropdown-toggle:active:not(:disabled) {
+  box-shadow: 1px 1px 0 rgba(27, 27, 27, .2);
+  transform: translate(2px, 2px);
+}
+
+.public-site .btn:disabled,
+.public-site .dropdown-toggle:disabled {
+  border-color: #8d8a8d;
+  background: #e7e4e0 !important;
+  box-shadow: none;
+  color: #777277 !important;
+  opacity: 1;
+}
+
+.public-site .form-control {
+  min-height: 38px;
+  border: 2px solid var(--control-ink);
+  border-radius: 8px;
+  background: var(--control-ivory);
+  box-shadow: inset 0 0 0 2px rgba(195, 234, 240, .46);
+  color: var(--control-ink);
+}
+
+.public-site .form-control:focus {
+  border-color: var(--control-ink);
+  background: #fff;
+  box-shadow: inset 0 0 0 2px rgba(195, 234, 240, .7), 3px 3px 0 rgba(40, 55, 255, .18);
+}
+
+.public-site .dropdown-menu {
+  padding: 6px;
+  border: 2px solid var(--control-ink);
+  border-radius: 9px;
+  background: var(--control-ivory);
+  box-shadow: 5px 5px 0 rgba(255, 193, 143, .72);
+}
+
+.public-site .dropdown-item {
+  display: block;
+  min-height: auto;
+  width: 100%;
+  padding: .45rem .55rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--control-ink);
+  font-weight: 600;
+  text-align: left;
+  transform: none;
+}
+
+.public-site .dropdown-item:hover,
+.public-site .dropdown-item:focus,
+.public-site .dropdown-item.active {
+  background: var(--control-sky) !important;
+  box-shadow: none;
+  color: var(--control-ink) !important;
+  transform: none;
 }
 
 details {

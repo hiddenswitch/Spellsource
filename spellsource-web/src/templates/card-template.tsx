@@ -1,7 +1,6 @@
 import React from "react";
-import Layout from "../components/creative-layout";
+import PublicSiteLayout, { ContentPanel, PublicPageHeader } from "../components/public-site-layout";
 import CardDisplay, { CardDef } from "../components/collection/card-display";
-import * as styles from "../templates/template-styles.module.scss";
 import Link from "next/link";
 
 const CardProperties = (props: { card: CardDef }) => {
@@ -21,15 +20,7 @@ const CardProperties = (props: { card: CardDef }) => {
       </h2>
       <p>{rarity}</p>
       <div>
-        <CardDisplay
-          name={name}
-          baseManaCost={baseManaCost}
-          description={description}
-          art={art}
-          baseAttack={baseAttack}
-          baseHp={baseHp}
-          type={type}
-        />
+        <CardDisplay name={name} baseManaCost={baseManaCost} description={description} art={art} baseAttack={baseAttack} baseHp={baseHp} type={type} />
       </div>
       <h3>{typeAndStats}</h3>
       <p>{description}</p>
@@ -41,9 +32,10 @@ const CardProperties = (props: { card: CardDef }) => {
 export default function CardTemplate({ data }: { data: { card: CardDef } }) {
   const { card } = data; // data.card holds your post data
   return (
-    <Layout>
-      <div className={styles.templateContainer}>{card && <CardProperties card={card} />}</div>
-    </Layout>
+    <PublicSiteLayout title={card?.name ?? "Card"}>
+      <PublicPageHeader eyebrow="Card library" title={card?.name ?? "Card"} />
+      <ContentPanel variant="document">{card && <CardProperties card={card} />}</ContentPanel>
+    </PublicSiteLayout>
   );
 }
 

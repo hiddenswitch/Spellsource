@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import * as styles from "../components/creative-layout.module.scss";
-import * as templateStyles from "../templates/template-styles.module.scss";
-import Layout from "../components/creative-layout";
+import PublicSiteLayout, { ContentPanel, EmptyState, PublicPageHeader } from "../components/public-site-layout";
 import { ListGroup } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { isArray } from "lodash";
 import { cardSearchNode } from "../hooks/use-index";
-import CardDisplay, {CardDef} from "../components/collection/card-display";
+import CardDisplay, { CardDef } from "../components/collection/card-display";
 import { useGetCollectionCardsQuery } from "../__generated__/client";
 
 const SearchResults = () => {
@@ -37,23 +35,26 @@ const SearchResults = () => {
 
   if (results.length === 0) {
     return (
-      <Layout>
-        <p>Showing search results for "{query}":</p>
-        <p>Nothing found</p>
-      </Layout>
+      <PublicSiteLayout title="Search Spellsource">
+        <PublicPageHeader eyebrow="Card library" title="Search results" />
+        <ContentPanel variant="document">
+          <EmptyState title="Nothing found">No cards match “{query}”. Try a different name or keyword.</EmptyState>
+        </ContentPanel>
+      </PublicSiteLayout>
     );
   } else {
     return (
-      <Layout>
-        <div className={templateStyles.templateContainer}>
+      <PublicSiteLayout title="Search Spellsource">
+        <PublicPageHeader eyebrow="Card library" title="Search results" />
+        <ContentPanel variant="document">
           <p>Showing search results for "{query}":</p>
-          <ListGroup variant="flush" className={styles.searchResults}>
+          <ListGroup variant="flush">
             {results.map((page) => (
               <CardDisplay key={page.id} {...page.node} />
             ))}
           </ListGroup>
-        </div>
-      </Layout>
+        </ContentPanel>
+      </PublicSiteLayout>
     );
   }
 };

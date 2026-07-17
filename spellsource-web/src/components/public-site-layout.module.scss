@@ -1,0 +1,799 @@
+.site {
+  --ink: #292536;
+  --ink-muted: #625179;
+  --link: #2837ff;
+  --paper: #fffaf5;
+  --paper-muted: #f6efe7;
+  --panel: #846f7f;
+  --control: rgba(40, 37, 54, 0.42);
+  --frame: #312d68;
+  --page-banner-height: 152px;
+  --ground: url("/static/game-ui/ground.png");
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+  // All public pages share the same ground treatment. Individual content
+  // panels provide the page-specific character, rather than replacing it.
+  background-color: #e4e7ef;
+  background-image: linear-gradient(112deg, rgba(205, 224, 244, 0.84) 0%, rgba(229, 218, 239, 0.84) 53%, rgba(248, 226, 210, 0.84) 100%), var(--ground);
+  background-position:
+    center,
+    top left;
+  background-repeat: repeat;
+  background-size:
+    auto,
+    64px 32px;
+}
+
+.shell {
+  width: min(1240px, calc(100% - 40px));
+  margin: auto;
+}
+
+.hero {
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background:
+    linear-gradient(102deg, rgba(40, 55, 255, 0.9), rgba(122, 104, 222, 0.64) 50%, rgba(235, 143, 180, 0.46) 74%, rgba(255, 190, 135, 0.5)),
+    url("/static/assets/gradient-section-1.png") center / cover;
+}
+
+.heroContent {
+  max-width: 690px;
+  padding: 64px 0;
+}
+
+.heroEyebrow,
+.pageHeader span {
+  display: block;
+  margin-bottom: 12px;
+  font:
+    500 12px "Space Grotesk",
+    sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero h1,
+.pageHeader h1 {
+  margin: 0 0 18px;
+  font-size: clamp(40px, 6vw, 66px);
+  line-height: 0.98;
+}
+
+.hero p {
+  max-width: 560px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.pageHeader {
+  min-height: var(--page-banner-height);
+  display: flex;
+  align-items: center;
+  padding: 26px 0 22px;
+  border-bottom: 2px solid var(--ink);
+  color: #fff;
+  background-color: var(--link);
+  background-position: center 53%;
+  background-size: cover;
+}
+
+.pageHeader span {
+  margin-bottom: 7px;
+  color: #fff;
+}
+
+.pageHeader h1 {
+  margin-bottom: 0;
+  font-size: clamp(32px, 4vw, 44px);
+  text-shadow: 0 2px 16px rgba(27, 27, 27, 0.35);
+}
+
+.panel {
+  max-width: 1080px;
+  margin: 38px auto;
+  padding: 28px;
+  border: 1px solid rgba(117, 108, 135, 0.62);
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255, 250, 244, 0.96), rgba(239, 250, 250, 0.9));
+  box-shadow:
+    0 14px 34px rgba(80, 67, 102, 0.13),
+    0 4px 0 rgba(195, 234, 240, 0.72);
+}
+
+.panel :global(h2),
+.panel :global(h3) {
+  margin-top: 32px;
+}
+.panel :global(h2):first-child,
+.panel :global(h3):first-child {
+  margin-top: 0;
+}
+.panel :global(p),
+.panel :global(li) {
+  line-height: 1.62;
+}
+.panel :global(a) {
+  color: var(--link);
+}
+.panel :global(img) {
+  max-width: 100%;
+  height: auto;
+}
+.panel :global(table) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Long-form public pages read as field notes rather than generic white cards. */
+.documentPanel {
+  max-width: 1080px;
+  padding: 34px 38px 42px;
+  border: 3px solid #312d68;
+  border-radius: 2px;
+  color: #fffaf5;
+  background: linear-gradient(138deg, rgba(132, 111, 127, 0.98), rgba(105, 86, 97, 0.98));
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 0 0 2px rgba(199, 185, 195, 0.62),
+    0 20px 42px rgba(40, 34, 69, 0.24),
+    0 5px 0 rgba(44, 40, 81, 0.55);
+}
+
+.documentPanel :global(h2),
+.documentPanel :global(h3),
+.documentPanel :global(h4) {
+  color: #fff;
+  text-shadow: 0 2px 2px rgba(17, 15, 30, 0.5);
+}
+
+.documentPanel :global(h3) {
+  margin-top: 38px;
+  padding-bottom: 9px;
+  border-bottom: 2px solid rgba(147, 185, 255, 0.42);
+  letter-spacing: 0.01em;
+}
+
+.documentPanel :global(p),
+.documentPanel :global(li) {
+  color: #fffaf5;
+}
+
+.documentPanel :global(a) {
+  color: #9ddcff;
+  font-weight: 600;
+  text-decoration-color: rgba(157, 220, 255, 0.55);
+  text-underline-offset: 0.16em;
+}
+
+.documentPanel :global(a:hover) {
+  color: #fff1b9;
+  text-decoration-color: currentColor;
+}
+
+.documentPanel :global(strong) {
+  color: #fff;
+}
+
+.documentPanel :global(img) {
+  border: 4px solid transparent;
+  border-image: url("/static/game-ui/slices/panel-dark-opaque.png") 4 / 4px / 0 stretch;
+  background: #4c3e4d;
+  box-shadow: 0 8px 18px rgba(15, 14, 27, 0.34);
+}
+
+.wikiHubPanel :global(img[title^="fig:"]) {
+  float: none;
+  display: block;
+  max-width: 100%;
+  margin: 20px auto 24px;
+}
+
+.documentPanel :global(details) {
+  margin: 17px 0;
+  border-left: 3px solid #e0c1a4;
+  background: rgba(63, 48, 60, 0.38);
+}
+
+.documentPanel :global(summary) {
+  padding: 13px 16px;
+  color: #fff;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+/* Override the legacy global summary hover rule: its white fill is a harsh
+   flash against the darker Wiki panel. */
+.documentPanel :global(summary:hover),
+.documentPanel :global(summary:focus-visible) {
+  color: #fff !important;
+  background-color: transparent !important;
+}
+
+.documentPanel :global(details[open] summary) {
+  border-bottom: 1px solid rgba(157, 220, 255, 0.22);
+}
+
+.documentPanel :global(details > :not(summary)) {
+  margin-right: 16px;
+  margin-left: 16px;
+}
+
+.documentPanel :global(blockquote) {
+  margin: 20px 0;
+  padding: 10px 18px;
+  border-left: 3px solid #f0a7c1;
+  color: #e2ddf0;
+  background: rgba(63, 48, 60, 0.34);
+}
+
+.documentPanel :global(th),
+.documentPanel :global(td) {
+  padding: 9px 12px;
+  border-color: rgba(157, 220, 255, 0.27);
+}
+
+.documentPanel :global(th) {
+  color: #fff;
+  background: rgba(63, 48, 60, 0.5);
+}
+
+@media (max-width: 575px) {
+  .documentPanel {
+    padding: 24px 20px 30px;
+  }
+}
+
+.platforms figure {
+  display: inline-block;
+  margin: 18px 26px;
+}
+.articleSection h4 {
+  margin: 24px 0 8px;
+}
+.articleSection img,
+.emphasisGif {
+  max-width: min(100%, 700px);
+  height: auto;
+}
+
+.hubSection {
+  width: min(1240px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 42px 0 66px;
+}
+
+.hubCardLink {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.hubCard {
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(117, 108, 135, 0.6);
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff9f3, #effafa);
+  box-shadow:
+    0 12px 24px rgba(80, 67, 102, 0.13),
+    0 4px 0 rgba(239, 166, 191, 0.62);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.hubCard:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 30px rgba(80, 67, 102, 0.18),
+    0 5px 0 rgba(239, 166, 191, 0.8);
+}
+
+.hubCard img {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+}
+.hubCard h4 {
+  margin: 0;
+  padding: 18px;
+  color: var(--ink);
+  text-align: center;
+}
+
+/* Home shortcuts stand as individual raised choices, using the same panel
+   frame as Collection cards without adding an unnecessary parent well. */
+.homeHub .hubCard {
+  border: 6px solid transparent;
+  // The raised panel sprite has a bright inner bevel that reads as a white
+  // seam against artwork. Home shortcuts use the darker opaque frame instead.
+  border-image: url("/static/game-ui/slices/panel-dark-opaque.png") 4 / 6px / 0 stretch;
+  border-radius: 0;
+  background: #39375c;
+  background-clip: padding-box;
+  box-shadow: 0 6px 13px rgba(55, 45, 80, 0.08);
+}
+
+.homeHub .hubCard:hover {
+  box-shadow: 0 9px 18px rgba(55, 45, 80, 0.13);
+}
+
+.homeHub .hubCard img {
+  display: block;
+}
+
+.homeHub .hubCard h4 {
+  position: relative;
+  z-index: 1;
+  min-height: 64px;
+  margin: -64px 0 0;
+  padding: 27px 18px 13px;
+  background: linear-gradient(180deg, transparent, rgba(34, 31, 49, 0.94) 56%);
+  color: #fff;
+  text-shadow: 0 2px 2px rgba(18, 16, 29, 0.92);
+}
+
+.emptyState {
+  padding: 56px 24px;
+  border: 2px dashed rgba(27, 27, 27, 0.45);
+  border-radius: 12px;
+  background: #fff;
+  text-align: center;
+}
+
+.emptyState h2 {
+  margin: 0 0 10px;
+}
+.emptyState p {
+  margin: 0;
+  color: #555;
+}
+
+/* Collection workspace */
+.collectionShell {
+  width: min(1240px, calc(100% - 40px));
+  max-width: none;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.collectionWorkspace {
+  --bs-gutter-x: 26px;
+  margin: 28px 0 52px;
+}
+
+.collectionResults,
+.collectionDeckPanel :global(.offcanvas-body) {
+  border: 6px solid transparent;
+  border-image: url("/static/game-ui/slices/panel-opaque.png") 6 6 4 4 fill / 6px / 0 stretch;
+  background: transparent;
+}
+
+.collectionResults {
+  padding: 18px;
+  box-shadow: 0 14px 30px rgba(72, 59, 92, 0.1);
+}
+
+.collectionDeckPanel {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.collectionDeckPanel :global(.offcanvas-body) {
+  padding: 14px;
+  color: #fff;
+}
+.collectionDeckPanel :global(h3) {
+  margin: 10px 0 14px;
+  color: #fff;
+  font-size: 24px;
+  text-shadow: 0 1px 1px rgba(40, 37, 54, 0.5);
+}
+
+.collectionToolbar {
+  margin: 0;
+  padding: 5px 4px 12px;
+  border: 0;
+  background: transparent;
+}
+
+.collectionToolbar > :global(.mb-1) {
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(40, 37, 54, 0.5);
+}
+
+.collectionToolbar :global(.btn),
+.collectionToolbar :global(.dropdown-toggle),
+.viewToggle :global(.btn) {
+  min-height: 39px;
+  padding: 0.3rem 0.64rem;
+  border: 6px solid transparent !important;
+  border-image: url("/static/game-ui/slices/button-medium-raised.png") 5 5 6 6 / 6px / 0 stretch !important;
+  border-radius: 0 !important;
+  background: var(--control) !important;
+  background-clip: padding-box !important;
+  box-shadow: none !important;
+  color: #fff !important;
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(27, 23, 38, 0.92);
+  image-rendering: pixelated;
+  transform: none !important;
+}
+
+.collectionToolbar :global(.btn:hover:not(:disabled)),
+.collectionToolbar :global(.dropdown-toggle:hover:not(:disabled)) {
+  color: #fff !important;
+  filter: brightness(1.045);
+}
+
+.collectionToolbar :global(.btn:active:not(:disabled)),
+.collectionToolbar :global(.btn.active),
+.collectionToolbar :global(.dropdown-toggle.show) {
+  border-image: url("/static/game-ui/slices/button-medium-pressed.png") 5 5 6 6 / 6px / 0 stretch !important;
+  background: transparent !important;
+  color: #fff !important;
+  filter: none;
+}
+
+.collectionToolbar :global(.btn:disabled),
+.collectionToolbar :global(.dropdown-toggle:disabled) {
+  border-image: url("/static/game-ui/slices/button-medium-flat.png") 4 4 6 6 / 6px / 0 stretch !important;
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.62) !important;
+  text-shadow: none;
+  filter: saturate(0.25);
+  opacity: 0.9;
+}
+
+.collectionToolbar > :global(form) :global(.form-control) {
+  min-height: 39px;
+  padding: 0.3rem 0.64rem;
+  border: 6px solid transparent;
+  border-image: url("/static/game-ui/slices/panel-raised.png") 4 4 6 5 / 5px / 0 stretch;
+  border-radius: 0;
+  background: rgba(40, 37, 54, 0.34);
+  background-clip: padding-box;
+  box-shadow: none;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(27, 23, 38, 0.8);
+}
+
+.collectionToolbar :global(.form-control::placeholder) {
+  color: #fff;
+  opacity: 0.8;
+}
+
+/* Focus stays inside the pixel frame: the alternate source contains a square
+   outer highlight that does not slice cleanly. */
+.collectionToolbar :global(.form-control:focus),
+.collectionToolbar :global(.form-control:focus-visible) {
+  outline: none !important;
+  border-image-source: url("/static/game-ui/slices/panel-raised.png") !important;
+  background: rgba(40, 37, 54, 0.48) !important;
+  background-clip: padding-box !important;
+  box-shadow: none !important;
+}
+
+.collectionToolbar :global(.dropdown-menu) {
+  padding: 6px;
+  border: 4px solid transparent;
+  border-image: url("/static/game-ui/slices/panel-raised.png") 4 4 6 5 / 4px / 0 stretch;
+  border-radius: 0;
+  background: rgba(255, 250, 245, 0.98);
+  background-clip: padding-box;
+  box-shadow: 6px 8px 0 rgba(40, 37, 54, 0.18);
+}
+
+.collectionToolbar :global(.dropdown-menu .btn),
+.collectionToolbar :global(.dropdown-menu .dropdown-item) {
+  display: block;
+  width: 100%;
+  min-height: auto;
+  padding: 0.42rem 0.55rem;
+  border: 0 !important;
+  border-radius: 2px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #302b3b !important;
+  font-weight: 650;
+  text-align: left;
+  text-shadow: none;
+}
+
+.collectionToolbar :global(.dropdown-menu .btn:hover),
+.collectionToolbar :global(.dropdown-menu .btn:focus),
+.collectionToolbar :global(.dropdown-menu .btn.active),
+.collectionToolbar :global(.dropdown-menu .dropdown-item:hover),
+.collectionToolbar :global(.dropdown-menu .dropdown-item:focus),
+.collectionToolbar :global(.dropdown-menu .dropdown-item.active) {
+  background: rgba(91, 83, 116, 0.16) !important;
+  color: var(--ink) !important;
+}
+
+.collectionGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding: 18px 4px 4px;
+}
+
+.collectionTile {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-height: 184px;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 14px 16px;
+  border: 6px solid transparent;
+  border-image: url("/static/game-ui/slices/panel-raised.png") 4 4 6 5 / 6px / 0 stretch;
+  border-radius: 0;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--collection-accent, #756c87) 6%, var(--paper)), rgba(255, 252, 247, 0.76));
+  background-clip: padding-box;
+  box-shadow: 0 6px 13px rgba(55, 45, 80, 0.08);
+  cursor: pointer;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.collectionTile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 18px rgba(55, 45, 80, 0.13);
+}
+.collectionTile::before {
+  position: absolute;
+  z-index: 1;
+  top: 6px;
+  right: 7px;
+  left: 7px;
+  height: 3px;
+  background: var(--collection-accent, #756c87);
+  content: "";
+  opacity: 0.88;
+}
+.collectionTile > div:first-child {
+  padding-right: 76px;
+}
+.collectionTile > div:first-child,
+.collectionTile h3,
+.collectionTile strong,
+.collectionTile p,
+.collectionTile a {
+  position: relative;
+  z-index: 1;
+}
+.collectionTile div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.collectionTile > div:first-child span:last-child {
+  color: color-mix(in srgb, var(--collection-accent, #625179) 35%, var(--ink));
+  font-weight: 700;
+}
+.collectionTile h3 {
+  margin: 12px 74px 4px 0;
+  font-size: 20px;
+}
+.collectionTile strong {
+  font-size: 13px;
+}
+.collectionTile p {
+  flex: 1;
+  margin: 12px 0;
+  color: #45404a;
+  font-size: 14px;
+}
+.collectionTile a {
+  color: var(--link);
+  font-weight: 700;
+}
+
+.collectionTileArtwork {
+  position: absolute;
+  z-index: 0;
+  top: 11px;
+  right: 10px;
+  display: grid !important;
+  width: 66px;
+  height: 70px;
+  place-items: center;
+  padding: 5px;
+  border: 1px solid rgba(53, 47, 95, 0.52);
+  border-radius: 22px 8px 18px 9px;
+  background: #282a5b url("/static/card-images/large-card-window-background.png") center / cover;
+  box-shadow: 0 4px 9px rgba(47, 40, 86, 0.24);
+}
+
+.collectionTileArtwork img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(1px 2px 0 rgba(20, 20, 40, 0.55));
+}
+
+.collectionLoading {
+  margin: 18px 4px 4px;
+  padding: 44px;
+  border: 1px dashed rgba(117, 108, 135, 0.65);
+  border-radius: 13px;
+  background: rgba(255, 250, 244, 0.62);
+  text-align: center;
+}
+
+.collectionDeckPanel :global(ul) {
+  gap: 0.65rem !important;
+}
+.collectionDeckPanel :global(ul li),
+.collectionDeckPanel :global(ul li > a) {
+  display: block;
+  width: 100%;
+}
+.collectionDeckPanel :global(ul .btn) {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 36px;
+  padding: 0.38rem 0.8rem;
+  border: 4px solid transparent !important;
+  border-image: url("/static/game-ui/slices/panel-dark-opaque.png") 6 6 4 4 fill / 4px / 0 stretch !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-clip: padding-box !important;
+  box-shadow: none !important;
+  color: #fff !important;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  text-shadow: 0 1px 1px rgba(27, 23, 38, 0.82);
+}
+
+.collectionDeckPanel :global(ul .btn)::before {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  bottom: 5px;
+  width: 3px;
+  background: var(--collection-deck-accent, rgba(255, 255, 255, 0.75));
+  content: "";
+  pointer-events: none;
+}
+.collectionDeckPanel :global(ul .btn:hover:not(:disabled)),
+.collectionDeckPanel :global(ul .btn:focus-visible) {
+  background: rgba(255, 255, 255, 0.19) !important;
+  color: #fff !important;
+  filter: none;
+  transform: translateX(2px);
+}
+.collectionDeckPanel :global(ul li > a) {
+  color: #fff;
+  text-decoration-color: var(--collection-deck-accent, rgba(255, 255, 255, 0.8));
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+.collectionResults :global(.table) {
+  --bs-table-bg: transparent;
+  --bs-table-striped-bg: rgba(255, 250, 245, 0.78);
+  --bs-table-hover-bg: rgba(255, 255, 255, 0.9);
+  margin: 18px 0 0;
+  border-collapse: separate;
+  border-spacing: 0 2px;
+  color: #302b3b;
+}
+
+.collectionResults :global(.table thead th) {
+  padding: 0.7rem 0.55rem;
+  border: 0;
+  border-bottom: 2px solid rgba(255, 250, 245, 0.62);
+  color: #fff;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.collectionResults :global(.table tbody td) {
+  padding: 0.65rem 0.55rem;
+  border: 0;
+  background: rgba(255, 250, 245, 0.88);
+  vertical-align: top;
+}
+.collectionResults :global(.table tbody tr td:first-child) {
+  border-radius: 3px 0 0 3px;
+}
+.collectionResults :global(.table tbody tr td:last-child) {
+  border-radius: 0 3px 3px 0;
+}
+.collectionResults :global(.table a) {
+  color: var(--link);
+  font-weight: 650;
+}
+
+/* Keyboard focus remains visible on public pages; Collection's input is the
+   exception above because its artwork already provides the focus boundary. */
+.site :global(a:focus-visible),
+.site :global(button:focus-visible),
+.site :global(input:focus-visible),
+.site :global([role="button"]:focus-visible) {
+  outline: 3px solid var(--link) !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.82) !important;
+}
+
+.site:has(.homeHub) .pageHeader p {
+  max-width: 560px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow: 0 2px 5px rgba(27, 23, 38, 0.82);
+}
+
+@media (max-width: 1200px) and (min-width: 901px) {
+  .collectionGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 991px) {
+  .collectionDeckPanel {
+    border: 1px solid rgba(150, 103, 111, 0.45);
+    border-radius: 20px 20px 0 0;
+    background: rgba(255, 248, 239, 0.96);
+    box-shadow: 0 -12px 32px rgba(102, 73, 67, 0.14);
+  }
+
+  .collectionDeckPanel :global(.offcanvas-body) {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .collectionGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .shell {
+    width: min(100% - 28px, 1240px);
+  }
+  .collectionShell {
+    width: calc(100% - 28px);
+  }
+  .collectionWorkspace {
+    margin-top: 20px;
+  }
+  .hero {
+    min-height: 320px;
+  }
+  .heroContent {
+    padding: 48px 0;
+  }
+  .panel {
+    margin: 24px 14px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 560px) {
+  .collectionGrid {
+    grid-template-columns: 1fr;
+  }
+  .viewToggle {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+}
