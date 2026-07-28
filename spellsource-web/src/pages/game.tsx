@@ -1,9 +1,8 @@
 import Head from "next/head";
 import type { FunctionComponent } from "react";
 
-const WEBGL_BUILD_VERSION = "4.0.4";
 const WEBGL_BUILD_URL =
-  `https://s3-builds.appmana.com/spellsource-build-artifacts/spellsource-client/webgl/${WEBGL_BUILD_VERSION}/index.html`;
+  "https://s3-builds.appmana.com/spellsource-build-artifacts/spellsource-client/webgl/latest/index.html";
 
 const GamePage: FunctionComponent = () => (
   <>
