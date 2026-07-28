@@ -42,9 +42,6 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          lfs: true
-      - run: git lfs checkout
       - name: Checkout public submodules
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"
