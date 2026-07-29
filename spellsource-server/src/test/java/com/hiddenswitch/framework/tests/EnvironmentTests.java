@@ -8,11 +8,15 @@ import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
 
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GAMES;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EnvironmentTests extends FrameworkTestBase {
 
@@ -103,7 +107,16 @@ public class EnvironmentTests extends FrameworkTestBase {
 									.send(),
 							webClient.get(8080, Environment.getHostIpAddress(), "/readiness")
 									.timeout(900)
-									.send()).map(v);
+									.send(),
+							webClient.get(8080, Environment.getHostIpAddress(), "/metrics")
+									.timeout(900)
+									.send())
+						.map(responses -> {
+							HttpResponse<Buffer> metrics = responses.resultAt(2);
+							assertEquals(200, metrics.statusCode());
+							assertTrue(metrics.bodyAsString().contains("# HELP"));
+							return v;
+						});
 				})
 				.onSuccess(vx -> vx.close())
 				.onComplete(vertxTestContext.succeedingThenComplete());

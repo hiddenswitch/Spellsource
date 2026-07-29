@@ -5,7 +5,6 @@ import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.diagnostics.Tracing;
-// PrometheusMeterRegistry and TextFormat removed - using PrometheusScrapingHandler
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
@@ -72,7 +71,7 @@ public class Diagnostics {
 				});
 
 		router.get(configuration.getMetrics().getMetricsRoute())
-				.handler(io.vertx.micrometer.PrometheusScrapingHandler.create());
+				.handler(io.vertx.micrometer.PrometheusScrapingHandler.create(Environment.prometheusMeterRegistry()));
 
 		var server = vertx.createHttpServer(new HttpServerOptions().setPort(configuration.getMetrics().getPort()));
 		server.requestHandler(router);

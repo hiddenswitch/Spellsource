@@ -13,6 +13,7 @@ import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.internal.KeepAliveManager;
 import io.micrometer.core.instrument.Metrics;
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
 import io.vertx.core.Context;
@@ -597,6 +598,10 @@ public class Environment {
 
 	public static PrometheusBackendRegistry registry() {
 		return prometheusRegistry;
+	}
+
+	public static PrometheusMeterRegistry prometheusMeterRegistry() {
+		return (PrometheusMeterRegistry) prometheusRegistry.getMeterRegistry();
 	}
 
 	public static KeepAliveManager keepAliveManager(HttpConnection connection, Handler<Void> failHandler, boolean reply) {
