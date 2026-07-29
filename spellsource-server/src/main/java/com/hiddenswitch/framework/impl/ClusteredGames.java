@@ -182,15 +182,16 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 	private Future<String> restoreGame(String userId) {
 		var hosted = contexts.values().stream()
 				.filter(context -> context.getPlayerConfigurations().stream().anyMatch(c -> !c.isBot() && userId.equals(c.getUserId())))
-				.map(ServerGameContext::getGameId).findFirst();
+				.findFirst();
 		if (hosted.isPresent()) {
-			return Future.succeededFuture(hosted.get());
+			return Future.succeededFuture(hosted.get().updateAndGetGameOver() ? null : hosted.get().getGameId());
 		}
 		return Environment.query(dsl -> dsl.select(GAMES.ID, GAMES.TRACE, GAME_USERS.PLAYER_INDEX, GAME_USERS.DECK_ID)
 				.from(GAMES).join(GAME_USERS).on(GAME_USERS.GAME_ID.eq(GAMES.ID))
 				.where(GAME_USERS.USER_ID.eq(userId))
 				.and(GAMES.STATUS.eq(GameStateEnum.STARTED))
 				.and(GAMES.TRACE.isNotNull())
+				.and(GAME_USERS.VICTORY_STATUS.eq(com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum.UNKNOWN))
 				.and(GAME_USERS.GAME_ID.in(dsl.select(GAME_USERS.GAME_ID).from(GAME_USERS)
 						.groupBy(GAME_USERS.GAME_ID).having(org.jooq.impl.DSL.count().eq(1))))
 				.orderBy(GAMES.CREATED_AT.desc()).limit(1))
@@ -285,7 +286,10 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			var userIdLoser = gameContext.getOpponent(gameContext.getWinner()).getUserId();
 
 			var pTrace = JSONToJsonObjectConverter.getInstance().to(gameContext.getTrace().toJson());
-			await(Environment.callRoutine(Routines.clusteredGamesUpdateGameAndUsers(winner, userIdLoser, gameIdLong, pTrace)).execute());
+			var updated = await(Environment.callRoutine(Routines.clusteredGamesUpdateGameAndUsers(winner, userIdLoser, gameIdLong, pTrace)).execute());
+			if (!Boolean.TRUE.equals(updated)) {
+				throw new IllegalStateException("failed to persist terminal state for gameId=" + gameId);
+			}
 		}
 
 		if (gameContext.getStatus() == GameStatus.RUNNING) {

@@ -29,6 +29,7 @@ public class Games {
 			.thenComparingInt(net.demilich.metastone.game.entities.Entity::getIndex);
 	public static final String GAMES_CREATE_GAME_SESSION = "games:createGameSession";
 	public static final String ADDRESS_IS_IN_GAME = "games:isInGame:";
+	public static final String ADDRESS_CONCEDE_GAME = "games:concede:";
 	/** Lazily hosts a persisted single-player match. Internal cluster API. */
 	public static final String GAMES_RESTORE_GAME = "games:restoreGame";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Games.class);
@@ -66,6 +67,18 @@ public class Games {
 						? Future.succeededFuture(res.body())
 						: eb.<String>request(GAMES_RESTORE_GAME, userId).map(Message::body).otherwiseEmpty())
 				.map(res -> res != null ? res : null);
+	}
+
+	/**
+	 * Concedes the game currently hosted for {@code userId}.
+	 *
+	 * Unlike ordinary client messages, concession is acknowledged only after the game
+	 * has ended and its terminal state has been persisted.
+	 */
+	public static Future<Boolean> concedeGame(@NotNull String userId) {
+		var eb = Vertx.currentContext().owner().eventBus();
+		return eb.<Boolean>request(ADDRESS_CONCEDE_GAME + userId, "")
+				.map(Message::body);
 	}
 
 	/**

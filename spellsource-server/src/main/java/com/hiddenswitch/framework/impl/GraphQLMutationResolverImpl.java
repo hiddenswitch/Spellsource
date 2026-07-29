@@ -2,6 +2,7 @@ package com.hiddenswitch.framework.impl;
 
 import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.Environment;
+import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.graphql.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
@@ -555,11 +556,7 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 		if (userId == null) {
 			return Future.failedFuture("must be authenticated");
 		}
-		var message = Spellsource.ClientToServerMessage.newBuilder()
-				.setMessageType(Spellsource.MessageTypeMessage.MessageType.CONCEDE)
-				.build();
-		GraphQLGameBridge.sendClientMessage(userId, message);
-		return Future.succeededFuture(true);
+		return Games.concedeGame(userId);
 	}
 
 	@Override

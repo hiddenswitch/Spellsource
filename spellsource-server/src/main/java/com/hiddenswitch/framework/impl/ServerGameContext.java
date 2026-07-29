@@ -57,6 +57,7 @@ import java.util.function.Function;
 
 import static com.hiddenswitch.framework.Environment.*;
 import static com.hiddenswitch.framework.Games.ADDRESS_IS_IN_GAME;
+import static com.hiddenswitch.framework.Games.ADDRESS_CONCEDE_GAME;
 import static io.micrometer.core.instrument.Metrics.globalRegistry;
 import static io.vertx.await.Async.await;
 import static io.vertx.core.Future.all;
@@ -84,7 +85,7 @@ public class ServerGameContext extends GameContext implements Server {
 	private final transient List<Promise<Void>> registrationsReady = new CopyOnWriteArrayList<>();
 	private final transient Promise<Void> initialization = Promise.promise();
 	private final Context context;
-	private final List<MessageConsumer<String>> inGameConsumers = new ArrayList<>();
+	private final List<MessageConsumer<?>> gameLifecycleConsumers = new ArrayList<>();
 	private final ClusteredGames cluster;
 	private final AbstractVirtualThreadVerticle verticle;
 	private final List<Configuration> playerConfigurations = new ArrayList<>();
@@ -176,7 +177,23 @@ public class ServerGameContext extends GameContext implements Server {
 				registrationsReady.add(inGameRegistration);
 
 				// When the game ends remove the fact that the user is in this game
-				this.inGameConsumers.add(inGameConsumer);
+				this.gameLifecycleConsumers.add(inGameConsumer);
+
+				if (!configuration.isBot()) {
+					var concedeConsumer = Vertx.currentContext().owner().eventBus()
+							.<String>consumer(ADDRESS_CONCEDE_GAME + userId, request -> {
+								try {
+									concede(configuration.getPlayerId());
+									request.reply(true);
+								} catch (Throwable cause) {
+									request.fail(-1, cause.getMessage());
+								}
+							});
+					var concedeRegistration = Promise.<Void>promise();
+					concedeConsumer.completion().onComplete(concedeRegistration);
+					registrationsReady.add(concedeRegistration);
+					gameLifecycleConsumers.add(concedeConsumer);
+				}
 
 				// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
 				if (configuration.isBot()) {
@@ -934,7 +951,7 @@ public class ServerGameContext extends GameContext implements Server {
 			super.endGame();
 			LOGGER.trace("endGame {}: called super.endGame", gameId);
 
-			for (var consumer : inGameConsumers) {
+			for (var consumer : gameLifecycleConsumers) {
 				consumer.unregister();
 			}
 

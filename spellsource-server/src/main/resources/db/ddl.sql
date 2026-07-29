@@ -919,27 +919,28 @@ CREATE FUNCTION spellsource.clustered_games_update_game_and_users(p_user_id_winn
     AS $$
 begin
     -- equivalent of the first jooq update query
-    update game_users
+    update spellsource.game_users
     set victory_status = 'WON'::spellsource.game_user_victory_enum
     where user_id = p_user_id_winner
       and game_id = p_game_id;
 
     -- equivalent of the second jooq update query
-    update game_users
+    update spellsource.game_users
     set victory_status = 'LOST'::spellsource.game_user_victory_enum
     where user_id = p_user_id_loser
       and game_id = p_game_id;
 
     -- equivalent of the third jooq update query
-    update games
+    update spellsource.games
     set status = 'FINISHED'::spellsource.game_state_enum,
         trace  = p_trace
     where id = p_game_id;
 
+    if not found then
+        raise exception 'game % was not found while recording completion', p_game_id;
+    end if;
+
     return true;
-exception
-    when others then
-        return false;
 end;
 $$;
 

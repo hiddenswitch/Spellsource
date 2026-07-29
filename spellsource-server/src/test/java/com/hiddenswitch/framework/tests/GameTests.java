@@ -28,12 +28,69 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GAMES;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GAME_USERS;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTests extends FrameworkTestBase {
+	@Test
+	public void testConcededPersistedBotMatchCannotResume(Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
+		var gameId = new AtomicReference<Long>();
+		var clusteredGamesDeployment = new AtomicReference<String>();
+
+		startGateway(vertx)
+				.compose(ignored -> client.createAndLogin())
+				.compose(ignored -> vertx.deployVerticle(new ClusteredGames(),
+						new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD)))
+				.onSuccess(clusteredGamesDeployment::set)
+				.compose(ignored -> client.legacy().decksGetAll(Empty.getDefaultInstance()))
+				.compose(decks -> Environment.query(dsl -> dsl.insertInto(GAMES).defaultValues().returning(GAMES.ID))
+						.compose(rows -> {
+							var id = rows.iterator().next().getLong(GAMES.ID.getName());
+							gameId.set(id);
+							var deckId = decks.getDecks(0).getCollection().getId();
+							return Environment.withDslContext(dsl -> dsl.insertInto(GAME_USERS)
+											.set(GAME_USERS.GAME_ID, id)
+											.set(GAME_USERS.USER_ID, client.getUserEntity().getId())
+											.set(GAME_USERS.DECK_ID, deckId)
+											.set(GAME_USERS.PLAYER_INDEX, (short) 0))
+									.map(ignored -> deckId);
+						}))
+				.compose(deckId -> Games.createGame(ConfigurationRequest.botMatch(
+						gameId.get().toString(),
+						client.getUserEntity().getId(),
+						client.getUserEntity().getId(),
+						deckId,
+						deckId)))
+				.compose(ignored -> playThroughOneAction(client))
+				.compose(ignored -> Environment.sleep(vertx, 250L))
+				.compose(ignored -> Games.concedeGame(client.getUserEntity().getId()))
+				.onSuccess(conceded -> testContext.verify(() -> assertTrue(conceded)))
+				.compose(ignored -> Games.getGameId(client.getUserEntity().getId()))
+				.onSuccess(activeGameId -> testContext.verify(() ->
+						assertNull(activeGameId, "conceded game must stop being active before concession is acknowledged")))
+				.compose(ignored -> Environment.query(dsl -> dsl.select(GAMES.STATUS, GAME_USERS.VICTORY_STATUS)
+						.from(GAMES)
+						.join(GAME_USERS).on(GAME_USERS.GAME_ID.eq(GAMES.ID))
+						.where(GAMES.ID.eq(gameId.get()))))
+				.onSuccess(rows -> testContext.verify(() -> {
+					var row = rows.iterator().next();
+					assertEquals("FINISHED", row.getString(GAMES.STATUS.getName()));
+					assertNotEquals("UNKNOWN", row.getString(GAME_USERS.VICTORY_STATUS.getName()));
+				}))
+				.compose(ignored -> vertx.undeploy(clusteredGamesDeployment.get()))
+				.compose(ignored -> vertx.deployVerticle(new ClusteredGames(),
+						new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD)))
+				.compose(ignored -> Games.getGameId(client.getUserEntity().getId()))
+				.onSuccess(restoredGameId -> testContext.verify(() ->
+						assertNull(restoredGameId, "conceded game must not resume after the game host restarts")))
+				.eventually(client::closeFut)
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
 	@Test
 	public void testBotMatchCheckpointsTraceAfterMulliganAndAction(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
@@ -86,9 +143,14 @@ public class GameTests extends FrameworkTestBase {
 						if (actionSent.compareAndSet(false, true)) {
 							stream.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.UPDATE_ACTION)
 									.setRepliesTo(message.getId()).setActionIndex(0).build())
-									.onSuccess(ignored -> completed.tryComplete()).onFailure(completed::tryFail);
+									.onFailure(completed::tryFail);
+						} else {
+							// A subsequent action request proves that the first action was
+							// processed and its synchronous checkpoint completed.
+							completed.tryComplete();
 						}
 					}
+					case ON_GAME_END -> completed.tryComplete();
 				}
 			});
 		}).onFailure(completed::tryFail);
