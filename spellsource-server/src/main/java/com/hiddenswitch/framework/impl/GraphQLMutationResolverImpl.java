@@ -500,8 +500,9 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 				.setMessageType(Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE)
 				.setFirstMessage(firstMessageBuilder)
 				.build();
-		GraphQLGameBridge.sendClientMessage(userId, firstMessage);
-		return Future.succeededFuture(true);
+		return GraphQLGameBridge.awaitGameMessagesSubscriber(userId)
+				.compose(ignored -> GraphQLGameBridge.sendClientMessage(userId, firstMessage))
+				.map(true);
 	}
 
 	@Override

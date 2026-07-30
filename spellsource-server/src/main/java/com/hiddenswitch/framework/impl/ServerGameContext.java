@@ -230,7 +230,8 @@ public class ServerGameContext extends GameContext implements Server {
 							this.consumer = bus.consumer(getMessagesFromClientAddress(userId));
 							// setMaxBufferedMessages removed in Vert.x 5
 							// By using a publisher, we do not require that there be a working connection while sending
-							this.producer = bus.publisher(getMessagesFromServerAddress(userId));
+							this.producer = new RetryMessageProducer<>(
+									bus.publisher(getMessagesFromServerAddress(userId)), 10, 1000);
 							// The event bus
 
 							Promise<Void> registration = Promise.promise();

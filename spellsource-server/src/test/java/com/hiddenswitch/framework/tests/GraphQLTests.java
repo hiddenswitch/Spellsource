@@ -3,8 +3,10 @@ package com.hiddenswitch.framework.tests;
 import com.hiddenswitch.framework.*;
 import com.hiddenswitch.framework.impl.ClusteredGames;
 import com.hiddenswitch.framework.impl.RogueManager;
+import com.hiddenswitch.framework.impl.ServerGameContext;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
+import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.vertx.core.*;
 import io.vertx.core.http.WebSocketConnectOptions;
 import io.vertx.core.json.JsonArray;
@@ -95,6 +97,13 @@ public class GraphQLTests extends FrameworkTestBase {
 
 	private String extractToken(JsonObject createAccountData) {
 		return createAccountData.getJsonObject("accessToken").getString("token");
+	}
+
+	private Future<JsonObject> connectToGame(WebClient webClient, String token) {
+		return graphql(webClient, """
+				mutation Connect {
+				  connectToGame(playerKey: "", playerSecret: "")
+				}""", null, token);
 	}
 
 	/**
@@ -969,6 +978,86 @@ public class GraphQLTests extends FrameworkTestBase {
 
 			// Cleanup
 			await(Matchmaking.deleteQueue(queueId));
+		});
+	}
+
+	@Test
+	public void testConnectToGameWaitsForGameMessageSubscription(Vertx vertx, VertxTestContext testContext) {
+		testVirtual(vertx, testContext, () -> {
+			await(startAll(vertx));
+			var webClient = graphqlClient(vertx);
+			var accountData = await(createAccountViaGraphQL(webClient,
+					UUID.randomUUID() + "@test.com", UUID.randomUUID().toString(), "password"));
+			var token = extractToken(accountData);
+			var userId = accountData.getJsonObject("userEntity").getString("id");
+
+			var firstMessage = Promise.<Spellsource.ClientToServerMessage>promise();
+			var gameConsumer = vertx.eventBus()
+					.<Spellsource.ClientToServerMessage>consumer(ServerGameContext.getMessagesFromClientAddress(userId));
+			gameConsumer.handler(message -> firstMessage.tryComplete(message.body()));
+			await(gameConsumer.completion());
+
+			var ws = await(vertx.createWebSocketClient().connect(new WebSocketConnectOptions()
+					.setHost("localhost")
+					.setPort(GRAPHQL_PORT)
+					.setURI("/graphql")
+					.addSubProtocol("graphql-transport-ws")));
+			var connectionAck = Promise.<Void>promise();
+			ws.textMessageHandler(text -> {
+				if ("connection_ack".equals(new JsonObject(text).getString("type"))) {
+					connectionAck.tryComplete();
+				}
+			});
+			ws.writeTextMessage(new JsonObject()
+					.put("type", "connection_init")
+					.put("payload", new JsonObject().put("Authorization", "Bearer " + token))
+					.encode());
+			await(connectionAck.future());
+
+			// Deliberately let the HTTP mutation race ahead of the WebSocket subscribe frame.
+			// connectToGame must not acknowledge success until the outbound game-message
+			// consumer exists, or a restored game can publish its initial state into a void.
+			var connect = connectToGame(webClient, token);
+			await(Environment.sleep(vertx, 250));
+			assertFalse(connect.isComplete(),
+					"connectToGame acknowledged before gameMessages was ready");
+
+			ws.writeTextMessage(new JsonObject()
+					.put("type", "subscribe")
+					.put("id", "game-connection")
+					.put("payload", new JsonObject().put("query", """
+							subscription {
+							  gameMessages { messageType }
+							}"""))
+					.encode());
+
+			var response = await(connect);
+			assertNull(response.getJsonArray("errors"), "connectToGame errors: " + response);
+			assertTrue(response.getJsonObject("data").getBoolean("connectToGame"));
+			assertEquals(Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE,
+					await(firstMessage.future()).getMessageType());
+
+			await(ws.close());
+			await(gameConsumer.unregister());
+		});
+	}
+
+	@Test
+	public void testConnectToGameWithoutSubscriptionDoesNotReportSuccess(Vertx vertx, VertxTestContext testContext) {
+		testVirtual(vertx, testContext, () -> {
+			await(startAll(vertx));
+			var webClient = graphqlClient(vertx);
+			var accountData = await(createAccountViaGraphQL(webClient,
+					UUID.randomUUID() + "@test.com", UUID.randomUUID().toString(), "password"));
+			var token = extractToken(accountData);
+
+			var response = await(connectToGame(webClient, token));
+
+			assertNotNull(response.getJsonArray("errors"),
+					"connectToGame must fail rather than report success without gameMessages");
+			assertTrue(response.getValue("data") == null
+							|| response.getJsonObject("data").getValue("connectToGame") == null,
+					"failed connection must not contain a successful result");
 		});
 	}
 }

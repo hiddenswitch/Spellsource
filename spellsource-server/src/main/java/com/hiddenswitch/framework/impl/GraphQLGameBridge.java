@@ -1,10 +1,14 @@
 package com.hiddenswitch.framework.impl;
 
+import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.graphql.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.Future;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.eventbus.ReplyException;
+import io.vertx.core.eventbus.ReplyFailure;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -30,6 +34,9 @@ import java.util.stream.Collectors;
  */
 public class GraphQLGameBridge {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLGameBridge.class);
+	private static final String SUBSCRIBER_READY_ADDRESS_PREFIX = "games:graphql-subscriber:";
+	private static final long SUBSCRIBER_READY_TIMEOUT_MILLIS = Games.getDefaultConnectionTime();
+	private static final long SUBSCRIBER_READY_RETRY_MILLIS = 50L;
 
 	/**
 	 * Creates a reactive streams Publisher that emits ServerGameMessage for the given user.
@@ -42,12 +49,42 @@ public class GraphQLGameBridge {
 	/**
 	 * Sends a ClientToServerMessage to the game engine via the event bus.
 	 */
-	public static void sendClientMessage(String userId, Spellsource.ClientToServerMessage message) {
+	public static Future<Void> sendClientMessage(String userId, Spellsource.ClientToServerMessage message) {
 		var eventBus = Vertx.currentContext().owner().eventBus();
 		var publisher = eventBus.<Spellsource.ClientToServerMessage>publisher(ServerGameContext.getMessagesFromClientAddress(userId));
 		var retryPublisher = new RetryMessageProducer<>(publisher, 10, 1000,
 				body -> body.getMessageType() == Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE);
-		retryPublisher.write(message);
+		return retryPublisher.write(message);
+	}
+
+	/**
+	 * Waits until the authenticated user's {@code gameMessages} subscription has installed
+	 * its event-bus consumer. This closes the race where {@code connectToGame} could send
+	 * FIRST_MESSAGE and cause the game to emit its initial state before GraphQL had anywhere
+	 * to deliver that state.
+	 */
+	public static Future<Void> awaitGameMessagesSubscriber(String userId) {
+		var vertx = Vertx.currentContext().owner();
+		return awaitGameMessagesSubscriber(vertx, userId, System.currentTimeMillis() + SUBSCRIBER_READY_TIMEOUT_MILLIS);
+	}
+
+	private static Future<Void> awaitGameMessagesSubscriber(Vertx vertx, String userId, long deadline) {
+		Future<Void> readinessRequest = vertx.eventBus()
+				.<String>request(SUBSCRIBER_READY_ADDRESS_PREFIX + userId, "",
+						new DeliveryOptions().setSendTimeout(SUBSCRIBER_READY_RETRY_MILLIS))
+				.mapEmpty();
+		return readinessRequest.recover(cause -> {
+					var retryable = cause instanceof ReplyException reply
+							&& (reply.failureType() == ReplyFailure.NO_HANDLERS
+							|| reply.failureType() == ReplyFailure.TIMEOUT);
+					if (retryable && System.currentTimeMillis() < deadline) {
+						return Future.<Void>future(promise ->
+								vertx.setTimer(SUBSCRIBER_READY_RETRY_MILLIS, ignored ->
+										awaitGameMessagesSubscriber(vertx, userId, deadline).onComplete(promise)));
+					}
+					return Future.failedFuture(new IllegalStateException(
+							"gameMessages subscription was not ready", cause));
+				});
 	}
 
 	/**
@@ -302,7 +339,12 @@ public class GraphQLGameBridge {
 			var eventBus = vertx.eventBus();
 			var address = ServerGameContext.getMessagesFromServerAddress(userId);
 			var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(address);
+			var readinessConsumer = eventBus.<String>consumer(SUBSCRIBER_READY_ADDRESS_PREFIX + userId);
 			var cancelled = new AtomicBoolean(false);
+
+			readinessConsumer.handler(request -> consumer.completion()
+					.onSuccess(ignored -> request.reply("ready"))
+					.onFailure(cause -> request.fail(-1, cause.getMessage())));
 
 			subscriber.onSubscribe(new Subscription() {
 				@Override
@@ -316,6 +358,7 @@ public class GraphQLGameBridge {
 				public void cancel() {
 					if (cancelled.compareAndSet(false, true)) {
 						consumer.unregister();
+						readinessConsumer.unregister();
 					}
 				}
 			});
@@ -332,6 +375,7 @@ public class GraphQLGameBridge {
 
 			consumer.completion().onFailure(t -> {
 				if (!cancelled.get()) {
+					readinessConsumer.unregister();
 					subscriber.onError(t);
 				}
 			});

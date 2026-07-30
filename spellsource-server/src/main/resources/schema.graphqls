@@ -779,7 +779,7 @@ type Mutation {
     cancelMatchmaking: Boolean!
 
     # game actions (send during an active game)
-    """Connect to an active game. Must be called before gameMessages subscription will emit."""
+    """Connect to an active game after opening the gameMessages subscription."""
     connectToGame(playerKey: String, playerSecret: String): Boolean!
     """Send a game action in response to an ON_REQUEST_ACTION message."""
     sendGameAction(actionIndex: Int!, repliesTo: String!): Boolean!
@@ -812,7 +812,8 @@ type Mutation {
 type Subscription {
     """
     Streams game messages for the authenticated user's active game.
-    Call connectToGame mutation first to initiate the game connection.
+    Open this subscription before calling connectToGame. The mutation waits until
+    this subscription is ready before initiating the game connection.
     Emits ServerGameMessage for each game state change, action request,
     mulligan, event, and game over.
     """
