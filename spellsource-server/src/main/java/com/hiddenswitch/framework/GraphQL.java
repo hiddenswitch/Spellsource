@@ -38,6 +38,10 @@ import static io.vertx.await.Async.await;
 
 
 public class GraphQL extends AbstractVirtualThreadVerticle {
+	public static int defaultPort() {
+		return Environment.getConfiguration().getGraphql().getPort();
+	}
+
 
 	@Override
 	public void startVirtual() throws Exception {
@@ -152,7 +156,7 @@ public class GraphQL extends AbstractVirtualThreadVerticle {
 
 
 		var server = vertx.createHttpServer(new HttpServerOptions()
-				.setPort(4000) // TODO configurable port
+				.setPort(defaultPort())
 				.setWebSocketSubProtocols(java.util.List.of("graphql-transport-ws")));
 		server.requestHandler(router);
 		await(server.listen());

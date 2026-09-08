@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GraphQLTests extends FrameworkTestBase {
 
-	private static final int GRAPHQL_PORT = 4000;
+	private static final int GRAPHQL_PORT = GraphQL.defaultPort();
 
 	protected Future<String> startGraphQL(Vertx vertx) {
 		return vertx.deployVerticle(GraphQL.class, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(1));
@@ -1039,6 +1039,121 @@ public class GraphQLTests extends FrameworkTestBase {
 
 			await(ws.close());
 			await(gameConsumer.unregister());
+		});
+	}
+
+	private Future<String> createBotQueue() {
+		var queueId = UUID.randomUUID().toString();
+		return Matchmaking.createQueue(new MatchmakingQueues()
+						.setId(queueId)
+						.setAutomaticallyClose(false)
+						.setLobbySize(1)
+						.setAwaitingLobbyTimeout(0L)
+						.setBotOpponent(true)
+						.setEmptyLobbyTimeout(0L)
+						.setName("graphql matchmaking readiness queue")
+						.setPrivateLobby(false)
+						.setOnce(false)
+						.setStartsAutomatically(true)
+						.setStillConnectedTimeout(0L))
+				.map(queueId);
+	}
+
+	private String createDeck(WebClient webClient, String token) {
+		var cardIds = getAvailableCardIds(webClient, token, 30);
+		assertTrue(cardIds.size() >= 30, "need at least 30 cards from SQL catalogue for deck");
+		var createDeckRes = await(graphql(webClient,
+				"""
+				mutation CreateDeck($input: DecksPutInput!) {
+				  createDeck(input: $input) { deckId }
+				}""",
+				new JsonObject().put("input", new JsonObject()
+						.put("name", "Matchmaking Readiness Deck")
+						.put("heroClass", "ANY")
+						.put("format", "Spellsource")
+						.put("cardIds", new JsonArray(cardIds))),
+				token));
+		assertNull(createDeckRes.getJsonArray("errors"), "create deck errors: " + createDeckRes);
+		return createDeckRes.getJsonObject("data").getJsonObject("createDeck").getString("deckId");
+	}
+
+	private Future<JsonObject> enqueueMatchmaking(WebClient webClient, String token, String deckId, String queueId) {
+		return graphql(webClient,
+				"""
+				mutation Enqueue($input: MatchmakingEnqueueInput!) {
+				  enqueueMatchmaking(input: $input)
+				}""",
+				new JsonObject().put("input", new JsonObject()
+						.put("deckId", deckId)
+						.put("queueId", queueId)),
+				token);
+	}
+
+	@Test
+	@Timeout(value = 60, timeUnit = TimeUnit.SECONDS)
+	public void testMatchFoundDeliveredWhenSubscriptionOpensAfterGameCreated(Vertx vertx, VertxTestContext testContext) {
+		testVirtual(vertx, testContext, () -> {
+			await(startAllWithMatchmaking(vertx));
+			var queueId = await(createBotQueue());
+			var webClient = graphqlClient(vertx);
+			var accountData = await(createAccountViaGraphQL(webClient,
+					UUID.randomUUID() + "@test.com", UUID.randomUUID().toString(), "password"));
+			var token = extractToken(accountData);
+			var deckId = createDeck(webClient, token);
+
+			// The client opens matchFound and enqueues at the same time, and the bot queue
+			// matches within one scan, so the game routinely exists before the subscription's
+			// consumer does. Reproduce the worst case: the game is already created when the
+			// subscription opens. The matchmaker must keep offering the game until then.
+			var enqueueRes = await(enqueueMatchmaking(webClient, token, deckId, queueId));
+			assertNull(enqueueRes.getJsonArray("errors"), "enqueueMatchmaking errors: " + enqueueRes);
+			assertTrue(enqueueRes.getJsonObject("data").getBoolean("enqueueMatchmaking"));
+
+			String createdGameId = null;
+			for (var attempt = 0; attempt < 20 && createdGameId == null; attempt++) {
+				await(Environment.sleep(vertx, 250));
+				var matchRes = await(graphql(webClient, "{ isInMatch }", null, token));
+				createdGameId = matchRes.getJsonObject("data").getString("isInMatch");
+			}
+			assertNotNull(createdGameId, "the bot queue should have created a game");
+
+			var ws = await(vertx.createWebSocketClient().connect(new WebSocketConnectOptions()
+					.setHost("localhost")
+					.setPort(GRAPHQL_PORT)
+					.setURI("/graphql")
+					.addSubProtocol("graphql-transport-ws")));
+			var connectionAck = Promise.<Void>promise();
+			var matchFound = Promise.<String>promise();
+			ws.textMessageHandler(text -> {
+				var message = new JsonObject(text);
+				switch (message.getString("type")) {
+					case "connection_ack" -> connectionAck.tryComplete();
+					case "next" -> matchFound.tryComplete(message.getJsonObject("payload")
+							.getJsonObject("data").getJsonObject("matchFound").getString("gameId"));
+					case "error" -> matchFound.tryFail(text);
+					default -> {
+					}
+				}
+			});
+			ws.writeTextMessage(new JsonObject()
+					.put("type", "connection_init")
+					.put("payload", new JsonObject().put("Authorization", "Bearer " + token))
+					.encode());
+			await(connectionAck.future());
+			ws.writeTextMessage(new JsonObject()
+					.put("type", "subscribe")
+					.put("id", "match-found")
+					.put("payload", new JsonObject().put("query", """
+							subscription {
+							  matchFound { gameId }
+							}"""))
+					.encode());
+
+			assertEquals(createdGameId, await(matchFound.future()),
+					"matchFound must deliver the game created before the subscription opened");
+
+			await(ws.close());
+			await(Matchmaking.deleteQueue(queueId));
 		});
 	}
 

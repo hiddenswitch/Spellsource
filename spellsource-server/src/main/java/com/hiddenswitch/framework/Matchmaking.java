@@ -16,6 +16,8 @@ import io.micrometer.core.instrument.Metrics;
 import io.micrometer.core.instrument.binder.BaseUnits;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.DeliveryOptions;
+import io.vertx.core.eventbus.ReplyException;
+import io.vertx.core.eventbus.ReplyFailure;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.pgclient.PgException;
 import org.slf4j.Logger;
@@ -35,6 +37,7 @@ import static org.jooq.impl.DSL.asterisk;
 public class Matchmaking extends AbstractVerticle {
 	public static final String MATCHMAKING_ENQUEUE = "matchmaking:enqueue:";
 	public static final String MATCHMAKING_QUEUE_CLOSED = "matchmaking:queue-closed:";
+	private static final long NOTIFY_RETRY_MILLIS = 50L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(Matchmaking.class);
 	private final static Counter TICKETS_TAKEN = Counter
 			.builder("matchmaking.tickets.taken")
@@ -87,19 +90,33 @@ public class Matchmaking extends AbstractVerticle {
 	}
 
 	public static Future<Void> notifyGameReady(String userId, String gameId) {
-		var address = MATCHMAKING_ENQUEUE + userId;
 		var vertx = Vertx.currentContext().owner();
 		var serverConfiguration = Environment.getConfiguration();
 		var smallTimeout = serverConfiguration.getMatchmaking().getScanFrequencyMillis();
+		var deadline = System.currentTimeMillis() + Games.getDefaultConnectionTime();
+		return notifyGameReady(vertx, MATCHMAKING_ENQUEUE + userId, gameId, smallTimeout, deadline)
+				.onFailure(Environment.onFailure("failed to notify game ready"));
+	}
 
+	private static Future<Void> notifyGameReady(Vertx vertx, String address, String gameId, long sendTimeout, long deadline) {
 		// observe this is a request
 		// the request will only return once the matchmaking stream has been written to, accommodating drops if
 		// players close the client after a match has been made but before they have been notified
 		// the protocol is to send over the event bus the game ID to the queued player, wherever they are, and
 		// once the client has actually received the notification, reply to this event bus request
-		return vertx.eventBus().<String>request(address, gameId, new DeliveryOptions().setSendTimeout(smallTimeout))
-				.onFailure(Environment.onFailure("failed to notify game ready"))
-				.mapEmpty();
+		return vertx.eventBus().<String>request(address, gameId, new DeliveryOptions().setSendTimeout(sendTimeout))
+				.<Void>mapEmpty()
+				.recover(cause -> {
+					// clients open their notification stream and enqueue at the same time, and a bot queue matches
+					// within one scan, so the stream may not be registered yet when the game is created. keep
+					// offering the game until the player has had the connection time to show up
+					var noHandlers = cause instanceof ReplyException reply && reply.failureType() == ReplyFailure.NO_HANDLERS;
+					if (!noHandlers || System.currentTimeMillis() >= deadline) {
+						return Future.failedFuture(cause);
+					}
+					return Future.future(promise -> vertx.setTimer(NOTIFY_RETRY_MILLIS, ignored ->
+							notifyGameReady(vertx, address, gameId, sendTimeout, deadline).onComplete(promise)));
+				});
 	}
 
 	public static MatchmakingQueuesRecord[] defaultQueues() {

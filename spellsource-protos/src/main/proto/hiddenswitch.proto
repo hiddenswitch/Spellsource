@@ -102,6 +102,7 @@ message ServerConfiguration {
 
   message GraphQLConfiguration {
     string url = 5;
+    int32 port = 6;
   }
 
   PostgresConfiguration pg = 1;

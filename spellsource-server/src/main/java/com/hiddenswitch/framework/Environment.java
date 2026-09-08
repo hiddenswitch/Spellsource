@@ -518,6 +518,9 @@ public class Environment {
 						.setUseInfinispanClusterManager(false)
 						.setInfinspanPort(7800)
 						.build())
+				.setGraphql(ServerConfiguration.GraphQLConfiguration.newBuilder()
+						.setPort(4000)
+						.build())
 				.build();
 	}
 
