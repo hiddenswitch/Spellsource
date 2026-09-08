@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "yarn playwright test",
-    "test:production": "yarn playwright test -c playwright.production.config.ts",
+    "test-production": "yarn playwright test -c playwright.production.config.ts",
     "playwrightInstall": "yarn playwright install",
     "develop": "next dev",
     "dev": "next dev",

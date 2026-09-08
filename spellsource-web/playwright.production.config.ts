@@ -6,7 +6,7 @@ import { defineConfig } from "@playwright/test";
  * the public GraphQL hosts, exercising DNS, TLS, the in-page WebGL client and
  * matchmaking through the gateway the way the shipped client does.
  *
- *   yarn test:production
+ *   yarn test-production
  */
 export const siteURL = process.env.SPELLSOURCE_SITE_URL ?? "https://playspellsource.com";
 
