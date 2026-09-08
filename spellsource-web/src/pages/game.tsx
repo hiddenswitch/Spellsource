@@ -6,6 +6,9 @@ import { useEffect, useRef, useState, type FunctionComponent } from "react";
  * versioned build, whose index.html carries the hashed asset names.
  */
 const WEBGL_LATEST_URL =
+  // A build-time override lets a dev server host a local or candidate build
+  // through this same page, so client changes can be tested before publishing.
+  process.env.NEXT_PUBLIC_SPELLSOURCE_WEBGL_INDEX ??
   "https://s3-builds.appmana.com/spellsource-build-artifacts/spellsource-client/webgl/latest/index.html";
 
 type UnityBuild = {
@@ -39,13 +42,15 @@ function attr(html: string, name: string): string | undefined {
  */
 async function resolveBuild(): Promise<UnityBuild> {
   const latest = await fetch(WEBGL_LATEST_URL).then((r) => r.text());
+  // the published "latest" is a redirect stub to the versioned build; a
+  // build's own index.html is used directly
   const target = latest.match(/url=([^"\s]+)/)?.[1];
-  if (!target) {
+  const indexUrl = target ? new URL(target, WEBGL_LATEST_URL).toString() : WEBGL_LATEST_URL;
+  if (!target && !/createUnityInstance/.test(latest)) {
     throw new Error("could not find the latest client build");
   }
-  const indexUrl = new URL(target, WEBGL_LATEST_URL).toString();
   const baseUrl = indexUrl.replace(/index\.html$/, "");
-  const html = await fetch(indexUrl).then((r) => r.text());
+  const html = target ? await fetch(indexUrl).then((r) => r.text()) : latest;
   const loader = html.match(/<script src="([^"]+\.loader\.js)"/)?.[1];
   const dataUrl = attr(html, "dataUrl");
   const frameworkUrl = attr(html, "frameworkUrl");
