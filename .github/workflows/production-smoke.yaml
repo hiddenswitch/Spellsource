@@ -1,0 +1,41 @@
+name: Production Smoke
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['Build Website', 'Build Server', 'Build GraphQL Gateway']
+    types: [completed]
+
+concurrency:
+  group: production-smoke
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout the workspace submodule
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule update --init spellsource-ts-proto/ts-proto
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install
+        run: yarn install
+      - name: Install browser
+        run: yarn workspace spellsource-web playwright install --with-deps chromium
+      - name: Smoke test the deployed site
+        run: yarn workspace spellsource-web test:production
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: production-smoke-report
+          path: |
+            spellsource-web/playwright-report
+            spellsource-web/test-results
+          retention-days: 14

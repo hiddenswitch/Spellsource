@@ -21086,6 +21086,7 @@ __metadata:
     "@types/three": "npm:^0"
     "@types/url-parse": "npm:^1.4.8"
     "@types/uuid": "npm:^9.0.4"
+    "@types/ws": "npm:^8"
     acorn: "npm:^8.2.4"
     aseprite: "npm:^0.3.0"
     bootstrap: "npm:^5.2.3"
@@ -21161,6 +21162,7 @@ __metadata:
     typescript: "npm:^5.3.3"
     url-parse: "npm:^1.5.10"
     webpack: "npm:^5.76.2"
+    ws: "npm:^8.18.3"
     yarn: "npm:^2.4.3"
   languageName: unknown
   linkType: soft
