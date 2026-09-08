@@ -27,7 +27,8 @@ function HeroIntroSection() {
         </div>
       </div>
       <div className={styles.heroButtonsContainer}>
-        <Button title="Play Now" buttonStyle="dark" route={"/download"} />
+        <Button title="Play Now" buttonStyle="dark" route={"/game"} />
+        <Button title="Get the App" buttonStyle="light" route={"/download"} />
         <Button title="Join Discord" buttonStyle="light" route={"https://discord.gg/HmbESh2"} />
       </div>
       <div className={styles.heroIntroSubText}>Proudly supported by</div>

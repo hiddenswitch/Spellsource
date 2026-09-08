@@ -9,6 +9,9 @@ import { use100vh } from "react-div-100vh";
 import cx from "classnames";
 
 export const pages = [
+  <li key={6}>
+    <Link href={"/game"}>Play</Link>
+  </li>,
   <li key={0}>
     <Link href={"/collection"}>Collection</Link>
   </li>,

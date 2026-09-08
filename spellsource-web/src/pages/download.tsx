@@ -15,6 +15,12 @@ const Download = () => {
       <Container>
         <h2>Play Now</h2>
         <section style={{ textAlign: "center" }}>
+          <p>
+            <Link href="/game">Play Spellsource in your browser</Link> — no download required. The client takes a moment
+            to load the first time.
+          </p>
+        </section>
+        <section style={{ textAlign: "center" }}>
           <figure>
             <Link href="/download#ios-users">
               <Image src={iOS} alt="iOS" width={75} />
