@@ -117,6 +117,11 @@ const GamePage: FunctionComponent = () => {
           companyName: "Hidden Switch",
           productName: "Spellsource",
           productVersion: build.productVersion,
+          // The client keeps the signed-in account (guests included) in
+          // Application.persistentDataPath, which on WebGL is an in-memory file
+          // system mirrored to IndexedDB only when synced. The build never syncs
+          // it, so without this a refresh forgets the guest and the match it is in.
+          autoSyncPersistentDataPath: true,
         },
         (p) => {
           if (cancelled) return;

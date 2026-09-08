@@ -18,6 +18,9 @@ export default defineConfig({
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   use: {
     baseURL: siteURL,
+    // the client is driven by coordinates measured at this size
+    viewport: { width: 1440, height: 810 },
+    screenshot: "only-on-failure",
     trace: "retain-on-failure",
     launchOptions: {
       // the unity client needs a webgl2 context; software rendering is enough
