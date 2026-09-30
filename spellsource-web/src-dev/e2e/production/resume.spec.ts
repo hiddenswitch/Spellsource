@@ -3,7 +3,7 @@ import { currentGameId, driveGuestIntoMatch, waitForClient, watchGraphQL } from 
 
 test.describe("browser client session", () => {
   test("a guest's match survives a page refresh", async ({ page, request }) => {
-    const graphql = watchGraphQL(page);
+    const graphql = await watchGraphQL(page);
 
     await page.goto("/game");
     await waitForClient(page);

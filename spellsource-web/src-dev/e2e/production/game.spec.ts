@@ -7,7 +7,10 @@ test.describe("browser client", () => {
     page.on("pageerror", (e) => pageErrors.push(String(e)));
 
     const socketHosts: string[] = [];
-    page.on("websocket", (ws) => socketHosts.push(new URL(ws.url()).hostname));
+    page.on("websocket", (ws) => {
+      const url = new URL(ws.url());
+      if (url.pathname === "/subscriptions") socketHosts.push(url.hostname);
+    });
 
     // throttle so the overlay is observable; unthrottled the client is up in seconds
     const cdp = await page.context().newCDPSession(page);

@@ -78,19 +78,22 @@ spec:
               path: {{ .Values.configmap.metrics.livenessRoute }}
               port: http
             initialDelaySeconds: 16
-            failureThreshold: 1
+            failureThreshold: 3
+            timeoutSeconds: 5
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: {{ .Values.configmap.metrics.readinessRoute }}
               port: http
             initialDelaySeconds: 5
+            timeoutSeconds: 5
             periodSeconds: 5
           startupProbe:
             httpGet:
               path: {{ .Values.configmap.metrics.readinessRoute }}
               port: http
             failureThreshold: 30
+            timeoutSeconds: 5
             periodSeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

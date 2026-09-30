@@ -3,6 +3,20 @@ on:
   push:
     branches: ['develop']
     tags: ['*']
+    paths:
+      - 'spellsource-server/**'
+      - 'spellsource-game/**'
+      - 'spellsource-cards*/**'
+      - 'spellsource-protos/**'
+      - 'spellsource-common/**'
+      - 'spellsource-testutils/**'
+      - 'vertx*/**'
+      - 'gradle/**'
+      - 'buildSrc/**'
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle.properties'
+      - '.github/workflows/server.yaml'
 
 jobs:
   test-and-deploy-server:

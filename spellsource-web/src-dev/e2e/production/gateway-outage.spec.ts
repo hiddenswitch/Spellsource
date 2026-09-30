@@ -48,7 +48,7 @@ test.describe("gateway outage during a match", () => {
   for (const scenario of ["reset", "closed", "blackhole", "offline"] as const) {
     test(`${scenario}: reconnecting screen appears promptly and the match resumes`, async ({ page, request }, testInfo) => {
       test.setTimeout(6 * 60_000);
-      const graphql = watchGraphQL(page);
+      const graphql = await watchGraphQL(page);
       const console_ = watchConsole(page);
       const sockets = watchSockets(page);
 

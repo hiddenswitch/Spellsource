@@ -9,7 +9,10 @@ import { expect, type APIRequestContext, type Page, type WebSocket } from "@play
 
 // The client sends graphql over fetch with a blob body that playwright does not
 // expose, so operations are recognised from their response data keys instead.
-export function watchGraphQL(page: Page) {
+export async function watchGraphQL(page: Page) {
+  // Large Unity downloads otherwise evict small GraphQL response bodies from CDP.
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send("Network.enable", { maxTotalBufferSize: 256 * 1024 * 1024, maxResourceBufferSize: 128 * 1024 * 1024 });
   const seen: { key: string; data: any; at: number }[] = [];
   let origin = "";
   page.on("response", async (response) => {
@@ -70,7 +73,8 @@ export function watchConsole(page: Page) {
 export function watchSockets(page: Page) {
   const sockets: { ws: WebSocket; url: string; openedAt: number; closedAt?: number; framesReceived: number; lastFrameAt?: number }[] = [];
   page.on("websocket", (ws) => {
-    const entry = { ws, url: ws.url(), openedAt: Date.now(), framesReceived: 0 } as (typeof sockets)[number];
+    if (new URL(ws.url()).pathname !== "/subscriptions") return;
+    const entry = { ws, url: new URL(ws.url()).origin + new URL(ws.url()).pathname, openedAt: Date.now(), framesReceived: 0 } as (typeof sockets)[number];
     sockets.push(entry);
     ws.on("framereceived", () => {
       entry.framesReceived++;
@@ -130,7 +134,7 @@ export async function currentGameId(request: APIRequestContext, origin: string, 
  * Play as Guest, then Single Player with the first starter deck, and return
  * once the client has connected to the created game.
  */
-export async function driveGuestIntoMatch(page: Page, graphql: ReturnType<typeof watchGraphQL>) {
+export async function driveGuestIntoMatch(page: Page, graphql: Awaited<ReturnType<typeof watchGraphQL>>) {
   const { width, height } = page.viewportSize()!;
   const click = (fx: number, fy: number) => page.mouse.click(width * fx, height * fy);
 

@@ -10,4 +10,6 @@ const site = new URL(siteURL);
  */
 export const domain = site.hostname.replace(/^www\./, "");
 export const siteHosts = [domain, `www.${domain}`, `login.${domain}`, `graphql.${domain}`, `subscriptions.${domain}`];
-export const graphqlHosts = [`graphql.${domain}`, `subscriptions.${domain}`];
+// A local candidate website can still exercise the deployed gateway.
+const backendDomain = process.env.SPELLSOURCE_BACKEND_DOMAIN ?? domain;
+export const graphqlHosts = [`graphql.${backendDomain}`, `subscriptions.${backendDomain}`];
