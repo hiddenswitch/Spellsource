@@ -2,7 +2,7 @@
  * @type {import("next").NextConfig}
  */
 const nextConfig = {
-  transpilePackages: ["spellsource-protos"],
+  transpilePackages: ["spellsource-protos", "spellsource-threejs"],
   webpack: (config) => {
     // camelCase style names from css modules
     // https://stackoverflow.com/questions/74038400/convert-css-module-kebab-case-class-names-to-camelcase-in-next-js

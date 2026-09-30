@@ -1,0 +1,13 @@
+plugins {
+  id 'base'
+  id 'com.github.node-gradle.node'
+}
+apply from: '../gradle/node.gradle'
+['build', 'typecheck', 'test', 'codegen'].each { script ->
+  tasks.register("yarnRun${script.capitalize()}", YarnTask) {
+    dependsOn ':yarnWorkspace'
+    args = ['run', script]
+  }
+}
+tasks.named('assemble') { dependsOn 'yarnRunBuild' }
+tasks.named('check') { dependsOn 'yarnRunTypecheck', 'yarnRunTest' }

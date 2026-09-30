@@ -9,7 +9,8 @@
     "spellsource-graphql",
     "spellsource-web",
     "spellsource-protos",
-    "spellsource-ts-proto/ts-proto"
+    "spellsource-ts-proto/ts-proto",
+    "spellsource-threejs"
   ],
   "resolutions": {
     "blockly": "10.0.0",

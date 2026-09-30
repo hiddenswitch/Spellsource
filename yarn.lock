@@ -5562,7 +5562,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-spring/three@npm:~9.7.5":
+"@react-spring/three@npm:^9.7.3, @react-spring/three@npm:~9.7.5":
   version: 9.7.5
   resolution: "@react-spring/three@npm:9.7.5"
   dependencies:
@@ -12526,6 +12526,15 @@ __metadata:
   peerDependencies:
     graphql: ">=0.11 <=16"
   checksum: 10c0/5e538c3460ca997a1634bd0f64236d8d7aa6ac75c58aba549b49953faf0dd2497f4fa43eedb0bc82cfff50426c7ce47682a670d2571fd7f3af5dcf00911c9e1b
+  languageName: node
+  linkType: hard
+
+"graphql-ws@npm:^5.16.2":
+  version: 5.16.2
+  resolution: "graphql-ws@npm:5.16.2"
+  peerDependencies:
+    graphql: ">=0.11 <=16"
+  checksum: 10c0/ba373df11ea8c6349c9f67335a0dfb09050a09ecc6b724b64730d242675c41d9f4b4a114b190b8711d014f8491c2bb8249e0df8308d51c4b27c921f87c4f6c58
   languageName: node
   linkType: hard
 
@@ -21046,6 +21055,34 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"spellsource-threejs@workspace:*, spellsource-threejs@workspace:spellsource-threejs":
+  version: 0.0.0-use.local
+  resolution: "spellsource-threejs@workspace:spellsource-threejs"
+  dependencies:
+    "@apollo/client": "npm:^3.8.6"
+    "@graphql-codegen/cli": "npm:^3.2.2"
+    "@graphql-codegen/typescript": "npm:^3.0.2"
+    "@graphql-codegen/typescript-operations": "npm:^3.0.2"
+    "@graphql-codegen/typescript-react-apollo": "npm:^3.3.7"
+    "@react-spring/three": "npm:^9.7.3"
+    "@react-three/drei": "npm:^9.0.0"
+    "@react-three/fiber": "npm:^8.17.0"
+    "@types/jest": "npm:^26.0.0"
+    "@types/react": "npm:^18.0.28"
+    "@types/react-dom": "npm:^18.0.11"
+    "@types/three": "npm:^0"
+    graphql: "npm:16.8.1"
+    graphql-ws: "npm:^5.16.2"
+    jest: "npm:^29.1.0"
+    three: "npm:^0.183.2"
+    ts-jest: "npm:^29.1.0"
+    typescript: "npm:^5.3.3"
+  peerDependencies:
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  languageName: unknown
+  linkType: soft
+
 "spellsource-web@workspace:spellsource-web":
   version: 0.0.0-use.local
   resolution: "spellsource-web@workspace:spellsource-web"
@@ -21151,6 +21188,7 @@ __metadata:
     sass: "npm:^1.33"
     sharp: "npm:^0.32.0"
     spellsource-protos: "npm:^1.0.0"
+    spellsource-threejs: "workspace:*"
     standard: "npm:^16.0.3"
     stream-read-all: "npm:^3.0.1"
     string-format: "npm:^2.0.0"

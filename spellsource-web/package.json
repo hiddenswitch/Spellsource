@@ -94,6 +94,7 @@
     "sass": "^1.33",
     "sharp": "^0.32.0",
     "spellsource-protos": "^1.0.0",
+    "spellsource-threejs": "workspace:*",
     "stream-read-all": "^3.0.1",
     "string-format": "^2.0.0",
     "three": "^0.183.2",

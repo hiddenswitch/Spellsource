@@ -1,0 +1,15 @@
+schema: ../spellsource-graphql/schema.graphql
+documents: ../spellsource-graphql/graphql/shared/**/*.graphql
+generates:
+  src/__generated__/client.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      enumsAsConst: true
+      withHooks: true
+      scalars:
+        BigInt: string
+        DateTime: string
+        Duration: number
