@@ -119,9 +119,10 @@ export interface SpellsourceThreeClientProps {
 export function SpellsourceThreeClient({ graphqlUrl, subscriptionsUrl, accessToken, mode = 'live', onExit }: SpellsourceThreeClientProps) {
   const [demo, setDemo] = useState(mode === 'demo');
   const transport = useMemo(() => {
-    const socket = createClient({ url: subscriptionsUrl, lazy: true,
-      connectionParams: () => ({ Authorization: accessToken ? `Bearer ${accessToken}` : '' }),
-      retryAttempts: 5 });
+    // The deployed gateway authenticates websocket upgrades through this parameter.
+    const websocketUrl = new URL(subscriptionsUrl);
+    if (accessToken) websocketUrl.searchParams.set('accessToken', accessToken);
+    const socket = createClient({ url: websocketUrl.href, lazy: true, retryAttempts: 5 });
     const link = split(({ query }) => {
       const definition = getMainDefinition(query);
       return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';

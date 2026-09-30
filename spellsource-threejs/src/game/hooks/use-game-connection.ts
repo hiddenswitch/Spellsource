@@ -61,15 +61,17 @@ export function useGameConnection(options?: UseGameConnectionOptions): GameConne
   }, []);
 
   const sendAction = useCallback((actionIndex: number) => {
-    void submit(state.actionsMessageId, () => sendActionMutation({
-      variables: { actionIndex, repliesTo: state.actionsMessageId! },
-    }));
+    void submit(state.actionsMessageId, async () => {
+      const result = await sendActionMutation({ variables: { actionIndex, repliesTo: state.actionsMessageId! } });
+      if (!result.data?.sendGameAction) throw new Error('The server rejected the action');
+    });
   }, [state.actionsMessageId, sendActionMutation, submit]);
 
   const sendMulligan = useCallback((discardedCardIndices: number[]) => {
-    void submit(state.mulliganMessageId, () => sendMulliganMutation({
-      variables: { discardedCardIndices, repliesTo: state.mulliganMessageId! },
-    }));
+    void submit(state.mulliganMessageId, async () => {
+      const result = await sendMulliganMutation({ variables: { discardedCardIndices, repliesTo: state.mulliganMessageId! } });
+      if (!result.data?.sendMulligan) throw new Error('The server rejected the mulligan');
+    });
   }, [state.mulliganMessageId, sendMulliganMutation, submit]);
 
   const concedeGame = useCallback(() => {

@@ -255,6 +255,13 @@ export function useAnimationQueue({ dispatch }: AnimationQueueOptions) {
     return () => clearInterval(interval)
   }, [activeEffects.length, !!revealedCard])
 
+  const stepTimer = useRef<ReturnType<typeof setTimeout>>();
+  useEffect(() => () => {
+    clearTimeout(stepTimer.current);
+    queueRef.current = [];
+    processingRef.current = false;
+  }, []);
+
   const processQueue = useCallback(() => {
     if (processingRef.current) return
     processingRef.current = true
@@ -305,11 +312,11 @@ export function useAnimationQueue({ dispatch }: AnimationQueueOptions) {
 
       const dur = messageDuration(msg)
       if (dur > 0) {
-        setTimeout(step, dur)
+        stepTimer.current = setTimeout(step, dur)
       } else {
         // Zero-delay messages process immediately but yield to allow React to render
         // before processing the next message
-        setTimeout(step, 0)
+        stepTimer.current = setTimeout(step, 0)
       }
     }
 

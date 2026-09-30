@@ -38,9 +38,10 @@ export function useMatchmaking() {
   const [cancelMutation] = useCancelMatchmakingMutation()
   const [connectToGameMutation] = useConnectToGameMutation()
 
-  // Listen for match found — only active when searching
+  // Subscribe before enqueueing so a fast bot match cannot be missed.
   useMatchFoundSubscription({
     skip: false,
+    onError: failure => setError(failure.message),
     onData: async ({ data: { data } }) => {
       if (!data?.matchFound || phase === 'ready' || phase === 'connecting') return
       const { playerKey, playerSecret } = data.matchFound
@@ -65,9 +66,10 @@ export function useMatchmaking() {
       setError(null)
       setPhase('searching')
       try {
-        await enqueueMutation({
+        const result = await enqueueMutation({
           variables: { input: { queueId, deckId } },
         })
+        if (!result.data?.enqueueMatchmaking) throw new Error("Matchmaking rejected the request")
       } catch (e) {
         setError('Failed to enqueue')
         setPhase('idle')
