@@ -45,7 +45,7 @@ test.describe("gateway outage during a match", () => {
 
   test.afterEach(() => clearToxics());
 
-  for (const scenario of ["reset", "closed", "blackhole", "offline"] as const) {
+  for (const scenario of ["reset", "closed", "blackhole", "offline", "lookup-failure"] as const) {
     test(`${scenario}: reconnecting screen appears promptly and the match resumes`, async ({ page, request }, testInfo) => {
       test.setTimeout(6 * 60_000);
       const graphql = await watchGraphQL(page);
@@ -67,7 +67,7 @@ test.describe("gateway outage during a match", () => {
       const cutAt = Date.now();
       if (scenario === "reset") {
         await addToxic({ name: "rst", type: "reset_peer", stream: "downstream", attributes: { timeout: 0 } });
-      } else if (scenario === "closed") {
+      } else if (scenario === "closed" || scenario === "lookup-failure") {
         await setEnabled(false);
       } else if (scenario === "offline") {
         // the browser itself reports the network gone (wifi off, airplane mode);
@@ -99,6 +99,31 @@ test.describe("gateway outage during a match", () => {
       await testInfo.attach(`${scenario}-during-outage`, { body: duringOutage, contentType: "image/png" });
 
       // ── restore ──
+      // Reproduce the race where the gateway is reachable again but the first
+      // match lookup fails. A successful account query must not end the game.
+      if (scenario === "lookup-failure") {
+        await page.evaluate(() => {
+          const originalFetch = window.fetch;
+          (window as any).__failedMatchLookups = 0;
+          window.fetch = async function (input, init) {
+            const url = input instanceof Request ? input.url : String(input);
+            if (url.includes("/graphql")) {
+              const body = init?.body != null
+                ? await new Response(init.body).text()
+                : input instanceof Request ? await input.clone().text() : "";
+              if (/isInMatch/i.test(body)) {
+                window.fetch = originalFetch;
+                (window as any).__failedMatchLookups++;
+                return new Response(JSON.stringify({ errors: [{ message: "Injected transient match lookup failure" }] }), {
+                  status: 503,
+                  headers: { "Content-Type": "application/json" },
+                });
+              }
+            }
+            return originalFetch.call(this, input, init);
+          };
+        });
+      }
       const restoredAt = Date.now();
       await clearToxics();
       if (scenario === "offline") {
@@ -132,6 +157,10 @@ test.describe("gateway outage during a match", () => {
       console.log(`[${scenario}] sockets ${JSON.stringify(evidence.sockets)}`);
       console.log(`[${scenario}] console ${JSON.stringify(evidence.console.slice(0, 12))}`);
 
+      if (scenario === "lookup-failure") {
+        expect(await page.evaluate(() => (window as any).__failedMatchLookups)).toBe(1);
+        expect(console_.find(/server reports no game/, restoredAt), "a failed lookup must not abandon the active match").toBeUndefined();
+      }
       expect(detectedMs, `reconnecting screen not shown within ${REQUIRED_DETECT_MS}ms of the ${scenario}`).not.toBeNull();
       expect(detectedMs!, `reconnecting screen took too long after the ${scenario}`).toBeLessThanOrEqual(REQUIRED_DETECT_MS);
       expect(resumedMs, `match not resumed within ${REQUIRED_RESUME_MS}ms of the network returning`).not.toBeNull();

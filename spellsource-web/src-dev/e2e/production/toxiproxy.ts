@@ -9,6 +9,7 @@ import { execFileSync } from "node:child_process";
 export const CONTAINER = "spellsource-toxiproxy";
 export const API = "http://127.0.0.1:8474";
 export const PROXY = "gateway";
+const hostNetwork = process.platform === "linux";
 
 type Toxic = { name: string; type: string; stream: "upstream" | "downstream"; toxicity?: number; attributes: Record<string, number> };
 
@@ -45,7 +46,11 @@ export async function startToxiproxy(upstreamAddress: string) {
     } catch {
       // not present
     }
-    docker(["run", "-d", "--name", CONTAINER, "-p", "127.0.0.1:8474:8474", "-p", "127.0.0.1:443:443", "ghcr.io/shopify/toxiproxy:latest"]);
+    // Avoid adding/removing a Docker bridge interface while Chrome is running:
+    // its network notifier can fail unrelated page loads with ERR_NETWORK_CHANGED.
+    // Keep both listeners on loopback when sharing the Linux host network.
+    const networkArgs = hostNetwork ? ["--network", "host"] : ["-p", "127.0.0.1:8474:8474", "-p", "127.0.0.1:443:443"];
+    docker(["run", "-d", "--name", CONTAINER, ...networkArgs, "ghcr.io/shopify/toxiproxy:latest", `-host=${hostNetwork ? "127.0.0.1" : "0.0.0.0"}`]);
   }
   const deadline = Date.now() + 15_000;
   while (Date.now() < deadline) {
@@ -57,7 +62,7 @@ export async function startToxiproxy(upstreamAddress: string) {
     }
   }
   await api("DELETE", `/proxies/${PROXY}`);
-  await api("POST", "/proxies", { name: PROXY, listen: "0.0.0.0:443", upstream: `${upstreamAddress}:443`, enabled: true });
+  await api("POST", "/proxies", { name: PROXY, listen: hostNetwork ? "127.0.0.1:443" : "0.0.0.0:443", upstream: `${upstreamAddress}:443`, enabled: true });
 }
 
 export function stopToxiproxy() {
