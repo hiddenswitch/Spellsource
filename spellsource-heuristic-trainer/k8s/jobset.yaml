@@ -4,7 +4,7 @@ metadata:
   name: gsvb-trainer
   namespace: ${NAMESPACE}
 spec:
-  suspend: false
+  suspend: true
   replicatedJobs:
     - name: island
       replicas: ${REPLICAS}
@@ -16,6 +16,16 @@ spec:
           template:
             spec:
               restartPolicy: Never
+              serviceAccountName: gsvb-trainer
+              volumes:
+                - name: keycloak-assertion
+                  projected:
+                    defaultMode: 0440
+                    sources:
+                      - serviceAccountToken:
+                          audience: https://login.appmana.com/realms/appmana
+                          expirationSeconds: 600
+                          path: assertion
               containers:
                 - name: trainer
                   image: ${IMAGE}
@@ -36,16 +46,18 @@ spec:
                       valueFrom:
                         fieldRef:
                           fieldPath: metadata.labels['jobset.sigs.k8s.io/job-index']
-                    - name: MLFLOW_TRACKING_USERNAME
-                      valueFrom:
-                        secretKeyRef:
-                          name: mlflow-auth-admin-secret
-                          key: username
-                    - name: MLFLOW_TRACKING_PASSWORD
-                      valueFrom:
-                        secretKeyRef:
-                          name: mlflow-auth-admin-secret
-                          key: password
+                    - name: MLFLOW_TRACKING_AUTH
+                      value: oidc-client-credentials
+                    - name: MLFLOW_OIDC_ISSUER_URL
+                      value: https://login.appmana.com/realms/appmana
+                    - name: MLFLOW_OIDC_CLIENT_ID
+                      value: appmana-gsvb-trainer
+                    - name: MLFLOW_OIDC_CLIENT_ASSERTION_FILE
+                      value: /var/run/secrets/keycloak/assertion
+                  volumeMounts:
+                    - name: keycloak-assertion
+                      mountPath: /var/run/secrets/keycloak
+                      readOnly: true
                   resources:
                     requests:
                       cpu: "${CPU_REQUEST}"
