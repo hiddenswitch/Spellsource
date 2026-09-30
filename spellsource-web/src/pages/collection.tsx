@@ -1,11 +1,6 @@
-import Layout from "../components/creative-layout";
-import {
-  DeckFragment,
-  useCreateDeckMutation,
-  useGetClassesQuery,
-  useGetDeckQuery,
-  useGetDecksQuery,
-} from "../__generated__/client";
+import PublicSiteLayout, { PublicPageHeader } from "../components/public-site-layout";
+import * as publicStyles from "../components/public-site-layout.module.scss";
+import { DeckFragment, useCreateDeckMutation, useGetClassesQuery, useGetDeckQuery, useGetDecksQuery } from "../__generated__/client";
 import React, { createContext, FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 import { getSession, useSession } from "next-auth/react";
 import Collection, { textDecorationStyle } from "../components/collection/collection";
@@ -52,7 +47,7 @@ export default () => {
         .keyBy((card) => card!.class!)
         .mapValues((card) => (card!.cardScript as CardDef).name)
         .value(),
-    [getClasses.data],
+    [getClasses.data]
   );
   const classColors = useMemo(
     () =>
@@ -61,7 +56,7 @@ export default () => {
         .keyBy((card) => card!.class!)
         .mapValues((card) => toRgbaString((card!.cardScript as CardDef).art?.primary))
         .value(),
-    [getClasses.data],
+    [getClasses.data]
   ) as Record<string, string>;
   const textColors = useMemo(
     () =>
@@ -70,7 +65,7 @@ export default () => {
         .keyBy((card) => card!.class!)
         .mapValues((card) => toRgbaString((card!.cardScript as CardDef).art?.body?.vertex))
         .value(),
-    [getClasses.data],
+    [getClasses.data]
   );
 
   const getDecks = useGetDecksQuery({ variables: { user } });
@@ -80,16 +75,16 @@ export default () => {
 
   const DeckEntry: FunctionComponent<{
     deck: DeckFragment;
-  }> = ({ deck }) => (
-    <li className={"d-flex flex-row align-items-baseline gap-2"}>
-      <Link draggable={false} href={{ query: { ...router.query, deckId: deck.id, heroClass: "ALLOWED" } }}>
-        <Button variant={"light"} className={""}
-                style={{ borderColor: deck.heroClass! in classColors ? classColors[deck.heroClass!] : "initial" }}>
-          {deck.name}
-        </Button>
-      </Link>
-    </li>
-  );
+  }> = ({ deck }) => {
+    const accentStyle = deck.heroClass! in classColors ? ({ "--collection-deck-accent": classColors[deck.heroClass!] } as React.CSSProperties) : undefined;
+    return (
+      <li className={"d-flex flex-row align-items-baseline gap-2"}>
+        <Link draggable={false} href={{ query: { ...router.query, deckId: deck.id, heroClass: "ALLOWED" } }} style={accentStyle}>
+          <Button variant={"light"}>{deck.name}</Button>
+        </Link>
+      </li>
+    );
+  };
 
   const getDeck = useGetDeckQuery({
     variables: { deckId },
@@ -139,28 +134,23 @@ export default () => {
   const [show, setShow] = useState(false);
 
   return (
-    <Layout>
+    <PublicSiteLayout title="Spellsource Collection">
       <Head>
         <title>Spellsource Cards</title>
       </Head>
+      <PublicPageHeader eyebrow="Card library" title="Collection" />
       <DndProvider backend={HTML5Backend}>
         <CardCache.Provider value={cache}>
-          <Container className={"p-0"}>
-            <Row id={"Collection"} className={"pe-lg-2 mt-2 flex-grow-1"}>
-              <Col id={"CardsList"} xs={12} lg={9}>
-                <Collection user={user} classes={classes} classColors={classColors} heroClass={heroClass}
-                            setHeroClass={setHeroClass} offset={offset} setOffset={setOffset}
-                            mainHeroClass={deck?.heroClass} addToDeck={myDeck ? addCardToDeck : undefined}
-                            removeFromDeck={myDeck ? removeCardFromDeck : undefined} />
+          <Container className={publicStyles.collectionShell}>
+            <Row id={"Collection"} className={publicStyles.collectionWorkspace}>
+              <Col id={"CardsList"} xs={12} lg={9} className={publicStyles.collectionResults}>
+                <Collection user={user} classes={classes} classColors={classColors} heroClass={heroClass} setHeroClass={setHeroClass} offset={offset} setOffset={setOffset} mainHeroClass={deck?.heroClass} addToDeck={myDeck ? addCardToDeck : undefined} removeFromDeck={myDeck ? removeCardFromDeck : undefined} />
               </Col>
               <Col id={"DecksList"} xs={12} lg={3}>
-                <Offcanvas responsive={"lg"} show={show} onHide={() => setShow(false)} placement={"bottom"}
-                           scroll={true} backdrop={false}>
+                <Offcanvas responsive={"lg"} show={show} onHide={() => setShow(false)} placement={"bottom"} scroll={true} backdrop={false} className={publicStyles.collectionDeckPanel}>
                   <OffcanvasBody>
                     {selectedDeck ? (
-                      <Deck user={user} deck={deck} myDeck={!!myDeck} cardIds={deckCards} cardActions={deckActions}
-                            getDecks={getDecks} getDeck={getDeck} classColors={classColors} setDeckId={setDeckId}
-                            realCards={realCards} />
+                      <Deck user={user} deck={deck} myDeck={!!myDeck} cardIds={deckCards} cardActions={deckActions} getDecks={getDecks} getDeck={getDeck} classColors={classColors} setDeckId={setDeckId} realCards={realCards} />
                     ) : (
                       <div className={"w-100"}>
                         {user && (
@@ -171,9 +161,7 @@ export default () => {
                                 <DropdownToggle>Create</DropdownToggle>
                                 <DropdownMenu>
                                   {Object.entries(classes).map(([heroClass, className]) => (
-                                    <DropdownItem key={heroClass}
-                                                  onClick={async () => await createNewDeck(heroClass, className)}
-                                                  style={textDecorationStyle(heroClass, classColors)}>
+                                    <DropdownItem key={heroClass} onClick={async () => await createNewDeck(heroClass, className)} style={textDecorationStyle(heroClass, classColors)}>
                                       {className}
                                     </DropdownItem>
                                   ))}
@@ -200,8 +188,7 @@ export default () => {
                       </div>
                     )}
                     {show && (
-                      <Button className={"position-absolute w-auto top-0 end-0 me-2 d-block d-lg-none"}
-                              style={{ transform: "translate(0%, -110%)" }} onClick={() => setShow(!show)}>
+                      <Button className={"position-absolute w-auto top-0 end-0 me-2 d-block d-lg-none"} style={{ transform: "translate(0%, -110%)" }} onClick={() => setShow(!show)}>
                         Close
                       </Button>
                     )}
@@ -217,6 +204,6 @@ export default () => {
           </Container>
         </CardCache.Provider>
       </DndProvider>
-    </Layout>
+    </PublicSiteLayout>
   );
 };

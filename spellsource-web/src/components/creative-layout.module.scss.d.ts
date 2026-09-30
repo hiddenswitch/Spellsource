@@ -42,6 +42,8 @@ export const heroButtonsContainer: string;
 export const heroContainer: string;
 export const heroContainerAlt: string;
 export const heroContainerGithub: string;
+export const heroGameButton: string;
+export const heroGameButtonPrimary: string;
 export const heroImage: string;
 export const heroImageContainer: string;
 export const heroIntroLogos: string;

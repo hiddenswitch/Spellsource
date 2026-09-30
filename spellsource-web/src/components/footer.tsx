@@ -5,12 +5,14 @@ import { Col, Container, Row } from "react-bootstrap";
 import cx from "classnames";
 
 function Footer({ pages }: { pages?: any }) {
+  const year = new Date().getFullYear();
+
   return (
     <div className={styles.navbarFooter}>
       <Container className={styles.footer}>
         <Row className={cx("justify-content-around", "w-100")}>
           <Col xs={"auto"}>
-            <a href="https://hiddenswitch.com/">2023 HiddenSwitch, Inc</a>
+            <a href="https://hiddenswitch.com/">{year} HiddenSwitch, Inc</a>
           </Col>
           <Col xs={"auto"}>
             <a href="/javadoc">Developer API</a>
