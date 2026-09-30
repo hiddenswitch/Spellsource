@@ -151,18 +151,15 @@ export async function driveGuestIntoMatch(page: Page, graphql: Awaited<ReturnTyp
   const userId: string = created.userEntity.id;
   const token: string = created.accessToken.token;
 
-  // these screens produce no http traffic to key off, so give each the settle
-  // time the client needs rather than retrying a sequence that is not
-  // idempotent once the first click has changed screens
-  await page.waitForTimeout(15_000); // main menu
-  await click(0.787, 0.189); // Single Player
-  await page.waitForTimeout(15_000);
-  await click(0.142, 0.37); // first starter deck
-  await page.waitForTimeout(5_000);
-  await click(0.934, 0.898); // PLAY
-  // the enqueue itself travels over the client's websocket; the connection to
-  // the created game is the first thing visible over http
-  await graphql.waitFor("connectToGame", 90_000, (connected) => connected === true);
+  // Canvas screens can be visible before accepting input. Retry the menu/deck
+  // selection until the real game connection confirms that setup completed.
+  await until(async () => {
+    await click(0.787, 0.189); // Single Player (or a deck when already in the picker)
+    await page.waitForTimeout(1_000);
+    await click(0.142, 0.37); // first starter deck
+    await page.waitForTimeout(1_000);
+    await click(0.934, 0.898); // PLAY
+  }, () => graphql.waitFor("connectToGame", 5_000, connected => connected === true), 18);
   await page.waitForTimeout(5_000); // let the mulligan render so the match is genuinely under way
   return { userId, token };
 }
