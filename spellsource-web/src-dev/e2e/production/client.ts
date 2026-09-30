@@ -10,22 +10,28 @@ import { expect, type APIRequestContext, type Page, type WebSocket } from "@play
 // The client sends graphql over fetch with a blob body that playwright does not
 // expose, so operations are recognised from their response data keys instead.
 export async function watchGraphQL(page: Page) {
-  // Large Unity downloads otherwise evict small GraphQL response bodies from CDP.
-  const cdp = await page.context().newCDPSession(page);
-  await cdp.send("Network.enable", { maxTotalBufferSize: 256 * 1024 * 1024, maxResourceBufferSize: 128 * 1024 * 1024 });
   const seen: { key: string; data: any; at: number }[] = [];
   let origin = "";
-  page.on("response", async (response) => {
-    if (response.request().method() !== "POST" || !response.url().includes("/graphql")) return;
-    try {
-      const body = await response.json();
-      origin = new URL(response.url()).origin;
-      for (const key of Object.keys(body?.data ?? {})) {
-        seen.push({ key, data: body.data[key], at: Date.now() });
-      }
-    } catch {
-      // not json
+  // Observe a clone inside the browser: Chromium can evict network response
+  // bodies while loading the large Unity wasm/data files. This preserves the
+  // browser's network path, including toxiproxy in the outage tests.
+  await page.exposeBinding("__spellsourceObserveGraphQL", (_source, url: string, body: any) => {
+    origin = new URL(url).origin;
+    for (const key of Object.keys(body?.data ?? {})) {
+      seen.push({ key, data: body.data[key], at: Date.now() });
     }
+  });
+  await page.addInitScript(() => {
+    const originalFetch = window.fetch;
+    window.fetch = async function (...args) {
+      const response = await originalFetch.apply(this, args);
+      if (response.url.includes("/graphql")) {
+        void response.clone().json().then(body =>
+          (window as any).__spellsourceObserveGraphQL(response.url, body)
+        ).catch(() => {});
+      }
+      return response;
+    };
   });
   return {
     seen,
