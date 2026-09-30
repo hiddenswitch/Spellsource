@@ -114,7 +114,6 @@ public class GameTests extends FrameworkTestBase {
 					var deckId = (String) game[1];
 					return Games.createGame(ConfigurationRequest.botMatch(gameId.toString(), client.getUserEntity().getId(), client.getUserEntity().getId(), deckId, deckId))
 							.compose(ignored -> playThroughOneAction(client))
-							.compose(ignored -> Environment.sleep(vertx, 250L))
 							.compose(ignored -> Environment.query(dsl -> dsl.select(GAMES.TRACE).from(GAMES).where(GAMES.ID.eq(gameId))))
 							.map(rows -> rows.iterator().next().getJsonObject("trace"));
 				})
@@ -130,7 +129,7 @@ public class GameTests extends FrameworkTestBase {
 
 	private Future<Void> playThroughOneAction(Client client) {
 		var writer = Promise.<WriteStream<ClientToServerMessage>>promise();
-		var actionSent = new AtomicBoolean();
+		var actionRequestId = new AtomicReference<String>();
 		var completed = Promise.<Void>promise();
 		client.legacy().subscribeGame(writer::tryComplete).onSuccess(reader -> {
 			reader.exceptionHandler(completed::tryFail);
@@ -140,13 +139,13 @@ public class GameTests extends FrameworkTestBase {
 					case ON_MULLIGAN -> stream.write(ClientToServerMessage.newBuilder()
 							.setMessageType(MessageType.UPDATE_MULLIGAN).setRepliesTo(message.getId()).build()).onFailure(completed::tryFail);
 					case ON_REQUEST_ACTION -> {
-						if (actionSent.compareAndSet(false, true)) {
+						if (actionRequestId.compareAndSet(null, message.getId())) {
 							stream.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.UPDATE_ACTION)
 									.setRepliesTo(message.getId()).setActionIndex(0).build())
 									.onFailure(completed::tryFail);
-						} else {
-							// A subsequent action request proves that the first action was
-							// processed and its synchronous checkpoint completed.
+						} else if (!message.getId().equals(actionRequestId.get())) {
+							// Replayed requests retain their ID. Only a new request proves
+							// the action and its synchronous checkpoint have completed.
 							completed.tryComplete();
 						}
 					}
