@@ -36,3 +36,101 @@ jib {
         jvmFlags = ['--enable-preview', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=85.0']
     }
 }
+
+def kubeconfig = System.getenv('KUBECONFIG') ?: '/home/administrator/Documents/appmana/appmana-cluster/src/bootstrap/appmana-cluster-03/kubeconfig.yaml'
+
+tasks.register('deployTrainer') {
+    description = 'Build trainer image and deploy JobSet to Kubernetes'
+    group = 'deployment'
+    dependsOn 'jib'
+
+    doLast {
+        def replicas = project.findProperty('replicas') ?: '7'
+        def generations = project.findProperty('generations') ?: '50'
+        def population = project.findProperty('population') ?: '12'
+        def matchupsPerEval = project.findProperty('matchupsPerEval') ?: '20'
+        def gamesPerMatchup = project.findProperty('gamesPerMatchup') ?: '6'
+        def gsvbDepth = project.findProperty('gsvbDepth') ?: '2'
+        def gsvbTimeout = project.findProperty('gsvbTimeout') ?: '5000'
+        def sigma = project.findProperty('sigma') ?: '20.0'
+        def mlflowUri = project.findProperty('mlflowUri') ?: 'https://mlflow.appmana.com'
+        def session = project.findProperty('session') ?: ''
+        def namespace = project.findProperty('namespace') ?: 'appmana'
+        def gameTimeout = project.findProperty('gameTimeout') ?: '90000'
+        def cpuRequest = project.findProperty('cpuRequest') ?: '8'
+        def cpuLimit = project.findProperty('cpuLimit') ?: '16'
+        def memoryRequest = project.findProperty('memoryRequest') ?: '12Gi'
+        def memoryLimit = project.findProperty('memoryLimit') ?: '24Gi'
+        def trainerImage = project.findProperty('trainerImage') ?: 'harbor.appmana.com/appmana/spellsource-trainer:latest'
+
+        def template = file('k8s/jobset.yaml').text
+        def vars = [
+                NAMESPACE: namespace, REPLICAS: replicas, IMAGE: trainerImage,
+                GENERATIONS: generations, POPULATION: population,
+                MATCHUPS_PER_EVAL: matchupsPerEval, GAMES_PER_MATCHUP: gamesPerMatchup,
+                GSVB_DEPTH: gsvbDepth, GSVB_TIMEOUT: gsvbTimeout,
+                SIGMA: sigma, MLFLOW_URI: mlflowUri, SESSION: session,
+                GAME_TIMEOUT: gameTimeout,
+                CPU_REQUEST: cpuRequest, CPU_LIMIT: cpuLimit,
+                MEMORY_REQUEST: memoryRequest, MEMORY_LIMIT: memoryLimit,
+        ]
+        def manifest = template
+        vars.each { k, v -> manifest = manifest.replace('${' + k + '}', v) }
+
+        def rendered = new File(layout.buildDirectory.asFile.get(), 'jobset-rendered.yaml')
+        rendered.parentFile.mkdirs()
+        rendered.text = manifest
+
+        logger.lifecycle("Rendered JobSet manifest to ${rendered}")
+        logger.lifecycle("  replicas=${replicas} generations=${generations} population=${population}")
+        logger.lifecycle("  matchupsPerEval=${matchupsPerEval} gamesPerMatchup=${gamesPerMatchup}")
+        logger.lifecycle("  sigma=${sigma} mlflowUri=${mlflowUri} session=${session}")
+        logger.lifecycle("  cpu=${cpuRequest}/${cpuLimit} memory=${memoryRequest}/${memoryLimit}")
+
+        // Delete existing JobSet if present (ignore errors)
+        exec {
+            commandLine 'kubectl', '--kubeconfig', kubeconfig,
+                    'delete', 'jobset', 'gsvb-trainer', '-n', namespace, '--ignore-not-found'
+        }
+
+        exec {
+            commandLine 'kubectl', '--kubeconfig', kubeconfig,
+                    'apply', '-f', rendered.absolutePath
+        }
+
+        logger.lifecycle("JobSet deployed to namespace ${namespace} with ${replicas} islands")
+    }
+}
+
+tasks.register('deleteTrainer') {
+    description = 'Delete the trainer JobSet from Kubernetes'
+    group = 'deployment'
+
+    doLast {
+        def namespace = project.findProperty('namespace') ?: 'appmana'
+        exec {
+            commandLine 'kubectl', '--kubeconfig', kubeconfig,
+                    'delete', 'jobset', 'gsvb-trainer', '-n', namespace, '--ignore-not-found'
+        }
+    }
+}
+
+tasks.register('trainerStatus') {
+    description = 'Show trainer JobSet status'
+    group = 'deployment'
+
+    doLast {
+        def namespace = project.findProperty('namespace') ?: 'appmana'
+        exec {
+            commandLine 'kubectl', '--kubeconfig', kubeconfig,
+                    'get', 'jobset', 'gsvb-trainer', '-n', namespace, '-o', 'wide'
+            ignoreExitValue = true
+        }
+        exec {
+            commandLine 'kubectl', '--kubeconfig', kubeconfig,
+                    'get', 'pods', '-n', namespace, '-l', 'jobset.sigs.k8s.io/jobset-name=gsvb-trainer',
+                    '-o', 'wide', '--sort-by=.metadata.name'
+            ignoreExitValue = true
+        }
+    }
+}
