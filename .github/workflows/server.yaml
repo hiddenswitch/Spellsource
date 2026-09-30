@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: 22
       - name: Run server tests
-        run: ./gradlew --no-parallel spellsource-server:test
+        run: ./gradlew --no-parallel spellsource-server:test spellsource-game:test
       - name: Build and push server image
         run: ./gradlew spellsource-server:githubDockerPush
         env:

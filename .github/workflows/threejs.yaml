@@ -1,0 +1,22 @@
+name: Three.js Client
+on:
+  push:
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout workspace generator
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule update --init spellsource-ts-proto/ts-proto
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: yarn install --immutable
+      - run: yarn workspace spellsource-threejs codegen
+      - run: git diff --exit-code -- spellsource-threejs/src/__generated__
+      - run: yarn workspace spellsource-threejs typecheck
+      - run: yarn workspace spellsource-threejs test
+      - run: yarn workspace spellsource-threejs build

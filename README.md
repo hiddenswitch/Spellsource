@@ -32,7 +32,7 @@ See [docs/missing-cards.md](docs/missing-cards.md) for the current list of 230 u
 
 ### Getting Around
 
-Cards are located at [spellsource-cards-git/src/main/resources/cards/custom](https://github.com/hiddenswitch/Spellsource/tree/master/spellsource-cards-git).
+Cards are located at [spellsource-cards-git/src/main/resources/cards/custom](https://github.com/hiddenswitch/Spellsource/tree/develop/spellsource-cards-git).
 
 To implement new effects (called **Spells** inside Spellsource) add a new Spell subclass to [spellsource-game/src/main/java/net/demilich/metastone/game/spells](spellsource-game/src/main/java/net/demilich/metastone/game/spells).
 
@@ -242,7 +242,7 @@ Visit the [Contribution Guide](CONTRIBUTE.md) for more about contributions, incl
 
 ### Deployment
 
-Increase the `allprojects.version` in `build.gradle`, then merge into the `master` branch.
+Increase the `allprojects.version` in `build.gradle`, then merge into `develop`. CI publishes images and Flux deploys them. Unity client releases come from the separate Spellsource-Client `master` branch through Tekton.
 
 ### Configure `UnityYamlMerge`
 

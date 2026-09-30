@@ -42,3 +42,6 @@ python/dist/
 dump/
 
 hs_err_pid*
+
+.yarn/install-state.gz
+*.tsbuildinfo

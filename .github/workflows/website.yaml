@@ -4,6 +4,11 @@ on:
     branches: ['develop']
     paths:
       - spellsource-web/**
+      - spellsource-threejs/**
+      - package.json
+      - settings.gradle
+      - gradle/**
+      - buildSrc/**
       - build.gradle
       - .github/workflows/website.yaml
       - yarn.lock
