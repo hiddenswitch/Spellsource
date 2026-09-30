@@ -29,6 +29,7 @@ dependencies = [
     'nltk',
     "skia-python",
     "SecretColors==1.1.0",
+    "pixel-art @ git+https://github.com/hiddenswitch/pixel-art.git",
 ]
 
 [project.urls]
