@@ -17,6 +17,7 @@ The `Spellsource-Server` project is a 2-player card battler that supports hosted
 - [CLAUDE.md](CLAUDE.md) — AI assistant quick reference
 - [docs/](docs/) — Card authoring, spell reference, testing guide
 - [CONTRIBUTE.md](CONTRIBUTE.md) — Contribution guidelines
+- [Three.js client](spellsource-threejs/README.md) — Independent workspace hosted at `/game-3js`; Unity remains at `/game`.
 
 ### Hearthstone Card Database
 
@@ -100,7 +101,7 @@ Start a local server and website using:
 
 ### Unity Requirements
 
-Install Unity 6.2 beta with the iOS, macOS, Windows, and Android modules for your platform. You should not install Visual Studio.
+Install the editor version recorded in `spellsource-client/src/unity/ProjectSettings/ProjectVersion.txt` (currently 6000.4.10f1), with the WebGL, iOS, macOS, Windows, and Android modules needed for your builds. You should not install Visual Studio.
 
 ##### Getting Around Unity
 
