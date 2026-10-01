@@ -42,8 +42,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Test and build GraphQL gateway image
-        run: ./gradlew spellsource-graphql:yarnRunTest spellsource-graphql:createImage_spellsource_graphql_linux_amd64
+      - name: Test GraphQL gateway
+        run: |
+          yarn install --immutable
+          yarn workspace spellsource-graphql test
+      - name: Build GraphQL gateway image
+        run: ./gradlew spellsource-graphql:createImage_spellsource_graphql_linux_amd64
       - name: Tag and push GraphQL gateway image
         shell: bash
         run: |
