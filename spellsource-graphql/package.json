@@ -54,6 +54,7 @@
     "start": "node build/server.js",
     "codegen": "graphql-codegen",
     "strawberry-shake": "dotnet graphql generate",
-    "docker-debug": "node -r ts-node/register --inspect=0.0.0.0:51535 src/server.ts"
+    "docker-debug": "node -r ts-node/register --inspect=0.0.0.0:51535 src/server.ts",
+    "test": "node --require ts-node/register --test test/*.test.cjs"
   }
 }

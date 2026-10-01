@@ -31,7 +31,7 @@ const httpExecutor = buildHTTPExecutor({
 // to the Java backend's graphql-transport-ws endpoint at /graphql, opening a fresh
 // graphql-ws connection per subscription so the auth token can be passed via
 // connection_init payload (which the backend's GraphQLWSHandler reads).
-const wsExecutor: Executor = (executionRequest) => {
+export const wsExecutor: Executor = (executionRequest) => {
   const req = executionRequest.context as AuthRequest | undefined;
   const token = req?.token;
 
@@ -69,7 +69,10 @@ const wsExecutor: Executor = (executionRequest) => {
       return {
         unsubscribe: () => {
           unsubscribe();
-          void client.dispose();
+          void Promise.resolve(client.dispose()).catch(() => {
+            // Disposal awaits any in-flight handshake. A backend disconnect can
+            // reject it after this subscription has already been cancelled.
+          });
         },
       };
     },
