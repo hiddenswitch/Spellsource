@@ -165,11 +165,16 @@ export async function driveGuestIntoMatch(page: Page, graphql: Awaited<ReturnTyp
   // Canvas screens can be visible before accepting input. Retry the menu/deck
   // selection until the real game connection confirms that setup completed.
   await until(async () => {
-    await click(0.787, 0.189); // Single Player (or a deck when already in the picker)
+    const geometry = await page.locator("canvas").evaluate(canvas => ({
+      width: (canvas as HTMLCanvasElement).width, height: (canvas as HTMLCanvasElement).height,
+      portrait: canvas.clientHeight > canvas.clientWidth,
+    }));
+    await click(geometry.portrait ? 0.5 : 0.787,
+      geometry.portrait ? 1 - 680 / geometry.height : 0.189); // Single Player
     await page.waitForTimeout(1_000);
-    await click(0.142, 0.37); // first starter deck
+    await click(205 / geometry.width, geometry.portrait ? 0.25 : 0.37); // first starter deck
     await page.waitForTimeout(1_000);
-    await click(0.934, 0.898); // PLAY
+    await click(1 - 90 / geometry.width, 1 - 82 / geometry.height); // PLAY
   }, () => graphql.waitFor("connectToGame", 5_000, connected => connected === true), 18);
   await page.waitForTimeout(5_000); // let the mulligan render so the match is genuinely under way
   return { userId, token };
