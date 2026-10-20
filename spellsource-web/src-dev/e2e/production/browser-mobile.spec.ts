@@ -10,7 +10,7 @@ test("the exact candidate starts at the device viewport", async ({ page }) => {
   if (process.env.SPELLSOURCE_EXPECTED_BUILD_ID) {
     await expect(page.locator("html")).toHaveAttribute("data-webgl-build", process.env.SPELLSOURCE_EXPECTED_BUILD_ID);
   }
-  const canvas = await page.locator("canvas").evaluate(c => ({ width: c.width, css: c.clientWidth }));
+  const canvas = await page.locator("canvas").evaluate(c => ({ width: (c as HTMLCanvasElement).width, css: c.clientWidth }));
   expect(canvas.width).toBeLessThanOrEqual(canvas.css * 2 + 1);
   expect(errors).toEqual([]);
 });
