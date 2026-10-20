@@ -1,6 +1,14 @@
 import { expect, test } from "@playwright/test";
 import { currentGameId, driveGuestIntoMatch, waitForClient, watchGraphQL } from "./client";
 
+// Telemetry availability is independent of player startup and can emit WebKit
+// page errors when the external analytics endpoint rejects cross-origin requests.
+test.beforeEach(async ({ page }) => {
+  await page.route("https://cdp.cloud.unity3d.com/**", route => route.fulfill({
+    status: 204, headers: { "access-control-allow-origin": "*" },
+  }));
+});
+
 test("the exact candidate starts at the device viewport", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));

@@ -154,8 +154,11 @@ export async function driveGuestIntoMatch(page: Page, graphql: Awaited<ReturnTyp
     async () => {
       // The form is centered with a fixed pixel-art layout in Unity render pixels.
       // Account for the browser DPR cap instead of assuming a desktop viewport.
-      const renderHeight = await page.locator("canvas").evaluate(canvas => (canvas as HTMLCanvasElement).height);
-      await click(0.499, 0.5 + 240 / renderHeight);
+      const geometry = await page.locator("canvas").evaluate(canvas => ({
+        width: (canvas as HTMLCanvasElement).width, height: (canvas as HTMLCanvasElement).height,
+      }));
+      const uiScale = Math.min(1, geometry.width / 800, geometry.height / 800);
+      await click(0.499, 0.5 + 240 * uiScale / geometry.height);
     },
     () => graphql.waitFor("createAccount", 5_000)
   );
@@ -169,12 +172,13 @@ export async function driveGuestIntoMatch(page: Page, graphql: Awaited<ReturnTyp
       width: (canvas as HTMLCanvasElement).width, height: (canvas as HTMLCanvasElement).height,
       portrait: canvas.clientHeight > canvas.clientWidth,
     }));
+    const uiScale = Math.min(1, geometry.width / 800, geometry.height / 800);
     await click(geometry.portrait ? 0.5 : 0.787,
-      geometry.portrait ? 1 - 680 / geometry.height : 0.189); // Single Player
+      geometry.portrait ? 1 - 680 * uiScale / geometry.height : 0.189); // Single Player
     await page.waitForTimeout(1_000);
-    await click(205 / geometry.width, geometry.portrait ? 0.25 : 0.37); // first starter deck
+    await click(205 * uiScale / geometry.width, geometry.portrait ? 0.25 : 0.37); // first starter deck
     await page.waitForTimeout(1_000);
-    await click(1 - 90 / geometry.width, 1 - 82 / geometry.height); // PLAY
+    await click(1 - 90 * uiScale / geometry.width, 1 - 82 * uiScale / geometry.height); // PLAY
   }, () => graphql.waitFor("connectToGame", 5_000, connected => connected === true), 18);
   await page.waitForTimeout(5_000); // let the mulligan render so the match is genuinely under way
   return { userId, token };
