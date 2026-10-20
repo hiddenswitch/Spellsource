@@ -704,10 +704,13 @@ type Mutation {
   enqueueMatchmaking(input: MatchmakingEnqueueInput!): Boolean!
   cancelMatchmaking: Boolean!
 
+  """Connect to an active game after opening the gameMessages subscription."""
+  connectToGame(playerKey: String, playerSecret: String, connectionId: String): Boolean!
+
   """
-  Connect to an active game. Must be called before gameMessages subscription will emit.
+  Probe the game engine; a matching PINGPONG message arrives on gameMessages.
   """
-  connectToGame(playerKey: String, playerSecret: String): Boolean!
+  gameHeartbeat(nonce: String!): Boolean!
 
   """Send a game action in response to an ON_REQUEST_ACTION message."""
   sendGameAction(actionIndex: Int!, repliesTo: String!): Boolean!
@@ -3976,11 +3979,12 @@ input DeleteCardsInDeckByIdInput {
 type Subscription {
   """
   Streams game messages for the authenticated user's active game.
-  Call connectToGame mutation first to initiate the game connection.
+  Open this subscription before calling connectToGame. The mutation waits until
+  this subscription is ready before initiating the game connection.
   Emits ServerGameMessage for each game state change, action request,
   mulligan, event, and game over.
   """
-  gameMessages: ServerGameMessage!
+  gameMessages(connectionId: String): ServerGameMessage!
 
   """Emits when the current user is matched into a game."""
   matchFound: MatchFound!

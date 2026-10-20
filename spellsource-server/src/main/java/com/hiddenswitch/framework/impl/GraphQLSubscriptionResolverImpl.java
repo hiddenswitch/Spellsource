@@ -32,14 +32,14 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 	 * can use for subscription streaming.
 	 */
 	@Override
-	public Publisher<ServerGameMessage> gameMessages() throws Exception {
+	public Publisher<ServerGameMessage> gameMessages(String connectionId) throws Exception {
 		var userId = Accounts.userId();
 		if (userId == null) {
 			throw new AuthenticationException("must be authenticated");
 		}
 		// Return the publisher directly - graphql-kickstart handles Publisher returns
 		// from subscription resolvers natively.
-		return GraphQLGameBridge.gameMessagesPublisher(userId);
+		return GraphQLGameBridge.gameMessagesPublisher(userId, connectionId);
 	}
 
 	/**

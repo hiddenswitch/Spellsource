@@ -1,5 +1,5 @@
-subscription gameMessages {
-  gameMessages {
+subscription gameMessages($connectionId: String) {
+  gameMessages(connectionId: $connectionId) {
     ...serverGameMessage
   }
 }

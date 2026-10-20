@@ -61,9 +61,14 @@ public interface MutationResolver {
     io.vertx.core.Future<Boolean> cancelMatchmaking() throws Exception;
 
     /**
-     * Connect to an active game. Must be called before gameMessages subscription will emit.
+     * Connect to an active game after opening the gameMessages subscription.
      */
-    io.vertx.core.Future<Boolean> connectToGame(String playerKey, String playerSecret) throws Exception;
+    io.vertx.core.Future<Boolean> connectToGame(String playerKey, String playerSecret, String connectionId) throws Exception;
+
+    /**
+     * Probe the game engine; a matching PINGPONG message arrives on gameMessages.
+     */
+    io.vertx.core.Future<Boolean> gameHeartbeat(String nonce) throws Exception;
 
     /**
      * Send a game action in response to an ON_REQUEST_ACTION message.

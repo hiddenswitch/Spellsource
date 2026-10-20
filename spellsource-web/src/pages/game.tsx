@@ -30,6 +30,7 @@ function loadScript(src: string): Promise<void> {
 }
 
 const GamePage: FunctionComponent = () => {
+  const frameRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("Finding the latest build");
@@ -47,8 +48,12 @@ const GamePage: FunctionComponent = () => {
     let instance: { Quit: () => Promise<void> } | undefined;
 
     const fit = () => {
-      canvas.style.width = `${window.visualViewport?.width ?? window.innerWidth}px`;
-      canvas.style.height = `${window.visualViewport?.height ?? window.innerHeight}px`;
+      const frame = frameRef.current;
+      const style = frame ? getComputedStyle(frame) : undefined;
+      const horizontal = style ? parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) : 0;
+      const vertical = style ? parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) : 0;
+      canvas.style.width = `${Math.max(1, (window.visualViewport?.width ?? window.innerWidth) - horizontal)}px`;
+      canvas.style.height = `${Math.max(1, (window.visualViewport?.height ?? window.innerHeight) - vertical)}px`;
     };
     const onSession = (event: Event) => {
       const state = (event as CustomEvent<{ phase: string; message?: string }>).detail;
@@ -90,8 +95,8 @@ const GamePage: FunctionComponent = () => {
           productVersion: build.productVersion,
           // The client keeps the signed-in account (guests included) in
           // Application.persistentDataPath, which on WebGL is an in-memory file
-          // system mirrored to IndexedDB only when synced. The build never syncs
-          // it, so without this a refresh forgets the guest and the match it is in.
+          // system mirrored to IndexedDB only when synced. Older builds need this;
+          // new builds also await an explicit flush before exposing a new identity.
           autoSyncPersistentDataPath: true,
         },
         (p) => {
@@ -145,14 +150,15 @@ const GamePage: FunctionComponent = () => {
           background: #000;
         }
       `}</style>
-      <main style={{ position: "fixed", inset: 0, background: "#000" }}>
+      <main ref={frameRef} style={{ position: "fixed", inset: 0, background: "#000",
+        padding: "env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)" }}>
         <canvas
           ref={canvasRef}
           id="unity-canvas"
           width={1280}
           height={720}
           tabIndex={-1}
-          style={{ position: "absolute", top: 0, left: 0, imageRendering: "pixelated", touchAction: "none" }}
+          style={{ position: "absolute", top: "env(safe-area-inset-top)", left: "env(safe-area-inset-left)", imageRendering: "pixelated", touchAction: "none" }}
         />
         {(!ready || error) && (
           <div

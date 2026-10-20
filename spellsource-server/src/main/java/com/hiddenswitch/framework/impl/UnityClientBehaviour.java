@@ -250,7 +250,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					activityMonitor.activity();
 				}
 				// Server is responsible for replying
-				sendMessage(ServerToClientMessage.newBuilder().setMessageType(MessageType.PINGPONG));
+				sendMessage(ServerToClientMessage.newBuilder().setMessageType(MessageType.PINGPONG).setId(message.getRepliesTo()));
 				break;
 			case FIRST_MESSAGE:
 				LOGGER.trace("received first message");

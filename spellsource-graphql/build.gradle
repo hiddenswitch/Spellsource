@@ -78,6 +78,11 @@ tasks.named("yarnRunStrawberryShake").configure {
   doLast {
     copy {
       from "Generated/GraphQL.Client.cs"
+      filter { line -> line
+          .replace('global::StrawberryShake.OperationExecutor<global::System.Text.Json.JsonDocument, ', 'global::Spellsource.UnityOperationExecutor<')
+          .replace('public async global::System.Threading.Tasks.Task<', 'public global::System.Threading.Tasks.Task<')
+          .replace('return await _operationExecutor.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);', 'return _operationExecutor.ExecuteAsync(request, cancellationToken);')
+      }
       into "../spellsource-client/src/unity/Assets/Scripts/"
     }
   }

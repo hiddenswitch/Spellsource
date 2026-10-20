@@ -1,0 +1,3 @@
+mutation gameHeartbeat($nonce: String!) {
+  gameHeartbeat(nonce: $nonce)
+}

@@ -780,7 +780,9 @@ type Mutation {
 
     # game actions (send during an active game)
     """Connect to an active game after opening the gameMessages subscription."""
-    connectToGame(playerKey: String, playerSecret: String): Boolean!
+    connectToGame(playerKey: String, playerSecret: String, connectionId: String): Boolean!
+    """Probe the game engine; a matching PINGPONG message arrives on gameMessages."""
+    gameHeartbeat(nonce: String!): Boolean!
     """Send a game action in response to an ON_REQUEST_ACTION message."""
     sendGameAction(actionIndex: Int!, repliesTo: String!): Boolean!
     """Send a mulligan response in response to an ON_MULLIGAN message."""
@@ -817,7 +819,7 @@ type Subscription {
     Emits ServerGameMessage for each game state change, action request,
     mulligan, event, and game over.
     """
-    gameMessages: ServerGameMessage!
+    gameMessages(connectionId: String): ServerGameMessage!
 
     """Emits when the current user is matched into a game."""
     matchFound: MatchFound!

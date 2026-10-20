@@ -10,9 +10,34 @@ import re
 import subprocess
 import tempfile
 import urllib.request
+import urllib.error
 
 ROOT = "https://s3-builds.appmana.com/spellsource-build-artifacts/spellsource-client/webgl/"
 BUCKET = "s3://spellsource-build-artifacts/spellsource-client/webgl/"
+
+
+def read_descriptor(key):
+    request = urllib.request.Request(ROOT + key, headers={"Cache-Control": "no-cache"})
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return json.load(response)
+    except urllib.error.HTTPError as error:
+        if error.code == 404:
+            return None
+        raise
+
+
+def stage(directory, build, output):
+    existing = read_descriptor(build["buildId"] + "/build.json")
+    if existing is not None:
+        if existing != build:
+            raise RuntimeError("Build ID already belongs to different immutable assets")
+        return
+    for path in sorted(directory.rglob("*")):
+        if path.is_file():
+            upload(path, build["buildId"] + "/" + path.relative_to(directory).as_posix())
+    # Written last so an interrupted upload cannot be resolved by the player.
+    upload(output, build["buildId"] + "/build.json")
 
 
 def aws(*args):
@@ -75,10 +100,7 @@ def main():
         output = Path(temp) / "build.json"
         output.write_text(json.dumps(build, indent=2) + "\n")
         if args.operation == "stage":
-            for path in sorted(args.directory.rglob("*")):
-                if path.is_file():
-                    upload(path, build["buildId"] + "/" + path.relative_to(args.directory).as_posix())
-            upload(output, build["buildId"] + "/build.json")
+            stage(args.directory, build, output)
         else:
             request = urllib.request.Request("https://api.github.com/repos/hiddenswitch/Spellsource/git/ref/heads/develop",
                                              headers={"Accept": "application/vnd.github+json"})

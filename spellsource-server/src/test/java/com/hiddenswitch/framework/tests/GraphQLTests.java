@@ -849,6 +849,8 @@ public class GraphQLTests extends FrameworkTestBase {
 			// 7. Open a WebSocket and subscribe to gameMessages via graphql-transport-ws protocol.
 			//    Auth is passed in the connection_init payload.
 			var gameOverPromise = Promise.<JsonObject>promise();
+			var heartbeatPromise = Promise.<String>promise();
+			var heartbeatNonce = java.util.UUID.randomUUID().toString();
 			var random = new XORShiftRandom(System.nanoTime());
 
 			var wsClient = vertx.createWebSocketClient();
@@ -882,6 +884,9 @@ public class GraphQLTests extends FrameworkTestBase {
 					var messageType = gameMessage.getString("messageType");
 
 					switch (messageType) {
+						case "PINGPONG":
+							heartbeatPromise.tryComplete(gameMessage.getString("id"));
+							break;
 						case "ON_MULLIGAN":
 							var msgId = gameMessage.getString("id");
 							graphql(webClient,
@@ -964,6 +969,15 @@ public class GraphQLTests extends FrameworkTestBase {
 			assertNull(connectRes.getJsonArray("errors"), "connectToGame errors: " + connectRes);
 			assertTrue(connectRes.getJsonObject("data").getBoolean("connectToGame"));
 
+			// A gateway acknowledgement alone is insufficient: the engine must echo the nonce
+			// through the same subscribed stream used for authoritative game state.
+			var heartbeat = await(graphql(webClient,
+					"mutation($nonce: String!) { gameHeartbeat(nonce: $nonce) }",
+					new JsonObject().put("nonce", heartbeatNonce), token));
+			assertNull(heartbeat.getJsonArray("errors"));
+			assertTrue(heartbeat.getJsonObject("data").getBoolean("gameHeartbeat"));
+			assertEquals(heartbeatNonce, await(heartbeatPromise.future().timeout(10, java.util.concurrent.TimeUnit.SECONDS)));
+
 			// 9. Wait for game to finish (messages arrive via WebSocket subscription)
 			var gameOverMessage = await(gameOverPromise.future());
 			assertNotNull(gameOverMessage, "should have received game over message");
@@ -983,6 +997,15 @@ public class GraphQLTests extends FrameworkTestBase {
 
 	@Test
 	public void testConnectToGameWaitsForGameMessageSubscription(Vertx vertx, VertxTestContext testContext) {
+		assertConnectionReadiness(vertx, testContext, null);
+	}
+
+	@Test
+	public void testReconnectWaitsForItsOwnSubscription(Vertx vertx, VertxTestContext testContext) {
+		assertConnectionReadiness(vertx, testContext, UUID.randomUUID().toString());
+	}
+
+	private void assertConnectionReadiness(Vertx vertx, VertxTestContext testContext, String connectionId) {
 		testVirtual(vertx, testContext, () -> {
 			await(startAll(vertx));
 			var webClient = graphqlClient(vertx);
@@ -1017,7 +1040,14 @@ public class GraphQLTests extends FrameworkTestBase {
 			// Deliberately let the HTTP mutation race ahead of the WebSocket subscribe frame.
 			// connectToGame must not acknowledge success until the outbound game-message
 			// consumer exists, or a restored game can publish its initial state into a void.
-			var connect = connectToGame(webClient, token);
+			if (connectionId != null) {
+				ws.writeTextMessage(new JsonObject().put("type", "subscribe").put("id", "stale-subscription")
+						.put("payload", new JsonObject().put("query", "subscription { gameMessages(connectionId: \"stale\") { messageType } }")).encode());
+				await(Environment.sleep(vertx, 100));
+			}
+			var connect = connectionId == null ? connectToGame(webClient, token)
+					: graphql(webClient, "mutation($id: String) { connectToGame(connectionId: $id) }",
+						new JsonObject().put("id", connectionId), token);
 			await(Environment.sleep(vertx, 250));
 			assertFalse(connect.isComplete(),
 					"connectToGame acknowledged before gameMessages was ready");
@@ -1026,9 +1056,9 @@ public class GraphQLTests extends FrameworkTestBase {
 					.put("type", "subscribe")
 					.put("id", "game-connection")
 					.put("payload", new JsonObject().put("query", """
-							subscription {
-							  gameMessages { messageType }
-							}"""))
+							subscription($id: String) {
+							  gameMessages(connectionId: $id) { messageType }
+							}""").put("variables", new JsonObject().put("id", connectionId)))
 					.encode());
 
 			var response = await(connect);

@@ -38,12 +38,19 @@ public class GraphQLGameBridge {
 	private static final long SUBSCRIBER_READY_TIMEOUT_MILLIS = Games.getDefaultConnectionTime();
 	private static final long SUBSCRIBER_READY_RETRY_MILLIS = 50L;
 
+	private static String subscriberAddress(String userId, String connectionId) {
+		if (connectionId != null && !connectionId.matches("[a-zA-Z0-9-]{1,64}")) {
+			throw new IllegalArgumentException("Invalid connection ID");
+		}
+		return SUBSCRIBER_READY_ADDRESS_PREFIX + userId + (connectionId == null ? "" : ":" + connectionId);
+	}
+
 	/**
 	 * Creates a reactive streams Publisher that emits ServerGameMessage for the given user.
 	 * Subscribes to the event bus address {@code games:writer:{userId}}.
 	 */
-	public static Publisher<ServerGameMessage> gameMessagesPublisher(String userId) {
-		return new GameMessagePublisher(userId);
+	public static Publisher<ServerGameMessage> gameMessagesPublisher(String userId, String connectionId) {
+		return new GameMessagePublisher(userId, connectionId);
 	}
 
 	/**
@@ -63,14 +70,14 @@ public class GraphQLGameBridge {
 	 * FIRST_MESSAGE and cause the game to emit its initial state before GraphQL had anywhere
 	 * to deliver that state.
 	 */
-	public static Future<Void> awaitGameMessagesSubscriber(String userId) {
+	public static Future<Void> awaitGameMessagesSubscriber(String userId, String connectionId) {
 		var vertx = Vertx.currentContext().owner();
-		return awaitGameMessagesSubscriber(vertx, userId, System.currentTimeMillis() + SUBSCRIBER_READY_TIMEOUT_MILLIS);
+		return awaitGameMessagesSubscriber(vertx, subscriberAddress(userId, connectionId), System.currentTimeMillis() + SUBSCRIBER_READY_TIMEOUT_MILLIS);
 	}
 
-	private static Future<Void> awaitGameMessagesSubscriber(Vertx vertx, String userId, long deadline) {
+	private static Future<Void> awaitGameMessagesSubscriber(Vertx vertx, String address, long deadline) {
 		Future<Void> readinessRequest = vertx.eventBus()
-				.<String>request(SUBSCRIBER_READY_ADDRESS_PREFIX + userId, "",
+				.<String>request(address, "",
 						new DeliveryOptions().setSendTimeout(SUBSCRIBER_READY_RETRY_MILLIS))
 				.mapEmpty();
 		return readinessRequest.recover(cause -> {
@@ -80,7 +87,7 @@ public class GraphQLGameBridge {
 					if (retryable && System.currentTimeMillis() < deadline) {
 						return Future.<Void>future(promise ->
 								vertx.setTimer(SUBSCRIBER_READY_RETRY_MILLIS, ignored ->
-										awaitGameMessagesSubscriber(vertx, userId, deadline).onComplete(promise)));
+										awaitGameMessagesSubscriber(vertx, address, deadline).onComplete(promise)));
 					}
 					return Future.failedFuture(new IllegalStateException(
 							"gameMessages subscription was not ready", cause));
@@ -328,9 +335,11 @@ public class GraphQLGameBridge {
 	 */
 	private static class GameMessagePublisher implements Publisher<ServerGameMessage> {
 		private final String userId;
+		private final String connectionId;
 
-		GameMessagePublisher(String userId) {
+		GameMessagePublisher(String userId, String connectionId) {
 			this.userId = userId;
+			this.connectionId = connectionId;
 		}
 
 		@Override
@@ -339,7 +348,7 @@ public class GraphQLGameBridge {
 			var eventBus = vertx.eventBus();
 			var address = ServerGameContext.getMessagesFromServerAddress(userId);
 			var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(address);
-			var readinessConsumer = eventBus.<String>consumer(SUBSCRIBER_READY_ADDRESS_PREFIX + userId);
+			var readinessConsumer = eventBus.<String>consumer(subscriberAddress(userId, connectionId));
 			var cancelled = new AtomicBoolean(false);
 
 			readinessConsumer.handler(request -> consumer.completion()

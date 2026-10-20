@@ -8,11 +8,12 @@ public interface SubscriptionResolver {
 
     /**
      * Streams game messages for the authenticated user's active game.
-Call connectToGame mutation first to initiate the game connection.
+Open this subscription before calling connectToGame. The mutation waits until
+this subscription is ready before initiating the game connection.
 Emits ServerGameMessage for each game state change, action request,
 mulligan, event, and game over.
      */
-    org.reactivestreams.Publisher<ServerGameMessage> gameMessages() throws Exception;
+    org.reactivestreams.Publisher<ServerGameMessage> gameMessages(String connectionId) throws Exception;
 
     /**
      * Emits when the current user is matched into a game.

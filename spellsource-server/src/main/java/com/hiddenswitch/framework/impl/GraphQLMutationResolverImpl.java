@@ -484,7 +484,7 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 	// ── game actions ─────────────────────────────────────────
 
 	@Override
-	public Future<Boolean> connectToGame(String playerKey, String playerSecret) throws Exception {
+	public Future<Boolean> connectToGame(String playerKey, String playerSecret, String connectionId) throws Exception {
 		var userId = Accounts.userId();
 		if (userId == null) {
 			return Future.failedFuture("must be authenticated");
@@ -500,9 +500,19 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 				.setMessageType(Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE)
 				.setFirstMessage(firstMessageBuilder)
 				.build();
-		return GraphQLGameBridge.awaitGameMessagesSubscriber(userId)
+		return GraphQLGameBridge.awaitGameMessagesSubscriber(userId, connectionId)
 				.compose(ignored -> GraphQLGameBridge.sendClientMessage(userId, firstMessage))
 				.map(true);
+	}
+
+	@Override
+	public Future<Boolean> gameHeartbeat(String nonce) throws Exception {
+		var userId = Accounts.userId();
+		if (userId == null) return Future.failedFuture("must be authenticated");
+		if (nonce == null || !nonce.matches("[a-zA-Z0-9-]{1,96}")) return Future.failedFuture("invalid heartbeat nonce");
+		return GraphQLGameBridge.sendClientMessage(userId, Spellsource.ClientToServerMessage.newBuilder()
+				.setMessageType(Spellsource.MessageTypeMessage.MessageType.PINGPONG)
+				.setRepliesTo(nonce).build()).map(true);
 	}
 
 	@Override
@@ -516,8 +526,7 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 				.setActionIndex(actionIndex)
 				.setRepliesTo(repliesTo)
 				.build();
-		GraphQLGameBridge.sendClientMessage(userId, message);
-		return Future.succeededFuture(true);
+		return GraphQLGameBridge.sendClientMessage(userId, message).map(true);
 	}
 
 	@Override
@@ -531,8 +540,7 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 				.addAllDiscardedCardIndices(discardedCardIndices)
 				.setRepliesTo(repliesTo)
 				.build();
-		GraphQLGameBridge.sendClientMessage(userId, message);
-		return Future.succeededFuture(true);
+		return GraphQLGameBridge.sendClientMessage(userId, message).map(true);
 	}
 
 	@Override
@@ -547,8 +555,7 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 						.setEntityId(entityId)
 						.setMessage(Spellsource.Emote.EmoteMessage.valueOf(message.name())))
 				.build();
-		GraphQLGameBridge.sendClientMessage(userId, msg);
-		return Future.succeededFuture(true);
+		return GraphQLGameBridge.sendClientMessage(userId, msg).map(true);
 	}
 
 	@Override
@@ -570,8 +577,7 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 				.setMessageType(Spellsource.MessageTypeMessage.MessageType.TOUCH)
 				.setEntityTouch(entityId)
 				.build();
-		GraphQLGameBridge.sendClientMessage(userId, message);
-		return Future.succeededFuture(true);
+		return GraphQLGameBridge.sendClientMessage(userId, message).map(true);
 	}
 
 	@Override
@@ -584,8 +590,7 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 				.setMessageType(Spellsource.MessageTypeMessage.MessageType.TOUCH)
 				.setEntityUntouch(entityId)
 				.build();
-		GraphQLGameBridge.sendClientMessage(userId, message);
-		return Future.succeededFuture(true);
+		return GraphQLGameBridge.sendClientMessage(userId, message).map(true);
 	}
 
 	// ── cards (editable) ─────────────────────────────────────
