@@ -1,73 +1,22 @@
 import Head from "next/head";
 import { useEffect, useRef, useState, type FunctionComponent } from "react";
 
-/**
- * The published Unity WebGL client. `latest/index.html` redirects to the current
- * versioned build, whose index.html carries the hashed asset names.
- */
-const WEBGL_LATEST_URL =
-  // A build-time override lets a dev server host a local or candidate build
-  // through this same page, so client changes can be tested before publishing.
-  process.env.NEXT_PUBLIC_SPELLSOURCE_WEBGL_INDEX ??
-  "https://s3-builds.appmana.com/spellsource-build-artifacts/spellsource-client/webgl/latest/index.html";
-
-type UnityBuild = {
-  baseUrl: string;
-  loaderUrl: string;
-  dataUrl: string;
-  frameworkUrl: string;
-  codeUrl: string;
-  symbolsUrl?: string;
-  productVersion?: string;
-};
+import { resolveLegacyBuild, type UnityBuild } from "../lib/webgl-build";
 
 declare global {
   interface Window {
-    createUnityInstance?: (
-      canvas: HTMLCanvasElement,
-      config: Record<string, unknown>,
-      onProgress?: (progress: number) => void
-    ) => Promise<{ Quit: () => Promise<void> }>;
+    createUnityInstance?: (canvas: HTMLCanvasElement, config: Record<string, unknown>,
+      onProgress?: (progress: number) => void) => Promise<{ Quit: () => Promise<void> }>;
   }
 }
 
-function attr(html: string, name: string): string | undefined {
-  return html.match(new RegExp(`${name}:\\s*"([^"]+)"`))?.[1];
-}
-
-/**
- * Resolves the current build by following the latest redirect and reading the
- * asset URLs out of Unity's generated index.html, so the page tracks whatever
- * the build pipeline last published without a manifest.
- */
 async function resolveBuild(): Promise<UnityBuild> {
-  const latest = await fetch(WEBGL_LATEST_URL).then((r) => r.text());
-  // the published "latest" is a redirect stub to the versioned build; a
-  // build's own index.html is used directly
-  const target = latest.match(/url=([^"\s]+)/)?.[1];
-  const indexUrl = target ? new URL(target, WEBGL_LATEST_URL).toString() : WEBGL_LATEST_URL;
-  if (!target && !/createUnityInstance/.test(latest)) {
-    throw new Error("could not find the latest client build");
-  }
-  const baseUrl = indexUrl.replace(/index\.html$/, "");
-  const html = target ? await fetch(indexUrl).then((r) => r.text()) : latest;
-  const loader = html.match(/<script src="([^"]+\.loader\.js)"/)?.[1];
-  const dataUrl = attr(html, "dataUrl");
-  const frameworkUrl = attr(html, "frameworkUrl");
-  const codeUrl = attr(html, "codeUrl");
-  if (!loader || !dataUrl || !frameworkUrl || !codeUrl) {
-    throw new Error("client build index is missing asset URLs");
-  }
-  const symbolsUrl = attr(html, "symbolsUrl");
-  return {
-    baseUrl,
-    loaderUrl: baseUrl + loader,
-    dataUrl: baseUrl + dataUrl,
-    frameworkUrl: baseUrl + frameworkUrl,
-    codeUrl: baseUrl + codeUrl,
-    symbolsUrl: symbolsUrl ? baseUrl + symbolsUrl : undefined,
-    productVersion: attr(html, "productVersion"),
-  };
+  const legacy = process.env.NEXT_PUBLIC_SPELLSOURCE_WEBGL_INDEX;
+  if (legacy) return resolveLegacyBuild(legacy);
+  const id = new URLSearchParams(location.search).get("buildId") ?? process.env.NEXT_PUBLIC_SPELLSOURCE_WEBGL_BUILD_ID;
+  const response = await fetch(`/api/webgl/build${id ? `?buildId=${encodeURIComponent(id)}` : ""}`, { cache: "no-store" });
+  if (!response.ok) throw new Error("The browser build is temporarily unavailable. Please retry.");
+  return response.json();
 }
 
 function loadScript(src: string): Promise<void> {
@@ -87,6 +36,7 @@ const GamePage: FunctionComponent = () => {
   const [version, setVersion] = useState<string>();
   const [error, setError] = useState<string>();
   const [ready, setReady] = useState(false);
+  const [sessionStatus, setSessionStatus] = useState<string>();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -97,9 +47,22 @@ const GamePage: FunctionComponent = () => {
     let instance: { Quit: () => Promise<void> } | undefined;
 
     const fit = () => {
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
+      canvas.style.width = `${window.visualViewport?.width ?? window.innerWidth}px`;
+      canvas.style.height = `${window.visualViewport?.height ?? window.innerHeight}px`;
     };
+    const onSession = (event: Event) => {
+      const state = (event as CustomEvent<{ phase: string; message?: string }>).detail;
+      setSessionStatus(["live", "idle", "ended", "authenticationRequired"].includes(state.phase)
+        ? undefined : state.message ?? "Reconnecting…");
+      document.documentElement.dataset.gameSession = state.phase;
+    };
+    const onContextLost = (event: Event) => {
+      event.preventDefault();
+      setError("The graphics context was interrupted. Reload to restore your session.");
+    };
+    window.addEventListener("spellsource-session", onSession);
+    canvas.addEventListener("webglcontextlost", onContextLost);
+    window.visualViewport?.addEventListener("resize", fit);
     window.addEventListener("resize", fit);
     fit();
 
@@ -107,6 +70,8 @@ const GamePage: FunctionComponent = () => {
       const build = await resolveBuild();
       if (cancelled) return;
       setVersion(build.productVersion);
+      document.documentElement.dataset.webglBuild = build.buildId ?? "legacy";
+      document.documentElement.dataset.webglRevision = build.sourceRevision ?? "";
       setStatus("Downloading");
       await loadScript(build.loaderUrl);
       if (cancelled || !window.createUnityInstance) return;
@@ -114,6 +79,7 @@ const GamePage: FunctionComponent = () => {
         canvas,
         {
           arguments: [],
+          devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
           dataUrl: build.dataUrl,
           frameworkUrl: build.frameworkUrl,
           codeUrl: build.codeUrl,
@@ -136,7 +102,10 @@ const GamePage: FunctionComponent = () => {
           setStatus(p < 0.9 ? "Downloading" : "Starting");
         }
       );
-      if (cancelled) return;
+      if (cancelled) {
+        await instance.Quit();
+        return;
+      }
       setReady(true);
     })().catch((e: unknown) => {
       if (!cancelled) {
@@ -147,6 +116,9 @@ const GamePage: FunctionComponent = () => {
     return () => {
       cancelled = true;
       window.removeEventListener("resize", fit);
+      window.visualViewport?.removeEventListener("resize", fit);
+      window.removeEventListener("spellsource-session", onSession);
+      canvas.removeEventListener("webglcontextlost", onContextLost);
       instance?.Quit().catch(() => undefined);
     };
   }, []);
@@ -155,6 +127,7 @@ const GamePage: FunctionComponent = () => {
     <>
       <Head>
         <title>Spellsource — Play</title>
+        <link rel="canonical" href="https://playspellsource.com/game" />
         <meta name="description" content="Play Spellsource in your browser." />
         <meta
           name="viewport"
@@ -179,9 +152,9 @@ const GamePage: FunctionComponent = () => {
           width={1280}
           height={720}
           tabIndex={-1}
-          style={{ position: "absolute", top: 0, left: 0, imageRendering: "pixelated" }}
+          style={{ position: "absolute", top: 0, left: 0, imageRendering: "pixelated", touchAction: "none" }}
         />
-        {!ready && (
+        {(!ready || error) && (
           <div
             style={{
               position: "absolute",
@@ -201,8 +174,9 @@ const GamePage: FunctionComponent = () => {
             <img src="/static/assets/spellsource.png" alt="Spellsource" style={{ width: "min(70vw, 480px)" }} />
             {error ? (
               <div style={{ maxWidth: 480, padding: "0 24px" }}>
-                <p>Spellsource could not start.</p>
+                <p>Spellsource could not continue.</p>
                 <p style={{ opacity: 0.7, fontSize: 14 }}>{error}</p>
+                <button onClick={() => location.reload()}>Reload and restore session</button>
               </div>
             ) : (
               <>
@@ -236,6 +210,13 @@ const GamePage: FunctionComponent = () => {
                 </div>
               </>
             )}
+          </div>
+        )}
+        {ready && !error && sessionStatus && (
+          <div role="status" aria-live="polite" data-testid="game-recovery"
+            style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.75)", color: "white",
+              display: "grid", placeItems: "center", padding: "max(24px, env(safe-area-inset-top))", touchAction: "none" }}>
+            {sessionStatus}
           </div>
         )}
       </main>
