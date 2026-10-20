@@ -384,6 +384,9 @@ test {
   maxHeapSize = '16g'
   it.jvmArgs '-XX:+UseG1GC', '-XX:MinHeapFreeRatio=10', '-XX:MaxHeapFreeRatio=20', '-XX:-ShrinkHeapInSteps', '-XX:G1PeriodicGCInterval=10000'
   systemProperty("vertx.grpc.stack.traces", "true")
+  // JGroups' default 46655 overlaps Linux ephemeral UDP ports used by the
+  // test clients. Reserve a non-ephemeral discovery port for clustered tests.
+  systemProperty("jgroups.mcast_port", "26655")
   testLogging {
     showExceptions true
     exceptionFormat "full"
