@@ -2126,7 +2126,7 @@ export type Mutation = {
   changePassword: LoginOrCreateReply;
   /** Concede the current game. */
   concedeGame: Scalars['Boolean'];
-  /** Connect to an active game. Must be called before gameMessages subscription will emit. */
+  /** Connect to an active game after opening the gameMessages subscription. */
   connectToGame: Scalars['Boolean'];
   /** auth */
   createAccount: LoginOrCreateReply;
@@ -2158,6 +2158,8 @@ export type Mutation = {
   endRogueRun?: Maybe<EndRogueRunPayload>;
   /** matchmaking */
   enqueueMatchmaking: Scalars['Boolean'];
+  /** Probe the game engine; a matching PINGPONG message arrives on gameMessages. */
+  gameHeartbeat: Scalars['Boolean'];
   getClasses?: Maybe<GetClassesPayload>;
   getCollectionCards?: Maybe<GetCollectionCardsPayload>;
   login: LoginOrCreateReply;
@@ -2237,6 +2239,7 @@ export type MutationChangePasswordArgs = {
 
 /** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationConnectToGameArgs = {
+  connectionId?: InputMaybe<Scalars['String']>;
   playerKey?: InputMaybe<Scalars['String']>;
   playerSecret?: InputMaybe<Scalars['String']>;
 };
@@ -2353,6 +2356,12 @@ export type MutationEndRogueRunArgs = {
 /** ─── Mutation ───────────────────────────────────────────────── */
 export type MutationEnqueueMatchmakingArgs = {
   input: MatchmakingEnqueueInput;
+};
+
+
+/** ─── Mutation ───────────────────────────────────────────────── */
+export type MutationGameHeartbeatArgs = {
+  nonce: Scalars['String'];
 };
 
 
@@ -3596,7 +3605,6 @@ export type SaveGeneratedArtPayload = {
 };
 
 /**
- * 
  * A message from the server during a game. The messageType field indicates which
  * fields are populated. Clients should switch on messageType to process the message.
  */
@@ -3605,7 +3613,6 @@ export type ServerGameMessage = {
   /** Present on ON_REQUEST_ACTION messages. The actions the player can take. */
   actions?: Maybe<GameActions>;
   /**
-   * 
    * IDs of entities that changed in this message. Present on ON_UPDATE and
    * ON_REQUEST_ACTION messages. Clients use this to diff zones efficiently
    * instead of comparing the full entity list.
@@ -3790,9 +3797,9 @@ export type Subscription = {
   /** Emits friend list changes (added, removed, presence updates). */
   friendUpdated: Friend;
   /**
-   * 
    * Streams game messages for the authenticated user's active game.
-   * Call connectToGame mutation first to initiate the game connection.
+   * Open this subscription before calling connectToGame. The mutation waits until
+   * this subscription is ready before initiating the game connection.
    * Emits ServerGameMessage for each game state change, action request,
    * mulligan, event, and game over.
    */
@@ -3801,6 +3808,12 @@ export type Subscription = {
   inviteUpdated: Invite;
   /** Emits when the current user is matched into a game. */
   matchFound: MatchFound;
+};
+
+
+/** ─── Subscription ───────────────────────────────────────────── */
+export type SubscriptionGameMessagesArgs = {
+  connectionId?: InputMaybe<Scalars['String']>;
 };
 
 /** ─── Game types (real-time game state) ──────────────────────── */
@@ -5240,6 +5253,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   duplicateDeck?: Resolver<ResolversTypes['DecksGetResponse'], ParentType, ContextType, RequireFields<MutationDuplicateDeckArgs, 'deckId'>>;
   endRogueRun?: Resolver<Maybe<ResolversTypes['EndRogueRunPayload']>, ParentType, ContextType, RequireFields<MutationEndRogueRunArgs, 'input'>>;
   enqueueMatchmaking?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationEnqueueMatchmakingArgs, 'input'>>;
+  gameHeartbeat?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationGameHeartbeatArgs, 'nonce'>>;
   getClasses?: Resolver<Maybe<ResolversTypes['GetClassesPayload']>, ParentType, ContextType, RequireFields<MutationGetClassesArgs, 'input'>>;
   getCollectionCards?: Resolver<Maybe<ResolversTypes['GetCollectionCardsPayload']>, ParentType, ContextType, RequireFields<MutationGetCollectionCardsArgs, 'input'>>;
   login?: Resolver<ResolversTypes['LoginOrCreateReply'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
@@ -5505,7 +5519,7 @@ export type SpellActionResolvers<ContextType = any, ParentType extends Resolvers
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   editableCardUpdated?: SubscriptionResolver<ResolversTypes['EditableCard'], "editableCardUpdated", ParentType, ContextType>;
   friendUpdated?: SubscriptionResolver<ResolversTypes['Friend'], "friendUpdated", ParentType, ContextType>;
-  gameMessages?: SubscriptionResolver<ResolversTypes['ServerGameMessage'], "gameMessages", ParentType, ContextType>;
+  gameMessages?: SubscriptionResolver<ResolversTypes['ServerGameMessage'], "gameMessages", ParentType, ContextType, Partial<SubscriptionGameMessagesArgs>>;
   inviteUpdated?: SubscriptionResolver<ResolversTypes['Invite'], "inviteUpdated", ParentType, ContextType>;
   matchFound?: SubscriptionResolver<ResolversTypes['MatchFound'], "matchFound", ParentType, ContextType>;
 };
@@ -5756,6 +5770,7 @@ export type ConcedeGameMutation = { __typename?: 'Mutation', concedeGame: boolea
 export type ConnectToGameMutationVariables = Exact<{
   playerKey?: InputMaybe<Scalars['String']>;
   playerSecret?: InputMaybe<Scalars['String']>;
+  connectionId?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -5834,6 +5849,13 @@ export type EnqueueMatchmakingMutationVariables = Exact<{
 
 
 export type EnqueueMatchmakingMutation = { __typename?: 'Mutation', enqueueMatchmaking: boolean };
+
+export type GameHeartbeatMutationVariables = Exact<{
+  nonce: Scalars['String'];
+}>;
+
+
+export type GameHeartbeatMutation = { __typename?: 'Mutation', gameHeartbeat: boolean };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -6142,7 +6164,9 @@ export type FriendUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }
 
 export type FriendUpdatedSubscription = { __typename?: 'Subscription', friendUpdated: { __typename?: 'Friend', friendId: string, friendName: string, presence: Presence, since: any } };
 
-export type GameMessagesSubscriptionVariables = Exact<{ [key: string]: never; }>;
+export type GameMessagesSubscriptionVariables = Exact<{
+  connectionId?: InputMaybe<Scalars['String']>;
+}>;
 
 
 export type GameMessagesSubscription = { __typename?: 'Subscription', gameMessages: { __typename?: 'ServerGameMessage', messageType: MessageType, id?: string | null, localPlayerId: number, isReplayMessage: boolean, changedEntityIds?: Array<number> | null, gameState?: { __typename?: 'GameState', isLocalPlayerTurn: boolean, turnNumber: number, turnState: string, timestamp: any, hasPowerHistory: boolean, entities: Array<{ __typename?: 'Entity', boardPosition: number, baseAttack?: number | null, baseHp?: number | null, baseManaCost?: number | null, durability?: number | null, spellDamage?: number | null, overload?: number | null, extraAttack?: number | null, mana: number, maxMana: number, lockedMana: number, cannotAttack: boolean, chooseOne: boolean, combo: boolean, conditionMet: boolean, deflect: boolean, destroyed: boolean, discarded: boolean, enraged: boolean, frozen: boolean, gameStarted: boolean, gold: boolean, hostsTrigger: boolean, immune: boolean, isStartingTurn: boolean, permanent: boolean, roasted: boolean, silenced: boolean, summoningSickness: boolean, uncensored: boolean, underAura: boolean, untargetableBySpells: boolean, charges?: number | null, countUntilCast?: number | null, fires?: number | null, host: number, cardSet: string, cardSets: Array<string>, enchantmentType: string, note: string, id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, attack?: number | null, hp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, location?: { __typename?: 'EntityLocation', index: number, player: number, zone: Zone } | null, tooltips: Array<{ __typename?: 'Tooltip', text: string, keywords: Array<string> }>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null }>, powerHistory?: Array<{ __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, baseManaCost?: number | null, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, baseManaCost?: number | null, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, baseManaCost?: number | null, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null }>, cardEvent?: { __typename?: 'CardEvent', showLocal: boolean, card?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, baseManaCost?: number | null, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null } | null } | null }> | null } | null, actions?: { __typename?: 'GameActions', compatibility: Array<number>, all: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, baseManaCost?: number | null, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }>, choices: Array<{ __typename?: 'SpellAction', action: number, actionType: ActionType, sourceId: number, description: string, entity?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, baseManaCost?: number | null, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null } | null, targetKeyToActions: Array<{ __typename?: 'TargetActionPair', action: number, target: number, friendlyBattlefieldIndex: number }> }> }> } | null, startingCards?: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, baseManaCost?: number | null, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null }> | null, event?: { __typename?: 'GameEvent', eventType: GameEventType, id: number, description: string, isPowerHistory: boolean, isSourcePlayerLocal: boolean, isTargetPlayerLocal: boolean, value?: number | null, entityTouched?: number | null, entityUntouched?: number | null, source?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, baseManaCost?: number | null, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null } | null, target?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, baseManaCost?: number | null, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null } | null, targets: Array<{ __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, baseManaCost?: number | null, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null }>, cardEvent?: { __typename?: 'CardEvent', showLocal: boolean, card?: { __typename?: 'Entity', id: number, name: string, description: string, cardId: string, cardType: CardType, entityType: EntityType, rarity: Rarity, owner: number, manaCost?: number | null, baseManaCost?: number | null, attack?: number | null, baseAttack?: number | null, hp?: number | null, baseHp?: number | null, maxHp?: number | null, armor?: number | null, playable: boolean, taunt: boolean, charge: boolean, rush: boolean, divineShield: boolean, stealth: boolean, lifesteal: boolean, poisonous: boolean, deathrattles: boolean, battlecry: boolean, windfury: boolean, collectible: boolean, heroClasses: Array<string>, tribes: Array<string>, art?: { __typename?: 'Art', body?: { __typename?: 'ArtFont', vertex?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null } | null, highlight?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, loop?: { __typename?: 'ArtPrefab', named?: string | null } | null, missile?: { __typename?: 'ArtPrefab', named?: string | null } | null, onCast?: { __typename?: 'ArtPrefab', named?: string | null } | null, onHit?: { __typename?: 'ArtPrefab', named?: string | null } | null, primary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, secondary?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, shadow?: { __typename?: 'ArtColor', r: number, g: number, b: number, a: number } | null, spell?: { __typename?: 'ArtPrefab', named?: string | null } | null, sprite?: { __typename?: 'ArtSprite', named?: string | null } | null, spriteShadow?: { __typename?: 'ArtSprite', named?: string | null } | null } | null } | null } | null, performedGameAction?: { __typename?: 'PerformedGameActionEvent', actionType: ActionType } | null } | null, gameOver?: { __typename?: 'GameOver', localPlayerWon: boolean, winningPlayerId?: number | null } | null, emote?: { __typename?: 'Emote', entityId: number, message: EmoteType } | null, timers?: { __typename?: 'Timers', millisRemaining: any } | null } };
@@ -6716,8 +6740,12 @@ export type ConcedeGameMutationHookResult = ReturnType<typeof useConcedeGameMuta
 export type ConcedeGameMutationResult = Apollo.MutationResult<ConcedeGameMutation>;
 export type ConcedeGameMutationOptions = Apollo.BaseMutationOptions<ConcedeGameMutation, ConcedeGameMutationVariables>;
 export const ConnectToGameDocument = gql`
-    mutation connectToGame($playerKey: String, $playerSecret: String) {
-  connectToGame(playerKey: $playerKey, playerSecret: $playerSecret)
+    mutation connectToGame($playerKey: String, $playerSecret: String, $connectionId: String) {
+  connectToGame(
+    playerKey: $playerKey
+    playerSecret: $playerSecret
+    connectionId: $connectionId
+  )
 }
     `;
 export type ConnectToGameMutationFn = Apollo.MutationFunction<ConnectToGameMutation, ConnectToGameMutationVariables>;
@@ -6737,6 +6765,7 @@ export type ConnectToGameMutationFn = Apollo.MutationFunction<ConnectToGameMutat
  *   variables: {
  *      playerKey: // value for 'playerKey'
  *      playerSecret: // value for 'playerSecret'
+ *      connectionId: // value for 'connectionId'
  *   },
  * });
  */
@@ -7093,6 +7122,37 @@ export function useEnqueueMatchmakingMutation(baseOptions?: Apollo.MutationHookO
 export type EnqueueMatchmakingMutationHookResult = ReturnType<typeof useEnqueueMatchmakingMutation>;
 export type EnqueueMatchmakingMutationResult = Apollo.MutationResult<EnqueueMatchmakingMutation>;
 export type EnqueueMatchmakingMutationOptions = Apollo.BaseMutationOptions<EnqueueMatchmakingMutation, EnqueueMatchmakingMutationVariables>;
+export const GameHeartbeatDocument = gql`
+    mutation gameHeartbeat($nonce: String!) {
+  gameHeartbeat(nonce: $nonce)
+}
+    `;
+export type GameHeartbeatMutationFn = Apollo.MutationFunction<GameHeartbeatMutation, GameHeartbeatMutationVariables>;
+
+/**
+ * __useGameHeartbeatMutation__
+ *
+ * To run a mutation, you first call `useGameHeartbeatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGameHeartbeatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [gameHeartbeatMutation, { data, loading, error }] = useGameHeartbeatMutation({
+ *   variables: {
+ *      nonce: // value for 'nonce'
+ *   },
+ * });
+ */
+export function useGameHeartbeatMutation(baseOptions?: Apollo.MutationHookOptions<GameHeartbeatMutation, GameHeartbeatMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GameHeartbeatMutation, GameHeartbeatMutationVariables>(GameHeartbeatDocument, options);
+      }
+export type GameHeartbeatMutationHookResult = ReturnType<typeof useGameHeartbeatMutation>;
+export type GameHeartbeatMutationResult = Apollo.MutationResult<GameHeartbeatMutation>;
+export type GameHeartbeatMutationOptions = Apollo.BaseMutationOptions<GameHeartbeatMutation, GameHeartbeatMutationVariables>;
 export const LoginDocument = gql`
     mutation login($input: LoginInput!) {
   login(input: $input) {
@@ -8639,8 +8699,8 @@ export function useFriendUpdatedSubscription(baseOptions?: Apollo.SubscriptionHo
 export type FriendUpdatedSubscriptionHookResult = ReturnType<typeof useFriendUpdatedSubscription>;
 export type FriendUpdatedSubscriptionResult = Apollo.SubscriptionResult<FriendUpdatedSubscription>;
 export const GameMessagesDocument = gql`
-    subscription gameMessages {
-  gameMessages {
+    subscription gameMessages($connectionId: String) {
+  gameMessages(connectionId: $connectionId) {
     ...serverGameMessage
   }
 }
@@ -8658,6 +8718,7 @@ export const GameMessagesDocument = gql`
  * @example
  * const { data, loading, error } = useGameMessagesSubscription({
  *   variables: {
+ *      connectionId: // value for 'connectionId'
  *   },
  * });
  */
