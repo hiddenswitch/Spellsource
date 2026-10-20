@@ -114,8 +114,8 @@ public class GameTests extends FrameworkTestBase {
 					var deckId = (String) game[1];
 					return Games.createGame(ConfigurationRequest.botMatch(gameId.toString(), client.getUserEntity().getId(), client.getUserEntity().getId(), deckId, deckId))
 							.compose(ignored -> playThroughOneAction(client))
-							.compose(ignored -> Environment.query(dsl -> dsl.select(GAMES.TRACE).from(GAMES).where(GAMES.ID.eq(gameId))))
-							.map(rows -> rows.iterator().next().getJsonObject("trace"));
+							.compose(ignored -> awaitActionCheckpoint(vertx, gameId,
+									System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(10)));
 				})
 				.onSuccess(trace -> testContext.verify(() -> {
 					assertNotNull(trace, "bot match should checkpoint its trace");
@@ -125,6 +125,16 @@ public class GameTests extends FrameworkTestBase {
 				}))
 				.eventually(client::closeFut)
 				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	private Future<io.vertx.core.json.JsonObject> awaitActionCheckpoint(Vertx vertx, long gameId, long deadline) {
+		return Environment.query(dsl -> dsl.select(GAMES.TRACE).from(GAMES).where(GAMES.ID.eq(gameId)))
+				.compose(rows -> {
+					var trace = rows.iterator().next().getJsonObject("trace");
+					if (trace != null && !net.demilich.metastone.game.logic.Trace.load(trace.encode()).getActions().isEmpty()
+							|| System.nanoTime() >= deadline) return Future.succeededFuture(trace);
+					return Environment.sleep(vertx, 100).compose(ignored -> awaitActionCheckpoint(vertx, gameId, deadline));
+				});
 	}
 
 	private Future<Void> playThroughOneAction(Client client) {
@@ -144,8 +154,8 @@ public class GameTests extends FrameworkTestBase {
 									.setRepliesTo(message.getId()).setActionIndex(0).build())
 									.onFailure(completed::tryFail);
 						} else if (!message.getId().equals(actionRequestId.get())) {
-							// Replayed requests retain their ID. Only a new request proves
-							// the action and its synchronous checkpoint have completed.
+							// A new request can arrive while persistence is completing;
+							// the caller also waits for the database checkpoint itself.
 							completed.tryComplete();
 						}
 					}
