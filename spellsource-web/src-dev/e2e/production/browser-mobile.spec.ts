@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { currentGameId, driveGuestIntoMatch, waitForClient, watchGraphQL } from "./client";
 
 test("the exact candidate starts at the device viewport", async ({ page }) => {
   const errors: string[] = [];
@@ -13,4 +14,35 @@ test("the exact candidate starts at the device viewport", async ({ page }) => {
   const canvas = await page.locator("canvas").evaluate(c => ({ width: (c as HTMLCanvasElement).width, css: c.clientWidth }));
   expect(canvas.width).toBeLessThanOrEqual(canvas.css * 2 + 1);
   expect(errors).toEqual([]);
+});
+
+test("a touch session recovers offline and after closing the tab", async ({ page, context, request, isMobile }) => {
+  test.skip(!isMobile, "Desktop recovery is covered separately");
+  test.setTimeout(300_000);
+  const graphql = await watchGraphQL(page);
+  await page.goto("/game");
+  await waitForClient(page);
+  const { userId, token } = await driveGuestIntoMatch(page, graphql, true);
+  const gameId = await currentGameId(request, graphql.origin, token);
+  expect(gameId).toBeTruthy();
+  await expect(page.locator("html")).toHaveAttribute("data-game-session", "live", { timeout: 30_000 });
+
+  await context.setOffline(true);
+  await expect(page.getByTestId("game-recovery")).toBeVisible({ timeout: 12_000 });
+  await expect(page.locator("html")).toHaveAttribute("data-game-session", "reconnecting");
+  graphql.clear();
+  await context.setOffline(false);
+  await graphql.waitFor("connectToGame", 30_000, value => value === true);
+  await expect(page.locator("html")).toHaveAttribute("data-game-session", "live", { timeout: 30_000 });
+  expect(await currentGameId(request, graphql.origin, token)).toBe(gameId);
+
+  await page.close();
+  const reopened = await context.newPage();
+  const restored = await watchGraphQL(reopened);
+  await reopened.goto("/game");
+  await waitForClient(reopened);
+  expect((await restored.waitFor("account", 60_000)).id).toBe(userId);
+  expect(await restored.waitFor("isInMatch", 60_000, Boolean)).toBe(gameId);
+  await expect(reopened.locator("html")).toHaveAttribute("data-game-session", "live", { timeout: 30_000 });
+  expect(restored.seen.some(event => event.key === "createAccount")).toBe(false);
 });

@@ -140,12 +140,23 @@ export async function currentGameId(request: APIRequestContext, origin: string, 
  * Play as Guest, then Single Player with the first starter deck, and return
  * once the client has connected to the created game.
  */
-export async function driveGuestIntoMatch(page: Page, graphql: Awaited<ReturnType<typeof watchGraphQL>>) {
-  const { width, height } = page.viewportSize()!;
-  const click = (fx: number, fy: number) => page.mouse.click(width * fx, height * fy);
+export async function driveGuestIntoMatch(page: Page, graphql: Awaited<ReturnType<typeof watchGraphQL>>, touch = false) {
+  const click = async (fx: number, fy: number) => {
+    const bounds = await page.locator("canvas").boundingBox();
+    if (!bounds) throw new Error("The game canvas is not visible");
+    const x = bounds.x + bounds.width * fx;
+    const y = bounds.y + bounds.height * fy;
+    if (touch) await page.touchscreen.tap(x, y);
+    else await page.mouse.click(x, y);
+  };
 
   const created = await until(
-    () => click(0.499, 0.798), // Play as Guest
+    async () => {
+      // The form is centered with a fixed pixel-art layout in Unity render pixels.
+      // Account for the browser DPR cap instead of assuming a desktop viewport.
+      const renderHeight = await page.locator("canvas").evaluate(canvas => (canvas as HTMLCanvasElement).height);
+      await click(0.499, 0.5 + 240 / renderHeight);
+    },
     () => graphql.waitFor("createAccount", 5_000)
   );
   const userId: string = created.userEntity.id;

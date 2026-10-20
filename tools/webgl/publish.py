@@ -40,6 +40,20 @@ def stage(directory, build, output):
     upload(output, build["buildId"] + "/build.json")
 
 
+def rollback(build, output):
+    # Never roll back a newer deployment that superseded this candidate.
+    if read_descriptor("current.json") != build:
+        print("Current player differs from this candidate; no rollback needed")
+        return
+    previous = read_descriptor(build["buildId"] + "/previous.json")
+    if previous is None:
+        # A first deployment falls back to the existing legacy player.
+        aws("rm", BUCKET + "current.json")
+    else:
+        output.write_text(json.dumps(previous, indent=2) + "\n")
+        upload(output, "current.json", mutable=True)
+
+
 def aws(*args):
     subprocess.run(["aws", "--endpoint-url", os.environ.get("ARTIFACT_ENDPOINT", "https://s3-builds.appmana.com"), "s3", *args], check=True)
 
@@ -89,7 +103,7 @@ def descriptor(directory, manifest, source_revision):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("operation", choices=["stage", "promote"])
+    parser.add_argument("operation", choices=["stage", "promote", "rollback"])
     parser.add_argument("--directory", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--source-revision", required=True)
@@ -101,6 +115,8 @@ def main():
         output.write_text(json.dumps(build, indent=2) + "\n")
         if args.operation == "stage":
             stage(args.directory, build, output)
+        elif args.operation == "rollback":
+            rollback(build, output)
         else:
             request = urllib.request.Request("https://api.github.com/repos/hiddenswitch/Spellsource/git/ref/heads/develop",
                                              headers={"Accept": "application/vnd.github+json"})
@@ -120,6 +136,10 @@ def main():
                     raise
             if previous.exists():
                 upload(previous, "previous.json", mutable=True)
+            else:
+                previous.write_text("null\n")
+            # Save this candidate's predecessor before switching the public pointer.
+            upload(previous, build["buildId"] + "/previous.json", mutable=True)
             upload(output, "current.json", mutable=True)
 
 

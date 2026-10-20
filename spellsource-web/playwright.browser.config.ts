@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const publicUrl = process.env.SPELLSOURCE_BASE_URL || undefined;
+
 export default defineConfig({
   testDir: "./src-dev/e2e/production",
   testMatch: ["browser-mobile.spec.ts", "resume.spec.ts"],
@@ -8,7 +10,7 @@ export default defineConfig({
   workers: 1,
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
-    baseURL: "http://127.0.0.1:3200",
+    baseURL: publicUrl ?? "http://127.0.0.1:3200",
     screenshot: "only-on-failure",
     trace: "retain-on-failure",
   },
@@ -20,7 +22,7 @@ export default defineConfig({
         launchOptions: name.startsWith("Pixel") ? { args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] } : {} },
     })),
   ],
-  webServer: {
+  webServer: publicUrl ? undefined : {
     command: "yarn dev -H 127.0.0.1 -p 3200",
     url: "http://127.0.0.1:3200/game",
     timeout: 120_000,

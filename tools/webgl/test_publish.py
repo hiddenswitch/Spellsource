@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -40,6 +41,23 @@ class DescriptorTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "different immutable assets"):
                 publish.stage(Path("unused"), {**build, "checksums": {"file": "changed"}}, Path("unused"))
             upload.assert_not_called()
+
+    def test_rollback_does_not_replace_a_newer_deployment(self):
+        with patch.object(publish, "read_descriptor", return_value={"buildId": "newer"}), \
+                patch.object(publish, "upload") as upload, patch.object(publish, "aws") as aws:
+            publish.rollback({"buildId": "failed"}, Path("unused"))
+            upload.assert_not_called()
+            aws.assert_not_called()
+
+    def test_rollback_restores_this_candidates_predecessor(self):
+        failed, previous = {"buildId": "failed"}, {"buildId": "previous"}
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.object(publish, "read_descriptor", side_effect=[failed, previous]), \
+                patch.object(publish, "upload") as upload:
+            output = Path(directory) / "build.json"
+            publish.rollback(failed, output)
+            self.assertEqual(json.loads(output.read_text()), previous)
+            upload.assert_called_once_with(output, "current.json", mutable=True)
 
 
 if __name__ == "__main__":
