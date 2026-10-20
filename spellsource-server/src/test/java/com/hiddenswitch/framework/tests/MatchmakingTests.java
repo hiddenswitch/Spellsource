@@ -375,10 +375,12 @@ public class MatchmakingTests extends FrameworkTestBase {
 						assertNotNull(ticket, "still connected and should have ticket");
 					});
 				})
-				.compose(v -> Environment.sleep(vertx, 20001))
 				.compose(v -> {
 					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
-					return ticketsDao.findOneById(client.getUserEntity().getId());
+					// Heartbeat expiry and database cleanup run asynchronously. A fixed sleep
+					// races their completion on a busy CI worker; still require bounded cleanup.
+					return waitForTicketRemoval(vertx, ticketsDao, client.getUserEntity().getId(),
+							System.nanoTime() + TimeUnit.SECONDS.toNanos(45));
 				})
 				.onSuccess(ticket -> {
 					testContext.verify(() -> {
@@ -395,6 +397,15 @@ public class MatchmakingTests extends FrameworkTestBase {
 				})
 				.compose(v -> Matchmaking.deleteQueue(queueId))
 				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	private Future<MatchmakingTickets> waitForTicketRemoval(Vertx vertx, MatchmakingTicketsDao tickets,
+	                                                       String userId, long deadline) {
+		return tickets.findOneById(userId).compose(ticket -> {
+			if (ticket == null || System.nanoTime() >= deadline) return Future.succeededFuture(ticket);
+			return Environment.sleep(vertx, 250)
+					.compose(ignored -> waitForTicketRemoval(vertx, tickets, userId, deadline));
+		});
 	}
 
 	@Test
