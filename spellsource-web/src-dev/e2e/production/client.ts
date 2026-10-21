@@ -106,6 +106,9 @@ export function watchSockets(page: Page) {
 }
 
 export async function waitForClient(page: Page) {
+  // A hidden/absent loading indicator can be observed before hydration. The
+  // session event is emitted by Unity itself after the runtime starts.
+  await expect(page.locator("html")).toHaveAttribute("data-game-session", /.+/, { timeout: 120_000 });
   await expect(page.getByRole("progressbar")).toBeHidden({ timeout: 120_000 });
 }
 
