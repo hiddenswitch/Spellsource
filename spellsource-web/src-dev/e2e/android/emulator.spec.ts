@@ -1,11 +1,14 @@
 import { expect, test, _android } from "@playwright/test";
 import { execFileSync } from "node:child_process";
+import { homedir } from "node:os";
+import { join } from "node:path";
 import { currentGameId, driveGuestIntoMatch, waitForClient, watchGraphQL } from "../production/client";
 
 const serial = process.env.ANDROID_SERIAL ?? "emulator-5580";
 const avd = process.env.ANDROID_AVD ?? "spellsource_api35";
 const baseURL = process.env.SPELLSOURCE_BASE_URL ?? "https://playspellsource.com";
-const adb = (...args: string[]) => execFileSync(process.env.ADB ?? "adb", ["-s", serial, ...args], { encoding: "utf8" }).trim();
+const sdk = process.env.ANDROID_SDK_ROOT || process.env.ANDROID_HOME || join(homedir(), "Android/Sdk");
+const adb = (...args: string[]) => execFileSync(process.env.ADB ?? join(sdk, "platform-tools/adb"), ["-s", serial, ...args], { encoding: "utf8" }).trim();
 
 test("Android Chrome restores a touch match across network, lifecycle, rotation and tab loss", async ({}, testInfo) => {
   expect(serial, "Use the dedicated emulator, never an attached physical device").toMatch(/^emulator-\d+$/);
