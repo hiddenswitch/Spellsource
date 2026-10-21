@@ -21,7 +21,7 @@ import { currentGameId, driveGuestIntoMatch, waitForClient, watchConsole, watchG
  * reconnecting screen is driven by SpellsourceClient.isConnectionHealthy, which
  * flips exactly when the game subscription errors and logs
  * "Game subscription error", so that log line is the observable; resumption is
- * a fresh websocket carrying game frames plus "ConnectToGame result: True".
+ * a successful fresh game connection followed by an applied snapshot (live).
  */
 
 const REQUIRED_DETECT_MS = 10_000;
@@ -132,11 +132,11 @@ test.describe("gateway outage during a match", () => {
 
       let resumedMs: number | null = null;
       try {
-        const fresh = await sockets.waitForNewSocket(restoredAt, REQUIRED_RESUME_MS);
-        await console_.waitFor(/ConnectToGame result: True/i, REQUIRED_RESUME_MS - (Date.now() - restoredAt), restoredAt);
-        const deadline = restoredAt + REQUIRED_RESUME_MS;
-        while (Date.now() < deadline && fresh.framesReceived === 0) await page.waitForTimeout(100);
-        if (fresh.framesReceived > 0) resumedMs = (fresh.lastFrameAt ?? Date.now()) - restoredAt;
+        await graphql.waitFor("connectToGame", REQUIRED_RESUME_MS, connected => connected === true, restoredAt);
+        await expect(page.locator("html")).toHaveAttribute("data-game-session", "live", {
+          timeout: Math.max(1, REQUIRED_RESUME_MS - (Date.now() - restoredAt)),
+        });
+        resumedMs = Date.now() - restoredAt;
       } catch {
         // measured below
       }

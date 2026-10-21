@@ -50,7 +50,7 @@ export async function startToxiproxy(upstreamAddress: string) {
     // its network notifier can fail unrelated page loads with ERR_NETWORK_CHANGED.
     // Keep both listeners on loopback when sharing the Linux host network.
     const networkArgs = hostNetwork ? ["--network", "host"] : ["-p", "127.0.0.1:8474:8474", "-p", "127.0.0.1:443:443"];
-    docker(["run", "-d", "--name", CONTAINER, ...networkArgs, "ghcr.io/shopify/toxiproxy:latest", `-host=${hostNetwork ? "127.0.0.1" : "0.0.0.0"}`]);
+    docker(["run", "-d", "--name", CONTAINER, ...networkArgs, "ghcr.io/shopify/toxiproxy:2.13.0@sha256:5d3dae09bc185dcc5ff6cf43abf6062a4a720aff0c4306a471e773acdcd107aa", `-host=${hostNetwork ? "127.0.0.1" : "0.0.0.0"}`]);
   }
   const deadline = Date.now() + 15_000;
   while (Date.now() < deadline) {
