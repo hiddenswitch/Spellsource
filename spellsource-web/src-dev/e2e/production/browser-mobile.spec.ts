@@ -70,7 +70,7 @@ test("desktop hand expands when it fits and tucks away after resizing", async ({
 
   const layout = () => page.evaluate(() => (window as unknown as {
     __spellsourceHandLayout?: { count: number; expanded: boolean; bottom: number; top: number;
-      left: number; right: number; width: number; height: number; hovered: number };
+      left: number; right: number; width: number; height: number; hovered: number; descriptions: number };
   }).__spellsourceHandLayout);
   await expect.poll(async () => {
     const count = (await layout())?.count ?? 0;
@@ -84,14 +84,22 @@ test("desktop hand expands when it fits and tucks away after resizing", async ({
   }, { timeout: 30_000, intervals: [1_000] }).toBeGreaterThan(0);
   await page.mouse.move(0, 0);
 
-  for (const viewport of [{ width: 2560, height: 1440 }, { width: 960, height: 600 }, { width: 2560, height: 1440 }]) {
-    await page.setViewportSize(viewport);
-    const expanded = viewport.width === 2560;
+  // Cross the existing board's 1.25 aspect threshold, then portrait and compact layouts.
+  for (const viewport of [
+    { width: 2560, height: 1440, expanded: true },
+    { width: 1600, height: 1279, expanded: true },
+    { width: 1600, height: 1281, expanded: false },
+    { width: 1600, height: 2560, expanded: true },
+    { width: 960, height: 600, expanded: false },
+    { width: 2560, height: 1440, expanded: true },
+  ]) {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    const { expanded } = viewport;
     await expect.poll(async () => {
       const value = await layout();
       return !!value && value.width === viewport.width && value.height === viewport.height &&
         value.expanded === expanded && (expanded
-          ? value.bottom >= 0 && value.top <= value.height && value.left >= 0 && value.right <= value.width
+          ? value.descriptions === value.count && value.bottom >= 0 && value.top <= value.height && value.left >= 0 && value.right <= value.width
           : value.bottom < 0);
     }, { timeout: 20_000 }).toBe(true);
     if (expanded) {
