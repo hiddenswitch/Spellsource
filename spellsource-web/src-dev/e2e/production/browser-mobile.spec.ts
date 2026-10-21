@@ -72,7 +72,7 @@ test("desktop hand expands when it fits and tucks away after resizing", async ({
 
   const layout = () => page.evaluate(() => (window as unknown as {
     __spellsourceHandLayout?: { count: number; expanded: boolean; bottom: number; top: number;
-      left: number; right: number; width: number; height: number };
+      left: number; right: number; width: number; height: number; hovered: number };
   }).__spellsourceHandLayout);
   await expect.poll(async () => (await layout())?.count ?? 0, { timeout: 30_000 }).toBeGreaterThan(0);
 
@@ -86,6 +86,17 @@ test("desktop hand expands when it fits and tucks away after resizing", async ({
           ? value.bottom >= 0 && value.top <= value.height && value.left >= 0 && value.right <= value.width
           : value.bottom < 0);
     }, { timeout: 20_000 }).toBe(true);
+    if (expanded) {
+      const value = (await layout())!;
+      const box = (await canvas.boundingBox())!;
+      // Aim at the upper half of the first card, well above the old tucked-away hit area.
+      const x = value.left + (value.right - value.left) / value.count / 2;
+      const y = value.bottom + (value.top - value.bottom) * 0.75;
+      await page.mouse.move(box.x + x * box.width / value.width, box.y + (value.height - y) * box.height / value.height);
+      await expect.poll(async () => (await layout())?.hovered ?? 0).toBeGreaterThan(0);
+      await page.mouse.move(0, 0);
+      await expect.poll(async () => (await layout())?.hovered).toBe(0);
+    }
     await testInfo.attach(`hand-${viewport.width}x${viewport.height}`, {
       body: await page.screenshot(), contentType: "image/png",
     });
