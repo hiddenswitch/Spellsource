@@ -366,21 +366,22 @@ public class MatchmakingTests extends FrameworkTestBase {
 					client.matchmake(queueId);
 					return Environment.sleep(vertx, Environment.getConfiguration().getMatchmaking().getScanFrequencyMillis() + 1000);
 				})
-				.onSuccess(v -> toxicGrpcProxy().setConnectionCut(true))
 				.compose(v -> {
 					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
-					return ticketsDao.findOneById(client.getUserEntity().getId());
+					return waitForTicket(vertx, ticketsDao, client.getUserEntity().getId(), true,
+							System.nanoTime() + TimeUnit.SECONDS.toNanos(10));
 				})
 				.onSuccess(ticket -> {
 					testContext.verify(() -> {
 						assertNotNull(ticket, "still connected and should have ticket");
 					});
 				})
+				.onSuccess(v -> toxicGrpcProxy().setConnectionCut(true))
 				.compose(v -> {
 					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 					// Heartbeat expiry and database cleanup run asynchronously. A fixed sleep
 					// races their completion on a busy CI worker; still require bounded cleanup.
-					return waitForTicketRemoval(vertx, ticketsDao, client.getUserEntity().getId(),
+					return waitForTicket(vertx, ticketsDao, client.getUserEntity().getId(), false,
 							System.nanoTime() + TimeUnit.SECONDS.toNanos(45));
 				})
 				.onSuccess(ticket -> {
@@ -400,12 +401,12 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
-	private Future<MatchmakingTickets> waitForTicketRemoval(Vertx vertx, MatchmakingTicketsDao tickets,
-	                                                       String userId, long deadline) {
+	private Future<MatchmakingTickets> waitForTicket(Vertx vertx, MatchmakingTicketsDao tickets,
+	                                                       String userId, boolean present, long deadline) {
 		return tickets.findOneById(userId).compose(ticket -> {
-			if (ticket == null || System.nanoTime() >= deadline) return Future.succeededFuture(ticket);
+			if ((ticket != null) == present || System.nanoTime() >= deadline) return Future.succeededFuture(ticket);
 			return Environment.sleep(vertx, 250)
-					.compose(ignored -> waitForTicketRemoval(vertx, tickets, userId, deadline));
+					.compose(ignored -> waitForTicket(vertx, tickets, userId, present, deadline));
 		});
 	}
 

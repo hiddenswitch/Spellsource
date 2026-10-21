@@ -86,6 +86,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 
 			Games.getGameId(userId)
 					.compose(existingGameId -> {
+						if (session.cancelled.get()) return Future.succeededFuture();
 						if (existingGameId != null) {
 							return Matchmaking.writeGameId(response, existingGameId)
 									.onComplete(v -> session.close());
@@ -103,12 +104,12 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 								.setBotDeckId(message.getBotDeckId().isEmpty() ? null : message.getBotDeckId())
 								.setQueueId(queueId);
 
-						return withDslContext(dsl -> dsl
+						session.ticketWrite = withDslContext(dsl -> dsl
 								.insertInto(MATCHMAKING_TICKETS)
 								.set(record)
 								.onDuplicateKeyUpdate()
-								.set(record))
-								.mapEmpty();
+								.set(record));
+						return session.ticketWrite.mapEmpty();
 					})
 					.onFailure(t -> session.close());
 		});
@@ -138,6 +139,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		private final LongTaskTimer.Sample timer;
 		private final AtomicBoolean cancelled;
 		private final KeepAliveManager keepAliveManager;
+		private Future<?> ticketWrite = Future.succeededFuture();
 
 		Session(Function<Session, Boolean> remover,
 		        WriteStream<Spellsource.MatchmakingQueuePutResponse> response,
@@ -185,7 +187,11 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 			}
 
 			this.channels.clear();
-			var deletedTickets = withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS).where(MATCHMAKING_TICKETS.USER_ID.eq(this.userId)));
+			// A disconnect can arrive while the database insert is in flight.
+			// Delete after that write settles so it cannot recreate a cancelled ticket.
+			var deletedTickets = ticketWrite.mapEmpty().otherwiseEmpty()
+					.compose(ignored -> withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
+							.where(MATCHMAKING_TICKETS.USER_ID.eq(this.userId))));
 			var closedResponse = this.response.end();
 			this.timer.stop();
 			keepAliveManager.onTransportTermination();
