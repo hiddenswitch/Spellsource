@@ -28,7 +28,7 @@ import static org.testcontainers.Testcontainers.exposeHostPorts;
 @ExtendWith({VertxExtension.class})
 @Testcontainers
 public class FrameworkTestBase {
-	protected static ToxiproxyContainer TOXIPROXY = new ToxiproxyContainer(DockerImageName.parse("ghcr.io/shopify/toxiproxy:latest").asCompatibleSubstituteFor("shopify/toxiproxy"));
+	protected static ToxiproxyContainer TOXIPROXY = new ToxiproxyContainer(DockerImageName.parse("ghcr.io/shopify/toxiproxy:2.13.0@sha256:5d3dae09bc185dcc5ff6cf43abf6062a4a720aff0c4306a471e773acdcd107aa").asCompatibleSubstituteFor("shopify/toxiproxy"));
 	private static ToxiproxyContainer.ContainerProxy toxicGrpcProxy;
 
 	public static ToxiproxyContainer.ContainerProxy toxicGrpcProxy() {

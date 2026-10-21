@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
@@ -376,7 +377,14 @@ public class MatchmakingTests extends FrameworkTestBase {
 						assertNotNull(ticket, "still connected and should have ticket");
 					});
 				})
-				.onSuccess(v -> toxicGrpcProxy().setConnectionCut(true))
+				.onSuccess(v -> {
+					try {
+						// Zero bandwidth means unlimited traffic in Toxiproxy 2.13+.
+						// Timeout zero explicitly drops traffic without closing the socket.
+						toxicGrpcProxy().toxics().timeout("matchmaking-offline-down", eu.rekawek.toxiproxy.model.ToxicDirection.DOWNSTREAM, 0);
+						toxicGrpcProxy().toxics().timeout("matchmaking-offline-up", eu.rekawek.toxiproxy.model.ToxicDirection.UPSTREAM, 0);
+					} catch (IOException error) { throw new RuntimeException(error); }
+				})
 				.compose(v -> {
 					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 					// Heartbeat expiry and database cleanup run asynchronously. A fixed sleep
@@ -395,7 +403,12 @@ public class MatchmakingTests extends FrameworkTestBase {
 					if (containerProxy == null) {
 						return;
 					}
-					containerProxy.setConnectionCut(false);
+					try {
+						for (var name : List.of("matchmaking-offline-down", "matchmaking-offline-up")) {
+							var toxic = containerProxy.toxics().get(name);
+							if (toxic != null) toxic.remove();
+						}
+					} catch (IOException error) { throw new RuntimeException(error); }
 				})
 				.compose(v -> Matchmaking.deleteQueue(queueId))
 				.onComplete(testContext.succeedingThenComplete());

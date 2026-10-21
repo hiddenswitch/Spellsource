@@ -42,6 +42,16 @@ jobs:
           node-version: 22
       - name: Run server tests
         run: ./gradlew --no-parallel spellsource-server:test spellsource-game:test
+      - name: Retain server test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-test-reports
+          path: |
+            spellsource-server/build/test-results/test/
+            spellsource-server/build/reports/tests/test/
+            spellsource-game/build/test-results/test/
+          retention-days: 14
       - name: Build and push server image
         run: ./gradlew spellsource-server:githubDockerPush
         env:
