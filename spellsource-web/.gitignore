@@ -79,3 +79,4 @@ public/javadoc
 
 test-results
 docker
+playwright-report/

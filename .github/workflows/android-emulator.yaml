@@ -1,0 +1,78 @@
+name: Android Emulator Smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      site_url:
+        description: WebGL site to test
+        default: https://playspellsource.com
+        type: string
+      apk_url:
+        description: Optional APK or AAB download URL for native startup testing
+        type: string
+      apk_sha256:
+        description: Required SHA-256 when a native artifact URL is supplied
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANDROID_SERIAL: emulator-5580
+      ANDROID_AVD: spellsource_api35
+      SPELLSOURCE_BASE_URL: ${{ inputs.site_url }}
+      APK_URL: ${{ inputs.apk_url }}
+      APK_SHA256: ${{ inputs.apk_sha256 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 24
+      - name: Install workspace
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule update --init spellsource-ts-proto/ts-proto
+          corepack enable
+          yarn install --immutable
+      - name: Enable KVM
+        run: |
+          sudo chmod a+rw /dev/kvm
+      - name: Create and boot the dedicated emulator
+        run: |
+          python3 tools/android/emulator.py setup
+          python3 tools/android/emulator.py start
+          python3 tools/android/emulator.py status
+      - name: Test Android Chrome
+        run: yarn workspace spellsource-web playwright test -c playwright.android.config.ts
+      - name: Test native APK or bundle
+        if: inputs.apk_url != ''
+        run: |
+          printf '::add-mask::%s\n' "$APK_URL"
+          [[ "$APK_SHA256" =~ ^[a-fA-F0-9]{64}$ ]]
+          curl --fail --location --proto '=https' --proto-redir '=https' "$APK_URL" -o "$RUNNER_TEMP/native.zip"
+          printf '%s  %s\n' "$APK_SHA256" "$RUNNER_TEMP/native.zip" | sha256sum -c -
+          # AABs contain BundleConfig.pb; APKs contain AndroidManifest.xml.
+          if unzip -l "$RUNNER_TEMP/native.zip" | grep BundleConfig.pb > /dev/null; then extension=aab; else extension=apk; fi
+          mv "$RUNNER_TEMP/native.zip" "$RUNNER_TEMP/native.$extension"
+          python3 tools/android/emulator.py native "$RUNNER_TEMP/native.$extension"
+      - name: Retain emulator diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-emulator-results
+          path: |
+            spellsource-web/test-results/
+            spellsource-web/playwright-report/android/
+            ~/.cache/spellsource/android/*.log
+          retention-days: 14
+      - name: Stop the dedicated emulator
+        if: always()
+        run: python3 tools/android/emulator.py stop

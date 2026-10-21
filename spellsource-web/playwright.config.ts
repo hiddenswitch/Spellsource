@@ -2,6 +2,8 @@ import { defineConfig } from "@playwright/test";
 
 export const baseURL = "http://127.0.0.1:3000";
 export default defineConfig({
+  // Android tests require a dedicated AVD and their own configuration.
+  testIgnore: ["**/e2e/android/**"],
   webServer: [
     {
       command: "../gradlew :spellsource-server:run",
