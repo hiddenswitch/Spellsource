@@ -18,8 +18,7 @@ public abstract class RevertableSpell extends Spell {
 
 	protected abstract SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target);
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+	public final void applyRevertTrigger(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EventTriggerDesc triggerDesc = (EventTriggerDesc) desc.get(SpellArg.REVERT_TRIGGER);
 
 		if (triggerDesc != null) {
@@ -39,5 +38,10 @@ public abstract class RevertableSpell extends Spell {
 			removeTrigger.setMaxFires(1);
 			context.getLogic().addEnchantment(player, removeTrigger, source, target);
 		}
+	}
+
+	@Override
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		applyRevertTrigger(context, player, desc, source, target);
 	}
 }

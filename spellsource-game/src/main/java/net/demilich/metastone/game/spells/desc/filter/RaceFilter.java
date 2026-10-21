@@ -11,9 +11,7 @@ public class RaceFilter extends EntityFilter {
 		super(desc);
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		String race = (String) getDesc().get(EntityFilterArg.RACE);
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host, String race) {
 		return Race.hasRace(context, entity, race);
 	}
 }

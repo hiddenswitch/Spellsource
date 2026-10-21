@@ -88,7 +88,6 @@ public class EquipWeaponSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.TARGET_PLAYER, SpellArg.SPELL, SpellArg.SPELLS);
 		String cardId = (String) desc.get(SpellArg.CARD);
 		CardList results = new CardArrayList();
 		// check for a card source first, because AddDeathrattleSpell will write a CARD on this, and it interacts poorly with Treasure Mimic

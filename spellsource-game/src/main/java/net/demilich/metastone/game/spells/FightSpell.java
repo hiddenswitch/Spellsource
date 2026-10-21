@@ -62,7 +62,6 @@ public class FightSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SECONDARY_TARGET, SpellArg.EXCLUSIVE);
 		EntityReference secondaryTarget = (EntityReference) desc.getOrDefault(SpellArg.SECONDARY_TARGET, source == null ? EntityReference.NONE : source.getReference());
 		List<Entity> resolvedSources = context.resolveTarget(player, source, secondaryTarget);
 		if (resolvedSources == null) {

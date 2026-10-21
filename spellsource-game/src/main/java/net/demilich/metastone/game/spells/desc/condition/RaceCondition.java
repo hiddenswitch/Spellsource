@@ -15,9 +15,7 @@ public final class RaceCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		String race = (String) desc.get(ConditionArg.RACE);
+	protected boolean isFulfilled(GameContext context, Player player, Entity source, Entity target, String race) {
 		return Race.hasRace(context, target, race);
 	}
 

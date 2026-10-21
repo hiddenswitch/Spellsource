@@ -51,11 +51,7 @@ public class ModifyAttributeSpell extends RevertableSpell {
 		return ModifyAttributeSpell.create(target, (Attribute) desc.get(SpellArg.ATTRIBUTE), -desc.getValue(SpellArg.VALUE, context, player, context.resolveSingleTarget(target), source, 0));
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		super.onCast(context, player, desc, source, target);
-		Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
-		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, Attribute attribute, int value) {
 		target.modifyAttribute(attribute, value);
 	}
 }

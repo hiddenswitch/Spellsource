@@ -54,7 +54,6 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc);
 		if (target == null) {
 			logger.error("onCast {} {}: The target {} is null", context.getGameId(), source, desc.getTarget());
 			return;

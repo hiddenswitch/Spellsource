@@ -41,26 +41,19 @@ public final class AttributeFilter extends EntityFilter {
 		return create(attribute, (Object) value);
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		List<Entity> entities = getTargetedEntities(context, player, host);
-		Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
-		ComparisonOperation operation = (ComparisonOperation) getDesc().get(EntityFilterArg.OPERATION);
-
-		if (operation == null) {
-			operation = ComparisonOperation.HAS;
-		}
-
-		if (operation == ComparisonOperation.HAS) {
+	protected boolean test(
+			GameContext context,
+			Player player,
+			Entity entity,
+			Entity host,
+			Attribute attribute,
+			ComparisonOperation operation,
+			int value) {
+		if (operation == null || operation == ComparisonOperation.HAS) {
 			return entity.hasAttribute(attribute);
 		}
 
-		int targetValue;
-		if (entities == null) {
-			targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, null, host, 0);
-		} else {
-			targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, entities.get(0), host, 0);
-		}
+		int targetValue = value;
 
 		int actualValue = -1;
 		if (attribute == Attribute.ATTACK) {

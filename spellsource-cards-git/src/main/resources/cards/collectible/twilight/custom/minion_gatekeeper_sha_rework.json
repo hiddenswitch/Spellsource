@@ -8,8 +8,7 @@
   "rarity": "LEGENDARY",
   "description": "All the numbers on your Vampire Lord spells are (1) higher.",
   "aura": {
-    "class": "GatekeeperShaAura",
-    "value": 1
+    "class": "GatekeeperShaAura"
   },
   "collectible": true,
   "fileFormatVersion": 1,

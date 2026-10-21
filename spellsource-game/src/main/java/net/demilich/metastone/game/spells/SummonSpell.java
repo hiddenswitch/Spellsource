@@ -250,7 +250,6 @@ public class SummonSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD, SpellArg.CARDS, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.BOARD_POSITION_RELATIVE, SpellArg.BOARD_POSITION_ABSOLUTE, SpellArg.EXCLUSIVE);
 		// Summon minions from the cards or cardIds specified
 		List<Minion> summonedMinions = new ArrayList<>();
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);

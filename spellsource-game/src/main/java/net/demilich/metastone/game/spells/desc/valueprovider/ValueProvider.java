@@ -97,7 +97,9 @@ public abstract class ValueProvider implements Serializable, HasDesc<ValueProvid
 		return value;
 	}
 
-	protected abstract int provideValue(GameContext context, Player player, Entity target, Entity host);
+	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
+		return 0;
+	}
 
 	@Override
 	public ValueProviderDesc getDesc() {

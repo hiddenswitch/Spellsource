@@ -14,7 +14,6 @@
       "target": "SELF",
       "value": {
         "class": "PlayerAttributeValueProvider",
-        "target": "FRIENDLY_PLAYER",
         "playerAttribute": "SPELLS_CAST"
       }
     }
@@ -34,7 +33,6 @@
           "class": "ValueDescription",
           "value": {
             "class": "PlayerAttributeValueProvider",
-            "target": "FRIENDLY_PLAYER",
             "playerAttribute": "SPELLS_CAST"
           }
         },
@@ -43,7 +41,6 @@
           "class": "ValueDescription",
           "value": {
             "class": "PlayerAttributeValueProvider",
-            "target": "FRIENDLY_PLAYER",
             "playerAttribute": "SPELLS_CAST"
           }
         }

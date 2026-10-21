@@ -78,14 +78,22 @@ public class DiscardSpell extends AbstractRemoveCardSpell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardSource cardSource = (CardSource) desc.getOrDefault(SpellArg.CARD_SOURCE, HandSource.create());
-		EntityFilter cardFilter = desc.getCardFilter();
+	protected void onCast(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			CardSource cardSource,
+			EntityFilter cardFilter,
+			SpellDesc spell,
+			@Default(1) int value) {
+		if (cardSource == null) {
+			cardSource = HandSource.create();
+		}
 		if (cardFilter == null) {
 			cardFilter = AndFilter.create();
 		}
-		int numberOfCards = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
+		int numberOfCards = value;
 
 		if (target instanceof Card && player.getHand().contains(target)) {
 			context.getLogic().discardCard(player, (Card) target);
@@ -100,7 +108,7 @@ public class DiscardSpell extends AbstractRemoveCardSpell {
 				}
 				context.getLogic().discardCard(player, randomCard);
 				if (randomCard.hasAttribute(Attribute.DISCARDED)) {
-					SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, randomCard);
+					SpellUtils.castChildSpell(context, player, spell, source, target, randomCard);
 				}
 				discardableCards.remove(randomCard);
 			}

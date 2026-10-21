@@ -24,7 +24,6 @@ public class DestroyAllExceptOneSpell extends DestroySpell {
 	@Override
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		// No additional args.
-		checkArguments(logger, context, source, desc);
 		if (targets == null || targets.isEmpty()) {
 			return;
 		}

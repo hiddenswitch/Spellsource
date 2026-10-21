@@ -25,21 +25,17 @@ import java.util.List;
 public abstract class RelativeToTargetEffectSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(AdjacentEffectSpell.class);
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.SPELL1, SpellArg.SPELL2);
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target, SpellDesc spell, SpellDesc spell1, SpellDesc spell2) {
 		EntityReference sourceReference = source != null ? source.getReference() : null;
 		List<Actor> adjacentMinions = getActors(context, desc, source, target);
 		SpellDesc primary;
 		SpellDesc secondary;
-		if (desc.containsKey(SpellArg.SPELL) &&
-				!desc.containsKey(SpellArg.SPELL1)
-				&& !desc.containsKey(SpellArg.SPELL2)) {
-			primary = (SpellDesc) desc.get(SpellArg.SPELL);
+		if (spell != null && spell1 == null && spell2 == null) {
+			primary = spell;
 			secondary = primary;
 		} else {
-			primary = (SpellDesc) desc.get(SpellArg.SPELL1);
-			secondary = (SpellDesc) desc.get(SpellArg.SPELL2);
+			primary = spell1;
+			secondary = spell2;
 			if (secondary == null) {
 				secondary = primary;
 			}

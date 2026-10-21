@@ -36,7 +36,6 @@ public class SetAttributeSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(LOGGER, context, source, desc, SpellArg.ATTRIBUTE, SpellArg.VALUE);
 		Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 		Object value = desc.get(SpellArg.VALUE);
 		if (value == null) {

@@ -24,24 +24,25 @@ public class CardCountValueProvider extends EntityCountValueProvider {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity source) {
-		CardSource cardSource = (CardSource) getDesc().get(ValueProviderArg.CARD_SOURCE);
+	protected int provideValue(
+			GameContext context,
+			Player player,
+			Entity target,
+			Entity source,
+			CardSource cardSource,
+			EntityFilter cardFilter,
+			Attribute attribute) {
 		if (cardSource == null) {
-			cardSource = new CardSourceDesc(HandSource.class).create();
+			cardSource = HandSource.create();
 		}
 
-		EntityFilter cardFilter;
-		if (getDesc().containsKey(ValueProviderArg.CARD_FILTER)) {
-			cardFilter = (EntityFilter) getDesc().get(ValueProviderArg.CARD_FILTER);
-		} else {
+		if (cardFilter == null) {
 			cardFilter = AndFilter.create();
 		}
 
 		CardList cards = cardSource.getCards(context, source, player)
 				.filtered(cardFilter.matcher(context, player, source));
-		if (getDesc().containsKey(ValueProviderArg.ATTRIBUTE)) {
-			Attribute attribute = (Attribute) getDesc().get(ValueProviderArg.ATTRIBUTE);
+		if (attribute != null) {
 			return cards
 					.stream()
 					.mapToInt(card -> card.getAttributeValue(attribute))

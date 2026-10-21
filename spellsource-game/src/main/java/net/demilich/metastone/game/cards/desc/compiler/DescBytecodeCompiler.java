@@ -10,7 +10,9 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -25,6 +27,7 @@ import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.ConditionalEffectSpell;
 import net.demilich.metastone.game.spells.ConditionalSpell;
 import net.demilich.metastone.game.spells.DamageSpell;
+import net.demilich.metastone.game.spells.Default;
 import net.demilich.metastone.game.spells.DestroySpell;
 import net.demilich.metastone.game.spells.DrawCardSpell;
 import net.demilich.metastone.game.spells.EitherOrSpell;
@@ -35,6 +38,7 @@ import net.demilich.metastone.game.spells.ModifyAttributeSpell;
 import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.spells.RemoveAttributeSpell;
+import net.demilich.metastone.game.spells.RevertableSpell;
 import net.demilich.metastone.game.spells.SetAttackSpell;
 import net.demilich.metastone.game.spells.SetHpSpell;
 import net.demilich.metastone.game.spells.SilenceSpell;
@@ -77,6 +81,7 @@ import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ConditionalValueProvider;
+import net.demilich.metastone.game.spells.desc.valueprovider.ConstValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.DiedThisTurnValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.EntityCountValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.GameValueProvider;
@@ -102,12 +107,16 @@ import java.lang.constant.DynamicConstantDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -125,11 +134,20 @@ public final class DescBytecodeCompiler {
 	private static final String PKG = "net.demilich.metastone.game.cards.desc.compiler";
 	private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
 	private static final int MAX_INLINE_DEPTH = 4;
+	private static final boolean IN_NATIVE_IMAGE = System.getProperty("org.graalvm.nativeimage.imagecode") != null;
 
 	private static final EnumSet<DamageType> MAGICAL_DAMAGE_TYPE = EnumSet.of(DamageType.MAGICAL);
 	private static final CompiledSpell NOOP_SPELL = (context, player, desc, source, targets) -> {
 	};
 	private static final ConcurrentHashMap<Class<?>, Boolean> OVERRIDES_CAST_CACHE = new ConcurrentHashMap<>();
+	private static final ConcurrentHashMap<Class<?>, Optional<Option1MethodSpec>> OPTION1_SPEC_CACHE = new ConcurrentHashMap<>();
+
+	/**
+	 * Controls whether {@link DescBytecodeCompiler} lowers Option 1 typed component methods ({@code onCast},
+	 * {@code test}, {@code provideValue}, {@code isFulfilled}) directly into pre-bound hidden-class bytecode with
+	 * zero runtime {@code desc.get(...)} lookups, versus delegating to the woven {@code desc.get(...)} bridge.
+	 */
+	public static volatile boolean ENABLE_OPTION1_LOWERING = true;
 
 	private static final ClassDesc CD_COMPILER = ClassDesc.of(PKG, "DescBytecodeCompiler");
 	private static final ClassDesc CD_COMPILED_VP = ClassDesc.of(PKG, "CompiledValueProvider");
@@ -141,6 +159,8 @@ public final class DescBytecodeCompiler {
 	private static final ClassDesc CD_GAME_LOGIC = ClassDesc.of("net.demilich.metastone.game.logic.GameLogic");
 	private static final ClassDesc CD_PLAYER = ClassDesc.of("net.demilich.metastone.game.Player");
 	private static final ClassDesc CD_ENTITY = ClassDesc.of("net.demilich.metastone.game.entities.Entity");
+	private static final ClassDesc CD_CARD = ClassDesc.of("net.demilich.metastone.game.cards.Card");
+	private static final ClassDesc CD_CARD_LIST = ClassDesc.of("net.demilich.metastone.game.cards.CardList");
 	private static final ClassDesc CD_ATTRIBUTE = ClassDesc.of("net.demilich.metastone.game.cards.Attribute");
 	private static final ClassDesc CD_ENTITY_REF = ClassDesc.of("net.demilich.metastone.game.targeting.EntityReference");
 	private static final ClassDesc CD_COMP_OP = ClassDesc.of("net.demilich.metastone.game.spells.desc.filter.ComparisonOperation");
@@ -153,6 +173,7 @@ public final class DescBytecodeCompiler {
 	private static final ClassDesc CD_COND = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.Condition");
 	private static final ClassDesc CD_COND_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.ConditionDesc");
 	private static final ClassDesc CD_SPELL = ClassDesc.of("net.demilich.metastone.game.spells.Spell");
+	private static final ClassDesc CD_REVERTABLE_SPELL = ClassDesc.of("net.demilich.metastone.game.spells.RevertableSpell");
 	private static final ClassDesc CD_SPELL_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.SpellDesc");
 	private static final ClassDesc CD_RACE = ClassDesc.of("net.demilich.metastone.game.entities.minions.Race");
 	private static final ClassDesc CD_SPELL_UTILS = ClassDesc.of("net.demilich.metastone.game.spells.SpellUtils");
@@ -226,6 +247,14 @@ public final class DescBytecodeCompiler {
 
 	public static int evalValueProvider(ValueProvider vp, GameContext context, Player player, Entity target, Entity host) {
 		ValueProviderDesc d = vp.getDesc();
+		if (DescAuditRecorder.ENABLED) {
+			DescAuditRecorder.push(vp.getClass(), d);
+			try {
+				return CompilerBridge.evaluateFullValue(vp, context, player, target, host);
+			} finally {
+				DescAuditRecorder.pop();
+			}
+		}
 		if (d != null) {
 			CompiledValueProvider c = (CompiledValueProvider) CompilerBridge.getCompiled(d);
 			if (c != null) {
@@ -253,6 +282,14 @@ public final class DescBytecodeCompiler {
 
 	public static boolean evalEntityFilter(EntityFilter ef, GameContext context, Player player, Entity entity, Entity host) {
 		EntityFilterDesc d = ef.getDesc();
+		if (DescAuditRecorder.ENABLED) {
+			DescAuditRecorder.push(ef.getClass(), d);
+			try {
+				return CompilerBridge.evaluateFullMatches(ef, context, player, entity, host);
+			} finally {
+				DescAuditRecorder.pop();
+			}
+		}
 		if (d != null) {
 			CompiledEntityFilter c = (CompiledEntityFilter) CompilerBridge.getCompiled(d);
 			if (c != null) {
@@ -280,6 +317,14 @@ public final class DescBytecodeCompiler {
 
 	public static boolean evalCondition(Condition cond, GameContext context, Player player, Entity source, Entity target) {
 		ConditionDesc d = cond.getDesc();
+		if (DescAuditRecorder.ENABLED) {
+			DescAuditRecorder.push(cond.getClass(), d);
+			try {
+				return CompilerBridge.evaluateFullIsFulfilled(cond, context, player, source, target);
+			} finally {
+				DescAuditRecorder.pop();
+			}
+		}
 		if (d != null) {
 			CompiledCondition c = (CompiledCondition) CompilerBridge.getCompiled(d);
 			if (c != null) {
@@ -303,6 +348,17 @@ public final class DescBytecodeCompiler {
 	}
 
 	public static void castSpell(Spell spell, GameContext context, Player player, SpellDesc spellDesc, Entity source, List<Entity> targets) {
+		if (DescAuditRecorder.ENABLED) {
+			if (spell != null && spellDesc != null) {
+				DescAuditRecorder.push(spell.getClass(), spellDesc);
+				try {
+					spell.cast(context, player, spellDesc, source, targets);
+				} finally {
+					DescAuditRecorder.pop();
+				}
+			}
+			return;
+		}
 		CompiledSpell compiledSpell = (CompiledSpell) CompilerBridge.getCompiled(spellDesc);
 		if (compiledSpell != null) {
 			compiledSpell.cast(context, player, spellDesc, source, targets);
@@ -384,6 +440,14 @@ public final class DescBytecodeCompiler {
 
 	public static boolean evalTriggerQueues(EventTrigger trigger, GameEvent event, Enchantment enchantment, Entity host, int playerId) {
 		EventTriggerDesc d = trigger.getDesc();
+		if (DescAuditRecorder.ENABLED) {
+			DescAuditRecorder.push(trigger.getClass(), d);
+			try {
+				return CompilerBridge.evaluateFullQueues(trigger, event, enchantment, host, playerId);
+			} finally {
+				DescAuditRecorder.pop();
+			}
+		}
 		if (d != null) {
 			CompiledEventTrigger c = (CompiledEventTrigger) CompilerBridge.getCompiled(d);
 			if (c != null) {
@@ -398,6 +462,14 @@ public final class DescBytecodeCompiler {
 
 	public static boolean evalTriggerFires(EventTrigger trigger, GameEvent event, Entity host, int playerId) {
 		EventTriggerDesc d = trigger.getDesc();
+		if (DescAuditRecorder.ENABLED) {
+			DescAuditRecorder.push(trigger.getClass(), d);
+			try {
+				return CompilerBridge.evaluateFullFires(trigger, event, host, playerId);
+			} finally {
+				DescAuditRecorder.pop();
+			}
+		}
 		if (d != null) {
 			CompiledEventTrigger c = (CompiledEventTrigger) CompilerBridge.getCompiled(d);
 			if (c != null) {
@@ -551,6 +623,9 @@ public final class DescBytecodeCompiler {
 	// =========================================================================
 
 	public static CompiledValueProvider compile(ValueProvider instance) {
+		if (IN_NATIVE_IMAGE) {
+			return (context, player, target, host) -> CompilerBridge.evaluateFullValue(instance, context, player, target, host);
+		}
 		try {
 			List<Object> classData = new ArrayList<>(4);
 			ClassDesc hiddenDesc = ClassDesc.of(PKG, "HiddenVP");
@@ -727,6 +802,10 @@ public final class DescBytecodeCompiler {
 			int tempSlotBase,
 			int depth) {
 		Class<? extends ValueProvider> clazz = desc.getDescClass();
+		if (instance instanceof ConstValueProvider cvp) {
+			cob.ldc(cvp.getConstantValue());
+			return;
+		}
 		if (clazz == AlgebraicValueProvider.class) {
 			Object v1 = desc.get(ValueProviderArg.VALUE1);
 			Object v2 = desc.get(ValueProviderArg.VALUE2);
@@ -771,60 +850,6 @@ public final class DescBytecodeCompiler {
 				}
 			}
 			return;
-		}
-
-		if (clazz == AttributeValueProvider.class) {
-			EntityReference targetRef = (EntityReference) desc.get(ValueProviderArg.TARGET);
-			Attribute attr = (Attribute) desc.get(ValueProviderArg.ATTRIBUTE);
-			EntityFilter filter = (EntityFilter) desc.get(ValueProviderArg.FILTER);
-			int attrIdx = addConstant(classData, attr);
-			if (targetRef == null && filter == null) {
-				cob.aload(1);
-				loadClassData(cob, attrIdx, CD_ATTRIBUTE);
-				loadSlotOrNull(cob, targetSlot);
-				cob.invokestatic(CD_ATTR_VP, "provideValueForAttribute",
-						MethodTypeDesc.of(ConstantDescs.CD_int, CD_GAME_CONTEXT, CD_ATTRIBUTE, CD_ENTITY));
-				return;
-			}
-			int refIdx = addConstant(classData, targetRef);
-			int filterIdx = addConstant(classData, filter != null ? getCompiled(filter) : null);
-			cob.aload(1)
-					.aload(playerSlot);
-			loadSlotOrNull(cob, targetSlot);
-			loadSlotOrNull(cob, hostSlot);
-			loadClassData(cob, refIdx, CD_ENTITY_REF);
-			loadClassData(cob, attrIdx, CD_ATTRIBUTE);
-			loadClassData(cob, filterIdx, CD_COMPILED_EF);
-			cob.invokestatic(CD_COMPILER, "evalAttributeVP",
-					MethodTypeDesc.of(ConstantDescs.CD_int,
-							CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY,
-							CD_ENTITY_REF, CD_ATTRIBUTE, CD_COMPILED_EF));
-			return;
-		}
-
-		if (clazz == PlayerAttributeValueProvider.class) {
-			PlayerAttribute attr = (PlayerAttribute) desc.get(ValueProviderArg.PLAYER_ATTRIBUTE);
-			if (attr != null) {
-				switch (attr) {
-					case MANA -> {
-						cob.aload(playerSlot)
-								.invokevirtual(CD_PLAYER, "getMana", MethodTypeDesc.of(ConstantDescs.CD_int));
-						return;
-					}
-					case MAX_MANA -> {
-						cob.aload(playerSlot)
-								.invokevirtual(CD_PLAYER, "getMaxMana", MethodTypeDesc.of(ConstantDescs.CD_int));
-						return;
-					}
-					case LOCKED_MANA -> {
-						cob.aload(playerSlot)
-								.invokevirtual(CD_PLAYER, "getLockedMana", MethodTypeDesc.of(ConstantDescs.CD_int));
-						return;
-					}
-					default -> {
-					}
-				}
-			}
 		}
 
 		if (clazz == EntityCountValueProvider.class) {
@@ -903,6 +928,14 @@ public final class DescBytecodeCompiler {
 				cob.aload(1)
 						.invokestatic(CD_COMPILER, "evalLastManaCost",
 								MethodTypeDesc.of(ConstantDescs.CD_int, CD_GAME_CONTEXT));
+				return;
+			}
+		}
+
+		if (ENABLE_OPTION1_LOWERING && desc.isReadOnly() && clazz != null) {
+			Option1MethodSpec spec = getOption1Spec(clazz);
+			if (spec != null) {
+				emitOption1ValueProvider(cob, spec, instance, desc, classData, playerSlot, targetSlot, hostSlot, tempSlotBase, depth);
 				return;
 			}
 		}
@@ -1024,7 +1057,7 @@ public final class DescBytecodeCompiler {
 				return (context, player, entity, host) -> CompilerBridge.evaluateFullMatches(instance, context, player, entity, host);
 			}
 			TargetPlayer targetPlayer = (TargetPlayer) desc.get(EntityFilterArg.TARGET_PLAYER);
-			if (targetPlayer == TargetPlayer.BOTH || targetPlayer == TargetPlayer.EITHER) {
+			if (IN_NATIVE_IMAGE || targetPlayer == TargetPlayer.BOTH || targetPlayer == TargetPlayer.EITHER) {
 				return (context, player, entity, host) -> CompilerBridge.evaluateFullMatches(instance, context, player, entity, host);
 			}
 
@@ -1179,54 +1212,6 @@ public final class DescBytecodeCompiler {
 			int depth) {
 		Class<? extends EntityFilter> clazz = desc.getDescClass();
 
-		if (clazz == AttributeFilter.class) {
-			EntityReference targetRef = (EntityReference) desc.get(EntityFilterArg.TARGET);
-			Attribute attr = (Attribute) desc.get(EntityFilterArg.ATTRIBUTE);
-			ComparisonOperation op = (ComparisonOperation) desc.get(EntityFilterArg.OPERATION);
-			if (op == null) {
-				op = ComparisonOperation.HAS;
-			}
-			int attrIdx = addConstant(classData, attr);
-			if (op == ComparisonOperation.HAS && targetRef == null) {
-				loadSlotOrNull(cob, entitySlot);
-				loadClassData(cob, attrIdx, CD_ATTRIBUTE);
-				cob.invokevirtual(CD_ENTITY, "hasAttribute", MethodTypeDesc.of(ConstantDescs.CD_boolean, CD_ATTRIBUTE));
-				return;
-			}
-			Object valObj = desc.get(EntityFilterArg.VALUE);
-			int constVal = valObj instanceof Number n ? n.intValue() : 0;
-			CompiledValueProvider compiledVp = valObj instanceof ValueProvider vp ? getCompiled(vp) : null;
-			int refIdx = addConstant(classData, targetRef);
-			int opIdx = addConstant(classData, op);
-			int vpIdx = addConstant(classData, compiledVp);
-
-			cob.aload(1)
-					.aload(playerSlot);
-			loadSlotOrNull(cob, entitySlot);
-			loadSlotOrNull(cob, hostSlot);
-			loadClassData(cob, refIdx, CD_ENTITY_REF);
-			loadClassData(cob, attrIdx, CD_ATTRIBUTE);
-			loadClassData(cob, opIdx, CD_COMP_OP);
-			cob.ldc(constVal);
-			loadClassData(cob, vpIdx, CD_COMPILED_VP);
-			cob.invokestatic(CD_COMPILER, "evalAttributeFilter",
-					MethodTypeDesc.of(ConstantDescs.CD_boolean,
-							CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY,
-							CD_ENTITY_REF, CD_ATTRIBUTE, CD_COMP_OP, ConstantDescs.CD_int, CD_COMPILED_EF.equals(CD_COMPILED_VP) ? CD_COMPILED_VP : CD_COMPILED_VP));
-			return;
-		}
-
-		if (clazz == RaceFilter.class) {
-			String race = (String) desc.get(EntityFilterArg.RACE);
-			int raceIdx = addConstant(classData, race);
-			cob.aload(1);
-			loadSlotOrNull(cob, entitySlot);
-			loadClassData(cob, raceIdx, ConstantDescs.CD_String);
-			cob.invokestatic(CD_RACE, "hasRace",
-					MethodTypeDesc.of(ConstantDescs.CD_boolean, CD_GAME_CONTEXT, CD_ENTITY, ConstantDescs.CD_String));
-			return;
-		}
-
 		if (clazz == AndFilter.class) {
 			EntityFilter[] filters = (EntityFilter[]) desc.get(EntityFilterArg.FILTERS);
 			if (filters == null || filters.length == 0) {
@@ -1267,53 +1252,12 @@ public final class DescBytecodeCompiler {
 			return;
 		}
 
-		if (clazz == CardFilter.class) {
-			if (!desc.containsKey(EntityFilterArg.ATTRIBUTE) && !desc.containsKey(EntityFilterArg.MANA_COST)
-					&& !desc.containsKey(EntityFilterArg.HERO_CLASSES) && !desc.containsKey(EntityFilterArg.HERO_CLASS)
-					&& !desc.containsKey(EntityFilterArg.RARITY) && !desc.containsKey(EntityFilterArg.CARD_SET)
-					&& !desc.containsKey(EntityFilterArg.CARD) && !desc.containsKey(EntityFilterArg.TARGET)) {
-				CardType cardType = (CardType) desc.get(EntityFilterArg.CARD_TYPE);
-				String race = (String) desc.get(EntityFilterArg.RACE);
-				int ctIdx = addConstant(classData, cardType);
-				int raceIdx = addConstant(classData, race);
-				cob.aload(1);
-				loadSlotOrNull(cob, entitySlot);
-				loadClassData(cob, ctIdx, ClassDesc.ofDescriptor(CardType.class.descriptorString()));
-				loadClassData(cob, raceIdx, ConstantDescs.CD_String);
-				cob.invokestatic(CD_COMPILER, "evalSimpleCardFilter",
-						MethodTypeDesc.of(ConstantDescs.CD_boolean,
-								CD_GAME_CONTEXT, CD_ENTITY,
-								ClassDesc.ofDescriptor(CardType.class.descriptorString()),
-								ConstantDescs.CD_String));
+		if (ENABLE_OPTION1_LOWERING && desc.isReadOnly() && clazz != null) {
+			Option1MethodSpec spec = getOption1Spec(clazz);
+			if (spec != null) {
+				emitOption1EntityFilter(cob, spec, instance, desc, classData, playerSlot, entitySlot, hostSlot, tempSlotBase, depth);
 				return;
 			}
-			int descIdx = addConstant(classData, desc);
-			cob.aload(1)
-					.aload(playerSlot);
-			loadSlotOrNull(cob, entitySlot);
-			loadSlotOrNull(cob, hostSlot);
-			loadClassData(cob, descIdx, CD_EF_DESC);
-			cob.invokestatic(CD_COMPILER, "evalCardFilter",
-					MethodTypeDesc.of(ConstantDescs.CD_boolean,
-							CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY, CD_EF_DESC));
-			return;
-		}
-
-		if (clazz == SpecificCardFilter.class) {
-			Set<String> staticCards = Set.copyOf(desc.getCardOrCards());
-			EntityReference comparedTo = (EntityReference) desc.get(EntityFilterArg.SECONDARY_TARGET);
-			int setIdx = addConstant(classData, staticCards);
-			int refIdx = addConstant(classData, comparedTo);
-			cob.aload(1)
-					.aload(playerSlot);
-			loadSlotOrNull(cob, entitySlot);
-			loadSlotOrNull(cob, hostSlot);
-			loadClassData(cob, setIdx, CD_SET);
-			loadClassData(cob, refIdx, CD_ENTITY_REF);
-			cob.invokestatic(CD_COMPILER, "evalSpecificCardFilter",
-					MethodTypeDesc.of(ConstantDescs.CD_boolean,
-							CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY, CD_SET, CD_ENTITY_REF));
-			return;
 		}
 
 		int efIdx = addConstant(classData, instance);
@@ -1498,7 +1442,7 @@ public final class DescBytecodeCompiler {
 	public static CompiledCondition compile(Condition instance) {
 		ConditionDesc desc = instance.getDesc();
 		try {
-			if (!canInlineCondition(instance, desc)) {
+			if (IN_NATIVE_IMAGE || !canInlineCondition(instance, desc)) {
 				return (context, player, source, target) -> CompilerBridge.evaluateFullIsFulfilled(instance, context, player, source, target);
 			}
 
@@ -1670,54 +1614,6 @@ public final class DescBytecodeCompiler {
 			int depth) {
 		Class<? extends Condition> clazz = desc.getDescClass();
 
-		if (clazz == AttributeCondition.class) {
-			Attribute attr = (Attribute) desc.get(ConditionArg.ATTRIBUTE);
-			ComparisonOperation op = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
-			int attrIdx = addConstant(classData, attr);
-			if (op == null || op == ComparisonOperation.HAS) {
-				loadSlotOrNull(cob, targetSlot);
-				loadClassData(cob, attrIdx, CD_ATTRIBUTE);
-				cob.invokevirtual(CD_ENTITY, "hasAttribute", MethodTypeDesc.of(ConstantDescs.CD_boolean, CD_ATTRIBUTE));
-				return;
-			}
-			Object valObj = desc.get(ConditionArg.VALUE);
-			int opIdx = addConstant(classData, op);
-			loadClassData(cob, opIdx, CD_COMP_OP);
-			cob.aload(1);
-			loadClassData(cob, attrIdx, CD_ATTRIBUTE);
-			loadSlotOrNull(cob, targetSlot);
-			cob.invokestatic(CD_ATTR_VP, "provideValueForAttribute",
-					MethodTypeDesc.of(ConstantDescs.CD_int, CD_GAME_CONTEXT, CD_ATTRIBUTE, CD_ENTITY));
-			emitConditionArgValue(cob, valObj, classData, playerSlot, sourceSlot, targetSlot, tempSlotBase, depth);
-			cob.invokestatic(CD_SPELL_UTILS, "evaluateOperation",
-					MethodTypeDesc.of(ConstantDescs.CD_boolean, CD_COMP_OP, ConstantDescs.CD_int, ConstantDescs.CD_int));
-			return;
-		}
-
-		if (clazz == ComparisonCondition.class) {
-			Object v1 = desc.get(ConditionArg.VALUE1);
-			Object v2 = desc.get(ConditionArg.VALUE2);
-			ComparisonOperation op = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
-			int opIdx = addConstant(classData, op);
-			loadClassData(cob, opIdx, CD_COMP_OP);
-			emitConditionArgValue(cob, v1, classData, playerSlot, sourceSlot, targetSlot, tempSlotBase, depth);
-			emitConditionArgValue(cob, v2, classData, playerSlot, sourceSlot, targetSlot, tempSlotBase, depth);
-			cob.invokestatic(CD_SPELL_UTILS, "evaluateOperation",
-					MethodTypeDesc.of(ConstantDescs.CD_boolean, CD_COMP_OP, ConstantDescs.CD_int, ConstantDescs.CD_int));
-			return;
-		}
-
-		if (clazz == RaceCondition.class) {
-			String race = (String) desc.get(ConditionArg.RACE);
-			int raceIdx = addConstant(classData, race);
-			cob.aload(1);
-			loadSlotOrNull(cob, targetSlot);
-			loadClassData(cob, raceIdx, ConstantDescs.CD_String);
-			cob.invokestatic(CD_RACE, "hasRace",
-					MethodTypeDesc.of(ConstantDescs.CD_boolean, CD_GAME_CONTEXT, CD_ENTITY, ConstantDescs.CD_String));
-			return;
-		}
-
 		if (clazz == IsDeadCondition.class) {
 			loadSlotOrNull(cob, targetSlot);
 			cob.invokevirtual(CD_ENTITY, "isDestroyed", MethodTypeDesc.of(ConstantDescs.CD_boolean));
@@ -1762,6 +1658,14 @@ public final class DescBytecodeCompiler {
 					.iconst_1()
 					.labelBinding(endLabel);
 			return;
+		}
+
+		if (ENABLE_OPTION1_LOWERING && desc.isReadOnly() && clazz != null) {
+			Option1MethodSpec spec = getOption1Spec(clazz);
+			if (spec != null) {
+				emitOption1Condition(cob, spec, instance, desc, classData, playerSlot, sourceSlot, targetSlot, tempSlotBase, depth);
+				return;
+			}
 		}
 
 		int condIdx = addConstant(classData, instance);
@@ -1828,7 +1732,7 @@ public final class DescBytecodeCompiler {
 				return NOOP_SPELL;
 			}
 			Spell spellInstance = desc.create();
-			if (spellClass != DamageSpell.class && overridesCast(spellClass)) {
+			if (IN_NATIVE_IMAGE || (spellClass != DamageSpell.class && overridesCast(spellClass))) {
 				return spellInstance::cast;
 			}
 
@@ -2154,144 +2058,6 @@ public final class DescBytecodeCompiler {
 			return;
 		}
 
-		if (spellClass == HealSpell.class) {
-			cob.aload(1)
-					.aload(playerSlot)
-					.aload(4)
-					.aload(targetSlot);
-			emitSpellArgValue(cob, desc, SpellArg.VALUE, 0, classData, playerSlot, targetSlot, 4);
-			cob.invokestatic(CD_COMPILER, "execHealSpell",
-					MethodTypeDesc.of(ConstantDescs.MTD_void.returnType(),
-							CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY, ConstantDescs.CD_int));
-			return;
-		}
-
-		if (spellClass == BuffSpell.class && !desc.containsKey(SpellArg.REVERT_TRIGGER)) {
-			boolean hasValue = desc.containsKey(SpellArg.VALUE);
-			boolean hasAttack = desc.containsKey(SpellArg.ATTACK_BONUS);
-			boolean hasHp = desc.containsKey(SpellArg.HP_BONUS);
-			cob.aload(1)
-					.aload(playerSlot)
-					.aload(4)
-					.aload(targetSlot);
-			emitSpellArgValue(cob, desc, SpellArg.ATTACK_BONUS, 0, classData, playerSlot, targetSlot, 4);
-			emitSpellArgValue(cob, desc, SpellArg.HP_BONUS, 0, classData, playerSlot, targetSlot, 4);
-			emitSpellArgValue(cob, desc, SpellArg.ARMOR_BONUS, 0, classData, playerSlot, targetSlot, 4);
-			emitSpellArgValue(cob, desc, SpellArg.VALUE, 0, classData, playerSlot, targetSlot, 4);
-			cob.ldc(hasValue ? 1 : 0)
-					.ldc(hasAttack ? 1 : 0)
-					.ldc(hasHp ? 1 : 0)
-					.invokestatic(CD_COMPILER, "execBuffSpell",
-							MethodTypeDesc.of(ConstantDescs.MTD_void.returnType(),
-									CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY,
-									ConstantDescs.CD_int, ConstantDescs.CD_int, ConstantDescs.CD_int, ConstantDescs.CD_int,
-									ConstantDescs.CD_boolean, ConstantDescs.CD_boolean, ConstantDescs.CD_boolean));
-			return;
-		}
-
-		if (spellClass == AddAttributeSpell.class
-				&& !desc.containsKey(SpellArg.REVERT_TRIGGER)
-				&& !desc.containsKey(SpellArg.SECOND_REVERT_TRIGGER)
-				&& !desc.containsKey(SpellArg.VALUE)) {
-			Attribute tag = (Attribute) desc.get(SpellArg.ATTRIBUTE);
-			int tagIdx = addConstant(classData, tag);
-			cob.aload(1)
-					.aload(4)
-					.aload(targetSlot);
-			loadClassData(cob, tagIdx, CD_ATTRIBUTE);
-			cob.invokestatic(CD_COMPILER, "execAddAttributeSpell",
-					MethodTypeDesc.of(ConstantDescs.MTD_void.returnType(),
-							CD_GAME_CONTEXT, CD_ENTITY, CD_ENTITY, CD_ATTRIBUTE));
-			return;
-		}
-
-		if (spellClass == RemoveAttributeSpell.class
-				&& !desc.containsKey(SpellArg.REVERT_TRIGGER)
-				&& !desc.containsKey(SpellArg.SECOND_REVERT_TRIGGER)) {
-			Attribute tag = (Attribute) desc.get(SpellArg.ATTRIBUTE);
-			int tagIdx = addConstant(classData, tag);
-			cob.aload(1)
-					.aload(playerSlot)
-					.aload(targetSlot);
-			loadClassData(cob, tagIdx, CD_ATTRIBUTE);
-			cob.invokestatic(CD_COMPILER, "execRemoveAttributeSpell",
-					MethodTypeDesc.of(ConstantDescs.MTD_void.returnType(),
-							CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ATTRIBUTE));
-			return;
-		}
-
-		if (spellClass == ModifyAttributeSpell.class
-				&& !desc.containsKey(SpellArg.REVERT_TRIGGER)
-				&& !desc.containsKey(SpellArg.SECOND_REVERT_TRIGGER)) {
-			Attribute attr = (Attribute) desc.get(SpellArg.ATTRIBUTE);
-			int attrIdx = addConstant(classData, attr);
-			cob.aload(targetSlot);
-			loadClassData(cob, attrIdx, CD_ATTRIBUTE);
-			emitSpellArgValue(cob, desc, SpellArg.VALUE, 0, classData, playerSlot, targetSlot, 4);
-			cob.invokevirtual(CD_ENTITY, "modifyAttribute",
-					MethodTypeDesc.of(ConstantDescs.MTD_void.returnType(), CD_ATTRIBUTE, ConstantDescs.CD_int));
-			return;
-		}
-
-		if (spellClass == SetAttackSpell.class) {
-			boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, true);
-			cob.aload(targetSlot);
-			emitSpellArgValue(cob, desc, SpellArg.VALUE, 0, classData, playerSlot, targetSlot, 4);
-			cob.ldc(exclusive ? 1 : 0)
-					.invokestatic(CD_COMPILER, "execSetAttackSpell",
-							MethodTypeDesc.of(ConstantDescs.MTD_void.returnType(),
-									CD_ENTITY, ConstantDescs.CD_int, ConstantDescs.CD_boolean));
-			return;
-		}
-
-		if (spellClass == SetHpSpell.class) {
-			boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, true);
-			cob.aload(1)
-					.aload(targetSlot);
-			emitSpellArgValue(cob, desc, SpellArg.VALUE, 0, classData, playerSlot, targetSlot, 4);
-			cob.ldc(exclusive ? 1 : 0)
-					.invokestatic(CD_COMPILER, "execSetHpSpell",
-							MethodTypeDesc.of(ConstantDescs.MTD_void.returnType(),
-									CD_GAME_CONTEXT, CD_ENTITY, ConstantDescs.CD_int, ConstantDescs.CD_boolean));
-			return;
-		}
-
-		if (spellClass == DestroySpell.class) {
-			cob.aload(1)
-					.aload(4)
-					.aload(targetSlot)
-					.invokestatic(CD_COMPILER, "execDestroySpell",
-							MethodTypeDesc.of(ConstantDescs.MTD_void.returnType(),
-									CD_GAME_CONTEXT, CD_ENTITY, CD_ENTITY));
-			return;
-		}
-
-		if (spellClass == SilenceSpell.class) {
-			cob.aload(1)
-					.aload(playerSlot)
-					.aload(4)
-					.aload(targetSlot)
-					.invokestatic(CD_COMPILER, "execSilenceSpell",
-							MethodTypeDesc.of(ConstantDescs.MTD_void.returnType(),
-									CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY));
-			return;
-		}
-
-		if (spellClass == DrawCardSpell.class && !desc.containsKey(SpellArg.CARD_FILTER)) {
-			SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
-			int subIdx = addConstant(classData, subSpell);
-			cob.aload(1)
-					.aload(playerSlot)
-					.aload(4)
-					.aload(targetSlot);
-			emitSpellArgValue(cob, desc, SpellArg.VALUE, 1, classData, playerSlot, targetSlot, 4);
-			loadClassData(cob, subIdx, CD_SPELL_DESC);
-			cob.invokestatic(CD_COMPILER, "execDrawCardSpell",
-					MethodTypeDesc.of(ConstantDescs.MTD_void.returnType(),
-							CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY, ConstantDescs.CD_int, CD_SPELL_DESC));
-			return;
-		}
-
 		if (spellClass == ConditionalSpell.class) {
 			Condition condition = (Condition) desc.get(SpellArg.CONDITION);
 			if (condition != null) {
@@ -2381,19 +2147,30 @@ public final class DescBytecodeCompiler {
 			}
 		}
 
-		// Default: invoke spellInstance.evaluateOnCast(context, player, desc, source, target)
-		int spellIdx = addConstant(classData, spellInstance);
+		boolean isTopLevelSpell = spellInstance != null;
+		Spell targetInstance = isTopLevelSpell ? spellInstance : desc.create();
+
+		if (ENABLE_OPTION1_LOWERING && desc.isReadOnly() && spellClass != null) {
+			Option1MethodSpec spec = getOption1Spec(spellClass);
+			if (spec != null) {
+				emitOption1Spell(cob, spec, targetInstance, desc, isTopLevelSpell, classData, playerSlot, targetSlot);
+				return;
+			}
+		}
+
+		// Default: invoke targetInstance.evaluateOnCast(context, player, desc, source, target)
+		int spellIdx = addConstant(classData, targetInstance);
 		loadClassData(cob, spellIdx, CD_SPELL);
 		cob.aload(1)
-				.aload(playerSlot)
-				.aload(3)
-				.aload(4)
+				.aload(playerSlot);
+		emitLoadSpellDesc(cob, desc, isTopLevelSpell, classData);
+		cob.aload(4)
 				.aload(targetSlot)
 				.invokevirtual(CD_SPELL, "evaluateOnCast", MTD_SPELL_ONCAST);
 	}
 
 	private static boolean canCompileChildSpellInline(SpellDesc subSpell) {
-		if (subSpell == null || subSpell instanceof LambdaSpellDesc) {
+		if (!ENABLE_OPTION1_LOWERING || subSpell == null || !subSpell.isReadOnly() || subSpell instanceof LambdaSpellDesc) {
 			return false;
 		}
 		if (subSpell.hasPredefinedTarget()
@@ -2407,29 +2184,10 @@ public final class DescBytecodeCompiler {
 			return false;
 		}
 		Class<? extends Spell> c = subSpell.getDescClass();
-		if (c == BuffSpell.class) {
-			return !subSpell.containsKey(SpellArg.REVERT_TRIGGER);
+		if (c == null || overridesCast(c)) {
+			return false;
 		}
-		if (c == HealSpell.class
-				|| c == SetAttackSpell.class
-				|| c == SetHpSpell.class
-				|| c == DestroySpell.class
-				|| c == SilenceSpell.class) {
-			return true;
-		}
-		if (c == AddAttributeSpell.class) {
-			return !subSpell.containsKey(SpellArg.REVERT_TRIGGER)
-					&& !subSpell.containsKey(SpellArg.SECOND_REVERT_TRIGGER)
-					&& !subSpell.containsKey(SpellArg.VALUE);
-		}
-		if (c == RemoveAttributeSpell.class || c == ModifyAttributeSpell.class) {
-			return !subSpell.containsKey(SpellArg.REVERT_TRIGGER)
-					&& !subSpell.containsKey(SpellArg.SECOND_REVERT_TRIGGER);
-		}
-		if (c == DrawCardSpell.class) {
-			return !subSpell.containsKey(SpellArg.CARD_FILTER);
-		}
-		return false;
+		return getOption1Spec(c) != null;
 	}
 
 	private static void emitCastChildSpell(
@@ -2500,6 +2258,536 @@ public final class DescBytecodeCompiler {
 
 	public static void endInlineChildSpell(GameContext context) {
 		context.getSpellTargetStack().pop();
+	}
+
+	// =========================================================================
+	// Universal Option 1 Typed Signature Reflection & Bytecode Lowering
+	// =========================================================================
+
+	private enum Option1ParamKind {
+		MIXIN_CARDS,
+		MIXIN_CARD,
+		MIXIN_BOARD_POSITION,
+		MIXIN_TARGETED_ENTITIES,
+		INT_VALUE,
+		BOXED_INT_VALUE,
+		BOOLEAN,
+		VALUE_PROVIDER,
+		STRING,
+		ENUM_OR_REF
+	}
+
+	private record Option1ParamSpec(
+			Option1ParamKind kind,
+			Enum<?> argKey,
+			ClassDesc paramDesc,
+			int defaultInt,
+			boolean defaultBool,
+			boolean hasDefault,
+			String defaultStr,
+			Object defaultRefValue
+	) {
+	}
+
+	private record Option1MethodSpec(
+			ComponentSignatureAnalyzer.ComponentKind kind,
+			ClassDesc ownerDesc,
+			String methodName,
+			MethodTypeDesc methodTypeDesc,
+			boolean hasDescInPrefix,
+			boolean isRevertableSpell,
+			List<Option1ParamSpec> params
+	) {
+	}
+
+	private static Option1MethodSpec getOption1Spec(Class<?> clazz) {
+		return OPTION1_SPEC_CACHE.computeIfAbsent(clazz, DescBytecodeCompiler::resolveOption1Spec).orElse(null);
+	}
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private static Optional<Option1MethodSpec> resolveOption1Spec(Class<?> clazz) {
+		try {
+			ComponentSignatureAnalyzer.ComponentKind kind;
+			String expectedMethodName;
+			Class<? extends Enum> argEnumClass;
+			if (Spell.class.isAssignableFrom(clazz)) {
+				kind = ComponentSignatureAnalyzer.ComponentKind.SPELL;
+				expectedMethodName = "onCast";
+				argEnumClass = SpellArg.class;
+			} else if (EntityFilter.class.isAssignableFrom(clazz)) {
+				kind = ComponentSignatureAnalyzer.ComponentKind.ENTITY_FILTER;
+				expectedMethodName = "test";
+				argEnumClass = EntityFilterArg.class;
+			} else if (ValueProvider.class.isAssignableFrom(clazz)) {
+				kind = ComponentSignatureAnalyzer.ComponentKind.VALUE_PROVIDER;
+				expectedMethodName = "provideValue";
+				argEnumClass = ValueProviderArg.class;
+			} else if (Condition.class.isAssignableFrom(clazz)) {
+				kind = ComponentSignatureAnalyzer.ComponentKind.CONDITION;
+				expectedMethodName = "isFulfilled";
+				argEnumClass = ConditionArg.class;
+			} else {
+				return Optional.empty();
+			}
+
+			Method typedMethod = null;
+			for (Method m : clazz.getDeclaredMethods()) {
+				if (!m.getName().equals(expectedMethodName)
+						|| m.isSynthetic()
+						|| m.isBridge()
+						|| Modifier.isStatic(m.getModifiers())
+						|| !Modifier.isPublic(m.getModifiers())) {
+					continue;
+				}
+				Class<?>[] pTypes = m.getParameterTypes();
+				boolean isTyped = switch (kind) {
+					case SPELL -> {
+						if (pTypes.length == 5
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == SpellDesc.class
+								&& pTypes[3] == Entity.class
+								&& pTypes[4] == Entity.class) {
+							yield false;
+						}
+						yield (pTypes.length > 5
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == SpellDesc.class
+								&& pTypes[3] == Entity.class
+								&& pTypes[4] == Entity.class)
+								|| (pTypes.length >= 4
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == Entity.class
+								&& pTypes[3] == Entity.class);
+					}
+					case ENTITY_FILTER -> {
+						if (pTypes.length == 4
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == Entity.class
+								&& pTypes[3] == Entity.class) {
+							yield false;
+						}
+						yield (pTypes.length > 4
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == Entity.class
+								&& pTypes[3] == Entity.class)
+								|| (pTypes.length >= 5
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == EntityFilterDesc.class
+								&& pTypes[3] == Entity.class
+								&& pTypes[4] == Entity.class);
+					}
+					case VALUE_PROVIDER -> {
+						if (pTypes.length == 4
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == Entity.class
+								&& pTypes[3] == Entity.class) {
+							yield false;
+						}
+						yield (pTypes.length > 4
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == Entity.class
+								&& pTypes[3] == Entity.class)
+								|| (pTypes.length >= 5
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == ValueProviderDesc.class
+								&& pTypes[3] == Entity.class
+								&& pTypes[4] == Entity.class);
+					}
+					case CONDITION -> {
+						if (pTypes.length == 5
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == ConditionDesc.class
+								&& pTypes[3] == Entity.class
+								&& pTypes[4] == Entity.class) {
+							yield false;
+						}
+						if (pTypes.length == 4 && Modifier.isFinal(m.getModifiers())) {
+							yield false;
+						}
+						yield (pTypes.length > 5
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == ConditionDesc.class
+								&& pTypes[3] == Entity.class
+								&& pTypes[4] == Entity.class)
+								|| (pTypes.length > 4
+								&& pTypes[0] == GameContext.class
+								&& pTypes[1] == Player.class
+								&& pTypes[2] == Entity.class
+								&& pTypes[3] == Entity.class);
+					}
+					default -> false;
+				};
+				if (isTyped) {
+					typedMethod = m;
+					break;
+				}
+			}
+
+			if (typedMethod == null) {
+				return Optional.empty();
+			}
+
+			Parameter[] parameters = typedMethod.getParameters();
+			Class<?>[] pTypes = typedMethod.getParameterTypes();
+			boolean hasDescInPrefix = pTypes.length >= 5 && Desc.class.isAssignableFrom(pTypes[2]);
+			int prefixLen = hasDescInPrefix ? 5 : 4;
+
+			ClassDesc[] paramDescs = new ClassDesc[pTypes.length];
+			for (int i = 0; i < pTypes.length; i++) {
+				paramDescs[i] = ClassDesc.ofDescriptor(pTypes[i].descriptorString());
+			}
+			MethodTypeDesc mtd = MethodTypeDesc.of(
+					ClassDesc.ofDescriptor(typedMethod.getReturnType().descriptorString()),
+					paramDescs);
+
+			List<Option1ParamSpec> paramSpecs = new ArrayList<>(pTypes.length - prefixLen);
+			for (int i = prefixLen; i < pTypes.length; i++) {
+				Parameter p = parameters[i];
+				String pName = p.getName();
+				Class<?> pClass = pTypes[i];
+				ClassDesc pDesc = paramDescs[i];
+				Default defAnn = p.getAnnotation(Default.class);
+				boolean hasDef = defAnn != null;
+				int defInt = hasDef ? defAnn.value() : 0;
+				boolean defBool = hasDef && defAnn.bool();
+				String defStr = hasDef ? defAnn.string() : null;
+
+				if (kind == ComponentSignatureAnalyzer.ComponentKind.SPELL && pName.equals("cards") && pClass == CardList.class) {
+					paramSpecs.add(new Option1ParamSpec(Option1ParamKind.MIXIN_CARDS, null, pDesc, 0, false, false, null, null));
+					continue;
+				}
+				if (kind == ComponentSignatureAnalyzer.ComponentKind.SPELL && pName.equals("card") && pClass == Card.class) {
+					paramSpecs.add(new Option1ParamSpec(Option1ParamKind.MIXIN_CARD, null, pDesc, 0, false, false, null, null));
+					continue;
+				}
+				if (kind == ComponentSignatureAnalyzer.ComponentKind.SPELL && pName.equals("boardPosition") && pClass == int.class) {
+					paramSpecs.add(new Option1ParamSpec(Option1ParamKind.MIXIN_BOARD_POSITION, null, pDesc, 0, false, false, null, null));
+					continue;
+				}
+				if (kind == ComponentSignatureAnalyzer.ComponentKind.ENTITY_FILTER
+						&& (pName.equals("entities") || pName.equals("targetedEntities"))
+						&& pClass == List.class) {
+					paramSpecs.add(new Option1ParamSpec(Option1ParamKind.MIXIN_TARGETED_ENTITIES, null, pDesc, 0, false, false, null, null));
+					continue;
+				}
+
+				String keyName = ComponentSignatureAnalyzer.camelToUpperSnake(pName);
+				if (keyName.equals("TARGET_REFERENCE") && pClass == EntityReference.class) {
+					keyName = "TARGET";
+				}
+				Enum<?> argKey = Enum.valueOf(argEnumClass, keyName);
+
+				if (pClass == int.class) {
+					paramSpecs.add(new Option1ParamSpec(Option1ParamKind.INT_VALUE, argKey, pDesc, defInt, false, hasDef, null, null));
+				} else if (pClass == Integer.class) {
+					paramSpecs.add(new Option1ParamSpec(Option1ParamKind.BOXED_INT_VALUE, argKey, pDesc, defInt, false, hasDef, null, null));
+				} else if (pClass == boolean.class) {
+					paramSpecs.add(new Option1ParamSpec(Option1ParamKind.BOOLEAN, argKey, pDesc, 0, defBool, hasDef, null, null));
+				} else if (pClass == ValueProvider.class) {
+					paramSpecs.add(new Option1ParamSpec(Option1ParamKind.VALUE_PROVIDER, argKey, pDesc, 0, false, hasDef, null, null));
+				} else if (pClass == String.class) {
+					paramSpecs.add(new Option1ParamSpec(Option1ParamKind.STRING, argKey, pDesc, 0, false, hasDef, defStr, null));
+				} else {
+					Object defRef = null;
+					if (hasDef && defStr != null && !defStr.isEmpty() && pClass.isEnum()) {
+						defRef = Enum.valueOf((Class<? extends Enum>) pClass, defStr);
+					}
+					paramSpecs.add(new Option1ParamSpec(Option1ParamKind.ENUM_OR_REF, argKey, pDesc, 0, false, hasDef, defStr, defRef));
+				}
+			}
+
+			return Optional.of(new Option1MethodSpec(
+					kind,
+					ClassDesc.ofDescriptor(clazz.descriptorString()),
+					expectedMethodName,
+					mtd,
+					hasDescInPrefix,
+					RevertableSpell.class.isAssignableFrom(clazz),
+					List.copyOf(paramSpecs)
+			));
+		} catch (Throwable t) {
+			return Optional.empty();
+		}
+	}
+
+	private static void emitLoadSpellDesc(CodeBuilder cob, SpellDesc desc, boolean isTopLevelSpell, List<Object> classData) {
+		if (isTopLevelSpell) {
+			cob.aload(3);
+		} else {
+			int descIdx = addConstant(classData, desc);
+			loadClassData(cob, descIdx, CD_SPELL_DESC);
+		}
+	}
+
+	private static void emitOption1ValueProvider(
+			CodeBuilder cob,
+			Option1MethodSpec spec,
+			ValueProvider instance,
+			ValueProviderDesc desc,
+			List<Object> classData,
+			int playerSlot,
+			int targetSlot,
+			int hostSlot,
+			int tempSlotBase,
+			int depth) {
+		int instIdx = addConstant(classData, instance);
+		loadClassData(cob, instIdx, spec.ownerDesc);
+		cob.aload(1)
+				.aload(playerSlot);
+		if (spec.hasDescInPrefix) {
+			int descIdx = addConstant(classData, desc);
+			loadClassData(cob, descIdx, CD_VP_DESC);
+		}
+		loadSlotOrNull(cob, targetSlot);
+		loadSlotOrNull(cob, hostSlot);
+		emitOption1ExtraParams(cob, spec, instance, desc, false, classData, playerSlot, targetSlot, hostSlot, targetSlot, hostSlot, tempSlotBase, depth);
+		cob.invokevirtual(spec.ownerDesc, spec.methodName, spec.methodTypeDesc);
+	}
+
+	private static void emitOption1EntityFilter(
+			CodeBuilder cob,
+			Option1MethodSpec spec,
+			EntityFilter instance,
+			EntityFilterDesc desc,
+			List<Object> classData,
+			int playerSlot,
+			int entitySlot,
+			int hostSlot,
+			int tempSlotBase,
+			int depth) {
+		// If EntityFilter has TARGET set AND at least one INT_VALUE/BOXED_INT_VALUE parameter uses a dynamic ValueProvider,
+		// resolve getTargetedEntity(context, player, host) into a temp slot before pushing arguments.
+		int vpTargetSlot = 0;
+		if (desc.containsKey(EntityFilterArg.TARGET)) {
+			boolean needsVpTarget = false;
+			for (int i = 0, n = spec.params.size(); i < n; i++) {
+				Option1ParamSpec p = spec.params.get(i);
+				if ((p.kind == Option1ParamKind.INT_VALUE || p.kind == Option1ParamKind.BOXED_INT_VALUE)
+						&& desc.get(p.argKey) instanceof ValueProvider) {
+					needsVpTarget = true;
+					break;
+				}
+			}
+			if (needsVpTarget) {
+				vpTargetSlot = tempSlotBase + depth;
+				depth++;
+				int instIdx = addConstant(classData, instance);
+				loadClassData(cob, instIdx, CD_EF);
+				cob.aload(1)
+						.aload(playerSlot);
+				loadSlotOrNull(cob, hostSlot);
+				cob.invokevirtual(CD_EF, "getTargetedEntity",
+						MethodTypeDesc.of(CD_ENTITY, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY))
+						.astore(vpTargetSlot);
+			}
+		}
+
+		int instIdx = addConstant(classData, instance);
+		loadClassData(cob, instIdx, spec.ownerDesc);
+		cob.aload(1)
+				.aload(playerSlot);
+		if (spec.hasDescInPrefix) {
+			int descIdx = addConstant(classData, desc);
+			loadClassData(cob, descIdx, CD_EF_DESC);
+		}
+		loadSlotOrNull(cob, entitySlot);
+		loadSlotOrNull(cob, hostSlot);
+		emitOption1ExtraParams(cob, spec, instance, desc, false, classData, playerSlot, entitySlot, hostSlot, vpTargetSlot, hostSlot, tempSlotBase, depth);
+		cob.invokevirtual(spec.ownerDesc, spec.methodName, spec.methodTypeDesc);
+	}
+
+	private static void emitOption1Condition(
+			CodeBuilder cob,
+			Option1MethodSpec spec,
+			Condition instance,
+			ConditionDesc desc,
+			List<Object> classData,
+			int playerSlot,
+			int sourceSlot,
+			int targetSlot,
+			int tempSlotBase,
+			int depth) {
+		int instIdx = addConstant(classData, instance);
+		loadClassData(cob, instIdx, spec.ownerDesc);
+		cob.aload(1)
+				.aload(playerSlot);
+		if (spec.hasDescInPrefix) {
+			int descIdx = addConstant(classData, desc);
+			loadClassData(cob, descIdx, CD_COND_DESC);
+		}
+		loadSlotOrNull(cob, sourceSlot);
+		loadSlotOrNull(cob, targetSlot);
+		// In Condition: ValueProvider evaluation uses target=targetSlot, host=sourceSlot
+		emitOption1ExtraParams(cob, spec, instance, desc, false, classData, playerSlot, targetSlot, sourceSlot, targetSlot, sourceSlot, tempSlotBase, depth);
+		cob.invokevirtual(spec.ownerDesc, spec.methodName, spec.methodTypeDesc);
+	}
+
+	private static void emitOption1Spell(
+			CodeBuilder cob,
+			Option1MethodSpec spec,
+			Spell instance,
+			SpellDesc desc,
+			boolean isTopLevelSpell,
+			List<Object> classData,
+			int playerSlot,
+			int targetSlot) {
+		int instIdx = addConstant(classData, instance);
+		loadClassData(cob, instIdx, spec.ownerDesc);
+		cob.aload(1)
+				.aload(playerSlot);
+		if (spec.hasDescInPrefix) {
+			emitLoadSpellDesc(cob, desc, isTopLevelSpell, classData);
+		}
+		cob.aload(4);
+		loadSlotOrNull(cob, targetSlot);
+		// In Spell: sourceSlot=4, targetSlot=targetSlot; tempSlotBase=14
+		emitOption1ExtraParams(cob, spec, instance, desc, isTopLevelSpell, classData, playerSlot, targetSlot, 4, targetSlot, 4, 14, 0);
+		cob.invokevirtual(spec.ownerDesc, spec.methodName, spec.methodTypeDesc);
+
+		if (spec.isRevertableSpell
+				&& !spec.hasDescInPrefix
+				&& (desc.containsKey(SpellArg.REVERT_TRIGGER) || desc.containsKey(SpellArg.SECOND_REVERT_TRIGGER))) {
+			loadClassData(cob, instIdx, CD_REVERTABLE_SPELL);
+			cob.aload(1)
+					.aload(playerSlot);
+			emitLoadSpellDesc(cob, desc, isTopLevelSpell, classData);
+			cob.aload(4);
+			loadSlotOrNull(cob, targetSlot);
+			cob.invokevirtual(CD_REVERTABLE_SPELL, "applyRevertTrigger", MTD_SPELL_ONCAST);
+		}
+	}
+
+	private static void emitOption1ExtraParams(
+			CodeBuilder cob,
+			Option1MethodSpec spec,
+			Object instance,
+			Desc<?, ?> desc,
+			boolean isTopLevelSpell,
+			List<Object> classData,
+			int playerSlot,
+			int targetOrEntitySlot,
+			int sourceOrHostSlot,
+			int vpTargetSlot,
+			int vpHostSlot,
+			int tempSlotBase,
+			int depth) {
+		List<Option1ParamSpec> params = spec.params;
+		for (int i = 0, n = params.size(); i < n; i++) {
+			Option1ParamSpec param = params.get(i);
+			switch (param.kind) {
+				case MIXIN_CARDS -> {
+					cob.aload(1)
+							.aload(playerSlot);
+					loadSlotOrNull(cob, targetOrEntitySlot);
+					loadSlotOrNull(cob, sourceOrHostSlot);
+					emitLoadSpellDesc(cob, (SpellDesc) desc, isTopLevelSpell, classData);
+					cob.invokestatic(CD_SPELL_UTILS, "getCards",
+							MethodTypeDesc.of(CD_CARD_LIST, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY, CD_SPELL_DESC));
+				}
+				case MIXIN_CARD -> {
+					cob.aload(1);
+					emitLoadSpellDesc(cob, (SpellDesc) desc, isTopLevelSpell, classData);
+					cob.invokestatic(CD_SPELL_UTILS, "getCard",
+							MethodTypeDesc.of(CD_CARD, CD_GAME_CONTEXT, CD_SPELL_DESC));
+				}
+				case MIXIN_BOARD_POSITION -> {
+					cob.aload(1)
+							.aload(playerSlot);
+					emitLoadSpellDesc(cob, (SpellDesc) desc, isTopLevelSpell, classData);
+					loadSlotOrNull(cob, sourceOrHostSlot);
+					cob.invokestatic(CD_SPELL_UTILS, "getBoardPosition",
+							MethodTypeDesc.of(ConstantDescs.CD_int, CD_GAME_CONTEXT, CD_PLAYER, CD_SPELL_DESC, CD_ENTITY));
+				}
+				case MIXIN_TARGETED_ENTITIES -> {
+					int efIdx = addConstant(classData, instance);
+					loadClassData(cob, efIdx, CD_EF);
+					cob.aload(1)
+							.aload(playerSlot);
+					loadSlotOrNull(cob, sourceOrHostSlot);
+					cob.invokevirtual(CD_EF, "getTargetedEntities",
+							MethodTypeDesc.of(CD_LIST, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY));
+				}
+				case INT_VALUE -> {
+					Object raw = desc.get(param.argKey);
+					if (raw == null) {
+						cob.ldc(param.defaultInt);
+					} else if (raw instanceof Number num) {
+						cob.ldc(num.intValue());
+					} else if (raw instanceof ValueProvider vp) {
+						emitInlineVP(cob, vp, classData, playerSlot, vpTargetSlot, vpHostSlot, tempSlotBase, depth);
+					} else {
+						cob.ldc(param.defaultInt);
+					}
+				}
+				case BOXED_INT_VALUE -> {
+					Object raw = desc.get(param.argKey);
+					if (raw == null) {
+						cob.aconst_null();
+					} else if (raw instanceof Number num) {
+						Integer boxed = Integer.valueOf(num.intValue());
+						int idx = addConstant(classData, boxed);
+						loadClassData(cob, idx, ConstantDescs.CD_Integer);
+					} else if (raw instanceof ValueProvider vp) {
+						emitInlineVP(cob, vp, classData, playerSlot, vpTargetSlot, vpHostSlot, tempSlotBase, depth);
+						cob.invokestatic(ConstantDescs.CD_Integer, "valueOf",
+								MethodTypeDesc.of(ConstantDescs.CD_Integer, ConstantDescs.CD_int));
+					} else {
+						cob.aconst_null();
+					}
+				}
+				case BOOLEAN -> {
+					Object raw = desc.get(param.argKey);
+					boolean b = raw instanceof Boolean bv ? bv : param.defaultBool;
+					if (b) {
+						cob.iconst_1();
+					} else {
+						cob.iconst_0();
+					}
+				}
+				case VALUE_PROVIDER -> {
+					Object raw = desc.get(param.argKey);
+					ValueProvider vp = ConstValueProvider.fromObject(raw);
+					if (vp == null) {
+						cob.aconst_null();
+					} else {
+						int idx = addConstant(classData, vp);
+						loadClassData(cob, idx, CD_VP);
+					}
+				}
+				case STRING -> {
+					Object raw = desc.get(param.argKey);
+					String str = raw instanceof String s ? s : (param.hasDefault ? (param.defaultStr != null ? param.defaultStr : "") : null);
+					if (str == null) {
+						cob.aconst_null();
+					} else {
+						cob.ldc(str);
+					}
+				}
+				case ENUM_OR_REF -> {
+					Object raw = desc.get(param.argKey);
+					if (raw == null) {
+						raw = param.defaultRefValue;
+					}
+					if (raw == null) {
+						cob.aconst_null();
+					} else {
+						int idx = addConstant(classData, raw);
+						loadClassData(cob, idx, param.paramDesc);
+					}
+				}
+			}
+		}
 	}
 
 	// =========================================================================

@@ -25,8 +25,7 @@ import org.slf4j.LoggerFactory;
 public class RefreshAttacksSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(RefreshAttacksSpell.class);
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+	protected void onCast(GameContext context, Player player, Entity source, Entity target) {
 		if (!(target instanceof Actor)) {
 			logger.error("onCast {} {}: Cannot refresh attacks of {}, which is not an actor.", context.getGameId(), source, target);
 		}

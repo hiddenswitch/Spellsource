@@ -28,8 +28,7 @@
             },
             {
               "class": "RaceFilter",
-              "race": "ELEMENTAL",
-              "operation": "HAS"
+              "race": "ELEMENTAL"
             }
           ]
         }

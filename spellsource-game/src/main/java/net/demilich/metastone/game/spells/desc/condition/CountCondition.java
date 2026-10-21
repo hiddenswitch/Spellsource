@@ -63,5 +63,10 @@ public abstract class CountCondition extends Condition {
 	}
 
 	protected abstract int getCountForPlayer(GameContext context, Player player, Entity source, Entity target);
+
+	@Override
+	protected boolean usesFilter() {
+		return false;
+	}
 }
 

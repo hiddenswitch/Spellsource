@@ -30,7 +30,6 @@ public final class JailMinionSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(LOGGER, context, source, desc, SpellArg.SECONDARY_TARGET, SpellArg.REVERT_TRIGGER, SpellArg.VALUE);
 		if (target.getEntityType() != EntityType.MINION) {
 			return;
 		}

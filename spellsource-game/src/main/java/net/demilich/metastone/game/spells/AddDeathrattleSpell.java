@@ -94,7 +94,6 @@ public class AddDeathrattleSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.CARD, SpellArg.VALUE);
 		Integer value = null;
 		if (desc.containsKey(SpellArg.VALUE)) {
 			value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);

@@ -59,7 +59,6 @@ public final class DecaySpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.IGNORE_SPELL_DAMAGE, SpellArg.VALUE);
 
 		if (target == null) {
 			target = source;

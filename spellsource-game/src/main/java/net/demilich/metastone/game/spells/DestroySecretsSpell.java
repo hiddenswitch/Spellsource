@@ -28,7 +28,6 @@ public class DestroySecretsSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc);
 		context.getLogic().removeSecrets(player);
 	}
 

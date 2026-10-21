@@ -37,10 +37,8 @@ public class SwapCardsSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(SwapCardsSpell.class);
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity spellSource, Entity spellTarget) {
-		checkArguments(logger, context, spellSource, desc, SpellArg.SECONDARY_TARGET);
-		Entity toSwap = context.resolveSingleTarget(player, spellSource, (EntityReference) desc.getOrDefault(SpellArg.SECONDARY_TARGET, EntityReference.SELF));
+	protected void onCast(GameContext context, Player player, Entity spellSource, Entity spellTarget, @Default(string = "SELF") EntityReference secondaryTarget) {
+		Entity toSwap = context.resolveSingleTarget(player, spellSource, secondaryTarget);
 
 		if (!(toSwap instanceof Card)) {
 			logger.error("onCast {} {}: Trying to swap {}, which is not a card", context.getGameId(), spellSource, toSwap);

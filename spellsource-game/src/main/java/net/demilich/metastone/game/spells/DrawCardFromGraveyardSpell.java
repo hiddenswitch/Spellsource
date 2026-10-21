@@ -26,7 +26,6 @@ public class DrawCardFromGraveyardSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(LOGGER, context, source, desc, SpellArg.VALUE, SpellArg.CARD_SOURCE, SpellArg.CARD_FILTER);
 		int cardCount = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		CardSource cardSource;
 		if (!desc.containsKey(SpellArg.CARD_SOURCE)) {

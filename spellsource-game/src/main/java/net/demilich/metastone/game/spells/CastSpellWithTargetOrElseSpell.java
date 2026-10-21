@@ -29,7 +29,6 @@ public class CastSpellWithTargetOrElseSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(LOGGER, context, source, desc, SpellArg.TARGET, SpellArg.SECONDARY_TARGET, SpellArg.CARD, SpellArg.TRIGGER, SpellArg.SPELL);
 
 		Card card;
 		if (desc.containsKey(SpellArg.TARGET) && target instanceof Card) {

@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.Default;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 
@@ -34,15 +35,14 @@ public class ManaCostCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		if (!(target instanceof Card)) {
-			target = target.getSourceCard();
-		}
-
-		var card = (Card) target;
-		var value = desc.getValue(ConditionArg.VALUE, context, player, target, source, 0);
-		var operation = (ComparisonOperation) desc.getOrDefault(ConditionArg.OPERATION, ComparisonOperation.EQUAL);
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			int value,
+			@Default(string = "EQUAL") ComparisonOperation operation) {
+		Card card = target instanceof Card c ? c : target.getSourceCard();
 		return SpellUtils.evaluateOperation(operation, context.getLogic().getModifiedManaCost(player, card), value);
 	}
 

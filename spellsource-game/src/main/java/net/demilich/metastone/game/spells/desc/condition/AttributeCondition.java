@@ -22,18 +22,21 @@ public class AttributeCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		var attribute = (Attribute) desc.get(ConditionArg.ATTRIBUTE);
-		var operation = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			Attribute attribute,
+			ComparisonOperation operation,
+			int value) {
 		if (operation == null || operation == ComparisonOperation.HAS) {
 			return target.hasAttribute(attribute);
 		}
 
-		var targetValue = desc.getValue(ConditionArg.VALUE, context, player, target, source, 0);
 		var actualValue = AttributeValueProvider.provideValueForAttribute(context, attribute, target);
 
-		return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
+		return SpellUtils.evaluateOperation(operation, actualValue, value);
 	}
 
 	@Override

@@ -30,10 +30,7 @@ public final class RemoveEnchantmentSpell extends Spell {
 		return new SpellDesc(RemoveEnchantmentSpell.class, target.getReference(), null, false);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.HOW_MANY);
-		CardList cards = SpellUtils.getCards(context, player, null, source, desc);
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, CardList cards, @Default(Integer.MAX_VALUE) int howMany) {
 		if (cards.isEmpty()) {
 			if (target.getEntityType() == EntityType.ENCHANTMENT) {
 				var enchantment = (Enchantment) target;
@@ -41,7 +38,6 @@ public final class RemoveEnchantmentSpell extends Spell {
 			}
 			return;
 		}
-		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, Integer.MAX_VALUE);
 		Set<String> cardIds = cards.stream().map(Card::getCardId).collect(Collectors.toSet());
 		for (Trigger e : context.getLogic().getActiveTriggers(target.getReference())) {
 			if (howMany <= 0) {

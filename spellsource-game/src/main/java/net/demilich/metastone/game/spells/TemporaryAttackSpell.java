@@ -34,21 +34,23 @@ public class TemporaryAttackSpell extends Spell {
 		return create(null, attackBonus);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(LOGGER, context, source, desc, SpellArg.VALUE, SpellArg.ATTACK_BONUS);
-		int attackBonus = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
-		attackBonus += desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
+	protected void onCast(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			int value,
+			int attackBonus) {
+		int bonus = value + attackBonus;
 		Actor targetActor = (Actor) target;
 
-		// Read auras
 		List<ModifyTemporaryAttackSpellAura> auras = SpellUtils.getAuras(context, ModifyTemporaryAttackSpellAura.class, source);
-		for (ModifyTemporaryAttackSpellAura aura : auras) {
-			attackBonus += aura.getDesc().getValue(AuraArg.VALUE, context, player, target, source, 0);
+		for (int i = 0, n = auras.size(); i < n; i++) {
+			bonus += auras.get(i).getDesc().getValue(AuraArg.VALUE, context, player, target, source, 0);
 		}
 
-		if (attackBonus != 0) {
-			targetActor.modifyAttribute(Attribute.TEMPORARY_ATTACK_BONUS, attackBonus);
+		if (bonus != 0) {
+			targetActor.modifyAttribute(Attribute.TEMPORARY_ATTACK_BONUS, bonus);
 		}
 	}
 

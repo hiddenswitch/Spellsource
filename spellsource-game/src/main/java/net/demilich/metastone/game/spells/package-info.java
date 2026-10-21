@@ -1,31 +1,82 @@
 /**
- * Spells contain all the functional pieces of the card JSON (Click on description to learn more about how to use this).
- * <p>
- * Each of these classes correspond to the value part of a spell's {@code "class"} key in the card JSON. For
- * <b>example</b>, if you saw the following in the card JSON:
- * <pre>
- *   {
- *     "class": "DrawCardSpell"
- *   }
- * </pre>
- * You would look up {@link net.demilich.metastone.game.spells.DrawCardSpell} here.
- * <p>
- * Then, {@link net.demilich.metastone.game.spells.desc.SpellArg} referenced in the documentation correspond to keys in
- * the JSON. For example, if you saw the following in the card JSON:
- * <pre>
- *   {
- *     "class": "DrawCardSpell",
- *     "value": 1
- *   }
- * </pre>
- * You'll see that {@link net.demilich.metastone.game.spells.DrawCardSpell} says that {@link
- * net.demilich.metastone.game.spells.desc.SpellArg#VALUE} is the number of cards to draw. That arg refers to the key
- * {@code "value"} in the JSON. We refer to this change in casing as "camelCase"; each spell arg corresponds to a
- * camelCased version in the JSON, where you remove the underscores and start the first letter lowercase, subsequent
- * starts of words uppercase.
- *
- * @see net.demilich.metastone.game.spells.desc.SpellArg for a rough idea of what the args generally mean.
- * @see net.demilich.metastone.game.spells.Spell for the base class of all spell effects (which includes stuff like
- * 		battlecries).
+ * Spells, filters, conditions, value providers, card sources, auras, and triggers in Spellsource.
  */
+@ComponentPackage(
+		commonSpellArgs = {
+				SpellArg.CLASS,
+				SpellArg.FILTER,
+				SpellArg.TARGET,
+				SpellArg.NAME,
+				SpellArg.DESCRIPTION,
+				SpellArg.RANDOM_TARGET,
+				SpellArg.TARGET_PLAYER,
+				SpellArg.SPELL,
+				SpellArg.BOARD_POSITION_RELATIVE,
+				SpellArg.BOARD_POSITION_ABSOLUTE,
+				SpellArg.AFTERMATH_ID,
+				SpellArg.CARD
+		},
+		commonFilterArgs = {
+				EntityFilterArg.CLASS,
+				EntityFilterArg.INVERT,
+				EntityFilterArg.TARGET_PLAYER,
+				EntityFilterArg.AND_CONDITION,
+				EntityFilterArg.TARGET
+		},
+		commonValueProviderArgs = {
+				ValueProviderArg.CLASS,
+				ValueProviderArg.TARGET_PLAYER,
+				ValueProviderArg.MULTIPLIER,
+				ValueProviderArg.OFFSET
+		},
+		commonConditionArgs = {
+				ConditionArg.CLASS,
+				ConditionArg.INVERT,
+				ConditionArg.TARGET_PLAYER,
+				ConditionArg.TARGET,
+				ConditionArg.FILTER
+		},
+		commonTriggerArgs = {
+				EventTriggerArg.CLASS,
+				EventTriggerArg.TARGET_PLAYER,
+				EventTriggerArg.SOURCE_PLAYER,
+				EventTriggerArg.HOST_TARGET_TYPE,
+				EventTriggerArg.QUEUE_CONDITION,
+				EventTriggerArg.FIRE_CONDITION,
+				EventTriggerArg.TARGET
+		},
+		mixins = {
+				@ComponentPackage.Mixin(
+						parameterName = "cards",
+						parameterType = CardList.class,
+						helperClass = SpellUtils.class,
+						helperMethod = "getCards",
+						consumedArgs = {"CARD", "CARDS", "CARD_SOURCE", "CARD_FILTER", "VALUE"}
+				),
+				@ComponentPackage.Mixin(
+						parameterName = "boardPosition",
+						parameterType = int.class,
+						helperClass = SpellUtils.class,
+						helperMethod = "getBoardPosition",
+						consumedArgs = {"BOARD_POSITION_ABSOLUTE", "BOARD_POSITION_RELATIVE"}
+				),
+				@ComponentPackage.Mixin(
+						parameterName = "targetedEntities",
+						parameterType = List.class,
+						helperClass = EntityFilter.class,
+						helperMethod = "getTargetedEntities",
+						consumedArgs = {"TARGET"}
+				)
+		}
+)
 package net.demilich.metastone.game.spells;
+
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
+
+import java.util.List;

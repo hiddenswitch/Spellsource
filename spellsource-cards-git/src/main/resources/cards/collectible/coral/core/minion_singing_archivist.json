@@ -14,7 +14,7 @@
         {
           "class": "ChooseAndReshuffleSpell",
           "value": 2,
-          "cardFilter": {
+          "filter": {
             "class": "CardFilter",
             "cardType": "SPELL"
           }

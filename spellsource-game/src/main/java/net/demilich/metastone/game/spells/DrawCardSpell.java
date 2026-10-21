@@ -6,6 +6,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,27 +60,29 @@ public class DrawCardSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(DrawCardSpell.class);
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD_FILTER);
-		int cardCount = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
-
+	protected void onCast(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			@Default(1) int value,
+			EntityFilter cardFilter,
+			SpellDesc spell) {
 		// If there is a card filter written on this effect, use a FromDeckToHandSpell instead
-		if (desc.containsKey(SpellArg.CARD_FILTER)) {
+		if (cardFilter != null) {
 			LOGGER.debug("{} {}: CARD_FILTER specified, doing a FromDeckToHandSpell instead", context.getGameId(), source);
-			FromDeckToHandSpell.drawFromDeck(context, player, source, target, cardCount, false, desc.getCardFilter(), desc.getSpell(), null);
+			FromDeckToHandSpell.drawFromDeck(context, player, source, target, value, false, cardFilter, spell, null);
 			return;
 		}
-		for (int i = 0; i < cardCount; i++) {
+		for (int i = 0; i < value; i++) {
 			Card card = context.getLogic().drawCard(player.getId(), source);
 
 			if (card == null || card.getZone() != Zones.HAND) {
 				continue;
 			}
 
-			SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
-			if (subSpell != null) {
-				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+			if (spell != null) {
+				SpellUtils.castChildSpell(context, player, spell, source, target, card);
 			}
 		}
 	}

@@ -14,10 +14,8 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		PlayerAttribute attribute = (PlayerAttribute) getDesc().get(ValueProviderArg.PLAYER_ATTRIBUTE);
-		switch (attribute) {
+	protected int provideValue(GameContext context, Player player, Entity target, Entity host, PlayerAttribute playerAttribute) {
+		switch (playerAttribute) {
 			case DECK_COUNT:
 				return player.getDeck().getCount();
 			case HAND_COUNT:

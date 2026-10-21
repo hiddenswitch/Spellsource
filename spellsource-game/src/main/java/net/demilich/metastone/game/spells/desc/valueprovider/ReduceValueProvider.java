@@ -3,13 +3,14 @@ package net.demilich.metastone.game.spells.desc.valueprovider;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.Default;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -53,33 +54,25 @@ public class ReduceValueProvider extends ValueProvider {
 		return new ValueProviderDesc(arguments);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		EntityReference sourceReference = (EntityReference) getDesc().get(ValueProviderArg.TARGET);
-		Attribute attribute = (Attribute) getDesc().get(ValueProviderArg.ATTRIBUTE);
-		List<Entity> entities = null;
-		if (sourceReference != null) {
-			entities = context.resolveTarget(player, host, sourceReference);
-		} else {
-			entities = new ArrayList<>();
-			entities.add(target);
-		}
+	protected int provideValue(
+			GameContext context,
+			Player player,
+			Entity targetEntity,
+			Entity host,
+			EntityReference target,
+			Attribute attribute,
+			@Default(string = "MAXIMUM") AlgebraicOperation operation,
+			EntityFilter filter,
+			ValueProvider value1,
+			Integer value2) {
+		List<Entity> entities = target != null
+				? context.resolveTarget(player, host, target)
+				: Collections.singletonList(targetEntity);
 		if (entities == null) {
 			return 0;
 		}
 
-		AlgebraicOperation operation = getDesc().containsKey(ValueProviderArg.OPERATION) ?
-				(AlgebraicOperation) getDesc().get(ValueProviderArg.OPERATION)
-				: AlgebraicOperation.MAXIMUM;
-
-
-		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
-		if (filter != null) {
-			entities.removeIf(filter.matcher(context, player, host).negate());
-		}
-
 		int value;
-
 		if (operation == AlgebraicOperation.MAXIMUM) {
 			value = Integer.MIN_VALUE;
 		} else if (operation == AlgebraicOperation.MINIMUM) {
@@ -94,24 +87,25 @@ public class ReduceValueProvider extends ValueProvider {
 			value = 0;
 		}
 
-		if (entities.isEmpty() && getDesc().containsKey(ValueProviderArg.VALUE2)) {
-			return getDesc().getValue(ValueProviderArg.VALUE2, context, player, target, host, 0);
-		}
-
-		boolean isApplyingValueProvider = getDesc().containsKey(ValueProviderArg.VALUE1) &&
-				ValueProvider.class.isAssignableFrom(getDesc().get(ValueProviderArg.VALUE1).getClass());
-		ValueProvider targetValueProvider = isApplyingValueProvider ? (ValueProvider) getDesc().get(ValueProviderArg.VALUE1) : null;
-		int staticValue1 = (!isApplyingValueProvider && attribute == null) ? getDesc().getInt(ValueProviderArg.VALUE1) : 0;
+		boolean matchedAny = false;
 		for (int i = 0, n = entities.size(); i < n; i++) {
 			Entity entity = entities.get(i);
-			if (isApplyingValueProvider) {
-				value = operation.performOperation(value, targetValueProvider.getValue(context, player, entity, target));
-			} else if (attribute != null) {
-				int value1 = AttributeValueProvider.provideValueForAttribute(context, attribute, entity);
-				value = operation.performOperation(value, value1);
-			} else {
-				value = operation.performOperation(value, staticValue1);
+			if (filter != null && !filter.matches(context, player, entity, host)) {
+				continue;
 			}
+			matchedAny = true;
+			if (value1 != null) {
+				value = operation.performOperation(value, value1.getValue(context, player, entity, targetEntity));
+			} else if (attribute != null) {
+				int v1 = AttributeValueProvider.provideValueForAttribute(context, attribute, entity);
+				value = operation.performOperation(value, v1);
+			} else {
+				value = operation.performOperation(value, 0);
+			}
+		}
+
+		if (!matchedAny && value2 != null) {
+			return value2;
 		}
 
 		return value;

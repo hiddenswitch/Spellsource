@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.EnvironmentAftermathTriggeredList;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -19,11 +20,12 @@ public class RepeatLastAftermathsSpell extends RepeatAllAftermathsSpell {
 	@Override
 	protected @NotNull ArrayList<EnvironmentAftermathTriggeredList.EnvironmentAftermathTriggeredItem> getAftermaths(GameContext context, Entity source) {
 		var aftermaths = super.getAftermaths(context, source);
-		// Just return the last three from the owner of the source
+		// Return the last VALUE aftermaths from the owner of the source
 		Collections.reverse(aftermaths);
+		long limit = getDesc() != null ? getDesc().getValue(SpellArg.VALUE, context, context.getPlayer(source.getOwner()), null, source, 3) : 3L;
 		return aftermaths.stream()
 				.takeWhile(item -> item.playerId() == source.getOwner())
-				.limit(3L)
+				.limit(limit)
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 

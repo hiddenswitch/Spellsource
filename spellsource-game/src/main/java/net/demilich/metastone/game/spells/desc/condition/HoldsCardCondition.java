@@ -19,14 +19,10 @@ public class HoldsCardCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		if (desc.containsKey(ConditionArg.FILTER)) {
-			LOGGER.warn("isFulfilled {} {}: Did you mean CARD_FILTER?", context.getGameId(), source);
-		}
-
-		var cardFilter = (EntityFilter) desc.get(ConditionArg.CARD_FILTER);
-		for (var card : player.getHand()) {
+	protected boolean isFulfilled(GameContext context, Player player, Entity source, Entity target, EntityFilter cardFilter) {
+		var hand = player.getHand();
+		for (int i = 0, n = hand.size(); i < n; i++) {
+			var card = hand.get(i);
 			if (cardFilter == null || cardFilter.matches(context, player, card, source)) {
 				return true;
 			}

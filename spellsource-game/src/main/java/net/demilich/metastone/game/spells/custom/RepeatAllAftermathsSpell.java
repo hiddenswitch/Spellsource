@@ -126,6 +126,13 @@ public class RepeatAllAftermathsSpell extends Spell {
 		if (item.playerId() != player.getId()) {
 			return false;
 		}
+		var cardFilter = getDesc().getCardFilter();
+		if (cardFilter != null) {
+			var entity = context.resolveSingleTarget(item.source(), false);
+			if (entity == null || !cardFilter.matches(context, player, entity, source)) {
+				return false;
+			}
+		}
 		return true;
 	}
 

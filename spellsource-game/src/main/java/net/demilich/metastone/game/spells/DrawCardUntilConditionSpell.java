@@ -32,7 +32,6 @@ public final class DrawCardUntilConditionSpell extends Spell {
 
 	@Override
 	public void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.CONDITION, SpellArg.VALUE);
 		int cardCount = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
 		for (int i = 0; i < cardCount; i++) {

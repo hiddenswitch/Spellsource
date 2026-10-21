@@ -24,9 +24,7 @@ public final class EntityTypeFilter extends EntityFilter {
 		super(desc);
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		EntityType entityType = (EntityType) getDesc().get(EntityFilterArg.ENTITY_TYPE);
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host, EntityType entityType) {
 		if (entityType == EntityType.ANY) {
 			return true;
 		}

@@ -38,32 +38,37 @@ public final class CardPropertyCondition extends Condition {
 		return desc.create();
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			CardType cardType,
+			String card,
+			String[] cards,
+			String heroClass,
+			String race,
+			Rarity rarity) {
 		if (target == null) {
 			return false;
 		}
-		var card = target.getSourceCard();
-
-		if (card == null) {
+		var sourceCard = target.getSourceCard();
+		if (sourceCard == null) {
 			return false;
 		}
 
-		var cardType = (CardType) desc.get(ConditionArg.CARD_TYPE);
-		if (cardType != null && !GameLogic.isCardType(card.getCardType(), cardType)) {
+		if (cardType != null && !GameLogic.isCardType(sourceCard.getCardType(), cardType)) {
 			return false;
 		}
 
-		var cardId = (String) desc.get(ConditionArg.CARD);
-		if (cardId != null && !card.getCardId().contains(cardId)) {
+		if (card != null && !sourceCard.getCardId().contains(card)) {
 			return false;
 		}
 
-		var cardIds = (String[]) desc.get(ConditionArg.CARDS);
-		if (cardIds != null && cardIds.length > 0) {
+		if (cards != null && cards.length > 0) {
 			var found = false;
-			for (var i = 0; i < cardIds.length; i++) {
-				if (Objects.equals(card.getCardId(), cardIds[i])) {
+			for (var i = 0; i < cards.length; i++) {
+				if (Objects.equals(sourceCard.getCardId(), cards[i])) {
 					found = true;
 					break;
 				}
@@ -73,19 +78,15 @@ public final class CardPropertyCondition extends Condition {
 			}
 		}
 
-		var heroClass = (String) desc.get(ConditionArg.HERO_CLASS);
-		if (heroClass != null && !card.hasHeroClass(heroClass)) {
+		if (heroClass != null && !sourceCard.hasHeroClass(heroClass)) {
 			return false;
 		}
 
-
-		var race = (String) desc.get(ConditionArg.RACE);
-		if (race != null && !Race.hasRace(context, card, race)) {
+		if (race != null && !Race.hasRace(context, sourceCard, race)) {
 			return false;
 		}
 
-		var rarity = (Rarity) desc.get(ConditionArg.RARITY);
-		if (rarity != null && !GameLogic.isRarity(card.getRarity(), rarity)) {
+		if (rarity != null && !GameLogic.isRarity(sourceCard.getRarity(), rarity)) {
 			return false;
 		}
 

@@ -33,10 +33,7 @@ public class RemoveAttributeSpell extends RevertableSpell {
 		return AddAttributeSpell.create(target, (Attribute) desc.get(SpellArg.ATTRIBUTE));
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Attribute tag = (Attribute) desc.get(SpellArg.ATTRIBUTE);
-		context.getLogic().removeAttribute(player, null, target, tag);
-		super.onCast(context, player, desc, source, target);
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, Attribute attribute) {
+		context.getLogic().removeAttribute(player, null, target, attribute);
 	}
 }

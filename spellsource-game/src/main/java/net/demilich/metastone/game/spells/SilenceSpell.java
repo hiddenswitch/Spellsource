@@ -38,8 +38,7 @@ public class SilenceSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+	protected void onCast(GameContext context, Player player, Entity source, Entity target) {
 		if (!(target instanceof Actor)) {
 			logger.error("onCast {} {}: The specified target {} is not an actor, so it cannot be silenced", context.getGameId(), source, target);
 			return;

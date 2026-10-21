@@ -6,6 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
+import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,13 +42,17 @@ public class CastRepeatedlySpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.HOW_MANY, SpellArg.CONDITION, SpellArg.EXCLUSIVE);
-		int iterations = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
-		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
-		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
-		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
+	protected void onCast(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			@Default(1) int howMany,
+			SpellDesc spell,
+			Condition condition,
+			boolean exclusive,
+			EntityReference targetReference) {
+		int iterations = howMany;
 		List<Entity> castedOn = new ArrayList<>();
 		for (int i = 0; i < iterations; i++) {
 			if (target == null) {
@@ -57,7 +62,7 @@ public class CastRepeatedlySpell extends Spell {
 					return;
 				}
 			} else {
-				List<Entity> targets = context.resolveTarget(player, source, desc.getTarget());
+				List<Entity> targets = context.resolveTarget(player, source, targetReference);
 				if (exclusive) {
 					targets.removeAll(castedOn);
 				}
@@ -71,7 +76,6 @@ public class CastRepeatedlySpell extends Spell {
 					return;
 				}
 			}
-
 		}
 	}
 

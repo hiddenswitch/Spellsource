@@ -33,6 +33,9 @@ public class TransformToRandomMinionSpell extends TransformMinionSpell {
 		}
 		Card randomCard = filteredMinions.get(0);
 		SpellDesc transformMinionSpell = TransformMinionSpell.create(randomCard.getCardId());
+		if (desc.getSpell() != null) {
+			transformMinionSpell.put(SpellArg.SPELL, desc.getSpell());
+		}
 		super.onCast(context, player, transformMinionSpell, source, target);
 	}
 }

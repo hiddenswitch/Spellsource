@@ -48,7 +48,6 @@ public class EitherOrSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.CONDITION, SpellArg.SPELL1, SpellArg.SPELL2);
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
 		SpellDesc either = (SpellDesc) desc.get(SpellArg.SPELL1);
 		SpellDesc or = (SpellDesc) desc.get(SpellArg.SPELL2);

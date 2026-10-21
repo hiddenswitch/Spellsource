@@ -132,7 +132,6 @@ public class AddEnchantmentSpell extends Spell {
 				throw new NullPointerException("target");
 			}
 		}
-		checkArguments(logger, context, source, desc, SpellArg.AURA, SpellArg.TRIGGER, SpellArg.CARD, SpellArg.EXCLUSIVE, SpellArg.REVERT_TRIGGER);
 		EnchantmentDesc enchantmentDesc = (EnchantmentDesc) desc.get(SpellArg.TRIGGER);
 		AuraDesc auraDesc = (AuraDesc) desc.get(SpellArg.AURA);
 		Card enchantmentCard = SpellUtils.getCard(context, desc);

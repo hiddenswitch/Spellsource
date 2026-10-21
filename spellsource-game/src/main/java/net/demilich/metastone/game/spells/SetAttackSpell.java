@@ -84,13 +84,7 @@ public class SetAttackSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
-		// When exclusive, the set attack spell will overwrite bonuses. When not exclusive, the BASE attack will change
-		// (to protect it from silencing) and the changed attack will honor bonuses.
-		boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, true);
-
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, int value, @Default(bool = true) boolean exclusive) {
 		target.setAttribute(Attribute.ATTACK, value);
 		target.getAttributes().remove(Attribute.ATTACK_BONUS);
 		if (exclusive) {

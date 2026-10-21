@@ -110,26 +110,20 @@ public class SetHpSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		int hp = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, int value, @Default(bool = true) boolean exclusive) {
 		target.getAttributes().remove(Attribute.HP_BONUS);
-		// When exclusive, the set hp spell will overwrite bonuses. When not exclusive, the BASE HP will change
-		// (to protect it from silencing) and the changed HP will honor bonuses.
-		boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, true);
-
 		if (target instanceof Actor) {
-			context.getLogic().setHpAndMaxHp((Actor) target, hp);
+			context.getLogic().setHpAndMaxHp((Actor) target, value);
 		} else if (target instanceof Card) {
-			target.getAttributes().put(Attribute.HP, hp);
+			target.getAttributes().put(Attribute.HP, value);
 		}
 
 		if (!exclusive) {
-			target.setAttribute(Attribute.BASE_HP, hp);
+			target.setAttribute(Attribute.BASE_HP, value);
 		}
 
 		// We might be undestroying the minion
-		if (hp > 0) {
+		if (value > 0) {
 			target.getAttributes().remove(Attribute.DESTROYED);
 		}
 	}

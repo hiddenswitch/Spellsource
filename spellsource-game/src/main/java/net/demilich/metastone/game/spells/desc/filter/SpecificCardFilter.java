@@ -34,33 +34,60 @@ public class SpecificCardFilter extends EntityFilter {
 		return desc;
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
+	protected boolean test(
+			GameContext context,
+			Player player,
+			Entity entity,
+			Entity host,
+			String card,
+			String[] cards,
+			EntityReference secondaryTarget) {
 		if (entity == null) {
 			return false;
 		}
 
 		String cardId = entity.getSourceCard().getCardId();
-		Set<String> requiredCardIds = new LinkedHashSet<>(getDesc().getCardOrCards());
-		EntityReference comparedTo = (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET);
-		if (comparedTo != null && !comparedTo.equals(EntityReference.NONE)) {
-			Entity target = context.resolveSingleTarget(player, host, comparedTo);
+		String singleRequired = null;
+		if (secondaryTarget != null && !secondaryTarget.equals(EntityReference.NONE)) {
+			Entity target = context.resolveSingleTarget(player, host, secondaryTarget);
 			if (target != null) {
-				requiredCardIds = Collections.singleton(target.getSourceCard().getCardId());
+				singleRequired = target.getSourceCard().getCardId();
 			}
 		}
 
 		List<SpecificCardFilterOverrideAura> filterAuras = SpellUtils.getAuras(context, player.getId(), SpecificCardFilterOverrideAura.class);
 		if (!filterAuras.isEmpty()) {
-			for (Aura aura : filterAuras) {
+			for (int i = 0, n = filterAuras.size(); i < n; i++) {
+				Aura aura = filterAuras.get(i);
 				String overrideCardId = aura.getDesc().getString(AuraArg.CARD);
-				if (aura.getAffectedEntities().contains(entity.getId()) && overrideCardId != null && requiredCardIds.contains(overrideCardId)) {
+				if (aura.getAffectedEntities().contains(entity.getId())
+						&& matchesCardOrCards(overrideCardId, singleRequired, card, cards)) {
 					return true;
 				}
 			}
 		}
 
-		return requiredCardIds.contains(cardId);
+		return matchesCardOrCards(cardId, singleRequired, card, cards);
+	}
+
+	private static boolean matchesCardOrCards(String targetCardId, String singleRequired, String card, String[] cards) {
+		if (targetCardId == null) {
+			return false;
+		}
+		if (singleRequired != null) {
+			return singleRequired.equals(targetCardId);
+		}
+		if (card != null && !card.isEmpty() && card.equals(targetCardId)) {
+			return true;
+		}
+		if (cards != null) {
+			for (int i = 0; i < cards.length; i++) {
+				if (targetCardId.equals(cards[i])) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
 

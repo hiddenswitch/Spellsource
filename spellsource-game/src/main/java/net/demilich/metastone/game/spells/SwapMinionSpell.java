@@ -29,13 +29,11 @@ import org.slf4j.LoggerFactory;
 public class SwapMinionSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(SwapMinionSpell.class);
 
-	@Override
 	@SuppressWarnings("unchecked")
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SECONDARY_TARGET);
-		Minion swap = (Minion) context.resolveTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET)).get(0);
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, EntityReference secondaryTarget) {
+		Minion swap = (Minion) context.resolveTarget(player, source, secondaryTarget).get(0);
 		if (swap.equals(target)) {
-			logger.warn("onCast {} {}: Target {} was asked to swap with itself. SECONDARY_TARGET={}", context.getGameId(), source, target, desc.get(SpellArg.SECONDARY_TARGET));
+			logger.warn("onCast {} {}: Target {} was asked to swap with itself. SECONDARY_TARGET={}", context.getGameId(), source, target, secondaryTarget);
 			return;
 		}
 		boolean ownershipChangeRequired = swap.getOwner() != target.getOwner();

@@ -145,19 +145,23 @@ public class BuffSpell extends RevertableSpell {
 		return reverse;
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+	protected void onCast(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			int attackBonus,
+			int hpBonus,
+			int armorBonus,
+			int value) {
 		super.onCast(context, player, desc, source, target);
 		if (target == null) {
 			LOGGER.warn("onCast {} {}: No target for buff, skipping", context.getGameId(), source);
 			return;
 		}
-		checkArguments(LOGGER, context, source, desc, SpellArg.ATTACK_BONUS, SpellArg.HP_BONUS, SpellArg.ARMOR_BONUS, SpellArg.VALUE, SpellArg.REVERT_TRIGGER);
 
-		int attackBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
-		int hpBonus = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
-		int totalArmorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0);
-		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+		int totalArmorBonus = armorBonus;
 
 		if (value != 0) {
 			if (target instanceof Hero) {
@@ -167,28 +171,35 @@ public class BuffSpell extends RevertableSpell {
 			}
 		}
 
-		// Read aura bonuses
-		List<ModifyBuffSpellAura> auras = SpellUtils.getAuras(context, ModifyBuffSpellAura.class, source);
-
-		for (ModifyBuffSpellAura aura : auras) {
-			context.getSpellValueStack().push(attackBonus);
-			int auraAttackBonus = aura.getDesc().getValue(AuraArg.ATTACK_BONUS, context, player, target, source, 0);
-			context.getSpellValueStack().pop();
-			context.getSpellValueStack().push(hpBonus);
-			int auraHpBonus = aura.getDesc().getValue(AuraArg.HP_BONUS, context, player, target, source, 0);
-			context.getSpellValueStack().pop();
-			int auraValueBonus = aura.getDesc().getValue(AuraArg.VALUE, context, player, target, source, 0);
-			if (desc.containsKey(SpellArg.VALUE)) {
-				attackBonus += auraAttackBonus + auraValueBonus;
-				hpBonus += auraHpBonus + auraValueBonus;
-			} else {
-				if (desc.containsKey(SpellArg.ATTACK_BONUS)) {
-					attackBonus += auraAttackBonus + auraValueBonus;
-					hpBonus += auraValueBonus;
-				}
-				if (desc.containsKey(SpellArg.HP_BONUS)) {
-					attackBonus += auraValueBonus;
-					hpBonus += auraHpBonus + auraValueBonus;
+		// Fast indexed check for ModifyBuffSpellAura without stream allocation
+		var triggers = context.getTriggers();
+		for (int i = 0, n = triggers.size(); i < n; i++) {
+			var t = triggers.get(i);
+			if (t instanceof ModifyBuffSpellAura aura && !aura.isExpired() && aura.isActivated()) {
+				var affected = aura.getAffectedEntities();
+				if (source != null && (affected.contains(source.getId())
+						|| (source.getSourceCard() != null && affected.contains(source.getSourceCard().getId())))) {
+					var spellValueStack = context.getSpellValueStack();
+					spellValueStack.push(attackBonus);
+					int auraAttackBonus = aura.getDesc().getValue(AuraArg.ATTACK_BONUS, context, player, target, source, 0);
+					spellValueStack.pop();
+					spellValueStack.push(hpBonus);
+					int auraHpBonus = aura.getDesc().getValue(AuraArg.HP_BONUS, context, player, target, source, 0);
+					spellValueStack.pop();
+					int auraValueBonus = aura.getDesc().getValue(AuraArg.VALUE, context, player, target, source, 0);
+					if (desc.containsKey(SpellArg.VALUE)) {
+						attackBonus += auraAttackBonus + auraValueBonus;
+						hpBonus += auraHpBonus + auraValueBonus;
+					} else {
+						if (desc.containsKey(SpellArg.ATTACK_BONUS)) {
+							attackBonus += auraAttackBonus + auraValueBonus;
+							hpBonus += auraValueBonus;
+						}
+						if (desc.containsKey(SpellArg.HP_BONUS)) {
+							attackBonus += auraValueBonus;
+							hpBonus += auraHpBonus + auraValueBonus;
+						}
+					}
 				}
 			}
 		}

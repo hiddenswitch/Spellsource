@@ -132,7 +132,6 @@ public class ReceiveCardSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.CARD, SpellArg.CARDS);
 		SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 

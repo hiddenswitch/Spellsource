@@ -9,11 +9,10 @@
   "spell": {
     "class": "SummonSpell",
     "value": {
-      "class": "PlayerAttributeValueProvider",
+      "class": "CardCountValueProvider",
       "cardFilter": {
         "class": "OddCostFilter"
       },
-      "playerAttribute": "HAND_COUNT",
       "targetPlayer": "SELF"
     },
     "card": "token_customer"

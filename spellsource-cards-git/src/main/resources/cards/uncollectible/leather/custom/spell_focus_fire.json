@@ -17,7 +17,7 @@
     },
     "spell1": {
       "class": "DamageSpell",
-      "hpBonus": 4
+      "value": 4
     },
     "spell2": {
       "class": "DamageSpell",

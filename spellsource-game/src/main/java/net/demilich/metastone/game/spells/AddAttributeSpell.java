@@ -102,17 +102,13 @@ public class AddAttributeSpell extends RevertableSpell {
 		return RemoveAttributeSpell.create(target, (Attribute) desc.get(SpellArg.ATTRIBUTE));
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(LOGGER, context, source, desc, SpellArg.ATTRIBUTE, SpellArg.REVERT_TRIGGER, SpellArg.SECOND_REVERT_TRIGGER);
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, Attribute attribute, Integer value) {
 		Objects.requireNonNull(target, source.getSourceCard().getCardId());
-		if (desc.containsKey(SpellArg.VALUE)) {
+		if (value != null) {
 			LOGGER.error("onCast {} {}: Cannot use an integer value in an AddAttributeSpell. Use ModifyAttributeSpell instead.", context.getGameId(), source);
 			throw new IllegalArgumentException("VALUE");
 		}
-		Attribute tag = (Attribute) desc.get(SpellArg.ATTRIBUTE);
-		context.getLogic().applyAttribute(target, tag, source);
-		super.onCast(context, player, desc, source, target);
+		context.getLogic().applyAttribute(target, attribute, source);
 	}
 }
 

@@ -62,7 +62,6 @@ public final class SetCardSpell extends RevertableSpell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.ATTRIBUTE, SpellArg.CARD, SpellArg.SECONDARY_TARGET, SpellArg.REVERT_TRIGGER, SpellArg.SECOND_REVERT_TRIGGER);
 
 		Attribute attr = (Attribute) desc.getOrDefault(SpellArg.ATTRIBUTE, Attribute.CARD_ID);
 		if (!(attr == Attribute.CARD_ID || attr == Attribute.AURA_CARD_ID)) {

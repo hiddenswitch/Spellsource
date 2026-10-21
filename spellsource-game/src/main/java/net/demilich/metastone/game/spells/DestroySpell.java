@@ -65,9 +65,7 @@ public class DestroySpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc);
+	protected void onCast(GameContext context, Player player, Entity source, Entity target) {
 		if (target == null) {
 			throw new UnsupportedOperationException("must specify a target");
 		}

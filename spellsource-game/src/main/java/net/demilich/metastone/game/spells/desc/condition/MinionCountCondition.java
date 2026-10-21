@@ -28,7 +28,7 @@ public class MinionCountCondition extends CountCondition {
 			filter = (EntityFilter) getDesc().get(ConditionArg.CARD_FILTER);
 		}
 		for (Entity minion : minions) {
-			if (filter == null || filter.matches(context, player, source, minion)) {
+			if (filter == null || filter.matches(context, player, minion, source)) {
 				count++;
 			}
 		}

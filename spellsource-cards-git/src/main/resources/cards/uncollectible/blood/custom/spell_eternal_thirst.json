@@ -7,41 +7,52 @@
   "description": "Each time you restore, increase or Drain Health this turn, draw.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "AddEnchantmentSpell",
-    "target": "FRIENDLY_PLAYER",
-    "triggers": [
+    "class": "MetaSpell",
+    "spells": [
       {
-        "eventTrigger": {
-          "class": "MaxHpIncreasedTrigger",
-          "targetPlayer": "SELF"
-        },
-        "spell": {
-          "class": "DrawCardSpell",
-          "value": 1
-        },
-        "oneTurn": true
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "MaxHpIncreasedTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DrawCardSpell",
+            "value": 1
+          },
+          "oneTurn": true
+        }
       },
       {
-        "eventTrigger": {
-          "class": "HealingTrigger",
-          "targetPlayer": "SELF"
-        },
-        "spell": {
-          "class": "DrawCardSpell",
-          "value": 1
-        },
-        "oneTurn": true
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "HealingTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DrawCardSpell",
+            "value": 1
+          },
+          "oneTurn": true
+        }
       },
       {
-        "eventTrigger": {
-          "class": "DrainTrigger",
-          "targetPlayer": "SELF"
-        },
-        "spell": {
-          "class": "DrawCardSpell",
-          "value": 1
-        },
-        "oneTurn": true
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "DrainTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DrawCardSpell",
+            "value": 1
+          },
+          "oneTurn": true
+        }
       }
     ]
   },

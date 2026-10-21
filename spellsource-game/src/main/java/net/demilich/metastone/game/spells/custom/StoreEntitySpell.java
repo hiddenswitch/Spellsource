@@ -35,12 +35,10 @@ import org.slf4j.LoggerFactory;
 public class StoreEntitySpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(StoreEntitySpell.class);
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SECONDARY_TARGET);
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, EntityReference secondaryTarget) {
 		Entity storageSource = source;
-		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
-			storageSource = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
+		if (secondaryTarget != null) {
+			storageSource = context.resolveSingleTarget(player, source, secondaryTarget);
 		}
 		EnvironmentEntityList list = EnvironmentEntityList.getList(context);
 		list.add(storageSource, target);

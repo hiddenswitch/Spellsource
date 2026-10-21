@@ -7,8 +7,7 @@
   "description": "If you control 3 or more units, destroy all units.",
   "condition": {
     "class": "MinionOnBoardCondition",
-    "value": 3,
-    "operation": "GREATER_OR_EQUAL"
+    "value": 3
   },
   "targetSelection": "MINIONS",
   "spell": {

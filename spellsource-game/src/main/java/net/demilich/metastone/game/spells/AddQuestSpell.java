@@ -67,7 +67,6 @@ public class AddQuestSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.QUEST);
 		final Object questObject = desc.get(SpellArg.QUEST);
 		if (questObject == null) {
 			logger.error("onCast {} {}: The specified QUEST argument is null", context.getGameId(), source);

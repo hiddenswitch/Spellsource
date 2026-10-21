@@ -14,12 +14,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public final class ExcessHealSpell extends HealSpell {
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		var healing = getHealing(context, player, desc, source, target);
-		var res = context.getLogic().heal(player, (Actor) target, Math.max(0, healing), source);
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, int value, SpellDesc spell) {
+		var res = context.getLogic().heal(player, (Actor) target, Math.max(0, value), source);
 		if (res.getExcess() > 0) {
-			var spell = desc.getSpell();
 			context.getEventValueStack().push(res.getExcess());
 			SpellUtils.castChildSpell(context, player, spell, source, target);
 			context.getEventValueStack().pop();

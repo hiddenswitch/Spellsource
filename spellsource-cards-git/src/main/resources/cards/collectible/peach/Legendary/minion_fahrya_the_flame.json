@@ -12,7 +12,7 @@
       "class": "DamageCausedTrigger",
       "cardType": "SPELL",
       "sourcePlayer": "SELF",
-	  "targetPlayer": "BOTH"
+      "targetPlayer": "BOTH"
     },
     "spell": {
       "class": "CreateSummonSpell",
@@ -34,12 +34,12 @@
       "mana": {
         "class": "AlgebraicValueProvider",
         "operation": "MINIMUM",
-        "value": {
+        "value2": 10,
+        "value1": {
           "class": "AttributeValueProvider",
           "target": "EVENT_TARGET",
           "attribute": "LAST_HIT"
-        },
-        "value2": 10
+        }
       }
     }
   },

@@ -34,7 +34,6 @@ public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc);
 		int currentTurn = context.getTurn();
 		List<Entity> graveyardSnapshot = new ArrayList<>(player.getGraveyard());
 		for (Entity deadEntity : graveyardSnapshot) {

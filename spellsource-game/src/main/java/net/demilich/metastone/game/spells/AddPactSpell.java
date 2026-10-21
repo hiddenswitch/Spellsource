@@ -73,7 +73,6 @@ public class AddPactSpell extends AddQuestSpell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.PACT);
 		final Object pactObject = desc.get(SpellArg.PACT);
 		if (pactObject == null) {
 			logger.error("onCast {} {}: The specified PACT argument is null", context.getGameId(), source);

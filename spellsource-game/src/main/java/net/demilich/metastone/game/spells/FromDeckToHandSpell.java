@@ -51,10 +51,17 @@ public class FromDeckToHandSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(FromDeckToHandSpell.class);
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD_FILTER, SpellArg.CARD, SpellArg.EXCLUSIVE);
-		drawFromDeck(context, player, source, target, desc.getValue(SpellArg.VALUE, context, player, target, source, 1), desc.getBool(SpellArg.EXCLUSIVE), (EntityFilter) desc.get(SpellArg.CARD_FILTER), desc.getSpell(), (String) desc.get(SpellArg.CARD));
+	protected void onCast(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			@Default(1) int value,
+			boolean exclusive,
+			EntityFilter cardFilter,
+			SpellDesc spell,
+			String card) {
+		drawFromDeck(context, player, source, target, value, exclusive, cardFilter, spell, card);
 	}
 
 	/**

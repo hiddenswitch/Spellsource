@@ -31,7 +31,9 @@ public abstract class Condition implements Serializable, HasDesc<ConditionDesc> 
 		this.desc = desc;
 	}
 
-	protected abstract boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target);
+	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+		return false;
+	}
 
 	/**
 	 * Is the condition fulfilled given the specified {@code source} and {@code target}?

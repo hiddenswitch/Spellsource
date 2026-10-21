@@ -126,7 +126,9 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 	 * @param host
 	 * @return
 	 */
-	protected abstract boolean test(GameContext context, Player player, Entity entity, Entity host);
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
+		return false;
+	}
 
 	@Override
 	public boolean equals(Object other) {
@@ -150,6 +152,11 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 			entities = context.resolveTarget(player, host, targetReference);
 		}
 		return entities;
+	}
+
+	public final Entity getTargetedEntity(GameContext context, Player player, Entity host) {
+		List<Entity> entities = getTargetedEntities(context, player, host);
+		return entities == null || entities.isEmpty() ? null : entities.get(0);
 	}
 
 	@Override

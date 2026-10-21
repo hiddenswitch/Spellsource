@@ -39,7 +39,6 @@ public final class LastMinionCardInDeckSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc);
 		// Note the top of the deck is the last element in the deck List, therefore the "last minion in the deck" is
 		// the first minion we find in the deck array.
 		Optional<Card> card = player.getDeck().stream().filter(c -> c.getCardType() == CardType.MINION).findFirst();

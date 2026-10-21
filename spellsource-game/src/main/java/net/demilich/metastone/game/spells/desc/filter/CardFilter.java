@@ -38,89 +38,111 @@ public final class CardFilter extends EntityFilter {
 		super(desc);
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		List<Entity> entities = getTargetedEntities(context, player, host);
-
+	protected boolean test(
+			GameContext context,
+			Player player,
+			Entity entity,
+			Entity host,
+			CardType cardType,
+			String race,
+			String[] heroClasses,
+			String heroClass,
+			Integer manaCost,
+			Rarity rarity,
+			String cardSet,
+			String card,
+			Attribute attribute,
+			ComparisonOperation operation,
+			Integer value) {
 		if (entity == null) {
 			return false;
 		}
 
-		Card card = entity.getSourceCard();
+		Card sourceCard = entity.getSourceCard();
 
-		CardType cardType = (CardType) getDesc().get(EntityFilterArg.CARD_TYPE);
-		if (cardType != null && !GameLogic.isCardType(card.getCardType(), cardType)) {
+		if (cardType != null && !GameLogic.isCardType(sourceCard.getCardType(), cardType)) {
 			return false;
 		}
-		String race = (String) getDesc().get(EntityFilterArg.RACE);
-		if (race != null && !Race.hasRace(context, card, race)) {
+		if (race != null && !Race.hasRace(context, sourceCard, race)) {
 			return false;
 		}
+		if (heroClasses == null && heroClass == null && manaCost == null && rarity == null
+				&& cardSet == null && card == null && attribute == null) {
+			return true;
+		}
+		return testExtended(context, player, sourceCard, heroClasses, heroClass, manaCost, rarity, cardSet, card, attribute, operation, value);
+	}
 
-		String[] heroClasses = (String[]) getDesc().get(EntityFilterArg.HERO_CLASSES);
+	private static boolean testExtended(
+			GameContext context,
+			Player player,
+			Card sourceCard,
+			String[] heroClasses,
+			String heroClass,
+			Integer manaCost,
+			Rarity rarity,
+			String cardSet,
+			String card,
+			Attribute attribute,
+			ComparisonOperation operation,
+			Integer value) {
 		if (heroClasses != null && heroClasses.length > 0) {
 			boolean test = false;
-			for (String heroClass : heroClasses) {
-				test |= !HeroClass.hasHeroClass(context, player, card, heroClass);
+			for (String hc : heroClasses) {
+				test |= !HeroClass.hasHeroClass(context, player, sourceCard, hc);
 			}
 			if (!test) {
 				return false;
 			}
 		}
 
-		String heroClass = (String) getDesc().get(EntityFilterArg.HERO_CLASS);
-		if (heroClass != null && HeroClass.hasHeroClass(context, player, card, heroClass)) {
+		if (heroClass != null && HeroClass.hasHeroClass(context, player, sourceCard, heroClass)) {
 			return false;
 		}
 
-		if (getDesc().containsKey(EntityFilterArg.MANA_COST)) {
-			int manaCost = getDesc().getValue(EntityFilterArg.MANA_COST, context, player, null, host, 0);
-			// TODO: Should we be looking at base mana cost or modified mana cost here?
-			if (manaCost != card.getBaseManaCost()) {
-				return false;
-			}
+		if (manaCost != null && manaCost != sourceCard.getBaseManaCost()) {
+			return false;
 		}
-		Rarity rarity = (Rarity) getDesc().get(EntityFilterArg.RARITY);
-		if (rarity != null && !GameLogic.isRarity(card.getRarity(), rarity)) {
+		if (rarity != null && !GameLogic.isRarity(sourceCard.getRarity(), rarity)) {
 			return false;
 		}
 
-		String cardSet = (String) getDesc().get(EntityFilterArg.CARD_SET);
-		if (cardSet != null && !cardSet.equals("ANY") && !card.getCardSet().equals(cardSet)) {
+		if (cardSet != null && !cardSet.equals("ANY") && !sourceCard.getCardSet().equals(cardSet)) {
 			return false;
 		}
 
-		String cardId = (String) getDesc().get(EntityFilterArg.CARD);
-		if (cardId != null && !card.getCardId().contains(cardId)) {
+		if (card != null && !sourceCard.getCardId().contains(card)) {
 			return false;
 		}
 
-		if (getDesc().containsKey(EntityFilterArg.ATTRIBUTE)) {
-			Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
-			ComparisonOperation operation = null;
-			if (getDesc().containsKey(EntityFilterArg.OPERATION)) {
-				operation = (ComparisonOperation) getDesc().get(EntityFilterArg.OPERATION);
-			}
-			if (!getDesc().containsKey(EntityFilterArg.OPERATION)
-					&& getDesc().containsKey(EntityFilterArg.VALUE)) {
+		if (attribute != null) {
+			if (operation == null && value != null) {
 				operation = ComparisonOperation.EQUAL;
 			}
 			if (operation == ComparisonOperation.HAS || operation == null) {
-				return card.hasAttribute(attribute);
+				return cardFilterHasAttribute(sourceCard, attribute);
 			}
 
-			int targetValue;
-			if (entities == null) {
-				targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, null, null, 0);
-			} else {
-				targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, entities.get(0), null, 0);
-			}
-
-			int actualValue = card.getAttributeValue(attribute);
+			int targetValue = value != null ? value : 0;
+			int actualValue = sourceCard.getAttributeValue(attribute);
 			return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
 		}
 
 		return true;
+	}
+
+	private static boolean cardFilterHasAttribute(Card card, Attribute attribute) {
+		if (!card.getAttributes().isEmpty()) {
+			return card.hasAttribute(attribute);
+		}
+		var desc = card.getDesc();
+		return switch (attribute) {
+			case PASSIVE_TRIGGERS -> desc.getPassiveTrigger() != null || (desc.getPassiveTriggers() != null && desc.getPassiveTriggers().length > 0);
+			case DECK_TRIGGERS -> desc.getDeckTrigger() != null || (desc.getDeckTriggers() != null && desc.getDeckTriggers().length > 0);
+			case GAME_TRIGGERS -> desc.getGameTriggers() != null && desc.getGameTriggers().length > 0;
+			case MANA_COST_MODIFIER -> desc.getManaCostModifier() != null;
+			default -> card.hasAttribute(attribute);
+		};
 	}
 
 	@Override

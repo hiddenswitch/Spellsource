@@ -99,7 +99,6 @@ public class ConditionalSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.SPELL1, SpellArg.SPELL2, SpellArg.SPELLS, SpellArg.CONDITIONS, SpellArg.CONDITION, SpellArg.EXCLUSIVE);
 		// case 1 - only one condition
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
 		if (condition != null) {

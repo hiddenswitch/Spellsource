@@ -33,24 +33,6 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	private SpellDesc desc;
 
 	/**
-	 * Arguments common to all spells that should not be considered invalid.
-	 */
-	private static final Set<SpellArg> COMMON_ARGS = EnumSet.of(
-			SpellArg.CLASS,
-			SpellArg.FILTER,
-			SpellArg.TARGET,
-			SpellArg.NAME,
-			SpellArg.DESCRIPTION,
-			SpellArg.RANDOM_TARGET,
-			SpellArg.TARGET_PLAYER,
-			SpellArg.SPELL,
-			SpellArg.BOARD_POSITION_RELATIVE,
-			SpellArg.BOARD_POSITION_ABSOLUTE,
-			SpellArg.AFTERMATH_ID,
-			// Included because the DiscoverSpell adds it to the spell that is cast for the chosen card
-			SpellArg.CARD);
-
-	/**
 	 * Casts a spell for the given arguments.
 	 * <p>
 	 * If there is at least one valid target in {@code targets} and {@link SpellArg#RANDOM_TARGET} is {@code true}, a
@@ -173,50 +155,12 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * @see SummonSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for an example of a complex spell
 	 * 		implementation.
 	 */
-	protected abstract void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target);
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+	}
 
 	@Override
 	public String toString() {
 		return "[SPELL " + getClass().getSimpleName() + "]";
-	}
-
-	/**
-	 * Allows an implementation to log when it encounters unexpected arguments.
-	 *
-	 * @param logger    The logger to print to
-	 * @param context   The context whose {@link GameContext#getGameId()} will be used to mark the log
-	 * @param source    The source of this call
-	 * @param desc      The description used in this call
-	 * @param validArgs The valid arguments
-	 */
-	protected void checkArguments(Logger logger, GameContext context, Entity source, SpellDesc desc, SpellArg... validArgs) {
-		if (desc == null || !logger.isWarnEnabled()) {
-			return;
-		}
-		Set<SpellArg> unexpectedArgs = null;
-		for (SpellArg arg : desc.keySet()) {
-			if (COMMON_ARGS.contains(arg)) {
-				continue;
-			}
-			boolean valid = false;
-			if (validArgs != null) {
-				for (SpellArg validArg : validArgs) {
-					if (arg == validArg) {
-						valid = true;
-						break;
-					}
-				}
-			}
-			if (!valid) {
-				if (unexpectedArgs == null) {
-					unexpectedArgs = new LinkedHashSet<>();
-				}
-				unexpectedArgs.add(arg);
-			}
-		}
-		if (unexpectedArgs != null) {
-			logger.warn("checkArguments {} {}: Unexpected arguments {}", context.getGameId(), source, unexpectedArgs);
-		}
 	}
 
 	@Override

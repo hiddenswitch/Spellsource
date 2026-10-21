@@ -3,9 +3,14 @@ package net.demilich.metastone.game.cards.desc.compiler;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.classfile.Annotation;
+import java.lang.classfile.AnnotationElement;
+import java.lang.classfile.AnnotationValue;
+import java.lang.classfile.Attributes;
 import java.lang.classfile.ClassElement;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.ClassModel;
+import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.CodeElement;
 import java.lang.classfile.CodeModel;
 import java.lang.classfile.FieldModel;
@@ -13,6 +18,9 @@ import java.lang.classfile.Label;
 import java.lang.classfile.MethodElement;
 import java.lang.classfile.MethodModel;
 import java.lang.classfile.Opcode;
+import java.lang.classfile.attribute.MethodParameterInfo;
+import java.lang.classfile.attribute.MethodParametersAttribute;
+import java.lang.classfile.attribute.RuntimeVisibleParameterAnnotationsAttribute;
 import java.lang.classfile.instruction.FieldInstruction;
 import java.lang.classfile.instruction.InvokeInstruction;
 import java.lang.classfile.instruction.ReturnInstruction;
@@ -21,10 +29,16 @@ import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Compile-time bytecode weaver using the JDK {@link java.lang.classfile} API.
@@ -37,6 +51,7 @@ public final class SpellsourceClassfileWeaver {
 	private static final String COMPILER_PKG = "net.demilich.metastone.game.cards.desc.compiler";
 
 	private static final ClassDesc CD_COMPILER = ClassDesc.of(COMPILER_PKG, "DescBytecodeCompiler");
+	private static final ClassDesc CD_AUDIT_RECORDER = ClassDesc.of(COMPILER_PKG, "DescAuditRecorder");
 	private static final ClassDesc CD_COMPILED_VP = ClassDesc.of(COMPILER_PKG, "CompiledValueProvider");
 	private static final ClassDesc CD_COMPILED_EF = ClassDesc.of(COMPILER_PKG, "CompiledEntityFilter");
 	private static final ClassDesc CD_COMPILED_COND = ClassDesc.of(COMPILER_PKG, "CompiledCondition");
@@ -47,15 +62,25 @@ public final class SpellsourceClassfileWeaver {
 	private static final ClassDesc CD_PLAYER = ClassDesc.of("net.demilich.metastone.game.Player");
 	private static final ClassDesc CD_ENTITY = ClassDesc.of("net.demilich.metastone.game.entities.Entity");
 	private static final ClassDesc CD_CARD = ClassDesc.of("net.demilich.metastone.game.cards.Card");
+	private static final ClassDesc CD_CARD_LIST = ClassDesc.of("net.demilich.metastone.game.cards.CardList");
 	private static final ClassDesc CD_ATTRIBUTE = ClassDesc.of("net.demilich.metastone.game.cards.Attribute");
 	private static final ClassDesc CD_ATTR_MAP = ClassDesc.of("net.demilich.metastone.game.cards.AttributeMap");
+	private static final ClassDesc CD_BASE_MAP = ClassDesc.of("net.demilich.metastone.game.cards.BaseMap");
 	private static final ClassDesc CD_DESC = ClassDesc.of("net.demilich.metastone.game.cards.desc.Desc");
 	private static final ClassDesc CD_VP = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider");
+	private static final ClassDesc CD_CONST_VP = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.ConstValueProvider");
+	private static final ClassDesc CD_VP_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc");
+	private static final ClassDesc CD_VP_ARG = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg");
 	private static final ClassDesc CD_EF = ClassDesc.of("net.demilich.metastone.game.spells.desc.filter.EntityFilter");
+	private static final ClassDesc CD_EF_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc");
+	private static final ClassDesc CD_EF_ARG = ClassDesc.of("net.demilich.metastone.game.spells.desc.filter.EntityFilterArg");
 	private static final ClassDesc CD_COND = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.Condition");
 	private static final ClassDesc CD_COND_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.ConditionDesc");
+	private static final ClassDesc CD_COND_ARG = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.ConditionArg");
 	private static final ClassDesc CD_SPELL = ClassDesc.of("net.demilich.metastone.game.spells.Spell");
 	private static final ClassDesc CD_SPELL_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.SpellDesc");
+	private static final ClassDesc CD_SPELL_ARG = ClassDesc.of("net.demilich.metastone.game.spells.desc.SpellArg");
+	private static final ClassDesc CD_SPELL_UTILS = ClassDesc.of("net.demilich.metastone.game.spells.SpellUtils");
 	private static final ClassDesc CD_EVENT_TRIGGER = ClassDesc.of("net.demilich.metastone.game.spells.trigger.EventTrigger");
 	private static final ClassDesc CD_ENCHANTMENT = ClassDesc.of("net.demilich.metastone.game.spells.trigger.Enchantment");
 	private static final ClassDesc CD_GAME_EVENT = ClassDesc.of("net.demilich.metastone.game.events.GameEvent");
@@ -108,6 +133,8 @@ public final class SpellsourceClassfileWeaver {
 		weaveEntityCardAndGameLogic(classesDir);
 		weaveTargetLogic(classesDir);
 		weaveZeroArgCreateMemoization(classesDir);
+		weaveTypedComponentSignatures(classesDir);
+		emitComponentSignaturesManifest(classesDir);
 	}
 
 	private static boolean hasField(ClassModel model, String name) {
@@ -341,9 +368,35 @@ public final class SpellsourceClassfileWeaver {
 			if (ce instanceof MethodModel mm) {
 				String name = mm.methodName().stringValue();
 				String desc = mm.methodType().stringValue();
-				if ((name.equals("put") && desc.equals("(Ljava/lang/Enum;Ljava/lang/Object;)Ljava/lang/Object;"))
-						|| name.equals("remove")
-						|| name.equals("clear")) {
+				if (name.equals("put") && desc.equals("(Ljava/lang/Enum;Ljava/lang/Object;)Ljava/lang/Object;")) {
+					clb.transformMethod(mm, (mb, me) -> {
+						if (me instanceof CodeModel cm) {
+							mb.transformCode(cm, (cob, coe) -> {
+								if (coe instanceof FieldInstruction fi
+										&& fi.opcode() == Opcode.PUTFIELD
+										&& fi.name().equalsString("cachedInstance")) {
+									Label afterAudit = cob.newLabel();
+									cob.getstatic(CD_AUDIT_RECORDER, "ENABLED", ConstantDescs.CD_boolean)
+											.ifeq(afterAudit)
+											.aload(0)
+											.aload(1)
+											.aload(2)
+											.invokestatic(CD_AUDIT_RECORDER, "onPut",
+													MethodTypeDesc.of(ConstantDescs.CD_void, CD_DESC, ConstantDescs.CD_Object, ConstantDescs.CD_Object))
+											.labelBinding(afterAudit);
+									cob.aload(0)
+											.aconst_null()
+											.putfield(CD_DESC, "compiled", ConstantDescs.CD_Object);
+								}
+								cob.with(coe);
+							});
+						} else {
+							mb.with(me);
+						}
+					});
+					return;
+				}
+				if (name.equals("remove") || name.equals("clear")) {
 					clb.transformMethod(mm, (mb, me) -> {
 						if (me instanceof CodeModel cm) {
 							mb.transformCode(cm, (cob, coe) -> {
@@ -362,17 +415,40 @@ public final class SpellsourceClassfileWeaver {
 					});
 					return;
 				}
-				if ((name.equals("clone") || name.equals("cloneAndUnfreeze"))
-						&& desc.equals("()Lnet/demilich/metastone/game/cards/desc/Desc;")) {
+				if ((name.equals("clone") || name.equals("cloneAndUnfreeze") || name.equals("copyTo"))
+						&& desc.endsWith("Lnet/demilich/metastone/game/cards/desc/Desc;")) {
+					final boolean trackCopy = name.equals("cloneAndUnfreeze") || name.equals("copyTo");
 					clb.transformMethod(mm, (mb, me) -> {
 						if (me instanceof CodeModel cm) {
-							mb.transformCode(cm, (cob, coe) -> {
-								if (coe instanceof ReturnInstruction ri && ri.opcode() == Opcode.ARETURN) {
-									cob.dup()
-											.aconst_null()
-											.putfield(CD_DESC, "compiled", ConstantDescs.CD_Object);
+							mb.transformCode(cm, new java.lang.classfile.CodeTransform() {
+								private boolean entered = false;
+
+								@Override
+								public void accept(CodeBuilder cob, CodeElement coe) {
+									if (trackCopy && !entered) {
+										entered = true;
+										Label afterEnter = cob.newLabel();
+										cob.getstatic(CD_AUDIT_RECORDER, "ENABLED", ConstantDescs.CD_boolean)
+												.ifeq(afterEnter)
+												.invokestatic(CD_AUDIT_RECORDER, "enterInternalCopy", ConstantDescs.MTD_void)
+												.labelBinding(afterEnter);
+									}
+									if (coe instanceof ReturnInstruction ri && ri.opcode() == Opcode.ARETURN) {
+										if (trackCopy) {
+											Label afterExit = cob.newLabel();
+											cob.getstatic(CD_AUDIT_RECORDER, "ENABLED", ConstantDescs.CD_boolean)
+													.ifeq(afterExit)
+													.invokestatic(CD_AUDIT_RECORDER, "exitInternalCopy", ConstantDescs.MTD_void)
+													.labelBinding(afterExit);
+										}
+										if (!name.equals("copyTo")) {
+											cob.dup()
+													.aconst_null()
+													.putfield(CD_DESC, "compiled", ConstantDescs.CD_Object);
+										}
+									}
+									cob.with(coe);
 								}
-								cob.with(coe);
 							});
 						} else {
 							mb.with(me);
@@ -384,13 +460,53 @@ public final class SpellsourceClassfileWeaver {
 			clb.with(ce);
 		});
 
-		// Add public transient Object compiled field
+		// Add public transient Object compiled field + get/containsKey audit hooks
 		ClassModel intermediate = cf.parse(woven);
 		byte[] finalBytes = cf.build(intermediate.thisClass().asSymbol(), clb -> {
 			for (ClassElement ce : intermediate) {
 				clb.with(ce);
 			}
 			clb.withField("compiled", ConstantDescs.CD_Object, ClassFile.ACC_PUBLIC | ClassFile.ACC_TRANSIENT);
+			if (!hasMethod(intermediate, "get")) {
+				clb.withMethodBody("get",
+						MethodTypeDesc.of(ConstantDescs.CD_Object, ConstantDescs.CD_Object),
+						ClassFile.ACC_PUBLIC,
+						cob -> {
+							Label afterHook = cob.newLabel();
+							cob.getstatic(CD_AUDIT_RECORDER, "ENABLED", ConstantDescs.CD_boolean)
+									.ifeq(afterHook)
+									.aload(0)
+									.aload(1)
+									.invokestatic(CD_AUDIT_RECORDER, "onGet",
+											MethodTypeDesc.of(ConstantDescs.CD_void, CD_DESC, ConstantDescs.CD_Object))
+									.labelBinding(afterHook)
+									.aload(0)
+									.aload(1)
+									.invokespecial(CD_BASE_MAP, "get",
+											MethodTypeDesc.of(ConstantDescs.CD_Object, ConstantDescs.CD_Object))
+									.areturn();
+						});
+			}
+			if (!hasMethod(intermediate, "containsKey")) {
+				clb.withMethodBody("containsKey",
+						MethodTypeDesc.of(ConstantDescs.CD_boolean, ConstantDescs.CD_Object),
+						ClassFile.ACC_PUBLIC,
+						cob -> {
+							Label afterHook = cob.newLabel();
+							cob.getstatic(CD_AUDIT_RECORDER, "ENABLED", ConstantDescs.CD_boolean)
+									.ifeq(afterHook)
+									.aload(0)
+									.aload(1)
+									.invokestatic(CD_AUDIT_RECORDER, "onGet",
+											MethodTypeDesc.of(ConstantDescs.CD_void, CD_DESC, ConstantDescs.CD_Object))
+									.labelBinding(afterHook)
+									.aload(0)
+									.aload(1)
+									.invokespecial(CD_BASE_MAP, "containsKey",
+											MethodTypeDesc.of(ConstantDescs.CD_boolean, ConstantDescs.CD_Object))
+									.ireturn();
+						});
+			}
 		});
 		Files.write(path, finalBytes);
 	}
@@ -1014,5 +1130,437 @@ public final class SpellsourceClassfileWeaver {
 			});
 		});
 		Files.write(classPath, woven);
+	}
+
+	// =========================================================================
+	// 12. Option 1 Typed Signature Bridge Weaving
+	// =========================================================================
+
+	private static void weaveTypedComponentSignatures(Path classesDir) throws IOException {
+		ClassFile cf = ClassFile.of();
+		Map<String, Path> pathByInternal = new LinkedHashMap<>();
+		Map<String, ClassModel> modelByInternal = new LinkedHashMap<>();
+
+		Files.walkFileTree(classesDir, new SimpleFileVisitor<>() {
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+				if (file.toString().endsWith(".class") && !file.getFileName().toString().equals("package-info.class")) {
+					ClassModel cm = cf.parse(file);
+					String internal = cm.thisClass().asInternalName();
+					pathByInternal.put(internal, file);
+					modelByInternal.put(internal, cm);
+				}
+				return FileVisitResult.CONTINUE;
+			}
+		});
+
+		for (Map.Entry<String, ClassModel> entry : modelByInternal.entrySet()) {
+			String internalName = entry.getKey();
+			ClassModel cm = entry.getValue();
+			ComponentSignatureAnalyzer.ComponentKind kind = resolveComponentKind(internalName, modelByInternal);
+			if (kind == null) {
+				continue;
+			}
+			MethodModel typedMethod = null;
+			for (MethodModel mm : cm.methods()) {
+				if (ComponentSignatureAnalyzer.isTypedComponentMethod(mm, kind)) {
+					typedMethod = mm;
+					break;
+				}
+			}
+			if (typedMethod == null) {
+				continue;
+			}
+			String stdMethodName = standardMethodName(kind);
+			MethodTypeDesc stdMtd = standardMethodTypeDesc(kind);
+			if (stdMethodName == null || stdMtd == null || hasNonSyntheticExactMethod(cm, stdMethodName, stdMtd)) {
+				continue;
+			}
+			if (hasExactMethod(cm, stdMethodName, stdMtd)
+					&& (typedMethod.flags().flagsMask() & ClassFile.ACC_PUBLIC) != 0) {
+				continue;
+			}
+
+			boolean isRevertableSpell = kind == ComponentSignatureAnalyzer.ComponentKind.SPELL
+					&& extendsClass(internalName, "net/demilich/metastone/game/spells/RevertableSpell", modelByInternal);
+			byte[] wovenBytes = buildTypedBridgeClass(cf, cm, kind, typedMethod, stdMethodName, stdMtd, isRevertableSpell);
+			Files.write(pathByInternal.get(internalName), wovenBytes);
+		}
+	}
+
+	private static boolean extendsClass(
+			String internalName,
+			String targetInternalName,
+			Map<String, ClassModel> models) {
+		String curr = internalName;
+		while (curr != null && !curr.equals("java/lang/Object")) {
+			if (curr.equals(targetInternalName)) {
+				return true;
+			}
+			ClassModel cm = models.get(curr);
+			if (cm == null) {
+				break;
+			}
+			curr = cm.superclass().map(e -> e.asInternalName()).orElse(null);
+		}
+		return false;
+	}
+
+	private static ComponentSignatureAnalyzer.ComponentKind resolveComponentKind(
+			String internalName,
+			Map<String, ClassModel> models) {
+		String curr = internalName;
+		while (curr != null && !curr.equals("java/lang/Object")) {
+			for (ComponentSignatureAnalyzer.ComponentKind kind : ComponentSignatureAnalyzer.ComponentKind.values()) {
+				if (curr.equals(kind.baseInternalName)) {
+					return kind;
+				}
+			}
+			ClassModel cm = models.get(curr);
+			if (cm == null) {
+				break;
+			}
+			curr = cm.superclass().map(e -> e.asInternalName()).orElse(null);
+		}
+		return null;
+	}
+
+	private static String standardMethodName(ComponentSignatureAnalyzer.ComponentKind kind) {
+		return switch (kind) {
+			case SPELL -> "onCast";
+			case ENTITY_FILTER -> "test";
+			case VALUE_PROVIDER -> "provideValue";
+			case CONDITION -> "isFulfilled";
+			default -> null;
+		};
+	}
+
+	private static MethodTypeDesc standardMethodTypeDesc(ComponentSignatureAnalyzer.ComponentKind kind) {
+		return switch (kind) {
+			case SPELL -> MTD_SPELL_ONCAST;
+			case ENTITY_FILTER -> MTD_EF_MATCHES;
+			case VALUE_PROVIDER -> MTD_VP_COMPUTE;
+			case CONDITION -> MTD_COND_EVAL;
+			default -> null;
+		};
+	}
+
+	private static boolean hasExactMethod(ClassModel cm, String name, MethodTypeDesc mtd) {
+		for (MethodModel mm : cm.methods()) {
+			if (mm.methodName().equalsString(name) && mm.methodTypeSymbol().equals(mtd)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean hasNonSyntheticExactMethod(ClassModel cm, String name, MethodTypeDesc mtd) {
+		for (MethodModel mm : cm.methods()) {
+			if (mm.methodName().equalsString(name)
+					&& mm.methodTypeSymbol().equals(mtd)
+					&& (mm.flags().flagsMask() & ClassFile.ACC_SYNTHETIC) == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static byte[] buildTypedBridgeClass(
+			ClassFile cf,
+			ClassModel cm,
+			ComponentSignatureAnalyzer.ComponentKind kind,
+			MethodModel typedMethod,
+			String stdMethodName,
+			MethodTypeDesc stdMtd,
+			boolean isRevertableSpell) {
+		ClassDesc ownerDesc = cm.thisClass().asSymbol();
+		List<ClassDesc> paramTypes = typedMethod.methodTypeSymbol().parameterList();
+		boolean hasDescInPrefix = ComponentSignatureAnalyzer.hasDescInPrefix(paramTypes);
+		int prefixLen = hasDescInPrefix ? 5 : 4;
+
+		Optional<MethodParametersAttribute> mpaOpt = typedMethod.findAttribute(Attributes.methodParameters());
+		if (mpaOpt.isEmpty()) {
+			throw new IllegalStateException("Missing -parameters MethodParametersAttribute on " + ownerDesc.displayName() + "." + typedMethod.methodName().stringValue());
+		}
+		List<MethodParameterInfo> paramInfos = mpaOpt.get().parameters();
+		Optional<RuntimeVisibleParameterAnnotationsAttribute> rvpaOpt =
+				typedMethod.findAttribute(Attributes.runtimeVisibleParameterAnnotations());
+		List<List<Annotation>> paramAnns = rvpaOpt.map(RuntimeVisibleParameterAnnotationsAttribute::parameterAnnotations)
+				.orElse(Collections.emptyList());
+
+		return cf.build(ownerDesc, clb -> {
+			for (ClassElement ce : cm) {
+				if (ce instanceof MethodModel mm
+						&& mm.methodName().equalsString(stdMethodName)
+						&& mm.methodTypeSymbol().equals(stdMtd)
+						&& (mm.flags().flagsMask() & ClassFile.ACC_SYNTHETIC) != 0) {
+					// Strip previously woven synthetic standard bridge when re-weaving
+					continue;
+				}
+				if (ce instanceof MethodModel mm
+						&& mm.methodName().equals(typedMethod.methodName())
+						&& mm.methodTypeSymbol().equals(typedMethod.methodTypeSymbol())) {
+					int newFlags = (mm.flags().flagsMask() & ~(ClassFile.ACC_PROTECTED | ClassFile.ACC_PRIVATE)) | ClassFile.ACC_PUBLIC;
+					clb.withMethod(mm.methodName().stringValue(), mm.methodTypeSymbol(), newFlags, mb -> {
+						for (MethodElement me : mm) {
+							if (!(me instanceof java.lang.classfile.AccessFlags)) {
+								mb.with(me);
+							}
+						}
+					});
+					continue;
+				}
+				clb.with(ce);
+			}
+
+			clb.withMethodBody(stdMethodName, stdMtd, ClassFile.ACC_PROTECTED | ClassFile.ACC_SYNTHETIC, cob -> {
+				final int descSlot;
+				final int targetSlot;
+				final int hostSlot;
+				final ClassDesc cdDescSub;
+				final ClassDesc cdArgEnum;
+
+				switch (kind) {
+					case SPELL -> {
+						descSlot = 3;
+						targetSlot = 5;
+						hostSlot = 4;
+						cdDescSub = CD_SPELL_DESC;
+						cdArgEnum = CD_SPELL_ARG;
+					}
+					case CONDITION -> {
+						descSlot = 3;
+						targetSlot = 5;
+						hostSlot = 4;
+						cdDescSub = CD_COND_DESC;
+						cdArgEnum = CD_COND_ARG;
+					}
+					case ENTITY_FILTER -> {
+						descSlot = 5;
+						targetSlot = 6;
+						hostSlot = 4;
+						cdDescSub = CD_EF_DESC;
+						cdArgEnum = CD_EF_ARG;
+						cob.aload(0)
+								.invokevirtual(CD_EF, "getDesc", MethodTypeDesc.of(CD_EF_DESC))
+								.astore(descSlot)
+								.aload(0)
+								.aload(1)
+								.aload(2)
+								.aload(4)
+								.invokevirtual(CD_EF, "getTargetedEntity",
+										MethodTypeDesc.of(CD_ENTITY, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY))
+								.astore(targetSlot);
+					}
+					case VALUE_PROVIDER -> {
+						descSlot = 5;
+						targetSlot = 3;
+						hostSlot = 4;
+						cdDescSub = CD_VP_DESC;
+						cdArgEnum = CD_VP_ARG;
+						cob.aload(0)
+								.invokevirtual(CD_VP, "getDesc", MethodTypeDesc.of(CD_VP_DESC))
+								.astore(descSlot);
+					}
+					default -> throw new IllegalStateException("Unsupported kind: " + kind);
+				}
+
+				// Push 'this' and prefix arguments
+				cob.aload(0)
+						.aload(1)
+						.aload(2);
+				if (kind == ComponentSignatureAnalyzer.ComponentKind.SPELL
+						|| kind == ComponentSignatureAnalyzer.ComponentKind.CONDITION) {
+					if (hasDescInPrefix) {
+						cob.aload(3);
+					}
+					cob.aload(4)
+							.aload(5);
+				} else {
+					if (hasDescInPrefix) {
+						cob.aload(descSlot);
+					}
+					cob.aload(3)
+							.aload(4);
+				}
+
+				// Evaluate and push each extra typed argument
+				for (int i = prefixLen; i < paramTypes.size(); i++) {
+					String pName = paramInfos.get(i).name().map(u -> u.stringValue()).orElse("arg" + i);
+					ClassDesc pType = paramTypes.get(i);
+
+					int defaultInt = 0;
+					String defaultStr = "";
+					boolean defaultBool = false;
+					boolean hasDefaultAnn = false;
+					if (i < paramAnns.size()) {
+						for (Annotation ann : paramAnns.get(i)) {
+							if (ann.className().stringValue().endsWith("/Default;")) {
+								hasDefaultAnn = true;
+								for (AnnotationElement el : ann.elements()) {
+									if (el.name().equalsString("value") && el.value() instanceof AnnotationValue.OfInt oi) {
+										defaultInt = oi.intValue();
+									} else if (el.name().equalsString("string") && el.value() instanceof AnnotationValue.OfString os) {
+										defaultStr = os.stringValue();
+									} else if (el.name().equalsString("bool") && el.value() instanceof AnnotationValue.OfBoolean ob) {
+										defaultBool = ob.booleanValue();
+									}
+								}
+							}
+						}
+					}
+
+					// Check special mixins
+					if (kind == ComponentSignatureAnalyzer.ComponentKind.SPELL
+							&& pName.equals("cards")
+							&& pType.equals(CD_CARD_LIST)) {
+						cob.aload(1)
+								.aload(2)
+								.aload(5)
+								.aload(4)
+								.aload(3)
+								.invokestatic(CD_SPELL_UTILS, "getCards",
+										MethodTypeDesc.of(CD_CARD_LIST, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY, CD_SPELL_DESC));
+						continue;
+					}
+					if (kind == ComponentSignatureAnalyzer.ComponentKind.SPELL
+							&& pName.equals("card")
+							&& pType.equals(CD_CARD)) {
+						cob.aload(1)
+								.aload(3)
+								.invokestatic(CD_SPELL_UTILS, "getCard",
+										MethodTypeDesc.of(CD_CARD, CD_GAME_CONTEXT, CD_SPELL_DESC));
+						continue;
+					}
+					if (kind == ComponentSignatureAnalyzer.ComponentKind.SPELL
+							&& pName.equals("boardPosition")
+							&& pType.equals(ConstantDescs.CD_int)) {
+						cob.aload(1)
+								.aload(2)
+								.aload(3)
+								.aload(4)
+								.invokestatic(CD_SPELL_UTILS, "getBoardPosition",
+										MethodTypeDesc.of(ConstantDescs.CD_int, CD_GAME_CONTEXT, CD_PLAYER, CD_SPELL_DESC, CD_ENTITY));
+						continue;
+					}
+					if (kind == ComponentSignatureAnalyzer.ComponentKind.ENTITY_FILTER
+							&& (pName.equals("entities") || pName.equals("targetedEntities"))
+							&& pType.equals(CD_LIST)) {
+						cob.aload(0)
+								.aload(1)
+								.aload(2)
+								.aload(4)
+								.invokevirtual(CD_EF, "getTargetedEntities",
+										MethodTypeDesc.of(CD_LIST, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY));
+						continue;
+					}
+
+					String argKey = ComponentSignatureAnalyzer.camelToUpperSnake(pName);
+					if (argKey.equals("TARGET_REFERENCE") && pType.equals(CD_ENTITY_REF)) {
+						argKey = "TARGET";
+					}
+					if (pType.equals(ConstantDescs.CD_int)) {
+						cob.aload(descSlot)
+								.getstatic(cdArgEnum, argKey, cdArgEnum)
+								.aload(1)
+								.aload(2)
+								.aload(targetSlot)
+								.aload(hostSlot)
+								.ldc(defaultInt)
+								.invokevirtual(cdDescSub, "getValue",
+										MethodTypeDesc.of(ConstantDescs.CD_int, ConstantDescs.CD_Enum, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY, ConstantDescs.CD_int));
+					} else if (pType.equals(ConstantDescs.CD_Integer)) {
+						Label absentLabel = cob.newLabel();
+						Label doneLabel = cob.newLabel();
+						cob.aload(descSlot)
+								.getstatic(cdArgEnum, argKey, cdArgEnum)
+								.invokevirtual(cdDescSub, "containsKey",
+										MethodTypeDesc.of(ConstantDescs.CD_boolean, ConstantDescs.CD_Object))
+								.ifeq(absentLabel)
+								.aload(descSlot)
+								.getstatic(cdArgEnum, argKey, cdArgEnum)
+								.aload(1)
+								.aload(2)
+								.aload(targetSlot)
+								.aload(hostSlot)
+								.ldc(defaultInt)
+								.invokevirtual(cdDescSub, "getValue",
+										MethodTypeDesc.of(ConstantDescs.CD_int, ConstantDescs.CD_Enum, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY, ConstantDescs.CD_int))
+								.invokestatic(ConstantDescs.CD_Integer, "valueOf",
+										MethodTypeDesc.of(ConstantDescs.CD_Integer, ConstantDescs.CD_int))
+								.goto_(doneLabel)
+								.labelBinding(absentLabel)
+								.aconst_null()
+								.labelBinding(doneLabel);
+					} else if (pType.equals(ConstantDescs.CD_boolean)) {
+						if (defaultBool) {
+							cob.aload(descSlot)
+									.getstatic(cdArgEnum, argKey, cdArgEnum)
+									.getstatic(ConstantDescs.CD_Boolean, "TRUE", ConstantDescs.CD_Boolean)
+									.invokevirtual(cdDescSub, "getOrDefault",
+											MethodTypeDesc.of(ConstantDescs.CD_Object, ConstantDescs.CD_Object, ConstantDescs.CD_Object))
+									.checkcast(ConstantDescs.CD_Boolean)
+									.invokevirtual(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.of(ConstantDescs.CD_boolean));
+						} else {
+							cob.aload(descSlot)
+									.getstatic(cdArgEnum, argKey, cdArgEnum)
+									.invokevirtual(cdDescSub, "getBool",
+											MethodTypeDesc.of(ConstantDescs.CD_boolean, ConstantDescs.CD_Enum));
+						}
+					} else if (pType.equals(ConstantDescs.CD_String) && hasDefaultAnn) {
+						cob.aload(descSlot)
+								.getstatic(cdArgEnum, argKey, cdArgEnum)
+								.invokevirtual(cdDescSub, "getString",
+										MethodTypeDesc.of(ConstantDescs.CD_String, ConstantDescs.CD_Enum));
+					} else if (pType.equals(CD_VP)) {
+						cob.aload(descSlot)
+								.getstatic(cdArgEnum, argKey, cdArgEnum)
+								.invokevirtual(cdDescSub, "get",
+										MethodTypeDesc.of(ConstantDescs.CD_Object, ConstantDescs.CD_Object))
+								.invokestatic(CD_CONST_VP, "fromObject",
+										MethodTypeDesc.of(CD_VP, ConstantDescs.CD_Object));
+					} else if (hasDefaultAnn && !defaultStr.isEmpty() && !pType.equals(ConstantDescs.CD_String)) {
+						cob.aload(descSlot)
+								.getstatic(cdArgEnum, argKey, cdArgEnum)
+								.getstatic(pType, defaultStr, pType)
+								.invokevirtual(cdDescSub, "getOrDefault",
+										MethodTypeDesc.of(ConstantDescs.CD_Object, ConstantDescs.CD_Object, ConstantDescs.CD_Object))
+								.checkcast(pType);
+					} else {
+						cob.aload(descSlot)
+								.getstatic(cdArgEnum, argKey, cdArgEnum)
+								.invokevirtual(cdDescSub, "get",
+										MethodTypeDesc.of(ConstantDescs.CD_Object, ConstantDescs.CD_Object))
+								.checkcast(pType);
+					}
+				}
+
+				cob.invokevirtual(ownerDesc, typedMethod.methodName().stringValue(), typedMethod.methodTypeSymbol());
+				if (isRevertableSpell && !hasDescInPrefix) {
+					cob.aload(0)
+							.aload(1)
+							.aload(2)
+							.aload(3)
+							.aload(4)
+							.aload(5)
+							.invokevirtual(
+									ClassDesc.of("net.demilich.metastone.game.spells.RevertableSpell"),
+									"applyRevertTrigger",
+									MTD_SPELL_ONCAST);
+				}
+				if (stdMtd.returnType().equals(ConstantDescs.CD_void)) {
+					cob.return_();
+				} else {
+					cob.ireturn();
+				}
+			});
+		});
+	}
+
+	private static void emitComponentSignaturesManifest(Path classesDir) throws IOException {
+		Map<String, ComponentSignatureAnalyzer.ComponentSignature> signatures =
+				ComponentSignatureAnalyzer.analyzeDirectories(classesDir);
+		Path manifestPath = classesDir.resolve("META-INF/spellsource/component-signatures.json");
+		ComponentSignatureAnalyzer.writeManifestJson(signatures, manifestPath);
 	}
 }

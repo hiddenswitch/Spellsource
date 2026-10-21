@@ -33,12 +33,8 @@ public class SetDescriptionSpell extends Spell {
 		return spellDesc;
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.DESCRIPTION);
-
-		if (desc.containsKey(SpellArg.DESCRIPTION)) {
-			final String description = desc.getString(SpellArg.DESCRIPTION);
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, String description) {
+		if (description != null) {
 			target.getAttributes().put(Attribute.DESCRIPTION, description);
 		} else {
 			target.getAttributes().remove(Attribute.DESCRIPTION);

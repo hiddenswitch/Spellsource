@@ -14,7 +14,7 @@
       "operation": "GREATER_OR_EQUAL",
       "value1": {
         "class": "CardsPlayedValueProvider",
-        "cardFilter": {
+        "filter": {
           "class": "RaceFilter",
           "race": "ELEMENTAL"
         }

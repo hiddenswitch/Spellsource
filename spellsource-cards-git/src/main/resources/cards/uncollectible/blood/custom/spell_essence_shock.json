@@ -16,10 +16,6 @@
         "class": "CardFilter",
         "cardType": "MINION"
       }
-    },
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
     }
   },
   "collectible": false,

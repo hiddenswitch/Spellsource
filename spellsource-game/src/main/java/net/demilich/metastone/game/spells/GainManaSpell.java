@@ -41,15 +41,12 @@ public class GainManaSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.VALUE);
-		int mana = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
-		if (mana <= 0) {
-			logger.debug("onCast {} {}: Player loses mana ({}) in this spell.", context.getGameId(), source, mana);
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, int value) {
+		if (value <= 0) {
+			logger.debug("onCast {} {}: Player loses mana ({}) in this spell.", context.getGameId(), source, value);
 		}
-		if (mana != 0) {
-			context.getLogic().modifyCurrentMana(player.getId(), mana, mana < 0);
+		if (value != 0) {
+			context.getLogic().modifyCurrentMana(player.getId(), value, value < 0);
 		}
 	}
 }

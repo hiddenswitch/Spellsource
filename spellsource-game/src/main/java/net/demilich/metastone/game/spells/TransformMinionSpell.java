@@ -55,12 +55,16 @@ public class TransformMinionSpell extends Spell {
 		return create(null, templateCard, false);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(LOGGER, context, source, desc, SpellArg.CARD, SpellArg.SECONDARY_TARGET);
-		Card card = SpellUtils.getCard(context, desc);
-		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
-			card = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET)).getSourceCard();
+	protected void onCast(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			Card card,
+			EntityReference secondaryTarget) {
+		if (secondaryTarget != null) {
+			card = context.resolveSingleTarget(player, source, secondaryTarget).getSourceCard();
 		}
 		if (!(target instanceof Minion)) {
 			LOGGER.warn("onCast {} {}: Target {} is not a minion, skipping transform", context.getGameId(), source, target);

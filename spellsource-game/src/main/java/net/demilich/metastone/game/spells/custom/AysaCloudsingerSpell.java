@@ -43,7 +43,6 @@ public final class AysaCloudsingerSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(LOGGER, context, source, desc, SpellArg.CARDS);
 		Card[] cards = SpellUtils.getCards(context, desc);
 		if (cards == null || cards.length < 3) {
 			LOGGER.error("onCast {} {}: Requires at least 3 cards", context.getGameId(), source);
