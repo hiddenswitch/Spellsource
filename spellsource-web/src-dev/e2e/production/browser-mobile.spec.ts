@@ -67,14 +67,22 @@ test("desktop hand expands when it fits and tucks away after resizing", async ({
   const size = await canvas.evaluate(c => ({ width: (c as HTMLCanvasElement).width, height: (c as HTMLCanvasElement).height }));
   const bounds = (await canvas.boundingBox())!;
   const scale = Math.min(2, size.width / 400, size.height / 400);
-  await page.mouse.click(bounds.x + bounds.width / 2, bounds.y + bounds.height * (1 - 64 * scale / size.height));
-  await page.mouse.move(0, 0);
 
   const layout = () => page.evaluate(() => (window as unknown as {
     __spellsourceHandLayout?: { count: number; expanded: boolean; bottom: number; top: number;
       left: number; right: number; width: number; height: number; hovered: number };
   }).__spellsourceHandLayout);
-  await expect.poll(async () => (await layout())?.count ?? 0, { timeout: 30_000 }).toBeGreaterThan(0);
+  await expect.poll(async () => {
+    const count = (await layout())?.count ?? 0;
+    if (count === 0) {
+      // Unity processes input on rendered frames. Keep the pointer over the button
+      // until the hand appears; moving it away immediately can lose the click.
+      await page.mouse.click(bounds.x + bounds.width / 2,
+        bounds.y + bounds.height * (1 - 64 * scale / size.height), { delay: 100 });
+    }
+    return count;
+  }, { timeout: 30_000, intervals: [1_000] }).toBeGreaterThan(0);
+  await page.mouse.move(0, 0);
 
   for (const viewport of [{ width: 2560, height: 1440 }, { width: 960, height: 600 }, { width: 2560, height: 1440 }]) {
     await page.setViewportSize(viewport);
