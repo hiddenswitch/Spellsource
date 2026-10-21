@@ -42,19 +42,24 @@ test("Android Chrome restores a touch match across network, lifecycle, rotation 
     await live();
     expect(await currentGameId(context.request, graph.origin, token)).toBe(gameId);
 
-    const backgroundAt = Date.now();
     adb("shell", "input", "keyevent", "KEYCODE_HOME");
     await page.waitForTimeout(10_000);
+    const backgroundReturnAt = Date.now();
     adb("shell", "am", "start", "-a", "android.intent.action.MAIN", "-c", "android.intent.category.LAUNCHER", "-n", "com.android.chrome/com.google.android.apps.chrome.Main");
+    // Android Chrome may keep the connection alive while backgrounded. Require
+    // fresh traffic and remain live beyond the engine's eight-second liveness
+    // deadline, accepting either a healthy connection or a completed reconnect.
+    await graph.waitFor("gameHeartbeat", 30_000, Boolean, backgroundReturnAt);
+    await page.waitForTimeout(10_000);
     await live();
-    await graph.waitFor("connectToGame", 30_000, Boolean, backgroundAt);
     // A fresh test AVD has no PIN. This does not unlock or alter any physical phone.
-    const sleepAt = Date.now();
     adb("shell", "input", "keyevent", "KEYCODE_SLEEP");
     await page.waitForTimeout(10_000);
+    const wakeAt = Date.now();
     adb("shell", "input", "keyevent", "KEYCODE_WAKEUP");
     adb("shell", "wm", "dismiss-keyguard");
-    await graph.waitFor("connectToGame", 30_000, Boolean, sleepAt);
+    await graph.waitFor("gameHeartbeat", 30_000, Boolean, wakeAt);
+    await page.waitForTimeout(10_000);
     await live();
     expect(await currentGameId(context.request, graph.origin, token)).toBe(gameId);
 
