@@ -54,3 +54,40 @@ test("a touch session recovers offline and after closing the tab", async ({ page
   await expect(reopened.locator("html")).toHaveAttribute("data-game-session", "live", { timeout: 30_000 });
   expect(restored.seen.some(event => event.key === "createAccount")).toBe(false);
 });
+
+test("desktop hand expands when it fits and tucks away after resizing", async ({ page, isMobile }, testInfo) => {
+  test.skip(isMobile, "Mouse hand layout; touch keeps its existing tray");
+  test.setTimeout(300_000);
+  const graphql = await watchGraphQL(page);
+  await page.goto("/game");
+  await waitForClient(page);
+  await driveGuestIntoMatch(page, graphql);
+  // Keep the initial cards. The button sits 64 canvas units above the bottom edge.
+  const canvas = page.locator("canvas");
+  const size = await canvas.evaluate(c => ({ width: (c as HTMLCanvasElement).width, height: (c as HTMLCanvasElement).height }));
+  const bounds = (await canvas.boundingBox())!;
+  const scale = Math.min(2, size.width / 400, size.height / 400);
+  await page.mouse.click(bounds.x + bounds.width / 2, bounds.y + bounds.height * (1 - 64 * scale / size.height));
+  await page.mouse.move(0, 0);
+
+  const layout = () => page.evaluate(() => (window as unknown as {
+    __spellsourceHandLayout?: { count: number; expanded: boolean; bottom: number; top: number;
+      left: number; right: number; width: number; height: number };
+  }).__spellsourceHandLayout);
+  await expect.poll(async () => (await layout())?.count ?? 0, { timeout: 30_000 }).toBeGreaterThan(0);
+
+  for (const viewport of [{ width: 2560, height: 1440 }, { width: 960, height: 600 }, { width: 2560, height: 1440 }]) {
+    await page.setViewportSize(viewport);
+    const expanded = viewport.width === 2560;
+    await expect.poll(async () => {
+      const value = await layout();
+      return !!value && value.width === viewport.width && value.height === viewport.height &&
+        value.expanded === expanded && (expanded
+          ? value.bottom >= 0 && value.top <= value.height && value.left >= 0 && value.right <= value.width
+          : value.bottom < 0);
+    }, { timeout: 20_000 }).toBe(true);
+    await testInfo.attach(`hand-${viewport.width}x${viewport.height}`, {
+      body: await page.screenshot(), contentType: "image/png",
+    });
+  }
+});
