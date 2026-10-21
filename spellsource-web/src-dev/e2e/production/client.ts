@@ -155,6 +155,9 @@ export async function driveGuestIntoMatch(page: Page, graphql: Awaited<ReturnTyp
 
   const created = await until(
     async () => {
+      // A slow Android emulator may deliver the account response after the menu renders.
+      // Do not repeat the guest tap on that menu (where it can hit Matchmaking).
+      if (graphql.seen.some(event => event.key === "createAccount")) return;
       // The form is centered with a fixed pixel-art layout in Unity render pixels.
       // Account for the browser DPR cap instead of assuming a desktop viewport.
       const geometry = await page.locator("canvas").evaluate(canvas => ({
@@ -163,7 +166,7 @@ export async function driveGuestIntoMatch(page: Page, graphql: Awaited<ReturnTyp
       const uiScale = Math.min(1, geometry.width / 800, geometry.height / 800);
       await click(0.499, 0.5 + 240 * uiScale / geometry.height);
     },
-    () => graphql.waitFor("createAccount", 5_000)
+    () => graphql.waitFor("createAccount", 20_000)
   );
   const userId: string = created.userEntity.id;
   const token: string = created.accessToken.token;
