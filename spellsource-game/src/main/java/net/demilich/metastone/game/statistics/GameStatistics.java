@@ -17,11 +17,56 @@ import java.util.*;
  * @see SimulationResult for
  */
 public class GameStatistics implements Cloneable, Serializable {
-	private final Map<Statistic, Object> stats = new EnumMap<>(Statistic.class);
-	private final Map<String, Map<Integer, Integer>> cardsPlayed = new LinkedHashMap<>();
-	private final Map<String, Integer> minionsSummoned = new LinkedHashMap<>();
+	private static final byte SHARED_STATS = 1;
+	private static final byte SHARED_CARDS_PLAYED = 2;
+	private static final byte SHARED_MINIONS_SUMMONED = 4;
+	private static final byte SHARED_ALL = SHARED_STATS | SHARED_CARDS_PLAYED | SHARED_MINIONS_SUMMONED;
+
+	private Map<Statistic, Object> stats;
+	private Map<String, Map<Integer, Integer>> cardsPlayed;
+	private Map<String, Integer> minionsSummoned;
+	private byte sharedMask;
+
+	public GameStatistics() {
+		this.stats = new EnumMap<>(Statistic.class);
+		this.cardsPlayed = new LinkedHashMap<>();
+		this.minionsSummoned = new LinkedHashMap<>();
+	}
+
+	private GameStatistics(GameStatistics other) {
+		this.stats = other.stats;
+		this.cardsPlayed = other.cardsPlayed;
+		this.minionsSummoned = other.minionsSummoned;
+		this.sharedMask = SHARED_ALL;
+	}
+
+	private void unshareStats() {
+		if ((sharedMask & SHARED_STATS) != 0) {
+			stats = stats.isEmpty() ? new EnumMap<>(Statistic.class) : new EnumMap<>(stats);
+			sharedMask &= ~SHARED_STATS;
+		}
+	}
+
+	private void unshareCardsPlayed() {
+		if ((sharedMask & SHARED_CARDS_PLAYED) != 0) {
+			Map<String, Map<Integer, Integer>> copy = new LinkedHashMap<>(cardsPlayed.size() + 2);
+			for (var kv : cardsPlayed.entrySet()) {
+				copy.put(kv.getKey(), new LinkedHashMap<>(kv.getValue()));
+			}
+			cardsPlayed = copy;
+			sharedMask &= ~SHARED_CARDS_PLAYED;
+		}
+	}
+
+	private void unshareMinionsSummoned() {
+		if ((sharedMask & SHARED_MINIONS_SUMMONED) != 0) {
+			minionsSummoned = new LinkedHashMap<>(minionsSummoned);
+			sharedMask &= ~SHARED_MINIONS_SUMMONED;
+		}
+	}
 
 	private void add(Statistic key, long value) {
+		unshareStats();
 		if (!stats.containsKey(key)) {
 			stats.put(key, 0L);
 		}
@@ -74,18 +119,8 @@ public class GameStatistics implements Cloneable, Serializable {
 	}
 
 	public GameStatistics clone() {
-		GameStatistics clone = new GameStatistics();
-		clone.stats.putAll(stats);
-		clone.cardsPlayed.putAll(getCardsPlayed());
-		for (var kv : cardsPlayed.entrySet()) {
-			var m = new LinkedHashMap<Integer, Integer>();
-			for (var kv1 : kv.getValue().entrySet()) {
-				m.put(kv1.getKey(), kv1.getValue());
-			}
-			clone.cardsPlayed.put(kv.getKey(), m);
-		}
-		clone.getMinionsSummoned().putAll(getMinionsSummoned());
-		return clone;
+		this.sharedMask |= SHARED_ALL;
+		return new GameStatistics(this);
 	}
 
 	public boolean contains(Statistic key) {
@@ -146,6 +181,7 @@ public class GameStatistics implements Cloneable, Serializable {
 		if (GameLogic.isCardType(card.getCardType(), CardType.HERO_POWER)) {
 			return;
 		}
+		unshareCardsPlayed();
 		String cardId = card.getCardId();
 		if (!getCardsPlayed().containsKey(cardId)) {
 			getCardsPlayed().put(cardId, new LinkedHashMap<>());
@@ -157,6 +193,7 @@ public class GameStatistics implements Cloneable, Serializable {
 	}
 
 	private void increaseMinionCount(Minion minion) {
+		unshareMinionsSummoned();
 		String cardId = minion.getSourceCard().getCardId();
 		if (!getMinionsSummoned().containsKey(cardId)) {
 			getMinionsSummoned().put(cardId, 0);
@@ -169,6 +206,8 @@ public class GameStatistics implements Cloneable, Serializable {
 	}
 
 	public GameStatistics merge(GameStatistics otherStatistics) {
+		unshareStats();
+		unshareCardsPlayed();
 		for (Statistic stat : otherStatistics.stats.keySet()) {
 			Object value = get(stat);
 			if (value != null) {
@@ -205,6 +244,7 @@ public class GameStatistics implements Cloneable, Serializable {
 	}
 
 	public void set(Statistic key, Object value) {
+		unshareStats();
 		stats.put(key, value);
 	}
 

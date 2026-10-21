@@ -1,17 +1,29 @@
 package com.hiddenswitch.spellsource.trainer;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.demilich.metastone.game.behaviour.heuristic.FeatureVector;
 import net.demilich.metastone.game.behaviour.heuristic.WeightedFeature;
 import org.mlflow.api.proto.Service;
 import org.mlflow.tracking.MlflowClient;
 import org.mlflow.tracking.creds.BasicMlflowHostCreds;
+import org.mlflow.tracking.creds.MlflowHostCreds;
+import org.mlflow.tracking.creds.MlflowHostCredsProvider;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -26,12 +38,16 @@ public class MlflowReporter implements AutoCloseable {
 	private static final String SESSION_TAG = "session_type";
 	private static final String DEFAULT_SESSION_VALUE = "ipop_cmaes_hof_v2";
 	private static final String DEFAULT_EXPERIMENT_NAME = "spellsource-gsvb-training";
+	private static final String DEFAULT_OIDC_ISSUER_URL = "https://login.appmana.com/realms/appmana";
+	private static final String DEFAULT_OIDC_CLIENT_ID = "spellsource-mlflow-trainer";
+	private static final String DEFAULT_OIDC_ASSERTION_FILE = "/var/run/secrets/keycloak/assertion";
+	private static final String JWT_BEARER_ASSERTION_TYPE = "urn:ietf:params:oauth:client-assertion-type:jwt-bearer";
 
 	private final MlflowClient client;
 	private final String experimentId;
 	private final String sessionValue;
 	private final String trackingUri;
-	private final String authHeader;
+	private final Supplier<String> authHeaderSupplier;
 	private String runId;
 	private String islandPrefix;
 	private int stepOffset;
@@ -44,14 +60,38 @@ public class MlflowReporter implements AutoCloseable {
 
 	public MlflowReporter(String trackingUri, String sessionName) {
 		this.trackingUri = trackingUri;
+		String authMode = System.getenv("MLFLOW_TRACKING_AUTH");
+		String assertionFile = System.getenv("MLFLOW_OIDC_CLIENT_ASSERTION_FILE");
 		String username = System.getenv("MLFLOW_TRACKING_USERNAME");
 		String password = System.getenv("MLFLOW_TRACKING_PASSWORD");
-		if (username != null && password != null) {
+		String bearerToken = System.getenv("MLFLOW_TRACKING_TOKEN");
+
+		if ("oidc-client-credentials".equalsIgnoreCase(authMode)
+				|| (assertionFile != null && !assertionFile.isBlank() && Files.exists(Path.of(assertionFile)))) {
+			String issuerUrl = Optional.ofNullable(System.getenv("MLFLOW_OIDC_ISSUER_URL"))
+					.filter(s -> !s.isBlank())
+					.orElse(DEFAULT_OIDC_ISSUER_URL);
+			String clientId = Optional.ofNullable(System.getenv("MLFLOW_OIDC_CLIENT_ID"))
+					.filter(s -> !s.isBlank())
+					.orElse(DEFAULT_OIDC_CLIENT_ID);
+			Path assertionPath = Path.of(Optional.ofNullable(assertionFile)
+					.filter(s -> !s.isBlank())
+					.orElse(DEFAULT_OIDC_ASSERTION_FILE));
+			OidcClientCredentialsProvider oidcProvider = new OidcClientCredentialsProvider(
+					trackingUri, issuerUrl, clientId, assertionPath);
+			this.client = new MlflowClient(oidcProvider);
+			this.authHeaderSupplier = () -> "Bearer " + oidcProvider.getAccessToken();
+			LOG.info("Configured MLflow OIDC client_credentials auth (issuer=" + issuerUrl + ", clientId=" + clientId + ")");
+		} else if (bearerToken != null && !bearerToken.isBlank()) {
+			this.client = new MlflowClient(new BasicMlflowHostCreds(trackingUri, bearerToken));
+			this.authHeaderSupplier = () -> "Bearer " + bearerToken;
+		} else if (username != null && password != null) {
 			this.client = new MlflowClient(new BasicMlflowHostCreds(trackingUri, username, password));
-			this.authHeader = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
+			String basicHeader = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
+			this.authHeaderSupplier = () -> basicHeader;
 		} else {
 			this.client = new MlflowClient(trackingUri);
-			this.authHeader = null;
+			this.authHeaderSupplier = () -> null;
 		}
 
 		this.sessionValue = sessionName != null ? sessionName : DEFAULT_SESSION_VALUE;
@@ -198,8 +238,8 @@ public class MlflowReporter implements AutoCloseable {
 			// Update win rate tag (small metadata for discovery)
 			client.setTag(runId, islandPrefix + "best_win_rate", String.valueOf(winRate));
 
-			// Check if this is the global best
-			if (winRate > cachedGlobalBest) {
+			// Check if this is the global best (or validated upgrade from ParallelGeneticTrainer)
+			if (winRate >= cachedGlobalBest) {
 				cachedGlobalBest = winRate;
 				client.logMetric(runId, "best_win_rate", winRate, timestamp, step);
 
@@ -416,15 +456,96 @@ public class MlflowReporter implements AutoCloseable {
 		uploadArtifact(islandPrefix + "timeouts/timeout_" + evalId + "_game" + gameIndex + ".json", traceDump);
 	}
 
+	/**
+	 * Uploads this island's evaluated sub-population for synchronized multi-node Genetic Algorithm generation {@code generation}.
+	 */
+	public void uploadGenerationIslandPopulation(int generation, long islandId, String jsonContent) {
+		if (runId == null) {
+			return;
+		}
+		String path = "ga_generations/gen_" + generation + "/island_" + islandId + ".json";
+		uploadArtifact(path, jsonContent);
+		try {
+			client.setTag(runId, "ga_gen_" + generation + "_island_" + islandId, "ready");
+		} catch (Exception e) {
+			LOG.warning("Failed to set generation readiness tag: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Barriers up to {@code timeoutMs} to gather evaluated sub-populations from all active islands for generation {@code generation}.
+	 */
+	public Map<Integer, String> gatherGenerationIslandPopulations(int generation, int numIslands, long timeoutMs) {
+		if (runId == null) {
+			return Map.of();
+		}
+		Map<Integer, String> collected = new LinkedHashMap<>();
+		long deadline = System.currentTimeMillis() + timeoutMs;
+		while (System.currentTimeMillis() < deadline && collected.size() < numIslands) {
+			for (int i = 0; i < numIslands; i++) {
+				if (collected.containsKey(i)) {
+					continue;
+				}
+				String path = "ga_generations/gen_" + generation + "/island_" + i + ".json";
+				String json = downloadArtifact(runId, path);
+				if (json != null && !json.isBlank()) {
+					collected.put(i, json);
+				}
+			}
+			if (collected.size() >= numIslands) {
+				break;
+			}
+			try {
+				Thread.sleep(1500L);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				break;
+			}
+		}
+		LOG.info(String.format("Generation %d barrier: gathered %d/%d island sub-populations",
+				generation, collected.size(), numIslands));
+		return collected;
+	}
+
+	/**
+	 * Marks the current MLflow run as a trusted, published heuristic run and uploads {@code best_weights.json}
+	 * and {@code feature_vector.json}.
+	 */
+	public void publishTrustedWeights(FeatureVector best, double winRate, int step) {
+		if (runId == null) {
+			return;
+		}
+		try {
+			String weightsJson = featureVectorToJson(best, winRate);
+			uploadArtifact("best_weights.json", weightsJson);
+			uploadArtifact("feature_vector.json", weightsJson);
+			if (islandPrefix != null && !islandPrefix.isEmpty()) {
+				uploadArtifact(islandPrefix + "best_weights.json", weightsJson);
+			}
+			long timestamp = System.currentTimeMillis();
+			client.logMetric(runId, "best_win_rate", winRate, timestamp, stepOffset + step);
+			client.setTag(runId, "best_win_rate_value", String.valueOf(winRate));
+			client.setTag(runId, "published", "true");
+			client.setTag(runId, "trusted", "true");
+			client.setTag(runId, "model_type", "ThreatBasedHeuristic");
+			client.setTag(runId, "feature_count", String.valueOf(WeightedFeature.values().length));
+			LOG.info(String.format("Published trusted FeatureVector to MLflow run %s (winRate=%.1f%%, features=%d)",
+					runId, winRate * 100, WeightedFeature.values().length));
+		} catch (Exception e) {
+			LOG.warning("Failed to publish trusted weights to MLflow: " + e.getMessage());
+		}
+	}
+
 	// --- Artifact helpers ---
 
 	private void uploadArtifact(String artifactPath, String content) {
 		try {
-			String url = trackingUri + "/api/2.0/mlflow-artifacts/artifacts/" + runId + "/" + artifactPath;
+			String url = trackingUri + "/api/2.0/mlflow-artifacts/artifacts/" + experimentId + "/" + runId + "/artifacts/" + artifactPath;
 
 			HttpURLConnection conn = (HttpURLConnection) URI.create(url).toURL().openConnection();
 			conn.setRequestMethod("PUT");
 			conn.setRequestProperty("Content-Type", "application/octet-stream");
+			String authHeader = authHeaderSupplier.get();
 			if (authHeader != null) {
 				conn.setRequestProperty("Authorization", authHeader);
 			}
@@ -450,10 +571,11 @@ public class MlflowReporter implements AutoCloseable {
 
 	private String downloadArtifact(String targetRunId, String artifactPath) {
 		try {
-			String url = trackingUri + "/api/2.0/mlflow-artifacts/artifacts/" + targetRunId + "/" + artifactPath;
+			String url = trackingUri + "/api/2.0/mlflow-artifacts/artifacts/" + experimentId + "/" + targetRunId + "/artifacts/" + artifactPath;
 
 			HttpURLConnection conn = (HttpURLConnection) URI.create(url).toURL().openConnection();
 			conn.setRequestMethod("GET");
+			String authHeader = authHeaderSupplier.get();
 			if (authHeader != null) {
 				conn.setRequestProperty("Authorization", authHeader);
 			}
@@ -498,10 +620,12 @@ public class MlflowReporter implements AutoCloseable {
 	private double[] jsonToWeightArray(String json) {
 		try {
 			WeightedFeature[] features = WeightedFeature.values();
+			FeatureVector fallbackDefaults = FeatureVector.getFittest();
 			double[] weights = new double[features.length];
 			int found = 0;
 
 			for (int i = 0; i < features.length; i++) {
+				weights[i] = fallbackDefaults.get(features[i]);
 				String key = "\"" + features[i].name() + "\":";
 				int idx = json.indexOf(key);
 				if (idx < 0) {
@@ -561,6 +685,86 @@ public class MlflowReporter implements AutoCloseable {
 				client.setTag(runId, islandPrefix + "status", "finished");
 			} catch (Exception e) {
 				LOG.warning("Failed to update island status: " + e.getMessage());
+			}
+		}
+	}
+
+	/**
+	 * Exchanges a Kubernetes projected ServiceAccount JWT assertion for a Keycloak OIDC
+	 * access token via RFC 7523 client_credentials grant, caching and refreshing before expiry.
+	 */
+	static final class OidcClientCredentialsProvider implements MlflowHostCredsProvider {
+		private final String trackingUri;
+		private final URI tokenEndpoint;
+		private final String clientId;
+		private final Path assertionPath;
+		private final HttpClient httpClient;
+
+		private volatile String cachedToken;
+		private volatile long refreshAtMillis;
+
+		OidcClientCredentialsProvider(String trackingUri, String issuerUrl, String clientId, Path assertionPath) {
+			this.trackingUri = trackingUri;
+			String normalizedIssuer = issuerUrl.endsWith("/") ? issuerUrl.substring(0, issuerUrl.length() - 1) : issuerUrl;
+			this.tokenEndpoint = URI.create(normalizedIssuer + "/protocol/openid-connect/token");
+			this.clientId = clientId;
+			this.assertionPath = assertionPath;
+			this.httpClient = HttpClient.newBuilder()
+					.connectTimeout(Duration.ofSeconds(10))
+					.build();
+		}
+
+		@Override
+		public MlflowHostCreds getHostCreds() {
+			return new BasicMlflowHostCreds(trackingUri, getAccessToken());
+		}
+
+		@Override
+		public void refresh() {
+			this.refreshAtMillis = 0L;
+		}
+
+		synchronized String getAccessToken() {
+			long now = System.currentTimeMillis();
+			if (cachedToken != null && now < refreshAtMillis) {
+				return cachedToken;
+			}
+			try {
+				// Re-read the projected volume JWT from disk on every mint so kubelet rotations are picked up
+				String clientAssertion = Files.readString(assertionPath, StandardCharsets.UTF_8).trim();
+				String formBody = "grant_type=client_credentials"
+						+ "&client_id=" + URLEncoder.encode(clientId, StandardCharsets.UTF_8)
+						+ "&client_assertion_type=" + URLEncoder.encode(JWT_BEARER_ASSERTION_TYPE, StandardCharsets.UTF_8)
+						+ "&client_assertion=" + URLEncoder.encode(clientAssertion, StandardCharsets.UTF_8);
+
+				HttpRequest request = HttpRequest.newBuilder(tokenEndpoint)
+						.timeout(Duration.ofSeconds(15))
+						.header("Content-Type", "application/x-www-form-urlencoded")
+						.header("Accept", "application/json")
+						.POST(HttpRequest.BodyPublishers.ofString(formBody, StandardCharsets.UTF_8))
+						.build();
+
+				HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+				if (response.statusCode() < 200 || response.statusCode() >= 300) {
+					throw new IllegalStateException("OIDC token exchange failed (HTTP " + response.statusCode() + "): " + response.body());
+				}
+
+				JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
+				if (!json.has("access_token")) {
+					throw new IllegalStateException("OIDC token response missing access_token");
+				}
+				String accessToken = json.get("access_token").getAsString();
+				long expiresIn = json.has("expires_in") ? json.get("expires_in").getAsLong() : 300L;
+				long lifetimeMillis = Math.max(30_000L, (expiresIn - 60L) * 1000L);
+				this.cachedToken = accessToken;
+				this.refreshAtMillis = System.currentTimeMillis() + lifetimeMillis;
+				return accessToken;
+			} catch (Exception e) {
+				if (cachedToken != null) {
+					LOG.warning("Failed to refresh OIDC token, reusing previous token: " + e.getMessage());
+					return cachedToken;
+				}
+				throw new RuntimeException("Failed to obtain OIDC access token from " + tokenEndpoint, e);
 			}
 		}
 	}

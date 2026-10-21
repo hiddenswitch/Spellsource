@@ -18,7 +18,7 @@ import io.vertx.grpc.server.GrpcServer;
 import static io.vertx.await.Async.await;
 
 public class Gateway extends AbstractVirtualThreadVerticle {
-	private final SqlCachedCardCatalogue cardCatalogue = new SqlCachedCardCatalogue();
+	private SqlCachedCardCatalogue cardCatalogue;
 	private final int port;
 	private Matchmaking.Services matchmaking;
 	private HttpServer httpServer;
@@ -37,8 +37,8 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 
 	@Override
 	public void startVirtual() {
-		cardCatalogue.subscribe();
-		cardCatalogue.invalidateAllAndRefresh();
+		this.cardCatalogue = SqlCachedCardCatalogue.forVertx();
+		this.cardCatalogue.ensureInitialized();
 
 		this.matchmaking = Matchmaking.services();
 		var services = new BindAll<?>[]{
@@ -60,7 +60,7 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 				.setSsl(false)
 				.setTcpKeepAlive(true));
 
-		var realm = await(Accounts.realm());
+		var realmName = Environment.getConfiguration().getKeycloak().getRealmId();
 		for (var serviceName : new String[]{
 				UnauthenticatedCardsGrpc.SERVICE_NAME,
 				UnauthenticatedGrpc.SERVICE_NAME,
@@ -82,7 +82,7 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 			router
 					.route()
 					.path("/" + serviceName + "/*")
-					.handler(JWTAuthHandler.create(jwtAuth, realm.toRepresentation().getRealm()))
+					.handler(JWTAuthHandler.create(jwtAuth, realmName))
 					.handler(rc -> {
 						server.routeHandler().handle(rc);
 					})

@@ -120,11 +120,15 @@ public final class CardZone extends EntityZone<Card> implements CardList {
 
 	@Override
 	public CardList shuffle(XORShiftRandom random) {
+		random.shuffle(this);
+		return this;
+	}
+
+	public void shuffleInternal(Random random) {
 		Collections.shuffle(internal, random);
 		for (int i = 0; i < internal.size(); i++) {
 			internal.get(i).setEntityLocation(new EntityLocation(getZone(), getPlayer(), i));
 		}
-		return this;
 	}
 
 	@Override

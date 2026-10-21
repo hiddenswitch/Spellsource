@@ -15,7 +15,7 @@ import java.util.logging.*;
 
 @Command(name = "trainer", mixinStandardHelpOptions = true,
 		description = "Spellsource GSVB Heuristic Trainer",
-		subcommands = {TrainerMain.LocalCmd.class, TrainerMain.CoordinatorCmd.class, TrainerMain.WorkerCmd.class})
+		subcommands = {TrainerMain.LocalCmd.class, TrainerMain.CoordinatorCmd.class, TrainerMain.WorkerCmd.class, GameplayAuditor.class})
 public class TrainerMain {
 	private static final Logger LOG = Logger.getLogger(TrainerMain.class.getName());
 
@@ -73,6 +73,15 @@ public class TrainerMain {
 
 		@Option(names = "--game-timeout", description = "Per-game timeout in ms (default: 90000)", defaultValue = "90000")
 		long gameTimeout;
+
+		@Option(names = "--algorithm", description = "Optimization algorithm: ga (synchronized parallel GA) or cmaes", defaultValue = "ga")
+		String algorithm;
+
+		@Option(names = "--num-islands", description = "Total synchronized islands in JobSet (default: 7)", defaultValue = "7")
+		int numIslands;
+
+		@Option(names = "--barrier-timeout", description = "Generation barrier timeout ms (default: 45000)", defaultValue = "45000")
+		long barrierTimeout;
 	}
 
 	@Command(name = "local", description = "Run everything in-process")
@@ -92,27 +101,39 @@ public class TrainerMain {
 			try {
 				double[] initialPoint = null;
 				double restoredBestWinRate = 0.0;
+				Long islandId = getIslandId();
 				if (mlflow != null) {
-					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, getIslandId());
+					mlflow.joinTrainingSession(generations, population, matchupsPerEval, gamesPerMatchup, islandId);
 					initialPoint = mlflow.loadIslandBestWeights();
 					restoredBestWinRate = mlflow.getRestoredBestWinRate();
 				}
 
-				CmaesTrainer trainer = new CmaesTrainer(
-						generations, population, matchupsPerEval, gamesPerMatchup,
-						deckPool.getDecks(), evaluator, mlflow, null, seed, sigma, initialPoint,
-						restoredBestWinRate
-				);
+				if ("cmaes".equalsIgnoreCase(algorithm)) {
+					CmaesTrainer trainer = new CmaesTrainer(
+							generations, population, matchupsPerEval, gamesPerMatchup,
+							deckPool.getDecks(), evaluator, mlflow, null, seed, sigma, initialPoint,
+							restoredBestWinRate
+					);
 
-				// Seed HoF with other islands' best weights for resume
-				if (mlflow != null) {
-					for (double[] islandBest : mlflow.loadAllIslandBests()) {
-						trainer.seedHofMember(islandBest);
+					if (mlflow != null) {
+						for (double[] islandBest : mlflow.loadAllIslandBests()) {
+							trainer.seedHofMember(islandBest);
+						}
 					}
-				}
 
-				FeatureVector best = trainer.train();
-				reportResults(best, trainer.getBestWinRate(), output);
+					FeatureVector best = trainer.train();
+					reportResults(best, trainer.getBestWinRate(), output);
+				} else {
+					long effectiveIslandId = islandId != null ? islandId : 0L;
+					int effectiveIslands = mlflow != null ? numIslands : 1;
+					ParallelGeneticTrainer gaTrainer = new ParallelGeneticTrainer(
+							generations, population, effectiveIslands, effectiveIslandId,
+							matchupsPerEval, gamesPerMatchup,
+							deckPool.getDecks(), evaluator, mlflow, seed, sigma, initialPoint, barrierTimeout
+					);
+					FeatureVector best = gaTrainer.train();
+					reportResults(best, gaTrainer.getBestWinRate(), output);
+				}
 			} finally {
 				if (mlflow != null) {
 					mlflow.close();
@@ -231,7 +252,7 @@ public class TrainerMain {
 		}
 	}
 
-	private static void loadCards() {
+	static void loadCards() {
 		LOG.info("Loading card catalogue...");
 		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
 		LOG.info("Card catalogue loaded");

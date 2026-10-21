@@ -6,6 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +36,9 @@ public final class DistinctTribesValueProvider extends ValueProvider {
 		} else {
 			targets = new ArrayList<>();
 		}
+		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
 		Stream<String> raceStream = targets.stream()
+				.filter(e -> filter == null || filter.matches(context, player, e, host))
 				.flatMap(e -> Arrays.stream(e.getRaces()))
 				.filter(r -> !r.equals(Race.NONE));
 		if (getDesc().containsKey(ValueProviderArg.RACE)) {

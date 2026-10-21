@@ -156,10 +156,20 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 			return false;
 		}
 
-		applies = !(targetReference != null
-				&& targetReference.isTargetGroup()
-				&& context.resolveTarget(player, host, targetReference)
-				.stream().map(Entity::getId).noneMatch(eid -> eid == card.getId()));
+		if (targetReference != null && targetReference.isTargetGroup()) {
+			var targets = context.resolveTarget(player, host, targetReference);
+			boolean found = false;
+			int cardId = card.getId();
+			for (int i = 0, n = targets.size(); i < n; i++) {
+				if (targets.get(i).getId() == cardId) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				applies = false;
+			}
+		}
 
 
 		// If a required attribute is specified, does it match?

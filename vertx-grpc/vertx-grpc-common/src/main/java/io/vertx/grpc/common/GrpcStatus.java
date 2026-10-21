@@ -62,6 +62,34 @@ public enum GrpcStatus {
     return codeMap.get(code);
   }
 
+  /**
+   * Map an HTTP status code to a gRPC status, see <a href="https://github.com/grpc/grpc/blob/master/doc/http-grpc-status-mapping.md">spec</a>.
+   * @param sc the HTTP status code
+   * @return the mapped status code
+   */
+  public static GrpcStatus fromHttpStatusCode(int sc) {
+    if (sc < 0) {
+      throw new IllegalArgumentException("Invalid status code: " + sc);
+    }
+    switch (sc) {
+      case 400:
+        return INTERNAL;
+      case 401:
+        return UNAUTHENTICATED;
+      case 403:
+        return PERMISSION_DENIED;
+      case 404:
+        return NOT_FOUND;
+      case 429:
+      case 502:
+      case 503:
+      case 504:
+        return UNAVAILABLE;
+      default:
+        return UNKNOWN;
+    }
+  }
+
   static {
     for (GrpcStatus status : values()) {
       codeMap.put(status.code, status);

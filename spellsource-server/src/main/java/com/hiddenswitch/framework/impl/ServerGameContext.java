@@ -691,7 +691,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			super.startTurn(playerId);
-			var state = new GameState(this, TurnState.TURN_IN_PROGRESS);
+			var state = new GameState(this, TurnState.TURN_IN_PROGRESS, true);
 			for (var updateClient : getClients()) {
 				updateClient.onUpdate(state);
 			}
@@ -770,7 +770,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 
 	private void updateClientsWithGameState() {
-		var state = getGameStateCopy();
+		var state = getGameState();
 		for (var client : getClients()) {
 			client.onUpdate(state);
 		}
@@ -778,7 +778,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 
 	private void updateClientWithGameState(int playerId) {
-		var state = getGameStateCopy();
+		var state = getGameState();
 		for (var client : getClients()) {
 			if (client.getPlayerId() == playerId) {
 				client.onUpdate(state);
@@ -792,7 +792,7 @@ public class ServerGameContext extends GameContext implements Server {
 		notificationCounter.incrementAndGet();
 		// Do not build game state for events the client is not interested in
 		if (event.isClientInterested()) {
-			var gameStateCopy = getGameStateCopy();
+			var gameStateCopy = getGameState();
 			for (var client : getClients()) {
 				client.sendNotification(event, gameStateCopy);
 			}
@@ -814,7 +814,7 @@ public class ServerGameContext extends GameContext implements Server {
 		super.onEnchantmentFired(trigger);
 
 		var triggerFired = new TriggerFired(this, trigger);
-		final var gameStateCopy = getGameStateCopy();
+		final var gameStateCopy = getGameState();
 
 		// If the trigger is in a private place, do not fire it for the public player
 		if (trigger.getHostReference() != null) {
@@ -843,7 +843,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	public void onWillPerformGameAction(int playerId, GameAction action) {
 		super.onWillPerformGameAction(playerId, action);
-		var gameStateCopy = getGameStateCopy();
+		var gameStateCopy = getGameState();
 		for (var client : getClients()) {
 			client.sendNotification(action, gameStateCopy);
 		}
@@ -901,7 +901,7 @@ public class ServerGameContext extends GameContext implements Server {
 	protected void notifyPlayersGameOver() {
 		for (var client : getClients()) {
 			LOGGER.trace("notifyPlayersGameOver: notifying {}", client.getUserId());
-			client.sendGameOver(getGameStateCopy(), getWinner());
+			client.sendGameOver(getGameState(), getWinner());
 		}
 	}
 

@@ -44,7 +44,7 @@ public class ValueProviderDesc extends Desc<ValueProviderArg, ValueProvider> {
 
 	@Override
 	public ValueProviderDesc clone() {
-		return (ValueProviderDesc) copyTo(new ValueProviderDesc(getDescClass()));
+		return (ValueProviderDesc) super.clone();
 	}
 
 	@Override

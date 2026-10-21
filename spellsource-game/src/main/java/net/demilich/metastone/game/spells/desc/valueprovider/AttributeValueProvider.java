@@ -43,25 +43,24 @@ public class AttributeValueProvider extends ValueProvider {
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
 		EntityReference sourceReference = (EntityReference) getDesc().get(ValueProviderArg.TARGET);
 		Attribute attribute = (Attribute) getDesc().get(ValueProviderArg.ATTRIBUTE);
-		List<Entity> entities = null;
-		if (sourceReference != null) {
-			entities = context.resolveTarget(player, host, sourceReference);
-		} else {
-			entities = new ArrayList<>();
-			entities.add(target);
+		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
+		if (sourceReference == null) {
+			if (filter != null && !filter.matches(context, player, target, host)) {
+				return 0;
+			}
+			return provideValueForAttribute(context, attribute, target);
 		}
 
-		if (getDesc().containsKey(ValueProviderArg.FILTER)) {
-			EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
-			entities = entities.stream().filter(filter.matcher(context, player, host)).collect(Collectors.toList());
-		}
-
+		List<Entity> entities = context.resolveTarget(player, host, sourceReference);
 		if (entities == null) {
 			return 0;
 		}
 		int value = 0;
-		for (Entity entity : entities) {
-			value += provideValueForAttribute(context, attribute, entity);
+		for (int i = 0, size = entities.size(); i < size; i++) {
+			Entity entity = entities.get(i);
+			if (filter == null || filter.matches(context, player, entity, host)) {
+				value += provideValueForAttribute(context, attribute, entity);
+			}
 		}
 		return value;
 	}

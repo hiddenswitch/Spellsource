@@ -27,9 +27,16 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		Player player = context.getPlayer(playerId);
 		Player opponent = context.getOpponent(player);
 		for (Minion minion : opponent.getMinions()) {
+			if (minion.hasAttribute(Attribute.PERMANENT)
+					|| minion.hasAttribute(Attribute.DORMANT)
+					|| minion.hasAttribute(Attribute.FROZEN)
+					|| minion.hasAttribute(Attribute.CANNOT_ATTACK)
+					|| minion.hasAttribute(Attribute.AURA_CANNOT_ATTACK)) {
+				continue;
+			}
 			damageOnBoard += minion.getAttack() * minion.getAttributeValue(Attribute.NUMBER_OF_ATTACKS);
 		}
-		damageOnBoard += getHeroDamage(opponent.getHero(), player);
+		damageOnBoard += getHeroDamage(opponent.getHero(), opponent);
 
 		int remainingHp = player.getHero().getEffectiveHp() - damageOnBoard;
 		boolean observesLethal = GameStateValueBehaviour.observesLethal(context, opponent.getId(), player.getHero());
@@ -40,6 +47,20 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		}
 
 		return ThreatLevel.GREEN;
+	}
+
+	private static boolean isLocation(Minion minion) {
+		Card sourceCard = minion.getSourceCard();
+		return (minion.hasAttribute(Attribute.PERMANENT) && !minion.hasAttribute(Attribute.DORMANT))
+				&& sourceCard != null
+				&& sourceCard.getDesc() != null
+				&& sourceCard.getDesc().getTaps() != null
+				&& sourceCard.getDesc().getTaps().length > 0;
+	}
+
+	private static boolean isDormantOrPermanentNonLocation(Minion minion) {
+		return minion.hasAttribute(Attribute.DORMANT)
+				|| (minion.hasAttribute(Attribute.PERMANENT) && !isLocation(minion));
 	}
 
 	private static int getHeroDamage(Hero hero, Player player) {
@@ -62,22 +83,10 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 	private static boolean isHardRemoval(CardCatalogue cardCatalogue, Card card) {
 		boolean isPoisonous = card.hasAttribute(Attribute.POISONOUS)
 				|| card.hasAttribute(Attribute.AURA_POISONOUS);
-		boolean destroySpell = false;
-		if (card.getDesc().getBattlecry() != null
-				&& card.getDesc().getBattlecry().getSpell() != null) {
-			SpellDesc spell = card.getDesc().getBattlecry().getSpell();
-			destroySpell |= DestroySpell.class.isAssignableFrom(spell.getDescClass())
-					|| spell.subSpells().stream().anyMatch(sd -> DestroySpell.class.isAssignableFrom(sd.getDescClass()));
-		}
-		if (card.getSpell() != null) {
-			SpellDesc spell = card.getSpell();
-			destroySpell |= DestroySpell.class.isAssignableFrom(spell.getDescClass())
-					|| spell.subSpells().stream().anyMatch(sd -> DestroySpell.class.isAssignableFrom(sd.getDescClass()));
-		}
-		return cardCatalogue.getHardRemovalCardIds().contains(card.getCardId())
+		return isPoisonous
+				|| card.getDesc().isHardRemoval()
 				|| (card.getDesc().artificialIntelligence() != null && card.getDesc().artificialIntelligence().getHardRemoval())
-				|| isPoisonous
-				|| destroySpell;
+				|| cardCatalogue.getHardRemovalCardIds().contains(card.getCardId());
 	}
 
 	private final FeatureVector weights;
@@ -125,7 +134,9 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		if (minion.hasAttribute(Attribute.STEALTH) || minion.hasAttribute(Attribute.AURA_STEALTH)) {
 			minionScore += weights.get(WeightedFeature.MINION_STEALTHED_MODIFIER);
 		}
-		if (minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)) {
+		if (minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)
+				|| minion.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS)
+				|| minion.hasAttribute(Attribute.UNTARGETABLE_BY_OPPONENT_SPELLS)) {
 			minionScore += weights.get(WeightedFeature.MINION_UNTARGETABLE_BY_SPELLS_MODIFIER);
 		}
 
@@ -196,7 +207,9 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		if (minion.hasAttribute(Attribute.STEALTH) || minion.hasAttribute(Attribute.AURA_STEALTH)) {
 			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_STEALTHED_MODIFIER);
 		}
-		if (minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)) {
+		if (minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)
+				|| minion.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS)
+				|| minion.hasAttribute(Attribute.UNTARGETABLE_BY_OPPONENT_SPELLS)) {
 			minionScore += weights.get(WeightedFeature.OPPONENT_MINION_UNTARGETABLE_BY_SPELLS_MODIFIER);
 		}
 
@@ -253,6 +266,8 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		}
 		score += player.getHero().getEffectiveHp() * weights.get(WeightedFeature.OWN_HP_FACTOR);
 		score += opponent.getHero().getEffectiveHp() * weights.get(WeightedFeature.OPPONENT_HP_FACTOR);
+		int handBuffTotal = 0;
+		int handManaDiscountTotal = 0;
 		for (Card card : player.getHand()) {
 			if (isHardRemoval(context.getCardCatalogue(), card)) {
 				score += weights.get(WeightedFeature.HARD_REMOVAL_VALUE);
@@ -261,17 +276,52 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 			if (card.hasAttribute(Attribute.CURSE)) {
 				score += weights.get(WeightedFeature.CURSED_FACTOR);
 			}
+
+			handBuffTotal += card.getAttributeValue(Attribute.ATTACK_BONUS) + card.getAttributeValue(Attribute.HP_BONUS);
+			if (card.hasAttribute(Attribute.DARK_GIFT)) {
+				handBuffTotal += 1;
+			}
+			int baseCost = card.getBaseManaCost();
+			int modifiedCost = context.getLogic().getModifiedManaCost(player, card);
+			if (modifiedCost < baseCost) {
+				handManaDiscountTotal += (baseCost - modifiedCost);
+			}
 		}
+		score += handBuffTotal * weights.get(WeightedFeature.HAND_BUFF_VALUE);
+		score += handManaDiscountTotal * weights.get(WeightedFeature.HAND_MANA_REDUCTION_VALUE);
 
 		score += player.getHand().getCount() * weights.get(WeightedFeature.OWN_CARD_COUNT);
 		score += opponent.getHand().getCount() * weights.get(WeightedFeature.OPPONENT_CARD_COUNT);
 
+		int ownActiveMinions = 0;
+		int ownStarshipValue = 0;
 		for (Minion minion : player.getMinions()) {
-			score += calculateOwnMinionScore(minion, threatLevel);
+			if (isLocation(minion)) {
+				score += (1.0 + 0.25 * Math.max(0, minion.getHp())) * weights.get(WeightedFeature.OWN_LOCATION_VALUE);
+			} else if (isDormantOrPermanentNonLocation(minion)) {
+				double wakingStats = Math.max(1, minion.getBaseAttack() + minion.getBaseHp()) / 4.0;
+				score += wakingStats * weights.get(WeightedFeature.OWN_DORMANT_VALUE);
+			} else {
+				score += calculateOwnMinionScore(minion, threatLevel);
+				ownActiveMinions++;
+			}
+			if (minion.hasAttribute(Attribute.STARSHIP_PIECE)
+					|| (minion.getSourceCard() != null && minion.getSourceCard().hasAttribute(Attribute.STARSHIP_PIECE))) {
+				ownStarshipValue++;
+			}
 		}
 
+		int opponentActiveMinions = 0;
 		for (Minion minion : opponent.getMinions()) {
-			score += calculateOpponentMinionScore(minion, threatLevel);
+			if (isLocation(minion)) {
+				score += (1.0 + 0.25 * Math.max(0, minion.getHp())) * weights.get(WeightedFeature.OPPONENT_LOCATION_VALUE);
+			} else if (isDormantOrPermanentNonLocation(minion)) {
+				double wakingStats = Math.max(1, minion.getBaseAttack() + minion.getBaseHp()) / 4.0;
+				score += wakingStats * weights.get(WeightedFeature.OPPONENT_DORMANT_VALUE);
+			} else {
+				score += calculateOpponentMinionScore(minion, threatLevel);
+				opponentActiveMinions++;
+			}
 		}
 
 		int questCount = player.getQuests().size();
@@ -294,9 +344,33 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		score += questCount * weights.get(WeightedFeature.QUEST_COUNTER_VALUE);
 		score += questRewards * weights.get(WeightedFeature.QUEST_REWARD_VALUE);
 
-		// Count roasted cards to make sure the bot punishes Fel Reaper
-		score += player.getGraveyard().stream().filter(c -> c.hasAttribute(Attribute.ROASTED)).count() * weights.get(WeightedFeature.OWN_ROASTED_VALUE);
-		score += opponent.getGraveyard().stream().filter(c -> c.hasAttribute(Attribute.ROASTED)).count() * weights.get(WeightedFeature.OPPONENT_ROASTED_VALUE);
+		// Count roasted cards and corpses using indexed loops over graveyard to avoid stream overhead
+		var playerGraveyard = player.getGraveyard();
+		int ownRoasted = 0;
+		int ownCorpses = 0;
+		for (int i = 0, n = playerGraveyard.size(); i < n; i++) {
+			Entity e = playerGraveyard.get(i);
+			if (e.hasAttribute(Attribute.ROASTED)) {
+				ownRoasted++;
+			}
+			if (e.getEntityType() == EntityType.MINION) {
+				ownCorpses++;
+			}
+			if (e.hasAttribute(Attribute.STARSHIP_PIECE)
+					|| (e.getSourceCard() != null && e.getSourceCard().hasAttribute(Attribute.STARSHIP_PIECE))) {
+				ownStarshipValue++;
+			}
+		}
+		var opponentGraveyard = opponent.getGraveyard();
+		int opponentRoasted = 0;
+		for (int i = 0, n = opponentGraveyard.size(); i < n; i++) {
+			Entity e = opponentGraveyard.get(i);
+			if (e.hasAttribute(Attribute.ROASTED)) {
+				opponentRoasted++;
+			}
+		}
+		score += ownRoasted * weights.get(WeightedFeature.OWN_ROASTED_VALUE);
+		score += opponentRoasted * weights.get(WeightedFeature.OPPONENT_ROASTED_VALUE);
 
 		score += player.getMaxMana() * weights.get(WeightedFeature.EMPTY_MANA_CRYSTAL_VALUE);
 		score += opponent.getMaxMana() * weights.get(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE);
@@ -308,11 +382,11 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		// Weapons
 		if (!player.getWeaponZone().isEmpty()) {
 			Weapon ownWeapon = player.getWeaponZone().get(0);
-			score += ownWeapon.getWeaponDamage() * ownWeapon.getDurability() * weights.get(WeightedFeature.WEAPON_VALUE);
+			score += 0.25 * ownWeapon.getWeaponDamage() * ownWeapon.getDurability() * weights.get(WeightedFeature.WEAPON_VALUE);
 		}
 		if (!opponent.getWeaponZone().isEmpty()) {
 			Weapon oppWeapon = opponent.getWeaponZone().get(0);
-			score += oppWeapon.getWeaponDamage() * oppWeapon.getDurability() * weights.get(WeightedFeature.OPPONENT_WEAPON_VALUE);
+			score += 0.25 * oppWeapon.getWeaponDamage() * oppWeapon.getDurability() * weights.get(WeightedFeature.OPPONENT_WEAPON_VALUE);
 		}
 
 		// Deck size
@@ -328,14 +402,25 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		score += opponent.getLockedMana() * weights.get(WeightedFeature.OPPONENT_LOCKED_MANA_VALUE);
 
 		// Corpse count (graveyard minion count for Death Knight)
-		long ownCorpses = player.getGraveyard().stream()
-				.filter(e -> e.getEntityType() == EntityType.MINION)
-				.count();
 		score += ownCorpses * weights.get(WeightedFeature.CORPSE_COUNT_VALUE);
 
-		// Board width
-		score += player.getMinions().size() * weights.get(WeightedFeature.OWN_MINION_COUNT);
-		score += opponent.getMinions().size() * weights.get(WeightedFeature.OPPONENT_MINION_COUNT);
+		// Imbue count / upgraded hero power
+		int imbueCount = player.getAttributeValue(Attribute.IMBUE);
+		if (!player.getHeroPowerZone().isEmpty()) {
+			Card heroPower = player.getHeroPowerZone().get(0);
+			imbueCount += heroPower.getAttributeValue(Attribute.IMBUE);
+			if (!heroPower.isCollectible() && heroPower.getCardId() != null && !heroPower.getCardId().startsWith("hero_power_")) {
+				imbueCount += 1;
+			}
+		}
+		score += imbueCount * weights.get(WeightedFeature.IMBUE_VALUE);
+
+		// Starship pieces / assembly progress
+		score += ownStarshipValue * weights.get(WeightedFeature.STARSHIP_VALUE);
+
+		// Board width (active minions only, excluding Locations and Dormant permanents)
+		score += ownActiveMinions * weights.get(WeightedFeature.OWN_MINION_COUNT);
+		score += opponentActiveMinions * weights.get(WeightedFeature.OPPONENT_MINION_COUNT);
 
 		return score;
 	}

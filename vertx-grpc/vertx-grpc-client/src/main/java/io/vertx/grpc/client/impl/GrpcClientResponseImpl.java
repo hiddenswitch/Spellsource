@@ -86,8 +86,11 @@ public class GrpcClientResponseImpl<Req, Resp> extends GrpcReadStreamBase<GrpcCl
 
   @Override
   public String statusMessage() {
-    if (status != null && status != GrpcStatus.OK) {
+    if (status != null && status != GrpcStatus.OK && statusMessage == null) {
       String msg = httpResponse.getHeader(GrpcHeaderNames.GRPC_MESSAGE);
+      if (msg == null) {
+        msg = httpResponse.getTrailer(GrpcHeaderNames.GRPC_MESSAGE.toString());
+      }
       if (msg != null) {
         statusMessage = QueryStringDecoder.decodeComponent(msg, StandardCharsets.UTF_8);
       }
@@ -105,7 +108,7 @@ public class GrpcClientResponseImpl<Req, Resp> extends GrpcReadStreamBase<GrpcCl
         }
         @Override
         public Throwable describe(Void value) {
-          return new InvalidStatusException(GrpcStatus.OK, status());
+          return new InvalidStatusException(GrpcStatus.OK, status(), statusMessage());
         }
       });
   }

@@ -45,7 +45,7 @@ public class CreateCardSpell extends Spell {
 		List<DiscoverAction> discoveries = new Vector<>();
 		List<SpellDesc> shuffledSpells = new Vector<>(spells);
 		for (int i = 0; i < value; i++) {
-			Collections.shuffle(shuffledSpells, context.getLogic().getRandom());
+			context.getLogic().getRandom().shuffleList(shuffledSpells);
 			List<SpellDesc> spellChoices = shuffledSpells.stream().limit(count).collect(Collectors.toList());
 			if (spellChoices.isEmpty()) {
 				continue;

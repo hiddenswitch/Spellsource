@@ -61,8 +61,10 @@ public interface CardCatalogue {
 			}
 		}
 
-		smallestFormat = smallestFormat.clone();
-		smallestFormat.getSets().remove(CardSet.TEST);
+		if (smallestFormat.getSets().contains(CardSet.TEST)) {
+			smallestFormat = smallestFormat.clone();
+			smallestFormat.removeSet(CardSet.TEST);
+		}
 		return smallestFormat;
 	}
 
@@ -212,7 +214,7 @@ public interface CardCatalogue {
 	 * @param deckFormat
 	 * @return
 	 */
-	Collection<String> getBaseClasses(DeckFormat deckFormat);
+	List<String> getBaseClasses(DeckFormat deckFormat);
 
 	Stream<Card> stream();
 

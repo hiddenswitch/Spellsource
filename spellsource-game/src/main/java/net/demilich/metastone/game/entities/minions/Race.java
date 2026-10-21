@@ -40,46 +40,108 @@ public class Race {
 	 * @return {@code true} if {@code lhs} has the race specified in {@code rhs}, including ALL.
 	 */
 	public static boolean hasRace(GameContext gameContext, Entity entity, String rhs) {
-		String[] lhsRaces = entity.getRaces();
-
-		// ALL matches everything except NONE
-		for (String lhsRace : lhsRaces) {
-			if (Objects.equals(lhsRace, ALL) && !Objects.equals(rhs, NONE)) {
+		if (rhs == null) {
+			return false;
+		}
+		if (entity instanceof net.demilich.metastone.game.cards.Card card && !card.getAttributes().containsKey(net.demilich.metastone.game.cards.Attribute.RACE)) {
+			var desc = card.getDesc();
+			String singleRace = desc.getRace();
+			if (matchesRaceSpec(singleRace != null ? singleRace : NONE, rhs)) {
 				return true;
 			}
-		}
-		if (Objects.equals(rhs, ALL)) {
-			for (String lhsRace : lhsRaces) {
-				if (!Objects.equals(lhsRace, NONE)) {
-					return true;
+			String[] descRaces = desc.getRaces();
+			if (descRaces != null) {
+				for (String r : descRaces) {
+					if (matchesRaceSpec(r, rhs)) {
+						return true;
+					}
 				}
 			}
-		}
-
-		final List<MenagerieMogulAura> auras = SpellUtils.getAuras(gameContext, MenagerieMogulAura.class, entity);
-		if (!auras.isEmpty()) {
-			for (MenagerieMogulAura aura : auras) {
-				if (aura.isExpired()) {
-					continue;
-				}
-
-				lhsRaces = ObjectArrays.concat(lhsRaces, aura.getRaces(), String.class);
-			}
-		}
-
-		String[] rhsRaces;
-		if (rhs.contains("&")) {
-			rhsRaces = rhs.split("&");
 		} else {
-			rhsRaces = new String[]{rhs};
-		}
-
-		for (String lhsRace : lhsRaces) {
-			for (String rhsRace : rhsRaces) {
-				if (Objects.equals(lhsRace, rhsRace)) {
-					return true;
+			String singleRace = entity.getRace();
+			if (matchesRaceSpec(singleRace, rhs)) {
+				return true;
+			}
+			if (entity instanceof net.demilich.metastone.game.cards.Card card) {
+				String[] descRaces = card.getDesc().getRaces();
+				if (descRaces != null) {
+					for (String r : descRaces) {
+						if (matchesRaceSpec(r, rhs)) {
+							return true;
+						}
+					}
 				}
 			}
+		}
+
+		if (gameContext != null) {
+			int id = entity.getId();
+			int sourceId = entity.getSourceCard() != null ? entity.getSourceCard().getId() : net.demilich.metastone.game.targeting.IdFactory.UNASSIGNED;
+			if (id != net.demilich.metastone.game.targeting.IdFactory.UNASSIGNED
+					|| sourceId != net.demilich.metastone.game.targeting.IdFactory.UNASSIGNED) {
+				final List<MenagerieMogulAura> auras = SpellUtils.getAuras(gameContext, MenagerieMogulAura.class, entity);
+				if (!auras.isEmpty()) {
+					for (int i = 0, n = auras.size(); i < n; i++) {
+						MenagerieMogulAura aura = auras.get(i);
+						if (!aura.isExpired()) {
+							for (String auraRace : aura.getRaces()) {
+								if (matchesRaceSpec(auraRace, rhs)) {
+									return true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private static boolean matchesRaceSpec(String lhs, String rhs) {
+		if (lhs == null) {
+			lhs = NONE;
+		}
+		if (lhs.indexOf('&') < 0) {
+			return matchesSingleLhs(lhs, rhs);
+		}
+		int start = 0;
+		int len = lhs.length();
+		while (start <= len) {
+			int amp = lhs.indexOf('&', start);
+			String token = amp < 0 ? lhs.substring(start) : lhs.substring(start, amp);
+			if (matchesSingleLhs(token, rhs)) {
+				return true;
+			}
+			if (amp < 0) {
+				break;
+			}
+			start = amp + 1;
+		}
+		return false;
+	}
+
+	private static boolean matchesSingleLhs(String lhsRace, String rhs) {
+		if (ALL.equals(lhsRace) && !NONE.equals(rhs)) {
+			return true;
+		}
+		if (ALL.equals(rhs) && !NONE.equals(lhsRace)) {
+			return true;
+		}
+		if (rhs.indexOf('&') < 0) {
+			return Objects.equals(lhsRace, rhs);
+		}
+		int start = 0;
+		int len = rhs.length();
+		while (start <= len) {
+			int amp = rhs.indexOf('&', start);
+			String token = amp < 0 ? rhs.substring(start) : rhs.substring(start, amp);
+			if (Objects.equals(lhsRace, token)) {
+				return true;
+			}
+			if (amp < 0) {
+				break;
+			}
+			start = amp + 1;
 		}
 		return false;
 	}

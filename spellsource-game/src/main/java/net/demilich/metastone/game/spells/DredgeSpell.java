@@ -75,7 +75,7 @@ public class DredgeSpell extends Spell {
 
 		// Cast sub-spell on the chosen card if specified
 		for (SpellDesc subSpell : desc.subSpells(0)) {
-			SpellUtils.castChildSpell(context, player, subSpell, source, actualCard);
+			SpellUtils.castChildSpell(context, player, subSpell, source, actualCard, actualCard);
 		}
 	}
 }

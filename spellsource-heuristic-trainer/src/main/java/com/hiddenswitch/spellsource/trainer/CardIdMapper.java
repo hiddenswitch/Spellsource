@@ -135,7 +135,22 @@ public class CardIdMapper {
 				dbfIdToSpellsourceId.size(), byTag, byStrippedTag, byName));
 	}
 
+	private static final List<Path> LOCAL_JSON_CANDIDATES = List.of(
+			Path.of(".claude", "scripts", "hearthstone-cards.json"),
+			Path.of("..", ".claude", "scripts", "hearthstone-cards.json"),
+			Path.of("/home/administrator/Documents/spellsource/.claude/scripts/hearthstone-cards.json")
+	);
+
 	private String loadOrFetchJson() throws IOException, InterruptedException {
+		String envPath = System.getenv("HEARTHSTONE_CARDS_JSON");
+		if (envPath != null && !envPath.isBlank()) {
+			Path customPath = Path.of(envPath);
+			if (Files.exists(customPath)) {
+				LOG.info("Using HearthstoneJSON data from HEARTHSTONE_CARDS_JSON: " + customPath);
+				return Files.readString(customPath);
+			}
+		}
+
 		if (Files.exists(CACHE_FILE)) {
 			long age = System.currentTimeMillis() - Files.getLastModifiedTime(CACHE_FILE).toMillis();
 			if (age < 7 * 24 * 60 * 60 * 1000L) {
@@ -144,8 +159,24 @@ public class CardIdMapper {
 			}
 		}
 
+		for (Path candidate : LOCAL_JSON_CANDIDATES) {
+			if (Files.exists(candidate)) {
+				LOG.info("Using local HearthstoneJSON data from " + candidate.toAbsolutePath().normalize());
+				return Files.readString(candidate);
+			}
+		}
+
+		try (var resourceStream = getClass().getResourceAsStream("/hearthstone-cards.json")) {
+			if (resourceStream != null) {
+				LOG.info("Using classpath /hearthstone-cards.json");
+				return new String(resourceStream.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+			}
+		}
+
 		LOG.info("Fetching HearthstoneJSON data from " + HS_JSON_URL);
-		HttpClient client = HttpClient.newHttpClient();
+		HttpClient client = HttpClient.newBuilder()
+				.followRedirects(HttpClient.Redirect.NORMAL)
+				.build();
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(HS_JSON_URL))
 				.GET()

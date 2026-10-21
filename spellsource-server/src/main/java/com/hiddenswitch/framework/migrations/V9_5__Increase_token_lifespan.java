@@ -22,65 +22,61 @@ public class V9_5__Increase_token_lifespan extends BaseJavaMigration {
 	public void migrate(Context context) throws Exception {
 		var vertx = Vertx.vertx();
 		vertx.exceptionHandler(t -> LOGGER.error(t.toString(), t));
-		var latch = new CountDownLatch(1);
+		try {
+			Async.vt(vertx, () -> {
+				var realm = await(Accounts.realm());
+				var realmRepr = realm.toRepresentation();
 
-		Async.vt(vertx, () -> {
-			var realm = await(Accounts.realm());
-			var realmRepr = realm.toRepresentation();
+				// Set token lifespans
+				realmRepr.setAccessTokenLifespan(ONE_YEAR_IN_SECONDS);
+				realmRepr.setSsoSessionIdleTimeout(ONE_YEAR_IN_SECONDS);
+				realmRepr.setSsoSessionMaxLifespan(ONE_YEAR_IN_SECONDS);
+				realmRepr.setOfflineSessionIdleTimeout(ONE_YEAR_IN_SECONDS);
+				realmRepr.setOfflineSessionMaxLifespan(ONE_YEAR_IN_SECONDS);
 
-			// Set token lifespans
-			realmRepr.setAccessTokenLifespan(ONE_YEAR_IN_SECONDS);
-			realmRepr.setSsoSessionIdleTimeout(ONE_YEAR_IN_SECONDS);
-			realmRepr.setSsoSessionMaxLifespan(ONE_YEAR_IN_SECONDS);
-			realmRepr.setOfflineSessionIdleTimeout(ONE_YEAR_IN_SECONDS);
-			realmRepr.setOfflineSessionMaxLifespan(ONE_YEAR_IN_SECONDS);
+				realm.update(realmRepr);
 
-			realm.update(realmRepr);
-
-			// First, find and disable RSA-OAEP key provider
-			realm.components().query()
-					.stream()
-					.filter(component -> "org.keycloak.keys.KeyProvider".equals(component.getProviderType())
-							&& "rsa-enc-generated".equals(component.getProviderId()))
-					.forEach(component -> {
-						component.getConfig().putSingle("enabled", "false");
-						component.getConfig().putSingle("active", "false");
-						realm.components().component(component.getId()).update(component);
-					});
-
-			// Create or update the RS256 provider if it doesn't exist
-			var rs256Provider = new ComponentRepresentation();
-			rs256Provider.setName("rsa-generated");
-			rs256Provider.setProviderType("org.keycloak.keys.KeyProvider");
-			rs256Provider.setProviderId("rsa-generated");
-			rs256Provider.setConfig(new MultivaluedHashMap<>());
-			rs256Provider.getConfig().putSingle("algorithm", "RS256");
-			rs256Provider.getConfig().putSingle("enabled", "true");
-			rs256Provider.getConfig().putSingle("active", "true");
-			rs256Provider.getConfig().putSingle("priority", "100");
-
-			// Try to create, if fails due to existence then update
-			try {
-				realm.components().add(rs256Provider);
-			} catch (Exception e) {
-				// If component already exists, find and update it
+				// First, find and disable RSA-OAEP key provider
 				realm.components().query()
 						.stream()
 						.filter(component -> "org.keycloak.keys.KeyProvider".equals(component.getProviderType())
-								&& "rsa-generated".equals(component.getProviderId()))
+								&& "rsa-enc-generated".equals(component.getProviderId()))
 						.forEach(component -> {
-							component.getConfig().putAll(rs256Provider.getConfig());
+							component.getConfig().putSingle("enabled", "false");
+							component.getConfig().putSingle("active", "false");
 							realm.components().component(component.getId()).update(component);
 						});
-			}
 
-			// Update the realm
+				// Create or update the RS256 provider if it doesn't exist
+				var rs256Provider = new ComponentRepresentation();
+				rs256Provider.setName("rsa-generated");
+				rs256Provider.setProviderType("org.keycloak.keys.KeyProvider");
+				rs256Provider.setProviderId("rsa-generated");
+				rs256Provider.setConfig(new MultivaluedHashMap<>());
+				rs256Provider.getConfig().putSingle("algorithm", "RS256");
+				rs256Provider.getConfig().putSingle("enabled", "true");
+				rs256Provider.getConfig().putSingle("active", "true");
+				rs256Provider.getConfig().putSingle("priority", "100");
 
-			latch.countDown();
-			return null;
-		});
+				// Try to create, if fails due to existence then update
+				try {
+					realm.components().add(rs256Provider);
+				} catch (Exception e) {
+					// If component already exists, find and update it
+					realm.components().query()
+							.stream()
+							.filter(component -> "org.keycloak.keys.KeyProvider".equals(component.getProviderType())
+									&& "rsa-generated".equals(component.getProviderId()))
+							.forEach(component -> {
+								component.getConfig().putAll(rs256Provider.getConfig());
+								realm.components().component(component.getId()).update(component);
+							});
+				}
 
-		latch.await();
-		vertx.close();
+				return null;
+			}).toCompletionStage().toCompletableFuture().join();
+		} finally {
+			vertx.close();
+		}
 	}
 }

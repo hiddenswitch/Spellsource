@@ -808,7 +808,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(bloodseeker2.getAttack(), 1 + 12, "it's a 1/1 + 12");
 			Minion bloodseeker3 = playMinionCard(context, player, "minion_bloodseeker");
 			assertEquals(bloodseeker3.getAttack(), bloodseeker3.getBaseAttack() + 12);
-			Minion bloodseeker4 = playMinionCard(context, player, "minion_faceless_manipulator", bloodseeker3);
+			Minion bloodseeker4 = playMinionCard(context, player, "minion_mirror_phantom", bloodseeker3);
 			assertEquals(bloodseeker4.getSourceCard().getCardId(), "minion_bloodseeker");
 			assertNotEquals(bloodseeker1, bloodseeker4);
 			assertNotEquals(bloodseeker2, bloodseeker4);
@@ -825,13 +825,13 @@ public class CustomCardsTests extends TestBase {
 			Minion bloodseeker = playMinionCard(context, player, "minion_bloodseeker");
 			playCard(context, player, "spell_test_deal_6", player.getHero());
 			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack() + 6);
-			Minion faceless = playMinionCard(context, player, "minion_faceless_manipulator", bloodseeker);
+			Minion faceless = playMinionCard(context, player, "minion_mirror_phantom", bloodseeker);
 			assertEquals(faceless.getAttack(), faceless.getBaseAttack() + 6);
 			context.endTurn();
 			playCard(context, opponent, "spell_test_deal_6", player.getHero());
 			playCard(context, opponent, "spell_test_deal_1", opponent.getHero());
 			assertEquals(faceless.getAttack(), faceless.getBaseAttack() + 6);
-			playCard(context, opponent, "spell_mind_control", faceless);
+			playCard(context, opponent, "spell_touch_of_corruption", faceless);
 			assertEquals(faceless.getOwner(), opponent.getId());
 			assertEquals(faceless.getAttack(), faceless.getBaseAttack() + 1, "+1 from razorpetal damage this turn");
 			context.endTurn();
@@ -1805,7 +1805,7 @@ public class CustomCardsTests extends TestBase {
 	public void testCatacombCandlefin() {
 		runGym((context, player, opponent) -> {
 			Minion shouldNotBeSummoned1 = playMinionCard(context, player, "minion_neutral_test_1");
-			Minion shouldBeSummoned = playMinionCard(context, player, "minion_murloc_warleader");
+			Minion shouldBeSummoned = playMinionCard(context, player, "minion_tasty_murloc");
 			Minion shouldNotBeSummoned2 = playMinionCard(context, player, "minion_test_3_2");
 			destroy(context, shouldNotBeSummoned1);
 			destroy(context, shouldBeSummoned);
@@ -3787,7 +3787,7 @@ public class CustomCardsTests extends TestBase {
 	public void testEnchantments() {
 		runGym((context, player, opponent) -> {
 			Minion wisp = playMinionCard(context, player, "minion_neutral_test_1");
-			playCard(context, player, "spell_blessing_of_wisdom", wisp);
+			playCard(context, player, "spell_trigger_happy", wisp);
 			assertEquals(wisp.getEnchantmentsFromContext(context).size(), 1);
 
 		});
@@ -5021,6 +5021,62 @@ public class CustomCardsTests extends TestBase {
 			Stream.of(player.getDeck(), opponent.getDeck(), player.getHand(), opponent.getHand(),
 							player.getMinions(), opponent.getMinions())
 					.forEach(cards -> cards.forEach(card -> assertNotEquals(card.getRace(), Race.FAE)));
+		});
+	}
+
+	@Test
+	public void testCompiledSpellAndDeepAstAndLispMutability() {
+		runGym((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, player, 2, 5);
+			var attrVp = net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider.create(
+					Attribute.ATTACK, minion.getReference()).create();
+			var algDesc = new net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc(
+					net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicValueProvider.class);
+			algDesc.put(net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg.OPERATION,
+					net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation.ADD);
+			algDesc.put(net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg.VALUE1, attrVp);
+			algDesc.put(net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg.VALUE2, 3);
+			var algVp = algDesc.create();
+
+			SpellDesc buffDesc = BuffSpell.create(minion.getReference(), algVp, null);
+			buffDesc.freeze();
+			var compiledBuff = buffDesc.getCompiledSpell();
+			assertNotNull(compiledBuff);
+			assertTrue(compiledBuff.getClass().isHidden(), "CompiledSpell should be a hidden JVM class");
+
+			// Cast via GameLogic (uses getCompiledSpell())
+			context.getLogic().castSpell(player.getId(), buffDesc, player.getHero().getReference(), minion.getReference(), TargetSelection.NONE, false, null);
+			// Minion started at 2 attack; algVp = 2 + 3 = 5 bonus -> 7 attack
+			assertEquals(7, minion.getAttack());
+
+			// Runtime LISP metadata manipulation via addArg / cloneAndUnfreeze / put must invalidate compiled cache
+			SpellDesc modifiedBuff = buffDesc.addArg(SpellArg.HP_BONUS, 4);
+			assertNotSame(compiledBuff, modifiedBuff.getCompiledSpell());
+			context.getLogic().castSpell(player.getId(), modifiedBuff, player.getHero().getReference(), minion.getReference(), TargetSelection.NONE, false, null);
+			assertEquals(9, minion.getHp());
+
+			SpellDesc unfrozenClone = modifiedBuff.cloneAndUnfreeze();
+			unfrozenClone.put(SpellArg.VALUE, 2);
+			context.getLogic().castSpell(player.getId(), unfrozenClone, player.getHero().getReference(), minion.getReference(), TargetSelection.NONE, false, null);
+			assertEquals(11, minion.getHp());
+
+			// Verify compiled vs interpreted equivalence for ValueProvider, EntityFilter, and Condition
+			assertEquals(algVp.evaluateFullValue(context, player, minion, player.getHero()),
+					algVp.getCompiled().compute(context, player, minion, player.getHero()));
+			var cardFilter = net.demilich.metastone.game.spells.desc.filter.CardFilter.create(CardType.MINION);
+			cardFilter.getDesc().freeze();
+			assertEquals(cardFilter.evaluateFullMatches(context, player, minion.getSourceCard(), player.getHero()),
+					cardFilter.getCompiled().matches(context, player, minion.getSourceCard(), player.getHero()));
+			var attrCondDesc = new net.demilich.metastone.game.spells.desc.condition.ConditionDesc(
+					net.demilich.metastone.game.spells.desc.condition.AttributeCondition.class);
+			attrCondDesc.put(net.demilich.metastone.game.spells.desc.condition.ConditionArg.ATTRIBUTE, Attribute.ATTACK);
+			attrCondDesc.put(net.demilich.metastone.game.spells.desc.condition.ConditionArg.OPERATION,
+					net.demilich.metastone.game.spells.desc.filter.ComparisonOperation.GREATER_OR_EQUAL);
+			attrCondDesc.put(net.demilich.metastone.game.spells.desc.condition.ConditionArg.VALUE, 5);
+			attrCondDesc.freeze();
+			var attrCond = attrCondDesc.create();
+			assertEquals(attrCond.evaluateFullIsFulfilled(context, player, minion, minion),
+					attrCond.getCompiled().isFulfilled(context, player, minion, minion));
 		});
 	}
 }

@@ -35,7 +35,7 @@ public class ConditionDesc extends Desc<ConditionArg, Condition> {
 
 	@Override
 	public ConditionDesc clone() {
-		return (ConditionDesc) copyTo(new ConditionDesc(getDescClass()));
+		return (ConditionDesc) super.clone();
 	}
 
 	@Override

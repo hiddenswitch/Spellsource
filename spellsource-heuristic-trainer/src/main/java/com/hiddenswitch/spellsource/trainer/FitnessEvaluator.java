@@ -29,6 +29,14 @@ import java.util.logging.Logger;
  */
 public class FitnessEvaluator {
 	private static final Logger LOG = Logger.getLogger(FitnessEvaluator.class.getName());
+	private static final AtomicInteger GAME_THREAD_COUNTER = new AtomicInteger(1);
+	private static final int MAX_CONCURRENT_GAMES = Math.max(2, Math.min(8, Runtime.getRuntime().availableProcessors()));
+	private static final Semaphore GAME_CONCURRENCY_LIMITER = new Semaphore(MAX_CONCURRENT_GAMES);
+	private static final ExecutorService GAME_EXECUTOR = Executors.newCachedThreadPool(runnable -> {
+		Thread thread = new Thread(runnable, "spellsource-trainer-game-" + GAME_THREAD_COUNTER.getAndIncrement());
+		thread.setDaemon(true);
+		return thread;
+	});
 
 	private final int gsvbDepth;
 	private final int gsvbTimeout;
@@ -50,47 +58,52 @@ public class FitnessEvaluator {
 	}
 
 	/**
-	 * A single game task: deck pair, opponent weights, who is candidate (P1 or P2).
+	 * A single game task: deck pair, opponent weights, who is candidate (P1 or P2), and deterministic game seed.
 	 */
 	private record GameTask(GameDeck deck1, GameDeck deck2, FeatureVector opponent, boolean candidateIsPlayer1,
-	                         int gameIndex) {
+	                        int gameIndex, long gameSeed) {
 	}
 
 	/**
 	 * Evaluates a candidate against a Hall of Fame of opponents.
-	 * <p>
-	 * Matchups are distributed across all HoF members: each matchup is assigned
-	 * to a random HoF member, so the candidate faces all of them across the
-	 * evaluation. Total game count = matchupsToSample * gamesPerMatchup,
-	 * same budget regardless of HoF size.
-	 *
-	 * @param opponents the Hall of Fame members to play against
 	 */
 	public EvalResult evaluate(String id, FeatureVector candidate, List<FeatureVector> opponents,
 	                           List<GameDeck> allDecks, int matchupsToSample, int gamesPerMatchup) {
-		long start = System.currentTimeMillis();
-		Random rng = new Random();
+		return evaluateWithCrn(id, candidate, opponents, allDecks, matchupsToSample, gamesPerMatchup,
+				ThreadLocalRandom.current().nextLong());
+	}
 
-		// Sample random non-mirror deck pairs
+	/**
+	 * Evaluates a candidate against a list of opponents (e.g. Baseline Fittest + Generation Elites) using
+	 * Common Random Numbers (CRN) and paired swap-side games.
+	 * <p>
+	 * Given the same {@code crnSeed}, every candidate across all pods in a generation faces the exact same
+	 * deck matchups, opponent assignments, and per-game RNG seeds, playing both sides (P1 and P2) of each seed.
+	 */
+	public EvalResult evaluateWithCrn(String id, FeatureVector candidate, List<FeatureVector> opponents,
+	                                  List<GameDeck> allDecks, int matchupsToSample, int gamesPerMatchup,
+	                                  long crnSeed) {
+		long start = System.currentTimeMillis();
+		Random rng = new Random(crnSeed);
+
+		// Sample deterministic non-mirror deck pairs for this generation seed
 		List<int[]> matchups = sampleMatchups(allDecks.size(), matchupsToSample, rng);
 
-		// Flatten all games across all matchups into a single list
-		// Each matchup is assigned to a random opponent from the HoF
+		// Flatten all games across all matchups into a single list.
+		// Each pair of games shares the exact same gameSeed with swapped sides (P1 vs P2).
 		List<GameTask> allTasks = new ArrayList<>();
 		int gameIndex = 0;
-		for (int[] matchup : matchups) {
+		for (int m = 0; m < matchups.size(); m++) {
+			int[] matchup = matchups.get(m);
 			GameDeck deck1 = allDecks.get(matchup[0]);
 			GameDeck deck2 = allDecks.get(matchup[1]);
-			FeatureVector opponent = opponents.get(rng.nextInt(opponents.size()));
+			FeatureVector opponent = opponents.get(m % opponents.size());
 
-			int gamesAsP1 = gamesPerMatchup / 2;
-			int gamesAsP2 = gamesPerMatchup - gamesAsP1;
-
-			for (int i = 0; i < gamesAsP1; i++) {
-				allTasks.add(new GameTask(deck1, deck2, opponent, true, gameIndex++));
-			}
-			for (int i = 0; i < gamesAsP2; i++) {
-				allTasks.add(new GameTask(deck1, deck2, opponent, false, gameIndex++));
+			int pairs = Math.max(1, gamesPerMatchup / 2);
+			for (int i = 0; i < pairs; i++) {
+				long gameSeed = crnSeed * 6364136223846793005L + (m + 1L) * 1442695040888963407L + i * 997L;
+				allTasks.add(new GameTask(deck1, deck2, opponent, true, gameIndex++, gameSeed));
+				allTasks.add(new GameTask(deck1, deck2, opponent, false, gameIndex++, gameSeed));
 			}
 		}
 
@@ -100,29 +113,25 @@ public class FitnessEvaluator {
 		AtomicInteger timeouts = new AtomicInteger(0);
 
 		allTasks.parallelStream().forEach(task -> {
+			boolean acquired = false;
 			try {
+				GAME_CONCURRENCY_LIMITER.acquire();
+				acquired = true;
 				FeatureVector p1Weights = task.candidateIsPlayer1 ? candidate : task.opponent;
 				FeatureVector p2Weights = task.candidateIsPlayer1 ? task.opponent : candidate;
 
-				GameContext game = GameContext.fromDecks(List.of(task.deck1, task.deck2));
+				GameContext game = GameContext.fromDecks(task.gameSeed, List.of(task.deck1, task.deck2));
 				game.setBehaviour(0, createBehaviour(p1Weights));
 				game.setBehaviour(1, createBehaviour(p2Weights));
 
 				game.init();
 
-				// Run with per-game timeout
-				ExecutorService executor = Executors.newSingleThreadExecutor();
-				Future<?> future = executor.submit(() -> game.resume());
+				// Run with per-game timeout using shared daemon thread pool
+				Future<?> future = GAME_EXECUTOR.submit(() -> game.resume());
 				try {
 					future.get(gameTimeoutMs, TimeUnit.MILLISECONDS);
 				} catch (TimeoutException e) {
 					future.cancel(true);
-					executor.shutdownNow();
-					try {
-						executor.awaitTermination(2, TimeUnit.SECONDS);
-					} catch (InterruptedException ie) {
-						Thread.currentThread().interrupt();
-					}
 					timeouts.incrementAndGet();
 					LOG.info(String.format("Game timeout: %s game %d (%s vs %s) at turn %d",
 							id, task.gameIndex,
@@ -130,16 +139,16 @@ public class FitnessEvaluator {
 							game.getTurn()));
 					if (mlflow != null) {
 						try {
-							String trace = game.getTrace().dump();
-							mlflow.logTimeoutTrace(id, task.gameIndex, trace);
+							String summary = String.format(
+									"{\"evalId\":\"%s\",\"gameIndex\":%d,\"deck1\":\"%s\",\"deck2\":\"%s\",\"turn\":%d,\"seed\":%d}",
+									id, task.gameIndex, task.deck1.getName(), task.deck2.getName(), game.getTurn(), task.gameSeed);
+							mlflow.logTimeoutTrace(id, task.gameIndex, summary);
 						} catch (Exception traceEx) {
 							// best effort
 						}
 					}
 					completed.incrementAndGet();
 					return;
-				} finally {
-					executor.shutdownNow();
 				}
 
 				boolean candidateWon;
@@ -153,6 +162,10 @@ public class FitnessEvaluator {
 				}
 			} catch (Throwable t) {
 				// Count as a loss
+			} finally {
+				if (acquired) {
+					GAME_CONCURRENCY_LIMITER.release();
+				}
 			}
 			completed.incrementAndGet();
 		});
@@ -177,9 +190,25 @@ public class FitnessEvaluator {
 	}
 
 	private GameStateValueBehaviour createBehaviour(FeatureVector weights) {
-		GameStateValueBehaviour gsvb = new GameStateValueBehaviour(weights, "Trainer");
+		GameStateValueBehaviour gsvb = new GameStateValueBehaviour(weights, "Trainer") {
+			@Override
+			public net.demilich.metastone.game.actions.GameAction requestAction(
+					GameContext context,
+					net.demilich.metastone.game.Player player,
+					List<net.demilich.metastone.game.actions.GameAction> validActions) {
+				if (Thread.currentThread().isInterrupted()) {
+					return validActions.stream()
+							.filter(ga -> ga != null && ga.getActionType() == com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType.END_TURN)
+							.findFirst().orElse(validActions.get(0));
+				}
+				return super.requestAction(context, player, validActions);
+			}
+		};
 		gsvb.setMaxDepth(gsvbDepth);
 		gsvb.setTimeout(gsvbTimeout);
+		gsvb.setLethalTimeout(gsvbTimeout * 2L);
+		gsvb.setExpandDepthForLethal(false);
+		gsvb.setParallel(false);
 		gsvb.setThrowsExceptions(false);
 		return gsvb;
 	}

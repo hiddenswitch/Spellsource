@@ -17,8 +17,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
-
 /**
  * Performs fuzzing of game contexts for Spellsource.
  */

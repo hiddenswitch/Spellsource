@@ -36,18 +36,22 @@ public enum Attribute {
 	 *
 	 * @see Card#getManaCost(GameContext, Player) to get the mana cost of a card considering all possible effects.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	BASE_MANA_COST,
 	/**
 	 * Indicates that this {@link Card} costs health instead of mana when played from the hand.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	COSTS_HEALTH_INSTEAD_OF_MANA,
 	/**
 	 * An Aura version of {@link #COSTS_HEALTH_INSTEAD_OF_MANA}.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_COSTS_HEALTH_INSTEAD_OF_MANA,
 	/**
 	 * The number of hit points the {@link Actor} currently has.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	HP,
 	/**
 	 * Returns the index of the entity in its current zone.
@@ -67,58 +71,70 @@ public enum Attribute {
 	 * The attack value written on the {@link Card}. This is distinct from {@link #BASE_ATTACK}, which is the base attack
 	 * value of the {@link Minion} this card would summon.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	ATTACK,
 	/**
 	 * An attack bonus that should be applied to the {@link Minion} attack.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	ATTACK_BONUS,
 	/**
 	 * The maximum number of hitpoints the {@link Actor} can have.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	MAX_HP,
 	/**
 	 * The current armor belonging to the {@link Actor}, or the additional armor gained by playing the specified
 	 * {@link net.demilich.metastone.game.cards.Card}.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	ARMOR,
 	/**
 	 * A one-turn long attack bonus given to the {@link Actor}.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	TEMPORARY_ATTACK_BONUS,
 	/**
 	 * The amount of hitpoints added by all the {@link net.demilich.metastone.game.spells.BuffSpell} effects on the
 	 * entity.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	HP_BONUS,
 	/**
 	 * The amount of attack added by all the {@link net.demilich.metastone.game.spells.aura.Aura} effects that target the
 	 * entity.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	AURA_ATTACK_BONUS,
 	/**
 	 * The amount of hitpoints added by all the {@link net.demilich.metastone.game.spells.aura.Aura} effects that target
 	 * the entity.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	AURA_HP_BONUS,
 	/**
 	 * Grants an immunity aura when present on an entity.
 	 *
 	 * @see #IMMUNE
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_IMMUNE,
 	/**
 	 * When set, the card behaves as though it were actually a copy of the card of the specified ID.
 	 * <p>
 	 * This is distinct from transformation effects.
 	 */
+	@Tier(Tier.Type.INLINE_OBJECT)
 	AURA_CARD_ID,
 	/**
 	 * The base number of hitpoints for the {@link Actor}.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	BASE_HP,
 	/**
 	 * The base amount of attack for the {@link Actor}.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	BASE_ATTACK,
 	/**
 	 * A conditional attack bonus for the {@link Actor} that corresponds to bonuses from an
@@ -127,12 +143,14 @@ public enum Attribute {
 	 * {@link net.demilich.metastone.game.spells.SetAttributeSpell}. This bonus is typically controlled by a
 	 * {@link net.demilich.metastone.game.spells.desc.condition.Condition}.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	CONDITIONAL_ATTACK_BONUS,
 	/**
 	 * The race of the entity.
 	 *
 	 * @see net.demilich.metastone.game.entities.minions.Race
 	 */
+	@Tier(Tier.Type.INLINE_OBJECT)
 	RACE,
 	/**
 	 * When the entity has this attribute, it is destroyed. However, entities are also considered destroyed if their
@@ -145,6 +163,7 @@ public enum Attribute {
 	 *
 	 * @see Actor#isDestroyed() for a complete list of situations where an {@link Actor} is destroyed.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	DESTROYED,
 	/**
 	 * Fatigue is a game mechanic that deals increasing damage to players who have already drawn all of the cards in their
@@ -161,6 +180,7 @@ public enum Attribute {
 	 * {@link net.demilich.metastone.game.spells.SilenceSpell} (when the minion is {@link #SILENCED}) or the owning player
 	 * ends his turn on a different turn than when the minion was {@link #FROZEN}.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	FROZEN,
 	/**
 	 * This {@link Minion} will typically gain an attack bonus after it is dealt damage the first time.
@@ -168,32 +188,38 @@ public enum Attribute {
 	 * @see net.demilich.metastone.game.spells.EnrageSpell for the spell that encapsulates this effect.
 	 * @see #CONDITIONAL_ATTACK_BONUS for the attribute that typically stores the amount of attack gained by an enrage.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	ENRAGABLE,
 	/**
 	 * Records that an {@link Entity} was silenced. Silencing clears all attributes and effects.
 	 *
 	 * @see GameLogic#silence(int, Actor) for a complete description of the silence effect.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	SILENCED,
 	/**
 	 * An {@link Actor} with {@link #WINDFURY} has two attacks per turn.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	WINDFURY,
 	/**
 	 * An aura version of {@link #WINDFURY}
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_WINDFURY,
 	/**
 	 * An {@link Actor} with {@link #MEGA_WINDFURY} has four attacks per turn.
 	 *
 	 * @see Actor#canAttackThisTurn(GameContext) for the complete rules of attacking.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	MEGA_WINDFURY,
 	/**
 	 * An {@link Actor} with {@link #UNLIMITED_ATTACKS} has unlimited attacks per turn.
 	 *
 	 * @see Actor#canAttackThisTurn(GameContext) for the complete rules of attacking.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	UNLIMITED_ATTACKS,
 	/**
 	 * An {@link Actor} with {@link #TAUNT} must be targeted by opposing
@@ -204,17 +230,20 @@ public enum Attribute {
 	 * @see net.demilich.metastone.game.logic.TargetLogic#getValidTargets(GameContext, Player, GameAction) for the
 	 * complete targeting logic.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	TAUNT,
 	/**
 	 * Like taunt, but created as a result of an {@link net.demilich.metastone.game.spells.aura.Aura}.
 	 *
 	 * @see #TAUNT for more about taunt.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_TAUNT,
 	/**
 	 * Like taunt, but only applies while in hand or in the deck. Affects the summoned minion and goes away when this card
 	 * is moved to the graveyard.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	CARD_TAUNT,
 	/**
 	 * The total amount of spell damage that an {@link Entity} contributes.
@@ -250,10 +279,12 @@ public enum Attribute {
 	 * @see #SUMMONING_SICKNESS for the attribute that a {@link Minion} otherwise has which prevents it from attacking the
 	 * same turn it is summoned.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	CHARGE,
 	/**
 	 * An Aura version of {@link #CHARGE}.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_CHARGE,
 	/**
 	 * An attribute that tracks the number of attacks the {@link Actor} has this turn. Typically, actors start with 1
@@ -262,6 +293,7 @@ public enum Attribute {
 	 * @see #WINDFURY for the attribute that sets the number of attacks an actor has to 2 at the start of the owner's
 	 * @see Actor#canAttackThisTurn(GameContext) for the complete rules of attacking. turn.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	NUMBER_OF_ATTACKS,
 	/**
 	 * An attribute used by Giant Sand Worm that refreshes the number of attacks it has.
@@ -279,12 +311,14 @@ public enum Attribute {
 	 *
 	 * @see net.demilich.metastone.game.spells.EnrageSpell for the spell that implements Enrage.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	ENRAGED,
 	/**
 	 * An {@link Entity} with {@link #BATTLECRY} performs an action when it goes from the {@link Zones#HAND} to the
 	 * {@link Zones#BATTLEFIELD}. This attribute is used to look up / keep track of entities that have battlecries. It
 	 * does not define the battlecry itself.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	BATTLECRY,
 	/**
 	 * An {@link Entity} with {@link #DOUBLE_BATTLECRIES} causes other friendly battlecries to occur twice.
@@ -300,6 +334,7 @@ public enum Attribute {
 	 * <p>
 	 * This attribute does not store the spell itself. It marks an entity that has a deathrattle.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	DEATHRATTLES,
 	/**
 	 * An {@link Entity} with {@link #DOUBLE_DEATHRATTLES} causes other friendly deathrattles to occur twice.
@@ -314,14 +349,17 @@ public enum Attribute {
 	/**
 	 * An immune {@link Actor} does not take any damage.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	IMMUNE,
 	/**
 	 * An {@link Actor} with this attribute does not take damage from the targets of its physical attacks.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	IMMUNE_WHILE_ATTACKING,
 	/**
 	 * An Aura version of {@link #IMMUNE_WHILE_ATTACKING}.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_IMMUNE_WHILE_ATTACKING,
 	/**
 	 * When set on a player or aura-applied to friendly characters, physical attacks ignore {@link #TAUNT} on enemy
@@ -339,6 +377,7 @@ public enum Attribute {
 	 *
 	 * @see GameLogic#damage(Player, Actor, int, Entity) for the complete rules of damage.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	DIVINE_SHIELD,
 	/**
 	 * A {@link Minion} with stealth cannot be targeted by spells, hero powers or physical attacks until it attacks.
@@ -354,16 +393,19 @@ public enum Attribute {
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
 	 * logic behind selecting valid targets.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	STEALTH,
 	/**
 	 * The aura version of {@link #STEALTH}
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_STEALTH,
 	/**
 	 * A {@link net.demilich.metastone.game.cards.Card} has this attribute to help spells find secrets in the deck.
 	 * <p>
 	 * Cards marked secret should not be revealed to the opponent.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	SECRET,
 	/**
 	 * When a combo {@link Card} is played after another card, an effect is triggered.
@@ -371,6 +413,7 @@ public enum Attribute {
 	 * @see net.demilich.metastone.game.spells.ComboSpell for the actual implementation of combo effects.
 	 * @see GameLogic#playCard(int, EntityReference, EntityReference) for the control of the combo attribute.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	COMBO,
 	/**
 	 * Overload is an {@link Integer} amount of mana that will be locked (unavailable for use) the next turn by playing
@@ -385,6 +428,7 @@ public enum Attribute {
 	 * A {@link Card} with this attribute signals that it has two options that a player chooses from when the card is
 	 * played.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	CHOOSE_ONE,
 	/**
 	 * An integer attribute indicating which choice was taken on a choose one card.
@@ -418,6 +462,7 @@ public enum Attribute {
 	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Entity, Minion, Minion, boolean)
 	 * for an unusual situation where minions enter the battlefield.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	SUMMONING_SICKNESS,
 	/**
 	 * Marks an {@link Actor} to be untargetable by spells or hero powers. This includes the owner's spells and hero
@@ -426,6 +471,7 @@ public enum Attribute {
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
 	 * complete target selection logic.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	UNTARGETABLE_BY_SPELLS,
 	/**
 	 * Marks an {@link Actor} to be untargetable by an <b>opponent's</b> spells or hero powers.
@@ -433,12 +479,14 @@ public enum Attribute {
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
 	 * complete target selection logic.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	UNTARGETABLE_BY_OPPONENT_SPELLS,
 	/**
 	 * An {@link Actor} with this attribute is untargetable by spells or hero powers due to an aura.
 	 *
 	 * @see #UNTARGETABLE_BY_SPELLS for more information.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_UNTARGETABLE_BY_SPELLS,
 	/**
 	 * When a {@link net.demilich.metastone.game.cards.Card} that casts a
@@ -480,10 +528,12 @@ public enum Attribute {
 	/**
 	 * When set, this {@link Minion} cannot attack.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	CANNOT_ATTACK,
 	/**
 	 * An Aura version of {@link #CANNOT_ATTACK}.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_CANNOT_ATTACK,
 	/**
 	 * When set, this {@link Minion} cannot target heroes with physical attacks.
@@ -493,10 +543,12 @@ public enum Attribute {
 	 * method instead of
 	 * {@link net.demilich.metastone.game.logic.TargetLogic#filterTargets (GameContext, Player, GameAction, List)}.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	CANNOT_ATTACK_HEROES,
 	/**
 	 * An Aura version of {@link #CANNOT_ATTACK_HEROES}
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_CANNOT_ATTACK_HEROES,
 	/**
 	 * Whens set on any entity, friendly healing effects deal damage instead.
@@ -516,6 +568,7 @@ public enum Attribute {
 	/**
 	 * This attribute records which turn a {@link Minion} was marked as {@link #DESTROYED}.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	DIED_ON_TURN,
 	/**
 	 * When any {@link Entity} alive has this attribute, the owning player's hero power freezes its target.
@@ -548,10 +601,12 @@ public enum Attribute {
 	 * {@link net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell
 	 * (e.g., a healing spell may heal the owning player by the amount of damage last dealt to an entity).
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	LAST_HIT,
 	/**
 	 * Records the amount of healing last applied to this {@link Actor}.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	LAST_HEAL,
 	/**
 	 * Marks that this {@link Entity} has a passive trigger that activates to a
@@ -638,10 +693,12 @@ public enum Attribute {
 	 *
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the complete damage implementation.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	TAKE_DOUBLE_DAMAGE,
 	/**
 	 * The Aura version of {@link #TAKE_DOUBLE_DAMAGE}
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_TAKE_DOUBLE_DAMAGE,
 	/**
 	 * A {@link Minion} with this attribute cannot target a {@link Hero} the same turn it is summoned. This is typically
@@ -650,10 +707,12 @@ public enum Attribute {
 	 * @see net.demilich.metastone.game.actions.PhysicalAttackAction for a complete implementation of what a minion can
 	 * attack.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	RUSH,
 	/**
 	 * Aura version of {@link #RUSH}
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_RUSH,
 	/**
 	 * An attribute that keeps track of how much attack and hitpoints to add to the next Jade Golem that gets summoned.
@@ -672,12 +731,14 @@ public enum Attribute {
 	 * <p>
 	 * Implements quest cards.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	QUEST,
 	/**
 	 * A {@link #PACT} {@link Entity} is an untargetable permanent that lives in the {@link Zones#QUEST} zone, is visible
 	 * to the opponent, and can be triggered by actions that either the opponent or player performs (activated during both
 	 * turns).
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	PACT,
 	/**
 	 * An attribute given to {@link Card} entities that started in the player's deck, as opposed to being generated by
@@ -685,12 +746,14 @@ public enum Attribute {
 	 * <p>
 	 * Implements Open the Waygate quest.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	STARTED_IN_DECK,
 	/**
 	 * An attribute given to {@link Card} entities that started in the player's opening hand
 	 * <p>
 	 * Implements Hex Lord Malacrass.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	STARTED_IN_HAND,
 	/**
 	 * This attribute describes a {@link Minion} that can never be targeted by spells, abilities, auras or physical
@@ -698,6 +761,7 @@ public enum Attribute {
 	 * <p>
 	 * Implements permanents.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	PERMANENT,
 	/**
 	 * This attribute is a {@link String} that describes the inventory owner (as opposed to in-match owner) of the card.
@@ -761,20 +825,24 @@ public enum Attribute {
 	/**
 	 * Every time an {@link Actor} kills a target, increment this attribute.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	TOTAL_KILLS,
 	/**
 	 * Every time an {@link Actor} receives damage, increment this attribute with the total amount of damage dealt.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	TOTAL_DAMAGE_RECEIVED,
 	/**
 	 * Every time an {@link Actor} is healed, increment this attribute with the amount of healing and set to zero at the
 	 * end of the turn.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	HEALING_THIS_TURN,
 	/**
 	 * Every time an {@link Actor} is healed, increment this attribute with the amount of healing and set to zero at the
 	 * end of the turn.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	EXCESS_HEALING_THIS_TURN,
 	/**
 	 * Every time an {@link Actor} has its max HP increased, this value increases.
@@ -784,14 +852,17 @@ public enum Attribute {
 	 * Every time an {@link Actor} is damaged, increment this attribute with the amount of damage and set it to zero at
 	 * the end of the turn.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	DAMAGE_THIS_TURN,
 	/**
 	 * Every time a {@link Player} successfully summons a minion, this counter is incremented on the summoning player.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	MINIONS_SUMMONED_THIS_TURN,
 	/**
 	 * Every time a {@link Player} successfully summons a minion, this counter is incremented on both players
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	TOTAL_MINIONS_SUMMONED_THIS_TURN,
 	/**
 	 * Whenever an {@link Actor} dies, increment this attribute by 1 if the actor had the lowest attack on the
@@ -802,20 +873,24 @@ public enum Attribute {
 	 * A shorthand implementation of the Poisonous keyword. Indicates that whenever the source minion deals more than 0
 	 * damage to the target minion, the target minion  is destroyed.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	POISONOUS,
 	/**
 	 * An aura version of {@link #POISONOUS}
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_POISONOUS,
 	/**
 	 * A shorthand implementation of the Lifesteal keyword. Indicates that the {@link Hero} of the owner of the
 	 * {@link Minion}, or {@link net.demilich.metastone.game.cards.Card} should be healed by the amount of damage dealt by
 	 * that minion.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	LIFESTEAL,
 	/**
 	 * An aura version of {@link #LIFESTEAL}
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_LIFESTEAL,
 	/**
 	 * Indicates that the {@link Player}'s end turn triggers should trigger twice.
@@ -826,6 +901,7 @@ public enum Attribute {
 	/**
 	 * Indicates the {@link Integer} turn that the specified card was played from the hand or the deck.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	PLAYED_FROM_HAND_OR_DECK,
 	/**
 	 * Indicates how much Mana the player spent to play the card
@@ -835,6 +911,7 @@ public enum Attribute {
 	 * An {@link EntityReference} that, when set, indicates which entity this copied, if the entity copied with
 	 * {@link Entity#getCopy}.
 	 */
+	@Tier(Tier.Type.INLINE_OBJECT)
 	COPIED_FROM,
 	/**
 	 * Overrides the name of the {@link Entity}
@@ -863,6 +940,7 @@ public enum Attribute {
 	/**
 	 * Returns the {@link Card}'s {@link net.demilich.metastone.game.cards.desc.CardDesc#heroClass} field.
 	 */
+	@Tier(Tier.Type.INLINE_OBJECT)
 	HERO_CLASS,
 	/**
 	 * Returns the {@link Card}'s {@link net.demilich.metastone.game.cards.desc.CardDesc#targetSelection} field.
@@ -871,6 +949,7 @@ public enum Attribute {
 	/**
 	 * When set, overrides the card's identity and makes it behave like a different card in all its base effects.
 	 */
+	@Tier(Tier.Type.INLINE_OBJECT)
 	CARD_ID,
 	/**
 	 * Indicates how many extra turns the player has.
@@ -897,16 +976,19 @@ public enum Attribute {
 	/**
 	 * Indicates that the game has started for the specified player.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	GAME_STARTED,
 	/**
 	 * For entities that are in the {@link Zones#REMOVED_FROM_PLAY} zone due to a transform effect, this attribute points
 	 * to the entity that replaced this one.
 	 */
+	@Tier(Tier.Type.INLINE_OBJECT)
 	TRANSFORM_REFERENCE,
 	/**
 	 * Whenever a {@link Card} is received into the hand, this attribute indicates on which turn (typically
 	 * {@link GameContext#getTurn()} the card was received.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	RECEIVED_ON_TURN,
 	/**
 	 * Remembers the {@link #ATTACK_BONUS}, {@link #HP_BONUS}, {@link #LIFESTEAL}, {@link #WINDFURY}, {@link #POISONOUS}
@@ -923,10 +1005,12 @@ public enum Attribute {
 	/**
 	 * Indicates the card will put a copy of itself into the player's hand after it is played.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	ECHO,
 	/**
 	 * The aura version of {@link #ECHO}.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	AURA_ECHO,
 	/**
 	 * Whenever a {@link Minion} with this attribute is first attacked, it loses this attribute and the damage dealt to it
@@ -951,6 +1035,7 @@ public enum Attribute {
 	/**
 	 * Indicates that this {@link Entity} should remove itself from play peacefully at the end of the current turn.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	REMOVES_SELF_AT_END_OF_TURN,
 	/**
 	 * This value indicates the turn number of the {@link Player}'s last turn.
@@ -970,6 +1055,7 @@ public enum Attribute {
 	/**
 	 * Indicates the minion should magnetize when being played left of a mech instead of summoning normally
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	MAGNETIC,
 	/**
 	 * An array of card ID strings that correspond to which cards this card was magnetized from.
@@ -1020,6 +1106,7 @@ public enum Attribute {
 	/**
 	 * Will block an entity from receiving game event triggers
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	CANT_GAIN_ENCHANTMENTS,
 	/**
 	 * Indicates a character shouldn't naturally lose the FROZEN attribute
@@ -1036,10 +1123,12 @@ public enum Attribute {
 	/**
 	 * Tracks the amount of times an actor has attacked over the course of a game
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	ATTACKS_THIS_GAME,
 	/**
 	 * Tracks a card being in the progress of playing
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	BEING_PLAYED,
 	/**
 	 * Marks a card as using a "Quick Draw" effect for the Outlaw class
@@ -1114,6 +1203,7 @@ public enum Attribute {
 	/**
 	 * Indicates which turn a minion was summoned.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	SUMMONED_ON_TURN,
 	/**
 	 * The player ID of the owner of the source entity that summoned this minion.
@@ -1122,6 +1212,7 @@ public enum Attribute {
 	/**
 	 * Indicates the number of attacks this {@link Actor} has made this turn.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	ATTACKS_THIS_TURN,
 	/**
 	 * The number of turns a player has for Demonic Form
@@ -1149,6 +1240,7 @@ public enum Attribute {
 	 * <p>
 	 * Requires an appropriate trigger to actually implement the effect.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	DECAY,
 	/**
 	 * The {@link net.demilich.metastone.game.spells.aura.Aura} version of the {@link #DECAY} keyword.
@@ -1197,6 +1289,7 @@ public enum Attribute {
 	/**
 	 * Records how much damage was dealt to minions by this player or entity this game.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	TOTAL_MINION_DAMAGE_DEALT_THIS_GAME,
 	/**
 	 * Records how many attacks last turn an actor made.
@@ -1218,6 +1311,7 @@ public enum Attribute {
 	/**
 	 * Keeps track of damage dealt by this {@code source} minion <b>this game</b>.
 	 */
+	@Tier(Tier.Type.INLINE_INT)
 	TOTAL_DAMAGE_DEALT_THIS_GAME,
 	/**
 	 * Attribute determining which card is the "Signature" for Ringmaster cards.
@@ -1279,6 +1373,7 @@ public enum Attribute {
 	/**
 	 * When a minion with REBORN dies for the first time it is resummoned at 1 HP without REBORN.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	REBORN,
 	/**
 	 * A dormant minion is untargetable and cannot attack. After a number of turns it awakens.
@@ -1291,18 +1386,22 @@ public enum Attribute {
 	/**
 	 * Outcast triggers when the card is played from the leftmost or rightmost position in hand.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	OUTCAST,
 	/**
 	 * Corrupt transforms a card in hand when you play a card costing more.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	CORRUPT,
 	/**
 	 * Tradeable allows swapping the card from hand to deck and drawing a new card.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	TRADEABLE,
 	/**
 	 * Honorable Kill triggers when damage exactly kills the target.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	HONORABLE_KILL,
 	/**
 	 * Infuse transforms a card in hand after enough friendly minions die.
@@ -1323,10 +1422,12 @@ public enum Attribute {
 	/**
 	 * Marks a spell card as a Twinspell. When played the first time it adds a copy without TWINSPELL to the hand.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	TWINSPELL,
 	/**
 	 * Marks a card as a Libram for cost reduction synergies.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	LIBRAM,
 	/**
 	 * Tracks the number of secrets played this turn.
@@ -1362,6 +1463,7 @@ public enum Attribute {
 	 * Set on a card when it is actually played from the leftmost or rightmost position in hand, indicating the
 	 * outcast bonus should trigger.
 	 */
+	@Tier(Tier.Type.INLINE_BOOL)
 	OUTCAST_TRIGGERED,
 	/**
 	 * Tracks how many times a player has Excavated this game.
@@ -1375,6 +1477,36 @@ public enum Attribute {
 	 * Marks a card as a Starship Piece for assembly.
 	 */
 	STARSHIP_PIECE,
+	/**
+	 * Stores the list/array of assembled Starship Piece card IDs on a player or starship entity.
+	 */
+	STARSHIP_PIECES,
+	/**
+	 * When set on a player or friendly entity via an aura, lifesteal damages the enemy hero instead of healing the
+	 * friendly hero (implements Il'gynoth).
+	 */
+	AURA_LIFEDRAIN_DAMAGES_ENEMY_HERO,
+	/**
+	 * Tracks how many times a player has Heralded this game (Cataclysm mechanic).
+	 */
+	HERALD_COUNT,
+	/**
+	 * Marks a card with the Fabled keyword (Across the Timeways mechanic), which shuffles associated Fabled tokens into
+	 * the deck at the start of the game.
+	 */
+	FABLED,
+	/**
+	 * Marks a card with the Assemble keyword.
+	 */
+	ASSEMBLE,
+	/**
+	 * Stores the set/list of minion races and spell schools played by the player on their previous turn for Kindred.
+	 */
+	KINDRED_RACES_LAST_TURN,
+	/**
+	 * Stores the set/list of minion races and spell schools played by the player on their current turn for Kindred.
+	 */
+	KINDRED_RACES_THIS_TURN,
 	/**
 	 * Equipment cards for rogue runs
 	 */

@@ -376,8 +376,8 @@ public class TestBase {
 	 * @return
 	 */
 	public static String randomHeroCard(DeckFormat deckFormat, CardCatalogue cardCatalogue) {
-		List<String> baseHeroes = new ArrayList<>(cardCatalogue.getBaseClasses(deckFormat));
-		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
+		List<String> baseHeroes = cardCatalogue.getBaseClasses(deckFormat);
+		return baseHeroes.get(ThreadLocalRandom.current().nextInt(baseHeroes.size()));
 	}
 
 	@FunctionalInterface
@@ -714,43 +714,38 @@ public class TestBase {
 		return getSummonedMinion(player.getMinions());
 	}
 
+	private static final ScheduledExecutorService TIMEOUT_WATCHDOG = Executors.newSingleThreadScheduledExecutor(r -> {
+		Thread t = new Thread(r, "test-timeout-watchdog");
+		t.setDaemon(true);
+		return t;
+	});
+
 	public static <T> T assertTimeoutPreemptively(Duration timeout, ThrowingSupplier<T> supplier,
 	                                              Object messageOrSupplier) {
-
-		var thread = new AtomicReference<Thread>();
-		var factory = new ThreadFactory() {
-			@Override
-			public Thread newThread(@NotNull Runnable r) {
-				thread.set(new Thread(r));
-				return thread.get();
-			}
-		};
-
-		ExecutorService executorService = Executors.newSingleThreadExecutor(factory);
-
+		Thread testThread = Thread.currentThread();
+		var timedOutTrace = new AtomicReference<StackTraceElement[]>();
+		long timeoutInMillis = timeout.toMillis();
+		ScheduledFuture<?> watchdog = TIMEOUT_WATCHDOG.schedule(() -> {
+			timedOutTrace.set(testThread.getStackTrace());
+			testThread.interrupt();
+		}, timeoutInMillis, TimeUnit.MILLISECONDS);
 		try {
-			Future<T> future = executorService.submit(() -> {
-				try {
-					return supplier.get();
-				} catch (Throwable throwable) {
-					throw ExceptionUtils.throwAsUncheckedException(throwable);
-				}
-			});
-
-			long timeoutInMillis = timeout.toMillis();
-			try {
-				return future.get(timeoutInMillis, TimeUnit.MILLISECONDS);
-			} catch (TimeoutException ex) {
-				ex.setStackTrace(thread.get().getStackTrace());
+			return supplier.get();
+		} catch (Throwable throwable) {
+			StackTraceElement[] trace = timedOutTrace.get();
+			if (trace != null) {
+				Thread.interrupted();
+				TimeoutException ex = new TimeoutException();
+				ex.setStackTrace(trace);
 				throw new AssertionFailedError(buildPrefix(nullSafeGet(messageOrSupplier))
 						+ "execution timed out after " + timeoutInMillis + " ms\ntask stacktrace:\n" + Throwables.getStackTraceAsString(ex));
-			} catch (ExecutionException ex) {
-				throw ExceptionUtils.throwAsUncheckedException(ex.getCause());
-			} catch (Throwable ex) {
-				throw ExceptionUtils.throwAsUncheckedException(ex);
 			}
+			throw ExceptionUtils.throwAsUncheckedException(throwable);
 		} finally {
-			executorService.shutdownNow();
+			watchdog.cancel(false);
+			if (timedOutTrace.get() != null) {
+				Thread.interrupted();
+			}
 		}
 	}
 

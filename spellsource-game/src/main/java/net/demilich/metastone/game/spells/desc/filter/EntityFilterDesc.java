@@ -38,7 +38,7 @@ public class EntityFilterDesc extends Desc<EntityFilterArg, EntityFilter> {
 
 	@Override
 	public EntityFilterDesc clone() {
-		return (EntityFilterDesc) copyTo(new EntityFilterDesc(getDescClass()));
+		return (EntityFilterDesc) super.clone();
 	}
 
 	@Override

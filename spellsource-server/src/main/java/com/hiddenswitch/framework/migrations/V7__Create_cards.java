@@ -24,20 +24,11 @@ public class V7__Create_cards extends BaseJavaMigration {
 
 	@Override
 	public Integer getChecksum() {
-		return Environment.cardsChecksum();
+		return 0;
 	}
 
 	@Override
 	public void migrate(Context context) throws Exception {
-		var dsl = DSL.using(context.getConnection(), SQLDialect.POSTGRES);
-		var ownerUserId = Environment.getSpellsourceUserId();
-		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
-		var insertAndUpdate = ClasspathCardCatalogue.INSTANCE.getRecords().values().stream().map(record -> {
-			var now = OffsetDateTime.now();
-			var encoded = JsonObject.mapFrom(record.getDesc());
-			return dsl.insertInto(CARDS, CARDS.ID, CARDS.CREATED_BY, CARDS.CREATED_AT, CARDS.LAST_MODIFIED, CARDS.CARD_SCRIPT)
-					.values(record.getId(), ownerUserId, now, now, encoded);
-		}).collect(Collectors.toList());
-		dsl.batch(insertAndUpdate).execute();
+		// No-op: git-authored cards are loaded directly in-memory from ClasspathCardCatalogue.INSTANCE
 	}
 }

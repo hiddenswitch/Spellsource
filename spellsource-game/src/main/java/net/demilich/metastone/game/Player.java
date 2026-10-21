@@ -58,21 +58,21 @@ import java.util.stream.Collectors;
  */
 public class Player extends Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private EntityLookup lookup = new EntityLookup(128);
-	protected CardZone deck = new CardZone(getId(), Zones.DECK, lookup);
-	private CardZone hand = new CardZone(getId(), Zones.HAND, lookup);
-	private CardZone discoverZone = new CardZone(getId(), Zones.DISCOVER, lookup);
-	private EntityZone<Entity> setAsideZone = new EntityZone<>(getId(), Zones.SET_ASIDE_ZONE, lookup);
-	private EntityZone<Entity> graveyard = new EntityZone<>(getId(), Zones.GRAVEYARD, lookup);
-	private EntityZone<Entity> removedFromPlay = new EntityZone<>(getId(), Zones.REMOVED_FROM_PLAY, lookup);
-	private EntityZone<Minion> minions = new EntityZone<>(getId(), Zones.BATTLEFIELD, lookup);
-	private EntityZone<Hero> heroZone = new EntityZone<>(getId(), Zones.HERO, lookup);
-	private EntityZone<Secret> secretZone = new EntityZone<>(getId(), Zones.SECRET, lookup);
-	private EntityZone<Quest> quests = new EntityZone<>(getId(), Zones.QUEST, lookup);
-	private EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER, lookup);
-	private EntityZone<Card> heroPowerZone = new EntityZone<>(getId(), Zones.HERO_POWER, lookup);
-	private EntityZone<Weapon> weaponZone = new EntityZone<>(getId(), Zones.WEAPON, lookup);
-	private GameStatistics statistics = new GameStatistics();
+	private EntityLookup lookup;
+	protected CardZone deck;
+	private CardZone hand;
+	private CardZone discoverZone;
+	private EntityZone<Entity> setAsideZone;
+	private EntityZone<Entity> graveyard;
+	private EntityZone<Entity> removedFromPlay;
+	private EntityZone<Minion> minions;
+	private EntityZone<Hero> heroZone;
+	private EntityZone<Secret> secretZone;
+	private EntityZone<Quest> quests;
+	private EntityZone<Player> playerZone;
+	private EntityZone<Card> heroPowerZone;
+	private EntityZone<Weapon> weaponZone;
+	private GameStatistics statistics;
 
 	/**
 	 * @see #getMana()
@@ -109,10 +109,9 @@ public class Player extends Entity implements Serializable {
 	}
 
 	private Player(Player otherPlayer) {
-		this.setName(otherPlayer.getName());
-		this.getAttributes().putAll(otherPlayer.getAttributes());
-		this.playerZone.add(this);
-		this.setId(otherPlayer.getId());
+		super(otherPlayer);
+		this.lookup = new EntityLookup(otherPlayer.lookup.capacity());
+		this.playerZone = new EntityZone<>(otherPlayer.getId(), Zones.PLAYER, lookup);
 		this.secretZone = otherPlayer.getSecrets().clone();
 		this.quests = otherPlayer.getQuests().clone();
 		this.deck = otherPlayer.getDeck().clone();
@@ -125,17 +124,17 @@ public class Player extends Entity implements Serializable {
 		this.heroZone = otherPlayer.getHeroZone().clone();
 		this.heroPowerZone = otherPlayer.getHeroPowerZone().clone();
 		this.weaponZone = otherPlayer.getWeaponZone().clone();
+		this.playerZone.add(this);
 		this.mana = otherPlayer.mana;
 		this.maxMana = otherPlayer.maxMana;
 		this.lockedMana = otherPlayer.lockedMana;
 		this.statistics = otherPlayer.getStatistics().clone();
-		this.lookup = new EntityLookup(128);
 		for (Zones zone : GameLogic.VALID_ZONES) {
 			@SuppressWarnings("unchecked")
 			EntityZone<? extends Entity> zone1 = (EntityZone<? extends Entity>) getZone(zone);
 			zone1.setLookup(lookup);
-			for (Object entity : zone1) {
-				Entity entity1 = (Entity) entity;
+			for (int i = 0, size = zone1.size(); i < size; i++) {
+				Entity entity1 = zone1.get(i);
 				lookup.put(entity1.getId(), entity1);
 			}
 		}
@@ -145,6 +144,21 @@ public class Player extends Entity implements Serializable {
 	 * Use build from config to actually build the class.
 	 */
 	public Player() {
+		this.lookup = new EntityLookup(128);
+		this.deck = new CardZone(getId(), Zones.DECK, lookup);
+		this.hand = new CardZone(getId(), Zones.HAND, lookup);
+		this.discoverZone = new CardZone(getId(), Zones.DISCOVER, lookup);
+		this.setAsideZone = new EntityZone<>(getId(), Zones.SET_ASIDE_ZONE, lookup);
+		this.graveyard = new EntityZone<>(getId(), Zones.GRAVEYARD, lookup);
+		this.removedFromPlay = new EntityZone<>(getId(), Zones.REMOVED_FROM_PLAY, lookup);
+		this.minions = new EntityZone<>(getId(), Zones.BATTLEFIELD, lookup);
+		this.heroZone = new EntityZone<>(getId(), Zones.HERO, lookup);
+		this.secretZone = new EntityZone<>(getId(), Zones.SECRET, lookup);
+		this.quests = new EntityZone<>(getId(), Zones.QUEST, lookup);
+		this.playerZone = new EntityZone<>(getId(), Zones.PLAYER, lookup);
+		this.heroPowerZone = new EntityZone<>(getId(), Zones.HERO_POWER, lookup);
+		this.weaponZone = new EntityZone<>(getId(), Zones.WEAPON, lookup);
+		this.statistics = new GameStatistics();
 		this.playerZone.add(this);
 	}
 
@@ -384,10 +398,10 @@ public class Player extends Entity implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder()
-				.append(getId())
-				.append(getName())
-				.toHashCode();
+		int result = 17;
+		result = 37 * result + getId();
+		result = 37 * result + Objects.hashCode(getName());
+		return result;
 	}
 
 	/**
@@ -400,16 +414,10 @@ public class Player extends Entity implements Serializable {
 	 */
 	@Override
 	public boolean equals(Object other) {
-		if (other == null
-				|| !(other instanceof Player)) {
+		if (!(other instanceof Player rhd)) {
 			return false;
 		}
-
-		Player rhd = (Player) other;
-		return new EqualsBuilder()
-				.append(getId(), rhd.getId())
-				.append(getName(), rhd.getName())
-				.isEquals();
+		return getId() == rhd.getId() && Objects.equals(getName(), rhd.getName());
 	}
 
 	/**

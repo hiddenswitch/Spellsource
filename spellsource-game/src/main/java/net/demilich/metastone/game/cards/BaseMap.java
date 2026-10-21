@@ -19,16 +19,30 @@ import java.util.Set;
  * @param <V>
  */
 public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> implements Freezable, Cloneable, Serializable {
+	private static final ClassValue<Enum<?>[]> KEY_UNIVERSE_CACHE = new ClassValue<>() {
+		@Override
+		protected Enum<?>[] computeValue(Class<?> type) {
+			Enum<?>[] universe = (Enum<?>[]) type.getEnumConstants();
+			if (universe.length > 320) {
+				throw new IllegalStateException("BaseMap supports at most 320 enum constants, got " + universe.length + " for " + type.getName());
+			}
+			return universe;
+		}
+	};
+	private static final Object[] EMPTY_VALUES = new Object[0];
+	private static final SharedData<?> EMPTY_DATA = new SharedData<>(EMPTY_VALUES, 0L, 0L, 0L, 0L, 0L, true);
+
 	private transient boolean readOnly;
 	private final Class<K> keyType;
 	private final K[] keyUniverse;
 	private SharedData<V> data;
 	private transient Set<Entry<K, V>> entrySet;
 
+	@SuppressWarnings("unchecked")
 	public BaseMap(Class<K> keyType) {
 		this.keyType = keyType;
-		this.keyUniverse = keyType.getEnumConstants();
-		this.data = new SharedData<>(keyUniverse.length);
+		this.keyUniverse = (K[]) KEY_UNIVERSE_CACHE.get(keyType);
+		this.data = (SharedData<V>) EMPTY_DATA;
 	}
 
 	BaseMap(Class<K> keyType, Map<K, V> m) {
@@ -44,12 +58,17 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public V getOrDefault(Object key, V defaultValue) {
-		int ordinal = ordinalOf(key);
-		if (ordinal < 0 || !data.present[ordinal]) {
+		SharedData<V> d = this.data;
+		if (d == EMPTY_DATA) {
 			return defaultValue;
 		}
-		return data.get(ordinal);
+		int ordinal = ordinalOf(key);
+		if (ordinal < 0 || !d.isPresent(ordinal)) {
+			return defaultValue;
+		}
+		return (V) d.values[d.indexOf(ordinal)];
 	}
 
 	protected void checkNotFrozen() {
@@ -59,57 +78,167 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public V put(K key, V value) {
 		checkNotFrozen();
-		Objects.requireNonNull(key);
-		ensureOwned();
-		return data.put(key.ordinal(), value);
+		int ordinal = key.ordinal();
+		SharedData<V> d = this.data;
+		int idx = d.indexOf(ordinal);
+		if (d.isPresent(ordinal)) {
+			V previous = (V) d.values[idx];
+			if (d.shared) {
+				Object[] newValues = d.values.clone();
+				newValues[idx] = value;
+				this.data = new SharedData<>(newValues, d.b0, d.b1, d.b2, d.b3, d.b4, false);
+			} else {
+				d.values[idx] = value;
+			}
+			return previous;
+		} else {
+			Object[] oldValues = d.values;
+			int len = oldValues.length;
+			Object[] newValues = new Object[len + 1];
+			if (idx > 0) {
+				System.arraycopy(oldValues, 0, newValues, 0, idx);
+			}
+			newValues[idx] = value;
+			if (idx < len) {
+				System.arraycopy(oldValues, idx, newValues, idx + 1, len - idx);
+			}
+			long bit = 1L << ordinal;
+			long nb0 = d.b0, nb1 = d.b1, nb2 = d.b2, nb3 = d.b3, nb4 = d.b4;
+			switch (ordinal >>> 6) {
+				case 0 -> nb0 |= bit;
+				case 1 -> nb1 |= bit;
+				case 2 -> nb2 |= bit;
+				case 3 -> nb3 |= bit;
+				default -> nb4 |= bit;
+			}
+			if (d.shared) {
+				this.data = new SharedData<>(newValues, nb0, nb1, nb2, nb3, nb4, false);
+			} else {
+				d.values = newValues;
+				d.b0 = nb0;
+				d.b1 = nb1;
+				d.b2 = nb2;
+				d.b3 = nb3;
+				d.b4 = nb4;
+			}
+			return null;
+		}
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public V remove(Object key) {
 		checkNotFrozen();
-		int ordinal = ordinalOf(key);
-		if (ordinal < 0 || !data.present[ordinal]) {
+		SharedData<V> d = this.data;
+		if (d == EMPTY_DATA) {
 			return null;
 		}
-		ensureOwned();
-		return data.remove(ordinal);
+		int ordinal = ordinalOf(key);
+		if (ordinal < 0) {
+			return null;
+		}
+		return removeByOrdinal(ordinal);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected final V removeByOrdinal(int ordinal) {
+		SharedData<V> d = this.data;
+		if (!d.isPresent(ordinal)) {
+			return null;
+		}
+		int idx = d.indexOf(ordinal);
+		Object[] oldValues = d.values;
+		V previous = (V) oldValues[idx];
+		int len = oldValues.length;
+		if (len == 1) {
+			this.data = (SharedData<V>) EMPTY_DATA;
+			return previous;
+		}
+		Object[] newValues = new Object[len - 1];
+		if (idx > 0) {
+			System.arraycopy(oldValues, 0, newValues, 0, idx);
+		}
+		if (idx < len - 1) {
+			System.arraycopy(oldValues, idx + 1, newValues, idx, len - idx - 1);
+		}
+		long mask = ~(1L << ordinal);
+		long nb0 = d.b0, nb1 = d.b1, nb2 = d.b2, nb3 = d.b3, nb4 = d.b4;
+		switch (ordinal >>> 6) {
+			case 0 -> nb0 &= mask;
+			case 1 -> nb1 &= mask;
+			case 2 -> nb2 &= mask;
+			case 3 -> nb3 &= mask;
+			default -> nb4 &= mask;
+		}
+		if (d.shared) {
+			this.data = new SharedData<>(newValues, nb0, nb1, nb2, nb3, nb4, false);
+		} else {
+			d.values = newValues;
+			d.b0 = nb0;
+			d.b1 = nb1;
+			d.b2 = nb2;
+			d.b3 = nb3;
+			d.b4 = nb4;
+		}
+		return previous;
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void clear() {
 		checkNotFrozen();
-		if (data.size == 0) {
-			return;
-		}
-		ensureOwned();
-		data.clear();
+		this.data = (SharedData<V>) EMPTY_DATA;
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public V get(Object key) {
-		int ordinal = ordinalOf(key);
-		if (ordinal < 0 || !data.present[ordinal]) {
+		SharedData<V> d = this.data;
+		if (d == EMPTY_DATA) {
 			return null;
 		}
-		return data.get(ordinal);
+		int ordinal = ordinalOf(key);
+		if (ordinal < 0 || !d.isPresent(ordinal)) {
+			return null;
+		}
+		return (V) d.values[d.indexOf(ordinal)];
+	}
+
+	@SuppressWarnings("unchecked")
+	protected final V getByOrdinal(int ordinal) {
+		SharedData<V> d = this.data;
+		if (d == EMPTY_DATA || !d.isPresent(ordinal)) {
+			return null;
+		}
+		return (V) d.values[d.indexOf(ordinal)];
 	}
 
 	@Override
 	public boolean containsKey(Object key) {
+		SharedData<V> d = this.data;
+		if (d == EMPTY_DATA) {
+			return false;
+		}
 		int ordinal = ordinalOf(key);
-		return ordinal >= 0 && data.present[ordinal];
+		return ordinal >= 0 && d.isPresent(ordinal);
+	}
+
+	protected final boolean containsOrdinal(int ordinal) {
+		SharedData<V> d = this.data;
+		return d != EMPTY_DATA && d.isPresent(ordinal);
 	}
 
 	@Override
 	public int size() {
-		return data.size;
+		return data.values.length;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return data.size == 0;
+		return data.values.length == 0;
 	}
 
 	@Override
@@ -118,7 +247,6 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 		if (m == null || m.isEmpty()) {
 			return;
 		}
-		ensureOwned();
 		for (var entry : m.entrySet()) {
 			put(entry.getKey(), entry.getValue());
 		}
@@ -145,6 +273,9 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 	@Override
 	public void freeze() {
 		readOnly = true;
+		if (!data.shared) {
+			data.shared = true;
+		}
 	}
 
 	@Override
@@ -157,10 +288,14 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public BaseMap<K, V> clone() {
 		try {
 			BaseMap<K, V> clone = (BaseMap<K, V>) super.clone();
-			clone.data = data.retain();
+			if (!this.data.shared) {
+				this.data.shared = true;
+			}
+			clone.data = this.data;
 			clone.readOnly = this.readOnly;
 			clone.entrySet = null;
 			return clone;
@@ -178,17 +313,9 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 		return clone;
 	}
 
-	private void ensureOwned() {
-		if (data.isShared()) {
-			data.release();
-			data = data.copy();
-		}
-	}
-
 	private int ordinalOf(Object key) {
-		int ordinal = ((Enum<?>) key).ordinal();
-		if (ordinal < keyUniverse.length && keyUniverse[ordinal] == key) {
-			return ordinal;
+		if (key instanceof Enum<?> e && e.getDeclaringClass() == keyType) {
+			return e.ordinal();
 		}
 		return -1;
 	}
@@ -250,8 +377,10 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 		}
 
 		@Override
+		@SuppressWarnings("unchecked")
 		public V getValue() {
-			return data.get(ordinal);
+			SharedData<V> d = data;
+			return d.isPresent(ordinal) ? (V) d.values[d.indexOf(ordinal)] : null;
 		}
 
 		@Override
@@ -274,80 +403,68 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 	}
 
 	private int findNext(int fromIndex) {
-		for (int i = fromIndex; i < data.present.length; i++) {
-			if (data.present[i]) {
-				return i;
-			}
+		if (fromIndex >= 320) {
+			return -1;
 		}
-		return -1;
+		SharedData<V> d = this.data;
+		int wordIndex = fromIndex >>> 6;
+		long word = d.word(wordIndex) & (~0L << fromIndex);
+		while (true) {
+			if (word != 0L) {
+				return (wordIndex << 6) + Long.numberOfTrailingZeros(word);
+			}
+			if (++wordIndex >= 5) {
+				return -1;
+			}
+			word = d.word(wordIndex);
+		}
 	}
 
 	private static final class SharedData<V> implements Serializable {
-		private final Object[] values;
-		private final boolean[] present;
-		private volatile int references;
-		private int size;
+		private Object[] values;
+		private long b0, b1, b2, b3, b4;
+		private boolean shared;
 
-		private SharedData(int capacity) {
-			this(new Object[capacity], new boolean[capacity], 0);
-		}
-
-		private SharedData(Object[] values, boolean[] present, int size) {
+		private SharedData(Object[] values, long b0, long b1, long b2, long b3, long b4, boolean shared) {
 			this.values = values;
-			this.present = present;
-			this.size = size;
-			this.references = 1;
+			this.b0 = b0;
+			this.b1 = b1;
+			this.b2 = b2;
+			this.b3 = b3;
+			this.b4 = b4;
+			this.shared = shared;
 		}
 
-		private SharedData<V> retain() {
-			references++;
-			return this;
+		private long word(int wordIndex) {
+			return switch (wordIndex) {
+				case 0 -> b0;
+				case 1 -> b1;
+				case 2 -> b2;
+				case 3 -> b3;
+				default -> b4;
+			};
 		}
 
-		private void release() {
-			references--;
+		private boolean isPresent(int ordinal) {
+			long word = switch (ordinal >>> 6) {
+				case 0 -> b0;
+				case 1 -> b1;
+				case 2 -> b2;
+				case 3 -> b3;
+				default -> b4;
+			};
+			return (word & (1L << ordinal)) != 0L;
 		}
 
-		private boolean isShared() {
-			return references > 1;
-		}
-
-		private SharedData<V> copy() {
-			return new SharedData<>(values.clone(), present.clone(), size);
-		}
-
-		@SuppressWarnings("unchecked")
-		private V get(int ordinal) {
-			return (V) values[ordinal];
-		}
-
-		@SuppressWarnings("unchecked")
-		private V put(int ordinal, V value) {
-			V previous = (V) values[ordinal];
-			values[ordinal] = value;
-			if (!present[ordinal]) {
-				present[ordinal] = true;
-				size++;
-			}
-			return previous;
-		}
-
-		@SuppressWarnings("unchecked")
-		private V remove(int ordinal) {
-			if (!present[ordinal]) {
-				return null;
-			}
-			V previous = (V) values[ordinal];
-			values[ordinal] = null;
-			present[ordinal] = false;
-			size--;
-			return previous;
-		}
-
-		private void clear() {
-			Arrays.fill(values, null);
-			Arrays.fill(present, false);
-			size = 0;
+		private int indexOf(int ordinal) {
+			long mask = (1L << ordinal) - 1L;
+			return switch (ordinal >>> 6) {
+				case 0 -> Long.bitCount(b0 & mask);
+				case 1 -> Long.bitCount(b0) + Long.bitCount(b1 & mask);
+				case 2 -> Long.bitCount(b0) + Long.bitCount(b1) + Long.bitCount(b2 & mask);
+				case 3 -> Long.bitCount(b0) + Long.bitCount(b1) + Long.bitCount(b2) + Long.bitCount(b3 & mask);
+				default -> Long.bitCount(b0) + Long.bitCount(b1) + Long.bitCount(b2) + Long.bitCount(b3) + Long.bitCount(b4 & mask);
+			};
 		}
 	}
 }

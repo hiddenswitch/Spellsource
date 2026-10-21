@@ -8,6 +8,7 @@ group 'com.hiddenswitch'
 
 dependencies {
     implementation project(':spellsource-common')
+    implementation project(':spellsource-game')
     api project(':spellsource-protos')
     testImplementation 'org.jetbrains:annotations'
     testImplementation "com.google.guava:guava:$guavaVersion"

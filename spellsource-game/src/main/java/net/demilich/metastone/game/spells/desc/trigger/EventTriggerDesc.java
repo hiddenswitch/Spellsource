@@ -37,7 +37,7 @@ public final class EventTriggerDesc extends Desc<EventTriggerArg, EventTrigger> 
 
 	@Override
 	public EventTriggerDesc clone() {
-		return (EventTriggerDesc) copyTo(new EventTriggerDesc(getDescClass()));
+		return (EventTriggerDesc) super.clone();
 	}
 
 	@Override

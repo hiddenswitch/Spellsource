@@ -88,20 +88,22 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 
 		EntityFilter targetFilter = desc.getEntityFilter();
 		List<Entity> validTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter, source);
+		int validSize = validTargets.size();
 		// there is at least one valid target and the RANDOM_TARGET flag is set,
 		// pick one randomly
-		if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
+		if (validSize > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
 			Entity target = context.getLogic().getRandom(validTargets);
 			castForPlayer(context, player, desc, source, target);
 		} else {
 			// there is at least one target and RANDOM_TARGET flag is not set,
 			// cast in on all targets
-
-			for (Entity target : validTargets) {
+			var targetStack = context.getSpellTargetStack();
+			for (int i = 0; i < validSize; i++) {
+				Entity target = validTargets.get(i);
 				final EntityReference reference = target == null ? EntityReference.NONE : target.getReference();
-				context.getSpellTargetStack().push(reference);
+				targetStack.push(reference);
 				castForPlayer(context, player, desc, source, target);
-				context.getSpellTargetStack().pop();
+				targetStack.pop();
 			}
 		}
 	}
@@ -120,20 +122,17 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 */
 	protected void castForPlayer(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		TargetPlayer targetPlayer = desc.getTargetPlayer();
-		if (targetPlayer == null) {
-			targetPlayer = TargetPlayer.SELF;
+		if (targetPlayer == null || targetPlayer == TargetPlayer.SELF) {
+			onCast(context, player, desc, source, target);
+			return;
 		}
-		Player opponent = context.getOpponent(player);
 		switch (targetPlayer) {
 			case BOTH:
 				onCast(context, player, desc, source, target);
-				onCast(context, opponent, desc, source, target);
+				onCast(context, context.getOpponent(player), desc, source, target);
 				break;
 			case OPPONENT:
-				onCast(context, opponent, desc, source, target);
-				break;
-			case SELF:
-				onCast(context, player, desc, source, target);
+				onCast(context, context.getOpponent(player), desc, source, target);
 				break;
 			case OWNER:
 				onCast(context, context.getPlayer(target.getOwner()), desc, source, target);
@@ -191,10 +190,31 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * @param validArgs The valid arguments
 	 */
 	protected void checkArguments(Logger logger, GameContext context, Entity source, SpellDesc desc, SpellArg... validArgs) {
-		Set<SpellArg> unexpectedArgs = new LinkedHashSet<>(desc == null ? Collections.emptySet() : desc.keySet());
-		unexpectedArgs.removeAll(Arrays.asList(validArgs == null ? new SpellArg[0] : validArgs));
-		unexpectedArgs.removeAll(COMMON_ARGS);
-		if (unexpectedArgs.size() > 0) {
+		if (desc == null || !logger.isWarnEnabled()) {
+			return;
+		}
+		Set<SpellArg> unexpectedArgs = null;
+		for (SpellArg arg : desc.keySet()) {
+			if (COMMON_ARGS.contains(arg)) {
+				continue;
+			}
+			boolean valid = false;
+			if (validArgs != null) {
+				for (SpellArg validArg : validArgs) {
+					if (arg == validArg) {
+						valid = true;
+						break;
+					}
+				}
+			}
+			if (!valid) {
+				if (unexpectedArgs == null) {
+					unexpectedArgs = new LinkedHashSet<>();
+				}
+				unexpectedArgs.add(arg);
+			}
+		}
+		if (unexpectedArgs != null) {
 			logger.warn("checkArguments {} {}: Unexpected arguments {}", context.getGameId(), source, unexpectedArgs);
 		}
 	}

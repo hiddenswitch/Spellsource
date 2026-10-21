@@ -545,4 +545,98 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			assertEquals(action.getSourceReference(), charger.getReference());
 		});
 	}
+
+	@Test
+	public void testAttacksWithReadyMinionsDespiteEndOfTurnTriggerAtHorizon() {
+		runGym((context, player, opponent) -> {
+			// Friendly end-of-turn trigger minion + ready attackers + 3 playable cards at maxDepth=4.
+			// Previously, depth=4 horizon leaves did not fire friendly TurnEndTriggers in postProcess,
+			// causing the bot to take END_TURN at depth 3 and leave ready minions unattacked!
+			Minion broodspawn = playMinionCard(context, player, "minion_broodspawn");
+			Minion attacker1 = playMinionCard(context, player, "minion_charge_test");
+			Minion attacker2 = playMinionCard(context, player, "minion_charge_test");
+
+			receiveCard(context, player, "minion_neutral_test_1");
+			receiveCard(context, player, "minion_neutral_test_1");
+			receiveCard(context, player, "minion_neutral_test_1");
+			player.setMaxMana(10);
+			player.setMana(10);
+
+			int initialEnemyHp = opponent.getHero().getHp();
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour()
+					.setMaxDepth(4)
+					.setParallel(false);
+			context.setBehaviour(player.getId(), behaviour);
+
+			while (context.takeActionInTurn()) {
+			}
+
+			int expectedDamage = attacker1.getAttack() + attacker2.getAttack();
+			assertTrue(opponent.getHero().getHp() <= initialEnemyHp - expectedDamage,
+					"All ready minions should attack the enemy hero before ending the turn");
+		});
+	}
+
+	@Test
+	public void testReplansWhenTopLevelActionDrawsPlayableCard() {
+		runGym((context, player, opponent) -> {
+			// Put a playable burn spell on top of the deck, and give the player a card-draw spell in hand.
+			// When spell_wayward_winds draws spell_test_deal_6, the newly drawn card must invalidate
+			// strictPlan's cached END_TURN and be cast on the enemy hero.
+			putOnTopOfDeck(context, player, "spell_test_deal_6");
+			receiveCard(context, player, "spell_wayward_winds");
+			player.setMaxMana(10);
+			player.setMana(10);
+			int initialHp = opponent.getHero().getHp();
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour()
+					.setParallel(false);
+			context.setBehaviour(player.getId(), behaviour);
+
+			while (context.takeActionInTurn()) {
+			}
+
+			assertEquals(initialHp - 6, opponent.getHero().getHp(),
+					"Bot must invalidate strictPlan after drawing spell_test_deal_6 and cast it");
+		});
+	}
+
+	@Test
+	public void testSwingsEquippedWeaponAtEnemyHero() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_test_3_2");
+			int initialHp = opponent.getHero().getHp();
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour()
+					.setParallel(false);
+			context.setBehaviour(player.getId(), behaviour);
+
+			while (context.takeActionInTurn()) {
+			}
+
+			assertEquals(initialHp - 3, opponent.getHero().getHp(),
+					"Bot should swing its equipped 3/2 weapon at the enemy hero instead of hoarding durability");
+		});
+	}
+
+	@Test
+	public void testValueTradePrefers4_4Over1_1TokenAndFace() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion enemyFourFour = playMinionCard(context, opponent, 4, 4);
+			Minion enemyOneOne = playMinionCard(context, opponent, 1, 1);
+			context.endTurn();
+			Minion ourFiveFive = playMinionCard(context, player, 5, 5);
+			ourFiveFive.setAttribute(Attribute.CHARGE);
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour()
+					.setParallel(false);
+			context.setBehaviour(player.getId(), behaviour);
+
+			while (context.takeActionInTurn()) {
+			}
+
+			assertTrue(enemyFourFour.isDestroyed(),
+					"A 5/5 minion should value-trade into an enemy 4/4 rather than attacking a 1/1 token or going face at 30 HP");
+			assertFalse(enemyOneOne.isDestroyed());
+			assertEquals(1, ourFiveFive.getHp());
+		});
+	}
 }

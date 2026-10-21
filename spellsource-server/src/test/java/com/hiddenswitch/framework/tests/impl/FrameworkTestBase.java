@@ -48,8 +48,7 @@ public class FrameworkTestBase {
 	}
 
 	@AfterEach
-	public void delay() throws InterruptedException {
-		TimeUnit.SECONDS.sleep(3);
+	public void delay() {
 	}
 
 	protected Future<String> startGateway(Vertx vertx) {
@@ -96,6 +95,11 @@ public class FrameworkTestBase {
 
 		@Override
 		public Future<Void> onComplete(Handler<AsyncResult<Void>> handler) {
+			return future.onComplete(handler);
+		}
+
+		@Override
+		public Future<Void> onComplete(Completable<? super Void> handler) {
 			return future.onComplete(handler);
 		}
 

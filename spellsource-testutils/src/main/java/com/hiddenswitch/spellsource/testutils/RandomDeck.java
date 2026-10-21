@@ -71,8 +71,8 @@ public final class RandomDeck extends GameDeck {
 		var random = new XORShiftRandom(seed);
 		DeckFormat deckFormat = cardCatalogue.spellsource();
 		var baseClasses = cardCatalogue.getBaseClasses(deckFormat);
-		var heroClass = new ArrayList<>(baseClasses).get(random.nextInt(baseClasses.size()));
-		return new RandomDeck(random.getState(), heroClass, cardCatalogue.spellsource());
+		var heroClass = baseClasses.get(random.nextInt(baseClasses.size()));
+		return new RandomDeck(random.getState(), heroClass, deckFormat, cardCatalogue);
 	}
 
 	public static @NotNull GameDeck randomDeck(DeckFormat deckFormat, CardCatalogue cardCatalogue) {
@@ -136,7 +136,9 @@ public final class RandomDeck extends GameDeck {
 				continue;
 			}
 
-			result.add(card.getCopy());
+			var copy = card.getCopy();
+			copy.freeze();
+			result.add(copy);
 		}
 		return result;
 	}

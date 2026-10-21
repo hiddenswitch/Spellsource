@@ -219,7 +219,12 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	 */
 	default CardList filtered(Predicate<? super Card> filter) {
 		CardList filteredCards = new CardArrayList();
-		this.stream().filter(filter).forEach(filteredCards::addCard);
+		for (int i = 0, n = size(); i < n; i++) {
+			Card c = get(i);
+			if (filter.test(c)) {
+				filteredCards.addCard(c);
+			}
+		}
 		return filteredCards;
 	}
 
@@ -231,8 +236,11 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	 * @see Card#getCopy() for more about the difference between a copy and a clone.
 	 */
 	default CardList getCopy() {
-		CardList copiedCards = new CardArrayList();
-		this.stream().map(Card::getCopy).forEach(copiedCards::addCard);
+		int n = size();
+		CardList copiedCards = new CardArrayList(n);
+		for (int i = 0; i < n; i++) {
+			copiedCards.addCard(get(i).getCopy());
+		}
 		return copiedCards;
 	}
 

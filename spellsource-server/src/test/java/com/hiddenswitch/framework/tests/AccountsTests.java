@@ -209,9 +209,13 @@ public class AccountsTests extends FrameworkTestBase {
 		// Create an account programmatically
 		startGateway(vertx)
 				.compose(v -> Accounts.realm())
-				.compose(hiddenswitch -> Environment.executeBlocking(() -> hiddenswitch.users().create(testUser)))
+				.compose(hiddenswitch -> Environment.executeBlocking(() -> {
+					try (var res = hiddenswitch.users().create(testUser)) {
+						return res.getStatus();
+					}
+				}))
 				.compose(ignored -> {
-					var url = StandaloneApplication.KEYCLOAK.getAuthServerUrl() + "/realms/hiddenswitch/protocol/openid-connect/token";
+					var url = java.net.URI.create(StandaloneApplication.KEYCLOAK.getAuthServerUrl() + "/realms/hiddenswitch/protocol/openid-connect/token").normalize().toString();
 
 					// Login
 					return webClient.postAbs(url)

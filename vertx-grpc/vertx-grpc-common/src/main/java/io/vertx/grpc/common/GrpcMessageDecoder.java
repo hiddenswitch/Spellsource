@@ -10,12 +10,14 @@
  */
 package io.vertx.grpc.common;
 
+import com.google.protobuf.Descriptors;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.Parser;
 import com.google.protobuf.util.JsonFormat;
 import io.grpc.MethodDescriptor;
+import io.vertx.codegen.annotations.Unstable;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.Json;
@@ -63,6 +65,10 @@ public interface GrpcMessageDecoder<T> {
       @Override
       public boolean accepts(WireFormat format) {
         return true;
+      }
+      @Override
+      public Descriptors.Descriptor messageDescriptor() {
+        return dit.getDescriptorForType();
       }
     };
   }
@@ -172,6 +178,16 @@ public interface GrpcMessageDecoder<T> {
   T decode(GrpcMessage msg) throws CodecException;
 
   boolean accepts(WireFormat format);
+
+  /**
+   * Returns the protobuf message descriptor if this decoder was created from a protobuf message type, {@code null} otherwise.
+   *
+   * @return the protobuf descriptor or {@code null}
+   */
+  @Unstable
+  default Descriptors.Descriptor messageDescriptor() {
+    return null;
+  }
 
   /**
    * Bridge from a gRPC-Java {@link MethodDescriptor.Marshaller} to a {@link GrpcMessageDecoder}.

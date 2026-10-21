@@ -105,20 +105,38 @@ public class Enchantment extends Entity implements Trigger {
 	@Override
 	public Enchantment clone() {
 		Enchantment clone = (Enchantment) super.clone();
-		clone.setTriggers(new ArrayList<>());
-		clone.setExpirationTriggers(new ArrayList<>());
-		clone.setActivationTriggers(new ArrayList<>());
-		for (var trigger : this.getTriggers()) {
-			clone.getTriggers().add(trigger.clone());
+		int nTrigs = this.getTriggers().size();
+		if (nTrigs == 0) {
+			clone.setTriggers(java.util.Collections.emptyList());
+		} else {
+			List<EventTrigger> clonedTrigs = new ArrayList<>(nTrigs);
+			for (int i = 0; i < nTrigs; i++) {
+				clonedTrigs.add(this.getTriggers().get(i).clone());
+			}
+			clone.setTriggers(clonedTrigs);
 		}
-		for (var trigger : this.getExpirationTriggers()) {
-			clone.getExpirationTriggers().add(trigger.clone());
+		int nExpTrigs = this.getExpirationTriggers().size();
+		if (nExpTrigs == 0) {
+			clone.setExpirationTriggers(java.util.Collections.emptyList());
+		} else {
+			List<EventTrigger> clonedExpTrigs = new ArrayList<>(nExpTrigs);
+			for (int i = 0; i < nExpTrigs; i++) {
+				clonedExpTrigs.add(this.getExpirationTriggers().get(i).clone());
+			}
+			clone.setExpirationTriggers(clonedExpTrigs);
 		}
-		for (var trigger : this.getActivationTriggers()) {
-			clone.getActivationTriggers().add(trigger.clone());
+		int nActTrigs = this.getActivationTriggers().size();
+		if (nActTrigs == 0) {
+			clone.setActivationTriggers(java.util.Collections.emptyList());
+		} else {
+			List<EventTrigger> clonedActTrigs = new ArrayList<>(nActTrigs);
+			for (int i = 0; i < nActTrigs; i++) {
+				clonedActTrigs.add(this.getActivationTriggers().get(i).clone());
+			}
+			clone.setActivationTriggers(clonedActTrigs);
 		}
 		if (getSpell() != null) {
-			clone.spell = getSpell().clone();
+			clone.spell = getSpell().isReadOnly() ? getSpell() : getSpell().clone();
 		}
 		return clone;
 	}
@@ -150,18 +168,27 @@ public class Enchantment extends Entity implements Trigger {
 		if (!usesSpellTrigger) {
 			return false;
 		}
-		for (EventTrigger trigger : getTriggers()) {
-			if (trigger.interestedIn() == eventType || trigger.interestedIn() == GameEventType.ALL) {
+		var trigs = getTriggers();
+		for (int i = 0, n = trigs.size(); i < n; i++) {
+			var trigger = trigs.get(i);
+			var interested = trigger.interestedIn();
+			if (interested == eventType || interested == GameEventType.ALL) {
 				return true;
 			}
 		}
-		for (EventTrigger trigger : getExpirationTriggers()) {
-			if (trigger.interestedIn() == eventType || trigger.interestedIn() == GameEventType.ALL) {
+		var expTrigs = getExpirationTriggers();
+		for (int i = 0, n = expTrigs.size(); i < n; i++) {
+			var trigger = expTrigs.get(i);
+			var interested = trigger.interestedIn();
+			if (interested == eventType || interested == GameEventType.ALL) {
 				return true;
 			}
 		}
-		for (EventTrigger trigger : getActivationTriggers()) {
-			if (trigger.interestedIn() == eventType || trigger.interestedIn() == GameEventType.ALL) {
+		var actTrigs = getActivationTriggers();
+		for (int i = 0, n = actTrigs.size(); i < n; i++) {
+			var trigger = actTrigs.get(i);
+			var interested = trigger.interestedIn();
+			if (interested == eventType || interested == GameEventType.ALL) {
 				return true;
 			}
 		}
@@ -296,6 +323,11 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public final boolean queues(GameEvent event) {
+		// Expired triggers do not queue
+		if (isExpired()) {
+			return false;
+		}
+
 		Entity host = event.getGameContext().resolveSingleTarget(hostReference, false);
 
 		// If the host of the enchantment has been removed from play, this enchantment should not queue
@@ -307,17 +339,16 @@ public class Enchantment extends Entity implements Trigger {
 			return false;
 		}
 
-		// Expired triggers do not queue
-		if (isExpired()) {
-			return false;
-		}
-
+		var eventType = event.getEventType();
 		if (!isActivated()) {
-			for (EventTrigger trigger : getActivationTriggers()) {
+			var actTrigs = getActivationTriggers();
+			for (int i = 0, n = actTrigs.size(); i < n; i++) {
+				EventTrigger trigger = actTrigs.get(i);
 				if (trigger == null) {
 					continue;
 				}
-				if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != GameEventType.ALL) {
+				var interested = trigger.interestedIn();
+				if (interested != eventType && interested != GameEventType.ALL) {
 					continue;
 				}
 				if (trigger.queues(event, this, host, getOwner())) {
@@ -333,12 +364,15 @@ public class Enchantment extends Entity implements Trigger {
 
 		// Check for expiration next
 		// Must have activated in order to expire
-		if (!isExpired() && !getExpirationTriggers().isEmpty()) {
-			for (EventTrigger trigger : getExpirationTriggers()) {
+		var expTrigs = getExpirationTriggers();
+		if (!isExpired() && !expTrigs.isEmpty()) {
+			for (int i = 0, n = expTrigs.size(); i < n; i++) {
+				EventTrigger trigger = expTrigs.get(i);
 				if (trigger == null) {
 					continue;
 				}
-				if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != GameEventType.ALL) {
+				var interested = trigger.interestedIn();
+				if (interested != eventType && interested != GameEventType.ALL) {
 					continue;
 				}
 				if (trigger.queues(event, this, host, getOwner())) {
@@ -348,11 +382,14 @@ public class Enchantment extends Entity implements Trigger {
 			}
 		}
 
-		for (EventTrigger trigger : getTriggers()) {
+		var trigs = getTriggers();
+		for (int i = 0, n = trigs.size(); i < n; i++) {
+			EventTrigger trigger = trigs.get(i);
 			if (trigger == null) {
 				continue;
 			}
-			if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != GameEventType.ALL) {
+			var interested = trigger.interestedIn();
+			if (interested != eventType && interested != GameEventType.ALL) {
 				continue;
 			}
 			if (trigger.queues(event, this, host, getOwner())) {
@@ -364,7 +401,13 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	protected boolean innerQueues(GameEvent event, Entity host) {
-		return Arrays.stream(getZones()).anyMatch(z -> z == host.getZone());
+		var hostZone = host.getZone();
+		for (var z : getZones()) {
+			if (z == hostZone) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean isPersistentOwner() {
@@ -380,14 +423,15 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	public boolean fires(GameEvent event) {
-		var host = event.getGameContext().resolveSingleTarget(hostReference, false);
 		// Expired
 		if (!isActivated() || isExpired()) {
 			return false;
 		}
+		var host = event.getGameContext().resolveSingleTarget(hostReference, false);
 
-		for (EventTrigger trigger : getTriggers()) {
-			if (trigger.fires(event, host, getOwner())) {
+		var trigs = getTriggers();
+		for (int i = 0, n = trigs.size(); i < n; i++) {
+			if (trigs.get(i).fires(event, host, getOwner())) {
 				return true;
 			}
 		}

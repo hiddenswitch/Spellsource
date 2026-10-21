@@ -37,12 +37,14 @@ public class ListCardCatalogue implements CardCatalogue {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ListCardCatalogue.class);
 
 	/**
-	 * Cached query results. Key is a composite of query parameters, value is an immutable list of card IDs matching
+	 * Cached query results. Key is a composite of query parameters, value is an immutable list of cards matching
 	 * the query. Invalidated whenever cards are loaded or removed.
 	 */
-	private final Cache<QueryKey, List<String>> queryCache = Caffeine.newBuilder()
+	private final Cache<QueryKey, List<Card>> queryCache = Caffeine.newBuilder()
 			.maximumSize(256)
 			.build();
+	private final java.util.concurrent.ConcurrentHashMap<DeckFormat, List<Card>> defaultQueryByFormat = new java.util.concurrent.ConcurrentHashMap<>(16);
+	private final java.util.concurrent.ConcurrentHashMap<DeckFormat, List<Card>> uncollectibleQueryByFormat = new java.util.concurrent.ConcurrentHashMap<>(16);
 
 	private record QueryKey(Set<String> formatSets, Spellsource.CardTypeMessage.CardType cardType,
 	                        Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag) {
@@ -63,6 +65,7 @@ public class ListCardCatalogue implements CardCatalogue {
 	protected final Map<String, Card> formatCardsByName = new LinkedHashMap<>(64);
 	protected final Multimap<DeckFormat, Card> classCardsForFormat = Multimaps.newSetMultimap(new LinkedHashMap<>(64), LinkedHashSet::new);
 	protected final Multimap<DeckFormat, String> baseClassesForFormat = Multimaps.newSetMultimap(new LinkedHashMap<>(64), LinkedHashSet::new);
+	protected final java.util.concurrent.ConcurrentHashMap<DeckFormat, List<String>> cachedBaseClassesForFormat = new java.util.concurrent.ConcurrentHashMap<>(16);
 
 	@Override
 	public Map<String, DeckFormat> formats() {
@@ -166,23 +169,40 @@ public class ListCardCatalogue implements CardCatalogue {
 	@Override
 	@NotNull
 	public CardList query(DeckFormat deckFormat, Spellsource.CardTypeMessage.CardType cardType, Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag, boolean clone) {
+		boolean isDefaultQuery = cardType == null && rarity == null && heroClass == null && tag == null && deckFormat.getClass() == DeckFormat.class;
+		if (isDefaultQuery) {
+			List<Card> cached = defaultQueryByFormat.get(deckFormat);
+			if (cached != null) {
+				if (!clone) {
+					return new CardArrayList(cached);
+				}
+				CardArrayList result = new CardArrayList(cached.size());
+				for (int i = 0, n = cached.size(); i < n; i++) {
+					result.addCard(cached.get(i).clone());
+				}
+				return result;
+			}
+		}
 		lock.readLock().lock();
 		try {
-			List<String> ids;
+			List<Card> matched;
 			if (deckFormat.getClass() == DeckFormat.class) {
 				var sets = new LinkedHashSet<>(deckFormat.getSets());
 				sets.remove(null);
 				var key = new QueryKey(sets, cardType, rarity, heroClass, tag);
-				ids = queryCache.get(key, k -> computeQuery(deckFormat, cardType, rarity, heroClass, tag));
-			} else {
-				ids = computeQuery(deckFormat, cardType, rarity, heroClass, tag);
-			}
-			CardList result = new CardArrayList();
-			for (var id : ids) {
-				var card = cards.get(id);
-				if (card != null) {
-					result.addCard(card.clone());
+				matched = queryCache.get(key, k -> computeQuery(deckFormat, cardType, rarity, heroClass, tag));
+				if (isDefaultQuery) {
+					defaultQueryByFormat.put(deckFormat, matched);
 				}
+			} else {
+				matched = computeQuery(deckFormat, cardType, rarity, heroClass, tag);
+			}
+			if (!clone) {
+				return new CardArrayList(matched);
+			}
+			CardArrayList result = new CardArrayList(matched.size());
+			for (int i = 0, n = matched.size(); i < n; i++) {
+				result.addCard(matched.get(i).clone());
 			}
 			return result;
 		} finally {
@@ -190,8 +210,8 @@ public class ListCardCatalogue implements CardCatalogue {
 		}
 	}
 
-	private List<String> computeQuery(DeckFormat deckFormat, Spellsource.CardTypeMessage.CardType cardType, Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag) {
-		var ids = new ArrayList<String>();
+	private List<Card> computeQuery(DeckFormat deckFormat, Spellsource.CardTypeMessage.CardType cardType, Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag) {
+		var matched = new ArrayList<Card>();
 		for (var card : cards.values()) {
 			var desc = card.getDesc();
 			var actualCardType = card.getCardType();
@@ -222,15 +242,18 @@ public class ListCardCatalogue implements CardCatalogue {
 			if (tag != null && !card.hasAttribute(tag)) {
 				continue;
 			}
-			ids.add(card.getCardId());
+			matched.add(card);
 		}
-		return List.copyOf(ids);
+		return List.copyOf(matched);
 	}
 
 	public void removeCard(String id) {
 		lock.writeLock().lock();
 		try {
 			queryCache.invalidateAll();
+			defaultQueryByFormat.clear();
+			uncollectibleQueryByFormat.clear();
+			cachedBaseClassesForFormat.clear();
 			var res = cards.remove(id);
 			if (res != null) {
 				cardsByName.remove(res.getDesc().getName(), res);
@@ -289,9 +312,15 @@ public class ListCardCatalogue implements CardCatalogue {
 
 	@Override
 	public List<String> getBaseClasses(DeckFormat deckFormat) {
+		var cached = cachedBaseClassesForFormat.get(deckFormat);
+		if (cached != null) {
+			return cached;
+		}
 		lock.readLock().lock();
 		try {
-			return new ArrayList<>(baseClassesForFormat.get(deckFormat));
+			var list = List.copyOf(baseClassesForFormat.get(deckFormat));
+			cachedBaseClassesForFormat.put(deckFormat, list);
+			return list;
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -425,9 +454,29 @@ public class ListCardCatalogue implements CardCatalogue {
 
 	@Override
 	public CardList queryUncollectible(DeckFormat deckFormat) {
+		if (deckFormat != null && deckFormat.getClass() == DeckFormat.class) {
+			List<Card> cached = uncollectibleQueryByFormat.get(deckFormat);
+			if (cached != null) {
+				return new CardArrayList(cached);
+			}
+		}
 		lock.readLock().lock();
 		try {
-			return query(deckFormat, always -> true);
+			var matched = new ArrayList<Card>();
+			for (var card : cards.values()) {
+				if (GameLogic.isCardType(card.getCardType(), Spellsource.CardTypeMessage.CardType.CLASS) || GameLogic.isCardType(card.getCardType(), Spellsource.CardTypeMessage.CardType.FORMAT)) {
+					continue;
+				}
+				if (deckFormat != null && !deckFormat.isInFormat(card)) {
+					continue;
+				}
+				matched.add(card);
+			}
+			List<Card> immutable = List.copyOf(matched);
+			if (deckFormat != null && deckFormat.getClass() == DeckFormat.class) {
+				uncollectibleQueryByFormat.put(deckFormat, immutable);
+			}
+			return new CardArrayList(immutable);
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -467,6 +516,8 @@ public class ListCardCatalogue implements CardCatalogue {
 		lock.writeLock().lock();
 		try {
 			queryCache.invalidateAll();
+			defaultQueryByFormat.clear();
+			uncollectibleQueryByFormat.clear();
 			formatsByName.clear();
 			bannedCardIds.clear();
 			hardRemovalCardIds.clear();
@@ -478,6 +529,33 @@ public class ListCardCatalogue implements CardCatalogue {
 			classCardsForFormat.clear();
 			baseClassesForFormat.clear();
 		} finally {
+			lock.writeLock().unlock();
+		}
+	}
+
+	/**
+	 * Copies all cards and format indices from another {@link ListCardCatalogue} whose cards are already frozen.
+	 *
+	 * @param other The source catalogue to copy from.
+	 */
+	protected void copyFrom(ListCardCatalogue other) {
+		lock.writeLock().lock();
+		other.lock.readLock().lock();
+		try {
+			clear();
+			formatsByName.putAll(other.formatsByName);
+			bannedCardIds.addAll(other.bannedCardIds);
+			hardRemovalCardIds.addAll(other.hardRemovalCardIds);
+			cards.putAll(other.cards);
+			cardsByName.putAll(other.cardsByName);
+			classCards.putAll(other.classCards);
+			heroCards.putAll(other.heroCards);
+			formatCardsByName.putAll(other.formatCardsByName);
+			classCardsForFormat.putAll(other.classCardsForFormat);
+			baseClassesForFormat.putAll(other.baseClassesForFormat);
+			cachedBaseClassesForFormat.clear();
+		} finally {
+			other.lock.readLock().unlock();
 			lock.writeLock().unlock();
 		}
 	}
@@ -524,6 +602,9 @@ public class ListCardCatalogue implements CardCatalogue {
 		lock.writeLock().lock();
 		try {
 			queryCache.invalidateAll();
+			defaultQueryByFormat.clear();
+			uncollectibleQueryByFormat.clear();
+			cachedBaseClassesForFormat.clear();
 			var newCards = new ArrayList<Card>(cardDescs.size());
 			// sort so that this is more consistent
 			List<CardDesc> values = new ArrayList<>(cardDescs.values());
@@ -536,9 +617,18 @@ public class ListCardCatalogue implements CardCatalogue {
 				var existing = cards.get(desc.getId());
 				if (existing != null) {
 					cardsByName.remove(existing.getDesc().getName(), existing);
-					if (existing.getDesc().getType() == Spellsource.CardTypeMessage.CardType.FORMAT) {
-						formatsByName.remove(existing.getDesc().getName());
-						formatCardsByName.remove(existing.getDesc().getName());
+					switch (existing.getDesc().getType()) {
+						case FORMAT -> {
+							formatsByName.remove(existing.getDesc().getName());
+							formatCardsByName.remove(existing.getDesc().getName());
+						}
+						case CLASS -> {
+							classCards.remove(existing.getDesc().getHeroClass());
+							for (var format : classCardsForFormat.keySet()) {
+								classCardsForFormat.get(format).removeIf(c -> c.getDesc().getId().equals(existing.getCardId()));
+							}
+						}
+						case HERO -> heroCards.remove(existing.getCardId());
 					}
 				}
 

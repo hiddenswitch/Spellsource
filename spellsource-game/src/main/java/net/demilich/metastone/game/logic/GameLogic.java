@@ -252,7 +252,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param idFactory An existing ID factory.
 	 */
-	private GameLogic(IdFactoryImpl idFactory) {
+	public GameLogic(IdFactoryImpl idFactory) {
 		this.idFactory = idFactory;
 	}
 
@@ -435,8 +435,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	public Optional<Aura> tryCreateAura(Player player, AuraDesc auraDesc, Entity effectSource, Card enchantmentSource,
 	 Entity host, boolean force) {
-		var inZone = Arrays.stream(auraDesc.getZones()).anyMatch(z -> z == host.getZone());
-		if (force || inZone) {
+		var inZone = force;
+		if (!inZone) {
+			var hostZone = host.getZone();
+			for (var z : auraDesc.getZones()) {
+				if (z == hostZone) {
+					inZone = true;
+					break;
+				}
+			}
+		}
+		if (inZone) {
 			var aura = auraDesc.create();
 			aura.setEffectSource(effectSource)
 				.setSourceCard(enchantmentSource)
@@ -448,7 +457,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	public Optional<Enchantment> tryCreateEnchantment(Player player, EnchantmentDesc enchantmentDesc,
 																										Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
-		if (force || Arrays.stream(enchantmentDesc.getZones()).anyMatch(z -> z == host.getZone())) {
+		var inZone = force;
+		if (!inZone) {
+			var hostZone = host.getZone();
+			for (var z : enchantmentDesc.getZones()) {
+				if (z == hostZone) {
+					inZone = true;
+					break;
+				}
+			}
+		}
+		if (inZone) {
 			var enchantment = enchantmentDesc.create();
 			enchantment.setEffectSource(effectSource)
 				.setSourceCard(enchantmentSource)
@@ -717,37 +736,42 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public boolean canPlayCard(Player player, Card card) {
 		var playerId = player.getId();
-		var entityReference = card.getReference();
 		// A player cannot play a card the player does not own.
-		if (card.getOwner() != player.getId()
+		if (card.getOwner() != playerId
 			&& card.getOwner() != Entity.NO_OWNER) {
 			return false;
 		}
 		var manaCost = getModifiedManaCost(player, card);
 
 		var costAuras = SpellUtils.getAuras(context, playerId, CardCostInsteadAura.class);
-		var cardCostOverridden =
-		 costAuras.size() > 0 && costAuras.stream().anyMatch(aura -> aura.getAffectedEntities().contains(entityReference.getId()));
+		var cardCostOverridden = false;
+		var cardId = card.getId();
+		for (int i = 0, n = costAuras.size(); i < n; i++) {
+			if (costAuras.get(i).getAffectedEntities().contains(cardId)) {
+				cardCostOverridden = true;
+				break;
+			}
+		}
 		// Only play the last card cost override whose condition was met.
 		if (cardCostOverridden) {
 			// We're reversing the cost auras because the most recent card cost aura to come into play is most intuitively
 			// the
 			// one we're paying with.
-			Collections.reverse(costAuras);
-			for (var aura : costAuras) {
+			for (int i = costAuras.size() - 1; i >= 0; i--) {
+				var aura = costAuras.get(i);
 				// The card is affected by the cost condition if the card or the player casting it are affected by the aura.
-				if (aura.getAffectedEntities().contains(entityReference.getId()) || aura.getAffectedEntities().contains(playerId)) {
+				if (aura.getAffectedEntities().contains(cardId) || aura.getAffectedEntities().contains(playerId)) {
 					return aura.getCanAffordCondition().isFulfilled(context, player, card, card);
 				}
 			}
-		} else if (doesCardCostHealth(player, card)
-			&& player.getHero().getEffectiveHp() < manaCost
-			&& manaCost != 0) {
-			return false;
-		} else if (!doesCardCostHealth(player, card)
-			&& player.getMana() < manaCost
-			&& manaCost != 0) {
-			return false;
+		} else if (manaCost != 0) {
+			if (doesCardCostHealth(player, card)) {
+				if (player.getHero().getEffectiveHp() < manaCost) {
+					return false;
+				}
+			} else if (player.getMana() < manaCost) {
+				return false;
+			}
 		}
 
 		if (isCardType(card.getCardType(), CardType.HERO_POWER)) {
@@ -900,8 +924,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
-		var spell = spellDesc.create();
-		spell.cast(context, player, spellDesc, source, targets);
+		Spell spell = spellDesc.create();
+		if (spell != null) {
+			spell.cast(context, player, spellDesc, source, targets);
+		}
 
 		context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
 
@@ -965,18 +991,20 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return;
 		}
 
-		// For logging purposes
 		Entity source = null;
-		if (sourceReference != null && !sourceReference.equals(EntityReference.NONE)) {
-			source = context.tryFind(sourceReference, false);
-		}
 
 		programCounter++;
 		if (programCounter > MAX_PROGRAM_COUNTER) {
+			if (sourceReference != null && !sourceReference.equals(EntityReference.NONE)) {
+				source = context.tryFind(sourceReference, false);
+			}
 			throw new IllegalStateException(String.format("%s: program counter", source));
 		}
 		spellDepth++;
 		if (spellDepth > MAX_SPELL_DEPTH) {
+			if (sourceReference != null && !sourceReference.equals(EntityReference.NONE)) {
+				source = context.tryFind(sourceReference, false);
+			}
 			throw new UnsupportedOperationException(String.format("%s: infinite spell depth", source));
 		}
 
@@ -1000,16 +1028,25 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Implement SpellOverrideAura
 		var spellClass = spellDesc.getDescClass();
-		var overrideAuras = context.getTriggers().stream()
-			.filter(t -> t instanceof SpellOverrideAura)
-			.map(t -> (Aura) t)
-			.filter(aura -> !aura.isExpired()
-				&& aura.isActivated()
-				&& aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(spellClass)
-				&& aura.getAffectedEntities().contains(playerId))
-			.collect(Collectors.toList());
+		List<Aura> overrideAuras = null;
+		var activeTriggers = context.getTriggers();
+		for (int i = 0, n = activeTriggers.size(); i < n; i++) {
+			var t = activeTriggers.get(i);
+			if (t instanceof SpellOverrideAura) {
+				var aura = (Aura) t;
+				if (!aura.isExpired()
+						&& aura.isActivated()
+						&& aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(spellClass)
+						&& aura.getAffectedEntities().contains(playerId)) {
+					if (overrideAuras == null) {
+						overrideAuras = new ArrayList<>(2);
+					}
+					overrideAuras.add(aura);
+				}
+			}
+		}
 
-		if (!overrideAuras.isEmpty()) {
+		if (overrideAuras != null) {
 			spellDesc = spellDesc.cloneAndUnfreeze();
 			for (var aura : overrideAuras) {
 				for (var spellArgObjectEntry : aura.getDesc().getApplyEffect().entrySet()) {
@@ -1023,8 +1060,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 							var newValue = (ValueProvider) value;
 							var newDesc = newValue.getDesc().cloneAndUnfreeze();
 							newDesc.put(ValueProviderArg.VALUE, originalValue);
-							newValue.setDesc(newDesc);
-							value = newValue;
+							value = newDesc.create();
 						} else {
 							// If the key doesn't exist in the original SpellDesc that we're trying to retrieve with
 							// OriginalValueProvider, don't put the new key/value pair into the new SpellDesc
@@ -1037,71 +1073,85 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		var spellTarget = spellDesc.hasPredefinedTarget() ? spellDesc.getTarget() : targetReference;
-		var targetResolution = resolveTarget(player, source, spellTarget, spellDesc, sourceAction);
-		if (targetResolution.isOverridden()) {
-			spellDesc = spellDesc.removeArg(SpellArg.FILTER);
-		}
-		var targets = targetResolution.getTargets();
-
-		var spell = spellDesc.create();
-		spell.cast(context, player, spellDesc, source, targets);
-
-		var sourceCard = source != null ? source.getSourceCard() : null;
-
-		// This implements Lynessa Sunsorrow
-		if (sourceCard != null
-			&& sourceCard.getCardType() == CardType.SPELL
-			&& targetSelection != TargetSelection.NONE
-			&& targets != null
-			&& targets.size() == 1
-			&& targets.get(0).getOwner() == playerId
-			&& targets.get(0).getEntityType().equals(EntityType.MINION)
-			&& sourceAction != null
-			&& Objects.equals(sourceAction.getSourceReference(), source.getReference())
-			&& !childSpell) {
-			sourceCard.setAttribute(Attribute.CASTED_ON_FRIENDLY_MINION);
+		List<Entity> targets;
+		if (sourceAction == null) {
+			targets = resolveTargetFast(player, source, spellTarget);
+		} else {
+			var targetResolution = resolveTarget(player, source, spellTarget, spellDesc, sourceAction);
+			if (targetResolution.isOverridden()) {
+				spellDesc = spellDesc.removeArg(SpellArg.FILTER);
+			}
+			targets = targetResolution.getTargets();
 		}
 
-		if (targetSelection != TargetSelection.NONE
-			&& targets != null
-			&& targets.size() == 1
-			&& sourceCard != null
-			&& targets.get(0).getEntityType().equals(EntityType.MINION)
-			&& sourceAction != null
-			&& Objects.equals(sourceAction.getSourceReference(), source.getReference())
-			&& !childSpell) {
-			var willTargetAdjacent = false;
-			for (var aura : SpellUtils.getAuras(context, playerId, SpellTargetsAdjacentAura.class)) {
-				aura.onGameEvent(new WillEndSequenceEvent(context));
-				if (aura.getAffectedEntities().contains(sourceCard.getId())) {
-					willTargetAdjacent = true;
+		Spell spell = spellDesc.create();
+		if (spell != null) {
+			spell.cast(context, player, spellDesc, source, targets);
+		}
+
+		if (!childSpell) {
+			var sourceCard = source != null ? source.getSourceCard() : null;
+
+			// This implements Lynessa Sunsorrow
+			if (sourceCard != null
+				&& sourceCard.getCardType() == CardType.SPELL
+				&& targetSelection != TargetSelection.NONE
+				&& targets != null
+				&& targets.size() == 1
+				&& targets.get(0).getOwner() == playerId
+				&& targets.get(0).getEntityType().equals(EntityType.MINION)
+				&& sourceAction != null
+				&& Objects.equals(sourceAction.getSourceReference(), source.getReference())) {
+				sourceCard.setAttribute(Attribute.CASTED_ON_FRIENDLY_MINION);
+			}
+
+			if (targetSelection != TargetSelection.NONE
+				&& targets != null
+				&& targets.size() == 1
+				&& sourceCard != null
+				&& targets.get(0).getEntityType().equals(EntityType.MINION)
+				&& sourceAction != null
+				&& Objects.equals(sourceAction.getSourceReference(), source.getReference())) {
+				var willTargetAdjacent = false;
+				for (var aura : SpellUtils.getAuras(context, playerId, SpellTargetsAdjacentAura.class)) {
+					aura.onGameEvent(new WillEndSequenceEvent(context));
+					if (aura.getAffectedEntities().contains(sourceCard.getId())) {
+						willTargetAdjacent = true;
+					}
+				}
+				if (willTargetAdjacent) {
+					var adjacentSpellDesc = AdjacentEffectSpell.create(targetReference, NullSpell.create(), spellDesc);
+					castSpell(playerId, adjacentSpellDesc, sourceReference, targetReference, TargetSelection.NONE, true, null);
 				}
 			}
-			if (willTargetAdjacent) {
-				var adjacentSpellDesc = AdjacentEffectSpell.create(targetReference, NullSpell.create(), spellDesc);
-				castSpell(playerId, adjacentSpellDesc, sourceReference, targetReference, TargetSelection.NONE, true, null);
+
+			if (sourceAction != null
+				&& sourceCard != null
+				&& isCardType(sourceCard.getCardType(), CardType.SPELL)
+				&& Objects.equals(sourceAction.getSourceReference(), source.getReference())) {
+				context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
+				endOfSequence();
+
+				handleAfterSpellCasted(playerId, targets, sourceCard);
+			}
+
+			// Cast second time if source belongs to aura and not child spell (Implements Lady Uki)
+			if (source != null) {
+				var castTwiceAuras = SpellUtils.getAuras(context, SpellEffectsCastTwiceAura.class, source);
+				if (!castTwiceAuras.isEmpty()) {
+					castSpell(playerId, spellDesc, sourceReference, targetReference, targetSelection, true, sourceAction);
+				}
 			}
 		}
-
-
-		if (sourceAction != null
-			&& sourceCard != null
-			&& isCardType(sourceCard.getCardType(), CardType.SPELL)
-			&& Objects.equals(sourceAction.getSourceReference(), source.getReference())
-			&& !childSpell) {
-			context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
-			endOfSequence();
-
-			handleAfterSpellCasted(playerId, targets, sourceCard);
-		}
-
-		// Cast second time if source belongs to aura and not child spell (Implements Lady Uki)
-		var castTwiceAuras = SpellUtils.getAuras(context, SpellEffectsCastTwiceAura.class, source);
-		if (!castTwiceAuras.isEmpty()
-			&& !childSpell) {
-			castSpell(playerId, spellDesc, sourceReference, targetReference, targetSelection, true, sourceAction);
-		}
 		spellDepth--;
+	}
+
+	public boolean incrementProgramCounter(Entity source) {
+		programCounter++;
+		if (programCounter > MAX_PROGRAM_COUNTER) {
+			throw new IllegalStateException(String.format("%s: program counter", source));
+		}
+		return true;
 	}
 
 	protected void handleAfterSpellCasted(int playerId, List<Entity> targets, Card sourceCard) {
@@ -1183,6 +1233,27 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param sourceAction
 	 * @return
 	 */
+	private List<Entity> resolveTargetFast(Player player, Entity source, EntityReference spellTarget) {
+		var targets = targetLogic.resolveTargetKey(context, player, source, spellTarget);
+		if (targets != null && !targets.isEmpty()) {
+			for (int i = 0, n = targets.size(); i < n; i++) {
+				var target = targets.get(i);
+				var transformed = target.transformResolved(context);
+				if (transformed != target) {
+					targets.set(i, transformed);
+				}
+			}
+			var incorruptibilityAuras = SpellUtils.getAuras(context, player.getId(), IncorruptibilityAura.class);
+			if (!incorruptibilityAuras.isEmpty()) {
+				for (int i = 0, n = incorruptibilityAuras.size(); i < n; i++) {
+					var affected = incorruptibilityAuras.get(i).getAffectedEntities();
+					targets.removeIf(e -> affected.contains(e.getId()));
+				}
+			}
+		}
+		return targets;
+	}
+
 	public TargetResolution resolveTarget(Player player, Entity source, EntityReference spellTarget, SpellDesc spellDesc
  , GameAction sourceAction) {
 		var targets = targetLogic.resolveTargetKey(context, player, source, spellTarget);
@@ -1197,18 +1268,21 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Spell effects should never be cast on the old reference to a transform.
 		if (targets != null && !targets.isEmpty()) {
-			for (var i = 0; i < targets.size(); i++) {
-				if (targets.get(i).getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)) {
-					targets.set(i, targets.get(i).transformResolved(context));
+			for (int i = 0, n = targets.size(); i < n; i++) {
+				var target = targets.get(i);
+				var transformed = target.transformResolved(context);
+				if (transformed != target) {
+					targets.set(i, transformed);
 				}
 			}
-		}
 
-		// Implements incorruptibility (removes the target if it is affected by an incorruptibility aura)
-		if (targets != null) {
+			// Implements incorruptibility (removes the target if it is affected by an incorruptibility aura)
 			var incorruptibilityAuras = SpellUtils.getAuras(context, player.getId(), IncorruptibilityAura.class);
-			for (var aura : incorruptibilityAuras) {
-				targets.removeIf(e -> aura.getAffectedEntities().contains(e.getId()));
+			if (!incorruptibilityAuras.isEmpty()) {
+				for (int i = 0, n = incorruptibilityAuras.size(); i < n; i++) {
+					var affected = incorruptibilityAuras.get(i).getAffectedEntities();
+					targets.removeIf(e -> affected.contains(e.getId()));
+				}
 			}
 		}
 
@@ -1647,7 +1721,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				// Implements Flesshapper
 				if (!SpellUtils.getAuras(context, LifedrainGrantsArmorInsteadAura.class, source).isEmpty()) {
 					gainArmor(player, damageDealt);
-				} else if (!SpellUtils.getAuras(context, LifedrainDamagesEnemyHeroAura.class, source).isEmpty()) {
+				} else if (hasAttribute(sourceOwner, Attribute.AURA_LIFEDRAIN_DAMAGES_ENEMY_HERO)
+						|| source.hasAttribute(Attribute.AURA_LIFEDRAIN_DAMAGES_ENEMY_HERO)) {
 					// Implements Il'gynoth: lifesteal damages the enemy hero instead of healing you
 					var enemyPlayer = context.getOpponent(sourceOwner);
 					damage(sourceOwner, enemyPlayer.getHero(), damageDealt, source, false, true, damageType);
@@ -1731,6 +1806,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					target.setAttribute(Attribute.HONORABLE_KILL);
 					fireGameEvent(new HonorableKillEvent(context, source, target));
 				}
+			}
+			for (var plugin : GameLogicPlugin.PLUGINS) {
+				plugin.onAfterDamage(context, player, target, damageDealt, source, startedDestroyed);
 			}
 		}
 	}
@@ -1943,6 +2021,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				rebornMinion.getAttributes().remove(Attribute.REBORN);
 				summon(owner.getId(), rebornMinion, target, rebornLocation.getIndex(), false);
 			}
+
+			for (var plugin : GameLogicPlugin.PLUGINS) {
+				plugin.onMinionDeathResolved(context, owner, target, actorPreviousLocation);
+			}
 		}
 
 		for (var target : targets) {
@@ -2005,7 +2087,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @return The ID of the player that should go first.
 	 */
 	public int determineBeginner(int... playerIds) {
-		return getRandom().nextBoolean() ? playerIds[0] : playerIds[1];
+		return getRandom().determineBeginner(playerIds);
 	}
 
 	/**
@@ -2072,7 +2154,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return null;
 		}
 
-		return drawCard(playerId, deck.peek(), source);
+		return drawCard(playerId, getRandom().draw(deck), source);
 	}
 
 	/**
@@ -2169,34 +2251,90 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		// Remove these attributes to occur after the turn has ended
-		context.getEntities()
-			.filter(entity -> entity.hasAttribute(Attribute.HEALING_THIS_TURN) || entity.hasAttribute(Attribute.EXCESS_HEALING_THIS_TURN) || entity.hasAttribute(Attribute.DAMAGE_THIS_TURN))
-			.forEach(actor -> {
-				actor.getAttributes().remove(Attribute.HEALING_THIS_TURN);
-				actor.getAttributes().remove(Attribute.DAMAGE_THIS_TURN);
-				actor.getAttributes().remove(Attribute.EXCESS_HEALING_THIS_TURN);
-			});
-
+		List<Entity> toRemovePeacefully = null;
 		for (var eachPlayer : context.getPlayers()) {
+			clearEndOfTurnAttributes(eachPlayer);
+			clearEndOfTurnAttributes(eachPlayer.getHero());
+			for (int i = 0, n = eachPlayer.getHeroPowerZone().size(); i < n; i++) {
+				clearEndOfTurnAttributes(eachPlayer.getHeroPowerZone().get(i));
+			}
+			for (int i = 0, n = eachPlayer.getWeaponZone().size(); i < n; i++) {
+				var weapon = eachPlayer.getWeaponZone().get(i);
+				clearEndOfTurnAttributes(weapon);
+				if (weapon.hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN)) {
+					if (toRemovePeacefully == null) toRemovePeacefully = new ArrayList<>(2);
+					toRemovePeacefully.add(weapon);
+				}
+			}
+			var minions = eachPlayer.getMinions();
+			for (int i = 0, n = minions.size(); i < n; i++) {
+				var minion = minions.get(i);
+				clearEndOfTurnAttributes(minion);
+				if (minion.hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN)) {
+					if (toRemovePeacefully == null) toRemovePeacefully = new ArrayList<>(2);
+					toRemovePeacefully.add(minion);
+				}
+			}
+			var hand = eachPlayer.getHand();
+			for (int i = 0, n = hand.size(); i < n; i++) {
+				var card = hand.get(i);
+				clearEndOfTurnAttributes(card);
+				if (card.hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN)) {
+					if (toRemovePeacefully == null) toRemovePeacefully = new ArrayList<>(2);
+					toRemovePeacefully.add(card);
+				}
+			}
+			var secrets = eachPlayer.getSecrets();
+			for (int i = 0, n = secrets.size(); i < n; i++) {
+				var secret = secrets.get(i);
+				clearEndOfTurnAttributes(secret);
+				if (secret.hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN)) {
+					if (toRemovePeacefully == null) toRemovePeacefully = new ArrayList<>(2);
+					toRemovePeacefully.add(secret);
+				}
+			}
+			var quests = eachPlayer.getQuests();
+			for (int i = 0, n = quests.size(); i < n; i++) {
+				var quest = quests.get(i);
+				clearEndOfTurnAttributes(quest);
+				if (quest.hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN)) {
+					if (toRemovePeacefully == null) toRemovePeacefully = new ArrayList<>(2);
+					toRemovePeacefully.add(quest);
+				}
+			}
+			var graveyard = eachPlayer.getGraveyard();
+			for (int i = 0, n = graveyard.size(); i < n; i++) {
+				clearEndOfTurnAttributes(graveyard.get(i));
+			}
 			eachPlayer.setAttribute(Attribute.MINIONS_SUMMONED_THIS_TURN, 0);
 			eachPlayer.setAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 0);
 			eachPlayer.setAttribute(Attribute.DAMAGE_THIS_TURN, 0);
 		}
 
 		// Peacefully remove in-play entities with this attribute
-		for (var entity : context.getEntities()
-			.filter(e -> e.isInPlay() || e.getZone() == Zones.HAND)
-			.filter(e -> e.hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN))
-			.collect(toList())) {
-			removePeacefully(entity);
+		if (toRemovePeacefully != null) {
+			for (int i = 0, n = toRemovePeacefully.size(); i < n; i++) {
+				removePeacefully(toRemovePeacefully.get(i));
+			}
 		}
 
 		endOfSequence();
+
+		for (var plugin : GameLogicPlugin.PLUGINS) {
+			plugin.onTurnEnd(context, player);
+		}
 
 		context.setLastSpellPlayedThisTurn(playerId, null);
 
 		player.getStatistics().endTurn(context);
 		player.setAttribute(Attribute.LAST_TURN, context.getTurn());
+	}
+
+	private static void clearEndOfTurnAttributes(Entity entity) {
+		var attrs = entity.getAttributes();
+		attrs.remove(Attribute.HEALING_THIS_TURN);
+		attrs.remove(Attribute.DAMAGE_THIS_TURN);
+		attrs.remove(Attribute.EXCESS_HEALING_THIS_TURN);
 	}
 
 	/**
@@ -2932,6 +3070,10 @@ EntityReference potentialTargets) {
 	public void startGameForPlayer(Player player) {
 		player.setAttribute(Attribute.GAME_STARTED);
 
+		for (var plugin : GameLogicPlugin.PLUGINS) {
+			plugin.onGameStart(context, player);
+		}
+
 		Actor hero = player.getHero();
 		addEnchantments(player, hero.getSourceCard(), hero.getSourceCard(), hero);
 
@@ -3548,12 +3690,15 @@ true, null);
 		card.setAttribute(Attribute.MANA_SPENT, modifiedManaCost);
 		card.setAttribute(Attribute.HAND_INDEX, card.getEntityLocation().getIndex());
 		// Outcast: set attribute if played from leftmost or rightmost position in hand
+		var playedHandIndex = card.getEntityLocation().getIndex();
+		var playedHandSize = player.getHand().getCount();
 		if (card.hasAttribute(Attribute.OUTCAST)) {
-			var handIndex = card.getEntityLocation().getIndex();
-			var handSize = player.getHand().getCount();
-			if (handIndex == 0 || handIndex == handSize - 1) {
+			if (playedHandIndex == 0 || playedHandIndex == playedHandSize - 1) {
 				card.setAttribute(Attribute.OUTCAST_TRIGGERED);
 			}
+		}
+		for (var plugin : GameLogicPlugin.PLUGINS) {
+			plugin.onCardPlayedFromHand(context, player, card, playedHandIndex, playedHandSize);
 		}
 		var cardPlayedEvent = new CardPlayedEvent(context, playerId, card);
 		context.setLastCardPlayed(playerId, card.getReference());
@@ -3725,10 +3870,7 @@ true, null);
 	 * @return {@code null} if the options array was of length zero, otherwise a choice.
 	 */
 	public <T> T getRandom(List<T> options) {
-		if (options.size() == 0) {
-			return null;
-		}
-		return options.get(getRandom().nextInt(options.size()));
+		return getRandom().choose(options);
 	}
 
 	/**
@@ -3739,10 +3881,7 @@ true, null);
 	 * @return An item returned from the options, or {@code null} if there were no options.
 	 */
 	public <T> T removeRandom(List<T> options) {
-		if (options.size() == 0) {
-			return null;
-		}
-		return options.remove(getRandom().nextInt(options.size()));
+		return getRandom().remove(options);
 	}
 
 	/**
@@ -3753,23 +3892,7 @@ true, null);
 	 * @return An item returned from the weighted options, or {@code null} if there were no options.
 	 */
 	public <T> T removeRandom(Multiset<T> weightedOptions) {
-		if (weightedOptions.size() == 0) {
-			return null;
-		}
-
-		// Still faster than creating and removing copies from a list
-		var index = getRandom().nextInt(weightedOptions.size());
-		var iterator = weightedOptions.iterator();
-		while (index > 0) {
-			if (Thread.currentThread().isInterrupted()) {
-				break;
-			}
-			iterator.next();
-			index--;
-		}
-		var item = iterator.next();
-		weightedOptions.remove(item);
-		return item;
+		return getRandom().removeWeighted(weightedOptions);
 	}
 
 	/**
@@ -3856,6 +3979,9 @@ true, null);
 	 */
 	public Card receiveCard(int playerId, Card card, Entity source, boolean isDrawnFromDeck) {
 		var player = context.getPlayer(playerId);
+		if (card.isReadOnly()) {
+			card = card.getCopy();
+		}
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(generateId());
 		}
@@ -4104,6 +4230,9 @@ card.getZone());
 			 "cards, which is not a %s", oldCard.getZone()));
 		}
 
+		if (newCard.isReadOnly()) {
+			newCard = newCard.getCopy();
+		}
 		if (newCard.getId() == IdFactory.UNASSIGNED) {
 			newCard.setId(generateId());
 		}
@@ -4492,6 +4621,9 @@ card.getZone());
  * MAX_DECK_SIZE}).
 	 */
 	public boolean insertIntoDeck(Player player, Card card, int index, boolean quiet) {
+		if (card.isReadOnly()) {
+			card = card.getCopy();
+		}
 		var count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
 			if (card.getId() == IdFactory.UNASSIGNED) {
@@ -4595,6 +4727,9 @@ card.getZone());
 	 */
 	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean extraCopy,
 	 boolean keepCardCostModifiers, int sourcePlayerId) {
+		if (card.isReadOnly()) {
+			card = card.getCopy();
+		}
 		var count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
 			if (card.getId() == IdFactory.UNASSIGNED) {
@@ -4612,7 +4747,7 @@ card.getZone());
 			if (count == 0) {
 				card.moveOrAddTo(context, Zones.DECK);
 			} else {
-				card.moveOrAddTo(context, Zones.DECK, getRandom().nextInt(count));
+				card.moveOrAddTo(context, Zones.DECK, random(count));
 			}
 
 			addEnchantments(player, card, card, card);
@@ -4754,6 +4889,10 @@ card.getZone());
 		startTurnForEntity(player, player.getHero());
 		for (var minion : player.getMinions()) {
 			startTurnForEntity(player, minion);
+		}
+
+		for (var plugin : GameLogicPlugin.PLUGINS) {
+			plugin.onTurnStart(context, player);
 		}
 
 		fireGameEvent(new TurnStartEvent(context, player.getId()));
@@ -4936,6 +5075,9 @@ card.getZone());
 				var miniIndex = minion.getEntityLocation().getIndex() + 1;
 				summon(playerId, miniCopy, source, miniIndex, false);
 			}
+			for (var plugin : GameLogicPlugin.PLUGINS) {
+				plugin.onMinionSummoned(context, player, minion, source, resolveOpener);
+			}
 			fireGameEvent(new BoardChangedEvent(context));
 			return true;
 		} finally {
@@ -4970,16 +5112,17 @@ card.getZone());
 	public List<Enchantment> addEnchantments(@NotNull Player player, @NotNull Entity effectSource,
 	 @NotNull Card enchantmentSource, @NotNull Entity host, boolean force,
 	  Predicate<? super AbstractEnchantmentDesc<?>> predicate) {
-		var enchantments = new ArrayList<Enchantment>();
-
 		var desc = enchantmentSource.getSourceCard().getDesc();
-		var enchantmentDescs = desc.getEnchantmentDescs();
-		if (predicate != null) {
-			enchantmentDescs = enchantmentDescs.filter(predicate);
+		var enchantmentDescs = desc.getEnchantmentDescList();
+		if (enchantmentDescs.isEmpty() && enchantmentSource.getCardType() != CardType.ENCHANTMENT && GameLogicPlugin.PLUGINS.length == 0) {
+			return Collections.emptyList();
 		}
-		var iterator = enchantmentDescs.iterator();
-		while (iterator.hasNext()) {
-			var enchantmentDesc = iterator.next();
+		var enchantments = new ArrayList<Enchantment>(enchantmentDescs.size());
+		for (int i = 0, n = enchantmentDescs.size(); i < n; i++) {
+			var enchantmentDesc = enchantmentDescs.get(i);
+			if (predicate != null && !predicate.test(enchantmentDesc)) {
+				continue;
+			}
 			var enchantment = addEnchantment(player, effectSource, enchantmentSource, host, enchantmentDesc, force);
 			enchantment.ifPresent(enchantments::add);
 		}
@@ -4995,6 +5138,10 @@ card.getZone());
 		if (enchantmentSource.getCardType() == CardType.ENCHANTMENT
 				&& enchantmentSource.getDesc().getSpell() != null) {
 			SpellUtils.castChildSpell(context, player, enchantmentSource.getDesc().getSpell(), effectSource, host);
+		}
+
+		for (var plugin : GameLogicPlugin.PLUGINS) {
+			plugin.onEnchantmentAdded(context, player, effectSource, enchantmentSource, host);
 		}
 
 		return enchantments;
@@ -5486,6 +5633,13 @@ card.getZone());
 
 		context.onNotificationWillFire(event);
 
+		var liveTriggers = context.getTriggers();
+		if (liveTriggers.isEmpty() && context.getDeferredTriggersQueue().isEmpty()) {
+			triggerDepth--;
+			context.onNotificationDidFire(event);
+			return;
+		}
+
 		// Push the event data onto the event data stack, used by effects to determine what the EntityReference
 		// .EVENT_TARGET
 		// is and the value of EventValueProvider
@@ -5493,41 +5647,56 @@ card.getZone());
 
 		try {
 			// We take a snapshot of the triggers currently in play at the time of evaluation.
-			var triggers = new ArrayList<>(context.getTriggers());
+			var triggers = new ArrayList<>(liveTriggers);
+			var eventType = event.getEventType();
+			var isTurnEnd = eventType == GameEventType.TURN_END;
 
 			// We keep track of which triggers were one turn only in order to expire them after they have fired.
-			var oneTurnExpires = new ArrayList<Trigger>();
+			List<Trigger> oneTurnExpires = null;
 
 			// Here we keep track of the triggers that were queued by this event
 			// Queueing gives a trigger an opportunity to look at the state of the board BEFORE all the other trigger's
 			// effects have been evaluated.
 			// For example, queueing is an appropriate time to check if a minion should be buffed, e.g. during a summon,
 			// because later a different effect may deal damage to and subsequently mark-as-destroyed the minion.
-			var thisQueuedTriggers = new ArrayDeque<Trigger>();
-			for (var trigger : triggers) {
+			ArrayDeque<Trigger> thisQueuedTriggers = null;
+			for (int i = 0, n = triggers.size(); i < n; i++) {
 				if (Thread.currentThread().isInterrupted()) {
 					return;
+				}
+				var trigger = triggers.get(i);
+				if (trigger.isExpired()) {
+					continue;
+				}
+				var needsExpirationCheck = isTurnEnd && trigger.oneTurnOnly();
+				var interested = trigger.interestedIn(eventType);
+				if (!needsExpirationCheck && !interested) {
+					continue;
 				}
 				pushHostReference(event, trigger);
 				try {
 					// In order to stop premature expiration, check
 					// for a oneTurnOnly tag and that it isn't delayed.
-					if (event.getEventType() == GameEventType.TURN_END
-						&& trigger.oneTurnOnly()) {
+					if (needsExpirationCheck) {
 						if (!trigger.interestedIn(GameEventType.TURN_START)
-							&& !trigger.interestedIn(GameEventType.TURN_END)) {
+							&& !interested) {
 							trigger.expire(context);
 						} else {
+							if (oneTurnExpires == null) {
+								oneTurnExpires = new ArrayList<>(2);
+							}
 							oneTurnExpires.add(trigger);
 						}
 					}
 
-					if (trigger.interestedIn(event.getEventType())
-						&& trigger.queues(event)) {
+					if (interested && trigger.queues(event)) {
 						// We're already processing this trigger, recursively, so we will reevaluate it at the end of this sequence
 						if (context.getProcessingTriggers().contains(trigger)) {
 							context.getDeferredTriggersQueue().addLast(new QueuedTrigger(event, trigger));
 						} else {
+							if (thisQueuedTriggers == null) {
+								thisQueuedTriggers = new ArrayDeque<>(4);
+							}
 							thisQueuedTriggers.addLast(trigger);
 						}
 					}
@@ -5536,12 +5705,14 @@ card.getZone());
 				}
 			}
 
-			while (!thisQueuedTriggers.isEmpty()) {
-				if (Thread.currentThread().isInterrupted()) {
-					return;
+			if (thisQueuedTriggers != null) {
+				while (!thisQueuedTriggers.isEmpty()) {
+					if (Thread.currentThread().isInterrupted()) {
+						return;
+					}
+					var trigger = thisQueuedTriggers.poll();
+					processTrigger(event, trigger);
 				}
-				var trigger = thisQueuedTriggers.poll();
-				processTrigger(event, trigger);
 			}
 
 			if (context.getProcessingTriggers().isEmpty()) {
@@ -5565,8 +5736,10 @@ card.getZone());
 				}
 			}
 
-			for (var trigger : oneTurnExpires) {
-				trigger.expire(context);
+			if (oneTurnExpires != null) {
+				for (int i = 0, n = oneTurnExpires.size(); i < n; i++) {
+					oneTurnExpires.get(i).expire(context);
+				}
 			}
 		} finally {
 			popEventData(event);
@@ -5642,11 +5815,18 @@ card.getZone());
 	 * @return
 	 */
 	public List<Trigger> getActiveTriggers(EntityReference hostReference) {
-		// TODO: Cache this
-		return context.getTriggers()
-			.stream()
-			.filter(t -> t.getHostReference().equals(hostReference) && !t.isExpired() && t.isActivated())
-			.collect(Collectors.toUnmodifiableList());
+		var triggers = context.getTriggers();
+		List<Trigger> active = null;
+		for (int i = 0, n = triggers.size(); i < n; i++) {
+			var t = triggers.get(i);
+			if (!t.isExpired() && t.isActivated() && t.getHostReference().equals(hostReference)) {
+				if (active == null) {
+					active = new ArrayList<>(2);
+				}
+				active.add(t);
+			}
+		}
+		return active != null ? active : Collections.emptyList();
 	}
 
 	/**

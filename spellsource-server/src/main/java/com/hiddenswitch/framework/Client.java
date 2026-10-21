@@ -18,9 +18,9 @@ import io.grpc.Status;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpClientOptions;
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpVersion;
 import io.vertx.core.http.RequestOptions;
-import io.vertx.core.http.impl.headers.HeadersMultiMap;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.core.streams.ReadStream;
@@ -96,9 +96,9 @@ public class Client {
 		var promise = Promise.<ServerToClientMessage>promise();
 		var readerFut = legacy().subscribeGame(writerFut::tryComplete);
 
-		readerFut.onSuccess(reader -> reader.handler(promise::complete));
-		readerFut.onSuccess(reader -> reader.exceptionHandler(promise::fail));
-		readerFut.onFailure(promise::fail);
+		readerFut.onSuccess(reader -> reader.handler(promise::tryComplete));
+		readerFut.onSuccess(reader -> reader.exceptionHandler(promise::tryFail));
+		readerFut.onFailure(promise::tryFail);
 
 		return writerFut.future()
 				.compose(writer -> {
@@ -136,7 +136,7 @@ public class Client {
 							.onFailure(gameOverPromise::tryFail);
 					break;
 				case ON_GAME_END:
-					gameOverPromise.complete(message);
+					gameOverPromise.tryComplete(message);
 					break;
 			}
 		}));
@@ -174,9 +174,11 @@ public class Client {
 		matchmakingResponseFut = Promise.<MatchmakingQueuePutResponse>promise();
 		matchmakingEndedFut = Promise.<Void>promise();
 		matchmakingResponsesFut.onSuccess(matchmakingResponses -> {
-			matchmakingResponses.handler(matchmakingResponseFut::complete);
-			matchmakingResponses.endHandler(matchmakingEndedFut::complete);
+			matchmakingResponses.handler(matchmakingResponseFut::tryComplete);
+			matchmakingResponses.endHandler(matchmakingEndedFut::tryComplete);
+			matchmakingResponses.exceptionHandler(t -> matchmakingEndedFut.tryComplete());
 		});
+		matchmakingResponsesFut.onFailure(t -> matchmakingEndedFut.tryComplete());
 		var response = matchmakingResponseFut.future();
 		// deals with cancellation
 		response.onFailure(t -> {
@@ -246,7 +248,7 @@ public class Client {
 
 	public MultiMap credentials() {
 		if (getAccessToken() != null) {
-			return HeadersMultiMap.httpHeaders().add("Authorization", "Bearer " + getAccessToken().getToken());
+			return HttpHeaders.headers().add("Authorization", "Bearer " + getAccessToken().getToken());
 		} else {
 			await(login(email, password)
 					.onSuccess(this::handleLogin)
@@ -417,7 +419,10 @@ public class Client {
 	}
 
 	public Future<Void> close(Object ignored) {
-		close();
+		var channel = managedChannel.getAndSet(null);
+		if (channel != null) {
+			return channel.close().otherwiseEmpty();
+		}
 		return Future.succeededFuture();
 	}
 

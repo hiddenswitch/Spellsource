@@ -84,6 +84,22 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		attributes = new AttributeMap();
 	}
 
+	protected Entity(Entity other) {
+		super();
+		this.name = other.name;
+		this.sourceCard = other.sourceCard;
+		this.effectSource = other.effectSource;
+		this.id = other.id;
+		this.ownerIndex = other.ownerIndex;
+		this.entityLocation = other.entityLocation;
+		if (other.attributes != null) {
+			this.attributes = other.attributes.clone();
+			this.attributes.setReadOnly(false);
+		} else {
+			this.attributes = new AttributeMap();
+		}
+	}
+
 	/**
 	 * Clone an entity, including its ID and location.
 	 * <p>
@@ -108,6 +124,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	@Override
 	public void freeze() {
 		readOnly = true;
+		if (attributes != null) {
+			attributes.freeze();
+		}
 	}
 
 	@Override
@@ -499,19 +518,16 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		if (depth < 0) {
 			throw new TransformCycleException(this);
 		}
-		if (!getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)
-				|| getAttributes().get(Attribute.TRANSFORM_REFERENCE) == null) {
+		EntityReference reference = (EntityReference) getAttribute(Attribute.TRANSFORM_REFERENCE);
+		if (reference == null) {
 			return this;
 		}
 
-		EntityReference reference = (EntityReference) getAttributes().get(Attribute.TRANSFORM_REFERENCE);
 		Entity entity = context.tryFind(reference, false);
 		if (entity == null) {
 			throw new TargetNotFoundException("transform ref", reference);
 		}
-		entity = entity.transformResolved(context, depth - 1);
-
-		return entity;
+		return entity.transformResolved(context, depth - 1);
 	}
 
 	/**

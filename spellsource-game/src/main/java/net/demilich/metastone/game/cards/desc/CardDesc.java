@@ -133,10 +133,14 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	private boolean countByValue;
 	private OpenerDesc battlecry;
 	private SpellDesc deathrattle;
+	private static final EnchantmentDesc[] EMPTY_ENCHANTMENTS = new EnchantmentDesc[0];
+	private static final AuraDesc[] EMPTY_AURAS = new AuraDesc[0];
+	private static final Spellsource.Tooltip[] EMPTY_TOOLTIPS = new Spellsource.Tooltip[0];
+
 	private EnchantmentDesc trigger;
-	private EnchantmentDesc[] triggers = new EnchantmentDesc[0];
+	private EnchantmentDesc[] triggers = EMPTY_ENCHANTMENTS;
 	private AuraDesc aura;
-	private AuraDesc[] auras = new AuraDesc[0];
+	private AuraDesc[] auras = EMPTY_AURAS;
 	private CardCostModifierDesc cardCostModifier;
 	private OpenerDesc[] chooseOneBattlecries;
 	private OpenerDesc chooseBothBattlecry;
@@ -148,10 +152,10 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	private ConditionDesc condition;
 	private SpellDesc[] group;
 	private EnchantmentDesc passiveTrigger;
-	private EnchantmentDesc[] passiveTriggers = new EnchantmentDesc[0];
+	private EnchantmentDesc[] passiveTriggers = EMPTY_ENCHANTMENTS;
 	private EnchantmentDesc deckTrigger;
-	private EnchantmentDesc[] deckTriggers = new EnchantmentDesc[0];
-	private EnchantmentDesc[] gameTriggers = new EnchantmentDesc[0];
+	private EnchantmentDesc[] deckTriggers = EMPTY_ENCHANTMENTS;
+	private EnchantmentDesc[] gameTriggers = EMPTY_ENCHANTMENTS;
 	private ValueProviderDesc manaCostModifier;
 	private AttributeMap attributes = new AttributeMap();
 	private String author;
@@ -168,15 +172,104 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	private TargetSelection targetSelectionOverride;
 	private ConditionDesc targetSelectionCondition;
 	private Spellsource.Art art;
-	private Spellsource.Tooltip[] tooltips = new Spellsource.Tooltip[0];
+	private Spellsource.Tooltip[] tooltips = EMPTY_TOOLTIPS;
 	private Spellsource.Draft draft;
 	private Spellsource.ArtificialIntelligence artificialIntelligence;
 	@JsonIgnore
 	private transient List<Condition> glowConditions;
 	@JsonIgnore
 	private transient boolean readOnly;
+	@JsonIgnore
+	private transient Boolean hardRemoval;
+	@JsonIgnore
+	private transient Set<Attribute> cachedStaticAttributeKeys;
 	private RogueInfoDesc rogueInfo;
 	private SpellDesc onInitialized;
+
+	@JsonIgnore
+	public Set<Attribute> getStaticAttributeKeys() {
+		Set<Attribute> cached = this.cachedStaticAttributeKeys;
+		if (cached != null) {
+			return cached;
+		}
+		EnumSet<Attribute> keys = EnumSet.noneOf(Attribute.class);
+		if (attributes != null) {
+			keys.addAll(attributes.keySet());
+		}
+		keys.add(Attribute.BASE_MANA_COST);
+		if (manaCostModifier != null) {
+			keys.add(Attribute.MANA_COST_MODIFIER);
+		}
+		if (passiveTrigger != null || (passiveTriggers != null && passiveTriggers.length > 0)) {
+			keys.add(Attribute.PASSIVE_TRIGGERS);
+		}
+		if (auras != null && auras.length > 0) {
+			keys.add(Attribute.PASSIVE_AURAS);
+		}
+		if (deckTrigger != null || (deckTriggers != null && deckTriggers.length > 0)) {
+			keys.add(Attribute.DECK_TRIGGERS);
+		}
+		if (gameTriggers != null && gameTriggers.length > 0) {
+			keys.add(Attribute.GAME_TRIGGERS);
+		}
+		if (race != null && !race.equals(net.demilich.metastone.game.entities.minions.Race.NONE)) {
+			keys.add(Attribute.RACE);
+		}
+		if (secret != null) {
+			keys.add(Attribute.SECRET);
+		}
+		if (quest != null) {
+			keys.add(Attribute.QUEST);
+		}
+		if (heroClass != null || heroClasses != null) {
+			keys.add(Attribute.HERO_CLASS);
+		}
+		boolean weaponOrMinion = type == CardType.MINION || type == CardType.WEAPON;
+		if (weaponOrMinion) {
+			keys.add(Attribute.HP);
+			keys.add(Attribute.BASE_ATTACK);
+			keys.add(Attribute.ATTACK);
+		}
+		if (type == CardType.HERO || weaponOrMinion) {
+			keys.add(Attribute.BASE_HP);
+			keys.add(Attribute.MAX_HP);
+		}
+		Set<Attribute> result = Collections.unmodifiableSet(keys);
+		if (this.readOnly) {
+			this.cachedStaticAttributeKeys = result;
+		}
+		return result;
+	}
+
+	@JsonIgnore
+	public boolean isHardRemoval() {
+		Boolean cached = this.hardRemoval;
+		if (cached != null) {
+			return cached;
+		}
+		boolean result = computeHardRemoval(this.spell)
+				|| (this.battlecry != null && computeHardRemoval(this.battlecry.getSpell()));
+		if (this.readOnly) {
+			this.hardRemoval = result;
+		}
+		return result;
+	}
+
+	private static boolean computeHardRemoval(SpellDesc spell) {
+		if (spell == null) {
+			return false;
+		}
+		Class<?> spellClass = spell.getDescClass();
+		if (spellClass != null && net.demilich.metastone.game.spells.DestroySpell.class.isAssignableFrom(spellClass)) {
+			return true;
+		}
+		for (SpellDesc subSpell : spell.subSpells(0)) {
+			if (computeHardRemoval(subSpell)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 
 	public CardDesc() {
@@ -215,6 +308,9 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	@Override
 	public void freeze() {
+		if (readOnly) {
+			return;
+		}
 		readOnly = true;
 		if (attributes != null) {
 			attributes.freeze();
@@ -248,8 +344,13 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	private static void freezeValue(Object value) {
-		if (value instanceof Freezable) {
-			((Freezable) value).freeze();
+		if (value instanceof Freezable freezable) {
+			freezable.freeze();
+		} else if (value instanceof HasDesc<?> hasDesc) {
+			Desc<?, ?> desc = hasDesc.getDesc();
+			if (desc != null && !desc.isReadOnly()) {
+				desc.freeze();
+			}
 		}
 	}
 
@@ -268,6 +369,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 		try {
 			CardDesc clone = (CardDesc) super.clone();
 			clone.readOnly = false;
+			clone.cachedEnchantmentDescs = null;
 			if (attributes != null) {
 				clone.attributes = attributes.cloneAndUnfreeze();
 			}
@@ -1378,13 +1480,45 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 		this.hero = hero;
 	}
 
+	private transient List<AbstractEnchantmentDesc<?>> cachedEnchantmentDescs;
+
+	@JsonIgnore
+	public List<AbstractEnchantmentDesc<?>> getEnchantmentDescList() {
+		if (readOnly) {
+			List<AbstractEnchantmentDesc<?>> c = cachedEnchantmentDescs;
+			if (c != null) {
+				return c;
+			}
+			c = buildEnchantmentDescList();
+			cachedEnchantmentDescs = c;
+			return c;
+		}
+		return buildEnchantmentDescList();
+	}
+
+	private List<AbstractEnchantmentDesc<?>> buildEnchantmentDescList() {
+		var list = new ArrayList<AbstractEnchantmentDesc<?>>(4);
+		if (getType() == CardType.ENCHANTMENT) {
+			list.add(this);
+		}
+		if (deathrattle != null) list.add(deathrattle);
+		if (battlecry != null) list.add(battlecry);
+		if (trigger != null) list.add(trigger);
+		if (deckTrigger != null) list.add(deckTrigger);
+		if (passiveTrigger != null) list.add(passiveTrigger);
+		if (aura != null) list.add(aura);
+		if (cardCostModifier != null) list.add(cardCostModifier);
+		if (triggers != null) Collections.addAll(list, triggers);
+		if (auras != null) Collections.addAll(list, auras);
+		if (passiveTriggers != null) Collections.addAll(list, passiveTriggers);
+		if (deckTriggers != null) Collections.addAll(list, deckTriggers);
+		if (gameTriggers != null) Collections.addAll(list, gameTriggers);
+		return list.isEmpty() ? List.of() : List.copyOf(list);
+	}
+
 	@JsonIgnore
 	public Stream<AbstractEnchantmentDesc<?>> getEnchantmentDescs() {
-		Stream<AbstractEnchantmentDesc<?>> concat = Streams.concat(Stream.ofNullable(this.getDeathrattle()), Stream.ofNullable(this.getBattlecry()), Stream.ofNullable(this.getTrigger()), Stream.ofNullable(this.getDeckTrigger()), Stream.ofNullable(this.getPassiveTrigger()), Stream.ofNullable(this.getAura()), Stream.ofNullable(this.getCardCostModifier()), Stream.of(this.getTriggers()), Stream.of(this.getAuras()), Stream.of(this.getPassiveTriggers()), Stream.of(this.getDeckTriggers()), Stream.of(this.getGameTriggers()));
-		if (getType() == CardType.ENCHANTMENT) {
-			concat = Streams.concat(Stream.ofNullable(this), concat);
-		}
-		return concat;
+		return getEnchantmentDescList().stream();
 	}
 
 	@JsonIgnore

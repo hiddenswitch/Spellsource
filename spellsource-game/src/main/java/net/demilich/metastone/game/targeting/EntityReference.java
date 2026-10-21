@@ -521,7 +521,7 @@ public final class EntityReference implements Serializable {
 	 */
 	public static final EntityReference OPPOSITE_CHARACTERS = new EntityReference(-77);
 	public static final EntityReference FRIENDLY_SIGNATURE = new EntityReference(-78);
-	public static final EntityReference ENEMY_SIGNATURE = new EntityReference(-78);
+	public static final EntityReference ENEMY_SIGNATURE = new EntityReference(-82);
 	public static final EntityReference FRIENDLY_SECRETS = new EntityReference(-79);
 	/**
 	 * References all permanents on the enemy battlefield.
@@ -534,11 +534,29 @@ public final class EntityReference implements Serializable {
 	public static final EntityReference PLAYER_1 = new EntityReference(0);
 	public static final EntityReference PLAYER_2 = new EntityReference(1);
 
+	private static final int CACHE_SIZE = 1024;
+	private static final EntityReference[] POSITIVE_CACHE = new EntityReference[CACHE_SIZE];
+
+	static {
+		POSITIVE_CACHE[0] = PLAYER_1;
+		POSITIVE_CACHE[1] = PLAYER_2;
+		for (int i = 2; i < CACHE_SIZE; i++) {
+			POSITIVE_CACHE[i] = new EntityReference(i);
+		}
+	}
+
 	public static @NotNull EntityReference pointTo(Entity entity) {
 		if (entity == null) {
 			return EntityReference.NONE;
 		}
-		return new EntityReference(entity.getId());
+		int id = entity.getId();
+		if (id >= 0 && id < CACHE_SIZE) {
+			return POSITIVE_CACHE[id];
+		}
+		if (id == -1) {
+			return EntityReference.NONE;
+		}
+		return new EntityReference(id);
 	}
 
 	private int id;

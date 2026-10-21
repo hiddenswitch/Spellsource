@@ -134,7 +134,7 @@ subprojects {
         }
 
         if (details.requested.group == 'org.jetbrains' && details.requested.name == 'annotations') {
-          details.useVersion '24.1.0'
+          details.useVersion '26.1.0'
         }
 
         if (details.requested.group == 'org.jetbrains.kotlin') {
@@ -145,8 +145,12 @@ subprojects {
           details.useVersion bytebuddyVersion
         }
 
-        if (details.requested.group == 'org.jboss.logging') {
-          details.useVersion '3.6.1.Final'
+        if (details.requested.group == 'org.jboss.logging' && details.requested.name == 'jboss-logging') {
+          details.useVersion '3.6.2.Final'
+        }
+
+        if (details.requested.group == 'org.keycloak' && (details.requested.name == 'keycloak-admin-client' || details.requested.name == 'keycloak-client-common-synced')) {
+          details.useVersion '26.0.12'
         }
 
         if (details.requested.group == 'com.google.code.findbugs') {
@@ -178,7 +182,11 @@ subprojects {
         }
 
         if (details.requested.group == 'org.jboss.resteasy') {
-          details.useVersion resteasyVersion
+          if (details.requested.name == 'resteasy-tracing-api') {
+            details.useVersion '2.0.2.Final'
+          } else {
+            details.useVersion resteasyVersion
+          }
         }
 
         if (details.requested.group == 'jakarta.xml.bind') {
@@ -194,11 +202,11 @@ subprojects {
         }
 
         if (details.requested.group == 'com.github.ben-manes.caffeine') {
-          details.useVersion '3.1.8'
+          details.useVersion '3.3.1'
         }
 
         if (details.requested.group == 'org.checkerframework') {
-          details.useVersion '3.43.0'
+          details.useVersion '3.55.1'
         }
 
         if (details.requested.group == 'org.hdrhistogram') {
@@ -219,15 +227,19 @@ subprojects {
         }
         
         if (details.requested.group == 'com.graphql-java' && details.requested.name == 'graphql-java') {
-          details.useVersion '20.1'
+          details.useVersion '20.7'
         }
         
         if (details.requested.group == 'org.apache.commons' && details.requested.name == 'commons-lang3') {
-          details.useVersion '3.13.0'
+          details.useVersion '3.21.0'
         }
         
         if (details.requested.group == 'org.wildfly.common' && details.requested.name == 'wildfly-common') {
           details.useVersion '1.5.1.Final'
+        }
+
+        if (details.requested.group == 'org.jspecify') {
+          details.useVersion '1.0.1'
         }
       }
     }

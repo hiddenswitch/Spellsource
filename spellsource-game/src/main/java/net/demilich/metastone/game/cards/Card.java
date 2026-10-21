@@ -326,6 +326,9 @@ public class Card extends Entity implements HasChooseOneActions {
 	@JsonIgnore
 	public Card getCopy() {
 		Card copy = clone();
+		if (getId() == IdFactory.UNASSIGNED && getOwner() == NO_OWNER && getEntityLocation() == net.demilich.metastone.game.entities.EntityLocation.UNASSIGNED && getAttributes().isEmpty()) {
+			return copy;
+		}
 		copy.setId(IdFactory.UNASSIGNED);
 		copy.setOwner(IdFactory.UNASSIGNED);
 		// Copies lose their attribute enchantments
@@ -398,8 +401,9 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return The cost modfication
 	 */
 	public int getManaCostModification(GameContext context, Player player) {
-		if (getManaCostModifier() != null) {
-			return getManaCostModifier().getValue(context, player, null, this);
+		ValueProvider modifier = getManaCostModifier();
+		if (modifier != null) {
+			return modifier.getValue(context, player, null, this);
 		}
 		return 0;
 	}
@@ -560,13 +564,14 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return A {@link CardDesc}
 	 */
 	public CardDesc getDesc() {
-		if (getAttributes().getOverrideCardId() == null) {
+		String overrideCardId = getAttributes().getOverrideCardId();
+		if (overrideCardId == null) {
 			return desc;
 		}
 		// Prevents copying here
 		var context = GameContext.current();
 		Objects.requireNonNull(context);
-		return context.getOverriddenCardById(getAttributes().getOverrideCardId()).getDesc();
+		return context.getOverriddenCardById(overrideCardId).getDesc();
 	}
 
 	/**
@@ -1165,14 +1170,9 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	@Override
 	public int compareTo(@NotNull Entity o) {
-		if (o instanceof Card) {
-			Card rhs = (Card) o;
-			boolean equals = new EqualsBuilder()
-					.append(getCardId(), rhs.getCardId())
-					.append(getAttributes(), rhs.getAttributes())
-					.build();
-
-			if (equals) {
+		if (o instanceof Card rhs) {
+			if (Objects.equals(getCardId(), rhs.getCardId())
+					&& Objects.equals(getAttributes(), rhs.getAttributes())) {
 				return 0;
 			}
 		}

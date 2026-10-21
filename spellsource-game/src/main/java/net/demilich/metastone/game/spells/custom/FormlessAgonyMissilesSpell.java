@@ -20,22 +20,23 @@ import java.util.List;
  */
 public final class FormlessAgonyMissilesSpell extends MissilesSpell {
 
-	private List<Actor> hits;
-
 	@Override
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
-		hits = new ArrayList<>(targets.size());
-		super.cast(context, player, desc, source, targets);
-		if (hits.stream().allMatch(desc.getCardFilter().matcher(context, player, source))) {
+		List<Actor> hits = new ArrayList<>(targets != null ? targets.size() : 4);
+		fireMissiles(context, player, desc, source, targets, hits);
+		var cardFilter = desc.getCardFilter();
+		boolean allMatch = true;
+		if (cardFilter != null) {
+			for (int i = 0, size = hits.size(); i < size; i++) {
+				if (!cardFilter.matches(context, player, hits.get(i), source)) {
+					allMatch = false;
+					break;
+				}
+			}
+		}
+		if (allMatch) {
 			SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL1), source, null);
 		}
-	}
-
-	@Override
-	public Actor getRandomTarget(GameContext context, List<Entity> validTargets) {
-		Actor selected = super.getRandomTarget(context, validTargets);
-		hits.add(selected);
-		return selected;
 	}
 
 	@Override

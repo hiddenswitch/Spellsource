@@ -9,9 +9,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.google.common.collect.Multiset;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardZone;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -78,6 +85,109 @@ public class XORShiftRandom extends Random implements Serializable, Cloneable {
 	public XORShiftRandom setState(long state) {
 		this.state = state;
 		return this;
+	}
+
+	/**
+	 * Determines who is the first player from a list of player IDs.
+	 *
+	 * @param playerIds The candidate player IDs.
+	 * @return The ID of the player that should go first.
+	 */
+	public int determineBeginner(int... playerIds) {
+		return nextBoolean() ? playerIds[0] : playerIds[1];
+	}
+
+	/**
+	 * Chooses a random item from a list of options without removing it.
+	 *
+	 * @param options The list of options.
+	 * @param <T>     The item type.
+	 * @return A randomly chosen item, or {@code null} if the list is empty.
+	 */
+	public <T> T choose(List<T> options) {
+		if (options == null || options.isEmpty()) {
+			return null;
+		}
+		return options.get(nextInt(options.size()));
+	}
+
+	/**
+	 * Chooses and removes a random item from a list of options.
+	 *
+	 * @param options The list of options.
+	 * @param <T>     The item type.
+	 * @return The removed item, or {@code null} if the list is empty.
+	 */
+	public <T> T remove(List<T> options) {
+		if (options == null || options.isEmpty()) {
+			return null;
+		}
+		return options.remove(nextInt(options.size()));
+	}
+
+	/**
+	 * Chooses and removes a random item from a weighted multiset of options.
+	 *
+	 * @param weightedOptions The weighted options.
+	 * @param <T>             The item type.
+	 * @return The removed item, or {@code null} if the multiset is empty.
+	 */
+	public <T> T removeWeighted(Multiset<T> weightedOptions) {
+		if (weightedOptions == null || weightedOptions.isEmpty()) {
+			return null;
+		}
+
+		var index = nextInt(weightedOptions.size());
+		var iterator = weightedOptions.iterator();
+		while (index > 0) {
+			if (Thread.currentThread().isInterrupted()) {
+				break;
+			}
+			iterator.next();
+			index--;
+		}
+		var item = iterator.next();
+		weightedOptions.remove(item);
+		return item;
+	}
+
+	/**
+	 * Shuffles a {@link CardList} in place using this random generator.
+	 *
+	 * @param cards The card list or card zone to shuffle.
+	 */
+	public void shuffle(CardList cards) {
+		if (cards instanceof CardZone cardZone) {
+			cardZone.shuffleInternal(this);
+		} else if (cards instanceof CardArrayList cardArrayList) {
+			cardArrayList.shuffleInternal(this);
+		} else if (cards != null) {
+			Collections.shuffle(cards, this);
+		}
+	}
+
+	/**
+	 * Shuffles a generic {@link List} in place using this random generator.
+	 *
+	 * @param list The list to shuffle.
+	 * @param <T>  The element type.
+	 */
+	public <T> void shuffleList(List<T> list) {
+		if (list instanceof CardList cardList) {
+			shuffle(cardList);
+		} else if (list != null) {
+			Collections.shuffle(list, this);
+		}
+	}
+
+	/**
+	 * Selects the next card to draw from a deck.
+	 *
+	 * @param deck The player's deck.
+	 * @return The card to draw, or {@code null} if the deck is empty.
+	 */
+	public Card draw(CardList deck) {
+		return deck == null || deck.isEmpty() ? null : deck.peek();
 	}
 
 	public static class XORShiftRandomSerializer extends StdSerializer<XORShiftRandom> {

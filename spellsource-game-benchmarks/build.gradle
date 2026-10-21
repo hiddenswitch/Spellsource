@@ -20,6 +20,16 @@ jmh {
     zip64 = true
     duplicateClassesStrategy = DuplicatesStrategy.EXCLUDE
     profilers = ['gc']
-    jvmArgs = ['--enable-preview']
+    jvmArgs = [
+        '--enable-preview',
+        '--add-opens=java.base/java.lang=ALL-UNNAMED',
+        '-XX:+IgnoreUnrecognizedVMOptions',
+        '-XX:+UnlockExperimentalVMOptions',
+        '-XX:+UseCompactObjectHeaders',
+        '-XX:AutoBoxCacheMax=16384',
+        '-XX:+EnableJVMCI',
+        '-XX:+UseJVMCICompiler',
+        '-XX:+UseJVMCINativeLibrary'
+    ]
     includes = ['GameContextBenchmarks|GameStateCloneBenchmarks']
 }

@@ -35,7 +35,7 @@ public class CatalogueSource extends CardSource implements HasCardCreationSideEf
 
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
-		return context.getCardCatalogue().query(context.getDeckFormat());
+		return context.getCardCatalogue().query(context.getDeckFormat(), null, null, null, null, false);
 	}
 
 }

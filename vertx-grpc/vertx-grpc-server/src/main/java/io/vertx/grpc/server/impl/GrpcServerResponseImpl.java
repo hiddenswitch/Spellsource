@@ -56,6 +56,19 @@ public abstract class GrpcServerResponseImpl<Req, Resp> extends GrpcWriteStreamB
     this.httpResponse = httpResponse;
   }
 
+  @Override
+  public void init() {
+    super.init();
+    httpResponse.closeHandler(v -> {
+      if (!hasError() && !isTrailersSent()) {
+        io.vertx.grpc.common.GrpcErrorException err = new io.vertx.grpc.common.GrpcErrorException(GrpcError.CANCELLED, GrpcStatus.CANCELLED);
+        handleError(GrpcError.CANCELLED);
+        handleException(err);
+        request.tryFail(err);
+      }
+    });
+  }
+
   public GrpcServerResponse<Req, Resp> status(GrpcStatus status) {
     Objects.requireNonNull(status);
     this.status = status;
@@ -102,8 +115,17 @@ public abstract class GrpcServerResponseImpl<Req, Resp> extends GrpcWriteStreamB
       StatusException se = (StatusException) failure;
       this.status = se.status();
       this.statusMessage = se.message();
+    } else if (failure instanceof io.grpc.StatusRuntimeException) {
+      io.grpc.StatusRuntimeException sre = (io.grpc.StatusRuntimeException) failure;
+      this.status = GrpcStatus.valueOf(sre.getStatus().getCode().value());
+      this.statusMessage = sre.getMessage();
+    } else if (failure instanceof io.grpc.StatusException) {
+      io.grpc.StatusException se = (io.grpc.StatusException) failure;
+      this.status = GrpcStatus.valueOf(se.getStatus().getCode().value());
+      this.statusMessage = se.getMessage();
     } else {
       this.status = mapStatus(failure);
+      this.statusMessage = failure.getMessage();
     }
     end();
   }
@@ -171,6 +193,9 @@ public abstract class GrpcServerResponseImpl<Req, Resp> extends GrpcWriteStreamB
     if (status != GrpcStatus.OK) {
       String msg = statusMessage;
       if (msg != null && !entries.contains(GrpcHeaderNames.GRPC_MESSAGE)) {
+        if (msg.length() > 1024) {
+          msg = msg.substring(0, 1024);
+        }
         entries.set(GrpcHeaderNames.GRPC_MESSAGE, Utils.utf8PercentEncode(msg));
       }
     } else {

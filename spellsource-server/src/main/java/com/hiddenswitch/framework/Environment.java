@@ -63,8 +63,10 @@ import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -72,6 +74,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import io.vertx.ext.web.Router;
 
 import static com.hiddenswitch.protos.Serialization.configureSerialization;
 import static io.vertx.await.Async.await;
@@ -609,11 +612,18 @@ public class Environment {
 
 	public static KeepAliveManager keepAliveManager(HttpConnection connection, Handler<Void> failHandler, boolean reply) {
 		var configuration = Environment.getConfiguration().getGrpcConfiguration();
+		var managerRef = new AtomicReference<KeepAliveManager>();
 		var keepAliveManager = new KeepAliveManager(new KeepAliveManager.KeepAlivePinger() {
 
 			@Override
 			public void ping() {
 				connection.ping(Buffer.buffer(new byte[]{0, 1, 2, 3, 4, 5, 6, 7}))
+						.onSuccess(pong -> {
+							var manager = managerRef.get();
+							if (manager != null) {
+								manager.onDataReceived();
+							}
+						})
 						.onFailure(t -> failHandler.handle(null));
 			}
 
@@ -625,6 +635,7 @@ public class Environment {
 				TimeUnit.MILLISECONDS.toNanos(configuration.getServerKeepAliveTimeMillis()),
 				TimeUnit.MILLISECONDS.toNanos(configuration.getServerKeepAliveTimeoutMillis()),
 				configuration.getServerPermitKeepAliveWithoutCalls());
+		managerRef.set(keepAliveManager);
 
 		connection.pingHandler(ping -> keepAliveManager.onDataReceived());
 
@@ -659,6 +670,97 @@ public class Environment {
 				.map(Json::encode)
 				.forEach(str -> checksum.putString(str, Charset.defaultCharset()));
 		return checksum.hash().asInt();
+	}
+
+	private static final ConcurrentHashMap<String, byte[]> ART_BY_HASH = new ConcurrentHashMap<>();
+	private static final ConcurrentHashMap<String, String> ART_HASH_BY_NAME = new ConcurrentHashMap<>();
+	private static final AtomicBoolean ART_INDEX_INITIALIZED = new AtomicBoolean(false);
+
+	public static void ensureArtIndexInitialized() {
+		if (!ART_INDEX_INITIALIZED.compareAndSet(false, true)) {
+			return;
+		}
+		var candidateRoots = List.of(
+				Path.of("spellsource-web/public/static/card-images/art"),
+				Path.of("../spellsource-web/public/static/card-images/art"),
+				Path.of("art")
+		);
+		for (var root : candidateRoots) {
+			if (!Files.isDirectory(root)) {
+				continue;
+			}
+			try (var walk = Files.walk(root, FileVisitOption.FOLLOW_LINKS)) {
+				walk.filter(Files::isRegularFile)
+						.filter(p -> p.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(".png"))
+						.forEach(path -> {
+							try {
+								var bytes = Files.readAllBytes(path);
+								var fileName = path.getFileName().toString();
+								var spriteName = fileName.substring(0, fileName.length() - 4);
+								var hash = Hashing.sha256().hashBytes(bytes).toString();
+								ART_BY_HASH.put(hash, bytes);
+								ART_HASH_BY_NAME.putIfAbsent(spriteName, hash);
+							} catch (IOException e) {
+								LOGGER.warn("Failed to index art file {}", path, e);
+							}
+						});
+			} catch (IOException e) {
+				LOGGER.warn("Failed to walk art directory {}", root, e);
+			}
+		}
+	}
+
+	public static String registerArt(String name, byte[] pngBytes) {
+		ensureArtIndexInitialized();
+		var hash = Hashing.sha256().hashBytes(pngBytes).toString();
+		ART_BY_HASH.put(hash, pngBytes);
+		if (name != null && !name.isEmpty()) {
+			ART_HASH_BY_NAME.put(name, hash);
+		}
+		return hash;
+	}
+
+	public static @Nullable String getArtHashByName(@Nullable String name) {
+		if (name == null || name.isEmpty()) {
+			return null;
+		}
+		ensureArtIndexInitialized();
+		return ART_HASH_BY_NAME.get(name);
+	}
+
+	public static @Nullable byte[] getArtBytesByHash(@Nullable String hash) {
+		if (hash == null || hash.isEmpty()) {
+			return null;
+		}
+		ensureArtIndexInitialized();
+		return ART_BY_HASH.get(hash.toLowerCase(Locale.ROOT));
+	}
+
+	public static void registerArtRoutes(Router router) {
+		router.get("/art/:file").handler(ctx -> {
+			var file = ctx.pathParam("file");
+			if (file == null || !file.toLowerCase(Locale.ROOT).endsWith(".png")) {
+				ctx.response().setStatusCode(404).end();
+				return;
+			}
+			var hash = file.substring(0, file.length() - 4).toLowerCase(Locale.ROOT);
+			var bytes = getArtBytesByHash(hash);
+			if (bytes == null) {
+				ctx.response().setStatusCode(404).end();
+				return;
+			}
+			var etag = "\"" + hash + "\"";
+			ctx.response()
+					.putHeader("Cache-Control", "public, max-age=31536000, immutable")
+					.putHeader("ETag", etag)
+					.putHeader("Content-Type", "image/png");
+			var ifNoneMatch = ctx.request().getHeader("If-None-Match");
+			if (ifNoneMatch != null && (ifNoneMatch.equals(etag) || ifNoneMatch.equals(hash) || ifNoneMatch.equals("W/" + etag))) {
+				ctx.response().setStatusCode(304).end();
+				return;
+			}
+			ctx.response().setStatusCode(200).end(Buffer.buffer(bytes));
+		});
 	}
 
 	public record PgArgs(PgConnectOptions connectionOptions, PoolOptions poolOptions) {

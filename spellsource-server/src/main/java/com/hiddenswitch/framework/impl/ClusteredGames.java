@@ -43,7 +43,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClusteredGames.class);
 	private final Map<String, ServerGameContext> contexts = new ConcurrentHashMap<>();
 	private final Map<String, Future<String>> restoring = new ConcurrentHashMap<>();
-	private final SqlCachedCardCatalogue cardCatalogue = new SqlCachedCardCatalogue();
+	private SqlCachedCardCatalogue cardCatalogue;
 	private MessageConsumer<?> registration;
 	private MessageConsumer<?> restoreRegistration;
 
@@ -58,8 +58,8 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			restoreGame(request.body()).onSuccess(request::reply).onFailure(t -> request.fail(-1, t.getMessage())));
 
 		var registrationFut = Promise.<Void>promise();
-		cardCatalogue.invalidateAllAndRefresh();
-		await(cardCatalogue.subscribe());
+		this.cardCatalogue = SqlCachedCardCatalogue.forVertx();
+		this.cardCatalogue.ensureInitialized();
 
 		// should we wait for registration to finish?
 		registration.completion().onComplete(v -> {

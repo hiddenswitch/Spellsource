@@ -53,7 +53,7 @@ public final class CardCostModifierDesc extends Desc<CardCostModifierArg, CardCo
 
 	@Override
 	public CardCostModifierDesc clone() {
-		return (CardCostModifierDesc) copyTo(new CardCostModifierDesc(getDescClass()));
+		return (CardCostModifierDesc) super.clone();
 	}
 
 	@Override

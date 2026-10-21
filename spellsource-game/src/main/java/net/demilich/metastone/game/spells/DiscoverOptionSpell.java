@@ -51,7 +51,7 @@ public class DiscoverOptionSpell extends Spell {
 			List<SpellDesc> spellChoices;
 			// Don't shuffle the spell choices unless we have to
 			if (shuffledSpells.size() > count) {
-				Collections.shuffle(shuffledSpells, context.getLogic().getRandom());
+				context.getLogic().getRandom().shuffleList(shuffledSpells);
 				spellChoices = shuffledSpells.stream().limit(count).collect(Collectors.toList());
 			} else {
 				spellChoices = shuffledSpells;

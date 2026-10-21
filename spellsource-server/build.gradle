@@ -223,7 +223,7 @@ tasks.register('pullPostgresImage', DockerPullImage) {
 }
 
 tasks.register('pullKeycloakImage', DockerPullImage) {
-  image.set("quay.io/keycloak/keycloak:20.0")
+  image.set("quay.io/keycloak/keycloak:$keycloakVersion")
 }
 
 tasks.register('createPostgresContainer', DockerCreateContainer) {
@@ -254,19 +254,21 @@ tasks.register('stopPostgresContainer', DockerStopContainer) {
 
 tasks.register('createKeycloakContainer', DockerCreateContainer) {
   dependsOn += [createPostgresContainer, pullKeycloakImage]
-  imageId.set("quay.io/keycloak/keycloak:22.0.3")
+  imageId.set("quay.io/keycloak/keycloak:$keycloakVersion")
   envVars.putAll([
-      'KEYCLOAK_ADMIN_USERNAME': "admin",
-      'KEYCLOAK_ADMIN_PASSWORD': 'password',
-      'KC_DB'                  : 'postgres',
-      'KC_DB_URL_HOST'         : 'gradleSupabasePostgres',
-      'KC_DB_URL_PORT'         : localPort,
-      'KC_DB_URL_DATABASE'     : localDatabaseName,
-      'KC_DB_USERNAME'         : localUsername,
-      'KC_DB_PASSWORD'         : localPassword,
-      'KC_DB_SCHEMA'           : 'keycloak',
-      'KC_HOSTNAME_STRICT'     : 'false',
-      'KC_FEATURES'            : 'declarative-user-profile'
+      'KEYCLOAK_ADMIN_USERNAME'    : "admin",
+      'KEYCLOAK_ADMIN_PASSWORD'    : 'password',
+      'KC_BOOTSTRAP_ADMIN_USERNAME': "admin",
+      'KC_BOOTSTRAP_ADMIN_PASSWORD': 'password',
+      'KC_DB'                      : 'postgres',
+      'KC_DB_URL_HOST'             : 'gradleSupabasePostgres',
+      'KC_DB_URL_PORT'             : localPort,
+      'KC_DB_URL_DATABASE'         : localDatabaseName,
+      'KC_DB_USERNAME'             : localUsername,
+      'KC_DB_PASSWORD'             : localPassword,
+      'KC_DB_SCHEMA'               : 'keycloak',
+      'KC_HOSTNAME_STRICT'         : 'false',
+      'JAVA_OPTS_APPEND'           : '-Dquarkus.hibernate-orm.database.version-check.enabled=false'
   ])
   cmd.set(["start-dev"])
   hostConfig.autoRemove.set(true)

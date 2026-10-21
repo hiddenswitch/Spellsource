@@ -5,18 +5,19 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 
 import java.util.*;
 
 /**
  * This behaviour chooses actions randomly.
  * <p>
- * It relies on its own internal {@link Random} instance as the state of its random choice generator and does not use
- * the {@link GameLogic#getRandom()} facilities at all.
+ * It relies on its own internal {@link XORShiftRandom} instance as the state of its random choice generator and does
+ * not use the {@link GameLogic#getRandom()} facilities at all.
  */
 public class PlayRandomBehaviour extends IntelligentBehaviour {
 
-	private Random random = new Random();
+	private XORShiftRandom random = new XORShiftRandom(XORShiftRandom.createSeed());
 
 	public PlayRandomBehaviour() {
 	}
@@ -32,7 +33,7 @@ public class PlayRandomBehaviour extends IntelligentBehaviour {
 				.size()), getRandom(context)));
 	}
 
-	protected Random getRandom(GameContext context) {
+	protected XORShiftRandom getRandom(GameContext context) {
 		return random;
 	}
 
@@ -42,8 +43,7 @@ public class PlayRandomBehaviour extends IntelligentBehaviour {
 			return validActions.get(0);
 		}
 
-		var randomIndex = getRandom(context).nextInt(validActions.size());
-		return validActions.get(randomIndex);
+		return getRandom(context).choose(validActions);
 	}
 
 	public <T> Set<T> randomSubset(List<T> items, int m, Random random) {

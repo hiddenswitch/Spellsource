@@ -16,7 +16,7 @@ spec:
           template:
             spec:
               restartPolicy: Never
-              serviceAccountName: gsvb-trainer
+              serviceAccountName: mlflow-trainer
               volumes:
                 - name: keycloak-assertion
                   projected:
@@ -29,8 +29,20 @@ spec:
               containers:
                 - name: trainer
                   image: ${IMAGE}
+                  command:
+                    - java
+                    - --enable-preview
+                    - -XX:+UseContainerSupport
+                    - -Xmx8g
+                    - -XX:+UseG1GC
+                    - -Djava.util.concurrent.ForkJoinPool.common.parallelism=6
+                    - -cp
+                    - "@/app/jib-classpath-file"
+                    - com.hiddenswitch.spellsource.trainer.TrainerMain
                   args:
                     - local
+                    - --algorithm=ga
+                    - --num-islands=${REPLICAS}
                     - --generations=${GENERATIONS}
                     - --population=${POPULATION}
                     - --matchups-per-eval=${MATCHUPS_PER_EVAL}
@@ -42,6 +54,8 @@ spec:
                     - --session=${SESSION}
                     - --game-timeout=${GAME_TIMEOUT}
                   env:
+                    - name: JAVA_TOOL_OPTIONS
+                      value: "-XX:MaxRAMPercentage=55.0 -Djava.util.concurrent.ForkJoinPool.common.parallelism=6"
                     - name: ISLAND_INDEX
                       valueFrom:
                         fieldRef:
@@ -51,7 +65,7 @@ spec:
                     - name: MLFLOW_OIDC_ISSUER_URL
                       value: https://login.appmana.com/realms/appmana
                     - name: MLFLOW_OIDC_CLIENT_ID
-                      value: appmana-gsvb-trainer
+                      value: spellsource-mlflow-trainer
                     - name: MLFLOW_OIDC_CLIENT_ASSERTION_FILE
                       value: /var/run/secrets/keycloak/assertion
                   volumeMounts:
@@ -69,6 +83,15 @@ spec:
                 - name: harbor
               nodeSelector:
                 kubernetes.io/os: linux
+              affinity:
+                nodeAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                      - matchExpressions:
+                          - key: kubernetes.io/hostname
+                            operator: NotIn
+                            values:
+                              - appmana-032
               topologySpreadConstraints:
                 - maxSkew: 1
                   topologyKey: kubernetes.io/hostname

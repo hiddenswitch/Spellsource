@@ -88,6 +88,11 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 		return result.future().map((Void) null);
 	}
 
+	public Future<Void> write(T body, DeliveryOptions options) {
+		deliveryOptions(options);
+		return write(body);
+	}
+
 	@Override
 	public Future<Void> close() {
 		return producer.close();

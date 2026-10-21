@@ -41,8 +41,9 @@ public class RevealCardSpell extends Spell {
 			logger.warn("onCast {} {}: Tried to reveal a card but none was specified.", context.getGameId(), source);
 			return;
 		}
-		filteredCards.shuffle(context.getLogic().getRandom());
-		Card cardToReveal = filteredCards.get(0);
+		Card cardToReveal = (target != null && filteredCards.size() == 1)
+				? filteredCards.get(0)
+				: context.getLogic().getRandom(filteredCards);
 		context.getLogic().revealCard(player, cardToReveal);
 		SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 		if (subSpell == null) {

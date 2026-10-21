@@ -6,7 +6,9 @@ import com.google.common.collect.Lists;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.impl.BindAll;
+import com.hiddenswitch.framework.impl.VertxClientHttpEngine;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
+import com.hiddenswitch.framework.migrations.V9_1__Change_Keycloak_registration;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.ClientConfiguration.AccountsConfiguration;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.Builder;
@@ -17,6 +19,7 @@ import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.virtual.VirtualThreadRoutingContextHandler;
 import io.grpc.Status;
+import io.vertx.await.Async;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -29,13 +32,14 @@ import io.vertx.ext.web.codec.BodyCodec;
 import io.vertx.grpc.server.GrpcServerRequest;
 import jakarta.ws.rs.NotFoundException;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.keycloak.TokenVerifier;
+import org.keycloak.admin.client.JacksonProvider;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.admin.client.spi.ResteasyClientClassicProvider;
 import org.keycloak.common.VerificationException;
 import org.keycloak.common.enums.SslRequired;
 import org.keycloak.credential.hash.Pbkdf2Sha512PasswordHashProviderFactory;
@@ -51,6 +55,7 @@ import java.util.stream.Collectors;
 
 import static com.hiddenswitch.framework.Environment.query;
 import static com.hiddenswitch.framework.Environment.withDslContext;
+import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ENTITY;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GUESTS;
 import static io.vertx.await.Async.await;
 import static java.util.stream.Collectors.toMap;
@@ -73,6 +78,23 @@ public class Accounts {
 	protected static final String KEYCLOAK_FORGOT_PASSWORD_PATH = "/realms/hiddenswitch/login-actions/reset-credentials";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Accounts.class);
 	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
+	private static final java.util.concurrent.ConcurrentHashMap<String, JWTAuthOptions> JWT_AUTH_OPTIONS_CACHE = new java.util.concurrent.ConcurrentHashMap<>();
+	private static final Set<String> VERIFIED_REALMS = java.util.concurrent.ConcurrentHashMap.newKeySet();
+
+	private static <T> Future<T> executeKeycloak(java.util.concurrent.Callable<T> callable) {
+		var ctx = Vertx.currentContext();
+		if (ctx != null && Thread.currentThread().isVirtual()) {
+			try {
+				return Future.succeededFuture(callable.call());
+			} catch (Throwable t) {
+				return Future.failedFuture(t);
+			}
+		}
+		if (ctx != null) {
+			return Async.vt(ctx.owner(), callable);
+		}
+		return Environment.executeBlocking(callable);
+	}
 
 	/**
 	 * Gets the user associated with the GRPC context currently being executed.
@@ -194,10 +216,14 @@ public class Accounts {
 
 					final var finalEmail = email;
 					final var finalPassword = password;
-					createUserEntity = realm()
-							.compose(realm -> Environment.executeBlocking(() -> realm.users().search(request.getUsername(), true)))
-							.compose(existingUsers -> {
-								if (!existingUsers.isEmpty()) {
+					var realmId = Environment.getConfiguration().getKeycloak().getRealmId();
+					createUserEntity = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient())
+							.queryExecutor()
+							.findOneRow(dsl -> dsl.selectOne()
+									.from(USER_ENTITY)
+									.where(USER_ENTITY.REALM_ID.eq(realmId).and(USER_ENTITY.USERNAME.eq(request.getUsername().toLowerCase(Locale.ROOT)))))
+							.compose(existingUser -> {
+								if (existingUser != null) {
 									return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("This username already exists.").asRuntimeException());
 								}
 
@@ -281,9 +307,9 @@ public class Accounts {
 					return Future.failedFuture("must log in with old password first");
 				}
 				return realm()
-						.compose(realm -> Environment.executeBlocking(() -> {
+						.compose(realm -> executeKeycloak(() -> {
 							realm.users().get(userId).resetPassword(getPasswordCredential(request.getNewPassword()));
-							return Future.succeededFuture();
+							return null;
 						}))
 						.compose(v -> (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient()).findOneById(userId)))
 						.map(userEntity -> LoginOrCreateReply.newBuilder()
@@ -362,8 +388,7 @@ public class Accounts {
 	}
 
 	public static Future<RealmResource> realm() {
-		var realmId = Environment.getConfiguration().getKeycloak().getRealmId();
-		return Future.succeededFuture(keycloakReference.get().realm(realmId));
+		return createRealmIfAbsent();
 	}
 
 	public static Future<UserEntity> createUser(String email, String username, String password) {
@@ -386,17 +411,16 @@ public class Accounts {
 					user.setCredentials(Collections.singletonList(credential));
 
 					// TODO: Not sure yet how to get the ID of the user you just created
-					return Environment.executeBlocking(() -> {
-						var response = realm.users().create(user);
-						if (response.getStatus() >= 400) {
-							throw new RuntimeException();
+					return executeKeycloak(() -> {
+						try (var response = realm.users().create(user)) {
+							if (response.getStatus() >= 400) {
+								throw new RuntimeException("Keycloak user create status " + response.getStatus());
+							}
+							var parts = response.getLocation().getPath().split("/");
+							var id = parts[parts.length - 1];
+							user.setId(id);
+							return user;
 						}
-						return response;
-					}).map(response -> {
-						var parts = response.getLocation().getPath().split("/");
-						var id = parts[parts.length - 1];
-						user.setId(id);
-						return user;
 					});
 				})
 				.compose(userRepresentation -> {
@@ -421,12 +445,15 @@ public class Accounts {
 	}
 
 	private static Keycloak keycloakConstructor(Vertx vertx) {
-		var client = (ResteasyClientBuilder) ResteasyClientBuilder.newBuilder();
-		/* TODO: Use a regular blocking client for now, until this is updated for 4.0
+		var client = ResteasyClientClassicProvider.createClientBuilder()
+				.register(JacksonProvider.class, 100);
 		if (vertx != null) {
 			var engine = new VertxClientHttpEngine(vertx);
 			client.httpEngine(engine);
-		}*/
+		} else {
+			var engine = new VertxClientHttpEngine();
+			client.httpEngine(engine);
+		}
 		var config = Environment.getConfiguration();
 
 		return KeycloakBuilder.builder()
@@ -442,11 +469,11 @@ public class Accounts {
 
 	public static Future<UserResource> disableUser(String userId) {
 		return Accounts.realm()
-				.compose(realm -> Environment.executeBlocking(() -> {
-					var userRepresentation = new UserRepresentation();
-					userRepresentation.setEnabled(false);
-					realm.users().get(userId).disableCredentialType(Collections.singletonList(CredentialRepresentation.PASSWORD));
+				.compose(realm -> executeKeycloak(() -> {
 					var userResource = realm.users().get(userId);
+					userResource.disableCredentialType(Collections.singletonList(CredentialRepresentation.PASSWORD));
+					var userRepresentation = userResource.toRepresentation();
+					userRepresentation.setEnabled(false);
 					userResource.update(userRepresentation);
 					return userResource;
 				}))
@@ -454,15 +481,23 @@ public class Accounts {
 	}
 
 	public static Future<RealmResource> createRealmIfAbsent() {
-		return Environment.executeBlocking(() -> {
-					var configuration = Environment.getConfiguration();
+		var configuration = Environment.getConfiguration();
+		var realmId = configuration.getKeycloak().getRealmId();
+		var cacheKey = configuration.getKeycloak().getAuthUrl() + "/" + realmId;
+		if (VERIFIED_REALMS.contains(cacheKey)) {
+			return Future.succeededFuture(keycloakReference.get().realm(realmId));
+		}
+		return executeKeycloak(() -> {
 					var keycloak = keycloakReference.get();
-					var realmId = configuration.getKeycloak().getRealmId();
+					if (VERIFIED_REALMS.contains(cacheKey)) {
+						return keycloak.realm(realmId);
+					}
 
 					try {
 						var realm = keycloak.realm(realmId);
 						var exists = realm.toRepresentation();
 						if (exists.isEnabled()) {
+							VERIFIED_REALMS.add(cacheKey);
 							return realm;
 						}
 					} catch (Throwable t) {
@@ -479,6 +514,7 @@ public class Accounts {
 					realmRepresentation.setDisplayName(configuration.getKeycloak().getRealmDisplayName());
 					realmRepresentation.setSslRequired(SslRequired.EXTERNAL.toString());
 					realmRepresentation.setEnabled(true);
+					realmRepresentation.setPasswordPolicy("hashIterations(1)");
 					// use scrypt provider
 					LOGGER.trace("""
 							realm password policy was NOT set to hashAlgorithm(scrypt), not compatible with ancient passwords.
@@ -497,6 +533,7 @@ public class Accounts {
 					keycloak.realms().create(realmRepresentation);
 
 					var realm = keycloak.realms().realm(realmId);
+					realm.users().userProfile().update(V9_1__Change_Keycloak_registration.getUserProfileConfig());
 					var flows = realm.flows().getFlows()
 							.stream().collect(toMap(AuthenticationFlowRepresentation::getAlias, AuthenticationFlowRepresentation::getId));
 					var client = new ClientRepresentation();
@@ -518,6 +555,7 @@ public class Accounts {
 
 					client.setWebOrigins(Collections.singletonList("+"));
 					realm.clients().create(client);
+					VERIFIED_REALMS.add(cacheKey);
 					return realm;
 				})
 				.onFailure(Environment.onFailure());
@@ -528,10 +566,17 @@ public class Accounts {
 	}
 
 	public static JWTAuthOptions jwtAuthOptions() {
+		var issuer = keycloakAuthUrl();
+		var cached = JWT_AUTH_OPTIONS_CACHE.get(issuer);
+		if (cached != null) {
+			return cached;
+		}
 		var vertx = Vertx.currentContext().owner();
 		var webClient = WebClient.create(vertx);
 
-		return await(jwtAuthOptions(webClient));
+		var fetched = await(jwtAuthOptions(webClient));
+		JWT_AUTH_OPTIONS_CACHE.putIfAbsent(issuer, fetched);
+		return fetched;
 	}
 
 	public static Future<JWTAuthOptions> jwtAuthOptions(WebClient webClient) {

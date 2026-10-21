@@ -14,8 +14,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * A map representing a complex type in Spellsource, like a {@link net.demilich.metastone.game.spells.Spell} or {@link
@@ -53,26 +55,61 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 
 	protected abstract Class<? extends Desc> getDescImplClass();
 
+	private transient V cachedInstance;
+
+	private static final ClassValue<Function<Desc<?, ?>, HasDesc<?>>> CREATOR_CACHE = new ClassValue<>() {
+		@Override
+		protected Function<Desc<?, ?>, HasDesc<?>> computeValue(Class<?> type) {
+			for (Constructor<?> ctor : type.getConstructors()) {
+				Class<?>[] params = ctor.getParameterTypes();
+				if (params.length == 1 && Desc.class.isAssignableFrom(params[0])) {
+					return desc -> {
+						try {
+							return (HasDesc<?>) ctor.newInstance(desc);
+						} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+							throw new RuntimeException(e);
+						}
+					};
+				}
+			}
+			try {
+				Constructor<?> noArgCtor = type.getConstructor();
+				return desc -> {
+					try {
+						HasDesc<?> v = (HasDesc<?>) noArgCtor.newInstance();
+						v.setDesc(desc);
+						return v;
+					} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+						throw new RuntimeException(e);
+					}
+				};
+			} catch (NoSuchMethodException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	};
+
 	/**
 	 * Per-instance memoized desc create instance.
 	 *
 	 * @return An instance of the underlying implementation of this desc.
 	 */
+	@SuppressWarnings("unchecked")
 	public V create() {
-		Class<? extends V> clazz = getDescClass();
-		try {
-			return clazz.getConstructor(getDescImplClass()).newInstance(this);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			// Try a no-args constructor and set the desc
-			try {
-				final V v = getDescClass().getConstructor().newInstance();
-				v.setDesc(this);
-				return v;
-			} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e1) {
-				throw new RuntimeException(e1);
+		if (isReadOnly()) {
+			V cached = this.cachedInstance;
+			if (cached != null) {
+				return cached;
 			}
+			Class<? extends V> clazz = getDescClass();
+			V instance = (V) CREATOR_CACHE.get(clazz).apply(this);
+			if (!Entity.class.isAssignableFrom(clazz)) {
+				this.cachedInstance = instance;
+			}
+			return instance;
 		}
+		Class<? extends V> clazz = getDescClass();
+		return (V) CREATOR_CACHE.get(clazz).apply(this);
 	}
 
 	public abstract T getClassArg();
@@ -94,8 +131,7 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 		if (storedValue == null) {
 			return defaultValue;
 		}
-		if (ValueProvider.class.isAssignableFrom(storedValue.getClass())) {
-			ValueProvider valueProvider = (ValueProvider) storedValue;
+		if (storedValue instanceof ValueProvider valueProvider) {
 			return valueProvider.getValue(context, player, target, host);
 		}
 		return (int) storedValue;
@@ -124,12 +160,30 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 		if (value == null) {
 			return null;
 		}
+		this.cachedInstance = null;
 		return super.put(key, value);
 	}
 
 	@Override
+	public Object remove(Object key) {
+		this.cachedInstance = null;
+		return super.remove(key);
+	}
+
+	@Override
+	public void clear() {
+		this.cachedInstance = null;
+		super.clear();
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
-	public abstract Desc<T, V> clone();
+	public Desc<T, V> clone() {
+		Desc<T, V> clone = (Desc<T, V>) super.clone();
+		clone.setReadOnly(false);
+		clone.cachedInstance = null;
+		return clone;
+	}
 
 	@Override
 	public String toString() {
@@ -164,10 +218,15 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 	}
 
 	private static void freezeValue(Object value) {
-		if (value instanceof Freezable) {
-			((Freezable) value).freeze();
-		} else if (value instanceof Object[]) {
-			for (Object element : (Object[]) value) {
+		if (value instanceof Freezable freezable) {
+			freezable.freeze();
+		} else if (value instanceof HasDesc<?> hasDesc) {
+			Desc<?, ?> desc = hasDesc.getDesc();
+			if (desc != null && !desc.isReadOnly()) {
+				desc.freeze();
+			}
+		} else if (value instanceof Object[] array) {
+			for (Object element : array) {
 				freezeValue(element);
 			}
 		}
@@ -178,6 +237,7 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 	 */
 	public Desc<T, V> cloneAndUnfreeze() {
 		Desc<T, V> clone = (Desc<T, V>) super.cloneAndUnfreeze();
+		clone.cachedInstance = null;
 		// Deep copy all nested mutable values
 		for (T arg : clone.keySet()) {
 			Object value = clone.get(arg);

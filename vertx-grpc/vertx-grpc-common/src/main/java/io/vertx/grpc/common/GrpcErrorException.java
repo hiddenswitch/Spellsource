@@ -10,7 +10,8 @@
  */
 package io.vertx.grpc.common;
 
-import io.vertx.core.VertxException;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.vertx.core.http.StreamResetException;
 
 /**
@@ -18,7 +19,7 @@ import io.vertx.core.http.StreamResetException;
  * in practice it means an HTTP/2 stream reset mapped to a gRPC code according to the
  * <a href="https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md#http2-transport-mapping">spec</a>.
  */
-public final class GrpcErrorException extends VertxException {
+public final class GrpcErrorException extends StatusRuntimeException {
 
   public static GrpcErrorException create(StreamResetException sre) {
     GrpcError error = GrpcError.mapHttp2ErrorCode(sre.getCode());
@@ -26,14 +27,18 @@ public final class GrpcErrorException extends VertxException {
     if (error != null) {
       status = error.status;
     }
-    return new GrpcErrorException(error, status);
+    return new GrpcErrorException(error, status, sre);
   }
 
   private final GrpcError error;
   private final GrpcStatus status;
 
   public GrpcErrorException(GrpcError error, GrpcStatus status) {
-    super("gRPC error status: " + status.name());
+    this(error, status, null);
+  }
+
+  public GrpcErrorException(GrpcError error, GrpcStatus status, Throwable cause) {
+    super(Status.fromCodeValue(status.code).withDescription("gRPC error status: " + status.name()).withCause(cause));
 
     this.error = error;
     this.status = status;

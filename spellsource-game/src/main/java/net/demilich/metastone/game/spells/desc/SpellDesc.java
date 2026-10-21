@@ -122,14 +122,14 @@ public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantm
 
 	@NotNull
 	public SpellDesc addArg(SpellArg spellArg, Object value) {
-		SpellDesc clone = cloneAndUnfreeze();
+		SpellDesc clone = clone();
 		clone.put(spellArg, value);
 		return clone;
 	}
 
 	@NotNull
 	public SpellDesc removeArg(SpellArg spellArg) {
-		SpellDesc clone = cloneAndUnfreeze();
+		SpellDesc clone = clone();
 		clone.remove(spellArg);
 		return clone;
 	}
@@ -137,25 +137,13 @@ public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantm
 	@Override
 	@NotNull
 	public SpellDesc cloneAndUnfreeze() {
-		SpellDesc clone = clone();
-		clone.setReadOnly(false);
-		for (SpellArg arg : keySet()) {
-			Object value = get(arg);
-			if (value instanceof net.demilich.metastone.game.logic.CustomCloneable) {
-				clone.put(arg, ((net.demilich.metastone.game.logic.CustomCloneable) value).clone());
-			} else if (value instanceof Desc) {
-				clone.put(arg, ((Desc) value).cloneAndUnfreeze());
-			} else {
-				clone.put(arg, value);
-			}
-		}
-		return clone;
+		return (SpellDesc) super.cloneAndUnfreeze();
 	}
 
 	@Override
 	@NotNull
 	public SpellDesc clone() {
-		return (SpellDesc) copyTo(new SpellDesc(getDescClass()));
+		return (SpellDesc) super.clone();
 	}
 
 	public EntityFilter getEntityFilter() {
@@ -323,16 +311,15 @@ public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantm
 	public @NotNull
 	CardList getFilteredCards(GameContext context, Player player, Entity host) {
 		CardSource source = getCardSource();
-		final EntityFilter filter;
 		if (source == null) {
 			source = UnweightedCatalogueSource.create();
 		}
-		if (containsKey(SpellArg.CARD_FILTER)) {
-			filter = getCardFilter();
-		} else {
-			filter = AndFilter.create();
+		CardList cards = source.getCards(context, host, player);
+		EntityFilter filter = getCardFilter();
+		if (filter == null) {
+			return cards;
 		}
-		return source.getCards(context, host, player).filtered(c -> filter.matches(context, player, c, host));
+		return cards.filtered(c -> filter.matches(context, player, c, host));
 	}
 
 	public Attribute getAttribute() {

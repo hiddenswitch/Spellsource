@@ -108,7 +108,10 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
       if (err instanceof StreamResetException) {
         StreamResetException reset = (StreamResetException) err;
         GrpcError error = mapHttp2ErrorCode(reset.getCode());
-        ws.handleError(error);
+        if (error != null) {
+          ws.handleError(error);
+        }
+        handleException(GrpcErrorException.create(reset));
       } else {
         handleException(err);
       }

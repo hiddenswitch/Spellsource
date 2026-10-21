@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.trainer;
 
 import net.demilich.metastone.game.behaviour.heuristic.FeatureVector;
+import net.demilich.metastone.game.behaviour.heuristic.FeatureVectorConstraints;
 import net.demilich.metastone.game.behaviour.heuristic.WeightedFeature;
 import net.demilich.metastone.game.decks.GameDeck;
 import org.moeaframework.algorithm.CMAES;
@@ -189,6 +190,10 @@ public class CmaesTrainer {
 		LOG.info(String.format("IPOP-CMA-ES complete. Best: %.1f%% after %d evaluations, %d restarts",
 				bestWinRate * 100, evaluationCounter, restartCount));
 
+		FeatureVectorConstraints.project(bestSoFar);
+		if (mlflow != null) {
+			mlflow.publishTrustedWeights(bestSoFar, bestWinRate, evaluationCounter);
+		}
 		return bestSoFar;
 	}
 
@@ -239,7 +244,7 @@ public class CmaesTrainer {
 		public void evaluate(Solution solution) {
 			evaluationCounter++;
 			String candidateId = "eval" + evaluationCounter;
-			double[] point = EncodingUtils.getReal(solution);
+			double[] point = FeatureVectorConstraints.project(EncodingUtils.getReal(solution));
 			FeatureVector candidate = arrayToFeatureVector(point);
 
 			double winRate;

@@ -32,7 +32,7 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// Snapshot the entity storage, do not use the transform
 		var resurrect = new ArrayList<>(EnvironmentEntityList.getList(context).getCards(context, source));
-		Collections.shuffle(resurrect, context.getLogic().getRandom());
+		context.getLogic().getRandom().shuffleList(resurrect);
 		int i = 0;
 
 		while (context.getLogic().canSummonMoreMinions(player)

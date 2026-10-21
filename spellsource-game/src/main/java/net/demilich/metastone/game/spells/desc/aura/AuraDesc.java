@@ -48,7 +48,7 @@ public class AuraDesc extends Desc<AuraArg, Aura> implements AbstractEnchantment
 
 	@Override
 	public AuraDesc clone() {
-		return (AuraDesc) copyTo(new AuraDesc(getDescClass()));
+		return (AuraDesc) super.clone();
 	}
 
 	@Override

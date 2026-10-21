@@ -41,6 +41,10 @@ public class MissilesSpell extends DamageSpell {
 
 	@Override
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
+		fireMissiles(context, player, desc, source, targets, null);
+	}
+
+	protected void fireMissiles(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets, List<Actor> hitsOut) {
 		if (desc.getTarget() == null
 				|| desc.getTarget().equals(EntityReference.TARGET)) {
 			logger.warn("cast {} {}: Probable incorrect usage of MissilesSpell.", context.getGameId(), source);
@@ -73,6 +77,9 @@ public class MissilesSpell extends DamageSpell {
 				return;
 			}
 			Actor randomTarget = getRandomTarget(context, validTargets);
+			if (hitsOut != null) {
+				hitsOut.add(randomTarget);
+			}
 			GameLogic.fireMissileEvent(context, player, source, Collections.singletonList(randomTarget), getDamageType(context, player, source));
 			context.getLogic().damage(player, randomTarget, damage, source, true);
 

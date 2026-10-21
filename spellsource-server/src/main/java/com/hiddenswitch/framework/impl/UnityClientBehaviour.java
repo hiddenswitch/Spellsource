@@ -110,18 +110,19 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	public static Spellsource.GameState.Builder getClientGameState(int playerId, GameState state) {
-		var simulatedContext = new GameContext();
-		simulatedContext.setGameState(state);
+		return getClientGameState(playerId, GameContext.fromState(state));
+	}
 
+	public static Spellsource.GameState.Builder getClientGameState(int playerId, GameContext simulatedContext) {
 		// Compute the local player
 		Player local;
 		Player opponent;
 		if (playerId == PLAYER_1) {
-			local = state.getPlayer1();
-			opponent = state.getPlayer2();
+			local = simulatedContext.getPlayer1();
+			opponent = simulatedContext.getPlayer2();
 		} else if (playerId == PLAYER_2) {
-			local = state.getPlayer2();
-			opponent = state.getPlayer1();
+			local = simulatedContext.getPlayer2();
+			opponent = simulatedContext.getPlayer1();
 		} else {
 			// TODO: How should we define spectators?
 			throw new IllegalStateException("playerId");
@@ -347,7 +348,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					.setType(GameplayRequestType.MULLIGAN)
 					.setStarterCards(cards)
 					.setCallback(next));
-			onMulligan(id, context.getGameStateCopy(), cards, playerId);
+			onMulligan(id, context.getGameState(), cards, playerId);
 		} finally {
 			requestsLock.unlock();
 		}
@@ -416,7 +417,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (!getRequests().isEmpty()) {
 					throw new RuntimeException("requesting action outside resume() loop");
 				}
-				var state = context.getGameStateCopy();
+				var state = context.getGameState();
 				getRequests().add(request);
 				onRequestAction(id, state, validActions);
 			}
@@ -507,7 +508,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		for (var activityMonitor : getActivityMonitors()) {
 			activityMonitor.cancel();
 		}
-		sendGameOver(context.getGameStateCopy(), context.getWinner());
+		sendGameOver(context.getGameState(), context.getWinner());
 	}
 
 	private void sendMessage(ServerToClientMessage.Builder message) {
@@ -571,7 +572,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		var message = ServerToClientMessage.newBuilder()
 				.setMessageType(MessageType.ON_GAME_EVENT)
 				.setChanges(visibleEntities(gameState))
-				.setGameState(getClientGameState(playerId, gameState));
+				.setGameState(getClientGameState(playerId, workingContext));
 		var messageEvent = GameEvent.newBuilder();
 		if (event instanceof TriggerFired) {
 			var triggerEvent = (TriggerFired) event;
@@ -644,7 +645,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 											.addAllAftermaths(destroy.getAftermaths().stream().map(aftermath -> ModelConversions.getEntity(workingContext, aftermath, playerId).build()).collect(toList())).build())
 									.collect(toList())));
 		} else if (event instanceof net.demilich.metastone.game.events.GameEvent) {
-			messageEvent = ModelConversions.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId);
+			messageEvent = ModelConversions.getClientEvent(workingContext, (net.demilich.metastone.game.events.GameEvent) event, playerId);
 		} else {
 			throw new RuntimeException("Unsupported notification.");
 		}
@@ -654,9 +655,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.setIsPowerHistory(event.isPowerHistory());
 
 		if (event.isPowerHistory()) {
-			messageEvent
-					.setId(eventCounter.getAndIncrement())
-					.setDescription((event.getDescription(workingContext, playerId)));
+			messageEvent.setId(eventCounter.getAndIncrement());
+			if (!(event instanceof net.demilich.metastone.game.events.GameEvent)) {
+				messageEvent.setDescription(event.getDescription(workingContext, playerId));
+			}
 
 			if (powerHistory.size() > MAX_POWER_HISTORY_SIZE) {
 				powerHistory.pop();
@@ -731,12 +733,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			availableActions.get(i).setId(i);
 		}
 
+		var workingContext = GameContext.fromState(state);
 		sendMessage(ServerToClientMessage.newBuilder()
 				.setId(id)
 				.setMessageType(MessageType.ON_REQUEST_ACTION)
 				.setChanges(visibleEntities(state))
-				.setGameState(getClientGameState(playerId, state))
-				.setActions(ModelConversions.getClientActions(GameContext.fromState(state), availableActions, playerId)));
+				.setGameState(getClientGameState(playerId, workingContext))
+				.setActions(ModelConversions.getClientActions(workingContext, availableActions, playerId)));
 	}
 
 	/**
@@ -752,13 +755,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {
 		flush();
-		var simulatedContext = new GameContext();
-		simulatedContext.setGameState(state);
+		var simulatedContext = GameContext.fromState(state);
 		sendMessage(ServerToClientMessage.newBuilder()
 				.setId(id)
 				.setMessageType(MessageType.ON_MULLIGAN)
 				.setChanges(visibleEntities(state))
-				.setGameState(getClientGameState(playerId, state))
+				.setGameState(getClientGameState(playerId, simulatedContext))
 				.addAllStartingCards(cards.stream().map(c -> ModelConversions.getEntity(simulatedContext, c, playerId).build()).collect(Collectors.toList())));
 	}
 
@@ -853,6 +855,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		getActivityMonitors().clear();
 		requests.clear();
 		messageBuffer.clear();
+		powerHistory.clear();
+		lastStateSent = null;
 		completionHandler.succeed();
 	}
 

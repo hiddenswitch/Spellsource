@@ -20,6 +20,8 @@ public class DeckFormat implements Serializable, Cloneable {
 	private Set<String> sets;
 	private String[] secondPlayerBonusCards = new String[0];
 	private ConditionDesc validDeckCondition;
+	private transient List<String> setsList;
+	private transient List<String> secondPlayerBonusCardsList;
 
 
 	public DeckFormat() {
@@ -28,7 +30,34 @@ public class DeckFormat implements Serializable, Cloneable {
 
 	public DeckFormat addSet(String cardSet) {
 		getSets().add(cardSet);
+		setsList = null;
 		return this;
+	}
+
+	public DeckFormat removeSet(String cardSet) {
+		getSets().remove(cardSet);
+		setsList = null;
+		return this;
+	}
+
+	public List<String> getSetsList() {
+		List<String> cached = setsList;
+		if (cached == null || cached.size() != sets.size()) {
+			cached = Collections.unmodifiableList(new ArrayList<>(sets));
+			setsList = cached;
+		}
+		return cached;
+	}
+
+	public List<String> getSecondPlayerBonusCardsList() {
+		List<String> cached = secondPlayerBonusCardsList;
+		if (cached == null) {
+			cached = secondPlayerBonusCards == null || secondPlayerBonusCards.length == 0
+					? Collections.emptyList()
+					: Collections.unmodifiableList(Arrays.asList(secondPlayerBonusCards));
+			secondPlayerBonusCardsList = cached;
+		}
+		return cached;
 	}
 
 	public boolean isInFormat(Card card) {
@@ -91,6 +120,7 @@ public class DeckFormat implements Serializable, Cloneable {
 
 	public DeckFormat setSecondPlayerBonusCards(String[] secondPlayerBonusCards) {
 		this.secondPlayerBonusCards = secondPlayerBonusCards;
+		this.secondPlayerBonusCardsList = null;
 		return this;
 	}
 
@@ -109,6 +139,7 @@ public class DeckFormat implements Serializable, Cloneable {
 
 	public void setSets(Set<String> sets) {
 		this.sets = sets;
+		this.setsList = null;
 	}
 
 	@Override
@@ -120,6 +151,7 @@ public class DeckFormat implements Serializable, Cloneable {
 			return null;
 		}
 		clone.sets = new LinkedHashSet<>(sets);
+		clone.setsList = null;
 		return clone;
 	}
 }

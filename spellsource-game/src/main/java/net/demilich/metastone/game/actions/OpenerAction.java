@@ -153,24 +153,21 @@ public final class OpenerAction extends GameAction {
 
 	@Override
 	public boolean equals(Object other) {
-		if (!(other instanceof OpenerAction)) {
+		if (!(other instanceof OpenerAction rhs)) {
 			return false;
 		}
-		OpenerAction rhs = (OpenerAction) other;
-		return new EqualsBuilder()
-				.appendSuper(super.equals(other))
-				.append(spell, rhs.spell)
-				.append(condition, rhs.condition)
-				.build();
+		return super.equals(other)
+				&& java.util.Objects.equals(spell, rhs.spell)
+				&& java.util.Objects.equals(condition, rhs.condition);
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder()
-				.appendSuper(super.hashCode())
-				.append(spell)
-				.append(condition)
-				.build();
+		int result = 17;
+		result = 37 * result + super.hashCode();
+		result = 37 * result + java.util.Objects.hashCode(spell);
+		result = 37 * result + java.util.Objects.hashCode(condition);
+		return result;
 	}
 
 	/**

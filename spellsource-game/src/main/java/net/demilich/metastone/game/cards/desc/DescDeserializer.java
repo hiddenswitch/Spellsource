@@ -9,9 +9,13 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A base class for deserializers of the "component" or object types in the Spellsource card JSON. Each type, like {@link net.demilich.metastone.game.spells.Spell}, has a corresponding {@link Desc}, like {@link SpellDesc}, which is deserialized by this class's implementor {@link SpellDescDeserializer}. In that class, the {@code #init(SerializationContext)} implementation adds the mappings from each enum value of {@link SpellArg} to its corresponding {@link ParseValueType}.
@@ -68,7 +72,17 @@ import java.util.Map;
  * @param <V>
  */
 public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, V extends HasDesc<T>> extends StdDeserializer<T> {
+	private static final List<ComponentPackageProvider> PACKAGE_PROVIDERS = loadPackageProviders();
+	private final ConcurrentHashMap<String, Class<? extends V>> classCache = new ConcurrentHashMap<>();
 	private LinkedHashMap<K, ParseValueType> interpreter = new LinkedHashMap<>();
+
+	private static List<ComponentPackageProvider> loadPackageProviders() {
+		List<ComponentPackageProvider> providers = new ArrayList<>();
+		for (ComponentPackageProvider provider : ServiceLoader.load(ComponentPackageProvider.class)) {
+			providers.add(provider);
+		}
+		return List.copyOf(providers);
+	}
 
 	protected DescDeserializer(Class<? extends T> vc) {
 		super(vc);
@@ -98,22 +112,49 @@ public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, 
 	}
 
 	@SuppressWarnings("unchecked")
-	public T innerDeserialize(DeserializationContext ctxt, JsonNode node) throws JsonMappingException {
-		T inst = createDescInstance();
-		final String suppliedClassName = node.get("class").asText();
-		String[] spellClassNames = new String[]{
-				getAbstractComponentClass().getPackage().getName() + "." + suppliedClassName,
-				getAbstractComponentClass().getPackage().getName() + ".custom." + suppliedClassName,
-				getAbstractComponentClass().getPackage().getName() + ".rogue." + suppliedClassName
-		};
-		Class<? extends V> spellClass = null;
-		for (String concreteClass : spellClassNames) {
+	protected Class<? extends V> resolveComponentClass(String suppliedClassName) {
+		Class<? extends V> cached = classCache.get(suppliedClassName);
+		if (cached != null) {
+			return cached;
+		}
+		String basePkg = getAbstractComponentClass().getPackage().getName();
+		String simpleName = suppliedClassName.contains(".")
+				? suppliedClassName.substring(suppliedClassName.lastIndexOf('.') + 1)
+				: suppliedClassName;
+
+		List<String> candidates = new ArrayList<>(8);
+		candidates.add(basePkg + "." + suppliedClassName);
+		candidates.add(basePkg + ".custom." + simpleName);
+		candidates.add(basePkg + ".rogue." + simpleName);
+		candidates.add(basePkg + ".hearthstone." + simpleName);
+		for (ComponentPackageProvider provider : PACKAGE_PROVIDERS) {
+			for (String pkg : provider.getPackages(getAbstractComponentClass())) {
+				candidates.add(pkg + "." + simpleName);
+				if (!simpleName.equals(suppliedClassName)) {
+					candidates.add(pkg + "." + suppliedClassName);
+				}
+			}
+		}
+		if (suppliedClassName.contains(".")) {
+			candidates.add(suppliedClassName);
+		}
+
+		for (String candidate : candidates) {
 			try {
-				spellClass = (Class<? extends V>) Class.forName(concreteClass);
-				break;
+				Class<? extends V> found = (Class<? extends V>) Class.forName(candidate);
+				classCache.put(suppliedClassName, found);
+				return found;
 			} catch (ClassNotFoundException ignored) {
 			}
 		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public T innerDeserialize(DeserializationContext ctxt, JsonNode node) throws JsonMappingException {
+		T inst = createDescInstance();
+		final String suppliedClassName = node.get("class").asText();
+		Class<? extends V> spellClass = resolveComponentClass(suppliedClassName);
 
 		if (spellClass == null) {
 			throw ctxt.weirdStringException(suppliedClassName, getAbstractComponentClass(), "parser encountered an invalid class");

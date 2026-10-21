@@ -780,18 +780,25 @@ public class SpellUtils {
 		}
 
 		if (count < cards.size()) {
-			CardList result = new CardArrayList();
+			CardList result = new CardArrayList(Math.max(count, 0));
 			int i = count;
 			while (cards.size() > 0
 					&& i > 0) {
 				if (Thread.currentThread().isInterrupted()) {
 					break;
 				}
-				result.add(context.getLogic().removeRandom(cards));
+				Card chosen = context.getLogic().removeRandom(cards);
+				result.add(chosen != null && chosen.isReadOnly() ? chosen.clone() : chosen);
 				i--;
 			}
 			return result;
 		} else {
+			for (int i = 0, n = cards.size(); i < n; i++) {
+				Card c = cards.get(i);
+				if (c != null && c.isReadOnly()) {
+					cards.set(i, c.clone());
+				}
+			}
 			return cards;
 		}
 	}
@@ -808,12 +815,17 @@ public class SpellUtils {
 	 * @see #getAuras(GameContext, int, Class) to retrieve the aura instances themselves.
 	 */
 	public static <T extends Aura> boolean hasAura(GameContext context, int playerId, Class<T> auraClass) {
-		return context.getEntities()
-				.filter(e -> e.getOwner() == playerId && e.isInPlay())
-				.anyMatch(m -> context.getLogic().getActiveTriggers(m.getReference()).stream()
-						.filter(auraClass::isInstance)
-						.map(t -> (Aura) t)
-						.anyMatch(((Predicate<Aura>) Aura::isExpired).negate()));
+		var triggers = context.getTriggers();
+		for (int i = 0, n = triggers.size(); i < n; i++) {
+			var t = triggers.get(i);
+			if (t.getOwner() == playerId && !t.isExpired() && auraClass.isInstance(t) && t.isActivated()) {
+				Entity host = context.tryFind(t.getHostReference());
+				if (host != null && host.getOwner() == playerId && host.isInPlay()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -827,14 +839,24 @@ public class SpellUtils {
 	 * @return A list of aura instances.
 	 */
 	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, @NotNull Class<T> auraClass) {
-		return context
-				.getTriggers()
-				.stream()
-				.filter(e -> e.getOwner() == playerId && !e.isExpired() && auraClass.isInstance(e) && e.isActivated())
-				.map(auraClass::cast)
-				// Should respect order of play
-				.sorted(Comparator.comparingInt(Entity::getId))
-				.collect(toList());
+		var triggers = context.getTriggers();
+		List<T> result = null;
+		for (int i = 0, n = triggers.size(); i < n; i++) {
+			var e = triggers.get(i);
+			if (e.getOwner() == playerId && !e.isExpired() && auraClass.isInstance(e) && e.isActivated()) {
+				if (result == null) {
+					result = new ArrayList<>(2);
+				}
+				result.add(auraClass.cast(e));
+			}
+		}
+		if (result == null) {
+			return Collections.emptyList();
+		}
+		if (result.size() > 1) {
+			result.sort(Comparator.comparingInt(Entity::getId));
+		}
+		return result;
 	}
 
 	/**
@@ -847,12 +869,22 @@ public class SpellUtils {
 	 * @return
 	 */
 	public static <T extends Aura> List<T> getAuras(GameContext context, Class<T> auraClass, Entity target) {
-		return context.getTriggers()
-				.stream()
-				.filter(aura -> auraClass.isInstance(aura) && !aura.isExpired() && aura.isActivated())
-				.map(auraClass::cast)
-				.filter(aura -> aura.getAffectedEntities().contains(target.getId()) || aura.getAffectedEntities().contains(target.getSourceCard().getId()))
-				.collect(toList());
+		var triggers = context.getTriggers();
+		List<T> result = null;
+		for (int i = 0, n = triggers.size(); i < n; i++) {
+			var e = triggers.get(i);
+			if (auraClass.isInstance(e) && !e.isExpired() && e.isActivated()) {
+				T aura = auraClass.cast(e);
+				var affected = aura.getAffectedEntities();
+				if (affected.contains(target.getId()) || affected.contains(target.getSourceCard().getId())) {
+					if (result == null) {
+						result = new ArrayList<>(2);
+					}
+					result.add(aura);
+				}
+			}
+		}
+		return result != null ? result : Collections.emptyList();
 	}
 
 	/**
@@ -866,16 +898,31 @@ public class SpellUtils {
 	 * @param target
 	 * @return A list of spells
 	 */
+	private static final SpellDesc[] EMPTY_SPELL_DESC_ARRAY = new SpellDesc[0];
+
 	public static SpellDesc[] getBonusesFromAura(GameContext context, int playerId, Class<? extends Aura> auraClass, Entity source, Entity target) {
-		return context.getEntities()
-				.filter(e -> e.getOwner() == playerId && e.isInPlay())
-				.flatMap(m -> context.getLogic().getActiveTriggers(m.getReference()).stream()
-						.filter(auraClass::isInstance)
-						.map(t -> (Aura) t)
-						.filter(((Predicate<Aura>) Aura::isExpired).negate())
-						.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context, context.getPlayer(playerId), source, target))
-						.map(aura -> aura.getDesc().getApplyEffect()))
-				.toArray(SpellDesc[]::new);
+		var triggers = context.getTriggers();
+		List<SpellDesc> result = null;
+		Player player = null;
+		for (int i = 0, n = triggers.size(); i < n; i++) {
+			var t = triggers.get(i);
+			if (t.getOwner() == playerId && !t.isExpired() && auraClass.isInstance(t) && t.isActivated()) {
+				Entity host = context.tryFind(t.getHostReference());
+				if (host != null && host.getOwner() == playerId && host.isInPlay()) {
+					Aura aura = (Aura) t;
+					if (player == null) {
+						player = context.getPlayer(playerId);
+					}
+					if (aura.getCondition() == null || aura.getCondition().isFulfilled(context, player, source, target)) {
+						if (result == null) {
+							result = new ArrayList<>(2);
+						}
+						result.add(aura.getDesc().getApplyEffect());
+					}
+				}
+			}
+		}
+		return result == null ? EMPTY_SPELL_DESC_ARRAY : result.toArray(EMPTY_SPELL_DESC_ARRAY);
 	}
 
 	/**

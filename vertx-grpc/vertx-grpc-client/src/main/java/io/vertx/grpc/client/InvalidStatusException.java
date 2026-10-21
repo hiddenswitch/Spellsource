@@ -10,19 +10,25 @@
  */
 package io.vertx.grpc.client;
 
-import io.vertx.core.VertxException;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.vertx.grpc.common.GrpcStatus;
 
 /**
  * Denotes a failure due to an invalid status.
  */
-public final class InvalidStatusException extends VertxException {
+public final class InvalidStatusException extends StatusRuntimeException {
 
   private final GrpcStatus expected;
   private final GrpcStatus actual;
 
   public InvalidStatusException(GrpcStatus expected, GrpcStatus actual) {
-    super("Invalid status: actual:" + actual.name() + ", expected:" + expected.name());
+    this(expected, actual, null);
+  }
+
+  public InvalidStatusException(GrpcStatus expected, GrpcStatus actual, String statusMessage) {
+    super(Status.fromCodeValue(actual.code).withDescription(
+      statusMessage != null ? statusMessage : "Invalid status: actual:" + actual.name() + ", expected:" + expected.name()));
     this.expected = expected;
     this.actual = actual;
   }

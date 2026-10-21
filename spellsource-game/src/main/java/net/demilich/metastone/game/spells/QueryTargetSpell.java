@@ -133,7 +133,7 @@ public class QueryTargetSpell extends Spell {
 			return;
 		}
 		if (shuffled) {
-			Collections.shuffle(targets, context.getLogic().getRandom());
+			context.getLogic().getRandom().shuffleList(targets);
 		}
 		targets = targets.stream().filter(filter.matcher(context, player, source)).collect(Collectors.toList());
 		if (desc.containsKey(SpellArg.VALUE)) {

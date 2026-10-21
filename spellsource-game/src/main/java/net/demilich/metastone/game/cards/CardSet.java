@@ -48,7 +48,12 @@ public class CardSet {
 	public static final String EMERALD_DREAM = "HS_EMERALD_DREAM";
 	public static final String THE_LOST_CITY = "HS_THE_LOST_CITY";
 	public static final String TIME_TRAVEL = "HS_TIME_TRAVEL";
-	public static final String CORE = "HS_CORE";
+	public static final String CATACLYSM = "HS_CATACLYSM";
+	public static final String ESCAPE_FROM_VIOLET_HOLD = "HS_ESCAPE_FROM_VIOLET_HOLD";
+	public static final String BLACK_EMPIRE = "HS_BLACK_EMPIRE";
+	public static final String EVENT = "HS_EVENT";
+	public static final String CORE = "CORE";
+	public static final String HS_CORE = "HS_CORE";
 	public static final String LEGACY = "HS_LEGACY";
 	public static final String WONDERS = "HS_WONDERS";
 	public static final String DEMON_HUNTER_INITIATE = "HS_DEMON_HUNTER_INITIATE";
@@ -59,9 +64,9 @@ public class CardSet {
 	public static final String CUSTOM = "CUSTOM";
 	public static final String ALTERNATIVE = "HS_ALTERNATIVE";
 	public static final String UNNERFED = "HS_UNNERFED";
-	public static final String BATTLE_FOR_ASHENVALE = "HS_BATTLE_FOR_ASHENVALE";
-	public static final String SANDS_OF_TIME = "HS_SANDS_OF_TIME";
-	public static final String VERDANT_DREAMS = "HS_VERDANT_DREAMS";
+	public static final String BATTLE_FOR_ASHENVALE = "BATTLE_FOR_ASHENVALE";
+	public static final String SANDS_OF_TIME = "SANDS_OF_TIME";
+	public static final String VERDANT_DREAMS = "VERDANT_DREAMS";
 	public static final String TEST = "TEST";
 	/**
 	 * Cards in the Spellsource basic set.
@@ -74,7 +79,8 @@ public class CardSet {
 	/**
 	 * Indicates the card should no longer be in any user's collections or appear in any formats.
 	 */
-	public static final String GRAVEYARD = "HS_GRAVEYARD";
+	public static final String GRAVEYARD = "GRAVEYARD";
+	public static final String HS_GRAVEYARD = "HS_GRAVEYARD";
 
 	public static boolean isHearthstoneSet(String set) {
 		DeckFormat wild = ClasspathCardCatalogue.INSTANCE.getFormat("Wild");

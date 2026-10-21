@@ -98,30 +98,25 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 
 	@Override
 	public boolean equals(Object other) {
-		if (!(other instanceof GameAction)) {
+		if (!(other instanceof GameAction rhs)) {
 			return false;
 		}
-
-		GameAction rhs = (GameAction) other;
-
-		return new EqualsBuilder()
-				.append(chooseOneOptionIndex, rhs.chooseOneOptionIndex)
-				.append(getTargetRequirement(), rhs.getTargetRequirement())
-				.append(getActionType(), rhs.getActionType())
-				.append(getSourceReference(), rhs.getSourceReference())
-				.append(getTargetReference(), rhs.getTargetReference())
-				.build();
+		return chooseOneOptionIndex == rhs.chooseOneOptionIndex
+				&& getTargetRequirement() == rhs.getTargetRequirement()
+				&& getActionType() == rhs.getActionType()
+				&& java.util.Objects.equals(getSourceReference(), rhs.getSourceReference())
+				&& java.util.Objects.equals(getTargetReference(), rhs.getTargetReference());
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder()
-				.append(chooseOneOptionIndex)
-				.append(getTargetRequirement())
-				.append(getActionType())
-				.append(getSourceReference())
-				.append(getTargetReference())
-				.build();
+		int result = 17;
+		result = 37 * result + chooseOneOptionIndex;
+		result = 37 * result + java.util.Objects.hashCode(getTargetRequirement());
+		result = 37 * result + java.util.Objects.hashCode(getActionType());
+		result = 37 * result + java.util.Objects.hashCode(getSourceReference());
+		result = 37 * result + java.util.Objects.hashCode(getTargetReference());
+		return result;
 	}
 
 	public int getId() {

@@ -28,11 +28,11 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	 * Create a KeycloakContainer by passing the full docker image name
 	 */
 	public KeycloakContainer() {
-		super("quay.io/keycloak/keycloak:22.0.3");
-		withCommand("start-dev", "--features=declarative-user-profile");
+		super("quay.io/keycloak/keycloak:26.8.1");
+		withCommand("start-dev");
 		withExposedPorts(KEYCLOAK_PORT_HTTP);
 		setWaitStrategy(Wait
-				.forHttp("/")
+				.forHttp("/realms/master")
 				.forPort(KEYCLOAK_PORT_HTTP)
 				.withStartupTimeout(Duration.ofSeconds(60))
 		);
@@ -51,8 +51,11 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 
 		withEnv("KEYCLOAK_ADMIN", adminUsername);
 		withEnv("KEYCLOAK_ADMIN_PASSWORD", adminPassword);
+		withEnv("KC_BOOTSTRAP_ADMIN_USERNAME", adminUsername);
+		withEnv("KC_BOOTSTRAP_ADMIN_PASSWORD", adminPassword);
 		withEnv("KC_DB_SCHEMA", "keycloak");
 		withEnv("KC_HOSTNAME_STRICT", "false");
+		withEnv("JAVA_OPTS_APPEND", "-Dquarkus.hibernate-orm.database.version-check.enabled=false");
 
 		if (importFile != null) {
 			String importFileInContainer = "/tmp/" + importFile;

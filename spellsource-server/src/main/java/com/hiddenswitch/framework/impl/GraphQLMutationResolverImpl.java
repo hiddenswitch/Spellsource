@@ -467,6 +467,7 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 				.set(MATCHMAKING_TICKETS.DECK_ID, input.getDeckId())
 				.set(MATCHMAKING_TICKETS.QUEUE_ID, input.getQueueId())
 				.set(MATCHMAKING_TICKETS.BOT_DECK_ID, input.getBotDeckId()))
+				.onSuccess(rows -> Vertx.currentContext().owner().eventBus().publish(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_WAKE, input.getQueueId()))
 				.map(rows -> true);
 	}
 

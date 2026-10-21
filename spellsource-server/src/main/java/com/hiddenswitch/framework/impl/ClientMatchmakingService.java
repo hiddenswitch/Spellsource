@@ -1,11 +1,8 @@
 package com.hiddenswitch.framework.impl;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Games;
-import com.hiddenswitch.framework.Gateway;
 import com.hiddenswitch.framework.Matchmaking;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpcServer;
@@ -13,23 +10,30 @@ import io.grpc.internal.KeepAliveManager;
 import io.micrometer.core.instrument.LongTaskTimer;
 import io.micrometer.core.instrument.Metrics;
 import io.vertx.core.*;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.HttpConnection;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
+import io.vertx.grpc.common.impl.GrpcWriteStreamBase;
 import io.vertx.grpc.server.GrpcServerRequest;
+import io.vertx.sqlclient.Tuple;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static com.hiddenswitch.framework.Environment.withDslContext;
 import static com.hiddenswitch.framework.Matchmaking.*;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS;
+import static io.vertx.core.Future.any;
 import static io.vertx.core.Future.join;
 
 public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpcServer.MatchmakingApi {
@@ -43,7 +47,8 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 			.register(Metrics.globalRegistry);
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(ClientMatchmakingService.class);
-	private final Set<Session> sessions = new HashSet<>();
+	private final Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
+	private final Map<String, Session> activeSessionsByUser = new ConcurrentHashMap<>();
 
 	public ClientMatchmakingService() {
 	}
@@ -56,21 +61,71 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		var vertx = Vertx.currentContext().owner();
 		var eventBus = vertx.eventBus();
 		var timer = MATCHMAKING_TICKETS_DURATION.start();
-		var channels = new ArrayList<MessageConsumer>();
-		var session = new Session(sessions::remove, response, userId, channels, timer, new AtomicBoolean(false), grpcServerRequest.connection());
+		var channels = Collections.synchronizedList(new ArrayList<MessageConsumer>());
+		var session = new Session(s -> {
+			activeSessionsByUser.remove(s.userId(), s);
+			return sessions.remove(s);
+		}, response, userId, channels, timer, new AtomicBoolean(false), grpcServerRequest.connection());
 		sessions.add(session);
+		var previousSession = activeSessionsByUser.put(userId, session);
+		if (previousSession != null && previousSession != session) {
+			session.chainInitialWrite(previousSession.close().otherwiseEmpty());
+		}
 		session.keepAliveManager().onTransportStarted();
 
 		LOGGER.trace("enqueue called userId={}", userId);
 
+		var prepareConsumer = eventBus.<String>consumer(MATCHMAKING_PREPARE + userId);
+		prepareConsumer.handler(message -> {
+			session.verifyAlive(vertx)
+					.onSuccess(v -> message.reply("ok"))
+					.onFailure(err -> message.fail(1, err.getMessage() != null ? err.getMessage() : "session disconnected"));
+		});
+		channels.add(prepareConsumer);
+
+		var requeueConsumer = eventBus.<JsonObject>consumer(MATCHMAKING_REQUEUE + userId);
+		requeueConsumer.handler(message -> {
+			var body = message.body();
+			session.requeueTicket(
+							body.getLong("ticketId"),
+							body.getString("queueId"),
+							body.getString("deckId"),
+							body.getString("botDeckId"))
+					.onSuccess(v -> {
+						eventBus.publish(MATCHMAKING_WAKE, body.getString("queueId"));
+						message.reply("ok");
+					})
+					.onFailure(err -> message.fail(1, err.getMessage() != null ? err.getMessage() : "requeue failed"));
+		});
+		channels.add(requeueConsumer);
+
 		// notify the user when a game has been assigned
-		channels.add(eventBus.<String>consumer(MATCHMAKING_ENQUEUE + userId)
-				.handler(message -> {
-					var gameId = message.body();
-					writeGameId(response, gameId);
-					message.reply("ok");
-					session.close();
-				}));
+		var enqueueConsumer = eventBus.<String>consumer(MATCHMAKING_ENQUEUE + userId);
+		enqueueConsumer.handler(message -> {
+			if (session.cancelled.get()) {
+				message.fail(1, "session already closed");
+				return;
+			}
+			var gameId = message.body();
+			session.matched.set(true);
+			writeGameId(response, gameId)
+					.onSuccess(v -> {
+						session.close();
+						message.reply("ok");
+					})
+					.onFailure(err -> {
+						session.matched.set(false);
+						session.close();
+						message.fail(1, err.getMessage() != null ? err.getMessage() : "failed to write gameId");
+					});
+		});
+		channels.add(enqueueConsumer);
+
+		var consumersReady = Future.all(
+				prepareConsumer.completion(),
+				requeueConsumer.completion(),
+				enqueueConsumer.completion()
+		).mapEmpty().otherwiseEmpty();
 
 		request.handler(message -> {
 			session.keepAliveManager().onDataReceived();
@@ -88,8 +143,9 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 					.compose(existingGameId -> {
 						if (session.cancelled.get()) return Future.succeededFuture();
 						if (existingGameId != null) {
+							session.matched.set(true);
 							return Matchmaking.writeGameId(response, existingGameId)
-									.onComplete(v -> session.close());
+									.eventually(() -> session.close());
 						}
 
 						var queueId = message.getQueueId();
@@ -104,12 +160,12 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 								.setBotDeckId(message.getBotDeckId().isEmpty() ? null : message.getBotDeckId())
 								.setQueueId(queueId);
 
-						session.ticketWrite = withDslContext(dsl -> dsl
+						return consumersReady.compose(ignored -> session.enqueueTicketWrite(() -> withDslContext(dsl -> dsl
 								.insertInto(MATCHMAKING_TICKETS)
 								.set(record)
 								.onDuplicateKeyUpdate()
-								.set(record));
-						return session.ticketWrite.mapEmpty();
+								.set(record))
+								.onSuccess(v -> eventBus.publish(MATCHMAKING_WAKE, queueId))));
 					})
 					.onFailure(t -> session.close());
 		});
@@ -124,7 +180,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 	public void close(Completable<Void> completion) {
 		// interrupt all the threads, runClientEnqueue will handle it appropriately
 		var closeAll = new ArrayList<Future<?>>();
-		for (var session : sessions) {
+		for (var session : new ArrayList<>(sessions)) {
 			closeAll.add(session.close());
 		}
 
@@ -138,8 +194,12 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		private final List<MessageConsumer> channels;
 		private final LongTaskTimer.Sample timer;
 		private final AtomicBoolean cancelled;
+		private final AtomicBoolean matched = new AtomicBoolean(false);
 		private final KeepAliveManager keepAliveManager;
+		private final HttpConnection connection;
+		private final Promise<Void> closePromise = Promise.promise();
 		private Future<?> ticketWrite = Future.succeededFuture();
+		private Future<Void> closeFuture;
 
 		Session(Function<Session, Boolean> remover,
 		        WriteStream<Spellsource.MatchmakingQueuePutResponse> response,
@@ -154,6 +214,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 			this.channels = channels;
 			this.timer = timer;
 			this.cancelled = cancelled;
+			this.connection = connection;
 			this.keepAliveManager = Environment.keepAliveManager(connection, v -> close(), true);
 		}
 
@@ -161,43 +222,133 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 			return keepAliveManager;
 		}
 
-		@Override
-		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
-			Session session = (Session) o;
-			return userId.equals(session.userId);
+		synchronized void chainInitialWrite(Future<?> prev) {
+			this.ticketWrite = this.ticketWrite.mapEmpty().otherwiseEmpty().compose(ignored -> prev);
 		}
 
-		@Override
-		public int hashCode() {
-			return Objects.hash(userId);
+		public synchronized Future<Void> enqueueTicketWrite(Supplier<Future<?>> writeSupplier) {
+			if (this.cancelled.get() || this.matched.get()) {
+				return Future.failedFuture("session closed or matched");
+			}
+			this.ticketWrite = this.ticketWrite.mapEmpty().otherwiseEmpty()
+					.compose(ignored -> {
+						synchronized (Session.this) {
+							if (this.cancelled.get() || this.matched.get()) {
+								return Future.failedFuture("session closed or matched");
+							}
+						}
+						return writeSupplier.get();
+					});
+			return this.ticketWrite.mapEmpty();
+		}
+
+		public Future<Void> requeueTicket(Long ticketId, String queueId, String deckId, String botDeckId) {
+			return enqueueTicketWrite(() -> {
+				if (ticketId != null) {
+					return Environment.sqlClient()
+							.preparedQuery(REINSERT_TICKET_SQL)
+							.execute(Tuple.of(ticketId, queueId, this.userId, deckId, botDeckId));
+				}
+				var record = MATCHMAKING_TICKETS.newRecord()
+						.setUserId(this.userId)
+						.setQueueId(queueId)
+						.setDeckId(deckId)
+						.setBotDeckId(botDeckId);
+				return withDslContext(dsl -> dsl
+						.insertInto(MATCHMAKING_TICKETS)
+						.set(record)
+						.onDuplicateKeyUpdate()
+						.set(record));
+			});
+		}
+
+		private boolean isResponseDead() {
+			if (this.response instanceof GrpcWriteStreamBase<?, ?> grpcWriteStream) {
+				return grpcWriteStream.isCancelled() || grpcWriteStream.isTrailersSent() || grpcWriteStream.hasError();
+			}
+			return false;
+		}
+
+		public Future<Void> verifyAlive(Vertx vertx) {
+			synchronized (this) {
+				if (this.cancelled.get() || this.matched.get()) {
+					return Future.failedFuture("session closed or matched");
+				}
+			}
+			if (isResponseDead()) {
+				this.close();
+				return Future.failedFuture("grpc response stream closed");
+			}
+			if (this.connection == null) {
+				return Future.succeededFuture();
+			}
+			Future<Buffer> pingFuture;
+			try {
+				pingFuture = this.connection.ping(Buffer.buffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8}));
+			} catch (Throwable t) {
+				this.close();
+				return Future.failedFuture(t);
+			}
+			Future<Void> pingCheck = any(pingFuture.mapEmpty(), this.closePromise.future())
+					.compose(cf -> {
+						if (this.cancelled.get() || this.matched.get() || isResponseDead()) {
+							return Future.failedFuture("session closed during ping");
+						}
+						this.keepAliveManager.onDataReceived();
+						return Future.succeededFuture();
+					});
+			return Environment.timeout(pingCheck, 1000L, vertx)
+					.onFailure(err -> this.close());
 		}
 
 		public Future<Void> close() {
-			this.cancelled.set(true);
-			if (!this.remover.apply(this)) {
-				// already removed this session
-				return Future.succeededFuture();
-			}
+			Future<?> pendingTicketWrite;
+			synchronized (this) {
+				this.cancelled.set(true);
+				this.closePromise.tryFail("session closed");
+				if (this.closeFuture != null) {
+					return this.closeFuture;
+				}
+				if (!this.remover.apply(this)) {
+					this.closeFuture = Future.succeededFuture();
+					return this.closeFuture;
+				}
+				pendingTicketWrite = this.ticketWrite;
 
-			var closedChannels = new ArrayList<Future<?>>();
-			for (var channel : this.channels) {
-				closedChannels.add(channel.unregister());
-			}
+				this.timer.stop();
+				keepAliveManager.onTransportTermination();
 
-			this.channels.clear();
-			// A disconnect can arrive while the database insert is in flight.
-			// Delete after that write settles so it cannot recreate a cancelled ticket.
-			var deletedTickets = ticketWrite.mapEmpty().otherwiseEmpty()
-					.compose(ignored -> withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
-							.where(MATCHMAKING_TICKETS.USER_ID.eq(this.userId))));
-			var closedResponse = this.response.end();
-			this.timer.stop();
-			keepAliveManager.onTransportTermination();
-			closedChannels.add(deletedTickets);
-			closedChannels.add(closedResponse);
-			return Future.all(closedChannels).mapEmpty();
+				var closedChannels = new ArrayList<Future<?>>();
+				synchronized (this.channels) {
+					for (var channel : this.channels) {
+						closedChannels.add(channel.unregister());
+					}
+					this.channels.clear();
+				}
+
+				// A disconnect can arrive while the database insert is in flight.
+				// Delete after that write settles so it cannot recreate a cancelled ticket,
+				// and end the response stream after the ticket is deleted so callers awaiting
+				// stream end observe the ticket already removed.
+				Future<?> cleanupTicket;
+				if (this.matched.get()) {
+					cleanupTicket = pendingTicketWrite.mapEmpty().otherwiseEmpty();
+				} else {
+					cleanupTicket = pendingTicketWrite.mapEmpty().otherwiseEmpty()
+							.compose(ignored -> withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
+									.where(MATCHMAKING_TICKETS.USER_ID.eq(this.userId))));
+				}
+				var closedResponse = cleanupTicket.eventually(() -> {
+					try {
+						return this.response.end().otherwiseEmpty();
+					} catch (IllegalStateException ignored) {
+						return Future.succeededFuture();
+					}
+				});
+				closedChannels.add(closedResponse);
+				this.closeFuture = Future.all(closedChannels).mapEmpty();
+				return this.closeFuture;
+			}
 		}
 
 		public Function<Session, Boolean> remover() {

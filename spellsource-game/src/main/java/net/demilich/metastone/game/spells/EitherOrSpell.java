@@ -53,8 +53,9 @@ public class EitherOrSpell extends Spell {
 		SpellDesc either = (SpellDesc) desc.get(SpellArg.SPELL1);
 		SpellDesc or = (SpellDesc) desc.get(SpellArg.SPELL2);
 		if (desc.containsKey(SpellArg.CARD)) {
-			either.put(SpellArg.CARD, desc.get(SpellArg.CARD));
-			or.put(SpellArg.CARD, desc.get(SpellArg.CARD));
+			Object cardArg = desc.get(SpellArg.CARD);
+			either = either.addArg(SpellArg.CARD, cardArg);
+			or = or.addArg(SpellArg.CARD, cardArg);
 		}
 
 		SpellDesc spellToCast = condition.isFulfilled(context, player, source, target) ? either : or;

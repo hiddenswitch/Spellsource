@@ -67,6 +67,7 @@ import static java.util.stream.Collectors.*;
 public class Legacy {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Legacy.class);
 	private static final WeakVertxMap<List<DeckCreateRequest>> PREMADE_DECKS = new WeakVertxMap<>(Legacy::getPremadeDecksPrivate);
+	private static final java.util.concurrent.ConcurrentHashMap<String, DecksGetResponse> PREMADE_DECK_RESPONSE_CACHE = new java.util.concurrent.ConcurrentHashMap<>();
 	private static final LongTaskTimer GET_ALL_DECKS_TIME = LongTaskTimer
 			.builder("spellsource_getalldecks_duration")
 			.minimumExpectedValue(Duration.ofMillis(5))
@@ -345,6 +346,7 @@ public class Legacy {
 	}
 
 	public static Future<Boolean> invalidateDeck(String deckId) {
+		PREMADE_DECK_RESPONSE_CACHE.remove(deckId);
 		return Future.fromCompletionStage(getBucketForDeck(deckId).deleteAsync(), Vertx.currentContext());
 	}
 
@@ -481,6 +483,10 @@ public class Legacy {
 	}
 
 	public static Future<DecksGetResponse> getDeck(CardCatalogue cardCatalogue, String deckId, String userId) {
+		var cachedPremade = PREMADE_DECK_RESPONSE_CACHE.get(deckId);
+		if (cachedPremade != null) {
+			return Future.succeededFuture(cachedPremade);
+		}
 		var serverConfiguration = Environment.getConfiguration();
 		var bucket = getBucketForDeck(deckId);
 		var configuration = Environment.jooqAkaDaoConfiguration();
@@ -488,12 +494,24 @@ public class Legacy {
 		return Future.fromCompletionStage(bucket.getAsync(), Vertx.currentContext())
 				.compose(existing -> {
 					if (existing != null) {
+						if (existing.getCollection().getIsStandardDeck()) {
+							PREMADE_DECK_RESPONSE_CACHE.putIfAbsent(deckId, existing);
+						}
 						return Future.succeededFuture(existing);
 					}
 
 					return getDeck(cardCatalogue, deckId)
-							.compose(deck -> Future.fromCompletionStage(bucket.setAsync(deck, serverConfiguration.getDecks().getCachedDeckTimeToLiveMinutes(), TimeUnit.MINUTES), Vertx.currentContext()).map(deck));
+							.compose(deck -> {
+								if (deck.getCollection().getIsStandardDeck()) {
+									PREMADE_DECK_RESPONSE_CACHE.putIfAbsent(deckId, deck);
+								}
+								return Future.fromCompletionStage(bucket.setAsync(deck, serverConfiguration.getDecks().getCachedDeckTimeToLiveMinutes(), TimeUnit.MINUTES), Vertx.currentContext()).map(deck);
+							});
 				}).compose(deck -> {
+					if (deck.getCollection().getIsStandardDeck()
+							|| Objects.equals(deck.getCollection().getUserId(), userId)) {
+						return Future.succeededFuture(deck);
+					}
 					// we must always look up the shares record, though this should be fast
 					var deckSharesDao = new DeckSharesDao(configuration, delegate);
 					var sharesFut = deckSharesDao.queryExecutor()
@@ -502,9 +520,7 @@ public class Legacy {
 
 					return sharesFut.compose(shares -> {
 						// Check the deck is premade, owned by the current user, or shared with the user
-						if (!(deck.getCollection().getIsStandardDeck()
-								|| Objects.equals(deck.getCollection().getUserId(), userId)
-								|| shares != null)) {
+						if (shares == null) {
 							return Future.failedFuture("unauthorized");
 						}
 						return Future.succeededFuture(deck);
@@ -521,12 +537,9 @@ public class Legacy {
 			var cardsFut = queryExecutor.findManyRow(dsl -> dsl.select(
 									CARDS_IN_DECK.ID,
 									CARDS_IN_DECK.DECK_ID,
-									CARDS_IN_DECK.CARD_ID,
-									CARDS.CARD_SCRIPT)
+									CARDS_IN_DECK.CARD_ID)
 							.from(CARDS_IN_DECK)
-							.join(CARDS, JoinType.JOIN)
-							.on(CARDS_IN_DECK.CARD_ID.eq(CARDS.ID))
-							.where(CARDS_IN_DECK.DECK_ID.eq(deckId)).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false)))
+							.where(CARDS_IN_DECK.DECK_ID.eq(deckId)))
 					.onFailure(Environment.onFailure());
 			var decksFut = decks.findOneById(deckId);
 			var playerEntityAttributesFut = playerEntityAttributesDao.findManyByDeckId(Collections.singletonList(deckId));
@@ -539,6 +552,33 @@ public class Legacy {
 						var reply = DecksGetResponse.newBuilder();
 						var inventoryCollection = InventoryCollection.newBuilder();
 
+						var validCardIds = new ArrayList<String>(cards.size());
+						var i = 0;
+						for (var cardRecordRow : cards) {
+							var cardId = cardRecordRow.getString(CARDS_IN_DECK.CARD_ID.getName());
+							net.demilich.metastone.game.cards.Card card;
+							try {
+								card = cardCatalogue.getCardById(cardId);
+							} catch (RuntimeException ignored) {
+								continue;
+							}
+							if (card == null) {
+								continue;
+							}
+							validCardIds.add(cardId);
+							inventoryCollection.addInventory(CardRecord
+									.newBuilder()
+									.setId(cardRecordRow.getLong(CARDS_IN_DECK.ID.getName()))
+									// TODO: Do we really need to transmit the complete entity here?
+									.setEntity(Entity.newBuilder()
+											.setId(i)
+											.setName(card.getName())
+											.setCardId(cardId))
+									.addCollectionIds(deck.getId())
+									.build());
+							i++;
+						}
+
 						inventoryCollection.setId(deck.getId())
 								.setDeckType(InventoryCollection.InventoryCollectionDeckType.forNumber(deck.getDeckType()))
 								.setFormat(deck.getFormat())
@@ -547,21 +587,7 @@ public class Legacy {
 								.setType(InventoryCollection.InventoryCollectionType.DECK)
 								.setIsStandardDeck(deck.getIsPremade())
 								.setUserId(deck.getCreatedBy())
-								.setValidationReport((ValidationReport.Builder) validateDeck(cardCatalogue, cards.stream().map(row -> row.getString(CARDS_IN_DECK.CARD_ID.getName())).collect(toList()), deck.getHeroClass(), deck.getFormat()));
-						var i = 0;
-						for (var cardRecordRow : cards) {
-							inventoryCollection.addInventory(CardRecord
-									.newBuilder()
-									.setId(cardRecordRow.getLong(CARDS_IN_DECK.ID.getName()))
-									// TODO: Do we really need to transmit the complete entity here?
-									.setEntity(Entity.newBuilder()
-											.setId(i)
-											.setName(cardRecordRow.getJsonObject(CARDS.CARD_SCRIPT.getName()).getString("name"))
-											.setCardId(cardRecordRow.getString(CARDS_IN_DECK.CARD_ID.getName())))
-									.addCollectionIds(deck.getId())
-									.build());
-							i++;
-						}
+								.setValidationReport((ValidationReport.Builder) validateDeck(cardCatalogue, validCardIds, deck.getHeroClass(), deck.getFormat()));
 
 						for (var playerEntityAttribute : playerEntityAttributes) {
 							inventoryCollection.addPlayerEntityAttributes(AttributeValueTuple.newBuilder()

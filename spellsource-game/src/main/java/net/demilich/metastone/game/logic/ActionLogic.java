@@ -44,8 +44,7 @@ public class ActionLogic implements Serializable {
 		List<GameAction> heroPowerActions = new ArrayList<GameAction>();
 		Card heroPower = player.getHeroPowerZone().get(0);
 
-		EntityReference heroPowerReference = new EntityReference(heroPower.getId());
-		if (!context.getLogic().canPlayCard(player.getId(), heroPowerReference)) {
+		if (!context.getLogic().canPlayCard(player, heroPower)) {
 			return heroPowerActions;
 		}
 		if (heroPower.isChooseOne()) {
@@ -67,10 +66,20 @@ public class ActionLogic implements Serializable {
 				continue;
 			}
 
-			List<PhysicalAttackTargetOverrideAura> filters = context.getLogic().getActiveTriggers(minion.getReference()).stream()
-					.filter(trigger -> trigger instanceof PhysicalAttackTargetOverrideAura)
-					.map(trigger -> (PhysicalAttackTargetOverrideAura) trigger).collect(Collectors.toList());
-			if (!filters.isEmpty()) {
+			List<PhysicalAttackTargetOverrideAura> filters = null;
+			var triggers = context.getTriggers();
+			for (int i = 0, size = triggers.size(); i < size; i++) {
+				var trigger = triggers.get(i);
+				if (trigger instanceof PhysicalAttackTargetOverrideAura aura
+						&& !trigger.isExpired()
+						&& minion.getReference().equals(trigger.getHostReference())) {
+					if (filters == null) {
+						filters = new ArrayList<>(2);
+					}
+					filters.add(aura);
+				}
+			}
+			if (filters != null) {
 				Set<EntityReference> common = new LinkedHashSet<>();
 
 				for (Integer targetId : filters.get(0).getAffectedEntities()) {
@@ -99,8 +108,7 @@ public class ActionLogic implements Serializable {
 		playCardActions.addAll(getHeroPowerActions(context, player));
 
 		for (Card card : player.getHand()) {
-			EntityReference cardReference = card.getReference();
-			if (!context.getLogic().canPlayCard(player.getId(), cardReference)) {
+			if (!context.getLogic().canPlayCard(player, card)) {
 				continue;
 			}
 

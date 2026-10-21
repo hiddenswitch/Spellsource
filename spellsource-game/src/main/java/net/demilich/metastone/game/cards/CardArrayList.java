@@ -19,9 +19,14 @@ import java.util.stream.Stream;
  */
 public class CardArrayList extends AbstractList<Card> implements Cloneable, Serializable, CardList {
 	private static final long serialVersionUID = 1L;
-	private List<Card> cards = new ArrayList<Card>();
+	private List<Card> cards;
 
 	public CardArrayList() {
+		this.cards = new ArrayList<>(0);
+	}
+
+	public CardArrayList(int initialCapacity) {
+		this.cards = new ArrayList<>(initialCapacity);
 	}
 
 	@Override
@@ -57,7 +62,10 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 
 	@Override
 	public CardList clone() {
-		CardList clone = new CardArrayList();
+		if (cards.isEmpty()) {
+			return new CardArrayList(0);
+		}
+		CardList clone = new CardArrayList(cards.size());
 		for (Card card : cards) {
 			clone.addCard(card.clone());
 		}
@@ -149,8 +157,12 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 
 	@Override
 	public CardList shuffle(XORShiftRandom random) {
-		Collections.shuffle(cards, random);
+		random.shuffle(this);
 		return this;
+	}
+
+	public void shuffleInternal(Random random) {
+		Collections.shuffle(cards, random);
 	}
 
 	@Override

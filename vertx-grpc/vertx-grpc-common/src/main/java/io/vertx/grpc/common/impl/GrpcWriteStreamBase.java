@@ -44,7 +44,10 @@ public abstract class GrpcWriteStreamBase<S extends GrpcWriteStreamBase<S, T>, T
       if (err instanceof StreamResetException) {
         StreamResetException reset = (StreamResetException) err;
         GrpcError error = mapHttp2ErrorCode(reset.getCode());
-        handleError(error);
+        if (error != null) {
+          handleError(error);
+        }
+        handleException(GrpcErrorException.create(reset));
       } else {
         handleException(err);
       }
@@ -66,7 +69,7 @@ public abstract class GrpcWriteStreamBase<S extends GrpcWriteStreamBase<S, T>, T
     }
   }
 
-  private void handleException(Throwable err) {
+  protected void handleException(Throwable err) {
     Handler<Throwable> handler = exceptionHandler;
     if (handler != null) {
       handler.handle(err);
@@ -105,6 +108,10 @@ public abstract class GrpcWriteStreamBase<S extends GrpcWriteStreamBase<S, T>, T
 
   public boolean isCancelled() {
     return error == GrpcError.CANCELLED;
+  }
+
+  public boolean hasError() {
+    return error != null;
   }
 
   @Override

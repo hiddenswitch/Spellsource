@@ -55,6 +55,8 @@ public class Trace implements Serializable, Cloneable {
 	private transient List<GameAction> rawActions = new ArrayList<>();
 	@JsonIgnore
 	private transient CardCatalogue cardCatalogue;
+	@JsonIgnore
+	private transient boolean actionsShared;
 
 	public Trace() {
 	}
@@ -63,9 +65,9 @@ public class Trace implements Serializable, Cloneable {
 	public void setStartState(GameState gameState) {
 		Player[] players = new Player[]{gameState.getPlayer1(), gameState.getPlayer2()};
 		DeckFormat deckFormat = gameState.getDeckFormat();
-		deckFormatSets = new ArrayList<>(deckFormat.getSets());
-		deckFormatName = gameState.getDeckFormat().getName();
-		secondPlayerBonusCards = Arrays.asList(gameState.getDeckFormat().getSecondPlayerBonusCards());
+		deckFormatSets = deckFormat.getSetsList();
+		deckFormatName = deckFormat.getName();
+		secondPlayerBonusCards = deckFormat.getSecondPlayerBonusCardsList();
 		setHeroClasses(Arrays.asList(null, null));
 		setDeckCardIds(Arrays.asList(new DeckTrace().setPlayerId(0), new DeckTrace().setPlayerId(1)));
 		for (int i = 0; i < 2; i++) {
@@ -96,6 +98,11 @@ public class Trace implements Serializable, Cloneable {
 
 	@JsonIgnore
 	public void addAction(GameAction action) {
+		if (actionsShared) {
+			actions = actions == null ? new ArrayList<>() : new ArrayList<>(actions);
+			rawActions = rawActions == null ? new ArrayList<>() : new ArrayList<>(rawActions);
+			actionsShared = false;
+		}
 		actions.add(action.getId());
 		rawActions.add(action);
 	}
@@ -265,6 +272,7 @@ public class Trace implements Serializable, Cloneable {
 
 	public Trace setActions(List<Integer> actions) {
 		this.actions = actions;
+		this.actionsShared = false;
 		return this;
 	}
 
@@ -294,6 +302,7 @@ public class Trace implements Serializable, Cloneable {
 	@JsonIgnore
 	public Trace setRawActions(List<GameAction> rawActions) {
 		this.rawActions = rawActions;
+		this.actionsShared = false;
 		return this;
 	}
 
@@ -310,17 +319,8 @@ public class Trace implements Serializable, Cloneable {
 	public Trace clone() {
 		try {
 			Trace clone = (Trace) super.clone();
-			List<MulliganTrace> mulliganTraces = new ArrayList<>();
-			if (getMulligans() != null) {
-				for (MulliganTrace mulliganTrace : getMulligans()) {
-					mulliganTraces.add(mulliganTrace.clone());
-				}
-				clone.setMulligans(mulliganTraces);
-			}
-
-			if (actions != null) {
-				clone.actions = new ArrayList<>(actions);
-			}
+			this.actionsShared = true;
+			clone.actionsShared = true;
 			return clone;
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);

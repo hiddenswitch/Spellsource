@@ -42,6 +42,37 @@ public final class EntityLocation implements Serializable {
 	 * An unassigned location.
 	 */
 	public static final EntityLocation UNASSIGNED = new EntityLocation(Zones.NONE, -1, -1);
+	private static final int CACHE_MAX_INDEX = 64;
+	private static final EntityLocation[][][] CACHE;
+
+	static {
+		Zones[] zones = Zones.values();
+		CACHE = new EntityLocation[zones.length][2][CACHE_MAX_INDEX];
+		for (int z = 0; z < zones.length; z++) {
+			Zones zone = zones[z];
+			if (zone == Zones.UNRECOGNIZED) {
+				continue;
+			}
+			for (int p = 0; p < 2; p++) {
+				for (int idx = 0; idx < CACHE_MAX_INDEX; idx++) {
+					CACHE[z][p][idx] = new EntityLocation(zone, p, idx);
+				}
+			}
+		}
+	}
+
+	public static EntityLocation of(Zones zone, int player, int index) {
+		if (zone != null && (player == 0 || player == 1) && index >= 0 && index < CACHE_MAX_INDEX) {
+			int z = zone.ordinal();
+			if (z < CACHE.length) {
+				EntityLocation cached = CACHE[z][player][index];
+				if (cached != null) {
+					return cached;
+				}
+			}
+		}
+		return new EntityLocation(zone, player, index);
+	}
 	/**
 	 * @see #getZone()
 	 */
@@ -80,10 +111,11 @@ public final class EntityLocation implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder()
-				.append(index)
-				.append(zone)
-				.append(player).toHashCode();
+		int result = 17;
+		result = 37 * result + index;
+		result = 37 * result + (zone != null ? zone.hashCode() : 0);
+		result = 37 * result + player;
+		return result;
 	}
 
 	/**

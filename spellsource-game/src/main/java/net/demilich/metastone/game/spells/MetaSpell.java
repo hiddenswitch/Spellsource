@@ -68,6 +68,8 @@ public class MetaSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
+	private static final SpellDesc[] EMPTY_SPELLS = new SpellDesc[0];
+
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (desc.containsKey(SpellArg.VALUE)) {
@@ -75,30 +77,28 @@ public class MetaSpell extends Spell {
 		}
 		// Manually obtain sub spells for performance reasons, this is accessed very often
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
-		// We mutate an array here so we must clone the desc's spells array
 		SpellDesc[] originalSpellDescs = (SpellDesc[]) desc.get(SpellArg.SPELLS);
-		SpellDesc[] spells;
-		if (originalSpellDescs != null) {
-			spells = Arrays.copyOf(originalSpellDescs, originalSpellDescs.length);
-		} else {
-			spells = new SpellDesc[0];
-		}
+		SpellDesc[] spells = originalSpellDescs != null ? originalSpellDescs : EMPTY_SPELLS;
 		SpellDesc spell1 = (SpellDesc) desc.get(SpellArg.SPELL1);
 		SpellDesc spell2 = (SpellDesc) desc.get(SpellArg.SPELL2);
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
 		// Pass down the CARD arg if it's specified on this desc. This allows DiscoverSpells to correctly use MetaSpell.
 		if (desc.containsKey(SpellArg.CARD)) {
+			Object cardArg = desc.get(SpellArg.CARD);
 			if (spell != null) {
-				spell = spell.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+				spell = spell.addArg(SpellArg.CARD, cardArg);
 			}
-			for (int i = 0; i < spells.length; i++) {
-				spells[i] = spells[i].addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+			if (spells.length > 0) {
+				spells = Arrays.copyOf(spells, spells.length);
+				for (int i = 0; i < spells.length; i++) {
+					spells[i] = spells[i].addArg(SpellArg.CARD, cardArg);
+				}
 			}
 			if (spell1 != null) {
-				spell1 = spell1.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+				spell1 = spell1.addArg(SpellArg.CARD, cardArg);
 			}
 			if (spell2 != null) {
-				spell2 = spell2.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+				spell2 = spell2.addArg(SpellArg.CARD, cardArg);
 			}
 		}
 		for (int i = 0; i < howMany; i++) {

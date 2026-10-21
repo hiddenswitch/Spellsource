@@ -27,3 +27,25 @@ tasks.generateTypeScript {
     outputKind = 'module'
     outputFile = rootProject.project("spellsource-web").file("src/__generated__/spellsource-game.d.ts")
 }
+
+tasks.named('compileJava', JavaCompile).configure {
+    doLast {
+        def javaExe = javaToolchains.launcherFor(java.toolchain).get().executablePath.asFile.absolutePath
+        def classesDir = destinationDirectory.get().asFile.absolutePath
+        def cp = classesDir + File.pathSeparator + classpath.asPath
+        def pb = new ProcessBuilder(
+            javaExe,
+            "--enable-preview",
+            "-cp", cp,
+            "net.demilich.metastone.game.cards.desc.compiler.SpellsourceClassfileWeaver",
+            classesDir
+        )
+        pb.inheritIO()
+        def proc = pb.start()
+        def exitCode = proc.waitFor()
+        if (exitCode != 0) {
+            throw new GradleException("SpellsourceClassfileWeaver failed with exit code " + exitCode)
+        }
+    }
+}
+

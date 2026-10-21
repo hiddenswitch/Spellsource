@@ -35,10 +35,13 @@ public class DiscoverClassSpell extends Spell {
 		SpellDesc fakeDesc = NullSpell.create();
 		fakeDesc.put(SpellArg.SPELL, NullSpell.create());
 
-		classCards.shuffle(context.getLogic().getRandom());
-		classCards = new CardArrayList(classCards.subList(0, Math.min(classCards.size(), desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3))));
+		int count = Math.min(classCards.size(), desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3));
+		CardList chosenCards = new CardArrayList();
+		for (int i = 0; i < count; i++) {
+			chosenCards.add(context.getLogic().removeRandom(classCards));
+		}
 
-		DiscoverAction discoverAction = SpellUtils.discoverCard(context, player, source, fakeDesc, classCards);
+		DiscoverAction discoverAction = SpellUtils.discoverCard(context, player, source, fakeDesc, chosenCards);
 		String classCard = discoverAction.getCard().getCardId();
 		SpellDesc subSpell = desc.getSpell();
 

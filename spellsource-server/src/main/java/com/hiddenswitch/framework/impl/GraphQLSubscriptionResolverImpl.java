@@ -91,10 +91,12 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 		public void subscribe(Subscriber<? super MatchFound> subscriber) {
 			var cancelled = new AtomicBoolean(false);
 			var address = Matchmaking.MATCHMAKING_ENQUEUE + userId;
+			var prepareAddress = Matchmaking.MATCHMAKING_PREPARE + userId;
 			var vertx = Vertx.currentContext().owner();
 			var eventBus = vertx.eventBus();
 
 			MessageConsumer<String> consumer = eventBus.consumer(address);
+			MessageConsumer<String> prepareConsumer = eventBus.consumer(prepareAddress);
 
 			subscriber.onSubscribe(new Subscription() {
 				@Override
@@ -106,11 +108,23 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 				public void cancel() {
 					cancelled.set(true);
 					consumer.unregister();
+					prepareConsumer.unregister();
 				}
 			});
 
+			prepareConsumer.handler(message -> {
+				if (cancelled.get()) {
+					message.fail(1, "subscription cancelled");
+					return;
+				}
+				message.reply("ok");
+			});
+
 			consumer.handler(message -> {
-				if (cancelled.get()) return;
+				if (cancelled.get()) {
+					message.fail(1, "subscription cancelled");
+					return;
+				}
 
 				var gameId = message.body();
 				// Reply to acknowledge receipt so the matchmaker knows the player was notified

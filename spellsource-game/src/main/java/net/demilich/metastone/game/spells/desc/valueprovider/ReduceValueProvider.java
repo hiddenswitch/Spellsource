@@ -98,19 +98,20 @@ public class ReduceValueProvider extends ValueProvider {
 			return getDesc().getValue(ValueProviderArg.VALUE2, context, player, target, host, 0);
 		}
 
-		for (Entity entity : entities) {
-			boolean isApplyingValueProvider = getDesc().containsKey(ValueProviderArg.VALUE1) &&
-					ValueProvider.class.isAssignableFrom(getDesc().get(ValueProviderArg.VALUE1).getClass());
+		boolean isApplyingValueProvider = getDesc().containsKey(ValueProviderArg.VALUE1) &&
+				ValueProvider.class.isAssignableFrom(getDesc().get(ValueProviderArg.VALUE1).getClass());
+		ValueProvider targetValueProvider = isApplyingValueProvider ? (ValueProvider) getDesc().get(ValueProviderArg.VALUE1) : null;
+		int staticValue1 = (!isApplyingValueProvider && attribute == null) ? getDesc().getInt(ValueProviderArg.VALUE1) : 0;
+		for (int i = 0, n = entities.size(); i < n; i++) {
+			Entity entity = entities.get(i);
 			if (isApplyingValueProvider) {
-				ValueProvider targetValueProvider = (ValueProvider) getDesc().get(ValueProviderArg.VALUE1);
 				value = operation.performOperation(value, targetValueProvider.getValue(context, player, entity, target));
 			} else if (attribute != null) {
-				int value1 = AttributeValueProvider.create(attribute, entity.getReference()).create().getValue(context, player, entity, host);
+				int value1 = AttributeValueProvider.provideValueForAttribute(context, attribute, entity);
 				value = operation.performOperation(value, value1);
 			} else {
-				value = operation.performOperation(value, getDesc().getInt(ValueProviderArg.VALUE1));
+				value = operation.performOperation(value, staticValue1);
 			}
-
 		}
 
 		return value;

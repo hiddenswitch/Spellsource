@@ -33,7 +33,7 @@ public class CardSourceDesc extends Desc<CardSourceArg, CardSource> {
 
 	@Override
 	public CardSourceDesc clone() {
-		return (CardSourceDesc) copyTo(new CardSourceDesc(getDescClass()));
+		return (CardSourceDesc) super.clone();
 	}
 
 	@Override

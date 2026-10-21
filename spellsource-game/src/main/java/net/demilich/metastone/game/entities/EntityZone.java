@@ -66,7 +66,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		for (int i = 0; i < size; i++) {
 			E cloned = (E) internal.get(i).clone();
 			cloneZone.internal.add(cloned);
-			cloned.setEntityLocation(new EntityLocation(zone, player, i));
+			cloned.setEntityLocation(EntityLocation.of(zone, player, i));
 		}
 		return cloneZone;
 	}
@@ -107,7 +107,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 
 	protected E setUnchecked(int index, E element) {
 		internal.set(index, element);
-		element.setEntityLocation(new EntityLocation(zone, player, index));
+		element.setEntityLocation(EntityLocation.of(zone, player, index));
 		return element;
 	}
 
@@ -123,7 +123,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		}
 		internal.add(index, element);
 		for (int i = index; i < internal.size(); i++) {
-			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
+			internal.get(i).setEntityLocation(EntityLocation.of(zone, player, i));
 		}
 		updateLookup(element);
 	}
@@ -140,7 +140,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		result.setEntityLocation(EntityLocation.UNASSIGNED);
 		lookup.remove(result.getId());
 		for (int i = index; i < internal.size(); i++) {
-			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
+			internal.get(i).setEntityLocation(EntityLocation.of(zone, player, i));
 		}
 		return result;
 	}
@@ -181,7 +181,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 			lookup.remove(result.getId());
 		}
 		for (int i = index; i < internal.size(); i++) {
-			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
+			internal.get(i).setEntityLocation(EntityLocation.of(zone, player, i));
 		}
 		destination.uncheckedAdd(destinationIndex, result);
 	}
@@ -204,8 +204,8 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		int j = entity2.getIndex();
 		internal.set(i, entity2);
 		internal.set(j, entity1);
-		internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
-		internal.get(j).setEntityLocation(new EntityLocation(zone, player, j));
+		internal.get(i).setEntityLocation(EntityLocation.of(zone, player, i));
+		internal.get(j).setEntityLocation(EntityLocation.of(zone, player, j));
 	}
 
 	@Override
@@ -220,7 +220,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 
 		player = playerIndex;
 		for (int i = 0; i < internal.size(); i++) {
-			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
+			internal.get(i).setEntityLocation(EntityLocation.of(zone, player, i));
 		}
 	}
 

@@ -26,11 +26,16 @@ public class CardCountCondition extends CountCondition {
 			filter = (EntityFilter) getDesc().get(ConditionArg.CARD_FILTER);
 		}
 		for (Entity card : player.getHand()) {
-			if (filter == null || filter.matches(context, player, source, card)) {
+			if (filter == null || filter.matches(context, player, card, source)) {
 				count++;
 			}
 		}
 		return count;
+	}
+
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
 	}
 }
 

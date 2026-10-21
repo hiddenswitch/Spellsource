@@ -5,6 +5,11 @@ plugins {
 
 apply from: "${project.rootProject.layout.projectDirectory}/gradle/instrument.gradle"
 
+tasks.withType(JavaCompile).configureEach {
+  options.compilerArgs.removeAll { it == '--enable-preview' }
+  options.release = 21
+}
+
 def mainClassNameStr = 'io.vertx.grpc.plugin.VertxGrpcGenerator'
 
 application.mainClass = mainClassNameStr

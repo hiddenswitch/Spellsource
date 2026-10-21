@@ -49,6 +49,10 @@ public final class EntityLookup implements Serializable, Cloneable, Iterable<Ent
 		return size;
 	}
 
+	public int capacity() {
+		return table.length;
+	}
+
 	/**
 	 * Returns a stream of all non-null entities in this lookup. Replaces the old {@code Map.values().stream()} pattern.
 	 */

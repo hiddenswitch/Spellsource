@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.google.protobuf.Message;
 import com.hiddenswitch.diagnostics.Tracing;
+import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.rpc.Hiddenswitch;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.ICardsInDeck;
@@ -50,6 +51,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.curioswitch.common.protobuf.json.MessageMarshallerModule;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,6 +137,18 @@ public class ModelConversions {
 //			desc.getAttributes().putAll(cardRecord.getPersistentAttributes());
 
 		return desc;
+	}
+
+	public static Card getCardFromRecord(ICardsInDeck cardRecord, String userId, String deckId,
+	                                     CardCatalogue cardCatalogue) {
+		var card = cardCatalogue.getCardById(cardRecord.getCardId());
+		var attributes = card.getAttributes();
+		attributes.put(Attribute.USER_ID, userId);
+		attributes.put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
+		attributes.put(Attribute.DECK_ID, deckId);
+		attributes.put(Attribute.CHAMPION_ID, userId);
+		attributes.put(Attribute.ENTITY_INSTANCE_ID, UUID.randomUUID().toString());
+		return card;
 	}
 
 	/**
@@ -247,11 +261,14 @@ public class ModelConversions {
 	 * @return A client-specific view of the event.
 	 */
 	static GameEvent.Builder getClientEvent(net.demilich.metastone.game.events.GameEvent event, int playerId) {
+		return getClientEvent(event.getGameContext().clone(), event, playerId);
+	}
+
+	static GameEvent.Builder getClientEvent(GameContext workingContext, net.demilich.metastone.game.events.GameEvent event, int playerId) {
 		var clientEvent = GameEvent.newBuilder();
 
 		clientEvent.setEventType(event.getEventType());
 
-		var workingContext = event.getGameContext().clone();
 		var source = event.getSource(workingContext);
 		var target = event.getTarget();
 		var targets = event.getTargets(workingContext, playerId);
@@ -635,9 +652,33 @@ public class ModelConversions {
 		entity.setPermanent(actor.hasAttribute(Attribute.PERMANENT));
 		entity.setRush(actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
 		entity.addAllTribes(Arrays.asList(actor.getRaces()));
-		var triggers = workingContext.getLogic().getActiveTriggers(actor.getReference());
-		entity.setHostsTrigger(triggers.stream().anyMatch(t -> !(t instanceof Aftermath) && !(t instanceof Aura)));
+		entity.setHostsTrigger(hasActiveNonAftermathNonAuraTrigger(workingContext, actor.getReference()));
 		return entity;
+	}
+
+	private static boolean hasActiveNonAftermathNonAuraTrigger(GameContext context, EntityReference entityReference) {
+		var triggers = context.getTriggers();
+		for (int i = 0, size = triggers.size(); i < size; i++) {
+			var trigger = triggers.get(i);
+			if (!trigger.isExpired()
+					&& !(trigger instanceof Aftermath)
+					&& !(trigger instanceof Aura)
+					&& entityReference.equals(trigger.getHostReference())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean hasActiveTrigger(GameContext context, EntityReference entityReference) {
+		var triggers = context.getTriggers();
+		for (int i = 0, size = triggers.size(); i < size; i++) {
+			var trigger = triggers.get(i);
+			if (!trigger.isExpired() && entityReference.equals(trigger.getHostReference())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -748,8 +789,9 @@ public class ModelConversions {
 		entity.setTaunt(card.hasAttribute(Attribute.TAUNT));
 		entity.setHostsTrigger(card.hasTrigger() || card.hasAura() || card.hasCardCostModifier());
 		// in order to not leak information, these now have to be sent all the time
-		if (card.getDesc().getArt() != null) {
-			entity.setArt(card.getDesc().getArt());
+		var resolvedArt = toArt(card);
+		if (resolvedArt != null) {
+			entity.setArt(resolvedArt);
 		}
 		entity.addAllTooltips(Arrays.asList(card.getDesc().getTooltips()));
 
@@ -762,7 +804,7 @@ public class ModelConversions {
 			entity.setConditionMet(workingContext.getLogic().conditionMet(localPlayerId, card));
 		}
 		entity.setCardType(card.getCardType());
-		var hostsTrigger = !workingContext.getLogic().getActiveTriggers(card.getReference()).isEmpty();
+		var hostsTrigger = hasActiveTrigger(workingContext, card.getReference());
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its 
 		//  border yellow.
 		// I'd personally recommend making the glowing border effect be a custom programmable part of the .json file 
@@ -816,6 +858,71 @@ public class ModelConversions {
 		return entity;
 	}
 
+	private static final java.util.concurrent.ConcurrentHashMap<String, Optional<Art>> RESOLVED_ART_CACHE = new java.util.concurrent.ConcurrentHashMap<>(2048);
+
+	public static @Nullable Art toArt(@Nullable Card card) {
+		if (card == null || card.getDesc() == null) {
+			return null;
+		}
+		var cardId = card.getCardId();
+		if (cardId != null && card.getDesc().isReadOnly()) {
+			var cached = RESOLVED_ART_CACHE.get(cardId);
+			if (cached != null) {
+				return cached.orElse(null);
+			}
+			var resolved = resolveArtUncached(card);
+			RESOLVED_ART_CACHE.putIfAbsent(cardId, Optional.ofNullable(resolved));
+			return resolved;
+		}
+		return resolveArtUncached(card);
+	}
+
+	private static @Nullable Art resolveArtUncached(@NotNull Card card) {
+		var baseArt = card.getDesc().getArt();
+		var spriteName = (baseArt != null && baseArt.hasSprite() && !baseArt.getSprite().getNamed().isEmpty())
+				? baseArt.getSprite().getNamed()
+				: card.getName();
+		if (spriteName != null && !spriteName.isEmpty()) {
+			if (spriteName.startsWith("/art/") || spriteName.startsWith("http://") || spriteName.startsWith("https://")) {
+				var builder = baseArt != null ? baseArt.toBuilder() : Art.newBuilder();
+				var spriteBuilder = (baseArt != null && baseArt.hasSprite()) ? baseArt.getSprite().toBuilder() : Sprite.newBuilder();
+				return builder.setSprite(spriteBuilder.setNamed(spriteName)).build();
+			}
+			if (spriteName.length() == 64 && Environment.getArtBytesByHash(spriteName) != null) {
+				var builder = baseArt != null ? baseArt.toBuilder() : Art.newBuilder();
+				var spriteBuilder = (baseArt != null && baseArt.hasSprite()) ? baseArt.getSprite().toBuilder() : Sprite.newBuilder();
+				return builder.setSprite(spriteBuilder.setNamed("/art/" + spriteName.toLowerCase(Locale.ROOT) + ".png")).build();
+			}
+			var hash = Environment.getArtHashByName(spriteName);
+			if (hash == null && card.getCardId() != null) {
+				hash = Environment.getArtHashByName(card.getCardId());
+			}
+			if (hash == null && card.getName() != null && !card.getName().equals(spriteName)) {
+				hash = Environment.getArtHashByName(card.getName());
+			}
+			if (hash != null) {
+				var builder = baseArt != null ? baseArt.toBuilder() : Art.newBuilder();
+				var spriteBuilder = (baseArt != null && baseArt.hasSprite()) ? baseArt.getSprite().toBuilder() : Sprite.newBuilder();
+				return builder.setSprite(spriteBuilder.setNamed("/art/" + hash + ".png")).build();
+			}
+		}
+		if (baseArt != null) {
+			if (!baseArt.hasSprite() || baseArt.getSprite().getNamed().isEmpty()) {
+				return baseArt.toBuilder()
+						.setSprite((baseArt.hasSprite() ? baseArt.getSprite().toBuilder() : Sprite.newBuilder())
+								.setNamed(card.getName() != null ? card.getName() : ""))
+						.build();
+			}
+			return baseArt;
+		}
+		if (card.getName() != null && !card.getName().isEmpty()) {
+			return Art.newBuilder()
+					.setSprite(Sprite.newBuilder().setNamed(card.getName()))
+					.build();
+		}
+		return null;
+	}
+
 	/**
 	 * Converts an in-game entity location to a client view location.
 	 *
@@ -846,11 +953,12 @@ public class ModelConversions {
 		var hpBonus = 0;
 		var hasTaunt = false;
 		hasTaunt |= entity.hasAttribute(Attribute.CARD_TAUNT);
-		for (var e : context.getTriggers()
-			.stream()
-			.filter(e -> !e.isExpired() && e.getOwner() == playerId && e instanceof WhereverTheyAreEnchantment)
-			.map(WhereverTheyAreEnchantment.class::cast)
-			.collect(Collectors.toList())) {
+		var triggers = context.getTriggers();
+		for (int i = 0, size = triggers.size(); i < size; i++) {
+			var trigger = triggers.get(i);
+			if (trigger.isExpired() || trigger.getOwner() != playerId || !(trigger instanceof WhereverTheyAreEnchantment e)) {
+				continue;
+			}
 			List<SpellDesc> spells;
 			if (e.getSpell() == null) {
 				return;
@@ -896,13 +1004,15 @@ public class ModelConversions {
 		var deckId = deckCollection.getCollection().getId();
 		var deck = new GameDeck();
 		deck.setDeckId(deckCollection.getCollection().getId());
-		// TODO: Deal with how we retrieve cards here
-		deck.setCards(deckCollection.getCollection().getInventoryList().stream()
-			.map(cr -> Objects.requireNonNull(getDescriptionFromRecord(new CardsInDeck()
-				.setCardId(cr.getEntity().getCardId())
-				.setId(cr.getId())
-				.setDeckId(deckId), userId, deckId, cardCatalogue)).create())
-			.collect(Collectors.toCollection(CardArrayList::new)));
+		var inventoryList = deckCollection.getCollection().getInventoryList();
+		var cards = new CardArrayList(inventoryList.size());
+		for (var cr : inventoryList) {
+			cards.addCard(getCardFromRecord(new CardsInDeck()
+					.setCardId(cr.getEntity().getCardId())
+					.setId(cr.getId())
+					.setDeckId(deckId), userId, deckId, cardCatalogue));
+		}
+		deck.setCards(cards);
 		deck.setFormat(cardCatalogue.getFormat(deckCollection.getCollection().getFormat()));
 		deck.setHeroClass(deckCollection.getCollection().getHeroClass());
 		deck.setName(deckCollection.getCollection().getName());

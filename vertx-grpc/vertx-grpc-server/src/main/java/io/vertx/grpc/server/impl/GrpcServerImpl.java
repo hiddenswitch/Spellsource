@@ -266,6 +266,7 @@ public class GrpcServerImpl implements GrpcServer {
       grpcRequest.setRoutingContext(rc);
     }
     grpcResponse.init();
+    grpcRequest.pause();
     grpcRequest.init(grpcResponse, options.getScheduleDeadlineAutomatically(), options.getMaxMessageSize());
     grpcRequest.invalidMessageHandler(invalidMsg -> {
       if (invalidMsg instanceof MessageSizeOverflowException) {
@@ -274,7 +275,13 @@ public class GrpcServerImpl implements GrpcServer {
         grpcResponse.cancel();
       }
     });
-    grpcRequest.context().dispatch(grpcRequest, handler);
+    grpcRequest.context().dispatch(grpcRequest, req -> {
+      try {
+        handler.handle(req);
+      } finally {
+        grpcRequest.resume();
+      }
+    });
   }
 
   public GrpcServer callHandler(Handler<GrpcServerRequest<Buffer, Buffer>> handler) {

@@ -150,7 +150,7 @@ public class ReceiveCardSpell extends Spell {
 				logger.warn("onCast {} {}: Suspicious call with a CARD_SOURCE {} that does not create cards and we're behaving as though it does.", context.getGameId(), source, desc.getCardSource());
 			}
 
-			CardList cards = desc.getFilteredCards(context, player, source).getCopy();
+			CardList cards = desc.getFilteredCards(context, player, source);
 			String replacementCard = (String) desc.get(SpellArg.CARD);
 			if (count == GameLogic.INFINITE) {
 				count = cards.getCount();
@@ -158,7 +158,7 @@ public class ReceiveCardSpell extends Spell {
 			for (int i = 0; i < count; i++) {
 				Card card = null;
 				if (!cards.isEmpty()) {
-					card = getAndRemoveCard(context, cards);
+					card = getAndRemoveCard(context, cards).getCopy();
 				} else if (replacementCard != null) {
 					logger.debug("onCast {} {}: No cards were produced by the filter or source, so a replacement {} was used instead", context.getGameId(), source, replacementCard);
 					card = context.getCardById(replacementCard);

@@ -24,22 +24,13 @@ public class R__0001_Update_cards extends BaseJavaMigration {
 
 	@Override
 	public Integer getChecksum() {
-		return Environment.cardsChecksum();
+		return 0;
 	}
 
 	@Override
 	public void migrate(Context context) throws Exception {
-		var dsl = DSL.using(context.getConnection(), SQLDialect.POSTGRES);
-		var ownerUserId = Environment.getSpellsourceUserId();
-		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
-		var publish = ClasspathCardCatalogue.INSTANCE.getCards().values().stream().map(card -> {
-			var encoded = JsonObject.mapFrom(card.getDesc());
-			return dsl.select(Routines.publishGitCard(card.getCardId(), encoded, ownerUserId));
-		}).collect(Collectors.toList());
-		dsl.batch(publish).execute();
-		// invalidate the corresponding redis key for unity clients that need the card files
+		// No-op: git-authored cards are loaded directly in-memory from ClasspathCardCatalogue.INSTANCE.
+		// Invalidate the Redis cache key so clients receive updated card definitions when git cards change.
 		SqlCachedCardCatalogue.invalidateGitCardsFile();
-		// todo: notify running copies of the server that this has been updated?
-		// i think the subscription will stream in the thousands of cards that were changed
 	}
 }

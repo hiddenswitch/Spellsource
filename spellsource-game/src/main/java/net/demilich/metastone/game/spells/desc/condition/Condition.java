@@ -52,6 +52,16 @@ public abstract class Condition implements Serializable, HasDesc<ConditionDesc> 
 	public final boolean isFulfilled(GameContext context, Player player, Entity source, Entity target) {
 		var invert = desc.getBool(ConditionArg.INVERT);
 		var targetPlayer = (TargetPlayer) desc.getOrDefault(ConditionArg.TARGET_PLAYER, TargetPlayer.SELF);
+		if (!targetConditionArgOverridesSuppliedTarget() || !desc.containsKey(ConditionArg.TARGET)) {
+			if (targetConditionArgOverridesSuppliedTarget() && usesFilter() && desc.containsKey(ConditionArg.FILTER)) {
+				var filter = (EntityFilter) desc.get(ConditionArg.FILTER);
+				if (target != null && filter != null && !filter.matches(context, player, target, source)) {
+					var emptyRes = multipleTargetsEvaluatedAsAnd() && !requiresAtLeastOneTarget();
+					return emptyRes != invert;
+				}
+			}
+			return isFulfilledForTarget(context, player, source, target, targetPlayer) != invert;
+		}
 		var targets = new ArrayList<Entity>();
 		if (targetConditionArgOverridesSuppliedTarget() && desc.containsKey(ConditionArg.TARGET)) {
 			var targetKey = (EntityReference) desc.get(ConditionArg.TARGET);

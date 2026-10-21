@@ -14,12 +14,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TestClasspathCardCatalogue extends ClasspathCardCatalogue {
 	AtomicBoolean initializing = new AtomicBoolean(true);
+	private volatile boolean hasTestCards;
 
 	@Override
 	public @NotNull CardList query(DeckFormat deckFormat, Spellsource.CardTypeMessage.CardType cardType, Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag, boolean clone) {
 		var cards = super.query(deckFormat, cardType, rarity, heroClass, tag, clone);
-		if (!initializing.get() && cards.stream().anyMatch(card -> CardSet.TEST.equals(card.getCardSet()))) {
-			throw new IllegalStateException("return test");
+		if (!initializing.get() && hasTestCards) {
+			for (int i = 0, n = cards.size(); i < n; i++) {
+				if (CardSet.TEST.equals(cards.get(i).getCardSet())) {
+					throw new IllegalStateException("return test");
+				}
+			}
 		}
 		return cards;
 	}
@@ -27,8 +32,12 @@ public class TestClasspathCardCatalogue extends ClasspathCardCatalogue {
 	@Override
 	public CardList queryUncollectible(DeckFormat deckFormat) {
 		var cards = super.queryUncollectible(deckFormat);
-		if (!initializing.get() && cards.stream().anyMatch(card -> CardSet.TEST.equals(card.getCardSet()))) {
-			throw new IllegalStateException("returned test");
+		if (!initializing.get() && hasTestCards) {
+			for (int i = 0, n = cards.size(); i < n; i++) {
+				if (CardSet.TEST.equals(cards.get(i).getCardSet())) {
+					throw new IllegalStateException("returned test");
+				}
+			}
 		}
 		return cards;
 	}

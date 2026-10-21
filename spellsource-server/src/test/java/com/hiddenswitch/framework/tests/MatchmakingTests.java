@@ -604,32 +604,34 @@ public class MatchmakingTests extends FrameworkTestBase {
 					return Future.succeededFuture();
 				})
 				// delete all queues
-				.compose(v -> all(queueIds.stream().map(Matchmaking::deleteQueue).collect(toList())))
-				.compose(v -> {
+				.eventually(() -> all(queueIds.stream().map(Matchmaking::deleteQueue).collect(toList())))
+				.eventually(() -> {
 					var closed = new ArrayList<Future<Void>>();
 					for (var clientVertx : clientVertices) {
 						closed.add(clientVertx.close());
 					}
 					return join(closed);
 				})
-				.compose(v -> {
+				.eventually(() -> {
 					var closed = new ArrayList<Future<Void>>();
-					for (var vertx : vertexFuts.<Vertx>list()) {
-						var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).clusterManager();
-						var closeFut = vertx.close();
-						if (clusterManager != null) {
-							var cacheManager = clusterManager.getCacheManager();
-							if (cacheManager != null) {
-								closeFut = closeFut.andThen(w -> {
-									try {
-										cacheManager.close();
-									} catch (IOException e) {
-										// ignore
-									}
-								});
+					if (vertexFuts.succeeded()) {
+						for (var vertx : vertexFuts.<Vertx>list()) {
+							var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).clusterManager();
+							var closeFut = vertx.close();
+							if (clusterManager != null) {
+								var cacheManager = clusterManager.getCacheManager();
+								if (cacheManager != null) {
+									closeFut = closeFut.andThen(w -> {
+										try {
+											cacheManager.close();
+										} catch (IOException e) {
+											// ignore
+										}
+									});
+								}
 							}
+							closed.add(closeFut);
 						}
-						closed.add(closeFut);
 					}
 					System.getProperties().remove(GameLogic.GAMES_TURN_TIME_MILLIS);
 					Environment.setConfiguration(defaultConfiguration);
@@ -665,6 +667,296 @@ public class MatchmakingTests extends FrameworkTestBase {
 					System.getProperties().setProperty(Games.GAMES_DEFAULT_NO_ACTIVITY_TIMEOUT, "225000");
 				})
 				.compose(v -> Matchmaking.deleteQueue(queueId))
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	@Test
+	@Timeout(value = 90, timeUnit = TimeUnit.SECONDS)
+	public void testUngracefulAppCloseDoesNotMatchmakeDeadPlayer(Vertx vertx, VertxTestContext testContext) {
+		var client1 = new Client(vertx);
+		var client2 = new Client(vertx);
+		var client3 = new Client(vertx);
+		var gameCreated = checkpoint(1);
+		var queueId = UUID.randomUUID().toString();
+		var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+		var gameUsersDao = new GameUsersDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+
+		var matchmakingQueue = new Matchmaking() {
+			@Override
+			public Future<String> createGame(MatchmakingQueues configuration, MatchmakingTickets... tickets) {
+				testContext.verify(() -> {
+					assertEquals(2, tickets.length);
+					assertEquals(queueId, configuration.getId());
+					assertFalse(Arrays.stream(tickets).anyMatch(t -> t.getUserId().equals(client1.getUserEntity().getId())),
+							"dead player 1 must never be matched after closing app");
+					assertTrue(Arrays.stream(tickets).anyMatch(t -> t.getUserId().equals(client2.getUserEntity().getId())),
+							"live player 2 must be matched");
+					assertTrue(Arrays.stream(tickets).anyMatch(t -> t.getUserId().equals(client3.getUserEntity().getId())),
+							"live player 3 must be matched");
+					gameCreated.flag();
+				});
+				return super.createGame(configuration, tickets);
+			}
+		};
+
+		startServices(vertx, matchmakingQueue)
+				.compose(v -> Matchmaking.createQueue(createMultiplayerQueue(queueId)))
+				.compose(v -> join(client1.createAndLogin(), client2.createAndLogin(), client3.createAndLogin()))
+				.compose(v -> {
+					client1.matchmake(queueId);
+					return waitForTicket(vertx, ticketsDao, client1.getUserEntity().getId(), true,
+							System.nanoTime() + TimeUnit.SECONDS.toNanos(10));
+				})
+				.onSuccess(ticket -> testContext.verify(() -> assertNotNull(ticket, "player 1 ticket should initially be in queue")))
+				.compose(v -> {
+					// Simulate Player 1 force-closing their app without calling cancelMatchmaking()
+					client1.close();
+					// Immediately enqueue Player 2 and Player 3 right as Player 1 disconnects
+					return all(client2.matchmake(queueId), client3.matchmake(queueId));
+				})
+				.compose(cf -> {
+					var res2 = cf.<com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponse>resultAt(0);
+					var res3 = cf.<com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponse>resultAt(1);
+					testContext.verify(() -> {
+						assertNotNull(res2);
+						assertNotNull(res3);
+						assertEquals(res2.getUnityConnection().getGameId(), res3.getUnityConnection().getGameId(),
+								"live players 2 and 3 must be matched into the exact same game");
+					});
+					return all(client2.playUntilGameOver(), client3.playUntilGameOver());
+				})
+				.compose(v -> waitForTicket(vertx, ticketsDao, client1.getUserEntity().getId(), false,
+						System.nanoTime() + TimeUnit.SECONDS.toNanos(10)))
+				.onSuccess(ticket -> testContext.verify(() -> assertNull(ticket, "dead player 1 ticket must be purged")))
+				.compose(v -> gameUsersDao.findManyByUserId(List.of(client1.getUserEntity().getId())))
+				.onSuccess(gameUsers -> testContext.verify(() -> assertTrue(gameUsers.isEmpty(), "dead player 1 must not be in any game")))
+				.compose(v -> Matchmaking.deleteQueue(queueId))
+				.compose(v -> awaitCheckpoints(gameCreated))
+				.compose(client2::close)
+				.compose(client3::close)
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	@Test
+	@Timeout(value = 90, timeUnit = TimeUnit.SECONDS)
+	public void testStaleOrphanedTicketInDatabasePurgedAndLivePlayersMatch(Vertx vertx, VertxTestContext testContext) {
+		var deadClient = new Client(vertx);
+		var liveClient1 = new Client(vertx);
+		var liveClient2 = new Client(vertx);
+		var gameCreated = checkpoint(1);
+		var queueId = UUID.randomUUID().toString();
+		var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+		var gameUsersDao = new GameUsersDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+
+		var matchmakingQueue = new Matchmaking() {
+			@Override
+			public Future<String> createGame(MatchmakingQueues configuration, MatchmakingTickets... tickets) {
+				testContext.verify(() -> {
+					assertEquals(2, tickets.length);
+					assertFalse(Arrays.stream(tickets).anyMatch(t -> t.getUserId().equals(deadClient.getUserEntity().getId())),
+							"orphaned ticket must never be matched into a game");
+					assertTrue(Arrays.stream(tickets).anyMatch(t -> t.getUserId().equals(liveClient1.getUserEntity().getId())));
+					assertTrue(Arrays.stream(tickets).anyMatch(t -> t.getUserId().equals(liveClient2.getUserEntity().getId())));
+					gameCreated.flag();
+				});
+				return super.createGame(configuration, tickets);
+			}
+		};
+
+		startServices(vertx, matchmakingQueue)
+				.compose(v -> Matchmaking.createQueue(createMultiplayerQueue(queueId)))
+				.compose(v -> join(deadClient.createAndLogin(), liveClient1.createAndLogin(), liveClient2.createAndLogin()))
+				.compose(v -> deadClient.legacy().decksGetAll(Empty.getDefaultInstance()))
+				.compose(decks -> {
+					var deadDeckId = decks.getDecks(0).getCollection().getId();
+					// Close deadClient completely before inserting a stale/orphaned ticket into DB
+					return deadClient.closeFut()
+							.compose(v -> ticketsDao.insert(new MatchmakingTickets()
+									.setUserId(deadClient.getUserEntity().getId())
+									.setQueueId(queueId)
+									.setDeckId(deadDeckId)));
+				})
+				.compose(v -> {
+					// Now liveClient1 enters the queue; claimCompleteLobbies will claim (deadClient, liveClient1),
+					// detect deadClient is not connected, purge deadClient, and keep liveClient1 queued!
+					var matchFut1 = liveClient1.matchmake(queueId);
+					return waitForTicket(vertx, ticketsDao, deadClient.getUserEntity().getId(), false,
+							System.nanoTime() + TimeUnit.SECONDS.toNanos(10))
+							.onSuccess(deadTicket -> testContext.verify(() ->
+									assertNull(deadTicket, "stale ticket for deadClient should be purged by liveness check")))
+							.compose(ignored -> waitForTicket(vertx, ticketsDao, liveClient1.getUserEntity().getId(), true,
+									System.nanoTime() + TimeUnit.SECONDS.toNanos(10)))
+							.onSuccess(liveTicket -> testContext.verify(() -> {
+								assertNotNull(liveTicket, "liveClient1 should be re-queued and remain waiting");
+								assertFalse(matchFut1.isComplete(), "liveClient1 must not have been matched with deadClient");
+							}))
+							.compose(ignored -> all(matchFut1, liveClient2.matchmake(queueId)));
+				})
+				.compose(cf -> {
+					var res1 = cf.<com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponse>resultAt(0);
+					var res2 = cf.<com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponse>resultAt(1);
+					testContext.verify(() -> {
+						assertNotNull(res1);
+						assertNotNull(res2);
+						assertEquals(res1.getUnityConnection().getGameId(), res2.getUnityConnection().getGameId(),
+								"liveClient1 and liveClient2 must match together after deadClient was purged");
+					});
+					return all(liveClient1.playUntilGameOver(), liveClient2.playUntilGameOver());
+				})
+				.compose(v -> gameUsersDao.findManyByUserId(List.of(deadClient.getUserEntity().getId())))
+				.onSuccess(gameUsers -> testContext.verify(() -> assertTrue(gameUsers.isEmpty(), "deadClient must not appear in game_users")))
+				.compose(v -> Matchmaking.deleteQueue(queueId))
+				.compose(v -> awaitCheckpoints(gameCreated))
+				.compose(liveClient1::close)
+				.compose(liveClient2::close)
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	@Test
+	@Timeout(value = 180, timeUnit = TimeUnit.SECONDS)
+	public void testChaosUngracefulDisconnectsAcrossClusteredInstances(VertxTestContext testContext) {
+		int serverVertices = 2;
+		int waves = 4; // Each wave has 1 doomed client that ungracefully kills its connection + 2 live clients = 8 live clients + 4 doomed clients
+		var configuration = Environment.getConfiguration();
+		var queueId = UUID.randomUUID().toString();
+		var clientVertx = Vertx.vertx(new VertxOptions().setEventLoopPoolSize(CpuCoreSensor.availableProcessors()));
+
+		System.setProperty(GameLogic.GAMES_TURN_TIME_MILLIS, "6000");
+		var defaultConfiguration = Hiddenswitch.ServerConfiguration.newBuilder(Environment.getConfiguration()).build();
+		var originalPort = configuration.getGrpcConfiguration().getPort();
+
+		var vertexFuts = join(IntStream.range(0, serverVertices)
+				.mapToObj(v -> {
+					var thisConfiguration = Hiddenswitch.ServerConfiguration.newBuilder(defaultConfiguration);
+					var infinispanPort = 0;
+					thisConfiguration.setVertx(Hiddenswitch.ServerConfiguration.VertxConfiguration.newBuilder()
+							.setUseInfinispanClusterManager(true)
+							.setInfinspanPort(infinispanPort)
+							.build());
+					Environment.setConfiguration(thisConfiguration.build());
+					var cacheManager = Clustered.infinispanClusterManagerUdp(infinispanPort);
+					return Vertx.builder()
+							.with(Environment.vertxOptions())
+							.withClusterManager(new Infinispan15ClusterManager(cacheManager))
+							.buildClustered();
+				}).toList());
+
+		var liveClients = new ArrayList<Client>();
+		var doomedClients = new ArrayList<Client>();
+
+		vertexFuts
+				.compose(vertices -> join(vertices.<Vertx>list().stream().map(vertx -> vt(vertx, () -> {
+					var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).clusterManager();
+					while (clusterManager.getNodes().size() != serverVertices) {
+						await(Environment.sleep(vertx, 500));
+					}
+					return vertx;
+				})).toList()).compose(v -> vertices))
+				.compose(vertices -> join(IntStream.range(0, vertices.size()).mapToObj(i -> {
+					var vertx = vertices.<Vertx>resultAt(i);
+					return startGateway(vertx, originalPort + i)
+							.compose(v -> {
+								var createQueue = Promise.<Closeable>promise();
+								vertx.runOnContext(v1 -> Matchmaking.createQueue(createMultiplayerQueue(queueId)).onComplete(createQueue));
+								return createQueue.future();
+							})
+							.compose(v -> vertx.deployVerticle(Matchmaking.class, new DeploymentOptions()
+									.setThreadingModel(ThreadingModel.VIRTUAL_THREAD)
+									.setInstances(1)))
+							.compose(v -> vertx.deployVerticle(ClusteredGames.class, new DeploymentOptions()
+									.setThreadingModel(ThreadingModel.VIRTUAL_THREAD)
+									.setInstances(CpuCoreSensor.availableProcessors())))
+							.map(vertx);
+				}).toList()))
+				.compose(vertices -> {
+					var createLogins = new ArrayList<Future<?>>();
+					for (int w = 0; w < waves; w++) {
+						var doomed = new ClientWithPort(clientVertx, originalPort + (w % serverVertices));
+						doomedClients.add(doomed);
+						createLogins.add(doomed.createAndLogin());
+
+						var liveA = new ClientWithPort(clientVertx, originalPort + (w % serverVertices));
+						var liveB = new ClientWithPort(clientVertx, originalPort + ((w + 1) % serverVertices));
+						liveClients.add(liveA);
+						liveClients.add(liveB);
+						createLogins.add(liveA.createAndLogin());
+						createLogins.add(liveB.createAndLogin());
+					}
+					return all(createLogins);
+				})
+				.compose(v -> {
+					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+					Future<Void> chain = Future.succeededFuture();
+					for (int w = 0; w < waves; w++) {
+						final int waveIndex = w;
+						chain = chain.compose(ignored -> {
+							var doomed = doomedClients.get(waveIndex);
+							var liveA = liveClients.get(waveIndex * 2);
+							var liveB = liveClients.get(waveIndex * 2 + 1);
+							// Doomed client enters matchmaking then ungracefully closes its connection right as live clients join
+							doomed.matchmake(queueId);
+							return waitForTicket(clientVertx, ticketsDao, doomed.getUserEntity().getId(), true,
+									System.nanoTime() + TimeUnit.SECONDS.toNanos(10))
+									.compose(t -> {
+										doomed.close();
+										return all(
+												liveA.matchmake(queueId).compose(res -> liveA.playUntilGameOver()),
+												liveB.matchmake(queueId).compose(res -> liveB.playUntilGameOver())
+										).mapEmpty();
+									});
+						});
+					}
+					return chain;
+				})
+				.compose(v -> {
+					var liveUserIds = liveClients.stream().map(c -> c.getUserEntity().getId()).sorted().toArray(String[]::new);
+					var doomedUserIds = doomedClients.stream().map(c -> c.getUserEntity().getId()).toList();
+					var gameUsersDao = new GameUsersDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+					return gameUsersDao.findManyByUserId(Arrays.asList(liveUserIds))
+							.compose(liveGameUsers -> {
+								testContext.verify(() -> {
+									assertEquals(liveUserIds.length, liveGameUsers.size(), "every live client should be in exactly one game");
+									assertArrayEquals(liveUserIds, liveGameUsers.stream().map(GameUsers::getUserId).sorted().toArray(String[]::new));
+								});
+								return gameUsersDao.findManyByUserId(doomedUserIds);
+							})
+							.onSuccess(doomedGameUsers -> testContext.verify(() ->
+									assertTrue(doomedGameUsers.isEmpty(), "zero ungracefully disconnected clients should ever be matched into a game")));
+				})
+				.eventually(() -> {
+					for (var c : liveClients) {
+						c.close();
+					}
+					for (var c : doomedClients) {
+						c.close();
+					}
+					return Matchmaking.deleteQueue(queueId).otherwiseEmpty();
+				})
+				.eventually(clientVertx::close)
+				.eventually(() -> {
+					var closed = new ArrayList<Future<Void>>();
+					if (vertexFuts.succeeded()) {
+						for (var vertx : vertexFuts.<Vertx>list()) {
+							var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).clusterManager();
+							var closeFut = vertx.close();
+							if (clusterManager != null) {
+								var cacheManager = clusterManager.getCacheManager();
+								if (cacheManager != null) {
+									closeFut = closeFut.andThen(w -> {
+										try {
+											cacheManager.close();
+										} catch (IOException ignored) {
+										}
+									});
+								}
+							}
+							closed.add(closeFut);
+						}
+					}
+					System.getProperties().remove(GameLogic.GAMES_TURN_TIME_MILLIS);
+					Environment.setConfiguration(defaultConfiguration);
+					return join(closed);
+				})
 				.onComplete(testContext.succeedingThenComplete());
 	}
 

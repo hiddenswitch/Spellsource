@@ -1,8 +1,7 @@
 package net.demilich.metastone.game.behaviour;
 
 import net.demilich.metastone.game.GameContext;
-
-import java.util.Random;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 
 public class PlayGameLogicRandomBehaviour extends PlayRandomBehaviour {
 
@@ -12,7 +11,7 @@ public class PlayGameLogicRandomBehaviour extends PlayRandomBehaviour {
 	}
 
 	@Override
-	protected Random getRandom(GameContext context) {
+	protected XORShiftRandom getRandom(GameContext context) {
 		return context.getLogic().getRandom();
 	}
 }

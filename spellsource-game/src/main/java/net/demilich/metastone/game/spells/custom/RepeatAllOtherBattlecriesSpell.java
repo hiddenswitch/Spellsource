@@ -6,6 +6,7 @@ import net.demilich.metastone.game.actions.OpenerAction;
 import net.demilich.metastone.game.actions.OpenerAsPlaySpellCardAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.ChooseOneOverride;
 import net.demilich.metastone.game.entities.Actor;
@@ -15,6 +16,7 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.OpenerDesc;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -40,7 +42,17 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// Retrieve all other battlecry cards this player has played
 		CardList cards = desc.getFilteredCards(context, player, source);
-		cards.shuffle(context.getLogic().getRandom());
+		if (desc.containsKey(SpellArg.VALUE)) {
+			cards.removeIf(c -> c.getDesc().getBattlecry() != null
+					&& c.getDesc().getBattlecry().getSpell() != null
+					&& RepeatAllOtherBattlecriesSpell.class.equals(c.getDesc().getBattlecry().getSpell().getDescClass()));
+			int limit = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
+			if (cards.size() > limit) {
+				cards = new CardArrayList(cards.subList(cards.size() - limit, cards.size()));
+			}
+		} else {
+			cards.shuffle(context.getLogic().getRandom());
+		}
 
 		logger.debug("onCast {} {}: {} battlecries were selected.", context.getGameId(), source, cards.size());
 
@@ -100,7 +112,7 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 			} else {
 
 				// Choose randomly
-				action = chooseOneBattlecries[context.getLogic().getRandom().nextInt()].toOpenerAction();
+				action = chooseOneBattlecries[context.getLogic().random(chooseOneBattlecries.length)].toOpenerAction();
 			}
 
 			// Make a rules-based choice

@@ -153,6 +153,7 @@ public class GraphQL extends AbstractVirtualThreadVerticle {
 						.build());
 
 		router.route("/graphiql*").subRouter(GraphiQLHandler.create(vertx, new GraphiQLHandlerOptions().setEnabled(true)).router());
+		Environment.registerArtRoutes(router);
 
 
 		var server = vertx.createHttpServer(new HttpServerOptions()

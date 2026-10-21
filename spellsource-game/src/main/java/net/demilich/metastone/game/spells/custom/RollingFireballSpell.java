@@ -51,7 +51,7 @@ public class RollingFireballSpell extends DamageSpell {
 			}
 
 			// Pick a random adjacent minion
-			currentTarget = adjacent.get(context.getLogic().getRandom().nextInt(adjacent.size()));
+			currentTarget = context.getLogic().getRandom(adjacent);
 			damage = excess;
 		}
 	}

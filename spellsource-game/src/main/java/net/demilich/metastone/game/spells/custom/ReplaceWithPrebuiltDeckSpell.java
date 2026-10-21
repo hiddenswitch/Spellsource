@@ -34,7 +34,7 @@ public class ReplaceWithPrebuiltDeckSpell extends Spell {
 		}
 
 		// Pick a random deck
-		int index = context.getLogic().getRandom().nextInt(decks.length);
+		int index = context.getLogic().random(decks.length);
 		SpellDesc chosenDeck = decks[index];
 		String[] cardIds = (String[]) chosenDeck.get(SpellArg.CARDS);
 

@@ -191,17 +191,19 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
 	protected SpanContext spanContext;
+	private static final TargetLogic DEFAULT_TARGET_LOGIC = new TargetLogic();
 	private Player[] players = new Player[2];
+	private final List<Player> playersList = Collections.unmodifiableList(Arrays.asList(players));
 	private Behaviour[] behaviours;
 	private GameLogic logic;
 	private DeckFormat deckFormat;
-	private TargetLogic targetLogic = new TargetLogic();
-	private List<Trigger> triggers = new ArrayList<Trigger>();
-	private Deque<GameLogic.QueuedTrigger> deferredTriggersQueue = new ArrayDeque<>();
-	private Deque<GameAction> actionStack = new ArrayDeque<>();
-	private Set<Trigger> processingTriggers = new LinkedHashSet<>();
-	private Map<Environment, Object> environment = new LinkedHashMap<>();
-	private Map<String, AtomicInteger> variables = new LinkedHashMap<>();
+	private TargetLogic targetLogic = DEFAULT_TARGET_LOGIC;
+	private List<Trigger> triggers;
+	private Deque<GameLogic.QueuedTrigger> deferredTriggersQueue = new ArrayDeque<>(4);
+	private Deque<GameAction> actionStack = new ArrayDeque<>(4);
+	private Set<Trigger> processingTriggers = new LinkedHashSet<>(4);
+	private Map<Environment, Object> environment = new EnumMap<>(Environment.class);
+	private Map<String, AtomicInteger> variables;
 	private int activePlayerId = -1;
 	private Player winner;
 	private GameStatus result;
@@ -212,13 +214,13 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
 	private CardCatalogue cardCatalogue = ClasspathCardCatalogue.INSTANCE;
-	private CardList tempCards = new CardArrayList();
+	private CardList tempCards;
 	private boolean didCallEndGame;
 
-	private Trace trace = new Trace();
+	private Trace trace;
 	private Thread thread;
 
-	protected HashMap<Class<? extends ExternalLogicComponent>, ExternalLogicComponent> externalLogicComponents = new HashMap<>();
+	protected HashMap<Class<? extends ExternalLogicComponent>, ExternalLogicComponent> externalLogicComponents;
 
 	/**
 	 * Creates a game context with two empty players and two {@link PlayRandomBehaviour} behaviours.
@@ -235,12 +237,28 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 
 	public GameContext(@NotNull CardCatalogue cardCatalogue, @NotNull DeckFormat deckFormat) {
 		Objects.requireNonNull(cardCatalogue);
+		this.triggers = new ArrayList<>();
+		this.variables = new LinkedHashMap<>();
+		this.tempCards = new CardArrayList();
+		this.trace = new Trace();
+		this.externalLogicComponents = new HashMap<>();
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setLogic(new GameLogic());
 		setDeckFormat(deckFormat);
 		setCardCatalogue(cardCatalogue);
 		setPlayer1(new Player());
 		setPlayer2(new Player());
+	}
+
+	protected GameContext(@NotNull GameState state) {
+		this.variables = state.getVariables() != null ? state.getVariables() : new LinkedHashMap<>(4);
+		this.trace = new Trace();
+		this.externalLogicComponents = new HashMap<>(4);
+		this.behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
+		this.cardCatalogue = ClasspathCardCatalogue.INSTANCE;
+		this.trace.setCardCatalogue(this.cardCatalogue);
+		setLogic(new GameLogic(new IdFactoryImpl(state.getCurrentId())));
+		setGameState(state);
 	}
 
 	/**
@@ -254,16 +272,16 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 		Player player2Clone = fromContext.getPlayer2().clone();
 		setLogic(logicClone);
 		behaviours = new Behaviour[]{fromContext.behaviours[0] == null ? null : fromContext.behaviours[0].clone(), fromContext.behaviours[1] == null ? null : fromContext.behaviours[1].clone()};
-		setCardCatalogue(fromContext.getCardCatalogue());
-		setDeckFormat(fromContext.getDeckFormat());
+		this.cardCatalogue = fromContext.cardCatalogue;
+		this.deckFormat = fromContext.deckFormat;
 		setPlayer1(player1Clone);
 		setPlayer2(player2Clone);
 
 		setTempCards(fromContext.getTempCards().clone());
 		var fromTriggers = fromContext.getTriggers();
 		var clonedTriggers = new ArrayList<Trigger>(fromTriggers.size());
-		for (var trigger : fromTriggers) {
-			clonedTriggers.add(trigger.clone());
+		for (int i = 0, n = fromTriggers.size(); i < n; i++) {
+			clonedTriggers.add(fromTriggers.get(i).clone());
 		}
 		setTriggers(clonedTriggers);
 		setActivePlayerId(fromContext.getActivePlayerId());
@@ -272,25 +290,32 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 		setStatus(fromContext.getStatus());
 		setTurnState(fromContext.getTurnState());
 		setWinner(fromContext.getWinner());
-		setTrace(getTrace().clone());
 		if (fromContext.getTrace() != null) {
 			setTrace(fromContext.getTrace().clone());
+		} else {
+			setTrace(new Trace());
 		}
 
-		for (Map.Entry<Environment, Object> entry : fromContext.getEnvironment().entrySet()) {
+		for (Map.Entry<Environment, Object> entry : fromContext.environment.entrySet()) {
 			Object value1 = entry.getValue();
-			if (value1 == null
-					|| !EnvironmentValue.class.isAssignableFrom(value1.getClass())) {
-				getEnvironment().put(entry.getKey(), value1);
+			if (value1 instanceof EnvironmentDeque<?> deque && deque.isEmpty()) {
+				continue;
+			}
+			if (value1 instanceof EnvironmentValue envValue) {
+				environment.put(entry.getKey(), envValue.getCopy());
 			} else {
-				EnvironmentValue value = (EnvironmentValue) value1;
-				getEnvironment().put(entry.getKey(), value.getCopy());
+				environment.put(entry.getKey(), value1);
 			}
 		}
 
-		variables = new LinkedHashMap<>();
-		for (var kv : fromContext.variables.entrySet()) {
-			variables.put(kv.getKey(), new AtomicInteger(kv.getValue().intValue()));
+		if (fromContext.variables != null && !fromContext.variables.isEmpty()) {
+			variables = new LinkedHashMap<>(fromContext.variables.size());
+			for (var kv : fromContext.variables.entrySet()) {
+				variables.put(kv.getKey(), new AtomicInteger(kv.getValue().intValue()));
+			}
+		}
+		if (fromContext.externalLogicComponents != null && !fromContext.externalLogicComponents.isEmpty()) {
+			externalLogicComponents = new HashMap<>(fromContext.externalLogicComponents);
 		}
 	}
 
@@ -505,10 +530,12 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 */
 	@SuppressWarnings("unchecked")
 	public Deque<Integer> getDamageStack() {
-		if (!getEnvironment().containsKey(Environment.DAMAGE_STACK)) {
-			getEnvironment().put(Environment.DAMAGE_STACK, new EnvironmentDeque<Integer>());
+		Deque<Integer> stack = (Deque<Integer>) environment.get(Environment.DAMAGE_STACK);
+		if (stack == null) {
+			stack = new EnvironmentDeque<>();
+			environment.put(Environment.DAMAGE_STACK, stack);
 		}
-		return (Deque<Integer>) getEnvironment().get(Environment.DAMAGE_STACK);
+		return stack;
 	}
 
 	/**
@@ -550,10 +577,12 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 */
 	@SuppressWarnings("unchecked")
 	public Deque<EntityReference> getEventTargetStack() {
-		if (!getEnvironment().containsKey(Environment.EVENT_TARGET_REFERENCE_STACK)) {
-			getEnvironment().put(Environment.EVENT_TARGET_REFERENCE_STACK, new EnvironmentDeque<EntityReference>());
+		Deque<EntityReference> stack = (Deque<EntityReference>) environment.get(Environment.EVENT_TARGET_REFERENCE_STACK);
+		if (stack == null) {
+			stack = new EnvironmentDeque<>();
+			environment.put(Environment.EVENT_TARGET_REFERENCE_STACK, stack);
 		}
-		return (Deque<EntityReference>) getEnvironment().get(Environment.EVENT_TARGET_REFERENCE_STACK);
+		return stack;
 	}
 
 	/**
@@ -653,7 +682,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @return A reference to the player with that ID / at that {@code index}.
 	 */
 	public Player getPlayer(int index) {
-		return getPlayers().get(index);
+		return players[index];
 	}
 
 	/**
@@ -670,7 +699,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @return A player object.
 	 */
 	public Player getPlayer1() {
-		return getPlayer(PLAYER_1);
+		return players[PLAYER_1];
 	}
 
 	/**
@@ -679,7 +708,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @return A player object.
 	 */
 	public Player getPlayer2() {
-		return getPlayer(PLAYER_2);
+		return players[PLAYER_2];
 	}
 
 	/**
@@ -689,9 +718,9 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 */
 	public List<Player> getPlayers() {
 		if (players == null) {
-			return Collections.unmodifiableList(new ArrayList<>());
+			return Collections.emptyList();
 		}
-		return Collections.unmodifiableList(Arrays.asList(players));
+		return playersList;
 	}
 
 	public List<Behaviour> getBehaviours() {
@@ -728,10 +757,12 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 */
 	@SuppressWarnings("unchecked")
 	public Deque<EntityReference> getSummonReferenceStack() {
-		if (!getEnvironment().containsKey(Environment.SUMMON_REFERENCE_STACK)) {
-			getEnvironment().put(Environment.SUMMON_REFERENCE_STACK, new EnvironmentDeque<EntityReference>());
+		Deque<EntityReference> stack = (Deque<EntityReference>) environment.get(Environment.SUMMON_REFERENCE_STACK);
+		if (stack == null) {
+			stack = new EnvironmentDeque<>();
+			environment.put(Environment.SUMMON_REFERENCE_STACK, stack);
 		}
-		return (Deque<EntityReference>) getEnvironment().get(Environment.SUMMON_REFERENCE_STACK);
+		return stack;
 	}
 
 	/**
@@ -906,47 +937,39 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 */
 	public boolean takeActionInTurn() {
 		currentContext.set(this);
-		Tracer tracer = GlobalTracer.get();
-		Span span = tracer.buildSpan("GameContext/takeActionInTurn")
-				.withTag("gameId", getGameId())
-				.withTag("turn", getTurn())
-				.withTag("actionsThisTurn", getActionsThisTurn())
-				.asChildOf(getSpanContext())
-				.start();
 		setActionsThisTurn(getActionsThisTurn() + 1);
-		try (Scope s1 = tracer.activateSpan(span)) {
-			if (getActionsThisTurn() > 99) {
-				LOGGER.warn("{} takeActionInTurn: Turn has been forcefully ended after {} actions", getGameId(), getActionsThisTurn());
-				endTurn();
-				return false;
-			}
-
-			boolean gameOver = updateAndGetGameOver();
-			if (gameOver) {
-				return false;
-			}
-
-			List<GameAction> validActions = getLogic().getValidActions(getActivePlayerId());
-
-			if (validActions.size() == 0) {
-				return false;
-			}
-
-			// TODO: Does this need to respect random actions?
-			// todo: do we need to lock here, and unlock again later?
-			GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), validActions);
-
-			// we only get here if null is returned and InterruptedException was not thrown
-			if (nextAction == null) {
-				throw new NullPointerException("nextAction");
-			}
-
-			trace.addAction(nextAction);
-			getLogic().performGameAction(getActivePlayerId(), nextAction);
-			return nextAction.getActionType() != ActionType.END_TURN;
-		} finally {
-			span.finish();
+		if (Thread.currentThread().isInterrupted()) {
+			throw new RuntimeException(new InterruptedException("Game execution interrupted"));
 		}
+		if (getActionsThisTurn() > 99) {
+			LOGGER.warn("{} takeActionInTurn: Turn has been forcefully ended after {} actions", getGameId(), getActionsThisTurn());
+			endTurn();
+			return false;
+		}
+
+		boolean gameOver = updateAndGetGameOver();
+		if (gameOver) {
+			return false;
+		}
+
+		List<GameAction> validActions = getLogic().getValidActions(getActivePlayerId());
+
+		if (validActions.size() == 0) {
+			return false;
+		}
+
+		// TODO: Does this need to respect random actions?
+		// todo: do we need to lock here, and unlock again later?
+		GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), validActions);
+
+		// we only get here if null is returned and InterruptedException was not thrown
+		if (nextAction == null) {
+			throw new NullPointerException("nextAction");
+		}
+
+		trace.addAction(nextAction);
+		getLogic().performGameAction(getActivePlayerId(), nextAction);
+		return nextAction.getActionType() != ActionType.END_TURN;
 	}
 
 	/**
@@ -957,7 +980,6 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @throws TargetNotFoundException if the reference could not be found. Game rules shouldn't be looking for references that cannot be found.
 	 */
 	public Entity resolveSingleTarget(EntityReference targetKey) throws TargetNotFoundException {
-		currentContext.set(this);
 		return resolveSingleTarget(targetKey, true);
 	}
 
@@ -970,7 +992,6 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @throws TargetNotFoundException
 	 */
 	public Entity resolveSingleTarget(EntityReference targetKey, boolean rejectRemovedFromPlay) throws TargetNotFoundException {
-		currentContext.set(this);
 		if (targetKey == null || Objects.equals(targetKey, EntityReference.NONE)) {
 			return null;
 		}
@@ -994,12 +1015,18 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @see TargetLogic#resolveTargetKey(GameContext, Player, Entity, EntityReference) for more about how target resolution works.
 	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
-		currentContext.set(this);
 		List<Entity> entities = targetLogic.resolveTargetKey(this, player, source, targetKey);
 		if (entities == null) {
 			return null;
 		}
-		return entities.stream().map(e -> e.transformResolved(this)).collect(toList());
+		for (int i = 0, n = entities.size(); i < n; i++) {
+			Entity e = entities.get(i);
+			Entity transformed = e.transformResolved(this);
+			if (transformed != e) {
+				entities.set(i, transformed);
+			}
+		}
+		return entities;
 	}
 
 	public void setIgnoreEvents(boolean ignoreEvents) {
@@ -1138,8 +1165,8 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	public GameContext setDeckFormat(DeckFormat deckFormat) {
 		this.deckFormat = deckFormat;
 		trace.setDeckFormatName(deckFormat.getName());
-		trace.setDeckFormatSets(new ArrayList<>(deckFormat.getSets()));
-		trace.setSecondPlayerBonusCards(Arrays.stream(deckFormat.getSecondPlayerBonusCards()).toList());
+		trace.setDeckFormatSets(deckFormat.getSetsList());
+		trace.setSecondPlayerBonusCards(deckFormat.getSecondPlayerBonusCardsList());
 		return this;
 	}
 
@@ -1194,10 +1221,13 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 		this.setEnvironment(state.getEnvironment());
 		this.setTriggers(state.getTriggers());
 		if (getLogic() == null) {
-			setLogic(new GameLogic());
+			setLogic(new GameLogic(new IdFactoryImpl(state.getCurrentId())));
+		} else if (getLogic().getInternalId() != state.getCurrentId()) {
+			this.getLogic().setIdFactory(new IdFactoryImpl(state.getCurrentId()));
+			this.getLogic().setContext(this);
+		} else {
+			this.getLogic().setContext(this);
 		}
-		this.getLogic().setIdFactory(new IdFactoryImpl(state.getCurrentId()));
-		this.getLogic().setContext(this);
 		this.setTurnState(state.getTurnState());
 		this.setTurn(state.getTurnNumber());
 		this.setActivePlayerId(state.getActivePlayerId());
@@ -1307,68 +1337,84 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 */
 	@SuppressWarnings("unchecked")
 	public Deque<Integer> getSpellValueStack() {
-		if (!getEnvironment().containsKey(Environment.SPELL_VALUE_STACK)) {
-			getEnvironment().put(Environment.SPELL_VALUE_STACK, new EnvironmentDeque<Integer>());
+		Deque<Integer> stack = (Deque<Integer>) environment.get(Environment.SPELL_VALUE_STACK);
+		if (stack == null) {
+			stack = new EnvironmentDeque<>();
+			environment.put(Environment.SPELL_VALUE_STACK, stack);
 		}
-		return (Deque<Integer>) getEnvironment().get(Environment.SPELL_VALUE_STACK);
+		return stack;
 	}
 
 	@SuppressWarnings("unchecked")
 	public Deque<Integer> getEventValueStack() {
-		if (!getEnvironment().containsKey(Environment.EVENT_VALUE_STACK)) {
-			getEnvironment().put(Environment.EVENT_VALUE_STACK, new EnvironmentDeque<>());
+		Deque<Integer> stack = (Deque<Integer>) environment.get(Environment.EVENT_VALUE_STACK);
+		if (stack == null) {
+			stack = new EnvironmentDeque<>();
+			environment.put(Environment.EVENT_VALUE_STACK, stack);
 		}
-		return (Deque<Integer>) getEnvironment().get(Environment.EVENT_VALUE_STACK);
+		return stack;
 	}
 
 	@SuppressWarnings("unchecked")
 	public Deque<EntityReference> getSpellTargetStack() {
-		if (!getEnvironment().containsKey(Environment.SPELL_TARGET)) {
-			getEnvironment().put(Environment.SPELL_TARGET, new EnvironmentDeque<>());
+		Deque<EntityReference> stack = (Deque<EntityReference>) environment.get(Environment.SPELL_TARGET);
+		if (stack == null) {
+			stack = new EnvironmentDeque<>();
+			environment.put(Environment.SPELL_TARGET, stack);
 		}
-		return (Deque<EntityReference>) getEnvironment().get(Environment.SPELL_TARGET);
+		return stack;
 	}
 
 	@SuppressWarnings("unchecked")
 	public Deque<EntityReference> getOutputStack() {
-		if (!getEnvironment().containsKey(Environment.OUTPUTS)) {
-			getEnvironment().put(Environment.OUTPUTS, new EnvironmentDeque<>());
+		Deque<EntityReference> stack = (Deque<EntityReference>) environment.get(Environment.OUTPUTS);
+		if (stack == null) {
+			stack = new EnvironmentDeque<>();
+			environment.put(Environment.OUTPUTS, stack);
 		}
-		return (Deque<EntityReference>) getEnvironment().get(Environment.OUTPUTS);
+		return stack;
 	}
 
 	@SuppressWarnings("unchecked")
 	public Deque<EntityReference> getAttackerReferenceStack() {
-		if (!getEnvironment().containsKey(Environment.ATTACKER_REFERENCE_STACK)) {
-			getEnvironment().put(Environment.ATTACKER_REFERENCE_STACK, new EnvironmentDeque<>());
+		Deque<EntityReference> stack = (Deque<EntityReference>) environment.get(Environment.ATTACKER_REFERENCE_STACK);
+		if (stack == null) {
+			stack = new EnvironmentDeque<>();
+			environment.put(Environment.ATTACKER_REFERENCE_STACK, stack);
 		}
-		return (Deque<EntityReference>) getEnvironment().get(Environment.ATTACKER_REFERENCE_STACK);
+		return stack;
 	}
 
 	@SuppressWarnings("unchecked")
 	public Map<Integer, EntityReference> getLastCardPlayedMap() {
-		if (!getEnvironment().containsKey(Environment.LAST_CARD_PLAYED)) {
-			getEnvironment().put(Environment.LAST_CARD_PLAYED, new EnvironmentMap<>());
+		Map<Integer, EntityReference> map = (Map<Integer, EntityReference>) environment.get(Environment.LAST_CARD_PLAYED);
+		if (map == null) {
+			map = new EnvironmentMap<>();
+			environment.put(Environment.LAST_CARD_PLAYED, map);
 		}
-		return (Map<Integer, EntityReference>) getEnvironment().get(Environment.LAST_CARD_PLAYED);
+		return map;
 	}
 
 	public void setLastCardPlayed(int playerId, EntityReference cardReference) {
-		getLastCardPlayedMap().put(IdFactory.UNASSIGNED, cardReference);
-		getLastCardPlayedMap().put(playerId, cardReference);
+		Map<Integer, EntityReference> map = getLastCardPlayedMap();
+		map.put(IdFactory.UNASSIGNED, cardReference);
+		map.put(playerId, cardReference);
 	}
 
 	@SuppressWarnings("unchecked")
 	public Map<Integer, EntityReference> getLastCardPlayedBeforeCurrentSequenceMap() {
-		if (!getEnvironment().containsKey(Environment.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE)) {
-			getEnvironment().put(Environment.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE, new EnvironmentMap<>());
+		Map<Integer, EntityReference> map = (Map<Integer, EntityReference>) environment.get(Environment.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE);
+		if (map == null) {
+			map = new EnvironmentMap<>();
+			environment.put(Environment.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE, map);
 		}
-		return (Map<Integer, EntityReference>) getEnvironment().get(Environment.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE);
+		return map;
 	}
 
 	public void setLastCardPlayedBeforeCurrentSequence(int playerId, EntityReference cardReference) {
-		getLastCardPlayedBeforeCurrentSequenceMap().put(IdFactory.UNASSIGNED, cardReference);
-		getLastCardPlayedBeforeCurrentSequenceMap().put(playerId, cardReference);
+		Map<Integer, EntityReference> map = getLastCardPlayedBeforeCurrentSequenceMap();
+		map.put(IdFactory.UNASSIGNED, cardReference);
+		map.put(playerId, cardReference);
 	}
 
 	public EntityReference getLastCardPlayed(int playerId) {
@@ -1381,15 +1427,18 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 
 	@SuppressWarnings("unchecked")
 	public Map<Integer, EntityReference> getLastSpellPlayedThisTurnMap() {
-		if (!getEnvironment().containsKey(Environment.LAST_SPELL_PLAYED_THIS_TURN)) {
-			getEnvironment().put(Environment.LAST_SPELL_PLAYED_THIS_TURN, new EnvironmentMap<>());
+		Map<Integer, EntityReference> map = (Map<Integer, EntityReference>) environment.get(Environment.LAST_SPELL_PLAYED_THIS_TURN);
+		if (map == null) {
+			map = new EnvironmentMap<>();
+			environment.put(Environment.LAST_SPELL_PLAYED_THIS_TURN, map);
 		}
-		return (Map<Integer, EntityReference>) getEnvironment().get(Environment.LAST_SPELL_PLAYED_THIS_TURN);
+		return map;
 	}
 
 	public void setLastSpellPlayedThisTurn(int playerId, EntityReference cardReference) {
-		getLastSpellPlayedThisTurnMap().put(IdFactory.UNASSIGNED, cardReference);
-		getLastSpellPlayedThisTurnMap().put(playerId, cardReference);
+		Map<Integer, EntityReference> map = getLastSpellPlayedThisTurnMap();
+		map.put(IdFactory.UNASSIGNED, cardReference);
+		map.put(playerId, cardReference);
 	}
 
 	public EntityReference getLastCardPlayedBeforeCurrentSequence() {
@@ -1441,10 +1490,12 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 */
 	@SuppressWarnings("unchecked")
 	public Deque<EntityReference> getEventSourceStack() {
-		if (!getEnvironment().containsKey(Environment.EVENT_SOURCE_REFERENCE_STACK)) {
-			getEnvironment().put(Environment.EVENT_SOURCE_REFERENCE_STACK, new EnvironmentDeque<EntityReference>());
+		Deque<EntityReference> stack = (Deque<EntityReference>) environment.get(Environment.EVENT_SOURCE_REFERENCE_STACK);
+		if (stack == null) {
+			stack = new EnvironmentDeque<>();
+			environment.put(Environment.EVENT_SOURCE_REFERENCE_STACK, stack);
 		}
-		return (Deque<EntityReference>) getEnvironment().get(Environment.EVENT_SOURCE_REFERENCE_STACK);
+		return stack;
 	}
 
 	/**
@@ -1454,10 +1505,12 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 */
 	@SuppressWarnings("unchecked")
 	public Deque<Aftermath> getProcessingAftermathsStack() {
-		if (!getEnvironment().containsKey(Environment.PROCESSING_AFTERMATHS_STACK)) {
-			getEnvironment().put(Environment.PROCESSING_AFTERMATHS_STACK, new EnvironmentDeque<Aftermath>());
+		Deque<Aftermath> stack = (Deque<Aftermath>) environment.get(Environment.PROCESSING_AFTERMATHS_STACK);
+		if (stack == null) {
+			stack = new EnvironmentDeque<>();
+			environment.put(Environment.PROCESSING_AFTERMATHS_STACK, stack);
 		}
-		return (Deque<Aftermath>) getEnvironment().get(Environment.PROCESSING_AFTERMATHS_STACK);
+		return stack;
 	}
 
 
@@ -1704,9 +1757,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @param state A {@link GameState} object.
 	 */
 	public static GameContext fromState(GameState state) {
-		GameContext context = new GameContext();
-		context.setGameState(state);
-		return context;
+		return new GameContext(state);
 	}
 
 
@@ -1790,10 +1841,12 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 */
 	@SuppressWarnings("unchecked")
 	public Deque<EntityReference> getTriggerHostStack() {
-		if (!getEnvironment().containsKey(Environment.TRIGGER_HOST_STACK)) {
-			getEnvironment().put(Environment.TRIGGER_HOST_STACK, new EnvironmentDeque<>());
+		Deque<EntityReference> stack = (Deque<EntityReference>) environment.get(Environment.TRIGGER_HOST_STACK);
+		if (stack == null) {
+			stack = new EnvironmentDeque<>();
+			environment.put(Environment.TRIGGER_HOST_STACK, stack);
 		}
-		return (Deque<EntityReference>) getEnvironment().get(Environment.TRIGGER_HOST_STACK);
+		return stack;
 	}
 
 	public void setTargetOverride(EntityReference reference) {
@@ -1911,6 +1964,9 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @return
 	 */
 	public Map<String, AtomicInteger> getVariables() {
+		if (variables == null) {
+			variables = new LinkedHashMap<>(4);
+		}
 		return variables;
 	}
 
@@ -1921,7 +1977,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @param initialValue
 	 */
 	public void createInt(String name, int initialValue) {
-		variables.put(name, new AtomicInteger(initialValue));
+		getVariables().put(name, new AtomicInteger(initialValue));
 	}
 
 	/**
@@ -1932,7 +1988,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @return
 	 */
 	public int addAndGetInt(String name, int delta) {
-		return variables.get(name).addAndGet(delta);
+		return getVariables().get(name).addAndGet(delta);
 	}
 
 	/**
@@ -1942,7 +1998,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @return
 	 */
 	public int getInt(String name) {
-		return variables.get(name).get();
+		return getVariables().get(name).get();
 	}
 
 	/**
@@ -1952,7 +2008,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @return
 	 */
 	public int removeInt(String name) {
-		return variables.remove(name).get();
+		return getVariables().remove(name).get();
 	}
 
 	public GameContext setOtherTriggers(List<Trigger> otherTriggers) {
@@ -2031,20 +2087,26 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	public Card getOverriddenCardById(String overrideCardId) {
 		Card target = null;
 		for (var card : getTempCards()) {
-			if (card.getCardId().equals(overrideCardId)) {
+			if (card.getCardId().equalsIgnoreCase(overrideCardId)) {
 				target = card;
 				break;
 			}
 		}
 
 		if (target == null) {
-			// creates a clone - the frozen desc protects against accidental mutation
+			target = getCardCatalogue().getCards().get(overrideCardId);
+		}
+		if (target == null) {
+			// Fallback for special card IDs (e.g. hero_power_custom)
 			target = getCardById(overrideCardId);
 		}
 		return target;
 	}
 
 	public <T extends ExternalLogicComponent> T getExternalLogicComponent(T dummy) {
+		if (externalLogicComponents == null) {
+			return null;
+		}
 		//noinspection unchecked
 		return (T) externalLogicComponents.get(dummy.getClass());
 	}
