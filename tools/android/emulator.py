@@ -20,8 +20,8 @@ def run(*args, **kwargs):
     return subprocess.run([str(a) for a in args], check=True, **kwargs)
 
 
-def output(*args):
-    return run(*args, stdout=subprocess.PIPE, text=True).stdout.strip()
+def output(*args, **kwargs):
+    return run(*args, stdout=subprocess.PIPE, text=True, **kwargs).stdout.strip()
 
 
 def main():
@@ -50,7 +50,10 @@ def main():
     serial = f"emulator-{args.port}"
     cache = Path(os.environ.get("XDG_CACHE_HOME", str(Path.home() / ".cache"))) / "spellsource/android"
     cache.mkdir(parents=True, exist_ok=True)
-    env = dict(os.environ, ANDROID_HOME=str(sdk), ANDROID_SDK_ROOT=str(sdk))
+    avd_home = Path(os.environ.get("ANDROID_AVD_HOME", str(Path.home() / ".android/avd"))).expanduser().resolve()
+    avd_home.mkdir(parents=True, exist_ok=True)
+    env = dict(os.environ, ANDROID_HOME=str(sdk), ANDROID_SDK_ROOT=str(sdk),
+               ANDROID_AVD_HOME=str(avd_home), ANDROID_USER_HOME=str(avd_home.parent))
 
     def device(*parts):
         return output(adb, "-s", serial, *parts)
@@ -61,9 +64,11 @@ def main():
         if actual != args.avd:
             raise RuntimeError(f"{serial} belongs to {actual}, expected {args.avd}; refusing to modify it")
 
-    def ready():
+    def ready(process=None):
         deadline = time.monotonic() + 240
         while time.monotonic() < deadline:
+            if process is not None and process.poll() is not None:
+                raise RuntimeError(f"Emulator exited with {process.returncode}; inspect {cache / (args.avd + '.log')}")
             try:
                 if device("shell", "getprop", "sys.boot_completed") == "1":
                     verify_device()
@@ -78,25 +83,31 @@ def main():
         if not all(path.exists() for path in (adb, emulator, sdk / "build-tools/35.0.0/aapt",
                                                 sdk / "system-images/android-35/google_apis/x86_64/system.img")):
             run(cli / "sdkmanager", f"--sdk_root={sdk}", "platform-tools", "emulator", "build-tools;35.0.0", image, env=env)
-        avds = output(emulator, "-list-avds").splitlines()
+        avds = output(emulator, "-list-avds", env=env).splitlines()
         if args.avd not in avds:
             run(cli / "avdmanager", "create", "avd", "--name", args.avd, "--package", image, "--device", "pixel_6a", input="no\n", text=True, env=env)
-        print(f"AVD ready: {args.avd}")
+        if args.avd not in output(emulator, "-list-avds", env=env).splitlines():
+            raise RuntimeError(f"Created AVD is not visible to emulator in {avd_home}")
+        print(f"AVD ready: {args.avd} in {avd_home}")
         return
     if args.command == "start":
+        process = None
         if serial not in output(adb, "devices"):
             command = [str(emulator), "-avd", args.avd, "-port", str(args.port), "-gpu", args.gpu,
                        "-no-audio", "-no-boot-anim", "-no-snapshot", "-memory", "4096", "-cores", "4"]
             if not args.window:
                 command.append("-no-window")
             with (cache / f"{args.avd}.log").open("ab") as log:
-                subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT, env=env, start_new_session=True)
-        ready()
+                process = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT, env=env, start_new_session=True)
+        ready(process)
         device("shell", "settings", "put", "global", "window_animation_scale", "0")
         device("shell", "settings", "put", "global", "transition_animation_scale", "0")
         device("shell", "settings", "put", "global", "animator_duration_scale", "0")
         device("shell", "am", "set-debug-app", "--persistent", "com.android.chrome")
         print(f"Ready: ANDROID_SERIAL={serial} ANDROID_AVD={args.avd}")
+        return
+    if args.command == "stop" and serial not in output(adb, "devices"):
+        print(f"{serial} is already stopped")
         return
     verify_device()
     if args.command == "stop":
