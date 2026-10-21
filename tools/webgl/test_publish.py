@@ -11,6 +11,17 @@ spec.loader.exec_module(publish)
 
 
 class DescriptorTests(unittest.TestCase):
+    def test_product_version_advances_for_new_unity_revisions(self):
+        current = {"productVersion": "4.0.7", "unityRevision": "a" * 40}
+        publish.require_version_bump(current, current)
+        publish.require_version_bump({**current, "productVersion": "4.0.8", "unityRevision": "b" * 40}, current)
+        publish.require_version_bump({**current, "productVersion": "4.0.10"}, current)
+        publish.require_version_bump(current, None)
+        for candidate in ({**current, "unityRevision": "b" * 40},
+                          {**current, "productVersion": "4.0.6"}):
+            with self.assertRaisesRegex(RuntimeError, "bump PlayerSettings.bundleVersion"):
+                publish.require_version_bump(candidate, current)
+
     def test_immutable_paths_and_provenance(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

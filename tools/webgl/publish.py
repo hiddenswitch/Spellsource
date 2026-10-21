@@ -33,11 +33,27 @@ def stage(directory, build, output):
         if existing != build:
             raise RuntimeError("Build ID already belongs to different immutable assets")
         return
+    require_version_bump(build, read_descriptor("current.json"))
     for path in sorted(directory.rglob("*")):
         if path.is_file():
             upload(path, build["buildId"] + "/" + path.relative_to(directory).as_posix())
     # Written last so an interrupted upload cannot be resolved by the player.
     upload(output, build["buildId"] + "/build.json")
+
+
+def require_version_bump(build, current):
+    """New Unity revisions must advance the visible product version; retries may reuse it."""
+    def version(value):
+        if not re.fullmatch(r"\d+\.\d+\.\d+", value):
+            raise ValueError("Expected a numeric major.minor.patch product version")
+        return tuple(map(int, value.split(".")))
+
+    candidate = version(build["productVersion"])
+    if current is None:
+        return
+    previous = version(current["productVersion"])
+    if candidate < previous or (candidate == previous and build["unityRevision"] != current["unityRevision"]):
+        raise RuntimeError("New Unity releases must bump PlayerSettings.bundleVersion above " + current["productVersion"])
 
 
 def rollback(build, output):
@@ -135,6 +151,7 @@ def main():
                 if error.code != 404:
                     raise
             if previous.exists():
+                require_version_bump(build, json.loads(previous.read_text()))
                 upload(previous, "previous.json", mutable=True)
             else:
                 previous.write_text("null\n")
