@@ -21,8 +21,8 @@ python3 tools/android/emulator.py stop
 
 This creates `spellsource_api35` (Pixel 6a, Android 15/API 35, Google APIs,
 x86_64), listening as `emulator-5580`. It preserves the AVD's data between boots
-and never chooses an attached physical phone. The WebGL test removes the test
-site's previous account from this dedicated emulator, then checks guest match
+and never chooses an attached physical phone. Each WebGL run resets Chrome's
+test profile on this dedicated emulator (native app data is retained), then checks guest match
 creation, offline recovery, Home/return, screen sleep/wake, rotation, and closing
 and reopening the tab. Traces and screenshots go to `test-results/android-webgl`.
 Use `SPELLSOURCE_BASE_URL` for a different site and

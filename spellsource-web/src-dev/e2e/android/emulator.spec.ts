@@ -13,6 +13,9 @@ const adb = (...args: string[]) => execFileSync(process.env.ADB ?? join(sdk, "pl
 test("Android Chrome restores a touch match across network, lifecycle, rotation and tab loss", async ({}, testInfo) => {
   expect(serial, "Use the dedicated emulator, never an attached physical device").toMatch(/^emulator-\d+$/);
   expect(adb("emu", "avd", "name").split(/\r?\n/)[0]).toBe(avd);
+  // Reset only the dedicated emulator browser: restored Chrome tasks can close
+  // the initial DevTools target during a cold boot. Native app data is retained.
+  expect(adb("shell", "pm", "clear", "com.android.chrome")).toBe("Success");
   const device = (await _android.devices({ omitDriverInstall: true })).find(d => d.serial() === serial);
   expect(device, `No emulator ${serial} found`).toBeTruthy();
   const context = await device!.launchBrowser({ baseURL, isMobile: true, hasTouch: true });
