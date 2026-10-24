@@ -31,11 +31,11 @@ public final class RemoveEnchantmentSpell extends Spell {
 	}
 
 	protected void onCast(GameContext context, Player player, Entity source, Entity target, CardList cards, @Default(Integer.MAX_VALUE) int howMany) {
+		if (target.getEntityType() == EntityType.ENCHANTMENT) {
+			((Enchantment) target).expire(context);
+			return;
+		}
 		if (cards.isEmpty()) {
-			if (target.getEntityType() == EntityType.ENCHANTMENT) {
-				var enchantment = (Enchantment) target;
-				enchantment.expire(context);
-			}
 			return;
 		}
 		Set<String> cardIds = cards.stream().map(Card::getCardId).collect(Collectors.toSet());

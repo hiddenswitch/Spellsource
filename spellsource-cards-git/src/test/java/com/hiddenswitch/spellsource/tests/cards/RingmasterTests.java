@@ -6,6 +6,8 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.SpellTargetsAdjacentAura;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -149,6 +151,9 @@ public class RingmasterTests extends TestBase {
 			assertEquals(middle.getHp(), leftLeft.getMaxHp() - 5);
 			assertEquals(right.getHp(), right.getMaxHp() - 4);
 			assertEquals(rightRight.getHp(), rightRight.getMaxHp() - 1);
+			assertTrue(SpellUtils.getAuras(context, player.getId(),
+					SpellTargetsAdjacentAura.class).isEmpty(),
+					"Firedancer must expire after the first Signature");
 
 			context.getLogic().drawCard(player.getId(), null);
 
