@@ -5,7 +5,7 @@
   "main": "dist/experimental/client/spellsource.js",
   "dependencies": {
     "@appmana/ts-proto": "1.165.1",
-    "@grpc/grpc-js": "^1.9.13",
+    "@grpc/grpc-js": "1.14.6",
     "@improbable-eng/grpc-web": "^0.15.0",
     "cross-fetch": "^3.1.4",
     "google-protobuf": "^3.21.2",

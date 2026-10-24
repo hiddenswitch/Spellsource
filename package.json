@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "blockly": "10.0.0",
-    "patch-package": "^6.5.1",
+    "patch-package": "8.0.1",
     "typescript": "5.9.3"
   },
   "devDependencies": {

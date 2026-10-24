@@ -1,0 +1,39 @@
+{
+  "candidate": "0.10.15-rc.2",
+  "scope": "JavaScript workspaces runtime and development dependencies",
+  "changes": {
+    "grpc-js": "1.14.6",
+    "aws-sdk-client-s3": "3.1156.0",
+    "playwright": "1.64.1",
+    "patch-package": "8.0.1",
+    "lodash": "4.18.1",
+    "transitive": "refreshed within declared ranges"
+  },
+  "verification": {
+    "website_production_build": "passed 52 pages",
+    "gateway_build": "passed",
+    "gateway_tests": 7,
+    "threejs_tests": 4
+  },
+  "audit_before": {
+    "low": 17,
+    "moderate": 81,
+    "high": 104,
+    "critical": 10
+  },
+  "audit_after": {
+    "low": 4,
+    "moderate": 35,
+    "high": 27,
+    "critical": 4
+  },
+  "remaining_critical_packages": [
+    "handlebars via @hey-api/openapi-ts",
+    "tar via giget"
+  ],
+  "limitations": [
+    "Audit includes development tools and does not establish exploitability.",
+    "Candidate CI and image acceptance remain required before promotion.",
+    "Remaining advisories are not waived."
+  ]
+}
