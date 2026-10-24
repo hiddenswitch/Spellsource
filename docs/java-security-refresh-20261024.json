@@ -164,10 +164,28 @@
         "source": "https://repo.maven.apache.org/maven2/uk/org/webcompere/system-stubs-jupiter/maven-metadata.xml"
       }
     },
-    "validation": "full suite rerun failed with one randomized replay turn mismatch and testTwoGamesInRow timeout; replay-only rerun passed 10000 cases; both findings unresolved",
+    "validation": "sequential full suite passed; prior parallel timeout and randomized replay mismatch remain documented and are not treated as proven fixed",
     "targeted_validation": {
       "nested_choice_overrides": "six affected tests passed using delegation",
       "configuration_tests": "passed after System Stubs upgrade"
+    },
+    "sequential_validation": {
+      "result": "passed",
+      "command": "./gradlew --no-parallel :spellsource-server:test :spellsource-cards-git:test --console=plain",
+      "counts": {
+        "spellsource-server": {
+          "tests": 105,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 3
+        },
+        "spellsource-cards-git": {
+          "tests": 27395,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 14
+        }
+      }
     }
   }
 }
