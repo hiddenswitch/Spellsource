@@ -49,6 +49,65 @@
       "hosted_ci": "build and lint passed for 6db0269",
       "full_regeneration": "idempotent",
       "typescript_configs": 5
+    },
+    "published_candidate_images": {
+      "website": "ghcr.io/hiddenswitch/spellsource/web@sha256:ded323819b9ad4a73ef781599d9e6484b512621ed6bb7e1d5983199cc59c717e",
+      "gateway": "ghcr.io/hiddenswitch/spellsource-graphql@sha256:15b82943e8f02891fa739a6050f0f1b959109e8ed53a3c61da64153d220d3b0b",
+      "login_and_collection": "passed",
+      "authorization_boundary_tests": 2,
+      "validated_graphql_operations": 126,
+      "gameplay": {
+        "status": 200,
+        "signed_in": true,
+        "has_access_token": true,
+        "error": false,
+        "mulligan_confirmed": true,
+        "game": {
+          "frames": {
+            "received": 29,
+            "errors": 0
+          },
+          "page_errors": [],
+          "graphql_responses": [
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            }
+          ],
+          "canvas_count": 1
+        },
+        "blocked_origins": [
+          "https://authjs.dev",
+          "https://fonts.googleapis.com"
+        ],
+        "conceded": true
+      }
+    },
+    "server_regressions": {
+      "art_registration_cache": "passed",
+      "two_games_in_row": "passed in isolation and full suite",
+      "checkpoint_explicit_end_turn": "passed in isolation",
+      "full_suite": "rerun required after checkpoint test correction"
     }
   },
   "audit_before": {
@@ -68,7 +127,7 @@
     "Audit includes development tools and does not establish exploitability.",
     "Candidate CI and image acceptance remain required before promotion.",
     "Remaining advisories are not waived.",
-    "Server release blocked by two integration test failures; art cache invalidation fix under local verification."
+    "Full server suite rerun pending after explicit end-turn checkpoint test correction."
   ],
   "remaining_high_packages": []
 }
