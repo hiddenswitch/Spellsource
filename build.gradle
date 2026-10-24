@@ -183,6 +183,10 @@ subprojects {
           details.useVersion testcontainersVersion
         }
 
+        if (details.requested.group == 'commons-logging' && details.requested.name == 'commons-logging') {
+          details.useVersion '1.4.0'
+        }
+
         if (details.requested.group == 'commons-codec') {
           details.useVersion '1.15'
         }

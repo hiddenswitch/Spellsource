@@ -52,7 +52,7 @@ def localDatabaseName = 'spellsource'
 def localPort = '5432'
 def mainClassNameConst = 'com.hiddenswitch.framework.EntryPoint'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
-def jvmArgs = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=80.0', '-XX:+UseG1GC', '-XX:MinHeapFreeRatio=10', '-XX:MaxHeapFreeRatio=20', '-XX:-ShrinkHeapInSteps', '-XX:G1PeriodicGCInterval=10000']
+def serverJvmArguments = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=80.0', '-XX:+UseG1GC', '-XX:MinHeapFreeRatio=10', '-XX:MaxHeapFreeRatio=20', '-XX:-ShrinkHeapInSteps', '-XX:G1PeriodicGCInterval=10000']
 
 dependencies {
   compileOnly "org.infinispan:infinispan-component-annotations:$infinispanVersion"
@@ -71,7 +71,7 @@ dependencies {
   implementation 'javax.activation:activation:1.1.1'
 
   // keycloak
-  implementation 'net.openhft:zero-allocation-hashing:0.16'
+  implementation 'net.openhft:zero-allocation-hashing:2026.0'
   implementation platform("org.keycloak.bom:keycloak-bom-parent:$keycloakVersion")
   implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: "$keycloakVersion") {
     exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
@@ -83,7 +83,7 @@ dependencies {
   implementation "ch.qos.logback:logback-classic:$logbackVersion"
 
   implementation group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
-  implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
+  implementation group: 'commons-validator', name: 'commons-validator', version: '1.11.0'
   implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion") {
     exclude group: 'jakarta.xml.bind', module: '*'
     exclude group: 'jakarta.activation', module: '*'
@@ -177,6 +177,10 @@ jar {
 }
 
 shadowJar {
+  filesMatching(['META-INF/services/**', 'META-INF/*.kotlin_module']) {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+  }
+  failOnDuplicateEntries = true
   mergeServiceFiles()
   zip64 true
   manifest {
@@ -193,7 +197,7 @@ run {
   // opts the local supporting stack into testcontainers reuse so it survives
   // between runs (see StandaloneApplication)
   environment("TESTCONTAINERS_REUSE_ENABLE", "true")
-  jvmArgs.addAll(jvmArgs)
+  jvmArgs(serverJvmArguments)
 }
 
 tasks.register('purgeLocalServices', Exec) {
@@ -419,7 +423,7 @@ jib {
   }
   container {
     ports = ['8080']
-    jvmFlags = jvmArgs
+    jvmFlags = serverJvmArguments
   }
 }
 
@@ -465,7 +469,7 @@ tasks.register("generateSchema", JavaExec) {
   classpath sourceSets.test.runtimeClasspath
   mainClass.set('com.hiddenswitch.framework.tests.applications.SchemaGeneratorEntryPoint')
   environment("TESTCONTAINERS_REUSE_ENABLE", "true")
-  jvmArgs.addAll(jvmArgs)
+  jvmArgs(serverJvmArguments)
   inputs.file("src/main/resources/schema.graphqls")
   outputs.file(rootProject.file("spellsource-graphql/schema.graphql"))
 }

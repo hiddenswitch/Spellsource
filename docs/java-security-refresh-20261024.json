@@ -544,5 +544,37 @@
       "/tmp/spellsource-catalogue-withdraw-before.log",
       "/tmp/spellsource-catalogue-withdraw-after.log"
     ]
+  },
+  "buildtools_and_utility_refresh": {
+    "versions": {
+      "jib": "3.5.4",
+      "shadow": "9.6.1",
+      "error_prone_annotations": "2.51.0",
+      "commons_validator": "1.11.0",
+      "commons_logging": "1.4.0",
+      "zero_allocation_hashing": "2026.0"
+    },
+    "fixes": [
+      "Align commons-logging after validator dependency conflict",
+      "Pass the JVM argument list to JavaExec tasks instead of appending it to itself",
+      "Allow service and Kotlin metadata resources through Shadow duplicate filtering; fail on duplicate final archive entries"
+    ],
+    "server_tests": {
+      "tests": 111,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "shadow_services": {
+      "service_descriptors": 59,
+      "missing_providers": {},
+      "duplicate_entries": []
+    },
+    "container_entrypoint": "Verified each configured JVM flag appears once",
+    "logs": [
+      "/tmp/spellsource-buildtools-refresh2.log",
+      "/tmp/spellsource-shadow-merge-verification2.log"
+    ],
+    "status": "Locally validated; not yet released"
   }
 }
