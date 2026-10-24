@@ -762,7 +762,7 @@
   },
   "rc15_candidate": {
     "version": "0.10.15-rc.15",
-    "status": "All seven hosted workflows passed; server, gateway and website images published; rehearsal acceptance pending",
+    "status": "Hosted CI and published-image rehearsal acceptance passed; production promotion pending database cutover",
     "changes": [
       "Commons Codec 1.23.0, JBoss Logging 3.6.3.Final, Jakarta Activation 2.1.4, WildFly Common 2.0.1",
       "JUnit teardown closes independently created clustered Vertx instances after timeouts",
@@ -777,7 +777,6 @@
     "packaging": "shadowJar passed",
     "log": "/tmp/spellsource-cluster-cleanup-full-validation.log",
     "remaining": [
-      "Published-image acceptance against isolated PostgreSQL 18 and Keycloak 26",
       "Production database cutover and release promotion remain separate outstanding gates"
     ],
     "ci": {
@@ -811,6 +810,85 @@
       "server": "ghcr.io/hiddenswitch/spellsource@sha256:d200e16b64d3e665f52ad414ae4880f68772db85190e38693c2828cfdc00bd5f",
       "graphql": "ghcr.io/hiddenswitch/spellsource-graphql@sha256:7b2600a3b0e8d9c4adc583c7f29a255ae88b94aef6c0c5fd1fe2ad7df390e50c",
       "web": "ghcr.io/hiddenswitch/spellsource/web@sha256:3a8108330379d337d1d81a69de3ae404f3f3af5bfbdc9c1d74f5b2cca4ea309a"
+    },
+    "rehearsal": {
+      "environment": "Isolated production-copy PostgreSQL 18.6, Keycloak 26.8.1; all three services use immutable published rc15 digests listed above",
+      "readiness_http_status": 200,
+      "migration_history": {
+        "total": 70,
+        "failed": 0,
+        "startup": "Schema up to date; no migration necessary"
+      },
+      "containers": "All three running with zero restarts",
+      "catalogue_browser": {
+        "status": 200,
+        "signed_in": true,
+        "has_access_token": true,
+        "error": false,
+        "initial_cards": 25,
+        "session_state": {
+          "has_subject": true,
+          "server_has_subject": true,
+          "server_has_session": true
+        },
+        "deck_created": true,
+        "added_card": "A Challenger Appears",
+        "saved_and_reloaded": true,
+        "editor_blocks": 1,
+        "graphql_errors": [],
+        "page_errors": []
+      },
+      "game_browser": {
+        "status": 200,
+        "signed_in": true,
+        "has_access_token": true,
+        "error": false,
+        "mulligan_confirmed": true,
+        "game": {
+          "frames": {
+            "received": 13,
+            "errors": 0
+          },
+          "page_errors": [],
+          "graphql_responses": [
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            }
+          ],
+          "canvas_count": 1
+        },
+        "blocked_origins": [
+          "https://authjs.dev",
+          "https://fonts.googleapis.com"
+        ],
+        "conceded": true
+      },
+      "rollback": "Previous rehearsal containers retained with -before-rc15 suffix, stopped and disconnected",
+      "limitations": [
+        "Browser routes public gateway requests to the isolated gateway; no production writes",
+        "Production database cutover and final stable release remain outstanding"
+      ]
     }
   }
 }
