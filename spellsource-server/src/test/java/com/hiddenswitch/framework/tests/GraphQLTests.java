@@ -1008,7 +1008,8 @@ public class GraphQLTests extends FrameworkTestBase {
 			assertNotNull(gameOverMessage.getJsonObject("gameOver"), "should have gameOver data");
 
 			// 10. Close WebSocket and verify we're no longer in a match
-			ws.close();
+			await(ws.close());
+			await(wsClient.close());
 			await(Environment.sleep(vertx, 1000));
 			var afterRes = await(graphql(webClient, "{ isInMatch }", null, token));
 			assertNull(afterRes.getJsonArray("errors"), "isInMatch after game errors: " + afterRes);
@@ -1044,11 +1045,16 @@ public class GraphQLTests extends FrameworkTestBase {
 			gameConsumer.handler(message -> firstMessage.tryComplete(message.body()));
 			await(gameConsumer.completion());
 
-			var ws = await(vertx.createWebSocketClient().connect(new WebSocketConnectOptions()
+			var wsClient = vertx.createWebSocketClient();
+			var ws = await(wsClient.connect(new WebSocketConnectOptions()
 					.setHost("localhost")
 					.setPort(GRAPHQL_PORT)
 					.setURI("/graphql")
 					.addSubProtocol("graphql-transport-ws")));
+			// Vert.x 5 cleans up an unreachable client even while its socket is in use.
+			// Keep the client alive through explicit close and exercise collection here.
+			System.gc();
+			await(Environment.sleep(vertx, 250));
 			var connectionAck = Promise.<Void>promise();
 			var subscriptionFailure = new java.util.concurrent.atomic.AtomicReference<String>();
 			ws.exceptionHandler(cause -> {
@@ -1107,6 +1113,7 @@ public class GraphQLTests extends FrameworkTestBase {
 					await(firstMessage.future()).getMessageType());
 
 			await(ws.close());
+			await(wsClient.close());
 			await(gameConsumer.unregister());
 		});
 	}
@@ -1186,11 +1193,16 @@ public class GraphQLTests extends FrameworkTestBase {
 			}
 			assertNotNull(createdGameId, "the bot queue should have created a game");
 
-			var ws = await(vertx.createWebSocketClient().connect(new WebSocketConnectOptions()
+			var wsClient = vertx.createWebSocketClient();
+			var ws = await(wsClient.connect(new WebSocketConnectOptions()
 					.setHost("localhost")
 					.setPort(GRAPHQL_PORT)
 					.setURI("/graphql")
 					.addSubProtocol("graphql-transport-ws")));
+			// Vert.x 5 cleans up an unreachable client even while its socket is in use.
+			// Keep the client alive through explicit close and exercise collection here.
+			System.gc();
+			await(Environment.sleep(vertx, 250));
 			var connectionAck = Promise.<Void>promise();
 			var matchFound = Promise.<String>promise();
 			ws.exceptionHandler(cause -> {
@@ -1230,6 +1242,7 @@ public class GraphQLTests extends FrameworkTestBase {
 					"matchFound must deliver the game created before the subscription opened");
 
 			await(ws.close());
+			await(wsClient.close());
 			await(Matchmaking.deleteQueue(queueId));
 		});
 	}

@@ -606,7 +606,7 @@
     "status": "Do not promote; investigate subscription readiness failures before the next candidate"
   },
   "rc13_subscription_investigation": {
-    "status": "unresolved CI failure; targeted local reproduction passed",
+    "status": "Root cause reproduced locally and lifecycle fix passes all GraphQL tests; full suite and CI pending",
     "diagnostics": "Readiness test records WebSocket errors and close status/reason; late matchFound test includes close status/reason. No runtime fix or timeout relaxation.",
     "local_validation": {
       "command": "JAVA_TOOL_OPTIONS=-XX:ActiveProcessorCount=2 TESTCONTAINERS_REUSE_ENABLE=false ./gradlew --no-parallel :spellsource-server:test --tests *.GraphQLTests --console=plain",
@@ -622,7 +622,7 @@
       },
       "log": "/tmp/spellsource-subscription-two-cpu.log"
     },
-    "next": "Run full server suite with two CPU cores to check cross-class interactions; investigate original cause before promotion.",
+    "next": "Full server test and packaged build; publish next candidate and verify CI.",
     "full_server_two_cpu": {
       "tests": 111,
       "failures": 0,
@@ -630,6 +630,13 @@
       "log": "/tmp/spellsource-server-two-cpu.log",
       "dependency_state": "6965ec30a before jOOQ upgrade",
       "conclusion": "Original CI subscription failure not reproduced; cause remains unresolved."
+    },
+    "root_cause": "Vert.x 5 CleanableWebSocketClient shuts down connections when the client wrapper becomes unreachable. Two tests discarded the wrapper after connect; another did not use it during cleanup.",
+    "reproduction": {
+      "full_suite": "117 tests; one failure: WebSocket closed before connection acknowledgement: 1000 null; /tmp/spellsource-jooq321-full-validation.log",
+      "forced_collection_before": "Both affected tests fail with WebSocket is closed after System.gc() and a 250 ms collection window; /tmp/spellsource-ws-gc-before.log",
+      "forced_collection_after": "Retain client until explicit close. All 31 GraphQL tests pass with collection regression enabled; /tmp/spellsource-ws-gc-after.log",
+      "source": "io.vertx:vertx-core:5.2.2 sources VertxImpl.createWebSocketClient, CleanableWebSocketClient, CleanableResource.Action.run"
     }
   },
   "jooq_321_refresh": {
@@ -648,9 +655,9 @@
       "json_roundtrip_regression": "6 tests; zero failures /tmp/spellsource-jooq321-json-regression.log"
     },
     "remaining": [
-      "Complete full server suite",
-      "Check equivalent wrapped JSON conversion path in AppMana fork",
-      "Investigate preexisting intermittent CI WebSocket failure before production promotion"
+      "Complete full server suite with WebSocket lifecycle fix",
+      "Publish next candidate and verify CI and packaged runtime",
+      "AppMana equivalent JSON fix committed at 3d8a373a9; dependent release pending"
     ],
     "fork_commit": "1a8ffc0f",
     "fork_branch": "https://github.com/hiddenswitch/forks-jooq-vertx-5/tree/upgrade/jooq-3-21-20261024"
