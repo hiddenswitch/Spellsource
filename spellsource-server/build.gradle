@@ -145,7 +145,7 @@ dependencies {
   testImplementation(project(':spellsource-containers'))
   testImplementation project(':spellsource-testutils')
   testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
-  testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
+  testImplementation("org.testcontainers:testcontainers-junit-jupiter:$testcontainersVersion")
   testImplementation group: 'io.vertx', name: 'vertx-junit5', version: vertxVersion
   testImplementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
   testImplementation group: 'io.vertx', name: 'vertx-web-common', version: vertxVersion

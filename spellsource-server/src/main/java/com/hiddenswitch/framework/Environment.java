@@ -302,7 +302,22 @@ public class Environment {
 	}
 
 	public static Future<MigrateResult> migrate(String url, String username, String password) {
-		return executeBlocking(() -> {
+		var context = Vertx.currentContext();
+		if (context != null && !Thread.currentThread().isVirtual()) {
+			var result = new AtomicReference<MigrateResult>();
+			var owner = context.owner();
+			// Java migrations await Vert.x operations, which cannot run on a worker thread.
+			return owner.deployVerticle(new com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle() {
+				@Override
+				public void startVirtual() {
+					result.set(await(migrate(url, username, password)));
+				}
+			}, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
+					// Migration-created clients are cached for this Vertx instance. Keep their
+					// owning context alive until Vertx shuts down with the application.
+					.map(id -> result.get());
+		}
+		return executeBlocking((Context) null, () -> {
 			var shortenedUrl = url;
 			var jdbcPrefix = "jdbc:";
 			if (shortenedUrl.startsWith(jdbcPrefix)) {

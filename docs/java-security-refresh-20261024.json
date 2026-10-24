@@ -304,5 +304,108 @@
     "log": "/tmp/spellsource-junit6-graphql-cards-tests.log",
     "limitation": "No root cause or runtime fix established for intermittent notification failure; full hosted validation pending",
     "candidate": "0.10.15-rc.11"
+  },
+  "testcontainers2": {
+    "version": "2.0.5",
+    "changes": [
+      "Rename toxiproxy and junit-jupiter modules to testcontainers-prefixed artifact names",
+      "Remove obsolete JUnit 4 TestRule hook from PersistentNetwork"
+    ],
+    "full_server_validation": {
+      "tests": 106,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "log": "/tmp/spellsource-testcontainers2-server2.log",
+    "candidate": "0.10.15-rc.12"
+  },
+  "startup_migration_rehearsal": {
+    "environment": "isolated production-copy PostgreSQL 18.6 and Keycloak 26.8.1",
+    "initial_image": "ghcr.io/hiddenswitch/spellsource@sha256:7f087e8c98b5388ddae105812cc4fde9052c62afd8fcca7acdc3c4589713aafb",
+    "findings": [
+      "Original rehearsal configuration omitted startup migration; explicitly enabled it before claiming migration coverage",
+      "Populated V14 migration failed while enabling trigger with deferred constraint events pending",
+      "Repeatable Java migration failed because Vertx 5 disallows await on worker threads",
+      "Undeploying migration context closed HTTP clients cached for application lifetime",
+      "Protobuf object hash checksum changed across JVM restarts"
+    ],
+    "fixes": [
+      "Flush deferred constraints before re-enabling card trigger",
+      "Execute migration calls from Vertx contexts in a virtual-thread verticle retained until application shutdown",
+      "Compute protobuf descriptor checksum from serialized bytes using CRC32"
+    ],
+    "validation": {
+      "rollback_sql_test": "passed with 459 published cards and 460 cards deleted inside transaction then rolled back",
+      "restored_backup": "/tmp/spellsource-before-flyway13.dump",
+      "startup": "V14 and two repeatable migrations applied successfully from restored pre-migration history",
+      "failed_history_entries": 0,
+      "focused_event_loop_migration_tests": {
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "browser_on_startup_fix_build": {
+        "status": 200,
+        "signed_in": true,
+        "has_access_token": true,
+        "error": false,
+        "mulligan_confirmed": true,
+        "game": {
+          "frames": {
+            "received": 13,
+            "errors": 0
+          },
+          "page_errors": [],
+          "graphql_responses": [
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            }
+          ],
+          "canvas_count": 1
+        },
+        "blocked_origins": [
+          "https://authjs.dev",
+          "https://fonts.googleapis.com"
+        ],
+        "conceded": true
+      },
+      "browser_server_image_id": "sha256:7fda80163d67f4e63e4727af7e0cb7e6f289f43a6d59381a6edb578722d0dbf1",
+      "final_local_image_id": "sha256:77a55b76b112766b289ec1f842456541c0850c07bda9ea3037180e47fc1946b7",
+      "final_restart": {
+        "readiness_status": 200,
+        "history_before": 70,
+        "history_after": 70,
+        "log": "Schema hiddenswitch is up to date. No migration necessary."
+      }
+    },
+    "limitations": [
+      "Local candidate image; published rc12 image acceptance remains pending",
+      "Gateway and website were the previously accepted rc7 rehearsal images",
+      "Production was not changed"
+    ],
+    "candidate": "0.10.15-rc.12"
   }
 }

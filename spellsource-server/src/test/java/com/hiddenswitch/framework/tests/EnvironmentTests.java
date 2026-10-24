@@ -21,13 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class EnvironmentTests extends FrameworkTestBase {
 
 	@Test
-	public void testMigrationsAreIdempotent(VertxTestContext vertxTestContext) {
-		Environment.migrate()
+	public void testMigrationsAreIdempotent(Vertx vertx, VertxTestContext vertxTestContext) {
+		vertx.runOnContext(ignored -> Environment.migrate()
 				.compose(first -> Environment.migrate())
 				.onComplete(vertxTestContext.succeeding(migrationsExecuted -> {
 					vertxTestContext.verify(() -> assertEquals(0, migrationsExecuted));
 					vertxTestContext.completeNow();
-				}));
+				})));
 	}
 
 	@Test

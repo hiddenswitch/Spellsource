@@ -35,4 +35,7 @@ DELETE FROM spellsource.cards
 WHERE created_by = '4286293d-f538-401f-997b-d95623d135f5'
    OR uri = 'git@github.com:hiddenswitch/Spellsource.git';
 
+-- Finish deferred foreign-key checks from the deletes before altering the table.
+SET CONSTRAINTS ALL IMMEDIATE;
+
 ALTER TABLE spellsource.cards ENABLE TRIGGER card_changes_trigger;
