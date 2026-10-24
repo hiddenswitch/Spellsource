@@ -61,5 +61,43 @@
     "Gameplay covered entry mulligan and concede rather than a complete match",
     "Production database migration and promotion remain pending",
     "Subsequent common library batch is not included in these published images"
-  ]
+  ],
+  "trust_store_verification": {
+    "server": {
+      "os": {
+        "certificates": 120,
+        "distrusted_roots_found": 0
+      },
+      "java": {
+        "certificates": 118,
+        "distrusted_roots_found": 0
+      }
+    },
+    "node_services": {
+      "appmana-spellsource-web-pg18": {
+        "node": {
+          "certificates": 118,
+          "distrusted_roots_found": 0
+        },
+        "os": {
+          "certificates": 148,
+          "distrusted_roots_found": 0
+        }
+      },
+      "appmana-spellsource-graphql-pg18": {
+        "node": {
+          "certificates": 118,
+          "distrusted_roots_found": 0
+        },
+        "os": {
+          "certificates": 148,
+          "distrusted_roots_found": 0
+        }
+      }
+    },
+    "blocked_sha256": [
+      "86a1ecba089c4a8d3bbe2734c612ba341d813e043cf9e8a862cd5c57a36bbe6b",
+      "d7a7a0fb5d7e2731d771e9484ebcdef71d5f0c3e0a2948782bc83ee0ea699ef4"
+    ]
+  }
 }
