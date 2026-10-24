@@ -664,7 +664,7 @@
   },
   "rc14_candidate": {
     "version": "0.10.15-rc.14",
-    "status": "published source; hosted CI running",
+    "status": "Six workflows passed; server workflow failed clustered matchmaking timeout and subsequent port binding failures",
     "changes": [
       "Jib 3.5.4 and Shadow 9.6.1 with complete merged service providers",
       "Utility library refresh",
@@ -691,6 +691,14 @@
       "tests_pr": 40105618339,
       "threejs_push": 40105615164,
       "threejs_pr": 40105618284
+    },
+    "server_failure": {
+      "log": "/tmp/spellsource-rc14-server-failure.log",
+      "reports": "/tmp/spellsource-rc14-server-reports",
+      "artifact_id": 12565086148,
+      "first_failure": "MatchmakingTests.testManyClientsMatchmakeAcrossClusteredInstances with 60 clients timed out",
+      "graphql": "All 31 GraphQL tests passed in CI, including forced collection regression",
+      "next": "Diagnose clustered matchmaking stall and ensure independently created Vertx instances are closed on timeout before another release"
     }
   },
   "utility_alignment": {
