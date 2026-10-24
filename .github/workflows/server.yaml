@@ -46,7 +46,7 @@ jobs:
         run: ./gradlew --no-parallel spellsource-server:test spellsource-cards-git:test
       - name: Retain server test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: server-test-reports
           path: |

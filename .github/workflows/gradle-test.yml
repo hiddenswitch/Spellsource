@@ -25,3 +25,10 @@ jobs:
         run: npm install --global corepack@0.36.0 && corepack enable
       - name: Test with Gradle
         run: ./gradlew --no-parallel spellsource-cards-git:test
+      - name: Retain card test reports and failing traces
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: card-test-reports
+          path: spellsource-cards-git/build/test-results/test/
+          retention-days: 14

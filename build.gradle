@@ -241,7 +241,7 @@ subprojects {
         }
         
         if (details.requested.group == 'com.graphql-java' && details.requested.name == 'graphql-java') {
-          details.useVersion '20.7'
+          details.useVersion '26.1'
         }
         
         if (details.requested.group == 'org.apache.commons' && details.requested.name == 'commons-lang3') {
