@@ -1154,6 +1154,14 @@ public class GraphQLTests extends FrameworkTestBase {
 					.addSubProtocol("graphql-transport-ws")));
 			var connectionAck = Promise.<Void>promise();
 			var matchFound = Promise.<String>promise();
+			ws.exceptionHandler(cause -> {
+				connectionAck.tryFail(cause);
+				matchFound.tryFail(cause);
+			});
+			ws.closeHandler(ignored -> {
+				connectionAck.tryFail("WebSocket closed before connection acknowledgement");
+				matchFound.tryFail("WebSocket closed before matchFound delivery");
+			});
 			ws.textMessageHandler(text -> {
 				var message = new JsonObject(text);
 				switch (message.getString("type")) {
@@ -1179,7 +1187,7 @@ public class GraphQLTests extends FrameworkTestBase {
 							}"""))
 					.encode());
 
-			assertEquals(createdGameId, await(matchFound.future()),
+			assertEquals(createdGameId, await(matchFound.future().timeout(15, TimeUnit.SECONDS)),
 					"matchFound must deliver the game created before the subscription opened");
 
 			await(ws.close());

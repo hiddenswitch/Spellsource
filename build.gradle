@@ -26,7 +26,7 @@ dependencies {
 }
 
 allprojects {
-  project.version = '0.10.15-rc.10'
+  project.version = '0.10.15-rc.11'
 }
 
 subprojects {
@@ -136,7 +136,7 @@ subprojects {
         }
 
         if (details.requested.group == 'org.junit.platform') {
-          details.useVersion '1.14.3'
+          details.useVersion junitVersion
         }
 
         if (details.requested.group == 'org.jetbrains' && details.requested.name == 'annotations') {

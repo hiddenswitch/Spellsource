@@ -247,7 +247,13 @@
     "limitations": [
       "Production-copy Flyway 13 rehearsal and published image acceptance remain pending",
       "Historical V11 checksum changes; existing application repair step must be verified on production-copy history before promotion"
-    ]
+    ],
+    "hosted_ci": {
+      "head": "db9024f1df43cb5d499342bba1a4fc72a820cdb2",
+      "all_workflows": "passed",
+      "server_run": 40097560731,
+      "server_image": "ghcr.io/hiddenswitch/spellsource@sha256:7f087e8c98b5388ddae105812cc4fde9052c62afd8fcca7acdc3c4589713aafb"
+    }
   },
   "rc9_hosted_ci": {
     "head": "18aed55ffbc93aa603ec378e3ab06868f2dd7109",
@@ -262,6 +268,41 @@
     "failed_run": 40096814824,
     "failure": "GraphQLTests.testMatchFoundDeliveredWhenSubscriptionOpensAfterGameCreated WebSocketHandshakeException Connection closed while handshake in process",
     "status": "Unresolved; same test passed in local PostgreSQL 18 full suite but this does not establish cause or fix",
-    "report": "/tmp/spellsource-rc9-ci-server-reports"
+    "report": "/tmp/spellsource-rc9-ci-server-reports",
+    "local_reproduction": {
+      "single_test": "passed",
+      "repetitions": 20,
+      "failures": 0,
+      "runtime": "rc10 dependencies and fresh PostgreSQL 18.6",
+      "log": "/tmp/spellsource-late-subscription-stress20.log",
+      "conclusion": "Not reproduced; no root cause or fix established"
+    }
+  },
+  "junit6": {
+    "version": "6.1.3",
+    "platform_alignment": "Jupiter and Platform now share junitVersion",
+    "initial_full_server": {
+      "tests": 106,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 3
+    },
+    "initial_failure": "Late-subscription matchFound delivery timed out; thread dump showed pending matchFound future and logs showed NO_HANDLERS until notification deadline",
+    "diagnostic_change": "Fail pending test promises on WebSocket close or error and bound matchFound delivery wait to 15 seconds",
+    "focused_graphql_rerun": {
+      "tests": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "full_card_suite": {
+      "tests": 27395,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 14
+    },
+    "log": "/tmp/spellsource-junit6-graphql-cards-tests.log",
+    "limitation": "No root cause or runtime fix established for intermittent notification failure; full hosted validation pending",
+    "candidate": "0.10.15-rc.11"
   }
 }
