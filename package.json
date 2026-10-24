@@ -14,16 +14,15 @@
   ],
   "resolutions": {
     "blockly": "10.0.0",
-    "graphql": "16.8.1",
+    "graphql": "16.14.2",
     "@types/node": "26.6.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "typescript": "5.9.3",
-    "postgraphile": "^5.0.0-beta.37"
+    "postgraphile": "5.1.5"
   },
   "dependencies": {
     "blockly": "10.0.0",
-    "graphile-export": "^0.0.2-beta.29",
     "patch-package": "^6.5.1",
     "typescript": "5.9.3"
   },

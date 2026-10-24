@@ -77,6 +77,12 @@ class WorkspaceUtils {
       c.into distDir
     }
 
+    // Root postinstall applies these patches in every application distribution.
+    project.copy { CopySpec c ->
+      c.from "$parent.projectDir/spellsource-web/patches"
+      c.into "$distDir/spellsource-web/patches/"
+    }
+
     project.copy { CopySpec c ->
       c.from "$parent.projectDir/.yarn"
       c.into "$distDir/.yarn/"
