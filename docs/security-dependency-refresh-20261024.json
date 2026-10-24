@@ -1,5 +1,5 @@
 {
-  "candidate": "0.10.15-rc.6",
+  "candidate": "0.10.15-rc.7",
   "scope": "JavaScript workspaces runtime and development dependencies",
   "changes": {
     "grpc-js": "1.14.6",
@@ -117,6 +117,12 @@
         }
       },
       "legal_action_selection": "Client selects server-provided compatibility action IDs"
+    },
+    "card_suite": {
+      "tests": 27395,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 14
     }
   },
   "audit_before": {

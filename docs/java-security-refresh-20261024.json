@@ -101,6 +101,32 @@
       "errors": 0,
       "skipped": 0
     },
-    "full_server_suite": "pending"
+    "full_server_suite": {
+      "result": "passed",
+      "counts": {
+        "tests": 105,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      }
+    }
+  },
+  "combined_validation": {
+    "command": "./gradlew :spellsource-server:test :spellsource-cards-git:test --console=plain",
+    "result": "passed",
+    "counts": {
+      "spellsource-server": {
+        "tests": 105,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      },
+      "spellsource-cards-git": {
+        "tests": 27395,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 14
+      }
+    }
   }
 }
