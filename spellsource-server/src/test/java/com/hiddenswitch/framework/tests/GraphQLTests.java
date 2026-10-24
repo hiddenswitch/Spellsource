@@ -1050,8 +1050,23 @@ public class GraphQLTests extends FrameworkTestBase {
 					.setURI("/graphql")
 					.addSubProtocol("graphql-transport-ws")));
 			var connectionAck = Promise.<Void>promise();
+			var subscriptionFailure = new java.util.concurrent.atomic.AtomicReference<String>();
+			ws.exceptionHandler(cause -> {
+				connectionAck.tryFail(cause);
+				subscriptionFailure.set(cause.toString());
+			});
+			ws.closeHandler(ignored -> {
+				var reason = "WebSocket closed: " + ws.closeStatusCode() + " " + ws.closeReason();
+				connectionAck.tryFail(reason);
+				subscriptionFailure.set(reason);
+			});
 			ws.textMessageHandler(text -> {
-				if ("connection_ack".equals(new JsonObject(text).getString("type"))) {
+				var message = new JsonObject(text);
+				if ("error".equals(message.getString("type"))
+						|| message.getJsonObject("payload", new JsonObject()).containsKey("errors")) {
+					subscriptionFailure.set(text);
+				}
+				if ("connection_ack".equals(message.getString("type"))) {
 					connectionAck.tryComplete();
 				}
 			});
@@ -1086,7 +1101,7 @@ public class GraphQLTests extends FrameworkTestBase {
 					.encode());
 
 			var response = await(connect);
-			assertNull(response.getJsonArray("errors"), "connectToGame errors: " + response);
+			assertNull(response.getJsonArray("errors"), "connectToGame errors: " + response + "; subscription failure: " + subscriptionFailure.get());
 			assertTrue(response.getJsonObject("data").getBoolean("connectToGame"));
 			assertEquals(Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE,
 					await(firstMessage.future()).getMessageType());
@@ -1183,8 +1198,8 @@ public class GraphQLTests extends FrameworkTestBase {
 				matchFound.tryFail(cause);
 			});
 			ws.closeHandler(ignored -> {
-				connectionAck.tryFail("WebSocket closed before connection acknowledgement");
-				matchFound.tryFail("WebSocket closed before matchFound delivery");
+				connectionAck.tryFail("WebSocket closed before connection acknowledgement: " + ws.closeStatusCode() + " " + ws.closeReason());
+				matchFound.tryFail("WebSocket closed before matchFound delivery: " + ws.closeStatusCode() + " " + ws.closeReason());
 			});
 			ws.textMessageHandler(text -> {
 				var message = new JsonObject(text);

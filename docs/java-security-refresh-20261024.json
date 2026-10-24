@@ -604,5 +604,24 @@
       "graphql": "ghcr.io/hiddenswitch/spellsource-graphql@sha256:155549b04f793c10927ed996fb4b588ebb5ae9141292c8add51df29b456a647a"
     },
     "status": "Do not promote; investigate subscription readiness failures before the next candidate"
+  },
+  "rc13_subscription_investigation": {
+    "status": "unresolved CI failure; targeted local reproduction passed",
+    "diagnostics": "Readiness test records WebSocket errors and close status/reason; late matchFound test includes close status/reason. No runtime fix or timeout relaxation.",
+    "local_validation": {
+      "command": "JAVA_TOOL_OPTIONS=-XX:ActiveProcessorCount=2 TESTCONTAINERS_REUSE_ENABLE=false ./gradlew --no-parallel :spellsource-server:test --tests *.GraphQLTests --console=plain",
+      "result": {
+        "name": "com.hiddenswitch.framework.tests.GraphQLTests",
+        "tests": "31",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-24T14:43:01.123Z",
+        "hostname": "appmana-001",
+        "time": "61.002"
+      },
+      "log": "/tmp/spellsource-subscription-two-cpu.log"
+    },
+    "next": "Run full server suite with two CPU cores to check cross-class interactions; investigate original cause before promotion."
   }
 }
