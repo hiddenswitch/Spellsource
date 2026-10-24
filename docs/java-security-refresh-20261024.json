@@ -40,5 +40,38 @@
       "skipped": 3
     },
     "command": "./gradlew :spellsource-server:test --console=plain"
+  },
+  "protobuf": {
+    "runtime": "4.36.2",
+    "compiler": "4.36.2",
+    "source": "https://github.com/protocolbuffers/protobuf/releases/tag/v36.2",
+    "server_suite": {
+      "tests": 105,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "card_suite": {
+      "result": "failed",
+      "counts": {
+        "tests": 27395,
+        "failures": 44,
+        "errors": 0,
+        "skipped": 14
+      },
+      "baseline_comparison": {
+        "protobuf": "4.29.0",
+        "jackson": "2.19.4",
+        "result": "all four named failures reproduced",
+        "tests": [
+          "VampireLordTests.testGatekeeperSha",
+          "VampireLordTests.testSoulscreamRework",
+          "StorytellerTests.testDramaticPlaywright",
+          "RingmasterTests.testFiredancer"
+        ],
+        "limitation": "randomized failures not individually replayed against baseline"
+      }
+    },
+    "generated_sources": "regenerated and compiled"
   }
 }
