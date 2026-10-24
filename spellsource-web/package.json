@@ -105,7 +105,7 @@
     "@graphql-codegen/typescript": "6.1.2",
     "@graphql-codegen/typescript-operations": "6.1.10",
     "@graphql-codegen/typescript-resolvers": "6.1.1",
-    "@hey-api/openapi-ts": "^0.59.0",
+    "@hey-api/openapi-ts": "0.99.0",
     "@playwright/test": "1.64.1",
     "@tomysmith/deep-partial": "^1.0.1",
     "@types/cors": "^2.8.14",

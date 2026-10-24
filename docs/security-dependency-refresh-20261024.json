@@ -1,5 +1,5 @@
 {
-  "candidate": "0.10.15-rc.2",
+  "candidate": "0.10.15-rc.3",
   "scope": "JavaScript workspaces runtime and development dependencies",
   "changes": {
     "grpc-js": "1.14.6",
@@ -7,13 +7,23 @@
     "playwright": "1.64.1",
     "patch-package": "8.0.1",
     "lodash": "4.18.1",
-    "transitive": "refreshed within declared ranges"
+    "transitive": "refreshed within declared ranges",
+    "openapi-ts": "0.99.0",
+    "yaml_parser_override": "@hey-api/json-schema-ref-parser/js-yaml 4.3.2 replaces upstream exact vulnerable 4.2.0 pin",
+    "deduplication": "gRPC and lodash resolve compatible consumers to updated versions"
   },
   "verification": {
     "website_production_build": "passed 52 pages",
     "gateway_build": "passed",
     "gateway_tests": 7,
-    "threejs_tests": 4
+    "threejs_tests": 4,
+    "openapi_generation": {
+      "version": "0.99.0",
+      "cli": "openapi-ts -i <schema> -o <temporary output> -c @hey-api/client-fetch",
+      "schema": "AppMana ComfyUI openapi.yaml",
+      "schema_sha256": "f3bf54f7618d09c8ab7403363de2d8cba060f957c9c347536736d177fd71857c",
+      "result": "generated client passed TypeScript noEmit check targeting ES2022 with bundler module resolution"
+    }
   },
   "audit_before": {
     "low": 17,
@@ -22,15 +32,12 @@
     "critical": 10
   },
   "audit_after": {
-    "low": 4,
-    "moderate": 35,
-    "high": 27,
-    "critical": 4
+    "low": 2,
+    "moderate": 28,
+    "high": 12,
+    "critical": 0
   },
-  "remaining_critical_packages": [
-    "handlebars via @hey-api/openapi-ts",
-    "tar via giget"
-  ],
+  "remaining_critical_packages": [],
   "limitations": [
     "Audit includes development tools and does not establish exploitability.",
     "Candidate CI and image acceptance remain required before promotion.",
