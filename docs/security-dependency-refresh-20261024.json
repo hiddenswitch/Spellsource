@@ -1,5 +1,5 @@
 {
-  "candidate": "next candidate pending server verification",
+  "candidate": "0.10.15-rc.6",
   "scope": "JavaScript workspaces runtime and development dependencies",
   "changes": {
     "grpc-js": "1.14.6",
@@ -107,7 +107,16 @@
       "art_registration_cache": "passed",
       "two_games_in_row": "passed in isolation and full suite",
       "checkpoint_explicit_end_turn": "passed in isolation",
-      "full_suite": "rerun required after checkpoint test correction"
+      "full_suite": {
+        "result": "passed",
+        "counts": {
+          "tests": 105,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 3
+        }
+      },
+      "legal_action_selection": "Client selects server-provided compatibility action IDs"
     }
   },
   "audit_before": {
@@ -126,8 +135,7 @@
   "limitations": [
     "Audit includes development tools and does not establish exploitability.",
     "Candidate CI and image acceptance remain required before promotion.",
-    "Remaining advisories are not waived.",
-    "Full server suite rerun pending after explicit end-turn checkpoint test correction."
+    "Remaining advisories are not waived."
   ],
   "remaining_high_packages": []
 }

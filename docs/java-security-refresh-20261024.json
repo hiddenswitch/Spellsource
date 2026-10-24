@@ -31,5 +31,14 @@
       "skipped": "0"
     }
   ],
-  "full_server_suite": "pending"
+  "full_server_suite": {
+    "result": "passed",
+    "counts": {
+      "tests": 105,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "command": "./gradlew :spellsource-server:test --console=plain"
+  }
 }
