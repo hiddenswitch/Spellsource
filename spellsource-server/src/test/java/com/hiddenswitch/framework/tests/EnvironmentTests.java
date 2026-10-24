@@ -21,6 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class EnvironmentTests extends FrameworkTestBase {
 
 	@Test
+	public void testMigrationsAreIdempotent(VertxTestContext vertxTestContext) {
+		Environment.migrate()
+				.compose(first -> Environment.migrate())
+				.onComplete(vertxTestContext.succeeding(migrationsExecuted -> {
+					vertxTestContext.verify(() -> assertEquals(0, migrationsExecuted));
+					vertxTestContext.completeNow();
+				}));
+	}
+
+	@Test
 	public void testPgPool(VertxTestContext vertxTestContext) {
 		var vertx = Vertx.vertx();
 		var promise = Promise.<Void>promise();

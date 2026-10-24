@@ -5,6 +5,7 @@ buildscript {
   dependencies {
     classpath "org.jooq:jooq-codegen:3.17.3"
     classpath "org.postgresql:postgresql:$postgresqlVersion"
+    classpath "org.flywaydb:flyway-database-postgresql:$flywayVersion"
   }
 }
 
@@ -128,6 +129,7 @@ dependencies {
     exclude group: 'io.micrometer', module: 'micrometer-core'
   }
   implementation "org.flywaydb:flyway-core:$flywayVersion"
+  runtimeOnly "org.flywaydb:flyway-database-postgresql:$flywayVersion"
   implementation 'org.redisson:redisson:4.8.0'
   implementation(group: 'com.github.pcj', name: 'google-options', version: '1.0.0') {
     exclude group: 'com.google.guava', module: 'guava'

@@ -1,5 +1,5 @@
 {
-  "candidate": "0.10.15-rc.9",
+  "candidate": "0.10.15-rc.10",
   "scope": "JavaScript workspaces runtime and development dependencies",
   "changes": {
     "grpc-js": "1.14.6",

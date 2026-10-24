@@ -221,5 +221,47 @@
       "log": "/tmp/spellsource-redisson-classgraph-full-tests.log"
     },
     "candidate": "0.10.15-rc.9"
+  },
+  "flyway_postgresql": {
+    "candidate": "0.10.15-rc.10",
+    "flyway": "13.11.1",
+    "postgresql_test_image": "docker.io/postgres:18.6-trixie@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6",
+    "changes": [
+      "Add PostgreSQL module to application runtime and Gradle build classpaths",
+      "Quote json function parameter in historical V11 migration so new PostgreSQL 18 databases can bootstrap without changing argument names or function signatures",
+      "Add regression verifying repeated migrations execute zero pending migrations"
+    ],
+    "verification": {
+      "postgresql_13_focused": "6 environment tests passed before fixture upgrade",
+      "postgresql_18_focused": "7 environment tests passed with container reuse disabled",
+      "postgresql_18_full_server": {
+        "tests": 106,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      },
+      "command": "TESTCONTAINERS_REUSE_ENABLE=false ./gradlew --no-parallel :spellsource-server:test",
+      "duration": "3m 28s",
+      "log": "/tmp/spellsource-flyway13-pg18-server2.log"
+    },
+    "limitations": [
+      "Production-copy Flyway 13 rehearsal and published image acceptance remain pending",
+      "Historical V11 checksum changes; existing application repair step must be verified on production-copy history before promotion"
+    ]
+  },
+  "rc9_hosted_ci": {
+    "head": "18aed55ffbc93aa603ec378e3ab06868f2dd7109",
+    "passing_runs": [
+      40096818742,
+      40096814826,
+      40096818746,
+      40096814834,
+      40096814825,
+      40096814861
+    ],
+    "failed_run": 40096814824,
+    "failure": "GraphQLTests.testMatchFoundDeliveredWhenSubscriptionOpensAfterGameCreated WebSocketHandshakeException Connection closed while handshake in process",
+    "status": "Unresolved; same test passed in local PostgreSQL 18 full suite but this does not establish cause or fix",
+    "report": "/tmp/spellsource-rc9-ci-server-reports"
   }
 }
