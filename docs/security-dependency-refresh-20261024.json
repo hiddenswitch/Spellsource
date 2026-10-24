@@ -1,5 +1,5 @@
 {
-  "candidate": "0.10.15-rc.4",
+  "candidate": "0.10.15-rc.5",
   "scope": "JavaScript workspaces runtime and development dependencies",
   "changes": {
     "grpc-js": "1.14.6",
@@ -20,7 +20,9 @@
       "@graphql-codegen/plugin-helpers direct dependency",
       "@babel/preset-env",
       "@babel/preset-typescript"
-    ]
+    ],
+    "ts_proto": "AppMana/ts-proto c89447c with NestJS 12.2.0 and semantic-release 25.0.9",
+    "glob": "replace glob-promise with glob 13.0.6 native promise API"
   },
   "verification": {
     "website_production_build": "passed 52 pages",
@@ -35,7 +37,15 @@
       "result": "generated client passed TypeScript noEmit check targeting ES2022 with bundler module resolution"
     },
     "graphql_generation": "both configured generators passed with unchanged tracked output",
-    "scss_generation": "all source SCSS processed successfully into a temporary output directory"
+    "scss_generation": "all source SCSS processed successfully into a temporary output directory",
+    "ts_proto": {
+      "compiler": "passed in standalone and parent workspace",
+      "suites": 93,
+      "tests_passed": 303,
+      "tests_skipped": 4,
+      "snapshots": 94,
+      "pull_request": "https://github.com/AppMana/ts-proto/pull/1"
+    }
   },
   "audit_before": {
     "low": 17,
@@ -45,8 +55,8 @@
   },
   "audit_after": {
     "low": 2,
-    "moderate": 21,
-    "high": 4,
+    "moderate": 15,
+    "high": 0,
     "critical": 0
   },
   "remaining_critical_packages": [],
@@ -55,9 +65,5 @@
     "Candidate CI and image acceptance remain required before promotion.",
     "Remaining advisories are not waived."
   ],
-  "remaining_high_packages": [
-    "@nestjs/microservices",
-    "pacote",
-    "sigstore"
-  ]
+  "remaining_high_packages": []
 }

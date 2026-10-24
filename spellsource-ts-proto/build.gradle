@@ -13,7 +13,7 @@ tasks.register('compileTypescript', YarnTask) {
   dependsOn ':yarnWorkspace'
 
   // Use the root Yarn release instead of the submodule's legacy nested yarn script.
-  args = ['workspace', '@appmana/ts-proto', 'exec', 'tsc']
+  args = ['exec', 'tsc', '--project', 'spellsource-ts-proto/ts-proto/tsconfig.json']
   inputs.dir('ts-proto/src/')
   outputs.dir('ts-proto/build/')
 }
