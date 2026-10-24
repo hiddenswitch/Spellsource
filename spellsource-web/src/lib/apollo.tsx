@@ -17,7 +17,7 @@ export const ApolloClientProvider: FunctionComponent<PropsWithChildren> = ({ chi
   return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
 };
 
-export const createApolloClient = (tokenRef: RefObject<string>) => {
+export const createApolloClient = (tokenRef: RefObject<string | null>) => {
   return new ApolloClient({
     link: setContext((_, { headers, ...context }) => ({
       headers: {

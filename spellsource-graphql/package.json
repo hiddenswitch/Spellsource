@@ -5,8 +5,8 @@
   "main": "build/server.js",
   "private": true,
   "engines": {
-    "yarn": "^4.0.0",
-    "node": ">=22.11.0"
+    "yarn": ">=4.18.1",
+    "node": ">=26.12.1"
   },
   "author": "Benjamin Berman",
   "license": "AGPL-3.0-or-later",
@@ -45,9 +45,9 @@
     "@types/ws": "^8",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.1",
-    "typescript": "^5.3.3"
+    "typescript": "5.9.3"
   },
-  "packageManager": "yarn@4.5.0",
+  "packageManager": "yarn@4.18.1",
   "scripts": {
     "develop": "nodemon -L --inspect=0.0.0.0:9229 src/server.ts",
     "build": "tsc",

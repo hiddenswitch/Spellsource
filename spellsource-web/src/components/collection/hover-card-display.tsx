@@ -1,12 +1,19 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CardDisplay, { CardDef } from "./card-display";
 
 import styles from "../creative-layout.module.scss";
-import { useMouse } from "react-use";
+import { useRafState } from "react-use";
 
 export const useHoverCardDisplay = (options?: { translateX?: string; translateY?: string }) => {
-  const ref = useRef(null);
-  const { docX, docY } = useMouse(ref);
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [{ docX, docY }, setPosition] = useRafState({ docX: 0, docY: 0 });
+  useEffect(() => {
+    const move = (event: MouseEvent) => {
+      if (ref.current) setPosition({ docX: event.pageX, docY: event.pageY });
+    };
+    document.addEventListener("mousemove", move);
+    return () => document.removeEventListener("mousemove", move);
+  }, [setPosition]);
   const [card, setCard] = useState<CardDef | undefined | null>(null);
 
   const translateX = options?.translateX ?? "0%";

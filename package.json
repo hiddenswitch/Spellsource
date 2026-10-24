@@ -2,8 +2,8 @@
   "name": "spellsource",
   "private": true,
   "engines": {
-    "yarn": "^4.0.0",
-    "node": ">=22.11.0"
+    "yarn": ">=4.18.1",
+    "node": ">=26.12.1"
   },
   "workspaces": [
     "spellsource-graphql",
@@ -15,24 +15,23 @@
   "resolutions": {
     "blockly": "10.0.0",
     "graphql": "16.8.1",
-    "@types/node": "22.10.5",
-    "@types/react": "18.3.18",
-    "@types/react-dom": "18.3.5",
-    "typescript": "5.3.3",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "5.9.3",
     "postgraphile": "^5.0.0-beta.37"
   },
   "dependencies": {
     "blockly": "10.0.0",
     "graphile-export": "^0.0.2-beta.29",
     "patch-package": "^6.5.1",
-    "typescript": "^5.3.3",
-    "yarn": "^2.4.3"
+    "typescript": "5.9.3"
   },
   "devDependencies": {
-    "@types/node": "22.10.5",
+    "@types/node": "26.6.5",
     "ts-node": "^10.9.2"
   },
-  "packageManager": "yarn@4.5.0",
+  "packageManager": "yarn@4.18.1",
   "scripts": {
     "postinstall": "yarn run patch-package --patch-dir ./spellsource-web/patches"
   }

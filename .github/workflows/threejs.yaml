@@ -13,7 +13,9 @@ jobs:
           git submodule update --init spellsource-ts-proto/ts-proto
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 26.12.1
+      - name: Install pinned Corepack
+        run: npm install --global corepack@0.36.0 && corepack enable
       - run: yarn install --immutable
       - run: yarn workspace spellsource-threejs codegen
       - run: git diff --exit-code -- spellsource-threejs/src/__generated__

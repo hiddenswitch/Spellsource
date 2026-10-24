@@ -39,7 +39,9 @@ jobs:
           distribution: temurin
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 26.12.1
+      - name: Install pinned Corepack
+        run: npm install --global corepack@0.36.0 && corepack enable
       - name: Run server tests
         run: ./gradlew --no-parallel spellsource-server:test spellsource-game:test
       - name: Retain server test reports
