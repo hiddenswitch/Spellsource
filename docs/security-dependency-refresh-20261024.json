@@ -1,5 +1,5 @@
 {
-  "candidate": "0.10.15-rc.5",
+  "candidate": "next candidate pending server verification",
   "scope": "JavaScript workspaces runtime and development dependencies",
   "changes": {
     "grpc-js": "1.14.6",
@@ -21,8 +21,9 @@
       "@babel/preset-env",
       "@babel/preset-typescript"
     ],
-    "ts_proto": "AppMana/ts-proto c89447c with NestJS 12.2.0 and semantic-release 25.0.9",
-    "glob": "replace glob-promise with glob 13.0.6 native promise API"
+    "ts_proto": "AppMana/ts-proto 6db0269; full regeneration and hosted build/lint passed",
+    "glob": "replace glob-promise with glob 13.0.6 native promise API",
+    "runtime_cleanup": "Removed unused node-fs-extra and switched art endpoint to native Node fetch"
   },
   "verification": {
     "website_production_build": "passed 52 pages",
@@ -44,7 +45,10 @@
       "tests_passed": 303,
       "tests_skipped": 4,
       "snapshots": 94,
-      "pull_request": "https://github.com/AppMana/ts-proto/pull/1"
+      "pull_request": "https://github.com/AppMana/ts-proto/pull/1",
+      "hosted_ci": "build and lint passed for 6db0269",
+      "full_regeneration": "idempotent",
+      "typescript_configs": 5
     }
   },
   "audit_before": {
@@ -54,8 +58,8 @@
     "critical": 10
   },
   "audit_after": {
-    "low": 2,
-    "moderate": 15,
+    "low": 1,
+    "moderate": 12,
     "high": 0,
     "critical": 0
   },
@@ -63,7 +67,8 @@
   "limitations": [
     "Audit includes development tools and does not establish exploitability.",
     "Candidate CI and image acceptance remain required before promotion.",
-    "Remaining advisories are not waived."
+    "Remaining advisories are not waived.",
+    "Server release blocked by two integration test failures; art cache invalidation fix under local verification."
   ],
   "remaining_high_packages": []
 }

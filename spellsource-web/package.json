@@ -57,8 +57,6 @@
     "next": "16.4.3",
     "next-auth": "4.24.15",
     "nextjs-cors": "^2.1.2",
-    "node-fetch": "^3.3.2",
-    "node-fs-extra": "^0.8.2",
     "pify": "^5.0.0",
     "pixelmatch": "^5.2.1",
     "probe-image-size": "^7.2.3",
