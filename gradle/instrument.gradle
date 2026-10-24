@@ -4,10 +4,7 @@ def allJvmArgs = [
   '-XX:+IgnoreUnrecognizedVMOptions',
   '-XX:+UnlockExperimentalVMOptions',
   '-XX:+UseCompactObjectHeaders',
-  '-XX:AutoBoxCacheMax=16384',
-  '-XX:+EnableJVMCI',
-  '-XX:+UseJVMCICompiler',
-  '-XX:+UseJVMCINativeLibrary'
+  '-XX:AutoBoxCacheMax=16384'
 ]
 
 tasks.withType(JavaCompile).configureEach {
