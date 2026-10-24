@@ -1535,7 +1535,6 @@ public final class SpellsourceClassfileWeaver {
 					}
 				}
 
-				cob.invokevirtual(ownerDesc, typedMethod.methodName().stringValue(), typedMethod.methodTypeSymbol());
 				if (isRevertableSpell && !hasDescInPrefix) {
 					cob.aload(0)
 							.aload(1)
@@ -1548,6 +1547,7 @@ public final class SpellsourceClassfileWeaver {
 									"applyRevertTrigger",
 									MTD_SPELL_ONCAST);
 				}
+				cob.invokevirtual(ownerDesc, typedMethod.methodName().stringValue(), typedMethod.methodTypeSymbol());
 				if (stdMtd.returnType().equals(ConstantDescs.CD_void)) {
 					cob.return_();
 				} else {

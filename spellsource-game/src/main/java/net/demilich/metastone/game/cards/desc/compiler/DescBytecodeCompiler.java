@@ -2653,7 +2653,6 @@ public final class DescBytecodeCompiler {
 		loadSlotOrNull(cob, targetSlot);
 		// In Spell: sourceSlot=4, targetSlot=targetSlot; tempSlotBase=14
 		emitOption1ExtraParams(cob, spec, instance, desc, isTopLevelSpell, classData, playerSlot, targetSlot, 4, targetSlot, 4, 14, 0);
-		cob.invokevirtual(spec.ownerDesc, spec.methodName, spec.methodTypeDesc);
 
 		if (spec.isRevertableSpell
 				&& !spec.hasDescInPrefix
@@ -2666,6 +2665,8 @@ public final class DescBytecodeCompiler {
 			loadSlotOrNull(cob, targetSlot);
 			cob.invokevirtual(CD_REVERTABLE_SPELL, "applyRevertTrigger", MTD_SPELL_ONCAST);
 		}
+		cob.invokevirtual(spec.ownerDesc, spec.methodName, spec.methodTypeDesc);
+
 	}
 
 	private static void emitOption1ExtraParams(
