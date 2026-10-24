@@ -1,5 +1,6 @@
+import { ApolloProvider } from "@apollo/client/react";
 import React, { useState, useCallback, useEffect, useMemo, type FunctionComponent } from 'react';
-import { ApolloClient, ApolloProvider, InMemoryCache, HttpLink, split } from '@apollo/client';
+import { ApolloClient, InMemoryCache, HttpLink, split } from '@apollo/client';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';

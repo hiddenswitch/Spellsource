@@ -1,7 +1,8 @@
+import { useQuery } from "@apollo/client/react";
 import { useSession } from "next-auth/react";
 import React, { FunctionComponent, useContext, useEffect, useState } from "react";
 import { CardType } from "../../__generated__/spellsource-game";
-import { CollectionCardFragment, CollectionCardsOrderBy, useGetCollectionCardsQuery } from "../../__generated__/client";
+import { CollectionCardFragment, CollectionCardsOrderBy, GetCollectionCardsDocument } from "../../__generated__/client";
 import { CardDef } from "./card-display";
 import { Dropdown, Form, Table } from "react-bootstrap";
 import { Button } from "../typed-bootstrap";
@@ -139,7 +140,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
 
   const [_, cancelDebounce] = useDebounce(() => setSearch(searchVisual), 500, [searchVisual]);
 
-  const getCards = useGetCollectionCardsQuery({
+  const getCards = useQuery(GetCollectionCardsDocument, {
     variables: {
       limit,
       offset,
@@ -152,8 +153,12 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
         createdBy: ownOnly ? { equalTo: user ?? "" } : undefined,
       },
     },
-    onCompleted: (data) => data.allCollectionCards?.nodes?.forEach((node) => (cache[node!.id!] = node!.cardScript)),
   });
+  useEffect(() => {
+    getCards.data?.allCollectionCards?.nodes?.forEach((node) => {
+      if (node?.id) cache[node.id] = node.cardScript;
+    });
+  }, [getCards.data, cache]);
   const cards = getCards?.data?.allCollectionCards?.nodes ?? getCards?.previousData?.allCollectionCards?.nodes ?? [];
   const total = getCards?.data?.allCollectionCards?.totalCount ?? getCards?.previousData?.allCollectionCards?.totalCount ?? 0;
 

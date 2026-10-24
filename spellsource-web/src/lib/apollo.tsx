@@ -1,4 +1,5 @@
-import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client/react";
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { FunctionComponent, PropsWithChildren, RefObject, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -31,12 +32,11 @@ export const createApolloClient = (tokenRef: RefObject<string | null>) => {
         fetch,
       })
     ),
-    connectToDevTools: process.env.NODE_ENV !== "production",
+    devtools: { enabled: process.env.NODE_ENV !== "production" },
     cache: new InMemoryCache(),
     defaultOptions: {
       query: {
         fetchPolicy: "cache-first",
-        notifyOnNetworkStatusChange: true,
       },
       watchQuery: {
         fetchPolicy: "cache-and-network",

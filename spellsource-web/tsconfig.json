@@ -118,6 +118,7 @@
   "exclude": [
     "node_modules",
     "build",
+    "docker",
     ".next"
   ]
 }

@@ -30,16 +30,17 @@
     "ws": "8.22.0"
   },
   "devDependencies": {
+    "@graphql-codegen/add": "7.1.1",
     "@graphql-codegen/c-sharp": "^5.1.0",
     "@graphql-codegen/c-sharp-operations": "^3.1.0",
-    "@graphql-codegen/cli": "^3.2.2",
+    "@graphql-codegen/cli": "7.4.6",
     "@graphql-codegen/java": "^4.0.1",
     "@graphql-codegen/java-resolvers": "^3.0.0",
     "@graphql-codegen/plugin-helpers": "^5.1.0",
-    "@graphql-codegen/typescript": "^3.0.2",
-    "@graphql-codegen/typescript-operations": "^3.0.2",
-    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
-    "@graphql-codegen/typescript-resolvers": "^3.1.1",
+    "@graphql-codegen/typed-document-node": "7.2.0",
+    "@graphql-codegen/typescript": "6.1.2",
+    "@graphql-codegen/typescript-operations": "6.1.10",
+    "@graphql-codegen/typescript-resolvers": "6.1.1",
     "@types/cors": "^2.8.14",
     "@types/express": "5.0.6",
     "@types/jsonwebtoken": "^9",
@@ -57,6 +58,7 @@
     "strawberry-shake": "dotnet graphql generate",
     "docker-debug": "node -r ts-node/register --inspect=0.0.0.0:51535 src/server.ts",
     "test": "node --require ts-node/register --test test/*.test.cjs",
-    "test-archive": "yarn build && node test/archive-filter.integration.cjs"
+    "test-archive": "yarn build && node test/archive-filter.integration.cjs",
+    "test-operations": "node test/schema-operations.integration.cjs"
   }
 }

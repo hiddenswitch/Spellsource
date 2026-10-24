@@ -1,33 +1,39 @@
 schema:
-  - schema.graphql
+- schema.graphql
 config:
   pluckConfig:
     gqlMagicComment: __never__
     globalGqlIdentifierName: gql
     modules:
-      - name: '@apollo/client'
-        identifier: gql
+    - name: '@apollo/client'
+      identifier: gql
 generates:
-  ../spellsource-web/src/__generated__/client.ts:
-    documents:
-      - graphql/shared/**/*.graphql
-      - graphql/web/**/*.graphql
+  ../spellsource-web/src/__generated__/schema.ts:
     plugins:
-      - typescript
-      - typescript-resolvers
-      - typescript-operations
-      - typescript-react-apollo
+    - typescript
+    - typescript-resolvers
     config:
-      scalars:
+      scalars: &id001
         DateTime: string
         Duration: number
         CalendarDate: string
         ConstraintString: string
         ConstraintNumber: number
-      reactApolloVersion: 3
-      withComponent: false
-      withHOC: false
-      withHooks: true
-      withMutationFn: true
       enumsAsConst: true
       defaultMapper: Partial<{T}>
+      defaultScalarType: any
+  ../spellsource-web/src/__generated__/client.ts:
+    documents:
+    - graphql/shared/**/*.graphql
+    - graphql/web/**/*.graphql
+    plugins:
+    - add:
+        content: export * from './schema';
+    - typescript-operations
+    - typed-document-node
+    config:
+      scalars: *id001
+      enumsAsConst: true
+      defaultMapper: Partial<{T}>
+      defaultScalarType: any
+      importSchemaTypesFrom: ../spellsource-web/src/__generated__/schema.ts

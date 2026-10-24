@@ -1,3 +1,4 @@
+import { useLazyQuery, useMutation } from "@apollo/client/react";
 import React, { forwardRef, useContext, useEffect, useMemo, useState } from "react";
 import * as WorkspaceUtils from "../lib/workspace-utils";
 import Blockly, {
@@ -25,12 +26,11 @@ import {
 import { BlocklyDataContext } from "../pages/card-editor";
 import useComponentDidMount from "../hooks/use-component-did-mount";
 import {
-  useDeleteArtMutation,
-  useDeleteCardMutation,
-  useGetCardLazyQuery,
-  usePublishCardMutation,
-  useSaveCardMutation,
-} from "../__generated__/client";
+  DeleteArtDocument,
+  DeleteCardDocument,
+  GetCardDocument,
+  PublishCardDocument,
+  SaveCardDocument, GetCardQuery, GetCardQueryVariables} from "../__generated__/client";
 import { CardDef } from "./collection/card-display";
 import { useSession } from "next-auth/react";
 import { useDebounce, useDrop } from "react-use";
@@ -68,7 +68,7 @@ export type InitBlockOptions = {
 const handleWorkspaceCards = (
   workspace: WorkspaceSvg,
   userId: string,
-  getCard: ReturnType<typeof useGetCardLazyQuery>[0]
+  getCard: ReturnType<typeof useLazyQuery<GetCardQuery, GetCardQueryVariables>>[0]
 ) => {
   const cardScript = {} as Record<string, CardDef>;
 
@@ -134,10 +134,10 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
   const getToolbox = () => mainWorkspace()?.getToolbox() as Toolbox;
 
   const [json, setJson] = useState("{}");
-  const [saveCard] = useSaveCardMutation();
-  const [deleteCard] = useDeleteCardMutation();
-  const [publishCard] = usePublishCardMutation();
-  const [getCard] = useGetCardLazyQuery();
+  const [saveCard] = useMutation(SaveCardDocument);
+  const [deleteCard] = useMutation(DeleteCardDocument);
+  const [publishCard] = useMutation(PublishCardDocument);
+  const [getCard] = useLazyQuery(GetCardDocument);
 
   const saveAll = async () => {
     const workspace = mainWorkspace();
@@ -262,7 +262,7 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
       return null;
     });
 
-  const [deleteArt] = useDeleteArtMutation();
+  const [deleteArt] = useMutation(DeleteArtDocument);
 
   const deleteArtAsync = async (hash: string) => {
     if (!userId) return;

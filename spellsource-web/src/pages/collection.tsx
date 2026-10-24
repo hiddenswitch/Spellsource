@@ -1,6 +1,7 @@
+import { useMutation, useQuery } from "@apollo/client/react";
 import PublicSiteLayout, { PublicPageHeader } from "../components/public-site-layout";
 import * as publicStyles from "../components/public-site-layout.module.scss";
-import { DeckFragment, useCreateDeckMutation, useGetClassesQuery, useGetDeckQuery, useGetDecksQuery } from "../__generated__/client";
+import { DeckFragment, CreateDeckDocument, GetClassesDocument, GetDeckDocument, GetDecksDocument } from "../__generated__/client";
 import React, { createContext, FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 import { getSession, useSession } from "next-auth/react";
 import Collection, { textDecorationStyle } from "../components/collection/collection";
@@ -39,7 +40,7 @@ export default () => {
   const [deckId, setDeckId] = useParam(router, "deckId");
   const [heroClass, setHeroClass] = useParam(router, "heroClass");
 
-  const getClasses = useGetClassesQuery({ variables: { filter: { collectible: { equalTo: true } } } });
+  const getClasses = useQuery(GetClassesDocument, { variables: { filter: { collectible: { equalTo: true } } } });
   const classes = useMemo(
     () =>
       _.chain(getClasses.data?.allClasses?.nodes ?? [])
@@ -68,7 +69,7 @@ export default () => {
     [getClasses.data]
   );
 
-  const getDecks = useGetDecksQuery({ variables: { user } });
+  const getDecks = useQuery(GetDecksDocument, { variables: { user } });
   const allDecks = [...(getDecks.data?.allDecks?.nodes ?? []), ...(getDecks.data?.allDeckShares?.nodes?.map((node) => node!.deckByDeckId) ?? [])];
   const decksById = useMemo(() => _.keyBy(allDecks, (value) => value!.id), [allDecks]);
   const selectedDeck = decksById[deckId];
@@ -86,11 +87,15 @@ export default () => {
     );
   };
 
-  const getDeck = useGetDeckQuery({
+  const getDeck = useQuery(GetDeckDocument, {
     variables: { deckId },
-    onCompleted: (data) => data.deckById?.cardsInDecksByDeckId?.nodes?.forEach((node) => (cache[node!.cardId] = node?.publishedCardByCardId?.cardBySuccession?.cardScript)),
     skip: !deckId,
   });
+  useEffect(() => {
+    getDeck.data?.deckById?.cardsInDecksByDeckId?.nodes?.forEach((node) => {
+      if (node) cache[node.cardId] = node.publishedCardByCardId?.cardBySuccession?.cardScript;
+    });
+  }, [getDeck.data, cache]);
   const deck = getDeck?.data?.deckById ?? getDeck?.previousData?.deckById;
 
   const realCards = useMemo(() => deck?.cardsInDecksByDeckId?.nodes?.map((node) => node!.cardId) ?? [], [deck]);
@@ -106,7 +111,7 @@ export default () => {
 
   const myDeck = deck && user && deck.createdBy === user;
 
-  const [createDeck] = useCreateDeckMutation();
+  const [createDeck] = useMutation(CreateDeckDocument);
 
   const createNewDeck = async (heroClass: string, className: string) => {
     const { data } = await createDeck({
@@ -150,7 +155,7 @@ export default () => {
                 <Offcanvas responsive={"lg"} show={show} onHide={() => setShow(false)} placement={"bottom"} scroll={true} backdrop={false} className={publicStyles.collectionDeckPanel}>
                   <OffcanvasBody>
                     {selectedDeck ? (
-                      <Deck user={user} deck={deck} myDeck={!!myDeck} cardIds={deckCards} cardActions={deckActions} getDecks={getDecks} getDeck={getDeck} classColors={classColors} setDeckId={setDeckId} realCards={realCards} />
+                      <Deck user={user} deck={deck ?? null} myDeck={!!myDeck} cardIds={deckCards} cardActions={deckActions} getDecks={getDecks} getDeck={getDeck} classColors={classColors} setDeckId={setDeckId} realCards={realCards} />
                     ) : (
                       <div className={"w-100"}>
                         {user && (

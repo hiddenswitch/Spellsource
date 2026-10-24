@@ -1,9 +1,10 @@
+import { useMutation, useSubscription } from "@apollo/client/react";
 import { useCallback, useReducer, useRef, useState } from 'react'
 import {
-  useGameMessagesSubscription,
-  useSendGameActionMutation,
-  useSendMulliganMutation,
-  useConcedeGameMutation,
+  GameMessagesDocument,
+  SendGameActionDocument,
+  SendMulliganDocument,
+  ConcedeGameDocument,
 } from '../../__generated__/client'
 import type { ServerGameMessage } from '../../__generated__/client'
 import { reduceGameMessage, createInitialState } from '../state/game-state-manager'
@@ -34,7 +35,7 @@ export function useGameConnection(options?: UseGameConnectionOptions): GameConne
 
   const { enqueue, activeEffects, revealedCard } = useAnimationQueue({ dispatch })
 
-  const { loading } = useGameMessagesSubscription({
+  const { loading } = useSubscription(GameMessagesDocument, {
     onError: failure => setError(failure.message),
     skip,
     onData: ({ data: { data } }) => {
@@ -44,9 +45,9 @@ export function useGameConnection(options?: UseGameConnectionOptions): GameConne
     },
   })
 
-  const [sendActionMutation] = useSendGameActionMutation()
-  const [sendMulliganMutation] = useSendMulliganMutation()
-  const [concedeMutation] = useConcedeGameMutation()
+  const [sendActionMutation] = useMutation(SendGameActionDocument)
+  const [sendMulliganMutation] = useMutation(SendMulliganDocument)
+  const [concedeMutation] = useMutation(ConcedeGameDocument)
 
   const submit = useCallback(async (messageId: string | undefined, operation: () => Promise<unknown>) => {
     if (!messageId || submitted.current.has(messageId)) return;

@@ -1,7 +1,8 @@
+import { useMutation, useQuery } from "@apollo/client/react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import Layout from "../components/creative-layout";
-import { useGetClassesQuery, useGetUserIdTestQuery, useStartRogueRunMutation } from "../__generated__/client";
+import { GetClassesDocument, GetUserIdTestDocument, StartRogueRunDocument } from "../__generated__/client";
 import { Container } from "react-bootstrap";
 import { Button } from "../components/typed-bootstrap";
 
@@ -10,7 +11,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => ({
 });
 
 export default () => {
-  const getHeroClass = useGetClassesQuery({
+  const getHeroClass = useQuery(GetClassesDocument, {
     variables: {
       filter: {
         collectible: { equalTo: true },
@@ -20,9 +21,9 @@ export default () => {
 
   const classes = getHeroClass?.data?.allClasses?.nodes;
 
-  useGetUserIdTestQuery({ onCompleted: (data) => console.log(data) });
+  useQuery(GetUserIdTestDocument);
 
-  const [startRogueRun] = useStartRogueRunMutation();
+  const [startRogueRun] = useMutation(StartRogueRunDocument);
 
   return (
     <Layout className={"overflow-hidden"}>

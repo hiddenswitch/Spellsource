@@ -1,3 +1,4 @@
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client/react";
 import React, { createContext, useMemo, useRef } from "react";
 import Layout from "../components/card-editor-layout";
 import * as styles from "../templates/template-styles.module.scss";
@@ -6,9 +7,8 @@ import { getAllArt, getAllBlockJson, getAllIcons } from "../lib/fs-utils";
 import { CardDef } from "../components/collection/card-display";
 import { fixArt } from "../lib/json-transforms";
 import { keyBy } from "lodash";
-import { Card, GeneratedArtFragment, GetCardsQuery, GetGeneratedArtQuery, useGetCardsQuery, useGetClassesQuery, useGetCollectionCardsLazyQuery, useGetGeneratedArtQuery, useSaveGeneratedArtMutation } from "../__generated__/client";
+import { Card, GeneratedArtFragment, GetCardsQuery, GetGeneratedArtQuery, GetCardsDocument, GetClassesDocument, GetCollectionCardsDocument, GetGeneratedArtDocument, SaveGeneratedArtDocument , GetCollectionCardsQuery, GetCollectionCardsQueryVariables, SaveGeneratedArtMutation, SaveGeneratedArtMutationVariables} from "../__generated__/client";
 import { useSession } from "next-auth/react";
-import { ApolloQueryResult } from "@apollo/client";
 import Head from "next/head";
 import { Spinner } from "react-bootstrap";
 import CardEditorWorkspace from "../components/card-editor-workspace";
@@ -32,18 +32,18 @@ export const BlocklyDataContext = createContext({ ready: false } as InferGetStat
   allArt: ImageDef[];
   generatedArt?: GeneratedArtFragment[];
   myCards: Partial<Card>[];
-  refreshMyCards?: () => Promise<ApolloQueryResult<GetCardsQuery>>;
+  refreshMyCards?: useQuery.Result<GetCardsQuery>["refetch"];
   userId: string | null | undefined;
-  getCollectionCards?: ReturnType<typeof useGetCollectionCardsLazyQuery>[0];
-  saveGeneratedArt?: ReturnType<typeof useSaveGeneratedArtMutation>[0];
-  refreshGeneratedArt?: () => Promise<ApolloQueryResult<GetGeneratedArtQuery>>;
+  getCollectionCards?: ReturnType<typeof useLazyQuery<GetCollectionCardsQuery, GetCollectionCardsQueryVariables>>[0];
+  saveGeneratedArt?: ReturnType<typeof useMutation<SaveGeneratedArtMutation, SaveGeneratedArtMutationVariables>>[0];
+  refreshGeneratedArt?: useQuery.Result<GetGeneratedArtQuery>["refetch"];
 });
 
 const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { data: session } = useSession();
   const userId = session?.token?.sub ?? "";
 
-  const getClasses = useGetClassesQuery({
+  const getClasses = useQuery(GetClassesDocument, {
     variables: {
       filter: {
         createdBy: { notEqualToInsensitive: userId },
@@ -51,7 +51,7 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
       },
     },
   });
-  const getMyCards = useGetCardsQuery({
+  const getMyCards = useQuery(GetCardsDocument, {
     variables: {
       filter: {
         isPublished: { equalTo: false },
@@ -59,8 +59,8 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     },
   });
 
-  const [getCollectionCards] = useGetCollectionCardsLazyQuery();
-  const [saveGeneratedArt] = useSaveGeneratedArtMutation();
+  const [getCollectionCards] = useLazyQuery(GetCollectionCardsDocument);
+  const [saveGeneratedArt] = useMutation(SaveGeneratedArtDocument);
 
   const classes = useMemo(() => {
     const cards = getClasses.data?.allClasses?.nodes ?? [];
@@ -77,7 +77,7 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     return cardsById;
   }, [getClasses.data]);
 
-  const getGeneratedArt = useGetGeneratedArtQuery();
+  const getGeneratedArt = useQuery(GetGeneratedArtDocument);
   const generatedArt = (getGeneratedArt.data?.allGeneratedArts?.nodes ?? []).flatMap((f) => (!!f ? [f] : []));
 
   const ready = Object.values(classes).length > 0 && getGeneratedArt.data && typeof window !== "undefined";
