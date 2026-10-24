@@ -664,7 +664,7 @@
   },
   "rc14_candidate": {
     "version": "0.10.15-rc.14",
-    "status": "local server validation passed; CI pending",
+    "status": "published source; hosted CI running",
     "changes": [
       "Jib 3.5.4 and Shadow 9.6.1 with complete merged service providers",
       "Utility library refresh",
@@ -681,6 +681,16 @@
     "remaining": [
       "CI publication and packaged acceptance",
       "Production promotion after database migration readiness"
-    ]
+    ],
+    "commit": "f1b714ffc40bbb6b55aab7c13ac110a456c1a162",
+    "ci": {
+      "server": 40105615128,
+      "website": 40105615131,
+      "gateway": 40105615426,
+      "tests_push": 40105615260,
+      "tests_pr": 40105618339,
+      "threejs_push": 40105615164,
+      "threejs_pr": 40105618284
+    }
   }
 }
