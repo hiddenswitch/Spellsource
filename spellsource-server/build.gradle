@@ -401,7 +401,7 @@ def spellsourceTags = ['latest', project.version.toString()]
 def spellsourceImage = 'ghcr.io/hiddenswitch/spellsource'
 jib {
   from {
-    image = "eclipse-temurin:25-jre-noble@sha256:3f2223fe04b750aa5a8179e29b5c9a1ddf7665fc9bb08bfe11ad01d143bc13a5"
+    image = "harbor.appmana.com/appmana-shared/java-runtime:1.0.0@sha256:6bd2c82657e8277be8ad3eecd95d17600e651c1aa437d83fa29e43ef4db4880e"
   }
   to {
     image = spellsourceImage
