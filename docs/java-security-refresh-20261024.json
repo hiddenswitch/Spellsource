@@ -692,5 +692,22 @@
       "threejs_push": 40105615164,
       "threejs_pr": 40105618284
     }
+  },
+  "utility_alignment": {
+    "status": "locally validated; not included in published rc14",
+    "versions": {
+      "commons-codec": "1.15 -> 1.23.0",
+      "jboss-logging": "3.6.2.Final -> 3.6.3.Final",
+      "jakarta.activation-api": "2.1.3 -> 2.1.4",
+      "wildfly-common": "1.5.1.Final -> 2.0.1"
+    },
+    "validation": "117 server tests; zero failures; three skipped; shadowJar passed",
+    "log": "/tmp/spellsource-utility-alignment.log",
+    "sources": [
+      "https://commons.apache.org/proper/commons-codec/changes.html",
+      "https://github.com/jboss-logging/jboss-logging/releases",
+      "https://repo.maven.apache.org/maven2/jakarta/activation/jakarta.activation-api/maven-metadata.xml",
+      "https://repo.maven.apache.org/maven2/org/wildfly/common/wildfly-common/maven-metadata.xml"
+    ]
   }
 }

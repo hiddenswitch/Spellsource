@@ -152,7 +152,7 @@ subprojects {
         }
 
         if (details.requested.group == 'org.jboss.logging' && details.requested.name == 'jboss-logging') {
-          details.useVersion '3.6.2.Final'
+          details.useVersion '3.6.3.Final'
         }
 
         if (details.requested.group == 'org.keycloak' && (details.requested.name == 'keycloak-admin-client' || details.requested.name == 'keycloak-client-common-synced')) {
@@ -188,7 +188,7 @@ subprojects {
         }
 
         if (details.requested.group == 'commons-codec') {
-          details.useVersion '1.15'
+          details.useVersion '1.23.0'
         }
 
         if (details.requested.group == 'org.jboss.resteasy') {
@@ -204,7 +204,7 @@ subprojects {
         }
 
         if (details.requested.group == 'jakarta.activation') {
-          details.useVersion "2.1.3"
+          details.useVersion "2.1.4"
         }
 
         if (details.requested.group == 'io.micrometer') {
@@ -253,7 +253,7 @@ subprojects {
         }
         
         if (details.requested.group == 'org.wildfly.common' && details.requested.name == 'wildfly-common') {
-          details.useVersion '1.5.1.Final'
+          details.useVersion '2.0.1'
         }
 
         if (details.requested.group == 'org.jspecify') {
