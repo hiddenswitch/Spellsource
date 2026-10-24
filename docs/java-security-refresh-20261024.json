@@ -70,6 +70,21 @@
           "RingmasterTests.testFiredancer"
         ],
         "limitation": "randomized failures not individually replayed against baseline"
+      },
+      "after_fixes": {
+        "result": "passed",
+        "counts": {
+          "tests": 27395,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 14
+        },
+        "fixes": [
+          "Declare Gatekeeper Sha aura value",
+          "Capture revert values before mutation in generated spell paths",
+          "Expire explicitly targeted enchantments",
+          "Recompile all game classes before bytecode weaving"
+        ]
       }
     },
     "generated_sources": "regenerated and compiled"
