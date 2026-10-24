@@ -88,5 +88,19 @@
       }
     },
     "generated_sources": "regenerated and compiled"
+  },
+  "clustering": {
+    "vertx": "5.2.2",
+    "infinispan": "16.3.1",
+    "jgroups": "5.5.7.Final",
+    "smallrye_common": "2.21.1",
+    "custom_adapter": "removed in favor of upstream InfinispanClusterManager",
+    "clustered_matchmaking": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "full_server_suite": "pending"
   }
 }

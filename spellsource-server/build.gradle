@@ -54,7 +54,7 @@ def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
 def jvmArgs = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=80.0', '-XX:+UseG1GC', '-XX:MinHeapFreeRatio=10', '-XX:MaxHeapFreeRatio=20', '-XX:-ShrinkHeapInSteps', '-XX:G1PeriodicGCInterval=10000']
 
 dependencies {
-  compileOnly 'org.infinispan:infinispan-component-annotations:15.0.11.Final'
+  compileOnly "org.infinispan:infinispan-component-annotations:$infinispanVersion"
 
   implementation project(':spellsource-common')
   implementation project(':spellsource-game')

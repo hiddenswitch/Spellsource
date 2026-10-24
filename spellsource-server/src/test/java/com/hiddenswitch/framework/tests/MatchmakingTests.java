@@ -7,7 +7,8 @@ import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Matchmaking;
 import com.hiddenswitch.framework.impl.Clustered;
 import com.hiddenswitch.framework.impl.ClusteredGames;
-import com.hiddenswitch.framework.impl.Infinispan15ClusterManager;
+import io.vertx.ext.cluster.infinispan.InfinispanClusterManager;
+import org.infinispan.manager.DefaultCacheManager;
 import com.hiddenswitch.framework.rpc.Hiddenswitch;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.GamesDao;
@@ -516,7 +517,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 						var cacheManager = Clustered.infinispanClusterManagerUdp(infinispanPort);
 						return Vertx.builder()
 								.with(Environment.vertxOptions())
-								.withClusterManager(new Infinispan15ClusterManager(cacheManager))
+								.withClusterManager(new InfinispanClusterManager(cacheManager))
 								.buildClustered();
 					} else {
 						Environment.setConfiguration(thisConfiguration.build());
@@ -532,7 +533,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 
 					return vt(vertx, () -> {
 						// wait for the infinispan membership to be correct
-						var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).clusterManager();
+						var clusterManager = (InfinispanClusterManager) ((VertxInternal) vertx).clusterManager();
 
 						while (clusterManager.getNodes().size() != serverVertices) {
 							await(Environment.sleep(vertx, 1000));
@@ -616,10 +617,10 @@ public class MatchmakingTests extends FrameworkTestBase {
 					var closed = new ArrayList<Future<Void>>();
 					if (vertexFuts.succeeded()) {
 						for (var vertx : vertexFuts.<Vertx>list()) {
-							var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).clusterManager();
+							var clusterManager = (InfinispanClusterManager) ((VertxInternal) vertx).clusterManager();
 							var closeFut = vertx.close();
 							if (clusterManager != null) {
-								var cacheManager = clusterManager.getCacheManager();
+								var cacheManager = ((DefaultCacheManager) clusterManager.getCacheContainer());
 								if (cacheManager != null) {
 									closeFut = closeFut.andThen(w -> {
 										try {
@@ -837,7 +838,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 					var cacheManager = Clustered.infinispanClusterManagerUdp(infinispanPort);
 					return Vertx.builder()
 							.with(Environment.vertxOptions())
-							.withClusterManager(new Infinispan15ClusterManager(cacheManager))
+							.withClusterManager(new InfinispanClusterManager(cacheManager))
 							.buildClustered();
 				}).toList());
 
@@ -846,7 +847,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 
 		vertexFuts
 				.compose(vertices -> join(vertices.<Vertx>list().stream().map(vertx -> vt(vertx, () -> {
-					var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).clusterManager();
+					var clusterManager = (InfinispanClusterManager) ((VertxInternal) vertx).clusterManager();
 					while (clusterManager.getNodes().size() != serverVertices) {
 						await(Environment.sleep(vertx, 500));
 					}
@@ -937,10 +938,10 @@ public class MatchmakingTests extends FrameworkTestBase {
 					var closed = new ArrayList<Future<Void>>();
 					if (vertexFuts.succeeded()) {
 						for (var vertx : vertexFuts.<Vertx>list()) {
-							var clusterManager = (Infinispan15ClusterManager) ((VertxInternal) vertx).clusterManager();
+							var clusterManager = (InfinispanClusterManager) ((VertxInternal) vertx).clusterManager();
 							var closeFut = vertx.close();
 							if (clusterManager != null) {
-								var cacheManager = clusterManager.getCacheManager();
+								var cacheManager = ((DefaultCacheManager) clusterManager.getCacheContainer());
 								if (cacheManager != null) {
 									closeFut = closeFut.andThen(w -> {
 										try {
