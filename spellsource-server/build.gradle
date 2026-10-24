@@ -399,14 +399,14 @@ test {
   }
 }
 
-def spellsourceTags = ['latest', project.version.toString()]
+def spellsourceTags = project.version.toString().contains('-') ? [project.version.toString()] : ['latest', project.version.toString()]
 def spellsourceImage = 'ghcr.io/hiddenswitch/spellsource'
 jib {
   from {
     image = "harbor.appmana.com/appmana-shared/java-runtime:1.0.0@sha256:6bd2c82657e8277be8ad3eecd95d17600e651c1aa437d83fa29e43ef4db4880e"
   }
   to {
-    image = spellsourceImage
+    image = "${spellsourceImage}:${project.version}"
     tags = spellsourceTags
     if (System.getenv('GITHUB_ACTIONS') != null) {
       auth {

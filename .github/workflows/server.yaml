@@ -1,7 +1,7 @@
 name: Build Server
 on:
   push:
-    branches: ['develop']
+    branches: ['develop', 'upgrade/security-release-*']
     tags: ['*']
     paths:
       - 'spellsource-server/**'

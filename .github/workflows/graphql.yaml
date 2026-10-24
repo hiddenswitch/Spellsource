@@ -2,7 +2,7 @@ name: Build GraphQL Gateway
 
 on:
   push:
-    branches: ['develop']
+    branches: ['develop', 'upgrade/security-release-*']
     paths:
       - spellsource-graphql/**
       - spellsource-server/src/main/resources/schema.graphqls
@@ -57,6 +57,8 @@ jobs:
           SOURCE_IMAGE="spellsource/graphql:${VERSION}"
           TARGET_IMAGE="ghcr.io/hiddenswitch/spellsource-graphql"
           docker tag "${SOURCE_IMAGE}" "${TARGET_IMAGE}:${VERSION}"
-          docker tag "${SOURCE_IMAGE}" "${TARGET_IMAGE}:latest"
           docker push "${TARGET_IMAGE}:${VERSION}"
-          docker push "${TARGET_IMAGE}:latest"
+          if [[ "$VERSION" != *-* ]]; then
+            docker tag "${SOURCE_IMAGE}" "${TARGET_IMAGE}:latest"
+            docker push "${TARGET_IMAGE}:latest"
+          fi

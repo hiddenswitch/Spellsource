@@ -1,7 +1,7 @@
 name: Build Website
 on:
   push:
-    branches: ['develop']
+    branches: ['develop', 'upgrade/security-release-*']
     paths:
       - spellsource-web/**
       - spellsource-threejs/**
@@ -38,7 +38,11 @@ jobs:
         run: |
           COMMIT_SHA=$(git rev-parse --short=7 HEAD)
           TIMESTAMP=$(date +%s)
-          echo "PROJECT_VERSION=${COMMIT_SHA}-${TIMESTAMP}" >> $GITHUB_ENV
+          if [[ "$GITHUB_REF_NAME" == upgrade/security-release-* ]]; then
+            echo "PROJECT_VERSION=candidate-${COMMIT_SHA}-${TIMESTAMP}" >> $GITHUB_ENV
+          else
+            echo "PROJECT_VERSION=${COMMIT_SHA}-${TIMESTAMP}" >> $GITHUB_ENV
+          fi
       - name: Build and push website image
         run: ./gradlew spellsource-web:githubDockerPush
         env:
