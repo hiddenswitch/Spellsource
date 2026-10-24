@@ -63,6 +63,15 @@ class WorkspaceUtils {
       }
     }
 
+    // Preserve the complete workspace graph used by the immutable root lockfile.
+    // Unused workspaces need manifests only; application dependencies above include source.
+    parentPackage.workspaces.each { String workspace ->
+      project.copy { CopySpec c ->
+        c.from "$parent.projectDir/$workspace/package.json"
+        c.into "$distDir/$workspace/"
+      }
+    }
+
     project.copy { CopySpec c ->
       c.from "$parent.projectDir/yarn.lock", "$parent.projectDir/package.json", "$parent.projectDir/tsconfig.json", "$parent.projectDir/.yarnrc.yml"
       c.into distDir
