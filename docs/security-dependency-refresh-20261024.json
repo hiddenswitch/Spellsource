@@ -1,5 +1,5 @@
 {
-  "candidate": "0.10.15-rc.3",
+  "candidate": "0.10.15-rc.4",
   "scope": "JavaScript workspaces runtime and development dependencies",
   "changes": {
     "grpc-js": "1.14.6",
@@ -10,7 +10,17 @@
     "transitive": "refreshed within declared ranges",
     "openapi-ts": "0.99.0",
     "yaml_parser_override": "@hey-api/json-schema-ref-parser/js-yaml 4.3.2 replaces upstream exact vulnerable 4.2.0 pin",
-    "deduplication": "gRPC and lodash resolve compatible consumers to updated versions"
+    "deduplication": "gRPC and lodash resolve compatible consumers to updated versions",
+    "typed-scss-modules": "8.1.1",
+    "unused_dependencies_removed": [
+      "@graphql-codegen/java",
+      "@graphql-codegen/java-resolvers",
+      "@graphql-codegen/c-sharp",
+      "@graphql-codegen/c-sharp-operations",
+      "@graphql-codegen/plugin-helpers direct dependency",
+      "@babel/preset-env",
+      "@babel/preset-typescript"
+    ]
   },
   "verification": {
     "website_production_build": "passed 52 pages",
@@ -23,7 +33,9 @@
       "schema": "AppMana ComfyUI openapi.yaml",
       "schema_sha256": "f3bf54f7618d09c8ab7403363de2d8cba060f957c9c347536736d177fd71857c",
       "result": "generated client passed TypeScript noEmit check targeting ES2022 with bundler module resolution"
-    }
+    },
+    "graphql_generation": "both configured generators passed with unchanged tracked output",
+    "scss_generation": "all source SCSS processed successfully into a temporary output directory"
   },
   "audit_before": {
     "low": 17,
@@ -33,8 +45,8 @@
   },
   "audit_after": {
     "low": 2,
-    "moderate": 28,
-    "high": 12,
+    "moderate": 21,
+    "high": 4,
     "critical": 0
   },
   "remaining_critical_packages": [],
@@ -42,5 +54,10 @@
     "Audit includes development tools and does not establish exploitability.",
     "Candidate CI and image acceptance remain required before promotion.",
     "Remaining advisories are not waived."
+  ],
+  "remaining_high_packages": [
+    "@nestjs/microservices",
+    "pacote",
+    "sigstore"
   ]
 }

@@ -98,8 +98,6 @@
     "webpack": "^5.76.2"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-typescript": "^7.21.0",
     "@graphql-codegen/cli": "7.4.6",
     "@graphql-codegen/typed-document-node": "7.2.0",
     "@graphql-codegen/typescript": "6.1.2",
@@ -129,7 +127,7 @@
     "prettier": "^3.4.2",
     "standard": "^16.0.3",
     "ts-jest": "^29.1.0",
-    "typed-scss-modules": "^7.1.0",
+    "typed-scss-modules": "8.1.1",
     "typescript": "5.9.3",
     "ws": "8.22.0"
   },
