@@ -98,7 +98,10 @@ public class Client {
 
 		readerFut.onSuccess(reader -> reader.handler(promise::tryComplete));
 		readerFut.onSuccess(reader -> reader.exceptionHandler(promise::tryFail));
-		readerFut.onFailure(promise::tryFail);
+		readerFut.onFailure(cause -> {
+			promise.tryFail(cause);
+			writerFut.tryFail(cause);
+		});
 
 		return writerFut.future()
 				.compose(writer -> {
@@ -146,8 +149,14 @@ public class Client {
 			}
 		}));
 
-		readerFut.onFailure(gameOverPromise::tryFail);
-		readerFut.onSuccess(reader -> reader.exceptionHandler(gameOverPromise::tryFail));
+		readerFut.onFailure(cause -> {
+			gameOverPromise.tryFail(cause);
+			writerPromise.tryFail(cause);
+		});
+		readerFut.onSuccess(reader -> {
+			reader.exceptionHandler(gameOverPromise::tryFail);
+			reader.endHandler(ignored -> gameOverPromise.tryFail("Game stream ended before ON_GAME_END"));
+		});
 
 		return writerFut
 				.compose(writer -> {

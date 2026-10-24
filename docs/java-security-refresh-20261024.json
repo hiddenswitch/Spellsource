@@ -717,5 +717,42 @@
       "https://repo.maven.apache.org/maven2/jakarta/activation/jakarta.activation-api/maven-metadata.xml",
       "https://repo.maven.apache.org/maven2/org/wildfly/common/wildfly-common/maven-metadata.xml"
     ]
+  },
+  "rc14_matchmaking_followup": {
+    "status": "cleanup and client failure contracts validated locally; original CI stall remains unproven fixed",
+    "fixes": [
+      "Close independently created test Vertx instances from JUnit teardown even if the future chain hangs",
+      "Fail playUntilGameOver when the stream ends before ON_GAME_END",
+      "Propagate subscription setup failures to pending writer promises in connectToGame and playUntilGameOver"
+    ],
+    "validation": {
+      "com.hiddenswitch.framework.tests.MatchmakingTests": {
+        "tests": "23",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "com.hiddenswitch.framework.tests.ClientGameStreamTests": {
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    },
+    "logs": [
+      "/tmp/spellsource-matchmaking-cleanup-diagnostics.log",
+      "/tmp/spellsource-client-stream-contract.log",
+      "/tmp/spellsource-matchmaking-final-check.log"
+    ],
+    "forced_timeout": {
+      "method": "Temporary injected stall after clustered gateways started; clustered test timeout reduced to 20 seconds only for the experiment",
+      "result": "Clustered test timed out as expected; subsequent testQuickPlay passed with no port-binding failure",
+      "report": "/tmp/spellsource-matchmaking-forced-timeout.xml",
+      "restored": true
+    },
+    "remaining": [
+      "Full server suite and packaged build",
+      "Next candidate hosted CI; investigate any remaining clustered stall"
+    ]
   }
 }

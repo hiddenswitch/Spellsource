@@ -30,6 +30,7 @@ import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.logic.GameLogic;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -58,6 +59,26 @@ import static org.junit.jupiter.api.Assertions.*;
 @Execution(ExecutionMode.SAME_THREAD)
 public class MatchmakingTests extends FrameworkTestBase {
 	private static Logger LOGGER = LoggerFactory.getLogger(MatchmakingTests.class);
+	private final List<Future<Vertx>> ownedVertices = new ArrayList<>();
+	private Hiddenswitch.ServerConfiguration originalClusterTestConfiguration;
+
+	@AfterEach
+	public void closeClusterTestVertices() throws Exception {
+		try {
+			// These instances are created by the test, so VertxExtension does not
+			// close them when the test times out before its future chain finishes.
+			var closes = ownedVertices.stream()
+					.map(created -> created.compose(Vertx::close)).toList();
+			if (!closes.isEmpty()) {
+				join(closes).toCompletionStage().toCompletableFuture().get(30, TimeUnit.SECONDS);
+			}
+		} finally {
+			if (originalClusterTestConfiguration != null) {
+				Environment.setConfiguration(originalClusterTestConfiguration);
+				System.getProperties().remove(GameLogic.GAMES_TURN_TIME_MILLIS);
+			}
+		}
+	}
 
 	protected Future<Void> startServices(Vertx vertx, Matchmaking matchmaker) {
 		return startGateway(vertx)
@@ -488,6 +509,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 
 	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext, int serverVertices, int clientsToDeploy) {
 		var configuration = Environment.getConfiguration();
+		originalClusterTestConfiguration = configuration;
 		// client configuration
 		var verticesToDeploy = (int) Math.ceil((double) clientsToDeploy / ((double) CpuCoreSensor.availableProcessors()));
 		// dedicated clients vertx
@@ -498,6 +520,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 		var clientVertices = IntStream
 				.range(0, verticesToDeploy)
 				.mapToObj(i -> Vertx.vertx(new VertxOptions().setEventLoopPoolSize(CpuCoreSensor.availableProcessors())))
+				.peek(vertx -> ownedVertices.add(Future.succeededFuture(vertx)))
 				.toList();
 
 		System.setProperty(GameLogic.GAMES_TURN_TIME_MILLIS, "6000");
@@ -523,7 +546,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 						Environment.setConfiguration(thisConfiguration.build());
 						return Future.succeededFuture(Vertx.vertx(Environment.vertxOptions()));
 					}
-				}).toList());
+				}).peek(ownedVertices::add).toList());
 
 		vertexFuts
 				.compose(vertices -> join(vertices.<Vertx>list().stream().map(vertx -> {
