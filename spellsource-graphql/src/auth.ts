@@ -32,7 +32,7 @@ export const authenticate: RequestHandler = (req: AuthRequest, res, next) => {
 
   req.token = token;
 
-  if (token == pgJwtSecret) {
+  if (pgJwtSecret && token === pgJwtSecret) {
     req.admin = true;
     next();
     return;
@@ -60,3 +60,10 @@ export const authenticate: RequestHandler = (req: AuthRequest, res, next) => {
     }
   );
 };
+
+// Always assume the restricted application role, including anonymous requests.
+// Leaving the role unset inherits the connection role and can bypass row policies.
+export const databaseSettings = (request: Pick<AuthRequest, "admin" | "auth">) => ({
+  role: request.admin ? "admin" : "website",
+  "user.id": request.auth?.sub ?? "",
+});

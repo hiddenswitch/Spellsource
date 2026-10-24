@@ -1,7 +1,7 @@
 name: Build Website
 on:
   push:
-    branches: ['develop']
+    branches: ['develop', 'upgrade/security-release-*']
     paths:
       - spellsource-web/**
       - spellsource-threejs/**
@@ -20,23 +20,29 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Checkout public submodules
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"
           git submodule update --init vertx-jooq-fork spellsource-ts-proto/ts-proto
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
-          java-version: '24'
+          java-version: '25.0.5+8.0.LTS'
           distribution: temurin
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 22
+          node-version: 26.12.1
+      - name: Install pinned Corepack
+        run: npm install --global corepack@0.36.0 && corepack enable
       - name: Set Project Version
         run: |
           COMMIT_SHA=$(git rev-parse --short=7 HEAD)
           TIMESTAMP=$(date +%s)
-          echo "PROJECT_VERSION=${COMMIT_SHA}-${TIMESTAMP}" >> $GITHUB_ENV
+          if [[ "$GITHUB_REF_NAME" == upgrade/security-release-* ]]; then
+            echo "PROJECT_VERSION=candidate-${COMMIT_SHA}-${TIMESTAMP}" >> $GITHUB_ENV
+          else
+            echo "PROJECT_VERSION=${COMMIT_SHA}-${TIMESTAMP}" >> $GITHUB_ENV
+          fi
       - name: Build and push website image
         run: ./gradlew spellsource-web:githubDockerPush
         env:

@@ -14,6 +14,8 @@ plugins {
   id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
   id "com.github.node-gradle.node"
 }
+def processOperations = objects.newInstance(com.spellsource.utils.ProcessOperations)
+
 
 apply from: "gradle/shell.gradle"
 apply from: "gradle/node.gradle"
@@ -24,7 +26,7 @@ dependencies {
 }
 
 allprojects {
-  project.version = '0.10.14'
+  project.version = '0.10.15-rc.6'
 }
 
 subprojects {
@@ -70,7 +72,7 @@ subprojects {
                 'com.fasterxml.jackson.module',
                 'com.fasterxml.jackson.dataformat'
         ].contains(details.requested.group)) {
-          details.useVersion jacksonVersion
+          details.useVersion(details.requested.name == 'jackson-annotations' ? jacksonAnnotationsVersion : jacksonVersion)
         }
 
         if (details.requested.group == 'io.netty'
@@ -104,8 +106,12 @@ subprojects {
           details.useVersion logbackVersion
         }
 
-        if (details.requested.group == 'log4j') {
+        if (details.requested.group == 'org.apache.logging.log4j') {
           details.useVersion log4jVersion
+        }
+
+        if (details.requested.group == 'log4j' && details.requested.name == 'log4j') {
+          details.useTarget "org.slf4j:log4j-over-slf4j:$slf4jVersion"
         }
 
         if (details.requested.module.name == 'mockito-core') {
@@ -303,28 +309,28 @@ tasks.register('venv') {
   }
 
   doLast {
-    exec {
+    processOperations.execOperations.exec {
       commandLine(shell + ["curl -LsSf https://astral.sh/uv/install.sh | sh"])
     }
     if (!file(".venv").exists()) {
-      exec {
+      processOperations.execOperations.exec {
         commandLine("uv", "venv", "--seed")
       }
     }
     def venvSrc = "source .venv/${isWindows ? "scripts" : "bin"}/activate"
-    exec {
+    processOperations.execOperations.exec {
       commandLine(shell + ["$venvSrc; uv pip install -U wheel Cython poetry setuptools"])
     }
     if (!isMacOs) {
-      exec {
+      processOperations.execOperations.exec {
         commandLine(shell + ["$venvSrc; uv pip install --no-build-isolation --no-deps xformers==$xformersVersion --index-url https://download.pytorch.org/whl/"])
       }
     }
-    exec {
+    processOperations.execOperations.exec {
       commandLine(shell + ["$venvSrc; uv pip install -U torch==${torchVersion}${isWindows ? "+cu121" : ""} torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/${isWindows || isLinux ? "cu121" : ""}"])
     }
     paths.forEach { pythonProjectPath ->
-      exec {
+      processOperations.execOperations.exec {
         commandLine(shell + ["$venvSrc; uv pip install --no-build-isolation -e '${pythonProjectPath}'"] as List<String>)
       }
     }

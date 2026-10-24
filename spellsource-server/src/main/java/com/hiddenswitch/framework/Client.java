@@ -128,10 +128,15 @@ public class Client {
 							.onFailure(gameOverPromise::tryFail);
 					break;
 				case ON_REQUEST_ACTION:
+					var actions = message.getActions();
+					if (actions.getCompatibilityCount() == 0) {
+						gameOverPromise.tryFail("Server offered no compatible game actions");
+						return;
+					}
 					writer.write(ClientToServerMessage.newBuilder()
 									.setMessageType(MessageType.UPDATE_ACTION)
 									.setRepliesTo(message.getId())
-									.setActionIndex(random.nextInt(message.getActions().getAllCount()))
+									.setActionIndex(actions.getCompatibility(random.nextInt(actions.getCompatibilityCount())))
 									.build())
 							.onFailure(gameOverPromise::tryFail);
 					break;

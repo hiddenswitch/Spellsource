@@ -1,5 +1,5 @@
 import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4";
+import { expressMiddleware } from "@as-integrations/express5";
 import {
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault,
@@ -57,7 +57,6 @@ export const setupApolloServer = async (app: Application, httpServer: Server): P
         return { token };
       },
       onOperation: (_msg: any, params: any) => {
-        console.log("[legacy-ws] operation started:", JSON.stringify(params.query?.substring(0, 200)));
         return params;
       },
       onDisconnect: () => {
@@ -86,10 +85,6 @@ export const setupApolloServer = async (app: Application, httpServer: Server): P
     console.log(`[ws-upgrade] routing to: ${wss === legacyWsServer ? "legacy" : "modern"}`);
 
     wss.handleUpgrade(req, socket, head, (ws) => {
-      // Log raw messages from the client
-      ws.on("message", (data) => {
-        console.log(`[ws-message] ${data.toString().substring(0, 500)}`);
-      });
       wss.emit("connection", ws, req);
     });
   });

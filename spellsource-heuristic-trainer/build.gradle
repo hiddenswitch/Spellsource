@@ -3,6 +3,8 @@ plugins {
     id 'application'
     id 'com.google.cloud.tools.jib' version '3.5.3'
 }
+def processOperations = objects.newInstance(com.spellsource.utils.ProcessOperations)
+
 
 apply from: '../gradle/instrument.gradle'
 
@@ -80,19 +82,19 @@ tasks.register('deployTrainer') {
     dependsOn 'jib', 'renderTrainer'
     doLast {
         // Preserve an existing run. Delete it explicitly before launching another.
-        exec { commandLine 'kubectl', 'create', '-f', renderedTrainer.get().asFile.absolutePath }
-        exec { commandLine 'kubectl', 'patch', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(),
+        processOperations.execOperations.exec { commandLine 'kubectl', 'create', '-f', renderedTrainer.get().asFile.absolutePath }
+        processOperations.execOperations.exec { commandLine 'kubectl', 'patch', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(),
             '--type=merge', '-p', '{"spec":{"suspend":false}}' }
     }
 }
 tasks.register('deleteTrainer') {
     group = 'deployment'
-    doLast { exec { commandLine 'kubectl', 'delete', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(), '--ignore-not-found' } }
+    doLast { processOperations.execOperations.exec { commandLine 'kubectl', 'delete', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(), '--ignore-not-found' } }
 }
 tasks.register('trainerStatus') {
     group = 'deployment'
     doLast {
-        exec { commandLine 'kubectl', 'get', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(), '-o', 'wide' }
-        exec { commandLine 'kubectl', 'get', 'pods', '-n', trainerNamespace.get(), '-l', 'jobset.sigs.k8s.io/jobset-name=gsvb-trainer' }
+        processOperations.execOperations.exec { commandLine 'kubectl', 'get', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(), '-o', 'wide' }
+        processOperations.execOperations.exec { commandLine 'kubectl', 'get', 'pods', '-n', trainerNamespace.get(), '-l', 'jobset.sigs.k8s.io/jobset-name=gsvb-trainer' }
     }
 }

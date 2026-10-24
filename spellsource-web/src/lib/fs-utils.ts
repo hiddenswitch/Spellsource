@@ -1,4 +1,4 @@
-import * as glob from "glob-promise";
+import { glob, globSync } from "glob";
 import path from "path";
 import fs from "fs";
 import probe from "probe-image-size";
@@ -12,7 +12,7 @@ import { ImageDef } from "./art-generation";
  * @param transform
  */
 export const readAllJson = async <T = any>(globPath: string, transform?: (json: T, file: string) => void) => {
-  const files = await glob.promise(path.join(process.cwd(), globPath));
+  const files = await glob(path.join(process.cwd(), globPath));
   return await Promise.all(
     files.map(async (file) => {
       const fileText = await fs.promises.readFile(file, { encoding: "utf8" });
@@ -29,7 +29,7 @@ export const readAllJson = async <T = any>(globPath: string, transform?: (json: 
 };
 
 export const readAllJsonSync = <T = any>(globPath: string, transform?: (json: T, file: string) => void) => {
-  const files = glob.sync(path.join(process.cwd(), globPath));
+  const files = globSync(path.join(process.cwd(), globPath));
   return files.map((file: string) => {
     const fileText = fs.readFileSync(file, { encoding: "utf8" });
     try {
@@ -49,7 +49,7 @@ export const readAllJsonSync = <T = any>(globPath: string, transform?: (json: T,
  */
 export const readAllImages = async (globPath: string) => {
   const publicPath = path.join(process.cwd(), "public");
-  const artFiles = await glob.promise(path.join(publicPath, "static", globPath));
+  const artFiles = await glob(path.join(publicPath, "static", globPath));
 
   return await Promise.all(
     artFiles.map(async (artPath) => {

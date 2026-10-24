@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/client/react";
 import React, { useEffect, useState } from "react";
 import PublicSiteLayout, { ContentPanel, EmptyState, PublicPageHeader } from "../components/public-site-layout";
 import { ListGroup } from "react-bootstrap";
@@ -5,7 +6,7 @@ import { useRouter } from "next/router";
 import { isArray } from "lodash";
 import { cardSearchNode } from "../hooks/use-index";
 import CardDisplay, { CardDef } from "../components/collection/card-display";
-import { useGetCollectionCardsQuery } from "../__generated__/client";
+import { GetCollectionCardsDocument } from "../__generated__/client";
 
 const SearchResults = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const SearchResults = () => {
 
   const [offset, setOffset] = useState(0);
 
-  const getCards = useGetCollectionCardsQuery({
+  const getCards = useQuery(GetCollectionCardsDocument, {
     variables: {
       offset,
       limit: 20,

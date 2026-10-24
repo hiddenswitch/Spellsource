@@ -19,6 +19,8 @@ plugins {
   id 'application'
   id "io.github.kobylynskyi.graphql.codegen" version "5.9.0"
 }
+def processOperations = objects.newInstance(com.spellsource.utils.ProcessOperations)
+
 
 apply from: '../gradle/instrument.gradle'
 
@@ -85,7 +87,7 @@ dependencies {
     exclude group: 'jakarta.xml.bind', module: '*'
     exclude group: 'jakarta.activation', module: '*'
   }
-  implementation("com.fasterxml.jackson.module:jackson-module-afterburner:$jacksonVersion") {
+  implementation("com.fasterxml.jackson.module:jackson-module-blackbird:$jacksonVersion") {
     exclude group: 'jakarta.xml.bind', module: '*'
     exclude group: 'jakarta.activation', module: '*'
   }
@@ -343,7 +345,7 @@ tasks.register('jooqGenerate') {
     )
     Thread.currentThread().setContextClassLoader(cl)
     GenerationTool.generate(configuration)
-    exec {
+    processOperations.execOperations.exec {
       // dump the generated ddl to a file
       workingDir project.projectDir
       // this is using docker-wrapped pg_dump
@@ -397,14 +399,14 @@ test {
   }
 }
 
-def spellsourceTags = ['latest', project.version.toString()]
+def spellsourceTags = project.version.toString().contains('-') ? [project.version.toString()] : ['latest', project.version.toString()]
 def spellsourceImage = 'ghcr.io/hiddenswitch/spellsource'
 jib {
   from {
-    image = "eclipse-temurin:24-ubi9-minimal"
+    image = "harbor.appmana.com/appmana-shared/java-runtime:1.0.0@sha256:6bd2c82657e8277be8ad3eecd95d17600e651c1aa437d83fa29e43ef4db4880e"
   }
   to {
-    image = spellsourceImage
+    image = "${spellsourceImage}:${project.version}"
     tags = spellsourceTags
     if (System.getenv('GITHUB_ACTIONS') != null) {
       auth {

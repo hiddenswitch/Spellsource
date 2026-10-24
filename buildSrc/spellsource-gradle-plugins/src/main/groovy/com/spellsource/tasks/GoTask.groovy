@@ -1,5 +1,8 @@
 package com.spellsource.tasks
 
+import javax.inject.Inject
+import org.gradle.process.ExecOperations
+
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.Task
 import org.gradle.api.file.RegularFileProperty
@@ -11,6 +14,9 @@ import org.gradle.api.tasks.SourceTask
 import org.gradle.process.ExecSpec
 
 abstract class GoTask extends SourceTask {
+  @Inject
+  abstract ExecOperations getExecOperations()
+
   @Input
   abstract ListProperty<String> getGoCommandLineArgs()
 
@@ -44,7 +50,7 @@ abstract class GoTask extends SourceTask {
     def wd = this.workingDir
     def env = this.environment
     doLast {
-      project.exec { ExecSpec spec ->
+      execOperations.exec { ExecSpec spec ->
         spec.environment("GOPATH", goPath)
         spec.environment("GOFLAGS", "-modcacherw")
         spec.workingDir(wd)

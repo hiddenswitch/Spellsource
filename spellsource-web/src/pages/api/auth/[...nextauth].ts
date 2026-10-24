@@ -5,7 +5,7 @@ import { clientId, clientSecret, issuer } from "../../../lib/config";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const NextOptions: NextAuthOptions = {
-  secret: "secret",
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
   },

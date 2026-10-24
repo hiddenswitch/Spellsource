@@ -1,0 +1,141 @@
+{
+  "candidate": "0.10.15-rc.6",
+  "scope": "JavaScript workspaces runtime and development dependencies",
+  "changes": {
+    "grpc-js": "1.14.6",
+    "aws-sdk-client-s3": "3.1156.0",
+    "playwright": "1.64.1",
+    "patch-package": "8.0.1",
+    "lodash": "4.18.1",
+    "transitive": "refreshed within declared ranges",
+    "openapi-ts": "0.99.0",
+    "yaml_parser_override": "@hey-api/json-schema-ref-parser/js-yaml 4.3.2 replaces upstream exact vulnerable 4.2.0 pin",
+    "deduplication": "gRPC and lodash resolve compatible consumers to updated versions",
+    "typed-scss-modules": "8.1.1",
+    "unused_dependencies_removed": [
+      "@graphql-codegen/java",
+      "@graphql-codegen/java-resolvers",
+      "@graphql-codegen/c-sharp",
+      "@graphql-codegen/c-sharp-operations",
+      "@graphql-codegen/plugin-helpers direct dependency",
+      "@babel/preset-env",
+      "@babel/preset-typescript"
+    ],
+    "ts_proto": "AppMana/ts-proto 6db0269; full regeneration and hosted build/lint passed",
+    "glob": "replace glob-promise with glob 13.0.6 native promise API",
+    "runtime_cleanup": "Removed unused node-fs-extra and switched art endpoint to native Node fetch"
+  },
+  "verification": {
+    "website_production_build": "passed 52 pages",
+    "gateway_build": "passed",
+    "gateway_tests": 7,
+    "threejs_tests": 4,
+    "openapi_generation": {
+      "version": "0.99.0",
+      "cli": "openapi-ts -i <schema> -o <temporary output> -c @hey-api/client-fetch",
+      "schema": "AppMana ComfyUI openapi.yaml",
+      "schema_sha256": "f3bf54f7618d09c8ab7403363de2d8cba060f957c9c347536736d177fd71857c",
+      "result": "generated client passed TypeScript noEmit check targeting ES2022 with bundler module resolution"
+    },
+    "graphql_generation": "both configured generators passed with unchanged tracked output",
+    "scss_generation": "all source SCSS processed successfully into a temporary output directory",
+    "ts_proto": {
+      "compiler": "passed in standalone and parent workspace",
+      "suites": 93,
+      "tests_passed": 303,
+      "tests_skipped": 4,
+      "snapshots": 94,
+      "pull_request": "https://github.com/AppMana/ts-proto/pull/1",
+      "hosted_ci": "build and lint passed for 6db0269",
+      "full_regeneration": "idempotent",
+      "typescript_configs": 5
+    },
+    "published_candidate_images": {
+      "website": "ghcr.io/hiddenswitch/spellsource/web@sha256:ded323819b9ad4a73ef781599d9e6484b512621ed6bb7e1d5983199cc59c717e",
+      "gateway": "ghcr.io/hiddenswitch/spellsource-graphql@sha256:15b82943e8f02891fa739a6050f0f1b959109e8ed53a3c61da64153d220d3b0b",
+      "login_and_collection": "passed",
+      "authorization_boundary_tests": 2,
+      "validated_graphql_operations": 126,
+      "gameplay": {
+        "status": 200,
+        "signed_in": true,
+        "has_access_token": true,
+        "error": false,
+        "mulligan_confirmed": true,
+        "game": {
+          "frames": {
+            "received": 29,
+            "errors": 0
+          },
+          "page_errors": [],
+          "graphql_responses": [
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            }
+          ],
+          "canvas_count": 1
+        },
+        "blocked_origins": [
+          "https://authjs.dev",
+          "https://fonts.googleapis.com"
+        ],
+        "conceded": true
+      }
+    },
+    "server_regressions": {
+      "art_registration_cache": "passed",
+      "two_games_in_row": "passed in isolation and full suite",
+      "checkpoint_explicit_end_turn": "passed in isolation",
+      "full_suite": {
+        "result": "passed",
+        "counts": {
+          "tests": 105,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 3
+        }
+      },
+      "legal_action_selection": "Client selects server-provided compatibility action IDs"
+    }
+  },
+  "audit_before": {
+    "low": 17,
+    "moderate": 81,
+    "high": 104,
+    "critical": 10
+  },
+  "audit_after": {
+    "low": 1,
+    "moderate": 12,
+    "high": 0,
+    "critical": 0
+  },
+  "remaining_critical_packages": [],
+  "limitations": [
+    "Audit includes development tools and does not establish exploitability.",
+    "Candidate CI and image acceptance remain required before promotion.",
+    "Remaining advisories are not waived."
+  ],
+  "remaining_high_packages": []
+}

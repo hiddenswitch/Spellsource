@@ -1,6 +1,8 @@
 plugins {
   id "base"
 }
+def processOperations = objects.newInstance(com.spellsource.utils.ProcessOperations)
+
 
 apply from: "$rootDir/gradle/python.gradle"
 
@@ -16,7 +18,7 @@ tasks.register('run') {
   dependsOn ':venv'
   doLast {
     // Run the comfyui binary from the virtual environment
-    exec {
+    processOperations.execOperations.exec {
       workingDir(layout.projectDirectory.dir("workdir"))
       commandLine([layout.projectDirectory.file("${scriptsDir}/comfyui${fileExt}").asFile.path, "--listen", "--enable-cors-header"])
     }

@@ -674,6 +674,7 @@ public class Environment {
 
 	private static final ConcurrentHashMap<String, byte[]> ART_BY_HASH = new ConcurrentHashMap<>();
 	private static final ConcurrentHashMap<String, String> ART_HASH_BY_NAME = new ConcurrentHashMap<>();
+	private static final java.util.concurrent.atomic.AtomicLong ART_REVISION = new java.util.concurrent.atomic.AtomicLong();
 	private static final AtomicBoolean ART_INDEX_INITIALIZED = new AtomicBoolean(false);
 
 	public static void ensureArtIndexInitialized() {
@@ -717,7 +718,12 @@ public class Environment {
 		if (name != null && !name.isEmpty()) {
 			ART_HASH_BY_NAME.put(name, hash);
 		}
+		ART_REVISION.incrementAndGet();
 		return hash;
+	}
+
+	public static long getArtRevision() {
+		return ART_REVISION.get();
 	}
 
 	public static @Nullable String getArtHashByName(@Nullable String name) {

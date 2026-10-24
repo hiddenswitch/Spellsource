@@ -255,7 +255,7 @@ export function useAnimationQueue({ dispatch }: AnimationQueueOptions) {
     return () => clearInterval(interval)
   }, [activeEffects.length, !!revealedCard])
 
-  const stepTimer = useRef<ReturnType<typeof setTimeout>>();
+  const stepTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useEffect(() => () => {
     clearTimeout(stepTimer.current);
     queueRef.current = [];

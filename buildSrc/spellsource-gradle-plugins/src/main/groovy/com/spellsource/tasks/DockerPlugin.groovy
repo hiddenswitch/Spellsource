@@ -1,5 +1,8 @@
 package com.spellsource.tasks
 
+import javax.inject.Inject
+import org.gradle.process.ExecOperations
+
 import com.bmuschko.gradle.docker.DockerExtension
 import com.bmuschko.gradle.docker.DockerRemoteApiPlugin
 import com.bmuschko.gradle.docker.tasks.container.*
@@ -15,7 +18,10 @@ import org.gradle.api.tasks.TaskProvider
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.ecr.EcrClient
 
-class DockerPlugin implements Plugin<Project> {
+abstract class DockerPlugin implements Plugin<Project> {
+  @Inject
+  abstract ExecOperations getExecOperations()
+
 
 
   @Override
@@ -68,7 +74,7 @@ class DockerPlugin implements Plugin<Project> {
           return false
         }
         def versionOutput = new ByteArrayOutputStream()
-        project.exec {
+        execOperations.exec {
           commandLine("docker", "version", "-f", "{{.Server.Os}}")
           standardOutput(versionOutput)
         }
@@ -79,7 +85,7 @@ class DockerPlugin implements Plugin<Project> {
           throw new GradleException('Cannot build or use Windows containers on non-Windows platforms, so dependencies on the Windows docker daemon cannot be used on your current platform')
         }
         if (project.file("C:\\Program Files\\Docker\\Docker\\DockerCli.exe").exists()) {
-          project.exec {
+          execOperations.exec {
             commandLine "C:\\Program Files\\Docker\\Docker\\DockerCli.exe", "-SwitchWindowsEngine"
           }
         }
@@ -91,14 +97,14 @@ class DockerPlugin implements Plugin<Project> {
           return false
         }
         def versionOutput = new ByteArrayOutputStream()
-        project.exec {
+        execOperations.exec {
           commandLine("docker", "version", "-f", "{{.Server.Os}}")
           standardOutput(versionOutput)
         }
         return !versionOutput.toString().trim().equalsIgnoreCase("linux")
       }
       doLast {
-        project.exec {
+        execOperations.exec {
           commandLine "C:\\Program Files\\Docker\\Docker\\DockerCli.exe", "-SwitchLinuxEngine"
         }
       }
@@ -257,7 +263,7 @@ class DockerPlugin implements Plugin<Project> {
                     }
 
                     ecrImages.forEach { tag ->
-                      project.exec {
+                      execOperations.exec {
                         commandLine "crane", "append", "--platform=${platformArchTuple.platform}/${platformArchTuple.dockerArch}", "-f", layerPath, "-t", tag, "-b", lastFrom
                       }
                     }
@@ -314,10 +320,10 @@ class DockerPlugin implements Plugin<Project> {
                 def commands = ["docker", "manifest", "create", latestTag] + ecrImages.collectMany { ["--amend", it] }
 
                 doLast {
-                  project.exec {
+                  execOperations.exec {
                     commandLine(commands)
                   }
-                  project.exec {
+                  execOperations.exec {
                     commandLine "docker", "manifest", "push", latestTag
                   }
                 }
@@ -338,7 +344,7 @@ class DockerPlugin implements Plugin<Project> {
                   project.file('/kaniko/.docker/config.json').text = "{ \"credsStore\": \"ecr-login\" }"
                 }
                 doLast {
-                  project.exec {
+                  execOperations.exec {
                     commandLine kanikoBin, "--dockerfile=${dockerFileFile.absolutePath}", "--context=${project.file(dockerFileFile.parent).absolutePath}", "--destination=${remoteDestination}"
                   }
                 }

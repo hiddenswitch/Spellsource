@@ -1,3 +1,4 @@
+import { useLazyQuery } from "@apollo/client/react";
 import React, {ChangeEvent, FormEvent, FunctionComponent, useEffect, useMemo, useRef, useState} from "react";
 import {Form, FormControl, ListGroup} from "react-bootstrap";
 import * as styles from "./creative-layout.module.scss";
@@ -6,7 +7,7 @@ import {SearchNode, useIndex} from "../hooks/use-index";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useDebounce} from "react-use";
-import {useGetCollectionCardsLazyQuery} from "../__generated__/client"; // Search component
+import {GetCollectionCardsDocument} from "../__generated__/client"; // Search component
 
 // Search component
 const Search: FunctionComponent<{
@@ -82,7 +83,7 @@ const Search: FunctionComponent<{
                 )*/
   };
 
-  const [getCards] = useGetCollectionCardsLazyQuery();
+  const [getCards] = useLazyQuery(GetCollectionCardsDocument);
 
   useDebounce(
     async () => {

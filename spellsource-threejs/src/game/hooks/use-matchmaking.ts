@@ -1,11 +1,12 @@
+import { useMutation, useQuery, useSubscription } from "@apollo/client/react";
 import { useCallback, useState } from 'react'
 import {
-  useGetMatchmakingQueuesQuery,
-  useGetGameDecksQuery,
-  useEnqueueMatchmakingMutation,
-  useCancelMatchmakingMutation,
-  useMatchFoundSubscription,
-  useConnectToGameMutation,
+  GetMatchmakingQueuesDocument,
+  GetGameDecksDocument,
+  EnqueueMatchmakingDocument,
+  CancelMatchmakingDocument,
+  MatchFoundDocument,
+  ConnectToGameDocument,
 } from '../../__generated__/client'
 
 export type MatchmakingPhase = 'idle' | 'searching' | 'connecting' | 'ready'
@@ -32,14 +33,14 @@ export function useMatchmaking() {
   const [phase, setPhase] = useState<MatchmakingPhase>('idle')
   const [error, setError] = useState<string | null>(null)
 
-  const { data: queuesData, loading: queuesLoading } = useGetMatchmakingQueuesQuery()
-  const { data: decksData, loading: decksLoading } = useGetGameDecksQuery()
-  const [enqueueMutation] = useEnqueueMatchmakingMutation()
-  const [cancelMutation] = useCancelMatchmakingMutation()
-  const [connectToGameMutation] = useConnectToGameMutation()
+  const { data: queuesData, loading: queuesLoading } = useQuery(GetMatchmakingQueuesDocument)
+  const { data: decksData, loading: decksLoading } = useQuery(GetGameDecksDocument)
+  const [enqueueMutation] = useMutation(EnqueueMatchmakingDocument)
+  const [cancelMutation] = useMutation(CancelMatchmakingDocument)
+  const [connectToGameMutation] = useMutation(ConnectToGameDocument)
 
   // Subscribe before enqueueing so a fast bot match cannot be missed.
-  useMatchFoundSubscription({
+  useSubscription(MatchFoundDocument, {
     skip: false,
     onError: failure => setError(failure.message),
     onData: async ({ data: { data } }) => {
