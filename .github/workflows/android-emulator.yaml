@@ -37,7 +37,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 24
+          java-version: '25.0.5+8'
       - name: Install workspace
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"

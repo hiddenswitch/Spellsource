@@ -27,7 +27,7 @@ jobs:
           git submodule update --init vertx-jooq-fork spellsource-ts-proto/ts-proto
       - uses: actions/setup-java@v4
         with:
-          java-version: '24'
+          java-version: '25.0.5+8'
           distribution: temurin
       - uses: actions/setup-node@v4
         with:

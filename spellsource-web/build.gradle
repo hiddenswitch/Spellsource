@@ -8,6 +8,8 @@ plugins {
   id "next"
   id "docker"
 }
+def processOperations = objects.newInstance(com.spellsource.utils.ProcessOperations)
+
 
 apply from: '../gradle/instrument.gradle'
 apply from: '../gradle/node.gradle'
@@ -136,13 +138,13 @@ tasks.register('githubDockerPush') {
 
   doLast {
     if (System.getenv('GITHUB_ACTIONS') != null) {
-      exec {
+      processOperations.execOperations.exec {
         commandLine 'docker', 'login', 'ghcr.io', '-u', System.getenv('GITHUB_ACTOR') ?: '', '--password-stdin'
         standardInput = new ByteArrayInputStream((System.getenv('GITHUB_TOKEN') ?: '').bytes)
       }
     }
     for (def image : spellsourceTags.collect { tag -> "$spellsourceImage:$tag" }) {
-      exec {
+      processOperations.execOperations.exec {
         commandLine(['docker', 'push'] + [image])
       }
     }

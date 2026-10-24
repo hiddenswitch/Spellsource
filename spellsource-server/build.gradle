@@ -19,6 +19,8 @@ plugins {
   id 'application'
   id "io.github.kobylynskyi.graphql.codegen" version "5.9.0"
 }
+def processOperations = objects.newInstance(com.spellsource.utils.ProcessOperations)
+
 
 apply from: '../gradle/instrument.gradle'
 
@@ -343,7 +345,7 @@ tasks.register('jooqGenerate') {
     )
     Thread.currentThread().setContextClassLoader(cl)
     GenerationTool.generate(configuration)
-    exec {
+    processOperations.execOperations.exec {
       // dump the generated ddl to a file
       workingDir project.projectDir
       // this is using docker-wrapped pg_dump
