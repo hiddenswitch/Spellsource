@@ -3,7 +3,7 @@ package com.hiddenswitch.framework.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.smile.SmileFactory;
-import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+import com.fasterxml.jackson.module.blackbird.BlackbirdModule;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.MessageCodec;
 
@@ -15,7 +15,7 @@ public final class JsonMessageCodec<T> implements MessageCodec<T, T> {
 
 	static {
 		mapper = new ObjectMapper(new SmileFactory());
-		mapper.registerModule(new AfterburnerModule());
+		mapper.registerModule(new BlackbirdModule());
 	}
 
 	private final Class<T> target;

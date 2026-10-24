@@ -72,7 +72,7 @@ subprojects {
                 'com.fasterxml.jackson.module',
                 'com.fasterxml.jackson.dataformat'
         ].contains(details.requested.group)) {
-          details.useVersion jacksonVersion
+          details.useVersion(details.requested.name == 'jackson-annotations' ? jacksonAnnotationsVersion : jacksonVersion)
         }
 
         if (details.requested.group == 'io.netty'
@@ -106,8 +106,12 @@ subprojects {
           details.useVersion logbackVersion
         }
 
-        if (details.requested.group == 'log4j') {
+        if (details.requested.group == 'org.apache.logging.log4j') {
           details.useVersion log4jVersion
+        }
+
+        if (details.requested.group == 'log4j' && details.requested.name == 'log4j') {
+          details.useTarget "org.slf4j:log4j-over-slf4j:$slf4jVersion"
         }
 
         if (details.requested.module.name == 'mockito-core') {

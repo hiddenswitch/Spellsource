@@ -1,0 +1,35 @@
+{
+  "jackson": "2.22.4",
+  "jackson_annotations": "2.22",
+  "log4j": "2.26.1",
+  "codec_module": "Blackbird",
+  "changes": [
+    "Correct Log4j Maven group alignment",
+    "Bridge legacy log4j dependencies through SLF4J",
+    "Align integration gateway Node with production 26.12.1"
+  ],
+  "regression_tests": [
+    {
+      "name": "com.hiddenswitch.framework.tests.DiffTests",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hiddenswitch.framework.tests.ConfigurationTests",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "1"
+    },
+    {
+      "name": "com.hiddenswitch.framework.tests.JsonMessageCodecTests",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "full_server_suite": "pending"
+}

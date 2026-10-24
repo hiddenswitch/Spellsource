@@ -87,7 +87,7 @@ dependencies {
     exclude group: 'jakarta.xml.bind', module: '*'
     exclude group: 'jakarta.activation', module: '*'
   }
-  implementation("com.fasterxml.jackson.module:jackson-module-afterburner:$jacksonVersion") {
+  implementation("com.fasterxml.jackson.module:jackson-module-blackbird:$jacksonVersion") {
     exclude group: 'jakarta.xml.bind', module: '*'
     exclude group: 'jakarta.activation', module: '*'
   }
