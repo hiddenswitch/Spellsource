@@ -4,7 +4,7 @@ import { JWT } from "next-auth/jwt";
 import { clientId, clientSecret, issuer } from "../../../lib/config";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const NextOptions: NextAuthOptions = {
+export const NextOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",

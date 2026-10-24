@@ -1,26 +1,18 @@
+import { getServerSession } from "next-auth";
+import { NextOptions } from "./api/auth/[...nextauth]";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
+
 import Layout from "../components/creative-layout";
-import { GetClassesDocument, GetUserIdTestDocument, StartRogueRunDocument } from "../__generated__/client";
+import { GetUserIdTestDocument, StartRogueRunDocument } from "../__generated__/client";
 import { Container } from "react-bootstrap";
 import { Button } from "../components/typed-bootstrap";
 
 export const getServerSideProps: GetServerSideProps = async (context) => ({
-  props: { session: await getSession(context) },
+  props: { session: await getServerSession(context.req, context.res, NextOptions) },
 });
 
 export default () => {
-  const getHeroClass = useQuery(GetClassesDocument, {
-    variables: {
-      filter: {
-        collectible: { equalTo: true },
-      },
-    },
-  });
-
-  const classes = getHeroClass?.data?.allClasses?.nodes;
-
   useQuery(GetUserIdTestDocument);
 
   const [startRogueRun] = useMutation(StartRogueRunDocument);

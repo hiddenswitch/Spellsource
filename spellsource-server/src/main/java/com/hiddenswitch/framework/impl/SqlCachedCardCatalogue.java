@@ -85,7 +85,12 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 	private volatile GameContext workingContext;
 	private boolean sharedPerVertx;
 	private Promise<Void> initializedPromise;
+	private final Map<String, String> lastModifiedByCard = new ConcurrentHashMap<>();
 	private Future<Void> pendingCardRefresh = Future.succeededFuture();
+
+	public String getCardLastModified(String cardId) {
+		return lastModifiedByCard.get(cardId);
+	}
 
 	public static SqlCachedCardCatalogue forVertx() {
 		return VERTX_CATALOGUES.get();
@@ -163,6 +168,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		gitUserId = resolvedGitUserId;
 		try {
 			invalidated.clear();
+			lastModifiedByCard.clear();
 			copyFrom(baseCatalogue);
 			CARD_LOADS.increment(baseCatalogue.getCards().size());
 
@@ -228,6 +234,9 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		var cardDescs = cardDbRecords.stream()
 				.map(card -> {
 					try {
+						if (card.getLastModified() != null) {
+							lastModifiedByCard.put(card.getId(), card.getLastModified().toString());
+						}
 						var cardJson = card.getCardScript().put("id", card.getId());
 						var cardDesc = cardJson.mapTo(CardDesc.class);
 						// todo: should there be a dedicated metadata field for this? it could be mutated by buggy code
@@ -283,6 +292,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 						var gitCards = getBaseGitCatalogue(gitUserId).getCards();
 						for (var id : withdrawn) {
 							removeCard(id);
+							lastModifiedByCard.remove(id);
 							var gitCard = gitCards.get(id);
 							if (gitCard != null) {
 								loadCards(List.of(gitCard.getDesc()));

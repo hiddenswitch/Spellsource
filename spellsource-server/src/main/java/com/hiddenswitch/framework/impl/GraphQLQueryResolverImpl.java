@@ -61,11 +61,21 @@ public class GraphQLQueryResolverImpl implements QueryResolver, GraphQLQueryReso
 			.filter(card -> !card.hasAttribute(Attribute.ARCHIVED))
 			.filter(card -> !"TEST".equals(card.getDesc().getSet()))
 			.sorted(Comparator.comparing(card -> card.getCardId()))
-			.map(card -> new CatalogueCard.Builder()
+			.map(card -> {
+				var script = JsonObject.mapFrom(card.getDesc());
+				var attributes = script.getJsonObject("attributes");
+				if (attributes != null) {
+					attributes.remove("CREATED_BY_USER_ID");
+					attributes.remove("PUBLISHED");
+					attributes.remove("ARCHIVED");
+				}
+				return new CatalogueCard.Builder()
 				.setId(card.getCardId())
+				.setLastModified(cardCatalogue.getCardLastModified(card.getCardId()))
 				.setCreatedBy((String) card.getDesc().getAttributes().get(Attribute.CREATED_BY_USER_ID))
-				.setCardScript(JsonObject.mapFrom(card.getDesc()).getMap())
-				.build())
+				.setCardScript(script.getMap())
+				.build();
+			})
 			.toList();
 		return Future.succeededFuture(cards);
 	}

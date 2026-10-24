@@ -22,7 +22,7 @@ export type Scalars = {
    * to unexpected results.
    */
   Datetime: { input: any; output: any; }
-  /** Represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  /** A JSON scalar */
   JSON: { input: any; output: any; }
 };
 
@@ -186,6 +186,7 @@ export type Card = Node & {
   createdBy: Scalars['String']['output'];
   id: Scalars['String']['output'];
   isArchived: Scalars['Boolean']['output'];
+  isPrivate: Scalars['Boolean']['output'];
   isPublished: Scalars['Boolean']['output'];
   lastModified: Scalars['Datetime']['output'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
@@ -227,6 +228,8 @@ export type CardCondition = {
   id?: InputMaybe<Scalars['String']['input']>;
   /** Checks for equality with the object’s `isArchived` field. */
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Checks for equality with the object’s `isPrivate` field. */
+  isPrivate?: InputMaybe<Scalars['Boolean']['input']>;
   /** Checks for equality with the object’s `isPublished` field. */
   isPublished?: InputMaybe<Scalars['Boolean']['input']>;
   /** Checks for equality with the object’s `lastModified` field. */
@@ -247,10 +250,6 @@ export type CardEvent = {
 export type CardFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<CardFilter>>;
-  /** Filter by the object’s `blocklyWorkspace` field. */
-  blocklyWorkspace?: InputMaybe<JsonFilter>;
-  /** Filter by the object’s `cardScript` field. */
-  cardScript?: InputMaybe<JsonFilter>;
   /** Filter by the object’s `createdAt` field. */
   createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `createdBy` field. */
@@ -259,6 +258,8 @@ export type CardFilter = {
   id?: InputMaybe<StringFilter>;
   /** Filter by the object’s `isArchived` field. */
   isArchived?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `isPrivate` field. */
+  isPrivate?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `isPublished` field. */
   isPublished?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `lastModified` field. */
@@ -285,6 +286,7 @@ export type CardInput = {
   createdBy: Scalars['String']['input'];
   id: Scalars['String']['input'];
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+  isPrivate?: InputMaybe<Scalars['Boolean']['input']>;
   isPublished?: InputMaybe<Scalars['Boolean']['input']>;
   lastModified?: InputMaybe<Scalars['Datetime']['input']>;
   /**
@@ -303,6 +305,7 @@ export type CardPatch = {
   createdBy?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+  isPrivate?: InputMaybe<Scalars['Boolean']['input']>;
   isPublished?: InputMaybe<Scalars['Boolean']['input']>;
   lastModified?: InputMaybe<Scalars['Datetime']['input']>;
   /**
@@ -313,7 +316,6 @@ export type CardPatch = {
   uri?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** ─── Card catalogue ─────────────────────────────────────────── */
 export type CardRecord = {
   __typename?: 'CardRecord';
   cardId?: Maybe<Scalars['String']['output']>;
@@ -383,8 +385,6 @@ export type CardsInDeck = Node & {
   id: Scalars['BigInt']['output'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID']['output'];
-  /** Reads a single `PublishedCard` that is related to this `CardsInDeck`. */
-  publishedCardByCardId?: Maybe<PublishedCard>;
 };
 
 /**
@@ -416,8 +416,6 @@ export type CardsInDeckFilter = {
   not?: InputMaybe<CardsInDeckFilter>;
   /** Checks for any expressions in this list. */
   or?: InputMaybe<Array<CardsInDeckFilter>>;
-  /** Filter by the object’s `publishedCardByCardId` relation. */
-  publishedCardByCardId?: InputMaybe<PublishedCardFilter>;
 };
 
 /** An input for mutations affecting `CardsInDeck` */
@@ -486,6 +484,8 @@ export const CardsOrderBy = {
   IdDesc: 'ID_DESC',
   IsArchivedAsc: 'IS_ARCHIVED_ASC',
   IsArchivedDesc: 'IS_ARCHIVED_DESC',
+  IsPrivateAsc: 'IS_PRIVATE_ASC',
+  IsPrivateDesc: 'IS_PRIVATE_DESC',
   IsPublishedAsc: 'IS_PUBLISHED_ASC',
   IsPublishedDesc: 'IS_PUBLISHED_DESC',
   LastModifiedAsc: 'LAST_MODIFIED_ASC',
@@ -500,6 +500,15 @@ export const CardsOrderBy = {
 } as const;
 
 export type CardsOrderBy = typeof CardsOrderBy[keyof typeof CardsOrderBy];
+/** Published card definitions from the combined Git and database catalogue. */
+export type CatalogueCard = {
+  __typename?: 'CatalogueCard';
+  cardScript: Scalars['JSON']['output'];
+  createdBy?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  lastModified?: Maybe<Scalars['String']['output']>;
+};
+
 export type Class = {
   __typename?: 'Class';
   cardScript?: Maybe<Scalars['JSON']['output']>;
@@ -533,8 +542,6 @@ export type ClassCondition = {
 export type ClassFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<ClassFilter>>;
-  /** Filter by the object’s `cardScript` field. */
-  cardScript?: InputMaybe<JsonFilter>;
   /** Filter by the object’s `class` field. */
   class?: InputMaybe<StringFilter>;
   /** Filter by the object’s `collectible` field. */
@@ -653,10 +660,6 @@ export type CollectionCardCondition = {
 export type CollectionCardFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<CollectionCardFilter>>;
-  /** Filter by the object’s `blocklyWorkspace` field. */
-  blocklyWorkspace?: InputMaybe<JsonFilter>;
-  /** Filter by the object’s `cardScript` field. */
-  cardScript?: InputMaybe<JsonFilter>;
   /** Filter by the object’s `class` field. */
   class?: InputMaybe<StringFilter>;
   /** Filter by the object’s `collectible` field. */
@@ -809,8 +812,6 @@ export type CreateCardsInDeckPayload = {
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Reads a single `Deck` that is related to this `CardsInDeck`. */
   deckByDeckId?: Maybe<Deck>;
-  /** Reads a single `PublishedCard` that is related to this `CardsInDeck`. */
-  publishedCardByCardId?: Maybe<PublishedCard>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
@@ -1372,8 +1373,6 @@ export type DeleteCardsInDeckPayload = {
   /** Reads a single `Deck` that is related to this `CardsInDeck`. */
   deckByDeckId?: Maybe<Deck>;
   deletedCardsInDeckId?: Maybe<Scalars['ID']['output']>;
-  /** Reads a single `PublishedCard` that is related to this `CardsInDeck`. */
-  publishedCardByCardId?: Maybe<PublishedCard>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
@@ -1776,8 +1775,6 @@ export type GeneratedArtFilter = {
   and?: InputMaybe<Array<GeneratedArtFilter>>;
   /** Filter by the object’s `hash` field. */
   hash?: InputMaybe<StringFilter>;
-  /** Filter by the object’s `info` field. */
-  info?: InputMaybe<JsonFilter>;
   /** Filter by the object’s `isArchived` field. */
   isArchived?: InputMaybe<BooleanFilter>;
   /** Negates the expression. */
@@ -2015,42 +2012,6 @@ export const InviteStatus = {
 } as const;
 
 export type InviteStatus = typeof InviteStatus[keyof typeof InviteStatus];
-/** A filter to be used against JSON fields. All fields are combined with a logical ‘and.’ */
-export type JsonFilter = {
-  /** Contained by the specified JSON. */
-  containedBy?: InputMaybe<Scalars['JSON']['input']>;
-  /** Contains the specified JSON. */
-  contains?: InputMaybe<Scalars['JSON']['input']>;
-  /** Contains all of the specified keys. */
-  containsAllKeys?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** Contains any of the specified keys. */
-  containsAnyKeys?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** Contains the specified key. */
-  containsKey?: InputMaybe<Scalars['String']['input']>;
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['JSON']['input']>;
-  /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['JSON']['input']>;
-  /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['JSON']['input']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['JSON']['input']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['JSON']['input']>>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']['input']>;
-  /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['JSON']['input']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['JSON']['input']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['JSON']['input']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['JSON']['input']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['JSON']['input']>>;
-};
-
 export type LoginInput = {
   password: Scalars['String']['input'];
   usernameOrEmail: Scalars['String']['input'];
@@ -2616,24 +2577,10 @@ export type PublishedCard = Node & {
   __typename?: 'PublishedCard';
   /** Reads a single `Card` that is related to this `PublishedCard`. */
   cardBySuccession?: Maybe<Card>;
-  /** Reads and enables pagination through a set of `CardsInDeck`. */
-  cardsInDecksByCardId: CardsInDecksConnection;
   id: Scalars['String']['output'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID']['output'];
   succession: Scalars['BigInt']['output'];
-};
-
-
-export type PublishedCardCardsInDecksByCardIdArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>;
-  before?: InputMaybe<Scalars['Cursor']['input']>;
-  condition?: InputMaybe<CardsInDeckCondition>;
-  filter?: InputMaybe<CardsInDeckFilter>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Array<CardsInDecksOrderBy>>;
 };
 
 /**
@@ -2653,10 +2600,6 @@ export type PublishedCardFilter = {
   and?: InputMaybe<Array<PublishedCardFilter>>;
   /** Filter by the object’s `cardBySuccession` relation. */
   cardBySuccession?: InputMaybe<CardFilter>;
-  /** Filter by the object’s `cardsInDecksByCardId` relation. */
-  cardsInDecksByCardId?: InputMaybe<PublishedCardToManyCardsInDeckFilter>;
-  /** Some related `cardsInDecksByCardId` exist. */
-  cardsInDecksByCardIdExist?: InputMaybe<Scalars['Boolean']['input']>;
   /** Filter by the object’s `id` field. */
   id?: InputMaybe<StringFilter>;
   /** Negates the expression. */
@@ -2677,16 +2620,6 @@ export type PublishedCardInput = {
 export type PublishedCardPatch = {
   id?: InputMaybe<Scalars['String']['input']>;
   succession?: InputMaybe<Scalars['BigInt']['input']>;
-};
-
-/** A filter to be used against many `CardsInDeck` object types. All fields are combined with a logical ‘and.’ */
-export type PublishedCardToManyCardsInDeckFilter = {
-  /** Every related `CardsInDeck` matches the filter criteria. All fields are combined with a logical ‘and.’ */
-  every?: InputMaybe<CardsInDeckFilter>;
-  /** No related `CardsInDeck` matches the filter criteria. All fields are combined with a logical ‘and.’ */
-  none?: InputMaybe<CardsInDeckFilter>;
-  /** Some related `CardsInDeck` matches the filter criteria. All fields are combined with a logical ‘and.’ */
-  some?: InputMaybe<CardsInDeckFilter>;
 };
 
 /** A connection to a list of `PublishedCard` values. */
@@ -2767,13 +2700,14 @@ export type Query = Node & {
   card?: Maybe<Card>;
   /** Get a single `Card`. */
   cardBySuccession?: Maybe<Card>;
-  /** cards */
   cards: GetCardsResponse;
   cardsByUser: GetCardsResponse;
   /** Reads a single `CardsInDeck` using its globally unique `ID`. */
   cardsInDeck?: Maybe<CardsInDeck>;
   /** Get a single `CardsInDeck`. */
   cardsInDeckById?: Maybe<CardsInDeck>;
+  /** cards */
+  catalogueCards: Array<CatalogueCard>;
   configuration: ClientConfiguration;
   currentRogueChoice?: Maybe<RogueChoice>;
   /** rogue (existing) */
@@ -3368,8 +3302,6 @@ export type RogueRunCondition = {
   lives?: InputMaybe<Scalars['Int']['input']>;
   /** Checks for equality with the object’s `opponentDeck` field. */
   opponentDeck?: InputMaybe<Scalars['String']['input']>;
-  /** Checks for equality with the object’s `opponentInfo` field. */
-  opponentInfo?: InputMaybe<Scalars['String']['input']>;
   /** Checks for equality with the object’s `player` field. */
   player?: InputMaybe<Scalars['String']['input']>;
   /** Checks for equality with the object’s `rerollsThisRound` field. */
@@ -3916,8 +3848,6 @@ export type UpdateCardsInDeckPayload = {
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Reads a single `Deck` that is related to this `CardsInDeck`. */
   deckByDeckId?: Maybe<Deck>;
-  /** Reads a single `PublishedCard` that is related to this `CardsInDeck`. */
-  publishedCardByCardId?: Maybe<PublishedCard>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
@@ -4208,6 +4138,7 @@ export type ResolversTypes = {
   CardsInDecksEdge: ResolverTypeWrapper<Partial<CardsInDecksEdge>>;
   CardsInDecksOrderBy: ResolverTypeWrapper<Partial<CardsInDecksOrderBy>>;
   CardsOrderBy: ResolverTypeWrapper<Partial<CardsOrderBy>>;
+  CatalogueCard: ResolverTypeWrapper<Partial<CatalogueCard>>;
   Class: ResolverTypeWrapper<Partial<Class>>;
   ClassCondition: ResolverTypeWrapper<Partial<ClassCondition>>;
   ClassFilter: ResolverTypeWrapper<Partial<ClassFilter>>;
@@ -4310,7 +4241,6 @@ export type ResolversTypes = {
   InviteResponse: ResolverTypeWrapper<Partial<InviteResponse>>;
   InviteStatus: ResolverTypeWrapper<Partial<InviteStatus>>;
   JSON: ResolverTypeWrapper<Partial<Scalars['JSON']['output']>>;
-  JSONFilter: ResolverTypeWrapper<Partial<JsonFilter>>;
   LoginInput: ResolverTypeWrapper<Partial<LoginInput>>;
   LoginOrCreateReply: ResolverTypeWrapper<Partial<Omit<LoginOrCreateReply, 'userEntity'> & { userEntity?: Maybe<ResolversTypes['UserEntity']> }>>;
   MatchFound: ResolverTypeWrapper<Partial<MatchFound>>;
@@ -4331,7 +4261,6 @@ export type ResolversTypes = {
   PublishedCardFilter: ResolverTypeWrapper<Partial<PublishedCardFilter>>;
   PublishedCardInput: ResolverTypeWrapper<Partial<PublishedCardInput>>;
   PublishedCardPatch: ResolverTypeWrapper<Partial<PublishedCardPatch>>;
-  PublishedCardToManyCardsInDeckFilter: ResolverTypeWrapper<Partial<PublishedCardToManyCardsInDeckFilter>>;
   PublishedCardsConnection: ResolverTypeWrapper<Partial<PublishedCardsConnection>>;
   PublishedCardsEdge: ResolverTypeWrapper<Partial<PublishedCardsEdge>>;
   PublishedCardsOrderBy: ResolverTypeWrapper<Partial<PublishedCardsOrderBy>>;
@@ -4424,6 +4353,7 @@ export type ResolversParentTypes = {
   CardsInDeckPatch: Partial<CardsInDeckPatch>;
   CardsInDecksConnection: Partial<CardsInDecksConnection>;
   CardsInDecksEdge: Partial<CardsInDecksEdge>;
+  CatalogueCard: Partial<CatalogueCard>;
   Class: Partial<Class>;
   ClassCondition: Partial<ClassCondition>;
   ClassFilter: Partial<ClassFilter>;
@@ -4513,7 +4443,6 @@ export type ResolversParentTypes = {
   InvitePostInput: Partial<InvitePostInput>;
   InviteResponse: Partial<InviteResponse>;
   JSON: Partial<Scalars['JSON']['output']>;
-  JSONFilter: Partial<JsonFilter>;
   LoginInput: Partial<LoginInput>;
   LoginOrCreateReply: Partial<Omit<LoginOrCreateReply, 'userEntity'> & { userEntity?: Maybe<ResolversParentTypes['UserEntity']> }>;
   MatchFound: Partial<MatchFound>;
@@ -4531,7 +4460,6 @@ export type ResolversParentTypes = {
   PublishedCardFilter: Partial<PublishedCardFilter>;
   PublishedCardInput: Partial<PublishedCardInput>;
   PublishedCardPatch: Partial<PublishedCardPatch>;
-  PublishedCardToManyCardsInDeckFilter: Partial<PublishedCardToManyCardsInDeckFilter>;
   PublishedCardsConnection: Partial<PublishedCardsConnection>;
   PublishedCardsEdge: Partial<PublishedCardsEdge>;
   PutCardInput: Partial<PutCardInput>;
@@ -4582,6 +4510,17 @@ export type ResolversParentTypes = {
   UserEntity: Partial<UserEntity>;
   ValidationReport: Partial<ValidationReport>;
 };
+
+export type DeferDirectiveArgs = {
+  if?: Scalars['Boolean']['input'];
+  label?: Maybe<Scalars['String']['input']>;
+};
+
+export type DeferDirectiveResolver<Result, Parent, ContextType = any, Args = DeferDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type Experimental_DisableErrorPropagationDirectiveArgs = { };
+
+export type Experimental_DisableErrorPropagationDirectiveResolver<Result, Parent, ContextType = any, Args = Experimental_DisableErrorPropagationDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type AccessTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['AccessToken'] = ResolversParentTypes['AccessToken']> = {
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -4642,6 +4581,7 @@ export type CardResolvers<ContextType = any, ParentType extends ResolversParentT
   createdBy?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isArchived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isPrivate?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isPublished?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   lastModified?: Resolver<ResolversTypes['Datetime'], ParentType, ContextType>;
   nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -4683,7 +4623,6 @@ export type CardsInDeckResolvers<ContextType = any, ParentType extends Resolvers
   deckId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  publishedCardByCardId?: Resolver<Maybe<ResolversTypes['PublishedCard']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4697,6 +4636,13 @@ export type CardsInDecksConnectionResolvers<ContextType = any, ParentType extend
 export type CardsInDecksEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CardsInDecksEdge'] = ResolversParentTypes['CardsInDecksEdge']> = {
   cursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
   node?: Resolver<Maybe<ResolversTypes['CardsInDeck']>, ParentType, ContextType>;
+};
+
+export type CatalogueCardResolvers<ContextType = any, ParentType extends ResolversParentTypes['CatalogueCard'] = ResolversParentTypes['CatalogueCard']> = {
+  cardScript?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
+  createdBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lastModified?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type ClassResolvers<ContextType = any, ParentType extends ResolversParentTypes['Class'] = ResolversParentTypes['Class']> = {
@@ -4766,7 +4712,6 @@ export type CreateCardsInDeckPayloadResolvers<ContextType = any, ParentType exte
   cardsInDeckEdge?: Resolver<Maybe<ResolversTypes['CardsInDecksEdge']>, ParentType, ContextType, RequireFields<CreateCardsInDeckPayloadCardsInDeckEdgeArgs, 'orderBy'>>;
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   deckByDeckId?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
-  publishedCardByCardId?: Resolver<Maybe<ResolversTypes['PublishedCard']>, ParentType, ContextType>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
 };
 
@@ -4874,7 +4819,6 @@ export type DeleteCardsInDeckPayloadResolvers<ContextType = any, ParentType exte
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   deckByDeckId?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
   deletedCardsInDeckId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  publishedCardByCardId?: Resolver<Maybe<ResolversTypes['PublishedCard']>, ParentType, ContextType>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
 };
 
@@ -5259,7 +5203,6 @@ export type PublishCardPayloadResolvers<ContextType = any, ParentType extends Re
 
 export type PublishedCardResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublishedCard'] = ResolversParentTypes['PublishedCard']> = {
   cardBySuccession?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType>;
-  cardsInDecksByCardId?: Resolver<ResolversTypes['CardsInDecksConnection'], ParentType, ContextType, RequireFields<PublishedCardCardsInDecksByCardIdArgs, 'orderBy'>>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   succession?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -5304,6 +5247,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cardsByUser?: Resolver<ResolversTypes['GetCardsResponse'], ParentType, ContextType, Partial<QueryCardsByUserArgs>>;
   cardsInDeck?: Resolver<Maybe<ResolversTypes['CardsInDeck']>, ParentType, ContextType, RequireFields<QueryCardsInDeckArgs, 'nodeId'>>;
   cardsInDeckById?: Resolver<Maybe<ResolversTypes['CardsInDeck']>, ParentType, ContextType, RequireFields<QueryCardsInDeckByIdArgs, 'id'>>;
+  catalogueCards?: Resolver<Array<ResolversTypes['CatalogueCard']>, ParentType, ContextType>;
   configuration?: Resolver<ResolversTypes['ClientConfiguration'], ParentType, ContextType>;
   currentRogueChoice?: Resolver<Maybe<ResolversTypes['RogueChoice']>, ParentType, ContextType, Partial<QueryCurrentRogueChoiceArgs>>;
   currentRogueClasses?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
@@ -5483,7 +5427,6 @@ export type UpdateCardsInDeckPayloadResolvers<ContextType = any, ParentType exte
   cardsInDeckEdge?: Resolver<Maybe<ResolversTypes['CardsInDecksEdge']>, ParentType, ContextType, RequireFields<UpdateCardsInDeckPayloadCardsInDeckEdgeArgs, 'orderBy'>>;
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   deckByDeckId?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
-  publishedCardByCardId?: Resolver<Maybe<ResolversTypes['PublishedCard']>, ParentType, ContextType>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
 };
 
@@ -5538,6 +5481,7 @@ export type Resolvers<ContextType = any> = {
   CardsInDeck?: CardsInDeckResolvers<ContextType>;
   CardsInDecksConnection?: CardsInDecksConnectionResolvers<ContextType>;
   CardsInDecksEdge?: CardsInDecksEdgeResolvers<ContextType>;
+  CatalogueCard?: CatalogueCardResolvers<ContextType>;
   Class?: ClassResolvers<ContextType>;
   ClassesConnection?: ClassesConnectionResolvers<ContextType>;
   ClassesEdge?: ClassesEdgeResolvers<ContextType>;
@@ -5625,3 +5569,7 @@ export type Resolvers<ContextType = any> = {
   ValidationReport?: ValidationReportResolvers<ContextType>;
 };
 
+export type DirectiveResolvers<ContextType = any> = {
+  defer?: DeferDirectiveResolver<any, any, ContextType>;
+  experimental_disableErrorPropagation?: Experimental_DisableErrorPropagationDirectiveResolver<any, any, ContextType>;
+};

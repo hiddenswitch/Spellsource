@@ -1,9 +1,11 @@
+import { getServerSession } from "next-auth";
+import { NextOptions } from "./api/auth/[...nextauth]";
 import { useMutation, useQuery } from "@apollo/client/react";
 import PublicSiteLayout, { PublicPageHeader } from "../components/public-site-layout";
 import * as publicStyles from "../components/public-site-layout.module.scss";
-import { DeckFragment, CreateDeckDocument, GetClassesDocument, GetDeckDocument, GetDecksDocument } from "../__generated__/client";
-import React, { createContext, FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
-import { getSession, useSession } from "next-auth/react";
+import { DeckFragment, CreateDeckDocument, GetCatalogueCardsDocument, GetDeckDocument, GetDecksDocument } from "../__generated__/client";
+import React, { createContext, FunctionComponent, useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import Collection, { textDecorationStyle } from "../components/collection/collection";
 import Head from "next/head";
 import { Col, Container, Dropdown, Offcanvas, OffcanvasBody, Row } from "react-bootstrap";
@@ -21,9 +23,10 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Deck } from "../components/collection/deck";
 import { GetServerSideProps } from "next";
+import { collectionClasses } from "../lib/collection-catalogue";
 
 export const getServerSideProps: GetServerSideProps = async (context) => ({
-  props: { session: await getSession(context) },
+  props: { session: await getServerSession(context.req, context.res, NextOptions) },
 });
 
 export const CardCache = createContext<Record<string, CardDef>>({});
@@ -32,42 +35,17 @@ export default () => {
   const { data: session } = useSession();
   const user = session?.token?.sub;
 
-  const cacheRef = useRef<Record<string, CardDef>>({});
-  const cache = cacheRef.current;
+  const catalogue = useQuery(GetCatalogueCardsDocument);
+  const cache = useMemo(() => Object.fromEntries((catalogue.data?.catalogueCards ?? []).map((card) => [card.id, card.cardScript as CardDef])), [catalogue.data]);
 
   const router = useRouter();
   const [offset, setOffset] = useParamInt(router, "offset");
   const [deckId, setDeckId] = useParam(router, "deckId");
   const [heroClass, setHeroClass] = useParam(router, "heroClass");
 
-  const getClasses = useQuery(GetClassesDocument, { variables: { filter: { collectible: { equalTo: true } } } });
-  const classes = useMemo(
-    () =>
-      _.chain(getClasses.data?.allClasses?.nodes ?? [])
-        .filter((card) => card!.class !== "ANY")
-        .keyBy((card) => card!.class!)
-        .mapValues((card) => (card!.cardScript as CardDef).name)
-        .value(),
-    [getClasses.data]
-  );
-  const classColors = useMemo(
-    () =>
-      _.chain(getClasses.data?.allClasses?.nodes ?? [])
-        .filter((card) => card!.class !== "ANY")
-        .keyBy((card) => card!.class!)
-        .mapValues((card) => toRgbaString((card!.cardScript as CardDef).art?.primary))
-        .value(),
-    [getClasses.data]
-  ) as Record<string, string>;
-  const textColors = useMemo(
-    () =>
-      _.chain(getClasses.data?.allClasses?.nodes ?? [])
-        .filter((card) => card!.class !== "ANY")
-        .keyBy((card) => card!.class!)
-        .mapValues((card) => toRgbaString((card!.cardScript as CardDef).art?.body?.vertex))
-        .value(),
-    [getClasses.data]
-  );
+  const classCards = useMemo(() => collectionClasses(catalogue.data?.catalogueCards ?? []), [catalogue.data]);
+  const classes = useMemo(() => Object.fromEntries(classCards.map(({ cardScript }) => [cardScript.heroClass, cardScript.name])), [classCards]);
+  const classColors = useMemo(() => Object.fromEntries(classCards.map(({ cardScript }) => [cardScript.heroClass, toRgbaString(cardScript.art?.primary)])) as Record<string, string>, [classCards]);
 
   const getDecks = useQuery(GetDecksDocument, { variables: { user } });
   const allDecks = [...(getDecks.data?.allDecks?.nodes ?? []), ...(getDecks.data?.allDeckShares?.nodes?.map((node) => node!.deckByDeckId) ?? [])];
@@ -91,11 +69,6 @@ export default () => {
     variables: { deckId },
     skip: !deckId,
   });
-  useEffect(() => {
-    getDeck.data?.deckById?.cardsInDecksByDeckId?.nodes?.forEach((node) => {
-      if (node) cache[node.cardId] = node.publishedCardByCardId?.cardBySuccession?.cardScript;
-    });
-  }, [getDeck.data, cache]);
   const deck = getDeck?.data?.deckById ?? getDeck?.previousData?.deckById;
 
   const realCards = useMemo(() => deck?.cardsInDecksByDeckId?.nodes?.map((node) => node!.cardId) ?? [], [deck]);

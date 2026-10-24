@@ -1,3 +1,17 @@
+"""This directive allows results to be deferred during execution"""
+directive @defer(
+  """Deferred behaviour is controlled by this argument"""
+  if: Boolean! = true
+
+  """A unique label that represents the fragment being deferred"""
+  label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"""
+This directive disables error propagation when a non nullable field returns null for the given operation.
+"""
+directive @experimental_disableErrorPropagation on QUERY | MUTATION | SUBSCRIPTION
+
 """─── Query ────────────────────────────────────────────────────"""
 type Query implements Node {
   """
@@ -29,11 +43,11 @@ type Query implements Node {
   """Get a single `Deck`."""
   deckById(id: String!): Deck
 
-  """Get a single `Card`."""
-  cardBySuccession(succession: BigInt!): Card
-
   """Get a single `GeneratedArt`."""
   generatedArtByHashAndOwner(hash: String!, owner: String!): GeneratedArt
+
+  """Get a single `Card`."""
+  cardBySuccession(succession: BigInt!): Card
 
   """Get a single `RogueChoice`."""
   rogueChoiceById(id: BigInt!): RogueChoice
@@ -117,9 +131,6 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `PublishedCard`."""
-    orderBy: [PublishedCardsOrderBy!] = [PRIMARY_KEY_ASC]
-
     """
     A condition to be used in determining which values should be returned by the collection.
     """
@@ -129,6 +140,9 @@ type Query implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: PublishedCardFilter
+
+    """The method to use when ordering `PublishedCard`."""
+    orderBy: [PublishedCardsOrderBy!] = [PRIMARY_KEY_ASC]
   ): PublishedCardsConnection
 
   """Reads and enables pagination through a set of `DeckShare`."""
@@ -151,9 +165,6 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `DeckShare`."""
-    orderBy: [DeckSharesOrderBy!] = [PRIMARY_KEY_ASC]
-
     """
     A condition to be used in determining which values should be returned by the collection.
     """
@@ -163,6 +174,9 @@ type Query implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: DeckShareFilter
+
+    """The method to use when ordering `DeckShare`."""
+    orderBy: [DeckSharesOrderBy!] = [PRIMARY_KEY_ASC]
   ): DeckSharesConnection
 
   """Reads and enables pagination through a set of `CardsInDeck`."""
@@ -185,9 +199,6 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `CardsInDeck`."""
-    orderBy: [CardsInDecksOrderBy!] = [PRIMARY_KEY_ASC]
-
     """
     A condition to be used in determining which values should be returned by the collection.
     """
@@ -197,6 +208,9 @@ type Query implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: CardsInDeckFilter
+
+    """The method to use when ordering `CardsInDeck`."""
+    orderBy: [CardsInDecksOrderBy!] = [PRIMARY_KEY_ASC]
   ): CardsInDecksConnection
 
   """Reads and enables pagination through a set of `Class`."""
@@ -219,9 +233,6 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `Class`."""
-    orderBy: [ClassesOrderBy!] = [NATURAL]
-
     """
     A condition to be used in determining which values should be returned by the collection.
     """
@@ -231,6 +242,9 @@ type Query implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: ClassFilter
+
+    """The method to use when ordering `Class`."""
+    orderBy: [ClassesOrderBy!] = [NATURAL]
   ): ClassesConnection
 
   """Reads and enables pagination through a set of `Deck`."""
@@ -253,9 +267,6 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `Deck`."""
-    orderBy: [DecksOrderBy!] = [PRIMARY_KEY_ASC]
-
     """
     A condition to be used in determining which values should be returned by the collection.
     """
@@ -265,7 +276,49 @@ type Query implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: DeckFilter
+
+    """The method to use when ordering `Deck`."""
+    orderBy: [DecksOrderBy!] = [PRIMARY_KEY_ASC]
   ): DecksConnection
+
+  """Reads and enables pagination through a set of `GeneratedArt`."""
+  allGeneratedArts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GeneratedArtCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GeneratedArtFilter
+
+    """The method to use when ordering `GeneratedArt`."""
+    orderBy: [GeneratedArtsOrderBy!] = [NATURAL]
+
+    """
+    Indicates whether archived items should be included in the results or not.
+    """
+    includeArchived: IncludeArchivedOption = NO
+  ): GeneratedArtsConnection
 
   """Reads and enables pagination through a set of `Card`."""
   allCards(
@@ -287,9 +340,6 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `Card`."""
-    orderBy: [CardsOrderBy!] = [PRIMARY_KEY_ASC]
-
     """
     A condition to be used in determining which values should be returned by the collection.
     """
@@ -299,6 +349,9 @@ type Query implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: CardFilter
+
+    """The method to use when ordering `Card`."""
+    orderBy: [CardsOrderBy!] = [PRIMARY_KEY_ASC]
 
     """
     Indicates whether archived items should be included in the results or not.
@@ -326,9 +379,6 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `CollectionCard`."""
-    orderBy: [CollectionCardsOrderBy!] = [NATURAL]
-
     """
     A condition to be used in determining which values should be returned by the collection.
     """
@@ -338,46 +388,10 @@ type Query implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: CollectionCardFilter
+
+    """The method to use when ordering `CollectionCard`."""
+    orderBy: [CollectionCardsOrderBy!] = [NATURAL]
   ): CollectionCardsConnection
-
-  """Reads and enables pagination through a set of `GeneratedArt`."""
-  allGeneratedArts(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `GeneratedArt`."""
-    orderBy: [GeneratedArtsOrderBy!] = [NATURAL]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: GeneratedArtCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: GeneratedArtFilter
-
-    """
-    Indicates whether archived items should be included in the results or not.
-    """
-    includeArchived: IncludeArchivedOption = NO
-  ): GeneratedArtsConnection
 
   """Reads and enables pagination through a set of `RogueChoice`."""
   allRogueChoices(
@@ -399,9 +413,6 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `RogueChoice`."""
-    orderBy: [RogueChoicesOrderBy!] = [PRIMARY_KEY_ASC]
-
     """
     A condition to be used in determining which values should be returned by the collection.
     """
@@ -411,6 +422,9 @@ type Query implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: RogueChoiceFilter
+
+    """The method to use when ordering `RogueChoice`."""
+    orderBy: [RogueChoicesOrderBy!] = [PRIMARY_KEY_ASC]
   ): RogueChoicesConnection
 
   """Reads and enables pagination through a set of `RogueRun`."""
@@ -433,9 +447,6 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `RogueRun`."""
-    orderBy: [RogueRunsOrderBy!] = [PRIMARY_KEY_ASC]
-
     """
     A condition to be used in determining which values should be returned by the collection.
     """
@@ -445,6 +456,9 @@ type Query implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: RogueRunFilter
+
+    """The method to use when ordering `RogueRun`."""
+    orderBy: [RogueRunsOrderBy!] = [PRIMARY_KEY_ASC]
   ): RogueRunsConnection
 
   """auth"""
@@ -452,6 +466,7 @@ type Query implements Node {
   configuration: ClientConfiguration!
 
   """cards"""
+  catalogueCards: [CatalogueCard!]!
   cards(ifNoneMatch: String): GetCardsResponse!
   cardsByUser(ifNoneMatch: String): GetCardsResponse!
 
@@ -523,18 +538,18 @@ type Mutation {
     """
     input: CreateDeckWithCardsInput!
   ): CreateDeckWithCardsPayload
-  saveCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: SaveCardInput!
-  ): SaveCardPayload
   saveGeneratedArt(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
     input: SaveGeneratedArtInput!
   ): SaveGeneratedArtPayload
+  saveCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: SaveCardInput!
+  ): SaveCardPayload
   endRogueRun(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -561,14 +576,6 @@ type Mutation {
   """decks"""
   createDeck(input: DecksPutInput!): DecksPutResponse!
 
-  """Creates a single `Card`."""
-  createCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateCardInput!
-  ): CreateCardPayload
-
   """Creates a single `GeneratedArt`."""
   createGeneratedArt(
     """
@@ -576,6 +583,14 @@ type Mutation {
     """
     input: CreateGeneratedArtInput!
   ): CreateGeneratedArtPayload
+
+  """Creates a single `Card`."""
+  createCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateCardInput!
+  ): CreateCardPayload
 
   """
   Updates a single `PublishedCard` using its globally unique id and a patch.
@@ -622,6 +637,14 @@ type Mutation {
     input: UpdateDeckByIdInput!
   ): UpdateDeckPayload
 
+  """Updates a single `GeneratedArt` using a unique key and a patch."""
+  updateGeneratedArtByHashAndOwner(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGeneratedArtByHashAndOwnerInput!
+  ): UpdateGeneratedArtPayload
+
   """Updates a single `Card` using its globally unique id and a patch."""
   updateCard(
     """
@@ -637,14 +660,6 @@ type Mutation {
     """
     input: UpdateCardBySuccessionInput!
   ): UpdateCardPayload
-
-  """Updates a single `GeneratedArt` using a unique key and a patch."""
-  updateGeneratedArtByHashAndOwner(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateGeneratedArtByHashAndOwnerInput!
-  ): UpdateGeneratedArtPayload
 
   """Deletes a single `PublishedCard` using its globally unique id."""
   deletePublishedCard(
@@ -761,40 +776,6 @@ type PublishedCard implements Node {
 
   """Reads a single `Card` that is related to this `PublishedCard`."""
   cardBySuccession: Card
-
-  """Reads and enables pagination through a set of `CardsInDeck`."""
-  cardsInDecksByCardId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `CardsInDeck`."""
-    orderBy: [CardsInDecksOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: CardsInDeckCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: CardsInDeckFilter
-  ): CardsInDecksConnection!
 }
 
 """A 64-bit integer serialized as a string for JavaScript compatibility"""
@@ -819,6 +800,7 @@ type Card implements Node {
   createdAt: Datetime!
   lastModified: Datetime!
   isArchived: Boolean!
+  isPrivate: Boolean!
   isPublished: Boolean!
   succession: BigInt!
 
@@ -842,9 +824,6 @@ type Card implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `PublishedCard`."""
-    orderBy: [PublishedCardsOrderBy!] = [PRIMARY_KEY_ASC]
-
     """
     A condition to be used in determining which values should be returned by the collection.
     """
@@ -854,12 +833,13 @@ type Card implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: PublishedCardFilter
+
+    """The method to use when ordering `PublishedCard`."""
+    orderBy: [PublishedCardsOrderBy!] = [PRIMARY_KEY_ASC]
   ): PublishedCardsConnection!
 }
 
-"""
-Represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
+"""A JSON scalar"""
 scalar JSON
 
 """
@@ -915,17 +895,6 @@ type PageInfo {
   endCursor: Cursor
 }
 
-"""Methods to use when ordering `PublishedCard`."""
-enum PublishedCardsOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ID_ASC
-  ID_DESC
-  SUCCESSION_ASC
-  SUCCESSION_DESC
-}
-
 """
 A condition to be used against `PublishedCard` object types. All fields are
 tested for equality and combined with a logical ‘and.’
@@ -947,12 +916,6 @@ input PublishedCardFilter {
 
   """Filter by the object’s `succession` field."""
   succession: BigIntFilter
-
-  """Filter by the object’s `cardsInDecksByCardId` relation."""
-  cardsInDecksByCardId: PublishedCardToManyCardsInDeckFilter
-
-  """Some related `cardsInDecksByCardId` exist."""
-  cardsInDecksByCardIdExist: Boolean
 
   """Filter by the object’s `cardBySuccession` relation."""
   cardBySuccession: CardFilter
@@ -1142,23 +1105,364 @@ input BigIntFilter {
 }
 
 """
-A filter to be used against many `CardsInDeck` object types. All fields are combined with a logical ‘and.’
+A filter to be used against `Card` object types. All fields are combined with a logical ‘and.’
 """
-input PublishedCardToManyCardsInDeckFilter {
+input CardFilter {
+  """Filter by the object’s `id` field."""
+  id: StringFilter
+
+  """Filter by the object’s `createdBy` field."""
+  createdBy: StringFilter
+
+  """Filter by the object’s `uri` field."""
+  uri: StringFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Filter by the object’s `lastModified` field."""
+  lastModified: DatetimeFilter
+
+  """Filter by the object’s `isArchived` field."""
+  isArchived: BooleanFilter
+
+  """Filter by the object’s `isPrivate` field."""
+  isPrivate: BooleanFilter
+
+  """Filter by the object’s `isPublished` field."""
+  isPublished: BooleanFilter
+
+  """Filter by the object’s `succession` field."""
+  succession: BigIntFilter
+
+  """Filter by the object’s `publishedCardsBySuccession` relation."""
+  publishedCardsBySuccession: CardToManyPublishedCardFilter
+
+  """Some related `publishedCardsBySuccession` exist."""
+  publishedCardsBySuccessionExist: Boolean
+
+  """Checks for all expressions in this list."""
+  and: [CardFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [CardFilter!]
+
+  """Negates the expression."""
+  not: CardFilter
+}
+
+"""
+A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
+"""
+input DatetimeFilter {
   """
-  Every related `CardsInDeck` matches the filter criteria. All fields are combined with a logical ‘and.’
+  Is null (if `true` is specified) or is not null (if `false` is specified).
   """
-  every: CardsInDeckFilter
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Datetime
+
+  """Not equal to the specified value."""
+  notEqualTo: Datetime
 
   """
-  Some related `CardsInDeck` matches the filter criteria. All fields are combined with a logical ‘and.’
+  Not equal to the specified value, treating null like an ordinary value.
   """
-  some: CardsInDeckFilter
+  distinctFrom: Datetime
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Datetime
+
+  """Included in the specified list."""
+  in: [Datetime!]
+
+  """Not included in the specified list."""
+  notIn: [Datetime!]
+
+  """Less than the specified value."""
+  lessThan: Datetime
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Datetime
+
+  """Greater than the specified value."""
+  greaterThan: Datetime
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Datetime
+}
+
+"""
+A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
+"""
+input BooleanFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Boolean
+
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
 
   """
-  No related `CardsInDeck` matches the filter criteria. All fields are combined with a logical ‘and.’
+  Not equal to the specified value, treating null like an ordinary value.
   """
-  none: CardsInDeckFilter
+  distinctFrom: Boolean
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Boolean
+
+  """Included in the specified list."""
+  in: [Boolean!]
+
+  """Not included in the specified list."""
+  notIn: [Boolean!]
+
+  """Less than the specified value."""
+  lessThan: Boolean
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Boolean
+
+  """Greater than the specified value."""
+  greaterThan: Boolean
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Boolean
+}
+
+"""
+A filter to be used against many `PublishedCard` object types. All fields are combined with a logical ‘and.’
+"""
+input CardToManyPublishedCardFilter {
+  """
+  Every related `PublishedCard` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: PublishedCardFilter
+
+  """
+  Some related `PublishedCard` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: PublishedCardFilter
+
+  """
+  No related `PublishedCard` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: PublishedCardFilter
+}
+
+"""Methods to use when ordering `PublishedCard`."""
+enum PublishedCardsOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ID_ASC
+  ID_DESC
+  SUCCESSION_ASC
+  SUCCESSION_DESC
+}
+
+type DeckShare implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  deckId: String!
+  shareRecipientId: String!
+  trashedByRecipient: Boolean!
+
+  """Reads a single `Deck` that is related to this `DeckShare`."""
+  deckByDeckId: Deck
+}
+
+type Deck implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: String!
+
+  """who created this deck originally"""
+  createdBy: String!
+
+  """who last edited this deck"""
+  lastEditedBy: String!
+  name: String
+  heroClass: String
+  trashed: Boolean!
+  format: String
+  deckType: Int!
+
+  """premades always shared with all users by application logic"""
+  isPremade: Boolean!
+  permittedToDuplicate: Boolean!
+
+  """Reads and enables pagination through a set of `CardsInDeck`."""
+  cardsInDecksByDeckId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: CardsInDeckCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: CardsInDeckFilter
+
+    """The method to use when ordering `CardsInDeck`."""
+    orderBy: [CardsInDecksOrderBy!] = [PRIMARY_KEY_ASC]
+  ): CardsInDecksConnection!
+
+  """Reads a single `RogueRun` that is related to this `Deck`."""
+  rogueRunByDeck: RogueRun
+
+  """Reads and enables pagination through a set of `RogueRun`."""
+  rogueRunsByOpponentDeck(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: RogueRunCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: RogueRunFilter
+
+    """The method to use when ordering `RogueRun`."""
+    orderBy: [RogueRunsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): RogueRunsConnection!
+
+  """Reads and enables pagination through a set of `DeckShare`."""
+  deckSharesByDeckId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: DeckShareCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: DeckShareFilter
+
+    """The method to use when ordering `DeckShare`."""
+    orderBy: [DeckSharesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): DeckSharesConnection!
+}
+
+"""A connection to a list of `CardsInDeck` values."""
+type CardsInDecksConnection {
+  """A list of `CardsInDeck` objects."""
+  nodes: [CardsInDeck]!
+
+  """
+  A list of edges which contains the `CardsInDeck` and cursor to aid in pagination.
+  """
+  edges: [CardsInDecksEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `CardsInDeck` you could get from the connection."""
+  totalCount: Int!
+}
+
+type CardsInDeck implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: BigInt!
+
+  """deleting a deck deletes all its card references"""
+  deckId: String!
+
+  """cannot delete cards that are currently used in decks"""
+  cardId: String!
+
+  """Reads a single `Deck` that is related to this `CardsInDeck`."""
+  deckByDeckId: Deck
+}
+
+"""A `CardsInDeck` edge in the connection."""
+type CardsInDecksEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `CardsInDeck` at the end of the edge."""
+  node: CardsInDeck
+}
+
+"""
+A condition to be used against `CardsInDeck` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input CardsInDeckCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: BigInt
+
+  """Checks for equality with the object’s `deckId` field."""
+  deckId: String
+
+  """Checks for equality with the object’s `cardId` field."""
+  cardId: String
 }
 
 """
@@ -1173,9 +1477,6 @@ input CardsInDeckFilter {
 
   """Filter by the object’s `cardId` field."""
   cardId: StringFilter
-
-  """Filter by the object’s `publishedCardByCardId` relation."""
-  publishedCardByCardId: PublishedCardFilter
 
   """Filter by the object’s `deckByDeckId` relation."""
   deckByDeckId: DeckFilter
@@ -1230,12 +1531,6 @@ input DeckFilter {
   """Some related `cardsInDecksByDeckId` exist."""
   cardsInDecksByDeckIdExist: Boolean
 
-  """Filter by the object’s `deckSharesByDeckId` relation."""
-  deckSharesByDeckId: DeckToManyDeckShareFilter
-
-  """Some related `deckSharesByDeckId` exist."""
-  deckSharesByDeckIdExist: Boolean
-
   """Filter by the object’s `rogueRunByDeck` relation."""
   rogueRunByDeck: RogueRunFilter
 
@@ -1248,6 +1543,12 @@ input DeckFilter {
   """Some related `rogueRunsByOpponentDeck` exist."""
   rogueRunsByOpponentDeckExist: Boolean
 
+  """Filter by the object’s `deckSharesByDeckId` relation."""
+  deckSharesByDeckId: DeckToManyDeckShareFilter
+
+  """Some related `deckSharesByDeckId` exist."""
+  deckSharesByDeckIdExist: Boolean
+
   """Checks for all expressions in this list."""
   and: [DeckFilter!]
 
@@ -1256,48 +1557,6 @@ input DeckFilter {
 
   """Negates the expression."""
   not: DeckFilter
-}
-
-"""
-A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
-"""
-input BooleanFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Boolean
-
-  """Not equal to the specified value."""
-  notEqualTo: Boolean
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Boolean
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Boolean
-
-  """Included in the specified list."""
-  in: [Boolean!]
-
-  """Not included in the specified list."""
-  notIn: [Boolean!]
-
-  """Less than the specified value."""
-  lessThan: Boolean
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Boolean
-
-  """Greater than the specified value."""
-  greaterThan: Boolean
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Boolean
 }
 
 """
@@ -1360,52 +1619,6 @@ input DeckToManyCardsInDeckFilter {
   No related `CardsInDeck` matches the filter criteria. All fields are combined with a logical ‘and.’
   """
   none: CardsInDeckFilter
-}
-
-"""
-A filter to be used against many `DeckShare` object types. All fields are combined with a logical ‘and.’
-"""
-input DeckToManyDeckShareFilter {
-  """
-  Every related `DeckShare` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  every: DeckShareFilter
-
-  """
-  Some related `DeckShare` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  some: DeckShareFilter
-
-  """
-  No related `DeckShare` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  none: DeckShareFilter
-}
-
-"""
-A filter to be used against `DeckShare` object types. All fields are combined with a logical ‘and.’
-"""
-input DeckShareFilter {
-  """Filter by the object’s `deckId` field."""
-  deckId: StringFilter
-
-  """Filter by the object’s `shareRecipientId` field."""
-  shareRecipientId: StringFilter
-
-  """Filter by the object’s `trashedByRecipient` field."""
-  trashedByRecipient: BooleanFilter
-
-  """Filter by the object’s `deckByDeckId` relation."""
-  deckByDeckId: DeckFilter
-
-  """Checks for all expressions in this list."""
-  and: [DeckShareFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [DeckShareFilter!]
-
-  """Negates the expression."""
-  not: DeckShareFilter
 }
 
 """
@@ -1483,48 +1696,6 @@ input RogueRunFilter {
 
   """Negates the expression."""
   not: RogueRunFilter
-}
-
-"""
-A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
-"""
-input DatetimeFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Datetime
-
-  """Not equal to the specified value."""
-  notEqualTo: Datetime
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Datetime
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Datetime
-
-  """Included in the specified list."""
-  in: [Datetime!]
-
-  """Not included in the specified list."""
-  notIn: [Datetime!]
-
-  """Less than the specified value."""
-  lessThan: Datetime
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Datetime
-
-  """Greater than the specified value."""
-  greaterThan: Datetime
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Datetime
 }
 
 """
@@ -1769,295 +1940,49 @@ input DeckToManyRogueRunFilter {
 }
 
 """
-A filter to be used against `Card` object types. All fields are combined with a logical ‘and.’
+A filter to be used against many `DeckShare` object types. All fields are combined with a logical ‘and.’
 """
-input CardFilter {
-  """Filter by the object’s `id` field."""
-  id: StringFilter
+input DeckToManyDeckShareFilter {
+  """
+  Every related `DeckShare` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  every: DeckShareFilter
 
-  """Filter by the object’s `createdBy` field."""
-  createdBy: StringFilter
+  """
+  Some related `DeckShare` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  some: DeckShareFilter
 
-  """Filter by the object’s `uri` field."""
-  uri: StringFilter
+  """
+  No related `DeckShare` matches the filter criteria. All fields are combined with a logical ‘and.’
+  """
+  none: DeckShareFilter
+}
 
-  """Filter by the object’s `blocklyWorkspace` field."""
-  blocklyWorkspace: JSONFilter
+"""
+A filter to be used against `DeckShare` object types. All fields are combined with a logical ‘and.’
+"""
+input DeckShareFilter {
+  """Filter by the object’s `deckId` field."""
+  deckId: StringFilter
 
-  """Filter by the object’s `cardScript` field."""
-  cardScript: JSONFilter
+  """Filter by the object’s `shareRecipientId` field."""
+  shareRecipientId: StringFilter
 
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
+  """Filter by the object’s `trashedByRecipient` field."""
+  trashedByRecipient: BooleanFilter
 
-  """Filter by the object’s `lastModified` field."""
-  lastModified: DatetimeFilter
-
-  """Filter by the object’s `isArchived` field."""
-  isArchived: BooleanFilter
-
-  """Filter by the object’s `isPublished` field."""
-  isPublished: BooleanFilter
-
-  """Filter by the object’s `succession` field."""
-  succession: BigIntFilter
-
-  """Filter by the object’s `publishedCardsBySuccession` relation."""
-  publishedCardsBySuccession: CardToManyPublishedCardFilter
-
-  """Some related `publishedCardsBySuccession` exist."""
-  publishedCardsBySuccessionExist: Boolean
+  """Filter by the object’s `deckByDeckId` relation."""
+  deckByDeckId: DeckFilter
 
   """Checks for all expressions in this list."""
-  and: [CardFilter!]
+  and: [DeckShareFilter!]
 
   """Checks for any expressions in this list."""
-  or: [CardFilter!]
+  or: [DeckShareFilter!]
 
   """Negates the expression."""
-  not: CardFilter
-}
-
-"""
-A filter to be used against JSON fields. All fields are combined with a logical ‘and.’
-"""
-input JSONFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: JSON
-
-  """Not equal to the specified value."""
-  notEqualTo: JSON
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: JSON
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: JSON
-
-  """Included in the specified list."""
-  in: [JSON!]
-
-  """Not included in the specified list."""
-  notIn: [JSON!]
-
-  """Less than the specified value."""
-  lessThan: JSON
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: JSON
-
-  """Greater than the specified value."""
-  greaterThan: JSON
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: JSON
-
-  """Contains the specified JSON."""
-  contains: JSON
-
-  """Contains the specified key."""
-  containsKey: String
-
-  """Contains all of the specified keys."""
-  containsAllKeys: [String!]
-
-  """Contains any of the specified keys."""
-  containsAnyKeys: [String!]
-
-  """Contained by the specified JSON."""
-  containedBy: JSON
-}
-
-"""
-A filter to be used against many `PublishedCard` object types. All fields are combined with a logical ‘and.’
-"""
-input CardToManyPublishedCardFilter {
-  """
-  Every related `PublishedCard` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  every: PublishedCardFilter
-
-  """
-  Some related `PublishedCard` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  some: PublishedCardFilter
-
-  """
-  No related `PublishedCard` matches the filter criteria. All fields are combined with a logical ‘and.’
-  """
-  none: PublishedCardFilter
-}
-
-"""A connection to a list of `CardsInDeck` values."""
-type CardsInDecksConnection {
-  """A list of `CardsInDeck` objects."""
-  nodes: [CardsInDeck]!
-
-  """
-  A list of edges which contains the `CardsInDeck` and cursor to aid in pagination.
-  """
-  edges: [CardsInDecksEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `CardsInDeck` you could get from the connection."""
-  totalCount: Int!
-}
-
-type CardsInDeck implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: BigInt!
-
-  """deleting a deck deletes all its card references"""
-  deckId: String!
-
-  """cannot delete cards that are currently used in decks"""
-  cardId: String!
-
-  """Reads a single `PublishedCard` that is related to this `CardsInDeck`."""
-  publishedCardByCardId: PublishedCard
-
-  """Reads a single `Deck` that is related to this `CardsInDeck`."""
-  deckByDeckId: Deck
-}
-
-type Deck implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: String!
-
-  """who created this deck originally"""
-  createdBy: String!
-
-  """who last edited this deck"""
-  lastEditedBy: String!
-  name: String
-  heroClass: String
-  trashed: Boolean!
-  format: String
-  deckType: Int!
-
-  """premades always shared with all users by application logic"""
-  isPremade: Boolean!
-  permittedToDuplicate: Boolean!
-
-  """Reads and enables pagination through a set of `CardsInDeck`."""
-  cardsInDecksByDeckId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `CardsInDeck`."""
-    orderBy: [CardsInDecksOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: CardsInDeckCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: CardsInDeckFilter
-  ): CardsInDecksConnection!
-
-  """Reads and enables pagination through a set of `DeckShare`."""
-  deckSharesByDeckId(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `DeckShare`."""
-    orderBy: [DeckSharesOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: DeckShareCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: DeckShareFilter
-  ): DeckSharesConnection!
-
-  """Reads a single `RogueRun` that is related to this `Deck`."""
-  rogueRunByDeck: RogueRun
-
-  """Reads and enables pagination through a set of `RogueRun`."""
-  rogueRunsByOpponentDeck(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `RogueRun`."""
-    orderBy: [RogueRunsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: RogueRunCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: RogueRunFilter
-  ): RogueRunsConnection!
+  not: DeckShareFilter
 }
 
 """Methods to use when ordering `CardsInDeck`."""
@@ -2071,88 +1996,6 @@ enum CardsInDecksOrderBy {
   DECK_ID_DESC
   CARD_ID_ASC
   CARD_ID_DESC
-}
-
-"""
-A condition to be used against `CardsInDeck` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input CardsInDeckCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: BigInt
-
-  """Checks for equality with the object’s `deckId` field."""
-  deckId: String
-
-  """Checks for equality with the object’s `cardId` field."""
-  cardId: String
-}
-
-"""A connection to a list of `DeckShare` values."""
-type DeckSharesConnection {
-  """A list of `DeckShare` objects."""
-  nodes: [DeckShare]!
-
-  """
-  A list of edges which contains the `DeckShare` and cursor to aid in pagination.
-  """
-  edges: [DeckSharesEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `DeckShare` you could get from the connection."""
-  totalCount: Int!
-}
-
-type DeckShare implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  deckId: String!
-  shareRecipientId: String!
-  trashedByRecipient: Boolean!
-
-  """Reads a single `Deck` that is related to this `DeckShare`."""
-  deckByDeckId: Deck
-}
-
-"""A `DeckShare` edge in the connection."""
-type DeckSharesEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `DeckShare` at the end of the edge."""
-  node: DeckShare
-}
-
-"""Methods to use when ordering `DeckShare`."""
-enum DeckSharesOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  DECK_ID_ASC
-  DECK_ID_DESC
-  SHARE_RECIPIENT_ID_ASC
-  SHARE_RECIPIENT_ID_DESC
-  TRASHED_BY_RECIPIENT_ASC
-  TRASHED_BY_RECIPIENT_DESC
-}
-
-"""
-A condition to be used against `DeckShare` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input DeckShareCondition {
-  """Checks for equality with the object’s `deckId` field."""
-  deckId: String
-
-  """Checks for equality with the object’s `shareRecipientId` field."""
-  shareRecipientId: String
-
-  """Checks for equality with the object’s `trashedByRecipient` field."""
-  trashedByRecipient: Boolean
 }
 
 """─── Rogue types (existing) ──────────────────────────────────"""
@@ -2205,9 +2048,6 @@ type RogueRun implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `RogueChoice`."""
-    orderBy: [RogueChoicesOrderBy!] = [PRIMARY_KEY_ASC]
-
     """
     A condition to be used in determining which values should be returned by the collection.
     """
@@ -2217,6 +2057,9 @@ type RogueRun implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: RogueChoiceFilter
+
+    """The method to use when ordering `RogueChoice`."""
+    orderBy: [RogueChoicesOrderBy!] = [PRIMARY_KEY_ASC]
   ): RogueChoicesConnection!
 }
 
@@ -2264,27 +2107,6 @@ type RogueChoicesEdge {
   node: RogueChoice
 }
 
-"""Methods to use when ordering `RogueChoice`."""
-enum RogueChoicesOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ID_ASC
-  ID_DESC
-  ROGUE_RUN_ASC
-  ROGUE_RUN_DESC
-  CAN_PICK_ASC
-  CAN_PICK_DESC
-  INDEX_ASC
-  INDEX_DESC
-  CAN_REROLL_ASC
-  CAN_REROLL_DESC
-  REPOPULATE_ASC
-  REPOPULATE_DESC
-  TYPE_ASC
-  TYPE_DESC
-}
-
 """
 A condition to be used against `RogueChoice` object types. All fields are tested
 for equality and combined with a logical ‘and.’
@@ -2315,6 +2137,27 @@ input RogueChoiceCondition {
   type: RogueChoiceType
 }
 
+"""Methods to use when ordering `RogueChoice`."""
+enum RogueChoicesOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ID_ASC
+  ID_DESC
+  ROGUE_RUN_ASC
+  ROGUE_RUN_DESC
+  CAN_PICK_ASC
+  CAN_PICK_DESC
+  INDEX_ASC
+  INDEX_DESC
+  CAN_REROLL_ASC
+  CAN_REROLL_DESC
+  REPOPULATE_ASC
+  REPOPULATE_DESC
+  TYPE_ASC
+  TYPE_DESC
+}
+
 """A connection to a list of `RogueRun` values."""
 type RogueRunsConnection {
   """A list of `RogueRun` objects."""
@@ -2339,43 +2182,6 @@ type RogueRunsEdge {
 
   """The `RogueRun` at the end of the edge."""
   node: RogueRun
-}
-
-"""Methods to use when ordering `RogueRun`."""
-enum RogueRunsOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ID_ASC
-  ID_DESC
-  PLAYER_ASC
-  PLAYER_DESC
-  STARTED_AT_ASC
-  STARTED_AT_DESC
-  ENDED_AT_ASC
-  ENDED_AT_DESC
-  HERO_CLASS_ASC
-  HERO_CLASS_DESC
-  DECK_ASC
-  DECK_DESC
-  BOSSES_DEFEATED_ASC
-  BOSSES_DEFEATED_DESC
-  STATE_ASC
-  STATE_DESC
-  GAME_ASC
-  GAME_DESC
-  OPPONENT_DECK_ASC
-  OPPONENT_DECK_DESC
-  SEED_ASC
-  SEED_DESC
-  SEED_STATE_ASC
-  SEED_STATE_DESC
-  GOLD_ASC
-  GOLD_DESC
-  LIVES_ASC
-  LIVES_DESC
-  REROLLS_THIS_ROUND_ASC
-  REROLLS_THIS_ROUND_DESC
 }
 
 """
@@ -2427,18 +2233,97 @@ input RogueRunCondition {
 
   """Checks for equality with the object’s `rerollsThisRound` field."""
   rerollsThisRound: Int
-
-  """Checks for equality with the object’s `opponentInfo` field."""
-  opponentInfo: String
 }
 
-"""A `CardsInDeck` edge in the connection."""
-type CardsInDecksEdge {
+"""Methods to use when ordering `RogueRun`."""
+enum RogueRunsOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ID_ASC
+  ID_DESC
+  PLAYER_ASC
+  PLAYER_DESC
+  STARTED_AT_ASC
+  STARTED_AT_DESC
+  ENDED_AT_ASC
+  ENDED_AT_DESC
+  HERO_CLASS_ASC
+  HERO_CLASS_DESC
+  DECK_ASC
+  DECK_DESC
+  BOSSES_DEFEATED_ASC
+  BOSSES_DEFEATED_DESC
+  STATE_ASC
+  STATE_DESC
+  GAME_ASC
+  GAME_DESC
+  OPPONENT_DECK_ASC
+  OPPONENT_DECK_DESC
+  SEED_ASC
+  SEED_DESC
+  SEED_STATE_ASC
+  SEED_STATE_DESC
+  GOLD_ASC
+  GOLD_DESC
+  LIVES_ASC
+  LIVES_DESC
+  REROLLS_THIS_ROUND_ASC
+  REROLLS_THIS_ROUND_DESC
+}
+
+"""A connection to a list of `DeckShare` values."""
+type DeckSharesConnection {
+  """A list of `DeckShare` objects."""
+  nodes: [DeckShare]!
+
+  """
+  A list of edges which contains the `DeckShare` and cursor to aid in pagination.
+  """
+  edges: [DeckSharesEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `DeckShare` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `DeckShare` edge in the connection."""
+type DeckSharesEdge {
   """A cursor for use in pagination."""
   cursor: Cursor
 
-  """The `CardsInDeck` at the end of the edge."""
-  node: CardsInDeck
+  """The `DeckShare` at the end of the edge."""
+  node: DeckShare
+}
+
+"""
+A condition to be used against `DeckShare` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input DeckShareCondition {
+  """Checks for equality with the object’s `deckId` field."""
+  deckId: String
+
+  """Checks for equality with the object’s `shareRecipientId` field."""
+  shareRecipientId: String
+
+  """Checks for equality with the object’s `trashedByRecipient` field."""
+  trashedByRecipient: Boolean
+}
+
+"""Methods to use when ordering `DeckShare`."""
+enum DeckSharesOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  DECK_ID_ASC
+  DECK_ID_DESC
+  SHARE_RECIPIENT_ID_ASC
+  SHARE_RECIPIENT_ID_DESC
+  TRASHED_BY_RECIPIENT_ASC
+  TRASHED_BY_RECIPIENT_DESC
 }
 
 type GeneratedArt {
@@ -2505,25 +2390,6 @@ type ClassesEdge {
   node: Class
 }
 
-"""Methods to use when ordering `Class`."""
-enum ClassesOrderBy {
-  NATURAL
-  CREATED_BY_ASC
-  CREATED_BY_DESC
-  CLASS_ASC
-  CLASS_DESC
-  IS_PUBLISHED_ASC
-  IS_PUBLISHED_DESC
-  COLLECTIBLE_ASC
-  COLLECTIBLE_DESC
-  CARD_SCRIPT_ASC
-  CARD_SCRIPT_DESC
-  ID_ASC
-  ID_DESC
-  NAME_ASC
-  NAME_DESC
-}
-
 """
 A condition to be used against `Class` object types. All fields are tested for equality and combined with a logical ‘and.’
 """
@@ -2566,9 +2432,6 @@ input ClassFilter {
   """Filter by the object’s `collectible` field."""
   collectible: BooleanFilter
 
-  """Filter by the object’s `cardScript` field."""
-  cardScript: JSONFilter
-
   """Filter by the object’s `id` field."""
   id: StringFilter
 
@@ -2583,6 +2446,25 @@ input ClassFilter {
 
   """Negates the expression."""
   not: ClassFilter
+}
+
+"""Methods to use when ordering `Class`."""
+enum ClassesOrderBy {
+  NATURAL
+  CREATED_BY_ASC
+  CREATED_BY_DESC
+  CLASS_ASC
+  CLASS_DESC
+  IS_PUBLISHED_ASC
+  IS_PUBLISHED_DESC
+  COLLECTIBLE_ASC
+  COLLECTIBLE_DESC
+  CARD_SCRIPT_ASC
+  CARD_SCRIPT_DESC
+  ID_ASC
+  ID_DESC
+  NAME_ASC
+  NAME_DESC
 }
 
 """A connection to a list of `Deck` values."""
@@ -2609,33 +2491,6 @@ type DecksEdge {
 
   """The `Deck` at the end of the edge."""
   node: Deck
-}
-
-"""Methods to use when ordering `Deck`."""
-enum DecksOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ID_ASC
-  ID_DESC
-  CREATED_BY_ASC
-  CREATED_BY_DESC
-  LAST_EDITED_BY_ASC
-  LAST_EDITED_BY_DESC
-  NAME_ASC
-  NAME_DESC
-  HERO_CLASS_ASC
-  HERO_CLASS_DESC
-  TRASHED_ASC
-  TRASHED_DESC
-  FORMAT_ASC
-  FORMAT_DESC
-  DECK_TYPE_ASC
-  DECK_TYPE_DESC
-  IS_PREMADE_ASC
-  IS_PREMADE_DESC
-  PERMITTED_TO_DUPLICATE_ASC
-  PERMITTED_TO_DUPLICATE_DESC
 }
 
 """
@@ -2673,6 +2528,138 @@ input DeckCondition {
   permittedToDuplicate: Boolean
 }
 
+"""Methods to use when ordering `Deck`."""
+enum DecksOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ID_ASC
+  ID_DESC
+  CREATED_BY_ASC
+  CREATED_BY_DESC
+  LAST_EDITED_BY_ASC
+  LAST_EDITED_BY_DESC
+  NAME_ASC
+  NAME_DESC
+  HERO_CLASS_ASC
+  HERO_CLASS_DESC
+  TRASHED_ASC
+  TRASHED_DESC
+  FORMAT_ASC
+  FORMAT_DESC
+  DECK_TYPE_ASC
+  DECK_TYPE_DESC
+  IS_PREMADE_ASC
+  IS_PREMADE_DESC
+  PERMITTED_TO_DUPLICATE_ASC
+  PERMITTED_TO_DUPLICATE_DESC
+}
+
+"""A connection to a list of `GeneratedArt` values."""
+type GeneratedArtsConnection {
+  """A list of `GeneratedArt` objects."""
+  nodes: [GeneratedArt]!
+
+  """
+  A list of edges which contains the `GeneratedArt` and cursor to aid in pagination.
+  """
+  edges: [GeneratedArtsEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `GeneratedArt` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `GeneratedArt` edge in the connection."""
+type GeneratedArtsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GeneratedArt` at the end of the edge."""
+  node: GeneratedArt
+}
+
+"""
+A condition to be used against `GeneratedArt` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input GeneratedArtCondition {
+  """Checks for equality with the object’s `hash` field."""
+  hash: String
+
+  """Checks for equality with the object’s `owner` field."""
+  owner: String
+
+  """Checks for equality with the object’s `urls` field."""
+  urls: [String]
+
+  """Checks for equality with the object’s `info` field."""
+  info: JSON
+
+  """Checks for equality with the object’s `isArchived` field."""
+  isArchived: Boolean
+}
+
+"""
+A filter to be used against `GeneratedArt` object types. All fields are combined with a logical ‘and.’
+"""
+input GeneratedArtFilter {
+  """Filter by the object’s `hash` field."""
+  hash: StringFilter
+
+  """Filter by the object’s `owner` field."""
+  owner: StringFilter
+
+  """Filter by the object’s `urls` field."""
+  urls: StringListFilter
+
+  """Filter by the object’s `isArchived` field."""
+  isArchived: BooleanFilter
+
+  """Checks for all expressions in this list."""
+  and: [GeneratedArtFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GeneratedArtFilter!]
+
+  """Negates the expression."""
+  not: GeneratedArtFilter
+}
+
+"""Methods to use when ordering `GeneratedArt`."""
+enum GeneratedArtsOrderBy {
+  NATURAL
+  HASH_ASC
+  HASH_DESC
+  OWNER_ASC
+  OWNER_DESC
+  INFO_ASC
+  INFO_DESC
+  IS_ARCHIVED_ASC
+  IS_ARCHIVED_DESC
+}
+
+"""
+Indicates whether archived items should be included in the results or not.
+"""
+enum IncludeArchivedOption {
+  """Exclude archived items."""
+  NO
+
+  """Include archived items."""
+  YES
+
+  """Only include archived items (i.e. exclude non-archived items)."""
+  EXCLUSIVELY
+
+  """
+  If there is a parent GraphQL record and it is archived then this is equivalent to YES, in all other cases this is equivalent to NO.
+  """
+  INHERIT
+}
+
 """A connection to a list of `Card` values."""
 type CardsConnection {
   """A list of `Card` objects."""
@@ -2697,33 +2684,6 @@ type CardsEdge {
 
   """The `Card` at the end of the edge."""
   node: Card
-}
-
-"""Methods to use when ordering `Card`."""
-enum CardsOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ID_ASC
-  ID_DESC
-  CREATED_BY_ASC
-  CREATED_BY_DESC
-  URI_ASC
-  URI_DESC
-  BLOCKLY_WORKSPACE_ASC
-  BLOCKLY_WORKSPACE_DESC
-  CARD_SCRIPT_ASC
-  CARD_SCRIPT_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  LAST_MODIFIED_ASC
-  LAST_MODIFIED_DESC
-  IS_ARCHIVED_ASC
-  IS_ARCHIVED_DESC
-  IS_PUBLISHED_ASC
-  IS_PUBLISHED_DESC
-  SUCCESSION_ASC
-  SUCCESSION_DESC
 }
 
 """
@@ -2754,6 +2714,9 @@ input CardCondition {
   """Checks for equality with the object’s `isArchived` field."""
   isArchived: Boolean
 
+  """Checks for equality with the object’s `isPrivate` field."""
+  isPrivate: Boolean
+
   """Checks for equality with the object’s `isPublished` field."""
   isPublished: Boolean
 
@@ -2761,23 +2724,33 @@ input CardCondition {
   succession: BigInt
 }
 
-"""
-Indicates whether archived items should be included in the results or not.
-"""
-enum IncludeArchivedOption {
-  """Exclude archived items."""
-  NO
-
-  """Include archived items."""
-  YES
-
-  """Only include archived items (i.e. exclude non-archived items)."""
-  EXCLUSIVELY
-
-  """
-  If there is a parent GraphQL record and it is archived then this is equivalent to YES, in all other cases this is equivalent to NO.
-  """
-  INHERIT
+"""Methods to use when ordering `Card`."""
+enum CardsOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ID_ASC
+  ID_DESC
+  CREATED_BY_ASC
+  CREATED_BY_DESC
+  URI_ASC
+  URI_DESC
+  BLOCKLY_WORKSPACE_ASC
+  BLOCKLY_WORKSPACE_DESC
+  CARD_SCRIPT_ASC
+  CARD_SCRIPT_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  LAST_MODIFIED_ASC
+  LAST_MODIFIED_DESC
+  IS_ARCHIVED_ASC
+  IS_ARCHIVED_DESC
+  IS_PRIVATE_ASC
+  IS_PRIVATE_DESC
+  IS_PUBLISHED_ASC
+  IS_PUBLISHED_DESC
+  SUCCESSION_ASC
+  SUCCESSION_DESC
 }
 
 """A connection to a list of `CollectionCard` values."""
@@ -2819,35 +2792,6 @@ type CollectionCardsEdge {
 
   """The `CollectionCard` at the end of the edge."""
   node: CollectionCard
-}
-
-"""Methods to use when ordering `CollectionCard`."""
-enum CollectionCardsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  CREATED_BY_ASC
-  CREATED_BY_DESC
-  CARD_SCRIPT_ASC
-  CARD_SCRIPT_DESC
-  BLOCKLY_WORKSPACE_ASC
-  BLOCKLY_WORKSPACE_DESC
-  NAME_ASC
-  NAME_DESC
-  TYPE_ASC
-  TYPE_DESC
-  CLASS_ASC
-  CLASS_DESC
-  COST_ASC
-  COST_DESC
-  COLLECTIBLE_ASC
-  COLLECTIBLE_DESC
-  SEARCH_MESSAGE_ASC
-  SEARCH_MESSAGE_DESC
-  LAST_MODIFIED_ASC
-  LAST_MODIFIED_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
 }
 
 """
@@ -2902,12 +2846,6 @@ input CollectionCardFilter {
   """Filter by the object’s `createdBy` field."""
   createdBy: StringFilter
 
-  """Filter by the object’s `cardScript` field."""
-  cardScript: JSONFilter
-
-  """Filter by the object’s `blocklyWorkspace` field."""
-  blocklyWorkspace: JSONFilter
-
   """Filter by the object’s `name` field."""
   name: StringFilter
 
@@ -2942,93 +2880,33 @@ input CollectionCardFilter {
   not: CollectionCardFilter
 }
 
-"""A connection to a list of `GeneratedArt` values."""
-type GeneratedArtsConnection {
-  """A list of `GeneratedArt` objects."""
-  nodes: [GeneratedArt]!
-
-  """
-  A list of edges which contains the `GeneratedArt` and cursor to aid in pagination.
-  """
-  edges: [GeneratedArtsEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `GeneratedArt` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `GeneratedArt` edge in the connection."""
-type GeneratedArtsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `GeneratedArt` at the end of the edge."""
-  node: GeneratedArt
-}
-
-"""Methods to use when ordering `GeneratedArt`."""
-enum GeneratedArtsOrderBy {
+"""Methods to use when ordering `CollectionCard`."""
+enum CollectionCardsOrderBy {
   NATURAL
-  HASH_ASC
-  HASH_DESC
-  OWNER_ASC
-  OWNER_DESC
-  INFO_ASC
-  INFO_DESC
-  IS_ARCHIVED_ASC
-  IS_ARCHIVED_DESC
-}
-
-"""
-A condition to be used against `GeneratedArt` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input GeneratedArtCondition {
-  """Checks for equality with the object’s `hash` field."""
-  hash: String
-
-  """Checks for equality with the object’s `owner` field."""
-  owner: String
-
-  """Checks for equality with the object’s `urls` field."""
-  urls: [String]
-
-  """Checks for equality with the object’s `info` field."""
-  info: JSON
-
-  """Checks for equality with the object’s `isArchived` field."""
-  isArchived: Boolean
-}
-
-"""
-A filter to be used against `GeneratedArt` object types. All fields are combined with a logical ‘and.’
-"""
-input GeneratedArtFilter {
-  """Filter by the object’s `hash` field."""
-  hash: StringFilter
-
-  """Filter by the object’s `owner` field."""
-  owner: StringFilter
-
-  """Filter by the object’s `urls` field."""
-  urls: StringListFilter
-
-  """Filter by the object’s `info` field."""
-  info: JSONFilter
-
-  """Filter by the object’s `isArchived` field."""
-  isArchived: BooleanFilter
-
-  """Checks for all expressions in this list."""
-  and: [GeneratedArtFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [GeneratedArtFilter!]
-
-  """Negates the expression."""
-  not: GeneratedArtFilter
+  ID_ASC
+  ID_DESC
+  CREATED_BY_ASC
+  CREATED_BY_DESC
+  CARD_SCRIPT_ASC
+  CARD_SCRIPT_DESC
+  BLOCKLY_WORKSPACE_ASC
+  BLOCKLY_WORKSPACE_DESC
+  NAME_ASC
+  NAME_DESC
+  TYPE_ASC
+  TYPE_DESC
+  CLASS_ASC
+  CLASS_DESC
+  COST_ASC
+  COST_DESC
+  COLLECTIBLE_ASC
+  COLLECTIBLE_DESC
+  SEARCH_MESSAGE_ASC
+  SEARCH_MESSAGE_DESC
+  LAST_MODIFIED_ASC
+  LAST_MODIFIED_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
 }
 
 """The output of our `archiveCard` mutation."""
@@ -3213,6 +3091,33 @@ input CreateDeckWithCardsInput {
   cardIds: [String]
 }
 
+"""The output of our `saveGeneratedArt` mutation."""
+type SaveGeneratedArtPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  generatedArt: GeneratedArt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""All input for the `saveGeneratedArt` mutation."""
+input SaveGeneratedArtInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  digest: String
+  links: [String]
+  extraInfo: JSON
+}
+
 """The output of our `saveCard` mutation."""
 type SaveCardPayload {
   """
@@ -3244,33 +3149,6 @@ input SaveCardInput {
   cardId: String
   workspace: JSON
   json: JSON
-}
-
-"""The output of our `saveGeneratedArt` mutation."""
-type SaveGeneratedArtPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  generatedArt: GeneratedArt
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `saveGeneratedArt` mutation."""
-input SaveGeneratedArtInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  digest: String
-  links: [String]
-  extraInfo: JSON
 }
 
 """The output of our `endRogueRun` mutation."""
@@ -3376,9 +3254,6 @@ type CreateCardsInDeckPayload {
     orderBy: [CardsInDecksOrderBy!]! = [PRIMARY_KEY_ASC]
   ): CardsInDecksEdge
 
-  """Reads a single `PublishedCard` that is related to this `CardsInDeck`."""
-  publishedCardByCardId: PublishedCard
-
   """Reads a single `Deck` that is related to this `CardsInDeck`."""
   deckByDeckId: Deck
 }
@@ -3439,6 +3314,44 @@ input CreateDeckInput {
   deck: DeckInput!
 }
 
+"""The output of our create `GeneratedArt` mutation."""
+type CreateGeneratedArtPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GeneratedArt` that was created by this mutation."""
+  generatedArt: GeneratedArt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""All input for the create `GeneratedArt` mutation."""
+input CreateGeneratedArtInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GeneratedArt` to be created by this mutation."""
+  generatedArt: GeneratedArtInput!
+}
+
+"""An input for mutations affecting `GeneratedArt`"""
+input GeneratedArtInput {
+  hash: String!
+  owner: String
+  urls: [String]!
+  info: JSON
+  isArchived: Boolean
+}
+
 """The output of our create `Card` mutation."""
 type CreateCardPayload {
   """
@@ -3490,45 +3403,8 @@ input CardInput {
   createdAt: Datetime
   lastModified: Datetime
   isArchived: Boolean
+  isPrivate: Boolean
   isPublished: Boolean
-}
-
-"""The output of our create `GeneratedArt` mutation."""
-type CreateGeneratedArtPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `GeneratedArt` that was created by this mutation."""
-  generatedArt: GeneratedArt
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the create `GeneratedArt` mutation."""
-input CreateGeneratedArtInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `GeneratedArt` to be created by this mutation."""
-  generatedArt: GeneratedArtInput!
-}
-
-"""An input for mutations affecting `GeneratedArt`"""
-input GeneratedArtInput {
-  hash: String!
-  owner: String
-  urls: [String]!
-  info: JSON
-  isArchived: Boolean
 }
 
 """The output of our update `PublishedCard` mutation."""
@@ -3620,9 +3496,6 @@ type UpdateCardsInDeckPayload {
     """The method to use when ordering `CardsInDeck`."""
     orderBy: [CardsInDecksOrderBy!]! = [PRIMARY_KEY_ASC]
   ): CardsInDecksEdge
-
-  """Reads a single `PublishedCard` that is related to this `CardsInDeck`."""
-  publishedCardByCardId: PublishedCard
 
   """Reads a single `Deck` that is related to this `CardsInDeck`."""
   deckByDeckId: Deck
@@ -3750,6 +3623,50 @@ input UpdateDeckByIdInput {
   deckPatch: DeckPatch!
 }
 
+"""The output of our update `GeneratedArt` mutation."""
+type UpdateGeneratedArtPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GeneratedArt` that was updated by this mutation."""
+  generatedArt: GeneratedArt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""All input for the `updateGeneratedArtByHashAndOwner` mutation."""
+input UpdateGeneratedArtByHashAndOwnerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  hash: String!
+  owner: String!
+
+  """
+  An object where the defined keys will be set on the `GeneratedArt` being updated.
+  """
+  generatedArtPatch: GeneratedArtPatch!
+}
+
+"""
+Represents an update to a `GeneratedArt`. Fields that are set will be updated.
+"""
+input GeneratedArtPatch {
+  hash: String
+  owner: String
+  urls: [String]
+  info: JSON
+  isArchived: Boolean
+}
+
 """The output of our update `Card` mutation."""
 type UpdateCardPayload {
   """
@@ -3808,6 +3725,7 @@ input CardPatch {
   createdAt: Datetime
   lastModified: Datetime
   isArchived: Boolean
+  isPrivate: Boolean
   isPublished: Boolean
 }
 
@@ -3824,50 +3742,6 @@ input UpdateCardBySuccessionInput {
   An object where the defined keys will be set on the `Card` being updated.
   """
   cardPatch: CardPatch!
-}
-
-"""The output of our update `GeneratedArt` mutation."""
-type UpdateGeneratedArtPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `GeneratedArt` that was updated by this mutation."""
-  generatedArt: GeneratedArt
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `updateGeneratedArtByHashAndOwner` mutation."""
-input UpdateGeneratedArtByHashAndOwnerInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  hash: String!
-  owner: String!
-
-  """
-  An object where the defined keys will be set on the `GeneratedArt` being updated.
-  """
-  generatedArtPatch: GeneratedArtPatch!
-}
-
-"""
-Represents an update to a `GeneratedArt`. Fields that are set will be updated.
-"""
-input GeneratedArtPatch {
-  hash: String
-  owner: String
-  urls: [String]
-  info: JSON
-  isArchived: Boolean
 }
 
 """The output of our delete `PublishedCard` mutation."""
@@ -3943,9 +3817,6 @@ type DeleteCardsInDeckPayload {
     """The method to use when ordering `CardsInDeck`."""
     orderBy: [CardsInDecksOrderBy!]! = [PRIMARY_KEY_ASC]
   ): CardsInDecksEdge
-
-  """Reads a single `PublishedCard` that is related to this `CardsInDeck`."""
-  publishedCardByCardId: PublishedCard
 
   """Reads a single `Deck` that is related to this `CardsInDeck`."""
   deckByDeckId: Deck
@@ -4074,7 +3945,6 @@ type CardEvent {
   showLocal: Boolean!
 }
 
-"""─── Card catalogue ───────────────────────────────────────────"""
 type CardRecord {
   id: BigInt!
   entity: Entity!
@@ -4097,6 +3967,16 @@ enum CardType {
   CLASS
   FORMAT
   ROGUE_CHOICE
+}
+
+"""
+Published card definitions from the combined Git and database catalogue.
+"""
+type CatalogueCard {
+  id: String!
+  createdBy: String
+  cardScript: JSON!
+  lastModified: String
 }
 
 type ClientConfiguration {

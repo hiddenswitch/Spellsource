@@ -40,5 +40,10 @@ class CatalogueVisibilityTests {
 		assertTrue(result.succeeded());
 		assertEquals(List.of("published"), result.result().stream().map(c -> c.getId()).toList());
 		assertEquals("author", result.result().getFirst().getCreatedBy());
+		var script = new io.vertx.core.json.JsonObject((java.util.Map<String, Object>) result.result().getFirst().getCardScript());
+		assertFalse(script.getJsonObject("attributes").containsKey("CREATED_BY_USER_ID"));
+		assertFalse(script.getJsonObject("attributes").containsKey("PUBLISHED"));
+		assertFalse(script.getJsonObject("attributes").containsKey("ARCHIVED"));
+		assertTrue(catalogue.getAll().getFirst().hasAttribute(Attribute.PUBLISHED));
 	}
 }

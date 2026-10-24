@@ -26,7 +26,7 @@ dependencies {
 }
 
 allprojects {
-  project.version = '0.10.15-rc.12'
+  project.version = '0.10.15-rc.13'
 }
 
 subprojects {

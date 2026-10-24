@@ -1,3 +1,5 @@
+import { getServerSession } from "next-auth";
+import { NextOptions } from "./api/auth/[...nextauth]";
 import PublicSiteLayout, { PublicPageHeader } from "../components/public-site-layout";
 import { Col, Row } from "react-bootstrap";
 import React, { FunctionComponent } from "react";
@@ -9,11 +11,11 @@ import cardEditor from "../../public/static/assets/card-editor.png";
 import collection from "../../public/static/assets/collection.png";
 import map from "../../public/static/game-ui/spellsource-world-map.png";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
+
 import * as styles from "../components/public-site-layout.module.scss";
 
 export const getServerSideProps: GetServerSideProps = async (context) => ({
-  props: { session: await getSession(context) },
+  props: { session: await getServerSession(context.req, context.res, NextOptions) },
 });
 
 const Rectangle: FunctionComponent<{

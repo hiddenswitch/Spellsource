@@ -68,9 +68,11 @@ export type InitBlockOptions = {
 const handleWorkspaceCards = (
   workspace: WorkspaceSvg,
   userId: string,
-  getCard: ReturnType<typeof useLazyQuery<GetCardQuery, GetCardQueryVariables>>[0]
+  getCard: ReturnType<typeof useLazyQuery<GetCardQuery, GetCardQueryVariables>>[0],
+  catalogue: readonly { id: string; cardScript: CardDef }[]
 ) => {
   const cardScript = {} as Record<string, CardDef>;
+  const catalogueById = new Map(catalogue.map(card => [card.id, card.cardScript]));
 
   // Apply card ids and cardScript to all Starter_ blocks
   // TODO don't do this every single update
@@ -101,8 +103,11 @@ const handleWorkspaceCards = (
           if (block.getFieldValue("name") != name) {
             block.setFieldValue(name, "name");
           }
+        } else if (catalogueById.has(id)) {
+          const name = BlocklyMiscUtils.cardMessage(catalogueById.get(id)!);
+          if (block.getFieldValue("name") !== name) block.setFieldValue(name, "name");
         } else if (block.type === "Card_REFERENCE" && id === block.getFieldValue("name")) {
-          getCard({ variables: { id } }).then((result) => {
+          getCard({ variables: { id } }).retain().then((result) => {
             const card = result?.data?.getLatestCard?.cardScript;
             if (!card) return;
             const name = BlocklyMiscUtils.cardMessage(card);
@@ -247,7 +252,7 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
   };
 
   const generateCardAsync = (cardId: string) =>
-    getCard({ variables: { id: cardId } }).then((value) => {
+    getCard({ variables: { id: cardId } }).retain().then((value) => {
       const card = value.data?.getLatestCard;
       const workspace = mainWorkspace();
       if (!!card && !!workspace) {
@@ -259,7 +264,8 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
         }
       }
 
-      return null;
+      const definition = data.catalogueCards.find(card => card.id === cardId)?.cardScript;
+      return definition && workspace ? JsonConversionUtils.generateCard(workspace, definition) : null;
     });
 
   const [deleteArt] = useMutation(DeleteArtDocument);
@@ -355,7 +361,7 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
     }
     if (mainWorkspace()!.isDragging()) return; // While dragging a block, it doesn't appear in the blocks list
 
-    const cardScript = handleWorkspaceCards(mainWorkspace()!, data.userId || "guest", getCard);
+    const cardScript = handleWorkspaceCards(mainWorkspace()!, data.userId || "guest", getCard, data.catalogueCards);
     BlocklyMiscUtils.pluralStuff(mainWorkspace()!);
     let json = JSON.stringify(cardScript, null, 2);
     setJson(json);

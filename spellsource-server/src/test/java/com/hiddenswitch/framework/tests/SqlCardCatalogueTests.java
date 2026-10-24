@@ -72,6 +72,7 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 				await(Environment.sleep(20));
 			}
 			assertTrue(catalogue.getCards().containsKey(id), "published custom card should load");
+			assertNotNull(((SqlCachedCardCatalogue) catalogue).getCardLastModified(id));
 			await(Environment.withDslContext(dsl -> dsl.update(CARDS)
 				.set("archive".equals(transition) ? CARDS.IS_ARCHIVED : CARDS.IS_PUBLISHED, "archive".equals(transition))
 				.where(CARDS.ID.eq(id))));
@@ -79,6 +80,7 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 				await(Environment.sleep(20));
 			}
 			assertFalse(catalogue.getCards().containsKey(id), "withdrawn custom card must leave the live catalogue");
+			assertNull(((SqlCachedCardCatalogue) catalogue).getCardLastModified(id));
 		});
 	}
 

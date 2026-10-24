@@ -353,6 +353,7 @@ type CatalogueCard {
     id: String!
     createdBy: String
     cardScript: JSON!
+    lastModified: String
 }
 
 type CardRecord {

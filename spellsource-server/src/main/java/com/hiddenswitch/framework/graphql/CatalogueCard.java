@@ -11,14 +11,16 @@ public class CatalogueCard implements java.io.Serializable {
     private String id;
     private String createdBy;
     private java.lang.Object cardScript;
+    private String lastModified;
 
     public CatalogueCard() {
     }
 
-    public CatalogueCard(String id, String createdBy, java.lang.Object cardScript) {
+    public CatalogueCard(String id, String createdBy, java.lang.Object cardScript, String lastModified) {
         this.id = id;
         this.createdBy = createdBy;
         this.cardScript = cardScript;
+        this.lastModified = lastModified;
     }
 
     public String getId() {
@@ -42,6 +44,13 @@ public class CatalogueCard implements java.io.Serializable {
         this.cardScript = cardScript;
     }
 
+    public String getLastModified() {
+        return lastModified;
+    }
+    public void setLastModified(String lastModified) {
+        this.lastModified = lastModified;
+    }
+
 
 
     public static CatalogueCard.Builder builder() {
@@ -53,6 +62,7 @@ public class CatalogueCard implements java.io.Serializable {
         private String id;
         private String createdBy;
         private java.lang.Object cardScript;
+        private String lastModified;
 
         public Builder() {
         }
@@ -72,9 +82,14 @@ public class CatalogueCard implements java.io.Serializable {
             return this;
         }
 
+        public Builder setLastModified(String lastModified) {
+            this.lastModified = lastModified;
+            return this;
+        }
+
 
         public CatalogueCard build() {
-            return new CatalogueCard(id, createdBy, cardScript);
+            return new CatalogueCard(id, createdBy, cardScript, lastModified);
         }
 
     }

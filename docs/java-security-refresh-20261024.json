@@ -430,8 +430,9 @@
     },
     "server_log": "/tmp/spellsource-graphql26-full-server.log",
     "card_log": "/tmp/spellsource-graphql26-card-tests.log",
-    "promotion_status": "blocked on collection and deck API compatibility after V14",
-    "schema_operation_validation": {
+    "promotion_status": "Local collection compatibility checks passed; published candidate validation pending",
+    "root_cause": "V14 removes the cards_in_deck foreign key and git-authored SQL card records. Collection and deck UI still depend on these SQL views and relationships. Basic game browser acceptance does not cover deck editing.",
+    "initial_schema_operation_failure": {
       "operations": 126,
       "invalid_operations": 4,
       "missing_field": "CardsInDeck.publishedCardByCardId",
@@ -439,8 +440,7 @@
         "spellsource-web",
         "spellsource-threejs"
       ]
-    },
-    "root_cause": "V14 removes the cards_in_deck foreign key and git-authored SQL card records. Collection and deck UI still depend on these SQL views and relationships. Basic game browser acceptance does not cover deck editing."
+    }
   },
   "random_trace_diagnostics": {
     "change": "Save the original game trace on exceptions and assertion failures from random play or replay; retain the original failure and 10000 repetitions",
@@ -449,21 +449,69 @@
     "unresolved_failure": "rc12 push CI repetition 640 hit GameLogic.castSpell program counter limit during initial play. No original replay input was retained. Diagnostics do not establish a root-cause fix."
   },
   "catalogue_api_repair": {
-    "status": "backend implemented; UI and release validation pending",
-    "query": "catalogueCards { id createdBy cardScript }",
+    "status": "Implemented and locally verified; published candidate validation pending",
+    "query": "catalogueCards { id createdBy cardScript lastModified }",
     "tests": {
-      "graphql_and_visibility": "32 tests passed before final database flag normalization",
-      "final_focused": "2 tests passed after database flag normalization"
+      "server_full": {
+        "tests": 111,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      },
+      "collection_filter_tests": 6,
+      "final_serialization_tests": 2,
+      "typescript": [
+        "spellsource-web passed",
+        "spellsource-threejs passed"
+      ],
+      "next_production_build": "passed",
+      "schema_operations": {
+        "operations": 128,
+        "errors": []
+      },
+      "browser": {
+        "status": 200,
+        "signed_in": true,
+        "has_access_token": true,
+        "error": false,
+        "initial_cards": 25,
+        "session_state": {
+          "has_subject": true,
+          "server_has_subject": true,
+          "server_has_session": true
+        },
+        "deck_created": true,
+        "added_card": "A Challenger Appears",
+        "saved_and_reloaded": true,
+        "editor_blocks": 1,
+        "graphql_errors": [],
+        "page_errors": []
+      },
+      "live_internal_metadata_check": {
+        "cards": 3320,
+        "internalMetadataRemoved": true
+      }
     },
     "logs": [
-      "/tmp/spellsource-catalogue-graphql-tests.log",
-      "/tmp/spellsource-catalogue-final-test.log"
+      "/tmp/spellsource-catalogue-full-server.log",
+      "/tmp/spellsource-catalogue-public-script-tests.log",
+      "/tmp/spellsource-catalogue-ui-tests.log",
+      "/tmp/spellsource-catalogue-editor-build.log",
+      "/tmp/spellsource-catalogue-editor-browser3.log",
+      "/tmp/spellsource-catalogue-editor-browser-final.log"
     ],
     "remaining": [
-      "Wire collection browsing classes and deck card lookup to catalogueCards while retaining custom-card metadata and ordering",
-      "Regenerate web and ThreeJS clients after removing obsolete publishedCardByCardId relationship",
-      "Repeat schema operation validation and browser deck editing against migrated rehearsal database"
-    ]
+      "Verify CI and published candidate images before promotion"
+    ],
+    "ui_changes": [
+      "Collection filters and deck card display use published Git plus SQL definitions",
+      "Editor classes search and Git-card imports use the combined catalogue",
+      "Custom-card timestamps preserve recently changed sorting",
+      "SSR reads NextAuth sessions directly without a self-fetch",
+      "Apollo 4 SQL card lookups retain their result promises; Git references resolve locally",
+      "Internal ownership/publication attributes are omitted from editable card scripts"
+    ],
+    "candidate": "0.10.15-rc.13"
   },
   "catalogue_cache_withdrawal": {
     "before": "Both archive and unpublish regression cases failed because stale cards remained cached",
