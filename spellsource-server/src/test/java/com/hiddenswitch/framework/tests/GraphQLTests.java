@@ -558,6 +558,30 @@ public class GraphQLTests extends FrameworkTestBase {
 	// ── Cards Tests ──────────────────────────────────────────────
 
 	@Test
+	public void testPublishedCatalogueIncludesGitCards(Vertx vertx, VertxTestContext testContext) {
+		testVirtual(vertx, testContext, () -> {
+			await(startAll(vertx));
+			var result = await(graphql(graphqlClient(vertx), "{ catalogueCards { id createdBy cardScript } }"));
+			assertNull(result.getJsonArray("errors"), () -> result.encode());
+			var cards = result.getJsonObject("data").getJsonArray("catalogueCards");
+			assertFalse(cards.isEmpty());
+			boolean hasClass = false;
+			boolean hasAvenger = false;
+			for (var value : cards) {
+				var card = (JsonObject) value;
+				var script = card.getJsonObject("cardScript");
+				assertEquals(card.getString("id"), script.getString("id"));
+				assertNotEquals("TEST", script.getString("set"));
+				assertNotNull(script.getString("name"));
+				hasClass |= "CLASS".equals(script.getString("type"));
+				hasAvenger |= "minion_fassnu_avenger".equals(card.getString("id"));
+			}
+			assertTrue(hasClass, "class definitions must survive removal of Git cards from SQL");
+			assertTrue(hasAvenger, "Git card definitions must be available without a SQL card row");
+		});
+	}
+
+	@Test
 	public void testCardsQuery(Vertx vertx, VertxTestContext testContext) {
 		testVirtual(vertx, testContext, () -> {
 			await(startAll(vertx));

@@ -91,7 +91,8 @@ public class GraphQL extends AbstractVirtualThreadVerticle {
 									}
 								})
 								.build(),
-						ExtendedScalars.DateTime
+						ExtendedScalars.DateTime,
+						ExtendedScalars.Json
 				)
 				.build()
 				.makeExecutableSchema();

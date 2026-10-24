@@ -435,7 +435,8 @@ graphqlCodegen {
   packageName = "com.hiddenswitch.framework.graphql"
   customTypesMapping = [
       DateTime: "org.joda.time.DateTime",
-      BigInt: "java.lang.Long"
+      BigInt: "java.lang.Long",
+      JSON: "java.lang.Object"
   ]
   customAnnotationsMapping = [
       DateTime: ["@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.example.json.EpochMillisScalarDeserializer.class)"]
@@ -467,4 +468,9 @@ tasks.register("generateSchema", JavaExec) {
   jvmArgs.addAll(jvmArgs)
   inputs.file("src/main/resources/schema.graphqls")
   outputs.file(rootProject.file("spellsource-graphql/schema.graphql"))
+}
+
+// Generated API sources are checked in; order explicit regeneration before compilation.
+tasks.named("compileJava") {
+  mustRunAfter(tasks.named("graphqlCodegen"))
 }

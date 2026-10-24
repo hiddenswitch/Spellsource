@@ -447,5 +447,23 @@
     "verified_with": "Deliberately injected exception produced a JSON trace and preserved original exception; injection restored before full passing card run",
     "ci_artifact_action": "actions/upload-artifact v7.0.2 pinned cf430e030ddbb5b0abf93d22962f4752f3646cd9",
     "unresolved_failure": "rc12 push CI repetition 640 hit GameLogic.castSpell program counter limit during initial play. No original replay input was retained. Diagnostics do not establish a root-cause fix."
+  },
+  "catalogue_api_repair": {
+    "status": "backend implemented; UI and release validation pending",
+    "query": "catalogueCards { id createdBy cardScript }",
+    "tests": {
+      "graphql_and_visibility": "32 tests passed before final database flag normalization",
+      "final_focused": "2 tests passed after database flag normalization"
+    },
+    "logs": [
+      "/tmp/spellsource-catalogue-graphql-tests.log",
+      "/tmp/spellsource-catalogue-final-test.log"
+    ],
+    "remaining": [
+      "Wire collection browsing classes and deck card lookup to catalogueCards while retaining custom-card metadata and ordering",
+      "Regenerate web and ThreeJS clients after removing obsolete publishedCardByCardId relationship",
+      "Verify archive/unpublish invalidation removes stale cached custom cards before exposing catalogue API in production",
+      "Repeat schema operation validation and browser deck editing against migrated rehearsal database"
+    ]
   }
 }

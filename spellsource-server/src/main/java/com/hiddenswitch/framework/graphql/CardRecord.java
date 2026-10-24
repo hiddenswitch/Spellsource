@@ -1,9 +1,6 @@
 package com.hiddenswitch.framework.graphql;
 
 
-/**
- * ─── Card catalogue ───────────────────────────────────────────
- */
 public class CardRecord implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;

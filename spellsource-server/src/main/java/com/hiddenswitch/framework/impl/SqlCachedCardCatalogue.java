@@ -236,12 +236,8 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 							cardDesc.setAttributes(attributes);
 						}
 						attributes.put(Attribute.CREATED_BY_USER_ID, card.getCreatedBy());
-						if (card.getIsPublished()) {
-							attributes.put(Attribute.PUBLISHED, true);
-						}
-						if (card.getIsArchived()) {
-							attributes.put(Attribute.ARCHIVED, true);
-						}
+						attributes.put(Attribute.PUBLISHED, Boolean.TRUE.equals(card.getIsPublished()));
+						attributes.put(Attribute.ARCHIVED, Boolean.TRUE.equals(card.getIsArchived()));
 						return cardDesc;
 					} catch (Exception e) {
 						LOGGER.warn("Skipping malformed custom card {} in SQL: {}", card.getId(), e.getMessage());
