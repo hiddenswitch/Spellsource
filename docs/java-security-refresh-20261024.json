@@ -576,5 +576,33 @@
       "/tmp/spellsource-shadow-merge-verification2.log"
     ],
     "status": "Locally validated; not yet released"
+  },
+  "rc13_ci": {
+    "commit": "e2fd113557c77889fd525d1d2507484bf1bd80d1",
+    "passed": [
+      "Three.js Client push",
+      "Three.js Client PR",
+      "Tests push",
+      "Tests PR",
+      "Build GraphQL Gateway",
+      "Build Website"
+    ],
+    "server_run": 40102672560,
+    "server_result": {
+      "tests": 111,
+      "failures": 2,
+      "skipped": 3
+    },
+    "failures": {
+      "testMatchFoundDeliveredWhenSubscriptionOpensAfterGameCreated": "WebSocket closed before matchFound delivery",
+      "testConnectToGameWaitsForGameMessageSubscription": "gameMessages subscription was not ready"
+    },
+    "reports": "/tmp/spellsource-rc13-server-reports",
+    "log": "/tmp/spellsource-rc13-server-failure.log",
+    "published_images": {
+      "web": "ghcr.io/hiddenswitch/spellsource/web@sha256:27c2f61ffefc42e19da81655d7481e43a690e3cb6782bbe9eea516cbcdd26a7e",
+      "graphql": "ghcr.io/hiddenswitch/spellsource-graphql@sha256:155549b04f793c10927ed996fb4b588ebb5ae9141292c8add51df29b456a647a"
+    },
+    "status": "Do not promote; investigate subscription readiness failures before the next candidate"
   }
 }
