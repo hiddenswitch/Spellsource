@@ -751,8 +751,7 @@
       "restored": true
     },
     "remaining": [
-      "Full server suite and packaged build",
-      "Next candidate hosted CI; investigate any remaining clustered stall"
+      "Monitor clustered matchmaking in further acceptance; one successful hosted run does not prove an intermittent stall eliminated"
     ],
     "full_server_validation": {
       "tests": 121,
@@ -763,7 +762,7 @@
   },
   "rc15_candidate": {
     "version": "0.10.15-rc.15",
-    "status": "full local validation passed; hosted CI pending",
+    "status": "All seven hosted workflows passed; server, gateway and website images published; rehearsal acceptance pending",
     "changes": [
       "Commons Codec 1.23.0, JBoss Logging 3.6.3.Final, Jakarta Activation 2.1.4, WildFly Common 2.0.1",
       "JUnit teardown closes independently created clustered Vertx instances after timeouts",
@@ -778,8 +777,40 @@
     "packaging": "shadowJar passed",
     "log": "/tmp/spellsource-cluster-cleanup-full-validation.log",
     "remaining": [
-      "Hosted server CI and published-image acceptance",
-      "Confirm clustered matchmaking no longer stalls or use improved failure propagation to diagnose it"
-    ]
+      "Published-image acceptance against isolated PostgreSQL 18 and Keycloak 26",
+      "Production database cutover and release promotion remain separate outstanding gates"
+    ],
+    "ci": {
+      "server": 40107922080,
+      "website": 40107922081,
+      "graphql": 40107922063,
+      "cards": [
+        40107922062,
+        40107927390
+      ],
+      "threejs": [
+        40107922067,
+        40107927434
+      ]
+    },
+    "hosted_tests": {
+      "server": {
+        "tests": 121,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      },
+      "cards": {
+        "tests": 27395,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 14
+      }
+    },
+    "published_images": {
+      "server": "ghcr.io/hiddenswitch/spellsource@sha256:d200e16b64d3e665f52ad414ae4880f68772db85190e38693c2828cfdc00bd5f",
+      "graphql": "ghcr.io/hiddenswitch/spellsource-graphql@sha256:7b2600a3b0e8d9c4adc583c7f29a255ae88b94aef6c0c5fd1fe2ad7df390e50c",
+      "web": "ghcr.io/hiddenswitch/spellsource/web@sha256:3a8108330379d337d1d81a69de3ae404f3f3af5bfbdc9c1d74f5b2cca4ea309a"
+    }
   }
 }
