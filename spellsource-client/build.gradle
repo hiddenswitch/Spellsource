@@ -41,6 +41,8 @@ tasks.register('distAndroid', Exec) { t ->
 }
 
 tasks.register('distSteam') {
+  def execOps = services.get(org.gradle.process.ExecOperations)
+  def rootProjDir = rootProject.projectDir
   description("Uploads the macOS and Windows builds to Steam")
   group('spellsource')
   dependsOn += [buildProject_StandaloneOSX, buildProject_StandaloneWindows64]
@@ -49,18 +51,18 @@ tasks.register('distSteam') {
   def steamCmdPassword = props.getProperty("steamcmd.password")
   doLast {
     def steamGuardCode = new ByteArrayOutputStream();
-    exec {
-      workingDir("${rootProject.projectDir}/steamguardcli")
+    execOps.exec {
+      workingDir("${rootProjDir}/steamguardcli")
       commandLine "docker", "build", "-t", "steamguardcli", "."
     }
-    exec {
+    execOps.exec {
       commandLine "docker", "run", "--rm", "-v=$secretsPath/spellsource/maFiles:/data", "steamguardcli", "mono", "/build/steamguard", "--mafiles-path", "/data", "generate-code"
       standardOutput(steamGuardCode)
     }
-    exec {
-      def winLinuxCmd = ["docker", "run", "--rm", "-e", "CPU_MHZ=2000", "-v=${rootProject.projectDir}:/home/steam/workdir", "-w=/home/steam/workdir", "steamcmd/steamcmd:latest", "/home/steam/steamcmd/steamcmd.sh"]
-      def macOsCmd = ["/bin/bash", "$project.rootProject.projectDir/bin/steamcmd/steamcmd_osx/steamcmd.sh"]
-      def cmdProjectDir = isMacOs ? "$rootProject.projectDir" : "/home/steam/workdir"
+    execOps.exec {
+      def winLinuxCmd = ["docker", "run", "--rm", "-e", "CPU_MHZ=2000", "-v=${rootProjDir}:/home/steam/workdir", "-w=/home/steam/workdir", "steamcmd/steamcmd:latest", "/home/steam/steamcmd/steamcmd.sh"]
+      def macOsCmd = ["/bin/bash", "${rootProjDir}/bin/steamcmd/steamcmd_osx/steamcmd.sh"]
+      def cmdProjectDir = isMacOs ? "${rootProjDir}" : "/home/steam/workdir"
       commandLine([] +
               (isMacOs ? macOsCmd : winLinuxCmd)
               + [
@@ -73,6 +75,9 @@ tasks.register('distSteam') {
 }
 
 tasks.register('run') {
+  def execOps = services.get(org.gradle.process.ExecOperations)
+  def winExe = layout.buildDirectory.file("StandaloneWindows64/Spellsource.exe")
+  def macExe = layout.buildDirectory.file("StandaloneOSX/Spellsource.app/Contents/MacOS/Spellsource")
   enabled = false
   group('spellsource')
   if (isWindows) {
@@ -82,11 +87,11 @@ tasks.register('run') {
   }
 
   doLast {
-    exec {
+    execOps.exec {
       if (isWindows) {
-        executable layout.buildDirectory.file("StandaloneWindows64/Spellsource.exe").get()
+        executable winExe.get()
       } else if (isMacOs) {
-        executable layout.buildDirectory.file("StandaloneOSX/Spellsource.app/Contents/MacOS/Spellsource").get()
+        executable macExe.get()
       }
     }
   }
