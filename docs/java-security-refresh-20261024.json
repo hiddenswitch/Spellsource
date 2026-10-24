@@ -462,8 +462,39 @@
     "remaining": [
       "Wire collection browsing classes and deck card lookup to catalogueCards while retaining custom-card metadata and ordering",
       "Regenerate web and ThreeJS clients after removing obsolete publishedCardByCardId relationship",
-      "Verify archive/unpublish invalidation removes stale cached custom cards before exposing catalogue API in production",
       "Repeat schema operation validation and browser deck editing against migrated rehearsal database"
+    ]
+  },
+  "catalogue_cache_withdrawal": {
+    "before": "Both archive and unpublish regression cases failed because stale cards remained cached",
+    "after": {
+      "com.hiddenswitch.framework.tests.SqlCardCatalogueTests": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "com.hiddenswitch.framework.tests.CatalogueVisibilityTests": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "com.hiddenswitch.framework.tests.GraphQLTests": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "behavior": [
+      "Remove custom cards absent from the refreshed published SQL result",
+      "Restore Git definitions when SQL overrides are withdrawn",
+      "Serialize SQL refreshes to prevent stale responses overwriting newer ones"
+    ],
+    "logs": [
+      "/tmp/spellsource-catalogue-withdraw-before.log",
+      "/tmp/spellsource-catalogue-withdraw-after.log"
     ]
   }
 }

@@ -85,6 +85,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 	private volatile GameContext workingContext;
 	private boolean sharedPerVertx;
 	private Promise<Void> initializedPromise;
+	private Future<Void> pendingCardRefresh = Future.succeededFuture();
 
 	public static SqlCachedCardCatalogue forVertx() {
 		return VERTX_CATALOGUES.get();
@@ -259,7 +260,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		refreshInvalidCardsFromSql();
 	}
 
-	private void refreshInvalidCardsFromSql() {
+	private synchronized void refreshInvalidCardsFromSql() {
 		String invalid;
 		Set<String> toFetch = null;
 		while ((invalid = invalidated.pollFirst()) != null) {
@@ -270,15 +271,29 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		}
 		if (toFetch != null && !toFetch.isEmpty()) {
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
-			var getCards = cardsDao.findManyByCondition(CARDS.ID.in(toFetch).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false)));
-			getCards.onSuccess(cardDbRecords -> {
-				lock.writeLock().lock();
-				try {
-					loadFromCardDbRecords(cardDbRecords);
-				} finally {
-					lock.writeLock().unlock();
-				}
-			}).onFailure(t -> LOGGER.warn("Failed to refresh invalidated cards from SQL", t));
+			var requestedIds = Set.copyOf(toFetch);
+			pendingCardRefresh = pendingCardRefresh.recover(t -> Future.succeededFuture())
+				.compose(v -> cardsDao.findManyByCondition(CARDS.ID.in(requestedIds)
+					.and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false))))
+				.map(cardDbRecords -> {
+					lock.writeLock().lock();
+					try {
+						var withdrawn = new HashSet<>(requestedIds);
+						cardDbRecords.forEach(card -> withdrawn.remove(card.getId()));
+						var gitCards = getBaseGitCatalogue(gitUserId).getCards();
+						for (var id : withdrawn) {
+							removeCard(id);
+							var gitCard = gitCards.get(id);
+							if (gitCard != null) {
+								loadCards(List.of(gitCard.getDesc()));
+							}
+						}
+						loadFromCardDbRecords(cardDbRecords);
+						return (Void) null;
+					} finally {
+						lock.writeLock().unlock();
+					}
+				}).onFailure(t -> LOGGER.warn("Failed to refresh invalidated cards from SQL", t));
 		}
 	}
 
