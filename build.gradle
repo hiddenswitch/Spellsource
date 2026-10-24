@@ -26,7 +26,7 @@ dependencies {
 }
 
 allprojects {
-  project.version = '0.10.15-rc.8'
+  project.version = '0.10.15-rc.9'
 }
 
 subprojects {
@@ -217,6 +217,10 @@ subprojects {
 
         if (details.requested.group == 'org.hdrhistogram') {
           details.useVersion '2.2.2'
+        }
+
+        if (details.requested.group == 'org.yaml' && details.requested.name == 'snakeyaml') {
+          details.useVersion '2.7'
         }
 
         if (details.requested.group == 'io.smallrye.common') {

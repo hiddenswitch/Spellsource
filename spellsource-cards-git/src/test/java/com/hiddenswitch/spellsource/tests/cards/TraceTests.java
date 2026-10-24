@@ -43,7 +43,7 @@ public class TraceTests extends TestBase {
 
 	public static Object[][] getTraces() {
 		try (ScanResult scanResult = new ClassGraph()
-				.disableRuntimeInvisibleAnnotations()
+				.enableClasspath()
 				.acceptPaths(getDirectoryPrefix()).scan()) {
 			List<Trace> traces = scanResult
 					.getResourcesWithExtension(".json")
@@ -51,7 +51,7 @@ public class TraceTests extends TestBase {
 					.filter(Objects::nonNull)
 					.map(c -> {
 						try {
-							Trace trace = Trace.load(c.getContentAsString());
+							Trace trace = Trace.load(c.loadAsString());
 							if (trace.getId() == null) {
 								trace.setId(c.toString());
 							}

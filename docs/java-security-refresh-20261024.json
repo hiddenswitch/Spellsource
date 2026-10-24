@@ -187,5 +187,39 @@
         }
       }
     }
+  },
+  "redisson_classgraph": {
+    "versions": {
+      "redisson": "4.8.0",
+      "classgraph": "6.0.0",
+      "snakeyaml": "2.7"
+    },
+    "compatibility_changes": [
+      "Enable classpath scanning explicitly in all four ClassGraph scans",
+      "Replace removed resource and class loading APIs",
+      "Remove unused runtime annotation option",
+      "Align SnakeYAML across Redisson and Jackson"
+    ],
+    "validation": {
+      "command": "./gradlew --no-parallel :spellsource-server:test :spellsource-cards-git:test",
+      "result": "passed",
+      "duration": "5m 49s",
+      "counts": {
+        "spellsource-server": {
+          "tests": 105,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 3
+        },
+        "spellsource-cards-git": {
+          "tests": 27395,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 14
+        }
+      },
+      "log": "/tmp/spellsource-redisson-classgraph-full-tests.log"
+    },
+    "candidate": "0.10.15-rc.9"
   }
 }

@@ -81,9 +81,9 @@ public abstract class AbstractCardResources<T> implements CardResources {
 			};
 		}
 		ScanResult scanResult = new ClassGraph()
-				.disableRuntimeInvisibleAnnotations()
+				.enableClasspath()
 				.disableNestedJarScanning()
-				.whitelistPaths(getDirectoryPrefix()).scan();
+				.acceptPaths(getDirectoryPrefix()).scan();
 
 		resources = scanResult
 				.getResourcesWithExtension(".json")
