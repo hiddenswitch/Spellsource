@@ -164,7 +164,7 @@
         "source": "https://repo.maven.apache.org/maven2/uk/org/webcompere/system-stubs-jupiter/maven-metadata.xml"
       }
     },
-    "validation": "full rerun pending after helper and System Stubs corrections",
+    "validation": "full suite rerun failed with one randomized replay turn mismatch and testTwoGamesInRow timeout; replay-only rerun passed 10000 cases; both findings unresolved",
     "targeted_validation": {
       "nested_choice_overrides": "six affected tests passed using delegation",
       "configuration_tests": "passed after System Stubs upgrade"

@@ -1,0 +1,65 @@
+{
+  "candidate": "0.10.15-rc.7",
+  "source_commit": "b3283db9f430d1efac61709d08da834ea7203c9c",
+  "environment": "isolated PostgreSQL 18.6 and Keycloak 26.8.1 rehearsal",
+  "images": {
+    "server": "ghcr.io/hiddenswitch/spellsource@sha256:8a917d95384448c9192e261698f766a365749231c5ce3ef6aa4c1142cb2de3f4",
+    "gateway": "ghcr.io/hiddenswitch/spellsource-graphql@sha256:b91d7cd1ed073ae4c950fa159e5512ea6df72f2cbdb6de8614a14ad2e861e136",
+    "website": "ghcr.io/hiddenswitch/spellsource/web@sha256:89fc13a98193e3a67251b0745714abccaa8055cd51d9e02c6c6e61481d4fe2ff"
+  },
+  "ci": "all workflows passed",
+  "server_readiness": 200,
+  "authorization_tests_passed": 2,
+  "graphql_operations_validated": 126,
+  "browser": {
+    "status": 200,
+    "signed_in": true,
+    "has_access_token": true,
+    "error": false,
+    "mulligan_confirmed": true,
+    "game": {
+      "frames": {
+        "received": 19,
+        "errors": 0
+      },
+      "page_errors": [],
+      "graphql_responses": [
+        {
+          "status": 200,
+          "errors": false
+        },
+        {
+          "status": 200,
+          "errors": false
+        },
+        {
+          "status": 200,
+          "errors": false
+        },
+        {
+          "status": 200,
+          "errors": false
+        },
+        {
+          "status": 200,
+          "errors": false
+        },
+        {
+          "status": 200,
+          "errors": false
+        }
+      ],
+      "canvas_count": 1
+    },
+    "blocked_origins": [
+      "https://authjs.dev",
+      "https://fonts.googleapis.com"
+    ],
+    "conceded": true
+  },
+  "limitations": [
+    "Gameplay covered entry mulligan and concede rather than a complete match",
+    "Production database migration and promotion remain pending",
+    "Subsequent common library batch is not included in these published images"
+  ]
+}

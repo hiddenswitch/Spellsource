@@ -107,7 +107,8 @@ public class TraceTests extends TestBase {
 			context1.play();
 			Trace trace = context1.getTrace().clone();
 			GameContext context2 = trace.replayContext();
-			assertEquals(context1.getTurn(), context2.getTurn());
+			assertEquals(context1.getTurn(), context2.getTurn(),
+					() -> "Replay input for turn-count mismatch:\n" + trace.dump());
 			return null;
 		}, "timeout");
 	}
