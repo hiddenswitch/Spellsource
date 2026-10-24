@@ -12,11 +12,12 @@ clean {
 tasks.register('compileTypescript', YarnTask) {
   dependsOn ':yarnWorkspace'
 
-  args = ['--cwd', 'ts-proto', 'run', 'build']
+  // Use the root Yarn release instead of the submodule's legacy nested yarn script.
+  args = ['workspace', '@appmana/ts-proto', 'exec', 'tsc']
   inputs.dir('ts-proto/src/')
   outputs.dir('ts-proto/build/')
 }
 
 node {
-  nodeProjectDir = file("${projectDir}/ts-proto")
+  nodeProjectDir = rootProject.projectDir
 }
