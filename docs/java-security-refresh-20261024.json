@@ -128,5 +128,46 @@
         "skipped": 14
       }
     }
+  },
+  "common_libraries": {
+    "versions": {
+      "guavaVersion": {
+        "version": "33.7.2-jre",
+        "source": "https://repo.maven.apache.org/maven2/com/google/guava/guava/maven-metadata.xml"
+      },
+      "slf4jVersion": {
+        "version": "2.0.20",
+        "source": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/maven-metadata.xml"
+      },
+      "logbackVersion": {
+        "version": "1.6.5",
+        "source": "https://repo.maven.apache.org/maven2/ch/qos/logback/logback-classic/maven-metadata.xml"
+      },
+      "micrometerVersion": {
+        "version": "1.17.2",
+        "source": "https://repo.maven.apache.org/maven2/io/micrometer/micrometer-core/maven-metadata.xml"
+      },
+      "bytebuddyVersion": {
+        "version": "1.18.16",
+        "source": "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy/maven-metadata.xml"
+      },
+      "mockitoCoreVersion": {
+        "version": "5.24.0",
+        "source": "https://repo.maven.apache.org/maven2/org/mockito/mockito-core/maven-metadata.xml"
+      },
+      "gsonVersion": {
+        "version": "2.15.0",
+        "source": "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/maven-metadata.xml"
+      },
+      "system_stubs": {
+        "version": "2.1.8",
+        "source": "https://repo.maven.apache.org/maven2/uk/org/webcompere/system-stubs-jupiter/maven-metadata.xml"
+      }
+    },
+    "validation": "full rerun pending after helper and System Stubs corrections",
+    "targeted_validation": {
+      "nested_choice_overrides": "six affected tests passed using delegation",
+      "configuration_tests": "passed after System Stubs upgrade"
+    }
   }
 }

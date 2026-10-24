@@ -181,7 +181,8 @@ public class TestBase {
 	}
 
 	protected static OverrideHandle<Card> overrideDiscover(GameContext context, Player player, Function<List<DiscoverAction>, GameAction> discovery) {
-		Behaviour overriden = Mockito.spy(context.getBehaviours().get(player.getId()));
+		Behaviour previous = context.getBehaviours().get(player.getId());
+		Behaviour overriden = Mockito.mock(Behaviour.class, org.mockito.AdditionalAnswers.delegatesTo(previous));
 		context.setBehaviour(player.getId(), overriden);
 		OverrideHandle<Card> handle = new OverrideHandle<>();
 		Mockito.doAnswer(invocation -> {
@@ -194,14 +195,15 @@ public class TestBase {
 				handle.set(result.getCard());
 				return result;
 			} else {
-				return invocation.callRealMethod();
+				return previous.requestAction(invocation.getArgument(0), invocation.getArgument(1), actions);
 			}
 		}).when(overriden).requestAction(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.anyList());
 		return handle;
 	}
 
 	protected static OverrideHandle<EntityReference> overrideBattlecry(GameContext context, Player player, Function<List<OpenerAction>, GameAction> battlecry) {
-		Behaviour overriden = Mockito.spy(context.getBehaviours().get(player.getId()));
+		Behaviour previous = context.getBehaviours().get(player.getId());
+		Behaviour overriden = Mockito.mock(Behaviour.class, org.mockito.AdditionalAnswers.delegatesTo(previous));
 		context.setBehaviour(player.getId(), overriden);
 		OverrideHandle<EntityReference> handle = new OverrideHandle<>();
 		Mockito.doAnswer(invocation -> {
@@ -220,7 +222,7 @@ public class TestBase {
 				handle.set(result.getTargetReference());
 				return result;
 			} else {
-				return invocation.callRealMethod();
+				return previous.requestAction(invocation.getArgument(0), invocation.getArgument(1), actions);
 			}
 		}).when(overriden).requestAction(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.anyList());
 		return handle;
