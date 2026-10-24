@@ -606,7 +606,7 @@
     "status": "Do not promote; investigate subscription readiness failures before the next candidate"
   },
   "rc13_subscription_investigation": {
-    "status": "Root cause reproduced locally and lifecycle fix passes all GraphQL tests; full suite and CI pending",
+    "status": "Root cause reproduced and fixed; all 117 server tests pass (3 skipped); next candidate CI pending",
     "diagnostics": "Readiness test records WebSocket errors and close status/reason; late matchFound test includes close status/reason. No runtime fix or timeout relaxation.",
     "local_validation": {
       "command": "JAVA_TOOL_OPTIONS=-XX:ActiveProcessorCount=2 TESTCONTAINERS_REUSE_ENABLE=false ./gradlew --no-parallel :spellsource-server:test --tests *.GraphQLTests --console=plain",
@@ -640,7 +640,7 @@
     }
   },
   "jooq_321_refresh": {
-    "status": "targeted runtime and schema-generation checks passed; full suite and release pending",
+    "status": "Full server tests and packaged shadowJar passed; candidate publication pending",
     "versions": {
       "jooq": "3.17.3 -> 3.21.9",
       "jakarta.xml.bind-api": "3.0.1 -> 4.0.5"
@@ -661,5 +661,26 @@
     ],
     "fork_commit": "1a8ffc0f",
     "fork_branch": "https://github.com/hiddenswitch/forks-jooq-vertx-5/tree/upgrade/jooq-3-21-20261024"
+  },
+  "rc14_candidate": {
+    "version": "0.10.15-rc.14",
+    "status": "local server validation passed; CI pending",
+    "changes": [
+      "Jib 3.5.4 and Shadow 9.6.1 with complete merged service providers",
+      "Utility library refresh",
+      "jOOQ 3.21.9 and JAXB 4.0.5; mode-aware code generator and reactive JSON bindings",
+      "WebSocket client lifecycle regression fix with forced collection"
+    ],
+    "validation": {
+      "tests": 117,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "log": "/tmp/spellsource-jooq321-ws-fixed-full.log",
+    "remaining": [
+      "CI publication and packaged acceptance",
+      "Production promotion after database migration readiness"
+    ]
   }
 }
