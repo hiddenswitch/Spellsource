@@ -5,7 +5,7 @@ import { PostGraphileAmberPreset } from "postgraphile/presets/amber";
 import { makePgService } from "postgraphile/adaptors/pg";
 import { Pool } from "pg";
 import { pgDatabase, pgHost, pgPassword, pgPort, pgUser } from "./config";
-import { AuthRequest } from "./auth";
+import { AuthRequest, databaseSettings } from "./auth";
 
 export const pgPool = new Pool({
   user: pgUser,
@@ -46,10 +46,7 @@ const preset: GraphileConfig.Preset = {
       },
       pgSettings: (ctx) => {
         const req = ctx as unknown as AuthRequest;
-        return {
-          role: req.admin ? "admin" : req.auth ? "website" : undefined, // TODO use different roles for website / client / server ? or just rename role to "user"
-          "user.id": req.auth?.sub ?? "",
-        };
+        return databaseSettings(req);
       },
     }),
   ],
