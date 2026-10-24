@@ -753,6 +753,33 @@
     "remaining": [
       "Full server suite and packaged build",
       "Next candidate hosted CI; investigate any remaining clustered stall"
+    ],
+    "full_server_validation": {
+      "tests": 121,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    }
+  },
+  "rc15_candidate": {
+    "version": "0.10.15-rc.15",
+    "status": "full local validation passed; hosted CI pending",
+    "changes": [
+      "Commons Codec 1.23.0, JBoss Logging 3.6.3.Final, Jakarta Activation 2.1.4, WildFly Common 2.0.1",
+      "JUnit teardown closes independently created clustered Vertx instances after timeouts",
+      "Game client propagates premature stream termination and subscription setup failures"
+    ],
+    "validation": {
+      "tests": 121,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "packaging": "shadowJar passed",
+    "log": "/tmp/spellsource-cluster-cleanup-full-validation.log",
+    "remaining": [
+      "Hosted server CI and published-image acceptance",
+      "Confirm clustered matchmaking no longer stalls or use improved failure propagation to diagnose it"
     ]
   }
 }
