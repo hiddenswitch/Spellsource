@@ -3,7 +3,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath "org.jooq:jooq-codegen:3.17.3"
+    classpath "org.jooq:jooq-codegen:3.21.9"
     classpath "org.postgresql:postgresql:$postgresqlVersion"
     classpath "org.flywaydb:flyway-database-postgresql:$flywayVersion"
   }
@@ -108,7 +108,7 @@ dependencies {
   }
 
   implementation group: "io.netty", name: "netty-resolver-dns-native-macos", version: nettyVersion, classifier: "osx-aarch_64"
-  implementation 'org.jooq:jooq:3.17.3'
+  implementation 'org.jooq:jooq:3.21.9'
   implementation "io.vertx:vertx-pg-client:$vertxVersion"
   implementation(project(':vertx-jooq-fork:vertx-jooq-classic-reactive')) {
     exclude group: "io.vertx", module: '*'

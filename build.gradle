@@ -200,7 +200,7 @@ subprojects {
         }
 
         if (details.requested.group == 'jakarta.xml.bind') {
-          details.useVersion "3.0.1"
+          details.useVersion "4.0.5"
         }
 
         if (details.requested.group == 'jakarta.activation') {

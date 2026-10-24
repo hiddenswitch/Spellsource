@@ -622,6 +622,37 @@
       },
       "log": "/tmp/spellsource-subscription-two-cpu.log"
     },
-    "next": "Run full server suite with two CPU cores to check cross-class interactions; investigate original cause before promotion."
+    "next": "Run full server suite with two CPU cores to check cross-class interactions; investigate original cause before promotion.",
+    "full_server_two_cpu": {
+      "tests": 111,
+      "failures": 0,
+      "skipped": 3,
+      "log": "/tmp/spellsource-server-two-cpu.log",
+      "dependency_state": "6965ec30a before jOOQ upgrade",
+      "conclusion": "Original CI subscription failure not reproduced; cause remains unresolved."
+    }
+  },
+  "jooq_321_refresh": {
+    "status": "targeted runtime and schema-generation checks passed; full suite and release pending",
+    "versions": {
+      "jooq": "3.17.3 -> 3.21.9",
+      "jakarta.xml.bind-api": "3.0.1 -> 4.0.5"
+    },
+    "source": "https://github.com/jOOQ/jOOQ/releases/tag/version-3.21.9",
+    "generator": "Ported mode-aware JavaWriter factory compatibility from HiddenSwitch/forks-vertx-jooq commit 4ef546d to the existing Spellsource fork. Generated 727 Java files against PostgreSQL 18 rehearsal and compiled all of them in an isolated temporary directory.",
+    "runtime_repair": "Adapt wrapped-converter JSON/JSONB database values to Vert.x JSON values. Preserve JSON null using Tuple.JSON_NULL separately from SQL NULL.",
+    "validation": {
+      "initial_compile": "passed /tmp/spellsource-jooq321-compile.log",
+      "initial_runtime": "111 tests; 9 failures after upgrade /tmp/spellsource-jooq321-tests.log",
+      "targeted_after_fix": "40 tests; zero failures /tmp/spellsource-jooq321-json-fix2.log",
+      "json_roundtrip_regression": "6 tests; zero failures /tmp/spellsource-jooq321-json-regression.log"
+    },
+    "remaining": [
+      "Complete full server suite",
+      "Check equivalent wrapped JSON conversion path in AppMana fork",
+      "Investigate preexisting intermittent CI WebSocket failure before production promotion"
+    ],
+    "fork_commit": "1a8ffc0f",
+    "fork_branch": "https://github.com/hiddenswitch/forks-jooq-vertx-5/tree/upgrade/jooq-3-21-20261024"
   }
 }
