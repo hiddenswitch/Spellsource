@@ -97,6 +97,9 @@ public class DiscardSpell extends AbstractRemoveCardSpell {
 
 		if (target instanceof Card && player.getHand().contains(target)) {
 			context.getLogic().discardCard(player, (Card) target);
+			if (target.hasAttribute(Attribute.DISCARDED)) {
+				SpellUtils.castChildSpell(context, player, spell, source, target, (Card) target);
+			}
 		} else {
 			CardList discardableCards = cardSource.getCards(context, source, player).filtered(cardFilter.matcher(context, player, source));
 			int cardCount = numberOfCards == ALL_CARDS ? discardableCards.getCount() : numberOfCards;

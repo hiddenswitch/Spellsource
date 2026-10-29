@@ -13,9 +13,12 @@ public class HeroClassCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		String heroClass = (String) desc.get(ConditionArg.HERO_CLASS);
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			String heroClass) {
 		return player.getHero().getSourceCard().hasHeroClass(heroClass);
 	}
 

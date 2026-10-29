@@ -22,7 +22,8 @@
         }
       },
       "maxFires": 1
-    }
+    },
+    "name": "Casino Royale"
   },
   "attributes": {},
   "collectible": true,

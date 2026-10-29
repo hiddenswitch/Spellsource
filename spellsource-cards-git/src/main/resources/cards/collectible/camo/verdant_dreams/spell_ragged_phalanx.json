@@ -13,17 +13,20 @@
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
         "attackBonus": 1,
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Ragged Phalanx"
       },
       {
         "class": "AddAttributeSpell",
         "target": "FRIENDLY_MINIONS",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Ragged Phalanx"
       },
       {
         "class": "AddAttributeSpell",
         "target": "FRIENDLY_MINIONS",
-        "attribute": "CANNOT_ATTACK"
+        "attribute": "CANNOT_ATTACK",
+        "name": "Ragged Phalanx"
       }
     ]
   },

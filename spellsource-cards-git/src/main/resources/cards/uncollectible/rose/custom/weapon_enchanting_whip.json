@@ -45,7 +45,8 @@
         {
           "class": "BuffSpell",
           "attackBonus": 2,
-          "hpBonus": 2
+          "hpBonus": 2,
+          "name": "Enchanting Whip's Blessing"
         }
       ]
     }

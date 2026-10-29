@@ -17,15 +17,18 @@ public class PlayedLastTurnCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			EntityFilter filter) {
 		var cardIds = player.getStatistics().getCardsPlayed();
 		var count = 0;
 		var turn = player.getAttributeValue(Attribute.LAST_TURN, -1);
 		if (turn == -1) {
 			return false;
 		}
-		var filter = (EntityFilter) desc.get(ConditionArg.FILTER);
 		for (var cardId : cardIds.keySet()) {
 			Entity entity = context.getCardById(cardId);
 			if (filter == null || filter.matches(context, player, entity, source)) {

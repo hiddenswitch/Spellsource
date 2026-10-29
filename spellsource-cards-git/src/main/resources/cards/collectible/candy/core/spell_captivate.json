@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "SetAttackSpell",
-        "value": 1
+        "value": 1,
+        "name": "Captivate"
       },
       {
         "class": "MindControlSpell"

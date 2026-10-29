@@ -8,8 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",
-    "value": 60,
-    "cardFilter": {
+    "target": "FRIENDLY_DECK",
+    "filter": {
       "class": "AndFilter",
       "filters": [
         {

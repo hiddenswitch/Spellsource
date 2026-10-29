@@ -14,10 +14,11 @@ def isLinux = org.gradle.internal.os.OperatingSystem.current().isLinux()
 def isWindows = org.gradle.internal.os.OperatingSystem.current().isWindows()
 
 if (isLinux || isWindows) {
+  def shellPrefix = rootProject.shell
   afterEvaluate {
     tasks.withType(YarnTask).configureEach {
       execOverrides {
-        it.commandLine = rootProject.shell + [it.commandLine.join(' ').replace('\\', '/')]
+        it.commandLine = shellPrefix + [it.commandLine.join(' ').replace('\\', '/')]
       }
     }
   }

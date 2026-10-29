@@ -75,7 +75,8 @@
                     },
                     "value2": 4
                   }
-                }
+                },
+                "name": "Sot Mountain Excavation"
               },
               {
                 "class": "SummonSpell",

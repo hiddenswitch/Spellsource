@@ -15,7 +15,8 @@
     "spell": {
       "class": "TemporaryAttackSpell",
       "target": "FRIENDLY_CHARACTERS",
-      "value": 1
+      "value": 1,
+      "name": "Rousing Commander's Rally"
     }
   },
   "attributes": {},

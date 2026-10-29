@@ -12,7 +12,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Eternal Soul's Ward"
     }
   },
   "collectible": false,

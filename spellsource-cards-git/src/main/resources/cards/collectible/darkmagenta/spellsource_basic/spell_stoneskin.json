@@ -20,17 +20,20 @@
         "spells": [
           {
             "class": "BuffSpell",
-            "hpBonus": 5
+            "hpBonus": 5,
+            "name": "Stoneskin"
           },
           {
             "class": "AddAttributeSpell",
-            "attribute": "TAUNT"
+            "attribute": "TAUNT",
+            "name": "Stoneskin"
           }
         ]
       },
       "maxFires": 1,
       "oneTurn": true
-    }
+    },
+    "name": "Stoneskin"
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

@@ -21,7 +21,8 @@
           "class": "CardFilter",
           "cardType": "MINION"
         },
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Rampant Aggression"
       }
     ]
   },

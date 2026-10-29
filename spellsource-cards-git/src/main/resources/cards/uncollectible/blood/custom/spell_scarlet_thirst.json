@@ -18,7 +18,8 @@
         "class": "DrawCardSpell"
       },
       "oneTurn": true
-    }
+    },
+    "name": "Scarlet Thirst"
   },
   "attributes": {},
   "collectible": false,

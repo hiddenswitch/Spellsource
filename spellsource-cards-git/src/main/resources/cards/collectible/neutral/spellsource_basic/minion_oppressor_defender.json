@@ -14,11 +14,13 @@
       "class": "AdjacentEffectSpell",
       "spell1": {
         "class": "AddAttributeSpell",
-        "attribute": "DIVINE_SHIELD"
+        "attribute": "DIVINE_SHIELD",
+        "name": "Oppressor Defender's Dodge"
       },
       "spell2": {
         "class": "AddAttributeSpell",
-        "attribute": "DIVINE_SHIELD"
+        "attribute": "DIVINE_SHIELD",
+        "name": "Oppressor Defender's Dodge"
       }
     }
   },

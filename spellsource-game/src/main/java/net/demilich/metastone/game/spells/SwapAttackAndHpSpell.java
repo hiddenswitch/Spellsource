@@ -3,8 +3,8 @@ package net.demilich.metastone.game.spells;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -29,15 +29,15 @@ public class SwapAttackAndHpSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		if (target instanceof Minion) {
-			Minion minion = (Minion) target;
-			int attack = minion.getAttack();
-			int hp = minion.getHp();
-			minion.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
-			minion.getAttributes().remove(Attribute.ATTACK_BONUS);
-			minion.getAttributes().remove(Attribute.HP_BONUS);
-			minion.setAttack(hp);
-			context.getLogic().setHpAndMaxHp(minion, attack);
+		if (target instanceof Actor) {
+			Actor actor = (Actor) target;
+			int attack = actor.getAttack();
+			int hp = actor.getHp();
+			actor.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
+			actor.getAttributes().remove(Attribute.ATTACK_BONUS);
+			actor.getAttributes().remove(Attribute.HP_BONUS);
+			actor.setAttack(hp);
+			context.getLogic().setHpAndMaxHp(actor, attack);
 		} else if (target instanceof Card) {
 			Card card = (Card) target;
 			int attack = card.getAttack();

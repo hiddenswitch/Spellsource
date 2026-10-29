@@ -28,10 +28,12 @@
         "spell": {
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
-          "value": 2
+          "value": 2,
+          "name": "Gazal's Blessing"
         },
         "maxFires": 1
-      }
+      },
+      "name": "Gazal's Pact"
     }
   },
   "attributes": {

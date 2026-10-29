@@ -17,7 +17,8 @@
       "class": "BuffSpell",
       "target": "SELF",
       "attackBonus": 1,
-      "hpBonus": 1
+      "hpBonus": 1,
+      "name": "Desolate Sandstorm's Empowerment"
     }
   },
   "collectible": true,

@@ -15,7 +15,8 @@
         "revertTrigger": {
           "class": "TurnStartTrigger",
           "targetPlayer": "SELF"
-        }
+        },
+        "name": "Encased in Amber"
       },
       {
         "class": "DrawCardSpell"

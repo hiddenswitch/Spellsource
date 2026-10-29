@@ -20,7 +20,8 @@
         "targetPlayer": "SELF"
       },
       "oneTurn": true
-    }
+    },
+    "name": "Midsummer Mirage"
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

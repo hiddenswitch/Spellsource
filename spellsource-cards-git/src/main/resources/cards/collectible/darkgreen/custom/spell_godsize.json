@@ -9,7 +9,8 @@
   "spell": {
     "class": "BuffSpell",
     "attackBonus": 10,
-    "hpBonus": 10
+    "hpBonus": 10,
+    "name": "Godsize"
   },
   "collectible": true,
   "fileFormatVersion": 1,

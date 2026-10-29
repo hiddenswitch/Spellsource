@@ -18,7 +18,8 @@
       "target": "TRIGGER_HOST",
       "hpBonus": {
         "class": "EventValueProvider"
-      }
+      },
+      "name": "Bat Swarm's Ward"
     }
   },
   "collectible": false,

@@ -7,20 +7,20 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 
 /**
- * Combines multiple card sources together and includes cards from all of them.
+ * Combines the results of multiple {@link CardSource}s specified in {@link CardSourceArg#CARD_SOURCES}.
  */
 public class CombinedSource extends CardSource {
 	public CombinedSource(CardSourceDesc desc) {
 		super(desc);
 	}
 
-	@Override
-	protected CardList match(GameContext context, Entity source, Player player) {
-		CardSource[] cardSources = (CardSource[]) getDesc().get(CardSourceArg.CARD_SOURCES);
-		CardList totalCards = new CardArrayList();
-		for (CardSource cardSource : cardSources) {
-			totalCards.addAll(cardSource.getCards(context, source, player));
+	protected CardList match(GameContext context, Entity source, Player player, CardSource[] cardSources) {
+		CardList cards = new CardArrayList();
+		if (cardSources != null) {
+			for (CardSource cardSource : cardSources) {
+				cards.addAll(cardSource.getCards(context, source, player));
+			}
 		}
-		return totalCards;
+		return cards;
 	}
 }

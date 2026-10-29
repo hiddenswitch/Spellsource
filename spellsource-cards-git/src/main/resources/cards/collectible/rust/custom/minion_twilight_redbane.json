@@ -55,7 +55,8 @@
     "targetSelection": "FRIENDLY_CHARACTERS",
     "spell": {
       "class": "TemporaryAttackSpell",
-      "value": 5
+      "value": 5,
+      "name": "Twilight Redbane's Rally"
     }
   },
   "attributes": {

@@ -8,7 +8,8 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddAttributeSpell",
-    "attribute": "UNTARGETABLE_BY_SPELLS"
+    "attribute": "UNTARGETABLE_BY_SPELLS",
+    "name": "Spellforce"
   },
   "collectible": true,
   "set": "CUSTOM",

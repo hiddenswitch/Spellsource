@@ -21,11 +21,13 @@
           "class": "BuffSpell",
           "target": "EVENT_TARGET",
           "attackBonus": 1,
-          "hpBonus": 1
+          "hpBonus": 1,
+          "name": "Lantern Carrier's Blessing"
         },
         "maxFires": 1,
         "oneTurn": true
-      }
+      },
+      "name": "Lantern Carrier's Pact"
     }
   },
   "attributes": {

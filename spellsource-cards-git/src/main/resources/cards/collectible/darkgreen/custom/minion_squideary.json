@@ -18,7 +18,8 @@
         "token_tentacle"
       ]
     },
-    "hpBonus": 1
+    "hpBonus": 1,
+    "name": "Squideary's Blessing"
   },
   "attributes": {
     "DEATHRATTLES": true

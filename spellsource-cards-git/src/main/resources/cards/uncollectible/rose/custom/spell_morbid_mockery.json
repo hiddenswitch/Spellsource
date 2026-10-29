@@ -12,7 +12,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "OUTPUT",
-      "attribute": "CARD_TAUNT"
+      "attribute": "CARD_TAUNT",
+      "name": "Morbid Mockery"
     },
     "cardFilter": {
       "class": "CardFilter",

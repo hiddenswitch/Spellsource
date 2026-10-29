@@ -20,7 +20,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
-      "armorBonus": 2
+      "armorBonus": 2,
+      "name": "Swarmed Captive's Aegis"
     }
   },
   "collectible": true,

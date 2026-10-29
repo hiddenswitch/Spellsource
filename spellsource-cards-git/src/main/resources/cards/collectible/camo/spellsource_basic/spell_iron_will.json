@@ -9,7 +9,8 @@
   "spell": {
     "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
-    "armorBonus": 6
+    "armorBonus": 6,
+    "name": "Iron Will"
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

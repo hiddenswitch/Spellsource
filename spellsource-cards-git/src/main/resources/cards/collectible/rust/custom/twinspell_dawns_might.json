@@ -9,7 +9,8 @@
   "spell": {
     "class": "BuffSpell",
     "attackBonus": 3,
-    "hpBonus": 2
+    "hpBonus": 2,
+    "name": "Dawn's Might"
   },
   "collectible": false,
   "set": "CUSTOM",

@@ -28,7 +28,8 @@
           "cardType": "MINION"
         },
         "hpBonus": 0,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Smash-n-Run"
       }
     ]
   },

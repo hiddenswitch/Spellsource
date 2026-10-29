@@ -20,7 +20,7 @@ public class IsAdjacentCondition extends Condition {
 	}
 
 	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+	public boolean isFulfilled(GameContext context, Player player, Entity source, Entity target) {
 		Entity hasTriggerHost = context.resolveSingleTarget(player, source, EntityReference.TRIGGER_HOST);
 
 		if (hasTriggerHost != null) {

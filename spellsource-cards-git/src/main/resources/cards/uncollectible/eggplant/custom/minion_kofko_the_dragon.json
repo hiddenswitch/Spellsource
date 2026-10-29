@@ -15,7 +15,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "EVENT_TARGET",
-      "value": 3
+      "value": 3,
+      "name": "Kofko's Blessing"
     }
   },
   "collectible": true,

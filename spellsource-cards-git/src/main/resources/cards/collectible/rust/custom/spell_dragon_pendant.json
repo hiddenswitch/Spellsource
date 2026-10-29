@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 4,
-        "hpBonus": 4
+        "hpBonus": 4,
+        "name": "Dragon Pendant"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -33,7 +34,8 @@
             "exclusive": true,
             "secondaryTarget": "ENEMY_HERO"
           }
-        }
+        },
+        "name": "Dragon Pendant"
       }
     ]
   },

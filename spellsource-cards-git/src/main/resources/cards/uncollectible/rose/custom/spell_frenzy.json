@@ -8,7 +8,8 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",
-    "attackBonus": 2
+    "attackBonus": 2,
+    "name": "Frenzy"
   },
   "collectible": false,
   "set": "CUSTOM",

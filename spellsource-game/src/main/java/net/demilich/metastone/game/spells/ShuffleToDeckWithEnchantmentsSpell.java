@@ -26,16 +26,13 @@ public class ShuffleToDeckWithEnchantmentsSpell extends ShuffleMinionToDeckSpell
 		}
 
 		var actor = (Actor) target;
-		var sourceCard = target.getSourceCard();
+		var baseCard = context.getCardById(target.getSourceCard().getCardId());
 		if (!actor.isDestroyed()) {
 			context.getLogic().removeActor(actor, true);
 		}
 
-		// Remove the attack and HP bonuses from the source card, if they exist (why?)
-		sourceCard.getAttributes().remove(Attribute.ATTACK_BONUS);
-		sourceCard.getAttributes().remove(Attribute.HP_BONUS);
 		// Shuffles a copy of Immortal Prelate back into the deck
-		Card card = CopyCardSpell.copyCard(context, player, source, sourceCard, (playerId, copiedCard) -> {
+		Card card = CopyCardSpell.copyCard(context, player, source, baseCard, (playerId, copiedCard) -> {
 			moveCopyToDestination(context, player, target, copiedCard);
 		});
 
@@ -45,7 +42,20 @@ public class ShuffleToDeckWithEnchantmentsSpell extends ShuffleMinionToDeckSpell
 			return;
 		}
 
-		var enchantments = context.getLogic().copyEnchantments(player, source, target, card, null, true);
+		SpellDesc baseDeathrattle = baseCard.getDesc().getDeathrattle();
+		var baseBattlecry = baseCard.getDesc().getBattlecry();
+		var enchantments = context.getLogic().copyEnchantments(player, source, target, card, ench -> {
+			if (ench.oneTurnOnly()) {
+				return false;
+			}
+			if (ench instanceof net.demilich.metastone.game.spells.trigger.Aftermath a) {
+				return baseDeathrattle == null || a.getSpell() != baseDeathrattle;
+			}
+			if (ench instanceof net.demilich.metastone.game.spells.trigger.Opener o) {
+				return baseBattlecry == null || o.getOpenerDesc() != baseBattlecry;
+			}
+			return true;
+		}, true);
 		for (var enchantment : enchantments) {
 			enchantment.setCopyToActor(true);
 		}

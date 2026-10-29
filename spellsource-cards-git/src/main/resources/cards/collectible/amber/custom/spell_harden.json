@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus": 4
+        "hpBonus": 4,
+        "name": "Hardened"
       },
       {
         "class": "BuffSpell",
@@ -20,7 +21,8 @@
           "class": "AttributeValueProvider",
           "target": "TARGET",
           "attribute": "HP"
-        }
+        },
+        "name": "Hardened"
       }
     ]
   },

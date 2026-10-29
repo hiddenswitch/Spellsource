@@ -17,11 +17,13 @@
         "spells": [
           {
             "class": "AddAttributeSpell",
-            "attribute": "TAUNT"
+            "attribute": "TAUNT",
+            "name": "Idol Sculptor's Guard"
           },
           {
             "class": "AddAttributeSpell",
-            "attribute": "CANNOT_ATTACK"
+            "attribute": "CANNOT_ATTACK",
+            "name": "Idol Sculptor's Shackles"
           }
         ]
       },

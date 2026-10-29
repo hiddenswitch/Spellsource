@@ -11,15 +11,18 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 2
+        "value": 2,
+        "name": "Anti-Anomaly Scales"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Anti-Anomaly Scales"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "UNTARGETABLE_BY_SPELLS"
+        "attribute": "UNTARGETABLE_BY_SPELLS",
+        "name": "Anti-Anomaly Scales"
       }
     ]
   },

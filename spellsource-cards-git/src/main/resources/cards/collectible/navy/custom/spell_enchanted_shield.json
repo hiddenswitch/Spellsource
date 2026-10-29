@@ -11,7 +11,8 @@
     "attribute": "IMMUNE",
     "revertTrigger": {
       "class": "TurnEndTrigger"
-    }
+    },
+    "name": "Enchanted Shield"
   },
   "collectible": true,
   "set": "CUSTOM",

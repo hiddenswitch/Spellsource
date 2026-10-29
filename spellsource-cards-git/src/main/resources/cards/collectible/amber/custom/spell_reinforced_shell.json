@@ -28,7 +28,8 @@
         ]
       },
       "hpBonus": 2
-    }
+    },
+    "name": "Reinforced Shell"
   },
   "attributes": {},
   "collectible": true,

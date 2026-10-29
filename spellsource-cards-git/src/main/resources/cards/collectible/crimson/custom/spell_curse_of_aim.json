@@ -8,6 +8,7 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",
+    "targetPlayer": "OWNER",
     "trigger": {
       "eventTrigger": {
         "class": "AfterPhysicalAttackTrigger",
@@ -15,10 +16,12 @@
       },
       "spell": {
         "class": "FightSpell",
-        "target": "FRIENDLY_HERO"
+        "target": "FRIENDLY_HERO",
+        "secondaryTarget": "TRIGGER_HOST"
       },
       "maxFiresPerSequence": 1
-    }
+    },
+    "name": "Essence of Treachery"
   },
   "collectible": true,
   "fileFormatVersion": 1,

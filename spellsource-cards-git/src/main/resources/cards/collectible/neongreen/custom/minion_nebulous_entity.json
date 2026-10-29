@@ -23,7 +23,8 @@
           "revertTrigger": {
             "class": "TurnStartTrigger",
             "targetPlayer": "SELF"
-          }
+          },
+          "name": "Nebulous Entity's Curse"
         }
       ]
     }

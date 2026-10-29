@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 1,
-        "hpBonus": 1
+        "hpBonus": 1,
+        "name": "Backyard Portal"
       },
       {
         "class": "SummonSpell",

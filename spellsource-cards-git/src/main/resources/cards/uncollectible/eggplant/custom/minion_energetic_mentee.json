@@ -22,7 +22,8 @@
             "spell": {
               "class": "AddAttributeSpell",
               "target": "OUTPUT",
-              "attribute": "CHARGE"
+              "attribute": "CHARGE",
+              "name": "Energetic Mentee's Blitz"
             }
           },
           "boardPositionRelative": "RIGHT",
@@ -38,7 +39,8 @@
             "spell": {
               "class": "AddAttributeSpell",
               "target": "OUTPUT",
-              "attribute": "CHARGE"
+              "attribute": "CHARGE",
+              "name": "Energetic Mentee's Blitz"
             }
           },
           "boardPositionRelative": "LEFT",

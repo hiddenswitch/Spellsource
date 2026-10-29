@@ -16,12 +16,14 @@
         "filter": {
           "class": "CardFilter",
           "cardType": "MINION"
-        }
+        },
+        "name": "Rallying Speech"
       },
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
-        "attackBonus": 1
+        "attackBonus": 1,
+        "name": "Rallying Speech"
       }
     ]
   },

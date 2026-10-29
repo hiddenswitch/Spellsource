@@ -16,7 +16,8 @@
       "attackBonus": {
         "class": "EntityCountValueProvider",
         "target": "ENEMY_MINIONS"
-      }
+      },
+      "name": "Polycephalos' Fury"
     }
   },
   "attributes": {

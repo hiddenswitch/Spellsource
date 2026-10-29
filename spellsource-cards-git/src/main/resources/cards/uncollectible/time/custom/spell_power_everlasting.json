@@ -10,7 +10,8 @@
     "class": "WhereverTheyAreSpell",
     "spell": {
       "class": "BuffSpell",
-      "attackBonus": 2
+      "attackBonus": 2,
+      "name": "Power Everlasting"
     }
   },
   "collectible": true,

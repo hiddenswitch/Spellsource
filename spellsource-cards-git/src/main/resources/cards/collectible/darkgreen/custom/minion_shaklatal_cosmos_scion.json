@@ -19,7 +19,12 @@
       "hpBonus": {
         "class": "AttributeValueProvider",
         "attribute": "HP"
-      }
+      },
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "name": "Shaklatal's Blessing"
     }
   },
   "attributes": {

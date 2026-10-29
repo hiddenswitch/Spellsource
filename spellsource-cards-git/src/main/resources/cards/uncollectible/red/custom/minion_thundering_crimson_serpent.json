@@ -28,9 +28,11 @@
         "spell": {
           "class": "BuffSpell",
           "target": "FRIENDLY_HERO",
-          "armorBonus": 4
+          "armorBonus": 4,
+          "name": "Thundering Crimson Serpent's Aegis"
         }
-      }
+      },
+      "name": "Thundering Crimson Serpent's Boon"
     }
   },
   "attributes": {

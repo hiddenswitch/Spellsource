@@ -12,12 +12,14 @@
       {
         "class": "AddAttributeSpell",
         "target": "FRIENDLY_MINIONS",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Fortissimo"
       },
       {
         "class": "AddAttributeSpell",
         "target": "FRIENDLY_MINIONS",
-        "attribute": "DIVINE_SHIELD"
+        "attribute": "DIVINE_SHIELD",
+        "name": "Fortissimo"
       }
     ]
   },

@@ -7,7 +7,7 @@
   "description": "Summon three 1/1 Goons. If you're holding a Coin, discard it and summon five Goons instead.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ConditionalSpell",
+    "class": "EitherOrSpell",
     "condition": {
       "class": "HoldsCardCondition",
       "cardFilter": {
@@ -18,30 +18,12 @@
         ]
       }
     },
-    "spell": {
+    "spell1": {
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "SummonSpell",
-          "value": {
-            "class": "ConditionalValueProvider",
-            "condition": {
-              "class": "HoldsCardCondition",
-              "cardFilter": {
-                "class": "SpecificCardFilter",
-                "cards": [
-                  "spell_gold_coin",
-                  "token_spell_platinum_coin"
-                ]
-              }
-            },
-            "ifFalse": 3,
-            "ifTrue": 5
-          },
-          "card": "token_goon"
-        },
-        {
           "class": "DiscardSpell",
+          "value": 1,
           "cardFilter": {
             "class": "SpecificCardFilter",
             "cards": [
@@ -49,8 +31,18 @@
               "token_spell_platinum_coin"
             ]
           }
+        },
+        {
+          "class": "SummonSpell",
+          "value": 5,
+          "card": "token_goon"
         }
       ]
+    },
+    "spell2": {
+      "class": "SummonSpell",
+      "value": 3,
+      "card": "token_goon"
     }
   },
   "collectible": true,

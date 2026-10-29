@@ -31,7 +31,8 @@
         },
         "attribute": "AURA_UNTARGETABLE_BY_SPELLS",
         "persistentOwner": true
-      }
+      },
+      "name": "Korvas Bloodthorn's Boon"
     }
   },
   "collectible": true,

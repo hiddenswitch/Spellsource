@@ -64,7 +64,8 @@
                 "class": "UnweightedCatalogueSource"
               }
             }
-          }
+          },
+          "name": "Uus-Yai's Pact"
         },
         {
           "class": "CardCostModifierSpell",

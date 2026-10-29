@@ -59,6 +59,7 @@ public class ListCardCatalogue implements CardCatalogue {
 	protected final Set<String> bannedCardIds = new LinkedHashSet<>();
 	protected final Set<String> hardRemovalCardIds = new LinkedHashSet<>();
 	protected final Map<String, Card> cards = new LinkedHashMap<>(8196);
+	protected final Map<String, Card> synthesizedEnchantmentCards = new LinkedHashMap<>(4096);
 	protected final Multimap<String, Card> cardsByName = Multimaps.newSetMultimap(new LinkedHashMap<>(8196), LinkedHashSet::new);
 	protected final Map<String, Card> classCards = new LinkedHashMap<>(64);
 	protected final Map<String, Card> heroCards = new LinkedHashMap<>(64);
@@ -117,6 +118,9 @@ public class ListCardCatalogue implements CardCatalogue {
 		lock.readLock().lock();
 		try {
 			var card = cards.getOrDefault(id, null);
+			if (card == null) {
+				card = synthesizedEnchantmentCards.get(id);
+			}
 			if (card != null) {
 				card = card.getCopy();
 			} else {
@@ -126,6 +130,10 @@ public class ListCardCatalogue implements CardCatalogue {
 		} finally {
 			lock.readLock().unlock();
 		}
+	}
+
+	public Map<String, Card> getSynthesizedEnchantmentCards() {
+		return synthesizedEnchantmentCards;
 	}
 
 	@Override
@@ -522,6 +530,7 @@ public class ListCardCatalogue implements CardCatalogue {
 			bannedCardIds.clear();
 			hardRemovalCardIds.clear();
 			cards.clear();
+			synthesizedEnchantmentCards.clear();
 			cardsByName.clear();
 			classCards.clear();
 			heroCards.clear();
@@ -547,6 +556,7 @@ public class ListCardCatalogue implements CardCatalogue {
 			bannedCardIds.addAll(other.bannedCardIds);
 			hardRemovalCardIds.addAll(other.hardRemovalCardIds);
 			cards.putAll(other.cards);
+			synthesizedEnchantmentCards.putAll(other.synthesizedEnchantmentCards);
 			cardsByName.putAll(other.cardsByName);
 			classCards.putAll(other.classCards);
 			heroCards.putAll(other.heroCards);
@@ -652,9 +662,21 @@ public class ListCardCatalogue implements CardCatalogue {
 
 			var formatCards = newCards.stream().filter(card -> card.getCardType() == Spellsource.CardTypeMessage.CardType.FORMAT).toList();
 
+			this.all.setRuleCards(new String[]{
+					"enchantment_constructed_rules",
+					"enchantment_rule_mana",
+					"enchantment_rule_draw",
+					"enchantment_rule_hero_power",
+					"enchantment_rule_deck_size"
+			});
 			formatsByName.put(FORMAT_NAME_ALL, this.all);
 			for (var formatCard : formatCards) {
-				formatsByName.put(formatCard.getName(), new DeckFormat().setSecondPlayerBonusCards(formatCard.getDesc().getSecondPlayerBonusCards()).setValidDeckCondition(formatCard.getDesc().getCondition()).withName(formatCard.getName()).withCardSets(formatCard.getCardSets()));
+				formatsByName.put(formatCard.getName(), new DeckFormat()
+						.setSecondPlayerBonusCards(formatCard.getDesc().getSecondPlayerBonusCards())
+						.setRuleCards(formatCard.getDesc().getRuleCards())
+						.setValidDeckCondition(formatCard.getDesc().getCondition())
+						.withName(formatCard.getName())
+						.withCardSets(formatCard.getCardSets()));
 			}
 			formatCardsByName.putAll(formatCards.stream().collect(toMap(Card::getName, Function.identity())));
 			// Populate the class and hero cards
@@ -690,6 +712,8 @@ public class ListCardCatalogue implements CardCatalogue {
 			// Freeze all cards so their descs are read-only and shared safely
 			for (var card : newCards) {
 				card.freeze();
+				net.demilich.metastone.game.cards.desc.compiler.GameStateArena.synthesizeEnchantmentCardsForCard(
+						card.getDesc(), synthesizedEnchantmentCards);
 			}
 		} finally {
 			lock.writeLock().unlock();

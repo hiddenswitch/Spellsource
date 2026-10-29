@@ -18,11 +18,13 @@
         "class": "BuffSpell",
         "target": "EVENT_TARGET",
         "attackBonus": 5,
-        "hpBonus": 5
+        "hpBonus": 5,
+        "name": "Conjure Colossus"
       },
       "maxFires": 1,
       "oneTurn": true
-    }
+    },
+    "name": "Conjure Colossus"
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

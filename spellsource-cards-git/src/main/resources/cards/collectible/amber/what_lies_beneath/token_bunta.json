@@ -16,7 +16,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "TRIGGER_HOST",
-      "attribute": "DIVINE_SHIELD"
+      "attribute": "DIVINE_SHIELD",
+      "name": "Arido's Dodge"
     }
   },
   "attributes": {

@@ -18,7 +18,8 @@
         "value": 1
       },
       "persistentOwner": true
-    }
+    },
+    "name": "Trigger Happy"
   },
   "collectible": true,
   "set": "CUSTOM",

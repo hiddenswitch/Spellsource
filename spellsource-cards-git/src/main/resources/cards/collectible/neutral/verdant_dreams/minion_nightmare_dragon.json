@@ -16,7 +16,8 @@
         {
           "class": "BuffSpell",
           "attackBonus": 3,
-          "hpBonus": 3
+          "hpBonus": 3,
+          "name": "Nightmare Dragon's Blessing"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -29,7 +30,8 @@
               "class": "DestroySpell",
               "target": "SELF"
             }
-          }
+          },
+          "name": "Nightmare Dragon's Boon"
         }
       ]
     }

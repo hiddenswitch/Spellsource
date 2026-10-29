@@ -2,11 +2,14 @@ package net.demilich.metastone.game.logic;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.TargetSelection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,5 +80,17 @@ public interface GameLogicPlugin {
 	 * applied to a host entity.
 	 */
 	default void onEnchantmentAdded(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host) {
+	}
+
+	/**
+	 * Invoked during {@link GameLogic#castSpell} after a spell is cast.
+	 */
+	default void onSpellCasted(GameContext context, Player player, Entity source, SpellDesc spellDesc, List<Entity> targets, TargetSelection targetSelection, GameAction sourceAction, boolean childSpell) {
+	}
+
+	/**
+	 * Invoked during {@link GameLogic#secretTriggered} when a secret is triggered and revealed.
+	 */
+	default void onSecretRevealed(GameContext context, Player player, Card secretCard) {
 	}
 }

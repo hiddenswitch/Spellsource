@@ -49,14 +49,15 @@ tasks.named('test') {
 
 
 tasks.register('copyComfyClient') {
+  def fs = services.get(org.gradle.api.file.FileSystemOperations)
   dependsOn(':spellsource-python:generateTypeScriptClient')
   def addlInput = project(':spellsource-python').layout.buildDirectory.dir("comfyclient")
-  def addlOutput = "src/__generated__/comfyclient"
-  inputs.dir(addlInput)
-  outputs.dir("src/__generated__/comfyclient")
+  def addlOutput = layout.projectDirectory.dir("src/__generated__/comfyclient").asFile
+  inputs.dir(addlInput).withPathSensitivity(PathSensitivity.RELATIVE)
+  outputs.dir(addlOutput)
   outputs.cacheIf { true }
   doLast {
-    copy {
+    fs.copy {
       from addlInput
       into addlOutput
       include("**/*.ts")
@@ -68,17 +69,15 @@ tasks.register('copyComfyClient') {
 }
 
 tasks.register('fixComfyClient') {
+  def httpFile = layout.projectDirectory.file("src/__generated__/comfyclient/http/http.ts").asFile
+  def defaultApiFile = layout.projectDirectory.file("src/__generated__/comfyclient/apis/DefaultApi.ts").asFile
   doLast {
-    def http = file("src/__generated__/comfyclient/http/http.ts")
-
-    http.text = http.text
+    httpFile.text = httpFile.text
             .replaceFirst(/export \* from/, 'export {} from')
             .replaceFirst(/(reader.readAsText\(data)\)/, '$1 as any)')
             .replaceFirst(/(return new File\(\[data], fileName, \{ type: contentType }\));/, '$1 as any;')
 
-    def defaultApi = file("src/__generated__/comfyclient/apis/DefaultApi.ts")
-
-    defaultApi.text = defaultApi.text.replaceFirst(/(localVarFormParams.append\('image', image),/, '$1 as any,')
+    defaultApiFile.text = defaultApiFile.text.replaceFirst(/(localVarFormParams.append\('image', image),/, '$1 as any,')
 
   }
 }
@@ -113,14 +112,17 @@ tasks.register('copyNetJavadoc', Copy) {
 
 
 tasks.named("createDist").configure {
+  def fs = services.get(org.gradle.api.file.FileSystemOperations)
+  def contributeMdFile = project.parent.layout.projectDirectory.file("CONTRIBUTE.md").asFile
+  def targetDistDir = layout.projectDirectory.dir(distDir).asFile
   outputs.dir(distDir)
 
   group "spellsource"
 
   doLast {
-    copy {
-      from "$project.parent.projectDir/CONTRIBUTE.md"
-      into "$distDir/"
+    fs.copy {
+      from contributeMdFile
+      into targetDistDir
     }
   }
 }
@@ -130,19 +132,21 @@ def spellsourceTags = ['latest', projectVersion]
 def spellsourceImage = "ghcr.io/hiddenswitch/${distDir.replace("docker/", "")}"
 
 tasks.register('githubDockerPush') {
+  def execOps = services.get(org.gradle.process.ExecOperations)
+  def imageList = spellsourceTags.collect { tag -> "$spellsourceImage:$tag".toString() }
   dependsOn tasks.named("createImage_spellsource_web_linux_amd64")
 
   group "spellsource"
 
   doLast {
     if (System.getenv('GITHUB_ACTIONS') != null) {
-      exec {
+      execOps.exec {
         commandLine 'docker', 'login', 'ghcr.io', '-u', System.getenv('GITHUB_ACTOR') ?: '', '--password-stdin'
         standardInput = new ByteArrayInputStream((System.getenv('GITHUB_TOKEN') ?: '').bytes)
       }
     }
-    for (def image : spellsourceTags.collect { tag -> "$spellsourceImage:$tag" }) {
-      exec {
+    for (def image : imageList) {
+      execOps.exec {
         commandLine(['docker', 'push'] + [image])
       }
     }

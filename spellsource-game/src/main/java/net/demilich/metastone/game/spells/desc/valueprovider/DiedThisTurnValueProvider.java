@@ -1,13 +1,16 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
+import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.desc.filter.*;
+import net.demilich.metastone.game.spells.desc.filter.AndFilter;
+import net.demilich.metastone.game.spells.desc.filter.AttributeFilter;
+import net.demilich.metastone.game.spells.desc.filter.CardFilter;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource;
-import net.demilich.metastone.game.cards.Attribute;
 
 /**
  * Indicates how many of the {@link ValueProviderArg#FILTER} filtered actors were destroyed this turn.
@@ -21,11 +24,17 @@ public final class DiedThisTurnValueProvider extends ValueProvider {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
+	protected int provideValue(
+			GameContext context,
+			Player player,
+			Entity target,
+			Entity host,
+			Integer value,
+			EntityFilter cardFilter) {
 		CardSource source = GraveyardActorsSource.create();
-		EntityFilter diedThisTurnFilter = AttributeFilter.create(Attribute.DIED_ON_TURN, getDesc().getValue(ValueProviderArg.VALUE, context, player, target, host, context.getTurn()));
-		EntityFilter userFilter = (EntityFilter) getDesc().getOrDefault(ValueProviderArg.CARD_FILTER, AndFilter.create());
+		int turn = value != null ? value : context.getTurn();
+		EntityFilter diedThisTurnFilter = AttributeFilter.create(Attribute.DIED_ON_TURN, turn);
+		EntityFilter userFilter = cardFilter != null ? cardFilter : AndFilter.create();
 		EntityFilter minionFilter = CardFilter.create(CardType.MINION);
 		return source
 				.getCards(context, host, player)

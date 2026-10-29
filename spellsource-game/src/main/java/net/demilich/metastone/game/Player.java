@@ -72,6 +72,7 @@ public class Player extends Entity implements Serializable {
 	private EntityZone<Player> playerZone;
 	private EntityZone<Card> heroPowerZone;
 	private EntityZone<Weapon> weaponZone;
+	private EntityZone<Enchantment> enchantments;
 	private GameStatistics statistics;
 
 	/**
@@ -124,6 +125,7 @@ public class Player extends Entity implements Serializable {
 		this.heroZone = otherPlayer.getHeroZone().clone();
 		this.heroPowerZone = otherPlayer.getHeroPowerZone().clone();
 		this.weaponZone = otherPlayer.getWeaponZone().clone();
+		this.enchantments = otherPlayer.getEnchantments().clone();
 		this.playerZone.add(this);
 		this.mana = otherPlayer.mana;
 		this.maxMana = otherPlayer.maxMana;
@@ -158,6 +160,7 @@ public class Player extends Entity implements Serializable {
 		this.playerZone = new EntityZone<>(getId(), Zones.PLAYER, lookup);
 		this.heroPowerZone = new EntityZone<>(getId(), Zones.HERO_POWER, lookup);
 		this.weaponZone = new EntityZone<>(getId(), Zones.WEAPON, lookup);
+		this.enchantments = new EntityZone<>(getId(), Zones.ENCHANTMENT, lookup);
 		this.statistics = new GameStatistics();
 		this.playerZone.add(this);
 	}
@@ -441,6 +444,7 @@ public class Player extends Entity implements Serializable {
 		quests.setPlayer(id);
 		heroPowerZone.setPlayer(id);
 		weaponZone.setPlayer(id);
+		enchantments.setPlayer(id);
 	}
 
 	/**
@@ -463,8 +467,6 @@ public class Player extends Entity implements Serializable {
 	public EntityZone getZone(Zones zone) {
 		switch (zone) {
 			case PLAYER:
-				final EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER, lookup);
-				playerZone.add(this);
 				return playerZone;
 			case BATTLEFIELD:
 				return getMinions();
@@ -493,7 +495,7 @@ public class Player extends Entity implements Serializable {
 			case NONE:
 				return EntityZone.empty(Zones.NONE, getId());
 			case ENCHANTMENT:
-				return EntityZone.empty(Zones.ENCHANTMENT, getId());
+				return getEnchantments();
 		}
 		return null;
 	}
@@ -562,6 +564,10 @@ public class Player extends Entity implements Serializable {
 	 */
 	public EntityZone<Quest> getQuests() {
 		return quests;
+	}
+
+	public EntityZone<Enchantment> getEnchantments() {
+		return enchantments;
 	}
 
 	/**

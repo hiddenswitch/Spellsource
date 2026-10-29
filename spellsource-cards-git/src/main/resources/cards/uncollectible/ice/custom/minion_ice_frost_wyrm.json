@@ -20,7 +20,8 @@
         {
           "class": "AddAttributeSpell",
           "target": "ALL_OTHER_CHARACTERS",
-          "attribute": "FROZEN"
+          "attribute": "FROZEN",
+          "name": "Frost Wyrm's Frost"
         }
       ]
     }

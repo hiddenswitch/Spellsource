@@ -22,7 +22,8 @@
           "class": "SummonSpell",
           "card": "token_skugg_rat"
         }
-      }
+      },
+      "name": "Skugg's Pact"
     }
   },
   "attributes": {

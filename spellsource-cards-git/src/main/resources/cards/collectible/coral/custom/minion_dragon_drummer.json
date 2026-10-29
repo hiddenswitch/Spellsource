@@ -17,7 +17,8 @@
       "class": "BuffSpell",
       "target": "ADJACENT_MINIONS",
       "attackBonus": 2,
-      "hpBonus": 0
+      "hpBonus": 0,
+      "name": "Dragon Drummer's Blessing"
     }
   },
   "collectible": false,

@@ -13,7 +13,8 @@
     "revertTrigger": {
       "class": "TurnStartTrigger",
       "targetPlayer": "SELF"
-    }
+    },
+    "name": "Wraith Walk"
   },
   "collectible": true,
   "set": "CUSTOM",

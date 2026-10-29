@@ -23,13 +23,13 @@
           "spell1": {
             "class": "ModifyAttributeSpell",
             "target": "SELF",
-            "value": 1,
+            "value": 2,
             "attribute": "SPELL_DAMAGE"
           },
           "spell2": {
             "class": "ModifyAttributeSpell",
             "target": "SELF",
-            "value": 2,
+            "value": 1,
             "attribute": "SPELL_DAMAGE"
           }
         }

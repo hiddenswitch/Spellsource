@@ -13,8 +13,12 @@ public class HasWeaponCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			String card) {
 		if (player.getWeaponZone().isEmpty()) {
 			return false;
 		}
@@ -22,11 +26,7 @@ public class HasWeaponCondition extends Condition {
 		if (weapon.isBroken()) {
 			return false;
 		}
-		String cardId = (String) desc.get(ConditionArg.CARD);
-		if (cardId != null && !weapon.getSourceCard().getCardId().contains(cardId)) {
-			return false;
-		}
-		return true;
+		return card == null || weapon.getSourceCard().getCardId().contains(card);
 	}
 
 	@Override

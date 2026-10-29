@@ -1,0 +1,20 @@
+{
+  "name": "Deck & Hand Limits",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Constructed decks contain 30 cards unless modified by a deck-building card.",
+  "onInitialized": {
+    "class": "SetAttributeSpell",
+    "target": "FRIENDLY_PLAYER",
+    "attribute": "DECK_SIZE",
+    "value": 30
+  },
+  "attributes": {
+    "HIDDEN": true
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

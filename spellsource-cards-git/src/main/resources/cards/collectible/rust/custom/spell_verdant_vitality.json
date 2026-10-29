@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 2,
-        "hpBonus": 4
+        "hpBonus": 4,
+        "name": "Verdant Vitality"
       },
       {
         "class": "HealSpell",

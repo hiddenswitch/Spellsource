@@ -13,13 +13,15 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "ALL_OTHER_MINIONS",
-      "attribute": "FROZEN"
+      "attribute": "FROZEN",
+      "name": "Frost Wyrm's Frost"
     }
   },
   "deathrattle": {
     "class": "AddAttributeSpell",
     "target": "ALL_OTHER_MINIONS",
-    "attribute": "FROZEN"
+    "attribute": "FROZEN",
+    "name": "Frost Wyrm's Frost"
   },
   "attributes": {
     "BATTLECRY": true,

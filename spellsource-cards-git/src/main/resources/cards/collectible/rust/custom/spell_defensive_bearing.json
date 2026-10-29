@@ -11,11 +11,13 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Defensive Bearing"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Defensive Bearing"
       }
     ]
   },

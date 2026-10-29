@@ -11,13 +11,14 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "target": "SELF",
         "attackBonus": 2,
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Blood Thirst"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "LIFESTEAL"
+        "attribute": "LIFESTEAL",
+        "name": "Blood Thirst"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -28,9 +29,9 @@
           },
           "spell": {
             "class": "custom.FightRandomAdjacentMinionSpell"
-          },
-          "maxFires": 1
-        }
+          }
+        },
+        "name": "Blood Thirst"
       }
     ]
   },

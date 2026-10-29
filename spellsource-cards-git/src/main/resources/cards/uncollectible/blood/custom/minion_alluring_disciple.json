@@ -16,7 +16,8 @@
         "class": "AttributeValueProvider",
         "target": "TARGET",
         "attribute": "ATTACK"
-      }
+      },
+      "name": "Alluring Disciple's Might"
     }
   },
   "attributes": {

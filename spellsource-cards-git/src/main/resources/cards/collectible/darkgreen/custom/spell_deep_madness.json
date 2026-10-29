@@ -18,7 +18,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 10,
-        "hpBonus": 10
+        "hpBonus": 10,
+        "name": "Deep Madness"
       },
       {
         "class": "DrawCardSpell",

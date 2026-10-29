@@ -16,7 +16,8 @@
         "class": "DiedThisTurnValueProvider",
         "multiplier": 2,
         "targetPlayer": "BOTH"
-      }
+      },
+      "name": "Towering Horror's Fortitude"
     }
   },
   "attributes": {

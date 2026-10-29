@@ -21,7 +21,8 @@
       "spell2": {
         "class": "AddAttributeSpell",
         "target": "SELF",
-        "attribute": "STEALTH"
+        "attribute": "STEALTH",
+        "name": "Flingin' Alchemist's Veil"
       }
     }
   },

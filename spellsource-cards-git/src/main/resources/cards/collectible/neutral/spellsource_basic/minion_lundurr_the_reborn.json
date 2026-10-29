@@ -37,11 +37,13 @@
       "spells": [
         {
           "class": "BuffSpell",
-          "attackBonus": 5
+          "attackBonus": 5,
+          "name": "Lundurr's Rally"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "CHARGE"
+          "attribute": "CHARGE",
+          "name": "Lundurr's Blitz"
         }
       ]
     }

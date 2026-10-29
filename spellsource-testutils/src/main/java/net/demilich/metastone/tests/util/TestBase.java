@@ -409,7 +409,9 @@ public class TestBase {
 		var defaultFormat = getDefaultFormat();
 		var format = new DeckFormat()
 				.withName(defaultFormat.getName())
-				.withCardSets(defaultFormat.getSets());
+				.withCardSets(defaultFormat.getSets())
+				.setRuleCards(defaultFormat.getRuleCards())
+				.setValidDeckCondition(defaultFormat.getValidDeckCondition());
 		// Remove the starting card
 		format.setSecondPlayerBonusCards(new String[0]);
 		GameContext context = new DebugContext(new Player(heroClass1, ClasspathCardCatalogue.INSTANCE), new Player(heroClass2, ClasspathCardCatalogue.INSTANCE), new GameLogic() {

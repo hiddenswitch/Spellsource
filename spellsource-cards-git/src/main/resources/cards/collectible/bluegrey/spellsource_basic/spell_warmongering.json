@@ -16,9 +16,11 @@
       "spell": {
         "class": "BuffSpell",
         "target": "SELF",
-        "value": 2
+        "value": 2,
+        "name": "Warmongering"
       }
-    }
+    },
+    "name": "Warmongering"
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

@@ -17,7 +17,8 @@
         "class": "RaceFilter",
         "race": "DRAGON"
       },
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Duskwind Vanguard's Blessing"
     }
   },
   "attributes": {

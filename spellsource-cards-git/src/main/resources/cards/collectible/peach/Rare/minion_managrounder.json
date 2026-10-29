@@ -34,7 +34,7 @@
         },
         "cardSource": {
           "class": "GraveyardCardsSource",
-          "targetPlayer": "SELF"
+          "targetPlayer": "BOTH"
         }
       },
       "value2": 0

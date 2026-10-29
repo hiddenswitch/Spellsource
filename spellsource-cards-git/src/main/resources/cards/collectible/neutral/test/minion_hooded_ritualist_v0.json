@@ -25,7 +25,8 @@
           "card": "token_blackflame_imp"
         },
         "maxFires": 1
-      }
+      },
+      "name": "Hooded Ritualist's Pact"
     }
   },
   "collectible": false,

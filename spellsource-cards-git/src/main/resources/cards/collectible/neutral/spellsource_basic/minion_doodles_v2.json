@@ -31,7 +31,8 @@
               "card": "enchantment_draw_card_skill"
             },
             "maxFires": 1
-          }
+          },
+          "name": "Doodles' Pact"
         },
         {
           "class": "CastAfterSequenceSpell",

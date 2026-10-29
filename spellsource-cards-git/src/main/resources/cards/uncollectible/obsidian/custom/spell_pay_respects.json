@@ -29,7 +29,8 @@
         },
         "spell": {
           "class": "BuffSpell",
-          "value": 1
+          "value": 1,
+          "name": "Pay Respects"
         }
       }
     ]

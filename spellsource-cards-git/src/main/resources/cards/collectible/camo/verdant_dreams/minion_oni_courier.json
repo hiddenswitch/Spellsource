@@ -20,7 +20,8 @@
         "class": "AttributeValueProvider",
         "target": "EVENT_TARGET",
         "attribute": "LAST_HIT"
-      }
+      },
+      "name": "Oni Courier's Aegis"
     }
   },
   "attributes": {

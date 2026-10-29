@@ -24,8 +24,7 @@ public class OriginalValueProvider extends ValueProvider {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		return getDesc().getValue(ValueProviderArg.VALUE, context, player, target, host, 0);
+	protected int provideValue(GameContext context, Player player, Entity target, Entity host, int value) {
+		return value;
 	}
 }

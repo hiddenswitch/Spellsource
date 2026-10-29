@@ -8,24 +8,32 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "TARGET",
+      "attribute": "ATTACK"
+    },
     "spells": [
       {
-        "class": "DamageSpell",
-        "target": "ENEMY_MINIONS",
-        "value": {
-          "class": "AttributeValueProvider",
-          "attribute": "ATTACK"
-        },
+        "class": "DestroySpell"
+      },
+      {
+        "class": "ConditionalSpell",
         "condition": {
           "class": "AttributeCondition",
           "target": "FRIENDLY_HERO",
-          "value": 15,
+          "value": 12,
           "attribute": "HP",
           "operation": "LESS_OR_EQUAL"
+        },
+        "spell": {
+          "class": "DamageSpell",
+          "target": "ENEMY_MINIONS",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          }
         }
-      },
-      {
-        "class": "DestroySpell"
       }
     ]
   },

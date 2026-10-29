@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 1,
-        "hpBonus": 4
+        "hpBonus": 4,
+        "name": "Front-Row Fun"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -64,7 +65,8 @@
             }
           },
           "maxFires": 1
-        }
+        },
+        "name": "Front-Row Fun"
       }
     ]
   },

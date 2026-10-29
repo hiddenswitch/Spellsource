@@ -14,7 +14,8 @@
       "class": "EntityEqualsFilter",
       "invert": true,
       "secondaryTarget": "TARGET"
-    }
+    },
+    "name": "Geronimo! Chill"
   },
   "collectible": true,
   "set": "CUSTOM",

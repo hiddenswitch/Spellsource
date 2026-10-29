@@ -16,7 +16,8 @@
           {
             "class": "AddAttributeSpell",
             "target": "FRIENDLY_HERO",
-            "attribute": "INVERT_HEALING"
+            "attribute": "INVERT_HEALING",
+            "name": "Healing Damage"
           },
           {
             "class": "RemoveCardSpell",

@@ -19,7 +19,8 @@
         "target": "TRIGGER_HOST",
         "value": 3
       }
-    }
+    },
+    "name": "Black Plague"
   },
   "collectible": true,
   "set": "CUSTOM",

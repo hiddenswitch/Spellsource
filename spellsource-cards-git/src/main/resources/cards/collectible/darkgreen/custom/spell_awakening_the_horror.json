@@ -32,15 +32,18 @@
                 "class": "BuffSpell",
                 "target": "EVENT_TARGET",
                 "attackBonus": 6,
-                "hpBonus": 6
+                "hpBonus": 6,
+                "name": "Awakening the Horror"
               },
               "maxFires": 1
-            }
+            },
+            "name": "Awakening the Horror"
           }
         ]
       },
       "maxFires": 1
-    }
+    },
+    "name": "Awakening the Horror"
   },
   "collectible": true,
   "fileFormatVersion": 1,

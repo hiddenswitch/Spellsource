@@ -7,30 +7,31 @@
   "description": "Draw a spell. It Costs (3) less if you're holding a 10-Cost unit.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ConditionalEffectSpell",
-    "condition": {
-      "class": "HoldsCardCondition",
-      "cardFilter": {
-        "class": "CardFilter",
-        "manaCost": 10
-      }
+    "class": "DrawCardSpell",
+    "value": 1,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
     },
-    "spell1": {
-      "class": "DrawCardSpell",
-      "value": 1,
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "SPELL"
-      }
-    },
-    "spell2": {
-      "class": "CardCostModifierSpell",
-      "target": "OUTPUT",
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "target": "SELF",
-        "value": 3,
-        "operation": "SUBTRACT"
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "HoldsCardCondition",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": 10
+        }
+      },
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "OUTPUT",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 3,
+          "operation": "SUBTRACT"
+        }
       }
     }
   },

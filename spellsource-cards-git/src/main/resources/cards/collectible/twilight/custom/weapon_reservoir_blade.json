@@ -17,7 +17,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_MINIONS",
-      "hpBonus": 1
+      "hpBonus": 1,
+      "name": "Reservoir Blade's Ward"
     }
   },
   "collectible": true,

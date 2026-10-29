@@ -66,7 +66,8 @@
               "class": "AttributeValueProvider",
               "target": "FRIENDLY_WEAPON",
               "attribute": "ATTACK"
-            }
+            },
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "SetHpSpell",
@@ -75,12 +76,14 @@
               "class": "AttributeValueProvider",
               "target": "FRIENDLY_WEAPON",
               "attribute": "HP"
-            }
+            },
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "AddAttributeSpell",
             "target": "OUTPUT",
-            "attribute": "TAUNT"
+            "attribute": "TAUNT",
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "DrawCardSpell"
@@ -98,7 +101,8 @@
               "class": "AttributeValueProvider",
               "target": "FRIENDLY_WEAPON",
               "attribute": "ATTACK"
-            }
+            },
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "SetHpSpell",
@@ -107,12 +111,14 @@
               "class": "AttributeValueProvider",
               "target": "FRIENDLY_WEAPON",
               "attribute": "HP"
-            }
+            },
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "AddAttributeSpell",
             "target": "OUTPUT",
-            "attribute": "TAUNT"
+            "attribute": "TAUNT",
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "DrawCardSpell"
@@ -130,7 +136,8 @@
               "class": "AttributeValueProvider",
               "target": "FRIENDLY_WEAPON",
               "attribute": "ATTACK"
-            }
+            },
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "SetHpSpell",
@@ -139,12 +146,14 @@
               "class": "AttributeValueProvider",
               "target": "FRIENDLY_WEAPON",
               "attribute": "HP"
-            }
+            },
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "AddAttributeSpell",
             "target": "OUTPUT",
-            "attribute": "TAUNT"
+            "attribute": "TAUNT",
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "DrawCardSpell"
@@ -162,7 +171,8 @@
               "class": "AttributeValueProvider",
               "target": "FRIENDLY_WEAPON",
               "attribute": "ATTACK"
-            }
+            },
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "SetHpSpell",
@@ -171,12 +181,14 @@
               "class": "AttributeValueProvider",
               "target": "FRIENDLY_WEAPON",
               "attribute": "HP"
-            }
+            },
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "AddAttributeSpell",
             "target": "OUTPUT",
-            "attribute": "TAUNT"
+            "attribute": "TAUNT",
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "DrawCardSpell"
@@ -194,7 +206,8 @@
               "class": "AttributeValueProvider",
               "target": "FRIENDLY_WEAPON",
               "attribute": "ATTACK"
-            }
+            },
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "SetHpSpell",
@@ -203,12 +216,14 @@
               "class": "AttributeValueProvider",
               "target": "FRIENDLY_WEAPON",
               "attribute": "HP"
-            }
+            },
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "AddAttributeSpell",
             "target": "OUTPUT",
-            "attribute": "TAUNT"
+            "attribute": "TAUNT",
+            "name": "Dancing Rune Weapon"
           },
           {
             "class": "DrawCardSpell"

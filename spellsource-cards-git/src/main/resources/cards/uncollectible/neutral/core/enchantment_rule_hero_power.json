@@ -1,0 +1,20 @@
+{
+  "name": "Skill Refresh",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Players may use their Hero Power once per turn.",
+  "onInitialized": {
+    "class": "SetAttributeSpell",
+    "target": "FRIENDLY_PLAYER",
+    "attribute": "HERO_POWER_USAGES",
+    "value": 1
+  },
+  "attributes": {
+    "HIDDEN": true
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

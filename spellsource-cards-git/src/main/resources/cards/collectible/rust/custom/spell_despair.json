@@ -12,7 +12,8 @@
       "class": "AttributeValueProvider",
       "attribute": "ATTACK",
       "multiplier": -1
-    }
+    },
+    "name": "Despair"
   },
   "attributes": {},
   "collectible": true,

@@ -27,7 +27,8 @@
         "hpBonus": {
           "class": "GatekeeperShaValueProvider",
           "offset": 3
-        }
+        },
+        "name": "Hemoplate"
       }
     ]
   },

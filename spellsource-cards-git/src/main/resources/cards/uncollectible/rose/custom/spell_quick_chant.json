@@ -18,7 +18,8 @@
       },
       {
         "class": "BuffSpell",
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Quick Chant"
       }
     ]
   },

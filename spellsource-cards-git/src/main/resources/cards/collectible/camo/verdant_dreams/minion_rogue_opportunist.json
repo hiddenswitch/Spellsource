@@ -20,11 +20,13 @@
       "spells": [
         {
           "class": "BuffSpell",
-          "attackBonus": 1
+          "attackBonus": 1,
+          "name": "Rogue Opportunist's Rally"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "RUSH"
+          "attribute": "RUSH",
+          "name": "Rogue Opportunist's Dash"
         }
       ]
     }

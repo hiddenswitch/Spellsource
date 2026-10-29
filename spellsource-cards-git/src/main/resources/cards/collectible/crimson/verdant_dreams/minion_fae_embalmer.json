@@ -16,7 +16,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
-      "armorBonus": 4
+      "armorBonus": 4,
+      "name": "Fae Labourer's Aegis"
     }
   },
   "collectible": true,

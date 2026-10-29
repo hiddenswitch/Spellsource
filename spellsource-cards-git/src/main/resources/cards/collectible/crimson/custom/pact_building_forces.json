@@ -24,7 +24,8 @@
           {
             "class": "BuffSpell",
             "target": "FRIENDLY_HERO",
-            "armorBonus": 7
+            "armorBonus": 7,
+            "name": "Building Forces"
           },
           {
             "class": "SummonSpell",

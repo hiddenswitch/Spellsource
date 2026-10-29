@@ -84,8 +84,17 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		return name;
 	}
 
+	public int getDeckSize() {
+		for (Card card : cards) {
+			if (card.hasAttribute(Attribute.DECK_SIZE)) {
+				return card.getAttributeValue(Attribute.DECK_SIZE);
+			}
+		}
+		return GameLogic.DECK_SIZE;
+	}
+
 	public boolean isComplete() {
-		return cards.getCount() == GameLogic.DECK_SIZE;
+		return cards.getCount() == getDeckSize();
 	}
 
 	public boolean isFull() {

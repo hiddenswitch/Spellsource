@@ -16,7 +16,8 @@
       "class": "BuffSpell",
       "target": "EVENT_TARGET",
       "attackBonus": 1,
-      "hpBonus": 0
+      "hpBonus": 0,
+      "name": "Crimson General's Blessing"
     }
   },
   "attributes": {},

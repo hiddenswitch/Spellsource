@@ -1,10 +1,6 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
 buildscript {
-  ext {
-    grpcWindowsArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/protoc/grpc-protoc_windows_x64-1.35.0-dev.zip'
-    grpcUnityArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/csharp/grpc_unity_package.2.35.0-dev202011301311.zip'
-  }
   repositories {
     mavenLocal()
     mavenCentral()
@@ -93,14 +89,12 @@ tasks.register('copyCsharpGrpc', Copy) {
 
 tasks.register('dll', Exec) {
   dependsOn copyCsharpGrpc
-  workingDir csharpRootDir
+  workingDir "$csharpRootDir/Framework"
   outputs.dir(layout.buildDirectory.dir("dlls"))
   outputs.cacheIf { true }
-  inputs.dir("$csharpRootDir/Framework/Plugins").withPathSensitivity(PathSensitivity.RELATIVE)
   inputs.file("$csharpRootDir/HiddenSwitch.sln").withPathSensitivity(PathSensitivity.RELATIVE)
   inputs.file("$csharpRootDir/Framework/Framework.csproj").withPathSensitivity(PathSensitivity.RELATIVE)
   inputs.dir("$csharpRootDir/Framework/Sources").withPathSensitivity(PathSensitivity.RELATIVE)
-  // this is using docker-wrapped dotnet
   commandLine dotnetCmd + ['publish', '--output', "$project.buildDir/dlls"]
 }
 
@@ -110,23 +104,18 @@ tasks.register('testDll', Exec) {
   outputs.dir(layout.buildDirectory.dir("nunit"))
   outputs.cacheIf { true }
   workingDir csharpRootDir
-  // this is using docker-wrapped dotnet
   commandLine dotnetCmd + ['test', '--results-directory', "$project.buildDir/nunit"]
 }
 
 tasks.register('installDll', Copy) {
   dependsOn dll
   inputs.dir(layout.buildDirectory.dir("dlls")).withPathSensitivity(PathSensitivity.RELATIVE)
-  inputs.dir("$csharpRootDir/Framework/Plugins").withPathSensitivity(PathSensitivity.RELATIVE)
   def destination = project(':spellsource-client').projectDir.path + '/src/unity/Assets/Client'
   outputs.dir(destination)
   outputs.cacheIf { true }
   from("$project.buildDir/dlls") {
     include 'Framework.dll'
     include 'Framework.pdb'
-  }
-  from("$csharpRootDir/Framework/Plugins") {
-    include '**/*.*'
   }
   into(destination)
 }
@@ -254,23 +243,24 @@ afterEvaluate {
    * WRITES TO: build/formatted-sources-for-tsc/
    */
   tasks.register('prettierFormat', YarnTask) {
+    def fs = services.get(org.gradle.api.file.FileSystemOperations)
     def copyAndModifyProtoTask = tasks.named('copyAndModifyProto')
     dependsOn copyAndModifyProtoTask
 
     // --- FIX: Use a lazy provider for the input files ---
     // This prevents Gradle from checking for the directory's existence during the configuration phase.
     // It correctly wires the output of the previous task as the input for this one.
-    inputs.files(copyAndModifyProtoTask)
-    inputs.dir('src/main/javascript')
+    inputs.files(copyAndModifyProtoTask).withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.dir('src/main/javascript').withPathSensitivity(PathSensitivity.RELATIVE)
     outputs.dir(formattedSourcesDir)
     outputs.cacheIf { true }
 
     // This doFirst block prepares the directory that Prettier will operate on.
     doFirst {
       // Clean the output directory before copying
-      project.delete(formattedSourcesDir)
+      fs.delete { delete(formattedSourcesDir) }
       // Copy all necessary source files into the clean output directory.
-      copy {
+      fs.copy {
         from(inputs.files)
         into(formattedSourcesDir)
       }
@@ -287,10 +277,15 @@ afterEvaluate {
    * WRITES TO: build/dist/ and build/src/main/javascript/
    */
   tasks.register('compileTypescript', YarnTask) {
+    def fs = services.get(org.gradle.api.file.FileSystemOperations)
+    def compiledDir = layout.buildDirectory.dir('compiled')
+    def distOutDir = layout.projectDirectory.dir('dist').asFile
+    def distClientDir = layout.projectDirectory.dir('dist/client').asFile
+    def distServerDir = layout.projectDirectory.dir('dist/server').asFile
     dependsOn tasks.named('prettierFormat')
 
     // Its ONLY input is the clean output from the previous step in the chain.
-    inputs.dir(formattedSourcesDir)
+    inputs.dir(formattedSourcesDir).withPathSensitivity(PathSensitivity.RELATIVE)
 
     // Outputs remain the same.
     outputs.dir('build/compiled')
@@ -300,20 +295,22 @@ afterEvaluate {
     args = ["run", "-T", "tsc"]
 
     doFirst {
-      copy {
-        from "$buildDir/formatted-sources-for-tsc"
-        into "$buildDir/compiled"
+      fs.copy {
+        from formattedSourcesDir
+        into compiledDir
       }
     }
 
     doLast {
-      copy {
-        from "$buildDir/compiled"
-        into "dist"
+      fs.copy {
+        from compiledDir
+        into distOutDir
       }
       // todo: ugh
-      delete "dist/client"
-      delete "dist/server"
+      fs.delete {
+        delete distClientDir
+        delete distServerDir
+      }
     }
   }
 }

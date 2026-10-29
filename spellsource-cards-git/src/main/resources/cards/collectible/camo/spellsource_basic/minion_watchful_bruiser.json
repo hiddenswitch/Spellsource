@@ -13,11 +13,15 @@
     "triggers": [
       {
         "class": "AfterPhysicalAttackTrigger"
+      },
+      {
+        "class": "TurnStartTrigger"
       }
     ],
     "condition": {
       "class": "HasAttackedCondition",
-      "target": "ALL_OTHER_MINIONS"
+      "target": "ALL_OTHER_MINIONS",
+      "invert": true
     },
     "attribute": "AURA_CANNOT_ATTACK"
   },

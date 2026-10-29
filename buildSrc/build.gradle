@@ -24,7 +24,7 @@ dependencies {
   api localGroovy()
   api gradleApi()
   api project('spellsource-gradle-plugins')
-  implementation 'com.github.mwiede:jsch:0.2.8'
+  implementation 'com.github.mwiede:jsch:2.28.8'
 }
 
 allprojects {

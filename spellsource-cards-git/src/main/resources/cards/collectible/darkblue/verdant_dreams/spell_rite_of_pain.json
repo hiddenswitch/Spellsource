@@ -22,7 +22,8 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
-        "attackBonus": 1
+        "attackBonus": 1,
+        "name": "Rite of Pain"
       }
     ]
   },

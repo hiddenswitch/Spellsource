@@ -22,7 +22,8 @@
         "hpBonus": {
           "class": "GatekeeperShaValueProvider",
           "offset": 2
-        }
+        },
+        "name": "Ichor Blast"
       }
     ]
   },

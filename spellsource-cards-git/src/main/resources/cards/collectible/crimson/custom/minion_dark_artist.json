@@ -25,7 +25,8 @@
           }
         }
       },
-      "hpBonus": -2
+      "hpBonus": -2,
+      "name": "Dark Artist's Curse"
     }
   },
   "attributes": {

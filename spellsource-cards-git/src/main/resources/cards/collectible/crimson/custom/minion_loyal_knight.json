@@ -19,7 +19,8 @@
       "class": "BuffSpell",
       "target": "SELF",
       "attackBonus": 2,
-      "hpBonus": 3
+      "hpBonus": 3,
+      "name": "Loyal Knight's Empowerment"
     }
   },
   "attributes": {

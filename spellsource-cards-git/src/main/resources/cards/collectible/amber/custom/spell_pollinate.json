@@ -14,11 +14,13 @@
       "spells": [
         {
           "class": "SetAttackSpell",
-          "value": 1
+          "value": 1,
+          "name": "Pollinated"
         },
         {
           "class": "SetHpSpell",
-          "value": 1
+          "value": 1,
+          "name": "Pollinated"
         }
       ]
     },

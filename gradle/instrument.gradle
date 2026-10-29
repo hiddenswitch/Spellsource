@@ -12,6 +12,8 @@ def allJvmArgs = [
 
 tasks.withType(JavaCompile).configureEach {
   options.compilerArgs += ["--enable-preview", "-parameters"]
+  options.incremental = true
+  options.fork = true
 }
 
 tasks.withType(Test).configureEach {

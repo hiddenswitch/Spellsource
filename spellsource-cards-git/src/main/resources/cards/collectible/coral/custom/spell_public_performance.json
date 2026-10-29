@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 1,
-        "hpBonus": 1
+        "hpBonus": 1,
+        "name": "Public Performance"
       },
       {
         "class": "ReceiveCardSpell",

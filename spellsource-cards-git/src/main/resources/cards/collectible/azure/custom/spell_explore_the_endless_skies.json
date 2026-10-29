@@ -14,6 +14,7 @@
         "target": "FRIENDLY_HAND",
         "cardFilter": {
           "class": "CardFilter",
+          "cardType": "MINION",
           "rarity": "LEGENDARY"
         }
       },
@@ -22,6 +23,7 @@
         "target": "FRIENDLY_HAND",
         "cardCostModifier": {
           "class": "CardCostModifier",
+          "target": "SELF",
           "value": 1,
           "operation": "SUBTRACT"
         }
@@ -31,6 +33,7 @@
         "target": "FRIENDLY_DECK",
         "cardFilter": {
           "class": "CardFilter",
+          "cardType": "MINION",
           "rarity": "LEGENDARY"
         }
       },
@@ -39,6 +42,7 @@
         "target": "FRIENDLY_DECK",
         "cardCostModifier": {
           "class": "CardCostModifier",
+          "target": "SELF",
           "value": 1,
           "operation": "SUBTRACT"
         }

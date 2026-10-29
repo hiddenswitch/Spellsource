@@ -40,12 +40,14 @@
                 "cardType": "SPELL"
               }
             }
-          }
+          },
+          "name": "Thundering Sapphire Serpent's Boon"
         },
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "DISCOVER"
+          "attribute": "DISCOVER",
+          "name": "Thundering Sapphire Serpent's Blessing"
         }
       ]
     }

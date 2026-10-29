@@ -15,7 +15,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "TRIGGER_HOST",
-      "value": 7
+      "value": 7,
+      "name": "Unearthed Horror's Blessing"
     }
   },
   "collectible": true,

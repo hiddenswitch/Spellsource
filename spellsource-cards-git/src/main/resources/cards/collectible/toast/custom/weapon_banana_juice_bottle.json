@@ -35,7 +35,8 @@
       "class": "BuffSpell",
       "target": "SELF",
       "attackBonus": 1,
-      "hpBonus": 1
+      "hpBonus": 1,
+      "name": "Banana Juice Bottle's Empowerment"
     }
   },
   "attributes": {

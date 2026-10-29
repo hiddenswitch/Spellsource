@@ -7,18 +7,22 @@
   "deathrattle": {
     "class": "MetaSpell",
     "target": "FRIENDLY_MINIONS",
+    "filter": {
+      "class": "IsDestroyedFilter",
+      "invert": true
+    },
     "randomTarget": true,
     "spells": [
       {
         "class": "BuffSpell",
         "attackBonus": 2,
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Top Hat"
       },
       {
         "class": "AddDeathrattleSpell",
-        "target": "FRIENDLY_MINIONS",
         "card": "enchantment_top_hat",
-        "randomTarget": true
+        "name": "Top Hat"
       }
     ]
   },

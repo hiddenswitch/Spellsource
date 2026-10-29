@@ -18,11 +18,13 @@
         "class": "BuffSpell",
         "target": "EVENT_TARGET",
         "attackBonus": 2,
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "One For All"
       },
       "maxFires": 1,
       "oneTurn": true
-    }
+    },
+    "name": "One For All"
   },
   "collectible": false,
   "set": "CUSTOM",

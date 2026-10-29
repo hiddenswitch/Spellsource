@@ -11,7 +11,8 @@
     "spell1": {
       "class": "BuffSpell",
       "attackBonus": 3,
-      "hpBonus": 3
+      "hpBonus": 3,
+      "name": "Soul Corruption"
     },
     "spell2": {
       "class": "DestroySpell"

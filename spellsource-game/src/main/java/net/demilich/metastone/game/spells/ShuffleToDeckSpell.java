@@ -48,11 +48,16 @@ public class ShuffleToDeckSpell extends Spell {
 		return desc;
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		int copies = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
-		SpellDesc subSpell = (SpellDesc) (desc.getOrDefault(SpellArg.SPELL, NullSpell.create()));
-		boolean extraCopy = desc.getBool(SpellArg.EXCLUSIVE);
+	protected void onCast(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			@Default(1) int howMany,
+			SpellDesc spell,
+			boolean exclusive) {
+		SpellDesc subSpell = spell != null ? spell : NullSpell.create();
 
 		if (target != null
 				&& !desc.containsKey(SpellArg.CARD)
@@ -62,13 +67,18 @@ public class ShuffleToDeckSpell extends Spell {
 			// Implements Kingsbane in a very basic way, since weapons pretty much only get enchanted for attack,
 			// durability, windfury, lifesteal and poisonous bonuses.
 			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());
-			for (int i = 0; i < copies; i++) {
-				Card copy = shuffle(context, player, source, null, target.getSourceCard(), extraCopy, source.getOwner());
+			var keptEnchantments = SpellUtils.extractKeptEnchantments(context, target);
+			Card baseTargetCard = (target instanceof net.demilich.metastone.game.entities.Actor && target.hasAttribute(net.demilich.metastone.game.cards.Attribute.KEEPS_ENCHANTMENTS))
+					? context.getCardById(target.getSourceCard().getCardId())
+					: target.getSourceCard();
+			for (int i = 0; i < howMany; i++) {
+				Card copy = shuffle(context, player, source, null, baseTargetCard, exclusive, source.getOwner());
 				if (copy == null) {
 					LOGGER.warn("onCast {} {}: Failed to shuffle {}, deck size was {}", context.getGameId(), source, target, player.getDeck().size());
 					continue;
 				}
 				copy.getAttributes().putAll(map);
+				SpellUtils.applyKeptEnchantments(context, player, source, copy, keptEnchantments);
 				if (copy.getZone() == Zones.DECK) {
 					SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
 				}
@@ -80,10 +90,12 @@ public class ShuffleToDeckSpell extends Spell {
 				desc.getValue(SpellArg.VALUE, context, player, target, source, 1));
 
 		Map<Card, Boolean> didShuffle = new LinkedHashMap<>();
-		for (int i = 0; i < copies; i++) {
+		for (int i = 0; i < howMany; i++) {
 			for (Card original : cards) {
-				Card copy = shuffle(context, player, source, null, original, extraCopy, source.getOwner());
-				didShuffle.put(copy, copy.getZone() == Zones.DECK);
+				Card copy = shuffle(context, player, source, null, original, exclusive, source.getOwner());
+				if (copy != null) {
+					didShuffle.put(copy, copy.getZone() == Zones.DECK);
+				}
 			}
 		}
 

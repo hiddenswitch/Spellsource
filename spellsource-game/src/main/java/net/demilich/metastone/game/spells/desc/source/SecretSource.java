@@ -2,9 +2,9 @@ package net.demilich.metastone.game.spells.desc.source;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.Default;
 
 /**
  * Returns a list of {@link net.demilich.metastone.game.spells.trigger.secrets.Secret} cards from the controller's hero
@@ -16,16 +16,14 @@ public class SecretSource extends CardSource implements HasCardCreationSideEffec
 		super(desc);
 	}
 
-	@Override
-	protected CardList match(GameContext context, Entity source, Player player) {
-		String defaultHeroClass = (String) getDesc().getOrDefault(CardSourceArg.HERO_CLASS, "GOLD");
+	protected CardList match(GameContext context, Entity source, Player player, @Default(string = "GOLD") String heroClass) {
 		// If the player doesn't ordinarily have secrets, return GOLD or otherwise specified secrets
 		String playerHeroClass = player.getHero().getHeroClass();
 		CardList secretCards = context.getCardCatalogue().query(context.getDeckFormat())
 				.filtered(c -> c.hasHeroClass(playerHeroClass) && c.isSecret() && c.isCollectible());
 		if (secretCards.isEmpty()) {
 			secretCards = context.getCardCatalogue().query(context.getDeckFormat())
-					.filtered(c -> c.hasHeroClass(defaultHeroClass) && c.isSecret() && c.isCollectible());
+					.filtered(c -> c.hasHeroClass(heroClass) && c.isSecret() && c.isCollectible());
 		}
 		return secretCards;
 	}

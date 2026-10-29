@@ -8,7 +8,7 @@
   "passiveTrigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "targetPlayer": "SELF"
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "CardCostModifierSpell",

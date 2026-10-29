@@ -12,7 +12,8 @@
     "targetSelection": "MINIONS",
     "spell": {
       "class": "SetAttackSpell",
-      "value": 2
+      "value": 2,
+      "name": "Sleepy Sprite's Might"
     }
   },
   "attributes": {

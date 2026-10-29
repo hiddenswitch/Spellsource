@@ -30,7 +30,8 @@
       },
       "ifTrue": -2
     },
-    "hpBonus": -2
+    "hpBonus": -2,
+    "name": "Corrupt Lifeforce"
   },
   "collectible": true,
   "fileFormatVersion": 1,

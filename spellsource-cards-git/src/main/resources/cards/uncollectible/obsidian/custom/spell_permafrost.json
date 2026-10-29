@@ -11,11 +11,13 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-        "attribute": "FROZEN"
+        "attribute": "FROZEN",
+        "name": "Permafrost Chill"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "FREEZES_PERMANENTLY"
+        "attribute": "FREEZES_PERMANENTLY",
+        "name": "Permafrost"
       }
     ]
   },

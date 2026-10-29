@@ -14,7 +14,8 @@
         "attribute": "IMMUNE",
         "revertTrigger": {
           "class": "TurnEndTrigger"
-        }
+        },
+        "name": "Defensive Position"
       },
       {
         "class": "DrawCardSpell",

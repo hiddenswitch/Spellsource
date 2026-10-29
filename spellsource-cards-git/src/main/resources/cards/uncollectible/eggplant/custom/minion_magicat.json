@@ -22,7 +22,8 @@
             "cardType": "MINION",
             "manaCost": 0
           },
-          "hpBonus": 2
+          "hpBonus": 2,
+          "name": "Magicat's Blessing"
         },
         {
           "class": "BuffSpell",
@@ -33,7 +34,8 @@
             "cardType": "MINION",
             "manaCost": 0
           },
-          "hpBonus": 2
+          "hpBonus": 2,
+          "name": "Magicat's Blessing"
         }
       ]
     }

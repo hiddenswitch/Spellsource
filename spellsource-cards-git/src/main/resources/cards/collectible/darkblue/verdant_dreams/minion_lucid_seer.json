@@ -18,7 +18,8 @@
           "value": {
             "class": "EntityCountValueProvider",
             "target": "ADJACENT_MINIONS"
-          }
+          },
+          "name": "Lucid Seer's Empowerment"
         },
         {
           "class": "ReturnTargetToHandSpell",

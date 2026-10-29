@@ -14,7 +14,8 @@
       {
         "class": "SetHpSpell",
         "target": "FRIENDLY_HERO",
-        "value": 35
+        "value": 35,
+        "name": "Level 8"
       },
       {
         "class": "ModifyMaxManaSpell",

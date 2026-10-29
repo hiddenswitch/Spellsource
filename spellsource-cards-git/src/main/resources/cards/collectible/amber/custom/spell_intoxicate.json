@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-        "attribute": "POISONOUS"
+        "attribute": "POISONOUS",
+        "name": "Intoxicated"
       },
       {
         "class": "AddAttributeSpell",
@@ -21,7 +22,8 @@
           "class": "CardFilter",
           "cardType": "MINION"
         },
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Intoxicated"
       }
     ]
   },

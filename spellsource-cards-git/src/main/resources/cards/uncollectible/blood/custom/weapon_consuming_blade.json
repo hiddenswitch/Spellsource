@@ -21,7 +21,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
-      "hpBonus": 4
+      "hpBonus": 4,
+      "name": "Consuming Blade's Ward"
     }
   },
   "attributes": {},

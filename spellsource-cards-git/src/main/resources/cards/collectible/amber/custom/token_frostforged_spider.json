@@ -22,7 +22,8 @@
         "attribute": "FROZEN",
         "invert": true,
         "operation": "HAS"
-      }
+      },
+      "name": "Frost Sting"
     }
   },
   "collectible": false,

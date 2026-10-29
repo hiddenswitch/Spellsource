@@ -12,7 +12,8 @@
       {
         "class": "AddAttributeSpell",
         "target": "FRIENDLY_MINIONS",
-        "attribute": "LIFESTEAL"
+        "attribute": "LIFESTEAL",
+        "name": "Grim Awakening"
       },
       {
         "class": "AddAttributeSpell",
@@ -21,7 +22,8 @@
         "filter": {
           "class": "EntityTypeFilter",
           "entityType": "MINION"
-        }
+        },
+        "name": "Grim Awakening"
       }
     ]
   },

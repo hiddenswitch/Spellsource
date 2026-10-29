@@ -22,7 +22,7 @@ public class ActivateTriggeredEffectSpell extends Spell {
 
 				if (trigger instanceof Enchantment && !(trigger instanceof Aura)) {
 					Enchantment enchantment = (Enchantment) trigger;
-					if (enchantment.getTriggers().stream().anyMatch(eT ->
+					if (enchantment.getSpell() != null && enchantment.getTriggers().stream().anyMatch(eT ->
 							eT.getClass().equals(triggerClass))) {
 						// Correctly set the trigger stacks
 						context.getTriggerHostStack().push(target.getReference());

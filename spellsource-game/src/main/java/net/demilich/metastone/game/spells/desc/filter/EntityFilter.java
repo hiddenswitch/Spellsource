@@ -145,6 +145,11 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 		return getDesc() == null || getDesc().equals(rhs.getDesc());
 	}
 
+	@Override
+	public int hashCode() {
+		return desc != null ? desc.hashCode() : 0;
+	}
+
 	protected List<Entity> getTargetedEntities(GameContext context, Player player, Entity host) {
 		EntityReference targetReference = (EntityReference) getDesc().get(EntityFilterArg.TARGET);
 		List<Entity> entities = null;

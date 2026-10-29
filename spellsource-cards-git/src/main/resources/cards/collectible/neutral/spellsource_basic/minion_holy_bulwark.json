@@ -11,7 +11,8 @@
     "class": "AddAttributeSpell",
     "target": "FRIENDLY_MINIONS",
     "attribute": "TAUNT",
-    "randomTarget": true
+    "randomTarget": true,
+    "name": "Miasma Warder's Guard"
   },
   "attributes": {
     "DEATHRATTLES": true,

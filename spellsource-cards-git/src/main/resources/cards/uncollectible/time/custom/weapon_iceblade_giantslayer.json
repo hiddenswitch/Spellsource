@@ -23,7 +23,8 @@
           {
             "class": "AddAttributeSpell",
             "target": "FRIENDLY_HERO",
-            "attribute": "FROZEN"
+            "attribute": "FROZEN",
+            "name": "Iceblade Giantslayer's Frost"
           },
           {
             "class": "ChooseAndReshuffleSpell"

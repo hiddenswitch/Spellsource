@@ -23,18 +23,21 @@
           "spells": [
             {
               "class": "SetAttackSpell",
-              "value": 3
+              "value": 3,
+              "name": "Echoing Potion"
             },
             {
               "class": "SetHpSpell",
-              "value": 3
+              "value": 3,
+              "name": "Echoing Potion"
             }
           ]
         }
       },
       "maxFires": 1,
       "oneTurn": true
-    }
+    },
+    "name": "Echoing Potion"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -13,7 +13,8 @@
     "revertTrigger": {
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
-    }
+    },
+    "name": "Blood Moon Rising"
   },
   "collectible": false,
   "fileFormatVersion": 1,

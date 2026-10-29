@@ -9,7 +9,8 @@
   "spell": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
-    "attackBonus": 2
+    "attackBonus": 2,
+    "name": "Kitsune Stance"
   },
   "collectible": false,
   "set": "CUSTOM",

@@ -8,8 +8,10 @@
   "spell": {
     "class": "DiscardSpell",
     "target": "FRIENDLY_HAND",
+    "randomTarget": true,
     "spell": {
-      "class": "HeroPowerToSpellSpell"
+      "class": "custom.SpellToHeroPowerSpell",
+      "target": "OUTPUT"
     },
     "filter": {
       "class": "CardFilter",

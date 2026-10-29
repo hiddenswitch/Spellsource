@@ -22,11 +22,13 @@
         "spell": {
           "class": "BuffSpell",
           "target": "EVENT_TARGET",
-          "value": 2
+          "value": 2,
+          "name": "Buddybot's Blessing"
         },
         "maxFires": 1,
         "oneTurn": true
-      }
+      },
+      "name": "Buddybot's Pact"
     }
   },
   "attributes": {

@@ -23,7 +23,8 @@
             "operation": "MULTIPLY"
           },
           "oneTurn": true
-        }
+        },
+        "name": "Armed and Dangerous"
       },
       {
         "class": "DrawCardSpell",

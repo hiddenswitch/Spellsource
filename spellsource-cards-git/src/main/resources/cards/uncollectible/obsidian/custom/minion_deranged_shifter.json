@@ -24,7 +24,8 @@
             "class": "AttributeValueProvider",
             "target": "ADJACENT_MINIONS",
             "attribute": "HP"
-          }
+          },
+          "name": "Deranged Shifter's Empowerment"
         },
         {
           "class": "custom.AddActorEffectsToTargetActorSpell",

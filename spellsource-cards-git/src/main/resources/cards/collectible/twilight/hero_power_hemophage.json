@@ -13,14 +13,16 @@
     "spells": [
       {
         "class": "TemporaryAttackSpell",
-        "value": 1
+        "value": 1,
+        "name": "Hemophage's Rally"
       },
       {
         "class": "AddAttributeSpell",
         "attribute": "LIFESTEAL",
         "revertTrigger": {
           "class": "TurnEndTrigger"
-        }
+        },
+        "name": "Hemophage's Lifedrain"
       }
     ]
   },

@@ -17,7 +17,8 @@
         "class": "SpecificCardFilter",
         "card": "spell_gold_coin"
       }
-    }
+    },
+    "name": "Oooh, Shiny!"
   },
   "collectible": true,
   "fileFormatVersion": 1,

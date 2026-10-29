@@ -20,7 +20,8 @@
       },
       "spell2": {
         "class": "SetAttackSpell",
-        "value": 10
+        "value": 10,
+        "name": "Vitality Thrower's Might"
       }
     }
   },

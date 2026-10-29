@@ -16,7 +16,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
-      "armorBonus": 3
+      "armorBonus": 3,
+      "name": "Frontline Cutthroat's Aegis"
     }
   },
   "attributes": {

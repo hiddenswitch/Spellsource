@@ -14,7 +14,7 @@ import static io.vertx.await.Async.await;
 public class ChoiceSpellImpl extends ChoiceSpell {
 
 	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+	public void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		var rogueRun = await(RogueManager.getRogueRun((String) player.getAttribute(Attribute.DECK_ID)));
 
 		String[] cards;

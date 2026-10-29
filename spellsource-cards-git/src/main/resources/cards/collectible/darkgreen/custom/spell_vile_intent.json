@@ -20,7 +20,8 @@
           },
           "spell": {
             "class": "BuffSpell",
-            "value": 2
+            "value": 2,
+            "name": "Vile Intent"
           }
         },
         "filter": {
@@ -40,7 +41,8 @@
           },
           "spell": {
             "class": "BuffSpell",
-            "value": 2
+            "value": 2,
+            "name": "Vile Intent"
           }
         },
         "filter": {

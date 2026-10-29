@@ -74,7 +74,8 @@
                 {
                   "class": "AddAttributeSpell",
                   "target": "SELF",
-                  "attribute": "WINDFURY"
+                  "attribute": "WINDFURY",
+                  "name": "General Vezax's Fury"
                 }
               ]
             },
@@ -89,7 +90,8 @@
                 {
                   "class": "AddAttributeSpell",
                   "target": "SELF",
-                  "attribute": "LIFESTEAL"
+                  "attribute": "LIFESTEAL",
+                  "name": "General Vezax's Lifedrain"
                 }
               ]
             },
@@ -104,7 +106,8 @@
                 {
                   "class": "AddAttributeSpell",
                   "target": "SELF",
-                  "attribute": "TAUNT"
+                  "attribute": "TAUNT",
+                  "name": "General Vezax's Guard"
                 }
               ]
             }

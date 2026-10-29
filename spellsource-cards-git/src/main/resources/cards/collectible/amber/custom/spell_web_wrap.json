@@ -8,7 +8,7 @@
   "condition": {
     "class": "MinionCountCondition",
     "value": 2,
-    "operation": "GREATER",
+    "operation": "GREATER_OR_EQUAL",
     "targetPlayer": "OPPONENT"
   },
   "targetSelection": "ENEMY_MINIONS",

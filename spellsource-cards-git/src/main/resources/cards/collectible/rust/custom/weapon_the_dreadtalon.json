@@ -9,13 +9,13 @@
   "description": "Opener: If your deck has no Dragons, summon a 4/4 Dragon at the start of your turns this game.",
   "battlecry": {
     "condition": {
-      "class": "AllMatchFilterCondition",
+      "class": "AnyMatchFilterCondition",
       "target": "FRIENDLY_DECK",
       "filter": {
         "class": "RaceFilter",
-        "race": "DRAGON",
-        "invert": true
-      }
+        "race": "DRAGON"
+      },
+      "invert": true
     },
     "targetSelection": "NONE",
     "spell": {
@@ -30,7 +30,8 @@
           "class": "SummonSpell",
           "card": "token_44dragon"
         }
-      }
+      },
+      "name": "Dreadtalon's Pact"
     }
   },
   "attributes": {

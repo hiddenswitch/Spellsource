@@ -31,7 +31,8 @@
         "class": "GraveyardCardsSource",
         "targetPlayer": "SELF"
       }
-    }
+    },
+    "name": "Star Scripture"
   },
   "collectible": true,
   "set": "CUSTOM",

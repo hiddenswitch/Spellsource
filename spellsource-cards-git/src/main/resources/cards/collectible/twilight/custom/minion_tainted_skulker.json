@@ -22,6 +22,9 @@
     "target": "ENEMY_MINIONS",
     "attribute": "AURA_DECAY"
   },
+  "attributes": {
+    "STEALTH": true
+  },
   "collectible": true,
   "fileFormatVersion": 1,
   "sets": [

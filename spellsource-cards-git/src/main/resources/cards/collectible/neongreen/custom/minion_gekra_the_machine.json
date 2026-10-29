@@ -88,12 +88,14 @@
                   {
                     "class": "AddAttributeSpell",
                     "target": "OUTPUT",
-                    "attribute": "TAUNT"
+                    "attribute": "TAUNT",
+                    "name": "Gekra's Guard"
                   },
                   {
                     "class": "AddAttributeSpell",
                     "target": "SELF",
-                    "attribute": "RESERVED_BOOLEAN_1"
+                    "attribute": "RESERVED_BOOLEAN_1",
+                    "name": "Gekra's Blessing"
                   }
                 ]
               }
@@ -116,12 +118,14 @@
                   {
                     "class": "AddAttributeSpell",
                     "target": "OUTPUT",
-                    "attribute": "DIVINE_SHIELD"
+                    "attribute": "DIVINE_SHIELD",
+                    "name": "Gekra's Dodge"
                   },
                   {
                     "class": "AddAttributeSpell",
                     "target": "SELF",
-                    "attribute": "RESERVED_BOOLEAN_1"
+                    "attribute": "RESERVED_BOOLEAN_1",
+                    "name": "Gekra's Blessing"
                   }
                 ]
               }
@@ -144,12 +148,14 @@
                   {
                     "class": "AddAttributeSpell",
                     "target": "OUTPUT",
-                    "attribute": "STEALTH"
+                    "attribute": "STEALTH",
+                    "name": "Gekra's Veil"
                   },
                   {
                     "class": "AddAttributeSpell",
                     "target": "SELF",
-                    "attribute": "RESERVED_BOOLEAN_1"
+                    "attribute": "RESERVED_BOOLEAN_1",
+                    "name": "Gekra's Blessing"
                   }
                 ]
               }
@@ -172,12 +178,14 @@
                   {
                     "class": "AddAttributeSpell",
                     "target": "OUTPUT",
-                    "attribute": "WINDFURY"
+                    "attribute": "WINDFURY",
+                    "name": "Gekra's Fury"
                   },
                   {
                     "class": "AddAttributeSpell",
                     "target": "SELF",
-                    "attribute": "RESERVED_BOOLEAN_1"
+                    "attribute": "RESERVED_BOOLEAN_1",
+                    "name": "Gekra's Blessing"
                   }
                 ]
               }

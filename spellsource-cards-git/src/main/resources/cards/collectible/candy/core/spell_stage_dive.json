@@ -13,7 +13,8 @@
     "class": "MetaSpell",
     "spell1": {
       "class": "TemporaryAttackSpell",
-      "value": 3
+      "value": 3,
+      "name": "Stage Dive"
     },
     "spell2": {
       "class": "AddAttributeSpell",
@@ -21,7 +22,8 @@
       "revertTrigger": {
         "class": "TurnEndTrigger",
         "targetPlayer": "BOTH"
-      }
+      },
+      "name": "Stage Dive"
     }
   }
 }

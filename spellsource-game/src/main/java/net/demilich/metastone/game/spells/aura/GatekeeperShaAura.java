@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.aura;
 
+import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 
 /**
@@ -18,6 +19,6 @@ public final class GatekeeperShaAura extends AbstractFriendlyCardAura {
 	 * @return The {@link net.demilich.metastone.game.spells.desc.aura.AuraArg#VALUE}.
 	 */
 	public int getNumbersIncrease() {
-		return getDesc().getValue();
+		return (int) getDesc().getOrDefault(AuraArg.VALUE, 1);
 	}
 }

@@ -25,7 +25,8 @@
             "class": "CardFilter",
             "race": "DEMON"
           },
-          "randomTarget": true
+          "randomTarget": true,
+          "name": "Dreamscape Scythe's Rally"
         },
         {
           "class": "BuffSpell",
@@ -35,7 +36,8 @@
             "class": "CardFilter",
             "race": "DRAGON"
           },
-          "randomTarget": true
+          "randomTarget": true,
+          "name": "Dreamscape Scythe's Rally"
         }
       ]
     }

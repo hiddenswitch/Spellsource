@@ -8,10 +8,13 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
-import org.apache.commons.lang3.ArrayUtils;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.Trigger;
+import net.demilich.metastone.game.targeting.IdFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,35 +60,32 @@ public final class CopyCardEnchantmentsSpell extends Spell {
 					auras.addAll(Arrays.asList(card.getDesc().getAuras()));
 				}
 
-				if (triggers.isEmpty()) {
-					return;
-				}
-
-				if (applyingTo instanceof Card) {
-					Card applyingToCard = (Card) applyingTo;
-					if (applyingToCard.getDesc().isReadOnly()) {
-						applyingToCard.setDesc(applyingToCard.getDesc().cloneAndUnfreeze());
-					}
-					if (applyingToCard.getDesc().getTriggers() != null) {
-						applyingToCard.getDesc().setTriggers((EnchantmentDesc[]) ArrayUtils.addAll(applyingToCard.getDesc().getTriggers(), triggers));
-					} else {
-						applyingToCard.getDesc().setTriggers(triggers.toArray(new EnchantmentDesc[0]));
-					}
-
-					if (applyingToCard.getDesc().getAuras() != null) {
-						applyingToCard.getDesc().setAuras((AuraDesc[]) ArrayUtils.addAll(applyingToCard.getDesc().getAuras(), auras));
-					} else {
-						applyingToCard.getDesc().setAuras(auras.toArray(new AuraDesc[0]));
-					}
-
-				} else if (applyingTo instanceof Actor) {
-					Actor applyingToActor = (Actor) applyingTo;
-
+				boolean copyToActor = applyingTo instanceof Card;
+				if (applyingTo instanceof Card || applyingTo instanceof Actor) {
 					for (EnchantmentDesc enchantmentDesc : triggers) {
-						context.getLogic().addEnchantment(player, enchantmentDesc.create(), source, applyingToActor);
+						Enchantment enchantment = enchantmentDesc.create();
+						enchantment.setEffectSource(source)
+								.setSourceCard(card);
+						enchantment.setCopyToActor(copyToActor);
+						enchantment.setOwner(player.getId());
+						context.getLogic().addEnchantment(player, enchantment, source, applyingTo);
 					}
-					for (AuraDesc aura : auras) {
-						context.getLogic().addEnchantment(player, aura.create(), source, applyingToActor);
+					for (AuraDesc auraDesc : auras) {
+						Aura aura = auraDesc.create();
+						aura.setEffectSource(source)
+								.setSourceCard(card);
+						aura.setCopyToActor(copyToActor);
+						aura.setOwner(player.getId());
+						context.getLogic().addEnchantment(player, aura, source, applyingTo);
+					}
+					if (card.getId() != IdFactory.UNASSIGNED) {
+						for (Trigger t : context.getLogic().getActiveTriggers(card.getReference())) {
+							if (t instanceof Enchantment ench && ench.isCopyToActor()) {
+								Enchantment copy = ench.getCopy();
+								copy.setCopyToActor(copyToActor);
+								context.getLogic().addEnchantment(player, copy, source, applyingTo);
+							}
+						}
 					}
 				}
 			}

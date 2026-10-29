@@ -16,11 +16,13 @@
         {
           "class": "BuffSpell",
           "attackBonus": 2,
-          "hpBonus": 2
+          "hpBonus": 2,
+          "name": "Morris's Infection"
         },
         {
           "class": "AddDeathrattleSpell",
-          "card": "enchantment_top_hat"
+          "card": "enchantment_top_hat",
+          "name": "Morris's Infection"
         }
       ]
     }

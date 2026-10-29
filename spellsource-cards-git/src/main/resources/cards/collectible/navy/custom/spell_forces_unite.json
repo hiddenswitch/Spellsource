@@ -14,7 +14,8 @@
       "class": "CardFilter",
       "cardType": "MINION"
     },
-    "hpBonus": 3
+    "hpBonus": 3,
+    "name": "Forces Unite!"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -1,5 +1,5 @@
 {
-  "name": "Bloodsoaked Constuct",
+  "name": "Bloodsoaked Construct",
   "type": "ENCHANTMENT",
   "heroClass": "BLOOD",
   "rarity": "FREE",
@@ -10,12 +10,14 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
-        "hpBonus": 1
+        "hpBonus": 1,
+        "name": "Bloodsoaked Construct"
       },
       {
         "class": "AddDeathrattleSpell",
         "target": "FRIENDLY_MINIONS",
-        "card": "enchantment_bloodsoaked_construct"
+        "card": "enchantment_bloodsoaked_construct",
+        "name": "Bloodsoaked Construct"
       }
     ]
   },

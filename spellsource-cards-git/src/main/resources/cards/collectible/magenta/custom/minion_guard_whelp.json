@@ -15,7 +15,8 @@
       "attribute": "IMMUNE",
       "revertTrigger": {
         "class": "TurnEndTrigger"
-      }
+      },
+      "name": "Guard Whelp's Immunity"
     }
   },
   "attributes": {

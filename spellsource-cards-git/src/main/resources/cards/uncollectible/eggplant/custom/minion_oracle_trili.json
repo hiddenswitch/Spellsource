@@ -18,7 +18,8 @@
       "spell": {
         "class": "BuffSpell",
         "target": "OUTPUT",
-        "value": 4
+        "value": 4,
+        "name": "Oracle Trili's Blessing"
       },
       "randomTarget": true
     }

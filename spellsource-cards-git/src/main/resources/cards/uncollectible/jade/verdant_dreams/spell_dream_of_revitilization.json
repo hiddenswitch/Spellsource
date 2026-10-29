@@ -19,7 +19,8 @@
       {
         "class": "BuffSpell",
         "target": "ALL_MINIONS",
-        "value": 3
+        "value": 3,
+        "name": "Dream of Revitilization"
       }
     ]
   },

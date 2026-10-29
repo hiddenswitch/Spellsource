@@ -16,7 +16,8 @@
         "attribute": "RUSH",
         "revertTrigger": {
           "class": "TurnEndTrigger"
-        }
+        },
+        "name": "Drop From the Sky"
       },
       "targetPlayer": "SELF"
     },

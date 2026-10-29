@@ -23,6 +23,10 @@
               "entityType": "CARD"
             },
             {
+              "class": "RaceFilter",
+              "race": "ELEMENTAL"
+            },
+            {
               "class": "AttributeFilter",
               "value": {
                 "class": "LastTurnValueProvider",

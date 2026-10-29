@@ -18,7 +18,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "attackBonus": 1
+      "attackBonus": 1,
+      "name": "No Man's Maul's Fury"
     }
   },
   "attributes": {

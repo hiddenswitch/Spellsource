@@ -29,7 +29,8 @@
         }
       },
       "maxFires": 1
-    }
+    },
+    "name": "Signs of the End"
   },
   "collectible": true,
   "set": "CUSTOM",

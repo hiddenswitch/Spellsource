@@ -20,7 +20,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Jerbrod Drake's Fortitude"
     }
   },
   "attributes": {

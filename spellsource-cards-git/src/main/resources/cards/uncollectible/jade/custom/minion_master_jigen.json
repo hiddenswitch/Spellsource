@@ -15,11 +15,13 @@
         {
           "class": "BuffSpell",
           "attackBonus": 3,
-          "hpBonus": 3
+          "hpBonus": 3,
+          "name": "Master Jigen's Blessing"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "DEFLECT"
+          "attribute": "DEFLECT",
+          "name": "Master Jigen's Deflection"
         }
       ]
     }

@@ -16,18 +16,13 @@ public class ManaCostModifierValueProvider extends ValueProvider {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
+	protected int provideValue(GameContext context, Player player, Entity target, Entity host, CardSource cardSource, EntityFilter cardFilter) {
 		int value = 0;
-		CardSource cardSource = (CardSource) getDesc().get(ValueProviderArg.CARD_SOURCE);
 		if (cardSource == null) {
 			cardSource = new CardSourceDesc(HandSource.class).create();
 		}
 
-		EntityFilter cardFilter;
-		if (getDesc().containsKey(ValueProviderArg.CARD_FILTER)) {
-			cardFilter = (EntityFilter) getDesc().get(ValueProviderArg.CARD_FILTER);
-		} else {
+		if (cardFilter == null) {
 			cardFilter = AndFilter.create();
 		}
 

@@ -4,8 +4,16 @@ import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.FileSystemOperations
+import javax.inject.Inject
 
 class GoPlugin implements Plugin<org.gradle.api.Project> {
+  private final FileSystemOperations fs
+
+  @Inject
+  GoPlugin(FileSystemOperations fs) {
+    this.fs = fs
+  }
 
   @Override
   void apply(Project project) {
@@ -14,6 +22,8 @@ class GoPlugin implements Plugin<org.gradle.api.Project> {
     def ext = project.extensions.create('go', GoPluginExtension)
     def myGoos = Os.isFamily(Os.FAMILY_WINDOWS) ? "windows" : (Os.isFamily(Os.FAMILY_MAC) ? "darwin" : "linux")
     def myArch = Os.isArch("amd64") ? "amd64" : "arm64"
+    def buildDirPath = project.layout.buildDirectory.asFile.get().path
+    def fileSystemOps = this.fs
     project.afterEvaluate {
       def single = false;
       def buildTasks =
@@ -30,24 +40,25 @@ class GoPlugin implements Plugin<org.gradle.api.Project> {
                       t.include("**/*.go")
                       t.include("**/go.mod")
                       t.include("**/go.sum")
-                      t.outputs.file("$project.buildDir/$path")
-                      t.goCommandLineArgs.set(['build', '-o', "$project.buildDir/$path", cmdFile.path])
+                      t.outputs.file("$buildDirPath/$path")
+                      t.goCommandLineArgs.set(['build', '-o', "$buildDirPath/$path", cmdFile.path])
                       t.environment.putAll(ext.environment.get())
                       t.environment.put("GOOS", goos)
                       t.environment.put("GOARCH", goarch)
                     }
                     if (goos == myGoos && goarch == myArch && !single) {
                       single = true
+                      def binDir = new File("$buildDirPath/bin")
                       project.tasks.register("goBuildCmdAsSingle", DefaultTask) {
                         group('go')
                         dependsOn(task)
                         outputs.file(project.layout.buildDirectory.file("bins/this_cmd"))
 
                         doLast {
-                          project.mkdir("$project.buildDir/bin/")
-                          project.copy {
+                          binDir.mkdirs()
+                          fileSystemOps.copy {
                             from task.get().outputs.files.singleFile
-                            into "$project.buildDir/bin"
+                            into binDir
                             rename ".*", "this_cmd"
                           }
                         }

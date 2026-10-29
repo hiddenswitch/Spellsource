@@ -27,12 +27,14 @@
           {
             "class": "SetAttackSpell",
             "value": 1,
-            "exclusive": true
+            "exclusive": true,
+            "name": "Puppeteer Senzaku's Humility"
           },
           {
             "class": "SetHpSpell",
             "value": 1,
-            "exclusive": true
+            "exclusive": true,
+            "name": "Puppeteer Senzaku's Mark"
           }
         ]
       }

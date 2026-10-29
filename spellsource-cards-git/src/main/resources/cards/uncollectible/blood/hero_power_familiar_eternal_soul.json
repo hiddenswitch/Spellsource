@@ -11,7 +11,8 @@
     "class": "HeroPowerSpell",
     "spell": {
       "class": "BuffSpell",
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Eternal Soul's Ward"
     }
   },
   "collectible": false,

@@ -17,7 +17,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "EVENT_TARGET",
-      "value": 1
+      "value": 1,
+      "name": "Onyx Forgeflame's Blessing"
     }
   },
   "collectible": true,

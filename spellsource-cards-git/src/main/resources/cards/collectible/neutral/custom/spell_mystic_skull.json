@@ -11,7 +11,8 @@
     "spell": {
       "class": "SetAttackSpell",
       "target": "OUTPUT",
-      "value": 5
+      "value": 5,
+      "name": "Mystic Skull"
     }
   },
   "collectible": false,

@@ -15,7 +15,8 @@
         "class": "BuffSpell",
         "target": "OUTPUT",
         "attackBonus": 3,
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Quest Giver's Blessing"
       },
       "howMany": 1
     }

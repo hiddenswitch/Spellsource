@@ -1,0 +1,14 @@
+{
+  "name": "Standard Combat",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Constructed Mode Rules: 30-card deck, 10 max Mana Crystals (+1 per turn), 10 max hand size (draw 1 per turn), 1 Hero Power use per turn.",
+  "attributes": {
+    "HIDDEN": true
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

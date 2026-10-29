@@ -12,7 +12,8 @@
       "class": "RecruitSpell",
       "cardLocation": "HAND",
       "targetPlayer": "SELF"
-    }
+    },
+    "name": "Unearthly Haunting"
   },
   "collectible": true,
   "set": "CUSTOM",

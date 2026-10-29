@@ -13,7 +13,8 @@
       "class": "DiscoverSpell",
       "spell": {
         "class": "AddDeathrattleSpell",
-        "target": "SELF"
+        "target": "SELF",
+        "name": "Spirit Saber's Legacy"
       },
       "cardSource": {
         "class": "AftermathsCardSource",

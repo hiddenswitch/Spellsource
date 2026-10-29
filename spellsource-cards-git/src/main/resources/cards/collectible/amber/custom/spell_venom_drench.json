@@ -17,7 +17,8 @@
       {
         "class": "AddAttributeSpell",
         "target": "ALL_MINIONS",
-        "attribute": "POISONOUS"
+        "attribute": "POISONOUS",
+        "name": "Venom Drenched"
       }
     ]
   },

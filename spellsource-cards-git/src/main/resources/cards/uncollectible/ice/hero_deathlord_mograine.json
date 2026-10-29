@@ -14,12 +14,14 @@
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
-          "value": 2
+          "value": 2,
+          "name": "Deathlord Mograine's Blessing"
         },
         {
           "class": "AddAttributeSpell",
           "target": "FRIENDLY_MINIONS",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Deathlord Mograine's Guard"
         }
       ]
     }

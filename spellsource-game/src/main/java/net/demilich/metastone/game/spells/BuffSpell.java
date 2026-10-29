@@ -11,6 +11,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
@@ -90,7 +91,7 @@ import java.util.Map;
  *
  * @see AddAttributeSpell to "buff" attributes.
  */
-public class BuffSpell extends RevertableSpell {
+public class BuffSpell extends Spell {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(BuffSpell.class);
 
@@ -121,30 +122,6 @@ public class BuffSpell extends RevertableSpell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target) {
-		SpellDesc reverse = new SpellDesc(BuffSpell.class, target, null, false);
-		if (desc.get(SpellArg.VALUE) instanceof ValueProvider
-				|| desc.get(SpellArg.ATTACK_BONUS) instanceof ValueProvider
-				|| desc.get(SpellArg.HP_BONUS) instanceof ValueProvider
-				|| desc.get(SpellArg.ARMOR_BONUS) instanceof ValueProvider) {
-			throw new UnsupportedOperationException("Cannot create a revertTrigger on a BuffSpell that uses a ValueProvider in any of its value fields");
-		}
-		if (desc.containsKey(SpellArg.VALUE)) {
-			reverse.put(SpellArg.VALUE, -desc.getInt(SpellArg.VALUE, 0));
-		}
-		if (desc.containsKey(SpellArg.ATTACK_BONUS)) {
-			reverse.put(SpellArg.ATTACK_BONUS, -desc.getInt(SpellArg.ATTACK_BONUS, 0));
-		}
-		if (desc.containsKey(SpellArg.HP_BONUS)) {
-			reverse.put(SpellArg.HP_BONUS, -desc.getInt(SpellArg.HP_BONUS, 0));
-		}
-		if (desc.containsKey(SpellArg.ARMOR_BONUS)) {
-			reverse.put(SpellArg.ARMOR_BONUS, -desc.getInt(SpellArg.ARMOR_BONUS, 0));
-		}
-		return reverse;
-	}
-
 	protected void onCast(
 			GameContext context,
 			Player player,
@@ -155,7 +132,6 @@ public class BuffSpell extends RevertableSpell {
 			int hpBonus,
 			int armorBonus,
 			int value) {
-		super.onCast(context, player, desc, source, target);
 		if (target == null) {
 			LOGGER.warn("onCast {} {}: No target for buff, skipping", context.getGameId(), source);
 			return;
@@ -171,39 +147,34 @@ public class BuffSpell extends RevertableSpell {
 			}
 		}
 
-		// Fast indexed check for ModifyBuffSpellAura without stream allocation
-		var triggers = context.getTriggers();
-		for (int i = 0, n = triggers.size(); i < n; i++) {
-			var t = triggers.get(i);
-			if (t instanceof ModifyBuffSpellAura aura && !aura.isExpired() && aura.isActivated()) {
-				var affected = aura.getAffectedEntities();
-				if (source != null && (affected.contains(source.getId())
-						|| (source.getSourceCard() != null && affected.contains(source.getSourceCard().getId())))) {
-					var spellValueStack = context.getSpellValueStack();
-					spellValueStack.push(attackBonus);
-					int auraAttackBonus = aura.getDesc().getValue(AuraArg.ATTACK_BONUS, context, player, target, source, 0);
-					spellValueStack.pop();
-					spellValueStack.push(hpBonus);
-					int auraHpBonus = aura.getDesc().getValue(AuraArg.HP_BONUS, context, player, target, source, 0);
-					spellValueStack.pop();
-					int auraValueBonus = aura.getDesc().getValue(AuraArg.VALUE, context, player, target, source, 0);
-					if (desc.containsKey(SpellArg.VALUE)) {
-						attackBonus += auraAttackBonus + auraValueBonus;
-						hpBonus += auraHpBonus + auraValueBonus;
-					} else {
-						if (desc.containsKey(SpellArg.ATTACK_BONUS)) {
-							attackBonus += auraAttackBonus + auraValueBonus;
-							hpBonus += auraValueBonus;
-						}
-						if (desc.containsKey(SpellArg.HP_BONUS)) {
-							attackBonus += auraValueBonus;
-							hpBonus += auraHpBonus + auraValueBonus;
-						}
-					}
+		for (ModifyBuffSpellAura aura : SpellUtils.getAuras(context, ModifyBuffSpellAura.class, source)) {
+			var spellValueStack = context.getSpellValueStack();
+			spellValueStack.push(attackBonus);
+			int auraAttackBonus = aura.getDesc().getValue(AuraArg.ATTACK_BONUS, context, player, target, source, 0);
+			spellValueStack.pop();
+			spellValueStack.push(hpBonus);
+			int auraHpBonus = aura.getDesc().getValue(AuraArg.HP_BONUS, context, player, target, source, 0);
+			spellValueStack.pop();
+			int auraValueBonus = aura.getDesc().getValue(AuraArg.VALUE, context, player, target, source, 0);
+			if (desc.containsKey(SpellArg.VALUE)) {
+				attackBonus += auraAttackBonus + auraValueBonus;
+				hpBonus += auraHpBonus + auraValueBonus;
+			} else {
+				if (desc.containsKey(SpellArg.ATTACK_BONUS)) {
+					attackBonus += auraAttackBonus + auraValueBonus;
+					hpBonus += auraValueBonus;
+				}
+				if (desc.containsKey(SpellArg.HP_BONUS)) {
+					attackBonus += auraValueBonus;
+					hpBonus += auraHpBonus + auraValueBonus;
 				}
 			}
 		}
 
+		boolean hasRevertTrigger = desc.containsKey(SpellArg.REVERT_TRIGGER) || desc.containsKey(SpellArg.SECOND_REVERT_TRIGGER);
+		if (attackBonus != 0 || hpBonus != 0 || (totalArmorBonus != 0 && hasRevertTrigger)) {
+			Enchantment.attachBuffEnchantment(context, player, desc, source, target, attackBonus, hpBonus, hasRevertTrigger ? totalArmorBonus : 0);
+		}
 
 		if (attackBonus != 0) {
 			if (target instanceof Hero) {

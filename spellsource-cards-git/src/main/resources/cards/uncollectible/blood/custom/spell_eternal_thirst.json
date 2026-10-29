@@ -22,7 +22,8 @@
             "value": 1
           },
           "oneTurn": true
-        }
+        },
+        "name": "Eternal Thirst"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -37,7 +38,8 @@
             "value": 1
           },
           "oneTurn": true
-        }
+        },
+        "name": "Eternal Thirst"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -52,7 +54,8 @@
             "value": 1
           },
           "oneTurn": true
-        }
+        },
+        "name": "Eternal Thirst"
       }
     ]
   },

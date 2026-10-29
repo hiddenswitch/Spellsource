@@ -21,7 +21,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "SELF",
-      "attribute": "CHARGE"
+      "attribute": "CHARGE",
+      "name": "Lava Manticore's Blitz"
     }
   },
   "attributes": {

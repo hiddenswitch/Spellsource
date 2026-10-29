@@ -24,7 +24,8 @@
         "target": "FRIENDLY_MINIONS",
         "attackBonus": 1,
         "hpBonus": 0,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Seething Axe's Blessing"
       }
     }
   },

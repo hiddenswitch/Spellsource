@@ -15,7 +15,7 @@ public class HighlanderHandCondition extends Condition {
 	}
 
 	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+	public boolean isFulfilled(GameContext context, Player player, Entity source, Entity target) {
 		return player.getHand().stream().map(Card::getCardId).distinct().count() == (long) player.getHand().getCount();
 	}
 

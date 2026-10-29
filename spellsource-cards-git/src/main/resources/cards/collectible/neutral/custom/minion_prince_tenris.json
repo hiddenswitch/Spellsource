@@ -34,7 +34,8 @@
           "class": "TurnStartTrigger",
           "targetPlayer": "BOTH"
         }
-      }
+      },
+      "name": "Rektan's Pact"
     }
   },
   "attributes": {

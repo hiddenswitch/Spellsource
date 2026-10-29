@@ -22,10 +22,12 @@
               "class": "BuffSpell",
               "target": "ALL_MINIONS",
               "attackBonus": 1,
-              "hpBonus": 1
+              "hpBonus": 1,
+              "name": "Feast of Souls"
             }
           }
-        }
+        },
+        "name": "Feast of Souls"
       },
       {
         "class": "DamageSpell",

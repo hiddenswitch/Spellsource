@@ -15,7 +15,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "EVENT_TARGET",
-      "attribute": "DEFLECT"
+      "attribute": "DEFLECT",
+      "name": "Enchanted Tapestry's Deflection"
     }
   },
   "collectible": false,

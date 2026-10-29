@@ -23,7 +23,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "SELF",
-      "attribute": "RUSH"
+      "attribute": "RUSH",
+      "name": "Rising Popstar's Dash"
     }
   },
   "attributes": {

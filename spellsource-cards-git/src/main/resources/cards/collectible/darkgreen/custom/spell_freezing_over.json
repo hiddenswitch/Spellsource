@@ -16,10 +16,12 @@
       "spell": {
         "class": "BuffSpell",
         "target": "SELF",
-        "value": 3
+        "value": 3,
+        "name": "For Science!"
       },
       "oneTurn": true
-    }
+    },
+    "name": "For Science!"
   },
   "fileFormatVersion": 1,
   "sets": [

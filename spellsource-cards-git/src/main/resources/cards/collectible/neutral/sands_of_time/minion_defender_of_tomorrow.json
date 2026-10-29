@@ -25,7 +25,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "hpBonus": 4
+      "hpBonus": 4,
+      "name": "Defender of Tomorrow's Fortitude"
     }
   },
   "attributes": {

@@ -20,7 +20,8 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 4
+        "value": 4,
+        "name": "Burning Passion"
       },
       {
         "class": "DamageSpell",

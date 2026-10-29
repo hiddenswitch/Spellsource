@@ -19,7 +19,8 @@
       "spells": [
         {
           "class": "BuffSpell",
-          "value": 1
+          "value": 1,
+          "name": "Thitazov's Blessing"
         },
         {
           "class": "HealSpell",

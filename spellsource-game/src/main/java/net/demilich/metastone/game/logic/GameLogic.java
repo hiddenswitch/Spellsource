@@ -16,6 +16,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.cards.desc.compiler.GameStateArena;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -86,7 +87,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 Zones.GRAVEYARD, Zones.REMOVED_FROM_PLAY);
 	public static final Zones[] VALID_ZONES = new Zones[]{Zones.HAND, Zones.DECK, Zones.GRAVEYARD, Zones.BATTLEFIELD,
 	 Zones.SECRET, Zones.QUEST, Zones.HERO_POWER, Zones.HERO, Zones.WEAPON, Zones.DISCOVER, Zones.REMOVED_FROM_PLAY,
-	  Zones.SET_ASIDE_ZONE, Zones.PLAYER};
+	  Zones.SET_ASIDE_ZONE, Zones.ENCHANTMENT, Zones.PLAYER};
 	/**
 	 * The maximum number of {@link Minion} entities that can be on a {@link Zones#BATTLEFIELD}.
 	 */
@@ -101,10 +102,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public static final int MAX_HAND_CARDS = 10;
 
 	/**
-	 * Gets the effective maximum hand size for the given player, accounting for any {@link Attribute#EXTRA_HAND_CARDS}.
+	 * Gets the effective maximum hand size for the given player, accounting for {@link Attribute#MAX_HAND_SIZE} and any
+	 * {@link Attribute#EXTRA_HAND_CARDS}.
 	 */
 	public int getMaxHandCards(Player player) {
-		return MAX_HAND_CARDS + player.getAttributeValue(Attribute.EXTRA_HAND_CARDS);
+		int baseMaxHand = player.hasAttribute(Attribute.MAX_HAND_SIZE)
+				? player.getAttributeValue(Attribute.MAX_HAND_SIZE)
+				: MAX_HAND_CARDS;
+		return baseMaxHand + player.getAttributeValue(Attribute.EXTRA_HAND_CARDS);
 	}
 
 	/**
@@ -117,9 +122,44 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public static final int STARTER_CARDS = 3;
 	/**
 	 * The maximum amount of mana a {@link Player} can have at the start of a turn. Some effects allow a player to spend
-* more than {@link #MAX_MANA} mana in a turn, but never start with more.
+	 * more than {@link #MAX_MANA} mana in a turn, but never start with more.
 	 */
 	public static final int MAX_MANA = 10;
+
+	/**
+	 * Gets the effective maximum mana crystal cap for the given player, accounting for {@link Attribute#MAX_MANA},
+	 * {@link Attribute#EXTRA_MAX_MANA}, and {@link Attribute#AURA_MAX_MANA}.
+	 */
+	public int getMaxManaCap(Player player) {
+		int baseMaxMana = player.hasAttribute(Attribute.MAX_MANA)
+				? player.getAttributeValue(Attribute.MAX_MANA)
+				: MAX_MANA;
+		return baseMaxMana
+				+ player.getAttributeValue(Attribute.EXTRA_MAX_MANA)
+				+ player.getAttributeValue(Attribute.AURA_MAX_MANA);
+	}
+
+	/**
+	 * Gets the number of empty mana crystals granted to the given player at the start of their turn, accounting for
+	 * {@link Attribute#MANA_PER_TURN} and {@link Attribute#AURA_MANA_PER_TURN}.
+	 */
+	public int getManaPerTurn(Player player) {
+		int baseManaPerTurn = player.hasAttribute(Attribute.MANA_PER_TURN)
+				? player.getAttributeValue(Attribute.MANA_PER_TURN)
+				: 1;
+		return baseManaPerTurn + player.getAttributeValue(Attribute.AURA_MANA_PER_TURN);
+	}
+
+	/**
+	 * Gets the number of cards drawn by the given player at the start of their turn, accounting for
+	 * {@link Attribute#CARDS_DRAWN_PER_TURN} and {@link Attribute#AURA_CARDS_DRAWN_PER_TURN}.
+	 */
+	public int getCardsDrawnPerTurn(Player player) {
+		int baseCardsDrawn = player.hasAttribute(Attribute.CARDS_DRAWN_PER_TURN)
+				? player.getAttributeValue(Attribute.CARDS_DRAWN_PER_TURN)
+				: 1;
+		return baseCardsDrawn + player.getAttributeValue(Attribute.AURA_CARDS_DRAWN_PER_TURN);
+	}
 	/**
 	 * The maximum number of {@link Secret} entities that can be in a {@link Zones#SECRET}.
 	 */
@@ -568,14 +608,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		enchantment.onAdd(context, player, effectSource, host);
-		var index = context.getTriggers().size();
 		context.getTriggers().add(enchantment);
 
 		if (Objects.equals(enchantment.getEntityLocation(), EntityLocation.UNASSIGNED)) {
-			enchantment.setEntityLocation(new EntityLocation(Zones.ENCHANTMENT, enchantment.getOwner(), index));
+			enchantment.moveOrAddTo(context, Zones.ENCHANTMENT);
 		}
 
-		if (context.getTriggers().size() > 100) {
+		if (context.getTriggers().size() > 400) {
 			LOGGER.warn("addTrigger {}: Warning, many triggers: {}", enchantment, context.getTriggers().size());
 		}
 	}
@@ -1028,23 +1067,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Implement SpellOverrideAura
 		var spellClass = spellDesc.getDescClass();
-		List<Aura> overrideAuras = null;
-		var activeTriggers = context.getTriggers();
-		for (int i = 0, n = activeTriggers.size(); i < n; i++) {
-			var t = activeTriggers.get(i);
-			if (t instanceof SpellOverrideAura) {
-				var aura = (Aura) t;
-				if (!aura.isExpired()
-						&& aura.isActivated()
-						&& aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(spellClass)
-						&& aura.getAffectedEntities().contains(playerId)) {
-					if (overrideAuras == null) {
-						overrideAuras = new ArrayList<>(2);
-					}
-					overrideAuras.add(aura);
-				}
-			}
-		}
+		List<Aura> overrideAuras = GameStateArena.getSpellOverrideAurasFast(context, playerId, spellClass);
 
 		if (overrideAuras != null) {
 			spellDesc = spellDesc.cloneAndUnfreeze();
@@ -1089,21 +1112,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			spell.cast(context, player, spellDesc, source, targets);
 		}
 
+		for (var plugin : GameLogicPlugin.PLUGINS) {
+			plugin.onSpellCasted(context, player, source, spellDesc, targets, targetSelection, sourceAction, childSpell);
+		}
+
 		if (!childSpell) {
 			var sourceCard = source != null ? source.getSourceCard() : null;
-
-			// This implements Lynessa Sunsorrow
-			if (sourceCard != null
-				&& sourceCard.getCardType() == CardType.SPELL
-				&& targetSelection != TargetSelection.NONE
-				&& targets != null
-				&& targets.size() == 1
-				&& targets.get(0).getOwner() == playerId
-				&& targets.get(0).getEntityType().equals(EntityType.MINION)
-				&& sourceAction != null
-				&& Objects.equals(sourceAction.getSourceReference(), source.getReference())) {
-				sourceCard.setAttribute(Attribute.CASTED_ON_FRIENDLY_MINION);
-			}
 
 			if (targetSelection != TargetSelection.NONE
 				&& targets != null
@@ -1176,39 +1190,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	public List<Enchantment> copyEnchantments(Player player, Entity effectSource, Entity source, Entity target,
 	 Predicate<Enchantment> predicate, boolean includeExpired) {
-		// Enchantment attributes
-		Attribute.getEnchantmentLikeAttributes()
-			.forEach(a -> {
-				if (source.getAttributes().containsKey(a)) {
-					target.getAttributes().put(a, source.getAttributes().get(a));
-				}
-			});
-
-		// Copy over the stored entities, e.g. the Test Subject + Vivid Nightmare combo
-		EnvironmentEntityList list = EnvironmentEntityList.getList(context);
-		for (EntityReference reference : list.getReferences(source)) {
-			if (!reference.equals(EntityReference.NONE)) {
-				list.add(target, context.resolveSingleTarget(reference));
-			}
-		}
-
-		// Actual enchantments
-		var enchantmentStream = context.getTriggers()
-			.stream()
-			.filter(t -> t instanceof Enchantment)
-			.map(t -> (Enchantment) t)
-			.filter(t -> (includeExpired || !t.isExpired()) && t.getHostReference().equals(source.getReference()));
-
-		if (predicate != null) {
-			enchantmentStream = enchantmentStream.filter(predicate);
-		}
-
-		var enchantments = enchantmentStream
-			.map(Enchantment::getCopy)
-			.collect(Collectors.toUnmodifiableList());
-		enchantments
-			.forEach(e -> context.getLogic().addEnchantment(player, e, effectSource, target));
-		return enchantments;
+		return GameStateArena.copyEnchantmentsFast(context, player, effectSource, source, target, predicate, includeExpired);
 	}
 
 	public Optional<Enchantment> tryCreateEnchantmentCard(GameContext context, Player player, Entity effectSource,
@@ -1463,20 +1445,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		// Check if triggers were added that do not have hosts
-		for (var trigger : context.getTriggers()) {
-			if (trigger instanceof HasCard && Objects.isNull(((HasCard) trigger).getSourceCard())) {
-				LOGGER.error("endOfSequence: Trigger {} is missing source card", trigger, new RuntimeException());
-			}
-
-			if (Objects.equals(trigger.getHostReference(), EntityReference.NONE) || trigger.getHostReference() == null) {
-				LOGGER.error("endOfSequence: Trigger has host reference of NONE on an enchantment from card {}", trigger,
-				 new RuntimeException());
-			}
-
-			if (trigger instanceof Enchantment && ((Enchantment) trigger).getId() == UNASSIGNED) {
-				LOGGER.error("endOfSequence: Trigger {} is missing an ID", trigger);
-			}
-		}
+		GameStateArena.checkTriggersValid(context, LOGGER);
 
 		// Only perform at most END_OF_SEQUENCE_MAX_DEPTH times. This limits the number of deathrattles to evaluate.
 		if (sequenceDepth > END_OF_SEQUENCE_MAX_DEPTH) {
@@ -1498,10 +1467,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 			context.getEnvironment().put(Environment.DESTROYED_THIS_SEQUENCE_COUNT, 0);
 			// Reset all enchantment sequence counters
-			context.getTriggers().stream()
-				.filter(Enchantment.class::isInstance)
-				.map(Enchantment.class::cast)
-				.forEach(Enchantment::endOfSequence);
+			GameStateArena.resetEnchantmentSequenceCounters(context);
 			fireGameEvent(new DidEndSequenceEvent(context));
 			// Check if any characters have been marked as destroyed by ending the sequence. If one has, we're in big 
 			// trouble.
@@ -1530,34 +1496,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	@NotNull
 	private List<Actor> getDestroyedCharacters() {
-		List<Actor> destroyList = new ArrayList<>();
-		for (var player : context.getPlayers()) {
-
-			if ((player.getHero().isDestroyed() || player.hasAttribute(Attribute.DESTROYED)) &&
-				player.getHero().getZone() != Zones.GRAVEYARD) {
-				destroyList.add(player.getHero());
-			}
-
-			for (var minion : player.getMinions()) {
-				if (minion.isDestroyed()) {
-					destroyList.add(minion);
-				}
-			}
-
-			for (var entity : player.getSetAsideZone()) {
-				if (!(entity instanceof Actor)) {
-					continue;
-				}
-				if (entity.isDestroyed()) {
-					destroyList.add((Actor) entity);
-				}
-			}
-
-			if (!player.getWeaponZone().isEmpty() && player.getWeaponZone().get(0).isDestroyed()) {
-				destroyList.add(player.getWeaponZone().get(0));
-			}
-		}
-		return destroyList;
+		return GameStateArena.getDestroyedCharactersFast(context);
 	}
 
 	/**
@@ -2401,6 +2340,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			weapon.setActive(context.getActivePlayerId() == playerId);
 
 			addEnchantments(player, weapon.getSourceCard(), weapon.getSourceCard(), weapon);
+			if (!weapon.hasAttribute(Attribute.SILENCED)) {
+				GameStateArena.copyCardEnchantmentsToActorFast(context, player, weaponCard, weapon);
+			}
 
 			// We're only going to fire this now if the weapon was successfully equipped
 			fireGameEvent(new WeaponEquippedEvent(context, weapon, weaponCard));
@@ -2728,30 +2670,7 @@ EntityReference potentialTargets) {
 	 * @return The modified mana cost of the card.
 	 */
 	public int getModifiedManaCost(Player player, Card card) {
-		var manaCost = card.getBaseManaCost();
-		if (card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-			return manaCost - card.getManaCostModification(context, player);
-		}
-		var minValue = 0;
-		for (var trigger : context.getTriggers()) {
-			if (!(trigger instanceof CardCostModifier)) {
-				continue;
-			}
-
-			var costModifier = (CardCostModifier) trigger;
-			if (!costModifier.appliesTo(context, card, player)) {
-				continue;
-			}
-			var host = context.resolveSingleTarget(costModifier.getHostReference());
-			manaCost = costModifier.process(context, host, card, manaCost, player);
-			if (costModifier.getMinValue() > minValue) {
-				minValue = costModifier.getMinValue();
-			}
-		}
-		manaCost -= card.getManaCostModification(context, player);
-		manaCost = MathUtils.clamp(manaCost, minValue, Integer.MAX_VALUE);
-
-		return manaCost;
+		return GameStateArena.getModifiedManaCostFast(context, player, card);
 	}
 
 	private boolean canActivateInvokeKeyword(Player player, Card card) {
@@ -2779,19 +2698,7 @@ EntityReference potentialTargets) {
 	}
 
 	private int getTotalAttributeValue(Player player, Attribute attr) {
-		var value = 0;
-		for (var entity : player.getLookup()) {
-			if (!entity.isInPlay()) {
-				continue;
-			}
-			value += entity.getAttributeValue(attr);
-		}
-		for (var trigger : context.getTriggers()) {
-			if (trigger instanceof Enchantment && trigger.getOwner() == player.getId()) {
-				value += ((Enchantment) trigger).getAttributeValue(attr);
-			}
-		}
-		return value;
+		return GameStateArena.getTotalAttributeValueFast(context, player, attr);
 	}
 
 	private int getTotalAttributeMultiplier(Player player, Attribute attribute) {
@@ -3062,6 +2969,108 @@ EntityReference potentialTargets) {
 	}
 
 	/**
+	 * Initializes base player rule attributes and executes any {@code onInitialized} or rule card spells defined on the
+	 * active {@link net.demilich.metastone.game.decks.DeckFormat} before deck cards' {@code onInitialized} effects run.
+	 */
+	public void initializeFormatRuleAttributes(Player player) {
+		if (player.hasAttribute(Attribute.FORMAT_RULES_APPLIED)) {
+			return;
+		}
+		player.setAttribute(Attribute.FORMAT_RULES_APPLIED);
+		if (!player.hasAttribute(Attribute.MAX_MANA)) {
+			player.setAttribute(Attribute.MAX_MANA, MAX_MANA);
+		}
+		if (!player.hasAttribute(Attribute.MAX_HAND_SIZE)) {
+			player.setAttribute(Attribute.MAX_HAND_SIZE, MAX_HAND_CARDS);
+		}
+		if (!player.hasAttribute(Attribute.MANA_PER_TURN)) {
+			player.setAttribute(Attribute.MANA_PER_TURN, 1);
+		}
+		if (!player.hasAttribute(Attribute.CARDS_DRAWN_PER_TURN)) {
+			player.setAttribute(Attribute.CARDS_DRAWN_PER_TURN, 1);
+		}
+		if (!player.hasAttribute(Attribute.HERO_POWER_USAGES)) {
+			player.setAttribute(Attribute.HERO_POWER_USAGES, 1);
+		}
+		if (!player.hasAttribute(Attribute.DECK_SIZE)) {
+			player.setAttribute(Attribute.DECK_SIZE, DECK_SIZE);
+		}
+
+		var deckFormat = context.getDeckFormat();
+		var catalogue = context.getCardCatalogue();
+		if (deckFormat == null || catalogue == null) {
+			return;
+		}
+		boolean prevIgnore = context.getIgnoreEvents();
+		context.setIgnoreEvents(true);
+		try {
+			var formatName = deckFormat.getName();
+			Card formatCard = (formatName != null && !formatName.isEmpty())
+					? catalogue.getFormatCard(formatName)
+					: null;
+			if (formatCard != null && formatCard.getDesc().getOnInitialized() != null) {
+				castSpell(player.getId(), formatCard.getDesc().getOnInitialized(), player.getReference(),
+						EntityReference.NONE, TargetSelection.NONE, false, null);
+			}
+			List<String> ruleCards = deckFormat.getRuleCardsList();
+			if (ruleCards.isEmpty() && formatCard != null && formatCard.getDesc().getRuleCards() != null) {
+				ruleCards = Arrays.asList(formatCard.getDesc().getRuleCards());
+			}
+			for (var ruleCardId : ruleCards) {
+				if ("enchantment_constructed_rules".equals(ruleCardId)
+						|| "enchantment_rule_mana".equals(ruleCardId)
+						|| "enchantment_rule_draw".equals(ruleCardId)
+						|| "enchantment_rule_hero_power".equals(ruleCardId)
+						|| "enchantment_rule_deck_size".equals(ruleCardId)) {
+					continue;
+				}
+				if (catalogue.getCards().containsKey(ruleCardId)) {
+					var ruleCard = catalogue.getCardById(ruleCardId);
+					if (ruleCard.getDesc().getOnInitialized() != null) {
+						castSpell(player.getId(), ruleCard.getDesc().getOnInitialized(), player.getReference(),
+								EntityReference.NONE, TargetSelection.NONE, false, null);
+					}
+				}
+			}
+		} finally {
+			context.setIgnoreEvents(prevIgnore);
+		}
+	}
+
+	/**
+	 * Puts the active {@link net.demilich.metastone.game.decks.DeckFormat}'s rule {@link Enchantment} cards into play on
+	 * the given {@link Player}.
+	 */
+	public void activateFormatRuleEnchantments(Player player) {
+		boolean alreadyInitialized = player.hasAttribute(Attribute.FORMAT_RULES_APPLIED);
+		if (!alreadyInitialized) {
+			initializeFormatRuleAttributes(player);
+		}
+		var deckFormat = context.getDeckFormat();
+		var catalogue = context.getCardCatalogue();
+		if (deckFormat == null || catalogue == null) {
+			return;
+		}
+		var formatName = deckFormat.getName();
+		Card formatCard = (formatName != null && !formatName.isEmpty())
+				? catalogue.getFormatCard(formatName)
+				: null;
+		if (formatCard != null && !formatCard.getDesc().getEnchantmentDescList().isEmpty()) {
+			addEnchantments(player, player, formatCard, player, true);
+		}
+		List<String> ruleCards = deckFormat.getRuleCardsList();
+		if (ruleCards.isEmpty() && formatCard != null && formatCard.getDesc().getRuleCards() != null) {
+			ruleCards = Arrays.asList(formatCard.getDesc().getRuleCards());
+		}
+		for (var ruleCardId : ruleCards) {
+			if (catalogue.getCards().containsKey(ruleCardId)) {
+				var ruleCard = catalogue.getCardById(ruleCardId);
+				addEnchantments(player, player, ruleCard, player, true);
+			}
+		}
+	}
+
+	/**
 	 * Activates all the appropriate enchantments for a player who has mulliganned, and gives that player the player's
 	  * {@link GameStartEvent}.
 	 *
@@ -3069,6 +3078,8 @@ EntityReference potentialTargets) {
 	 */
 	public void startGameForPlayer(Player player) {
 		player.setAttribute(Attribute.GAME_STARTED);
+
+		activateFormatRuleEnchantments(player);
 
 		for (var plugin : GameLogicPlugin.PLUGINS) {
 			plugin.onGameStart(context, player);
@@ -3129,8 +3140,9 @@ EntityReference potentialTargets) {
 		player.updateLookup(heroPower);
 		assignEntityIds(player.getDeck(), playerId);
 		assignEntityIds(player.getHand(), playerId);
-		// The player can use a hero power once per turn by default
+		// Initialize base rule attributes and format rule spells before deck card onInitialized effects
 		player.setAttribute(Attribute.HERO_POWER_USAGES, 1);
+		initializeFormatRuleAttributes(player);
 
 		Stream.concat(player.getDeck().stream(), player.getHand().stream()).toList().forEach(c -> {
 			// Implements Open the Waygate
@@ -3399,7 +3411,7 @@ card.getName()));
 	 */
 	public void modifyCurrentMana(int playerId, int mana, boolean spent) {
 		var player = context.getPlayer(playerId);
-		var newMana = MathUtils.clamp(player.getMana() + mana, 0, MAX_MANA + Math.abs(mana));
+		var newMana = MathUtils.clamp(player.getMana() + mana, 0, getMaxManaCap(player) + Math.abs(mana));
 		player.setMana(newMana);
 		if ((mana < 0 && spent) || mana > 0) {
 			context.getPlayer(playerId).modifyAttribute(Attribute.MANA_SPENT_THIS_TURN, mana < 0 ? -mana : 0);
@@ -3451,7 +3463,7 @@ card.getName()));
 	 * @param delta  The amount to increment or decrement the amount of mana the player has.
 	 */
 	public void modifyMaxMana(Player player, int delta) {
-		final var maxMana = MathUtils.clamp(player.getMaxMana() + delta, 0, GameLogic.MAX_MANA);
+		final var maxMana = MathUtils.clamp(player.getMaxMana() + delta, 0, getMaxManaCap(player));
 		final var initialMaxMana = player.getMaxMana();
 		final var change = maxMana - initialMaxMana;
 		player.setMaxMana(maxMana);
@@ -3550,13 +3562,15 @@ card.getName()));
 	public void performGameAction(int playerId, GameAction action) {
 		programCounter = 0;
 		var tracer = GlobalTracer.get();
-		var span = tracer.buildSpan("GameLogic/performGameAction")
-			.withTag("gameId", context.getGameId())
-			.withTag("action.id", action.getId())
-			.withTag("action.actionType", action.getActionType().toString())
-			.withTag("action.description", action.getDescription(context, playerId))
-			.asChildOf(context.getSpanContext())
-			.start();
+		var span = GlobalTracer.isRegistered()
+			? tracer.buildSpan("GameLogic/performGameAction")
+				.withTag("gameId", context.getGameId())
+				.withTag("action.id", action.getId())
+				.withTag("action.actionType", action.getActionType().toString())
+				.withTag("action.description", action.getDescription(context, playerId))
+				.asChildOf(context.getSpanContext())
+				.start()
+			: io.opentracing.noop.NoopSpan.INSTANCE;
 		context.getActionStack().push(action);
 		try (var s1 = tracer.activateSpan(span)) {
 			context.onWillPerformGameAction(playerId, action);
@@ -3573,8 +3587,10 @@ card.getName()));
 				}
 			}
 
-			LOGGER.trace("performGameAction {} {}: {}", context.getGameId(), playerId, action.getDescription(context,
-			 playerId));
+			if (LOGGER.isTraceEnabled()) {
+				LOGGER.trace("performGameAction {} {}: {}", context.getGameId(), playerId, action.getDescription(context,
+				 playerId));
+			}
 
 			action.execute(context, playerId);
 
@@ -4032,7 +4048,7 @@ card.getZone());
 			if (isDrawnFromDeck) {
 				player.getStatistics().cardDrawn();
 			}
-			fireGameEvent(new DrawCardEvent(context, playerId, card, isDrawnFromDeck));
+			fireGameEvent(new DrawCardEvent(context, playerId, card, source, isDrawnFromDeck));
 
 			if (isDrawnFromDeck && card.hasAttribute(Attribute.CASTS_WHEN_DRAWN)) {
 				revealCard(player, card);
@@ -4084,6 +4100,7 @@ card.getZone());
 		}
 
 		target.getAttributes().remove(attribute);
+		Enchantment.onAttributeRemovedFromTarget(context, target, attribute);
 	}
 
 	/**
@@ -4156,24 +4173,7 @@ card.getZone());
 	}
 
 	public void removeEnchantments(Entity entity, Predicate<Trigger> predicate) {
-		var entityReference = entity.getReference();
-		// Remove all card enchantments
-		if (entity.getEntityType() == EntityType.CARD) {
-			for (var cardEnchantmentAttribute : Attribute.getCardEnchantmentAttributes()) {
-				entity.getAttributes().remove(cardEnchantmentAttribute);
-			}
-		}
-
-		for (var trigger : new ArrayList<>(context.getLogic().context.getTriggers())) {
-			if (trigger.isExpired()) {
-				continue;
-			}
-			if (trigger.getHostReference().equals(entityReference)) {
-				if (predicate.test(trigger)) {
-					trigger.expire(context);
-				}
-			}
-		}
+		GameStateArena.removeEnchantmentsFast(context, entity, predicate);
 	}
 
 	public void removeEnchantments(Entity entity, final boolean removeAuras, final boolean keepSelfCardCostModifiers,
@@ -4287,27 +4287,8 @@ card.getZone());
 			openers.add(actor.getSourceCard().getDesc().getBattlecry());
 		}
 
-		// Find openers that are unexpired and hosted by the card (i.e., added to the card)
-		if (actor.getSourceCard().getId() != UNASSIGNED) {
-			openers.addAll(
-				context.getTriggers()
-					.stream()
-					.filter(t -> t instanceof Opener && t.getHostReference().equals(actor.getSourceCard().getReference()) && !t.isExpired() && t.isActivated())
-					.map(t -> ((Opener) t).getOpenerDesc())
-					.collect(toList()));
-		}
-
-		// Finally, if we're summoning, we may have put openers on this card from some other source, like Farseer Nobundo,
-		// that now need to be resolved.
-		if (!context.getSummonReferenceStack().isEmpty()
-			&& context.getSummonReferenceStack().getLast().equals(actor.getReference())) {
-			openers.addAll(
-				context.getTriggers()
-					.stream()
-					.filter(t -> t instanceof Opener && !((Opener) t).getSourceCard().equals(actor.getSourceCard()) && t.getHostReference().equals(actor.getReference()) && !t.isExpired() && t.isActivated())
-					.map(t -> ((Opener) t).getOpenerDesc())
-					.collect(toList()));
-		}
+		// Find openers that are unexpired and hosted by the card or added during summon
+		GameStateArena.collectAdditionalOpenersFast(context, actor, openers);
 
 		// Do nothing, especially do not end the sequence
 
@@ -4488,11 +4469,12 @@ card.getZone());
 
 	@NotNull
 	public List<Aftermath> getAftermaths(Entity host) {
-		return context.getTriggers().stream()
-			.filter(t -> t instanceof Aftermath)
-			.map(t -> (Aftermath) t)
-			.filter(a -> !a.isExpired() && a.isActivated() && Objects.equals(a.getHostReference(), host.getReference()))
-			.toList();
+		return GameStateArena.getAftermathsFast(context, host);
+	}
+
+	@NotNull
+	public List<Opener> getOpeners(Entity host) {
+		return GameStateArena.getOpenersFast(context, host);
 	}
 
 	/**
@@ -4589,6 +4571,9 @@ card.getZone());
 		removeEnchantments(secret);
 		if (secret.isInPlay()) {
 			secret.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			for (var plugin : GameLogicPlugin.PLUGINS) {
+				plugin.onSecretRevealed(context, player, secret.getSourceCard());
+			}
 			fireGameEvent(new SecretRevealedEvent(context, secret.getSourceCard(), player.getId()));
 		}
 	}
@@ -4813,6 +4798,7 @@ card.getZone());
 	 */
 	public void removeBonusAttributes(Entity target) {
 		var player = context.getPlayer(target.getOwner());
+		var oldMaxHp = target instanceof Actor a ? a.getMaxHp() : 0;
 		List<Attribute> tags = new ArrayList<>();
 		tags.addAll(target.getAttributes().keySet());
 		for (var attr : tags) {
@@ -4824,7 +4810,6 @@ card.getZone());
 
 		if (target instanceof Actor) {
 			var actor = (Actor) target;
-			var oldMaxHp = actor.getMaxHp();
 			actor.setMaxHp(actor.getAttributeValue(Attribute.BASE_HP));
 			actor.setAttack(actor.getAttributeValue(Attribute.BASE_ATTACK));
 			if (actor.getHp() > actor.getMaxHp()) {
@@ -4865,15 +4850,17 @@ card.getZone());
 		player.setAttribute(Attribute.MANA_SPENT_THIS_TURN, 0);
 		player.getAttributes().put(Attribute.TURN_START_TIME_MILLIS, startTime);
 
-		if (player.getMaxMana() < MAX_MANA) {
-			player.setMaxMana(player.getMaxMana() + 1);
+		var maxManaCap = getMaxManaCap(player);
+		var manaPerTurn = getManaPerTurn(player);
+		if (player.getMaxMana() < maxManaCap && manaPerTurn > 0) {
+			player.setMaxMana(Math.min(player.getMaxMana() + manaPerTurn, maxManaCap));
 		}
 		player.getStatistics().startTurn();
 
 		player.setLockedMana(player.getAttributeValue(Attribute.OVERLOAD));
-		var mana = Math.min(player.getMaxMana() - player.getLockedMana(), MAX_MANA);
+		var mana = Math.min(player.getMaxMana() - player.getLockedMana(), maxManaCap);
 		player.setMana(mana);
-		fireGameEvent(new MaxManaChangedEvent(context, player.getId(), 1));
+		fireGameEvent(new MaxManaChangedEvent(context, player.getId(), manaPerTurn));
 
 		player.getAttributes().remove(Attribute.OVERLOAD);
 		player.setAttribute(Attribute.EXTRA_TURN, Math.max(player.getAttributeValue(Attribute.EXTRA_TURN) - 1, 0));
@@ -4896,7 +4883,10 @@ card.getZone());
 		}
 
 		fireGameEvent(new TurnStartEvent(context, player.getId()));
-		castSpell(playerId, DrawCardSpell.create(), player.getReference(), null, TargetSelection.NONE, true, null);
+		int cardsToDraw = getCardsDrawnPerTurn(player);
+		for (int i = 0; i < cardsToDraw; i++) {
+			castSpell(playerId, DrawCardSpell.create(), player.getReference(), null, TargetSelection.NONE, true, null);
+		}
 		endOfSequence();
 		player.getAttributes().remove(Attribute.STARTING_TURN);
 	}
@@ -4932,8 +4922,10 @@ card.getZone());
 		if (actor.hasAttribute(Attribute.STEALTH) && actor.hasAttribute(Attribute.STEALTH_FOR_TURNS)) {
 			var stealthForTurns = actor.getAttributeValue(Attribute.STEALTH_FOR_TURNS);
 			if (stealthForTurns == 1) {
-				removeAttribute(player, null, actor, Attribute.STEALTH);
 				removeAttribute(player, null, actor, Attribute.STEALTH_FOR_TURNS);
+				if (!Enchantment.hasActiveAttributeEnchantment(context, actor, Attribute.STEALTH)) {
+					removeAttribute(player, null, actor, Attribute.STEALTH);
+				}
 			} else {
 				actor.setAttribute(Attribute.STEALTH_FOR_TURNS, stealthForTurns - 1);
 			}
@@ -5042,17 +5034,9 @@ card.getZone());
 			addEnchantments(player, source, minion.getSourceCard(), minion);
 			// Add aftermaths, openers and other enchantments to the minion that were attached to the card
 			@NotNull var finalMinion = minion;
-			var enchantments = context.getTriggers().stream()
-				.filter(t -> t instanceof Enchantment)
-				.map(t -> (Enchantment) t)
-				.filter(a ->
-					Objects.equals(a.getHostReference(), finalMinion.getSourceCard().getReference())
-						&& !a.isExpired()
-						&& a.isCopyToActor())
-				.collect(Collectors.toUnmodifiableList());
-
-			enchantments
-				.forEach(a -> addEnchantment(player, a.clone(), source, finalMinion));
+			if (!finalMinion.hasAttribute(Attribute.SILENCED)) {
+				GameStateArena.copyCardEnchantmentsToActorFast(context, player, source, finalMinion);
+			}
 
 			if (player.getMinions().contains(minion)
 				&& !minion.hasAttribute(Attribute.PERMANENT)) {
@@ -5113,6 +5097,12 @@ card.getZone());
 	 @NotNull Card enchantmentSource, @NotNull Entity host, boolean force,
 	  Predicate<? super AbstractEnchantmentDesc<?>> predicate) {
 		var desc = enchantmentSource.getSourceCard().getDesc();
+		if (!force && (host.getZone() == Zones.DECK || host.getZone() == Zones.HAND)
+				&& !desc.hasHandOrDeckEnchantments()
+				&& enchantmentSource.getCardType() != CardType.ENCHANTMENT
+				&& GameLogicPlugin.PLUGINS.length == 0) {
+			return Collections.emptyList();
+		}
 		var enchantmentDescs = desc.getEnchantmentDescList();
 		if (enchantmentDescs.isEmpty() && enchantmentSource.getCardType() != CardType.ENCHANTMENT && GameLogicPlugin.PLUGINS.length == 0) {
 			return Collections.emptyList();
@@ -5633,8 +5623,10 @@ card.getZone());
 
 		context.onNotificationWillFire(event);
 
-		var liveTriggers = context.getTriggers();
-		if (liveTriggers.isEmpty() && context.getDeferredTriggersQueue().isEmpty()) {
+		var eventType = event.getEventType();
+		var isTurnEnd = eventType == GameEventType.TURN_END;
+		var triggers = GameStateArena.getInterestedTriggersSnapshot(context, eventType, isTurnEnd);
+		if (triggers == null && !context.hasDeferredTriggers()) {
 			triggerDepth--;
 			context.onNotificationDidFire(event);
 			return;
@@ -5646,11 +5638,6 @@ card.getZone());
 		pushEventData(event);
 
 		try {
-			// We take a snapshot of the triggers currently in play at the time of evaluation.
-			var triggers = new ArrayList<>(liveTriggers);
-			var eventType = event.getEventType();
-			var isTurnEnd = eventType == GameEventType.TURN_END;
-
 			// We keep track of which triggers were one turn only in order to expire them after they have fired.
 			List<Trigger> oneTurnExpires = null;
 
@@ -5660,7 +5647,7 @@ card.getZone());
 			// For example, queueing is an appropriate time to check if a minion should be buffed, e.g. during a summon,
 			// because later a different effect may deal damage to and subsequently mark-as-destroyed the minion.
 			ArrayDeque<Trigger> thisQueuedTriggers = null;
-			for (int i = 0, n = triggers.size(); i < n; i++) {
+			for (int i = 0, n = triggers != null ? triggers.size() : 0; i < n; i++) {
 				if (Thread.currentThread().isInterrupted()) {
 					return;
 				}
@@ -5691,7 +5678,7 @@ card.getZone());
 
 					if (interested && trigger.queues(event)) {
 						// We're already processing this trigger, recursively, so we will reevaluate it at the end of this sequence
-						if (context.getProcessingTriggers().contains(trigger)) {
+						if (context.hasProcessingTriggers() && context.getProcessingTriggers().contains(trigger)) {
 							context.getDeferredTriggersQueue().addLast(new QueuedTrigger(event, trigger));
 						} else {
 							if (thisQueuedTriggers == null) {
@@ -5715,7 +5702,7 @@ card.getZone());
 				}
 			}
 
-			if (context.getProcessingTriggers().isEmpty()) {
+			if (!context.hasProcessingTriggers() && context.hasDeferredTriggers()) {
 				while (!context.getDeferredTriggersQueue().isEmpty()) {
 					if (Thread.currentThread().isInterrupted()) {
 						return;
@@ -5749,41 +5736,19 @@ card.getZone());
 	}
 
 	protected void pushHostReference(GameEvent event, Trigger trigger) {
-		var hostReference = trigger.getHostReference();
-		if (hostReference == null) {
-			hostReference = EntityReference.NONE;
-		}
-		event.getGameContext().getTriggerHostStack().push(hostReference);
+		GameStateArena.pushHostReferenceFast(event.getGameContext(), trigger);
 	}
 
 	protected void pushEventData(GameEvent event) {
-		if (event instanceof HasValue) {
-			event.getGameContext().getEventValueStack().push(((HasValue) event).getValue());
-		} else {
-			event.getGameContext().getEventValueStack().push(0);
-		}
-
-		if (event.getTarget() != null) {
-			event.getGameContext().getEventTargetStack().push(event.getTarget().getReference());
-		} else {
-			event.getGameContext().getEventTargetStack().push(EntityReference.NONE);
-		}
-
-		if (event.getSource() != null) {
-			event.getGameContext().getEventSourceStack().push(event.getSource().getReference());
-		} else {
-			event.getGameContext().getEventSourceStack().push(EntityReference.NONE);
-		}
+		GameStateArena.pushEventDataFast(event.getGameContext(), event);
 	}
 
 	private void popEventData(GameEvent event) {
-		event.getGameContext().getEventValueStack().pop();
-		event.getGameContext().getEventSourceStack().pop();
-		event.getGameContext().getEventTargetStack().pop();
+		GameStateArena.popEventDataFast(event.getGameContext());
 	}
 
 	protected void processTrigger(GameEvent event, Trigger trigger) {
-		if (context.getProcessingTriggers().contains(trigger)) {
+		if (context.hasProcessingTriggers() && context.getProcessingTriggers().contains(trigger)) {
 			throw new RuntimeException();
 		}
 
@@ -5805,7 +5770,7 @@ card.getZone());
 	}
 
 	private void popHostReference(GameEvent event) {
-		event.getGameContext().getTriggerHostStack().pop();
+		GameStateArena.popHostReferenceFast(event.getGameContext());
 	}
 
 	/**
@@ -5815,18 +5780,7 @@ card.getZone());
 	 * @return
 	 */
 	public List<Trigger> getActiveTriggers(EntityReference hostReference) {
-		var triggers = context.getTriggers();
-		List<Trigger> active = null;
-		for (int i = 0, n = triggers.size(); i < n; i++) {
-			var t = triggers.get(i);
-			if (!t.isExpired() && t.isActivated() && t.getHostReference().equals(hostReference)) {
-				if (active == null) {
-					active = new ArrayList<>(2);
-				}
-				active.add(t);
-			}
-		}
-		return active != null ? active : Collections.emptyList();
+		return GameStateArena.getActiveTriggersFast(context, hostReference);
 	}
 
 	/**
@@ -5843,6 +5797,9 @@ card.getZone());
 	 */
 	public void expireAll() {
 		for (var trigger : context.getTriggers()) {
+			if (trigger instanceof Enchantment ench) {
+				ench.clearRevertableModification();
+			}
 			trigger.expire(context);
 		}
 	}

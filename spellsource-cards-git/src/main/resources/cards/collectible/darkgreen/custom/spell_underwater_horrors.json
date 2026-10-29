@@ -21,7 +21,8 @@
           "target": "SELF"
         },
         "maxFires": 1
-      }
+      },
+      "name": "Underwater Horrors"
     },
     "targetPlayer": "OWNER"
   },

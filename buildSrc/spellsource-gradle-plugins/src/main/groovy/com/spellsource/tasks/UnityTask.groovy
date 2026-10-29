@@ -10,11 +10,13 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.services.BuildService
 import org.gradle.api.services.BuildServiceParameters
 import org.gradle.api.tasks.AbstractExecTask
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 
+@CacheableTask
 abstract class UnityTask extends AbstractExecTask<UnityTask> {
   static final isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
   static final isLinux = Os.isFamily(Os.FAMILY_UNIX) && !Os.isFamily(Os.FAMILY_MAC)
@@ -38,8 +40,11 @@ abstract class UnityTask extends AbstractExecTask<UnityTask> {
   @Internal
   Provider<BuildService<BuildServiceParameters>> unity3d
 
+  private final File projectDirFile
+
   UnityTask() {
     super(UnityTask.class)
+    this.projectDirFile = project.projectDir
     getUseMajorVersion().convention(true)
     getLogToStdOut().convention(false)
     getOutputPath().convention(project.layout.buildDirectory.map { it.asFile.path })
@@ -47,6 +52,7 @@ abstract class UnityTask extends AbstractExecTask<UnityTask> {
 
   @Override
   Task configure(groovy.lang.Closure closure) {
+    def pDir = this.projectDirFile
     unity3d = project.gradle.sharedServices.registerIfAbsent("unity3d", BuildService) {
       maxParallelUsages.set(1)
     }
@@ -55,7 +61,7 @@ abstract class UnityTask extends AbstractExecTask<UnityTask> {
 
     super.configure(closure)
 
-    def projectFiles = project.fileTree(projectPath.map { "${project.layout.projectDirectory.file(it).asFile.path}/Assets" }) {
+    def projectFiles = project.fileTree(projectPath.map { "${new File(pDir, it).path}/Assets" }) {
       // this affects caching
       exclude "**/TextMesh Pro/Resources/Fonts & Materials/*.asset"
     }
@@ -73,7 +79,7 @@ abstract class UnityTask extends AbstractExecTask<UnityTask> {
     })
             .withPathSensitivity(PathSensitivity.RELATIVE)
             .withPropertyName("projectSettings")
-    outputs.dir(outputPath.map { project.layout.projectDirectory.file(it) })
+    outputs.dir(outputPath.map { new File(it).isAbsolute() ? new File(it) : new File(pDir, it) })
             .withPropertyName("outputDirectory")
 
     return this
@@ -100,7 +106,7 @@ abstract class UnityTask extends AbstractExecTask<UnityTask> {
     def basePath = "/Applications/Unity/Hub/Editor"
     if (isWindows) {
       basePath = "C:\\Program Files\\Unity\\Hub\\Editor"
-      if (!project.file(basePath).exists()) {
+      if (!new File(basePath).exists()) {
         basePath = "C:\\Program Files\\Unity\\Editor"
       }
     } else if (isLinux) {
@@ -109,14 +115,20 @@ abstract class UnityTask extends AbstractExecTask<UnityTask> {
     basePath
   }
 
+  private File resolveFile(String p) {
+    def f = new File(p)
+    return f.isAbsolute() ? f : new File(projectDirFile, p)
+  }
+
   @TaskAction
   protected void exec() {
-    workingDir "${project.projectDir}"
+    workingDir "${projectDirFile}"
     def tempDir = getTemporaryDir()
-    String editorVersion = project.file("${projectPath.get()}/ProjectSettings/ProjectVersion.txt").text.readLines()[0].split(':')[1].trim()
+    def resolvedProjectDir = resolveFile(projectPath.get())
+    String editorVersion = new File(resolvedProjectDir, "ProjectSettings/ProjectVersion.txt").text.readLines()[0].split(':')[1].trim()
     def path = pathForVersion(editorVersion)
 
-    def executableFile = project.file(path)
+    def executableFile = resolveFile(path)
     if (!executableFile.exists() || !executableFile.canExecute()) {
       // check if a major version exists we can use instead
       def found = false;
@@ -139,7 +151,7 @@ abstract class UnityTask extends AbstractExecTask<UnityTask> {
       if (!found) {
         throw new NullPointerException("Unity version for $path not installed, install one")
       } else {
-        executableFile = project.file(path)
+        executableFile = resolveFile(path)
         if (!executableFile.exists() || !executableFile.canExecute()) {
           throw new NullPointerException("Unity version for $path not installed, install one")
         }
@@ -149,7 +161,7 @@ abstract class UnityTask extends AbstractExecTask<UnityTask> {
 
     def baseArgs = [
             path,
-            '-projectPath', project.file(projectPath).absolutePath,
+            '-projectPath', resolvedProjectDir.absolutePath,
             '-batchmode',
             '-nographics',
             '-silent-crashes',
@@ -160,8 +172,9 @@ abstract class UnityTask extends AbstractExecTask<UnityTask> {
     try {
       super.exec()
     } catch (Throwable t) {
-      if (project.file("$tempDir/unity.log").exists()) {
-        project.logger.log(LogLevel.ERROR, project.file("$tempDir/unity.log").text)
+      def logFile = new File(tempDir, "unity.log")
+      if (logFile.exists()) {
+        logger.log(LogLevel.ERROR, logFile.text)
       }
       throw t;
     }

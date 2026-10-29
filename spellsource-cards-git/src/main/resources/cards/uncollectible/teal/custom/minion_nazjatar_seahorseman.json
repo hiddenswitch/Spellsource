@@ -15,7 +15,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "SELF",
-      "attribute": "CANNOT_ATTACK_HEROES"
+      "attribute": "CANNOT_ATTACK_HEROES",
+      "name": "Nazjatar Seahorseman's Restraint"
     }
   },
   "attributes": {

@@ -11,11 +11,13 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "attackBonus": 1
+        "attackBonus": 1,
+        "name": "Combat Mastery"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "POISONOUS"
+        "attribute": "POISONOUS",
+        "name": "Toxic Edge"
       }
     ]
   },

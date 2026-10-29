@@ -18,7 +18,8 @@
         "secondaryTarget": "ENEMY_HERO"
       },
       "persistentOwner": true
-    }
+    },
+    "name": "Path of Frost"
   },
   "collectible": true,
   "set": "CUSTOM",

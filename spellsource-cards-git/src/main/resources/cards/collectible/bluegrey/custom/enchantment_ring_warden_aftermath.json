@@ -16,7 +16,8 @@
         "spell": {
           "class": "SummonSpell",
           "card": "token_lesser_oni"
-        }
+        },
+        "name": "Ring Warding"
       }
     }
   ],

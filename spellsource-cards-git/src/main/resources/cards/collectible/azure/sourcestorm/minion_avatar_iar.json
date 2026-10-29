@@ -19,22 +19,26 @@
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "CHARGE"
+          "attribute": "CHARGE",
+          "name": "Avatar Iar's Blitz"
         },
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "UNTARGETABLE_BY_SPELLS"
+          "attribute": "UNTARGETABLE_BY_SPELLS",
+          "name": "Avatar Iar's Shroud"
         },
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "DIVINE_SHIELD"
+          "attribute": "DIVINE_SHIELD",
+          "name": "Avatar Iar's Dodge"
         },
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Avatar Iar's Guard"
         }
       ]
     }

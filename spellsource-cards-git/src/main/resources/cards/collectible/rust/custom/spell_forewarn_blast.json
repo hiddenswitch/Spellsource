@@ -16,18 +16,21 @@
       "value": 2
     },
     "spell2": {
-      "class": "CardCostModifierSpell",
-      "target": "FRIENDLY_PLAYER",
-      "cardCostModifier": {
-        "class": "OneTurnCostModifier",
-        "value": 2,
-        "cardType": "SPELL",
-        "expirationTrigger": {
-          "class": "CardPlayedTrigger",
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "OneTurnCostModifier",
+          "value": 2,
           "cardType": "SPELL",
-          "sourcePlayer": "SELF"
-        },
-        "operation": "SUBTRACT"
+          "expirationTrigger": {
+            "class": "CardPlayedTrigger",
+            "cardType": "SPELL",
+            "sourcePlayer": "SELF"
+          },
+          "operation": "SUBTRACT"
+        }
       }
     }
   },

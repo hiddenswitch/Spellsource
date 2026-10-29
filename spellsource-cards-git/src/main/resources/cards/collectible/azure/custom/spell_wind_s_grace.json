@@ -11,11 +11,13 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 2
+        "value": 2,
+        "name": "Wind's Grace"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "DIVINE_SHIELD"
+        "attribute": "DIVINE_SHIELD",
+        "name": "Wind's Grace"
       }
     ]
   },

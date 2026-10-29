@@ -21,7 +21,8 @@
         "spell": {
           "class": "AddAttributeSpell",
           "target": "OUTPUT",
-          "attribute": "COSTS_HEALTH_INSTEAD_OF_MANA"
+          "attribute": "COSTS_HEALTH_INSTEAD_OF_MANA",
+          "name": "Hemoshape: Forge"
         }
       }
     ]

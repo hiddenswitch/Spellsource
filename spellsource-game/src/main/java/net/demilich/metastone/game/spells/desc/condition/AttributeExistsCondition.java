@@ -15,26 +15,23 @@ public class AttributeExistsCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		Attribute attribute = (Attribute) desc.get(ConditionArg.ATTRIBUTE);
-		if (desc.containsKey(ConditionArg.TARGET_PLAYER)) {
-			switch ((TargetPlayer) desc.get(ConditionArg.TARGET_PLAYER)) {
-				case OPPONENT:
-					return context.getLogic().hasAttribute(context.getOpponent(player), attribute);
-				case SELF:
-					return context.getLogic().hasAttribute(player, attribute);
-				case ACTIVE:
-					return context.getLogic().hasAttribute(context.getActivePlayer(), attribute);
-				case INACTIVE:
-					return context.getLogic().hasAttribute(context.getOpponent(context.getActivePlayer()), attribute);
-				case PLAYER_1:
-					return context.getLogic().hasAttribute(context.getPlayer1(), attribute);
-				case PLAYER_2:
-					return context.getLogic().hasAttribute(context.getPlayer2(), attribute);
-				default:
-					break;
-			}
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			Attribute attribute,
+			TargetPlayer targetPlayer) {
+		if (targetPlayer != null) {
+			return switch (targetPlayer) {
+				case OPPONENT -> context.getLogic().hasAttribute(context.getOpponent(player), attribute);
+				case SELF -> context.getLogic().hasAttribute(player, attribute);
+				case ACTIVE -> context.getLogic().hasAttribute(context.getActivePlayer(), attribute);
+				case INACTIVE -> context.getLogic().hasAttribute(context.getOpponent(context.getActivePlayer()), attribute);
+				case PLAYER_1 -> context.getLogic().hasAttribute(context.getPlayer1(), attribute);
+				case PLAYER_2 -> context.getLogic().hasAttribute(context.getPlayer2(), attribute);
+				default -> context.getLogic().attributeExists(attribute);
+			};
 		}
 		return context.getLogic().attributeExists(attribute);
 	}

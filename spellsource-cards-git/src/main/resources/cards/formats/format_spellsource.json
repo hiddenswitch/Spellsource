@@ -3,18 +3,67 @@
   "type": "FORMAT",
   "rarity": "FREE",
   "description": "The format with Custom made cards ONLY.",
+  "ruleCards": [
+    "enchantment_constructed_rules",
+    "enchantment_rule_mana",
+    "enchantment_rule_draw",
+    "enchantment_rule_hero_power",
+    "enchantment_rule_deck_size"
+  ],
   "condition": {
     "class": "AndCondition",
     "conditions": [
       {
-        "class": "ComparisonCondition",
-        "description": "Decks must have 30 cards.",
-        "operation": "EQUAL",
-        "value1": {
-          "class": "EntityCountValueProvider",
-          "target": "FRIENDLY_DECK"
-        },
-        "value2": 30
+        "class": "OrCondition",
+        "description": "Decks must have 30 cards (or 40 cards with Prince Renathal).",
+        "conditions": [
+          {
+            "class": "AndCondition",
+            "conditions": [
+              {
+                "class": "ComparisonCondition",
+                "operation": "EQUAL",
+                "value1": {
+                  "class": "EntityCountValueProvider",
+                  "target": "FRIENDLY_DECK"
+                },
+                "value2": 30
+              },
+              {
+                "class": "DeckContainsCondition",
+                "invert": true,
+                "cardFilter": {
+                  "class": "CardFilter",
+                  "attribute": "DECK_SIZE",
+                  "operation": "HAS"
+                }
+              }
+            ]
+          },
+          {
+            "class": "AndCondition",
+            "conditions": [
+              {
+                "class": "ComparisonCondition",
+                "operation": "EQUAL",
+                "value1": {
+                  "class": "EntityCountValueProvider",
+                  "target": "FRIENDLY_DECK"
+                },
+                "value2": 40
+              },
+              {
+                "class": "DeckContainsCondition",
+                "cardFilter": {
+                  "class": "CardFilter",
+                  "attribute": "DECK_SIZE",
+                  "operation": "EQUAL",
+                  "value": 40
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "class": "DeckContainsCondition",

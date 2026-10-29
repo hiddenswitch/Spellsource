@@ -23,7 +23,8 @@
             "class": "AttributeValueProvider",
             "target": "EVENT_TARGET",
             "attribute": "ATTACK"
-          }
+          },
+          "name": "Faceless Shifter's Might"
         },
         {
           "class": "SetHpSpell",
@@ -32,7 +33,8 @@
             "class": "AttributeValueProvider",
             "target": "EVENT_TARGET",
             "attribute": "HP"
-          }
+          },
+          "name": "Faceless Shifter's Vitality"
         }
       ]
     }

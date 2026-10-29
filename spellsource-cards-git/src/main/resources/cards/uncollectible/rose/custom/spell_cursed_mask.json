@@ -11,7 +11,8 @@
     "spell": {
       "class": "DestroySpell",
       "target": "ALL_MINIONS"
-    }
+    },
+    "name": "Cursed Mask"
   },
   "collectible": true,
   "set": "CUSTOM",

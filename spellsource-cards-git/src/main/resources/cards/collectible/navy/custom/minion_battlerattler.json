@@ -18,7 +18,8 @@
       "class": "BuffSpell",
       "target": "TRIGGER_HOST",
       "attackBonus": 1,
-      "hpBonus": 1
+      "hpBonus": 1,
+      "name": "Battlerattler's Blessing"
     }
   },
   "attributes": {},

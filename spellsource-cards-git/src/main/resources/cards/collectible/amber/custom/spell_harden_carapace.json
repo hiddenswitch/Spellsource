@@ -12,11 +12,13 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "armorBonus": 5
+        "armorBonus": 5,
+        "name": "Hardened Carapace"
       },
       {
         "class": "BuffSpell",
-        "hpBonus": 5
+        "hpBonus": 5,
+        "name": "Hardened Carapace"
       }
     ]
   },

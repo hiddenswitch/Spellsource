@@ -11,19 +11,20 @@
     "eventTrigger": {
       "class": "DamageCausedTrigger",
       "sourceEntityType": "HERO",
-      "sourcePlayer": "SELF",
-      "targetEntityType": "MINION"
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "AddAttributeSpell",
       "target": "EVENT_TARGET",
-      "attribute": "FROZEN"
+      "attribute": "FROZEN",
+      "name": "Dual Chillblades' Frost"
     }
   },
   "onEquip": {
     "class": "AddAttributeSpell",
     "target": "FRIENDLY_HERO",
-    "attribute": "WINDFURY"
+    "attribute": "WINDFURY",
+    "name": "Dual Chillblades' Fury"
   },
   "onUnequip": {
     "class": "RemoveAttributeSpell",

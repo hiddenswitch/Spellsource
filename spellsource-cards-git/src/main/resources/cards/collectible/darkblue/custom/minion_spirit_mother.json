@@ -12,7 +12,8 @@
     "targetSelection": "MINIONS",
     "spell": {
       "class": "BuffSpell",
-      "value": 3
+      "value": 3,
+      "name": "Spirit Mother's Blessing"
     }
   },
   "attributes": {

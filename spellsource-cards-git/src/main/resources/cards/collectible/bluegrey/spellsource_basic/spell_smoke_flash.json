@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "attackBonus": 3
+        "attackBonus": 3,
+        "name": "Smoke Flash"
       },
       {
         "class": "AddAttributeSpell",
@@ -19,7 +20,8 @@
         "revertTrigger": {
           "class": "TurnStartTrigger",
           "targetPlayer": "SELF"
-        }
+        },
+        "name": "Smoke Flash"
       }
     ]
   },

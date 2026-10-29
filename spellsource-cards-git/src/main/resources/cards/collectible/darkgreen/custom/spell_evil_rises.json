@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 5,
-        "hpBonus": 5
+        "hpBonus": 5,
+        "name": "Evil Rises"
       },
       {
         "class": "DamageSpell",

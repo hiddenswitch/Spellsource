@@ -15,7 +15,8 @@
       "revertTrigger": {
         "class": "AfterPhysicalAttackTrigger",
         "sourceEntityType": "MINION"
-      }
+      },
+      "name": "Shadowveiler's Veil"
     }
   },
   "attributes": {

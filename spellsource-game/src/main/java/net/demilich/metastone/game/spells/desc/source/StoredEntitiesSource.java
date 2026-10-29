@@ -2,48 +2,64 @@ package net.demilich.metastone.game.spells.desc.source;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.targeting.EntityReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Objects;
+
+import static java.util.stream.Collectors.toCollection;
 
 /**
- * Retrieves a snapshot of the cards stored in the {@code source} {@link Entity} or {@link CardSourceArg#SOURCE} {@link
- * EntityReference} by a {@link net.demilich.metastone.game.spells.custom.StoreEntitySpell}.
+ * Expects {@link CardSourceArg#SOURCE} to returns a single entity from which an {@link
+ * EnvironmentEntityList#getList(GameContext)} will be traversed on {@link EnvironmentEntityList#getCards(GameContext,
+ * Entity)} to map to a card list. If {@link CardSourceArg#SOURCE} is not defined, the {@code source} is used by
+ * default.
  * <p>
- * Example:
- * <pre>
- *     {
- *         "class": "StoreEntitiesSource",
- *         "source": "SELF"
- *     }
- * </pre>
+ * Notice how this differs from {@link CardSourceArg#TARGET_PLAYER}, which the base class uses to call {@link
+ * #match(GameContext, Entity, Player)} potentially twice across both players.
  *
- * @see net.demilich.metastone.game.spells.custom.StoreEntitySpell for more on storing entities with respect to a
- * 		specific {@code source} {@link Entity}.
+ * @see net.demilich.metastone.game.spells.AddToTopOfDeckSpell for an example of a spell which adds entities to this
+ * 		storage list.
  */
 public class StoredEntitiesSource extends CardSource {
 
-	private static Logger logger = LoggerFactory.getLogger(StoredEntitiesSource.class);
+	private static final StoredEntitiesSource INSTANCE = new StoredEntitiesSource(new CardSourceDesc(StoredEntitiesSource.class));
 
 	public StoredEntitiesSource(CardSourceDesc desc) {
 		super(desc);
 	}
 
-	@Override
-	protected CardList match(GameContext context, Entity source, Player player) {
-		EntityReference sourceOverride = (EntityReference) getDesc().get(CardSourceArg.SOURCE);
-		if (source == null
-				&& sourceOverride == null) {
-			logger.error("match {}: A SOURCE argument is required.", context.getGameId());
-			return new CardArrayList();
+	protected CardList match(GameContext context, Entity source, Player player, EntityReference sourceReference) {
+		CardList list = new CardArrayList();
+		if (sourceReference != null) {
+			List<Entity> targets = context.resolveTarget(player, source, sourceReference);
+			if (targets == null) {
+				return list;
+			}
+			for (Entity target : targets) {
+				CardList cards = EnvironmentEntityList.getList(context).getCards(context, target).stream().filter(Objects::nonNull)
+						.filter(e -> e.getSourceCard() != null)
+						.map(Entity::getSourceCard)
+						.map(Card::getCopy)
+						.collect(toCollection(CardArrayList::new));
+				list.addAll(cards);
+			}
+		} else {
+			list.addAll(EnvironmentEntityList.getList(context).getCards(context, source).stream().filter(Objects::nonNull)
+					.filter(e -> e.getSourceCard() != null)
+					.map(Entity::getSourceCard)
+					.map(Card::getCopy)
+					.collect(toCollection(CardArrayList::new)));
 		}
-		if (sourceOverride != null) {
-			source = context.resolveTarget(player, source, sourceOverride).get(0);
-		}
-		return new CardArrayList(EnvironmentEntityList.getList(context).getCards(context, source));
+		return list;
+	}
+
+	public static StoredEntitiesSource create() {
+		return INSTANCE;
 	}
 }

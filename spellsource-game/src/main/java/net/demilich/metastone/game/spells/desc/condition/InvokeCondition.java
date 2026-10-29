@@ -17,7 +17,7 @@ public class InvokeCondition extends Condition {
 	}
 
 	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+	public boolean isFulfilled(GameContext context, Player player, Entity source, Entity target) {
 		int invoke = source.getAttributeValue(Attribute.INVOKE);
 		if (source.hasAttribute(Attribute.BEING_PLAYED) || source instanceof Minion) {
 			return player.getMana() >= invoke;

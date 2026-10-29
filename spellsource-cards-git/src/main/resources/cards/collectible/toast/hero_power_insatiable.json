@@ -8,6 +8,12 @@
   "passiveTrigger": {
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",
+      "queueCondition": {
+        "class": "CardPropertyCondition",
+        "target": "EVENT_SOURCE",
+        "card": "hero_rotbutcher_gordo",
+        "invert": true
+      },
       "sourcePlayer": "SELF"
     },
     "spell": {

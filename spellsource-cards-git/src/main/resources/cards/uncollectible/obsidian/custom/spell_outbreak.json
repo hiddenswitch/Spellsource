@@ -9,7 +9,8 @@
   "spell": {
     "class": "AddAttributeSpell",
     "target": "ALL_MINIONS",
-    "attribute": "POISONOUS"
+    "attribute": "POISONOUS",
+    "name": "Outbreak"
   },
   "collectible": true,
   "set": "CUSTOM",

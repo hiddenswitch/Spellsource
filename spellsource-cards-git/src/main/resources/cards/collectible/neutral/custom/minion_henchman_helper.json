@@ -17,7 +17,8 @@
         "attribute": "TAUNT",
         "operation": "HAS"
       },
-      "hpBonus": 4
+      "hpBonus": 4,
+      "name": "Henchman Helper's Blessing"
     }
   },
   "attributes": {

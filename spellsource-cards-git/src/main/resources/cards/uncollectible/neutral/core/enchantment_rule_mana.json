@@ -1,0 +1,31 @@
+{
+  "name": "Mana Growth",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Players have a maximum of 10 Mana Crystals and gain 1 empty Mana Crystal at the start of their turn.",
+  "onInitialized": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SetAttributeSpell",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "MAX_MANA",
+        "value": 10
+      },
+      {
+        "class": "SetAttributeSpell",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "MANA_PER_TURN",
+        "value": 1
+      }
+    ]
+  },
+  "attributes": {
+    "HIDDEN": true
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

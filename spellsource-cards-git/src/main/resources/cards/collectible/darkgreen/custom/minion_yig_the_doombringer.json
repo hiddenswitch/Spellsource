@@ -22,8 +22,10 @@
         "class": "AttributeValueProvider",
         "target": "SELF",
         "attribute": "MAX_HP",
-        "multiplier": 3
-      }
+        "multiplier": 3,
+        "offset": -1
+      },
+      "name": "Yig's Blessing"
     },
     "card": "token_voltiyig"
   },

@@ -20,7 +20,8 @@
         "class": "AttributeValueProvider",
         "target": "EVENT_TARGET",
         "attribute": "LAST_HIT"
-      }
+      },
+      "name": "Shellcutter Ant's Aegis"
     }
   },
   "collectible": true,

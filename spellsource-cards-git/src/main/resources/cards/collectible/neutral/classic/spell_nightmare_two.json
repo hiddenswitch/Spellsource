@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 4,
-        "hpBonus": 4
+        "hpBonus": 4,
+        "name": "Nightmare"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -25,7 +26,8 @@
             "class": "DestroySpell",
             "target": "TRIGGER_HOST"
           }
-        }
+        },
+        "name": "Nightmare"
       }
     ]
   },

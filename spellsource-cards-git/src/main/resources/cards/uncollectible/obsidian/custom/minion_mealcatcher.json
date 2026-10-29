@@ -38,7 +38,8 @@
               "class": "AttributeValueProvider",
               "target": "OUTPUT",
               "attribute": "HP"
-            }
+            },
+            "name": "Mealcatcher's Empowerment"
           },
           {
             "class": "RemoveCardSpell",

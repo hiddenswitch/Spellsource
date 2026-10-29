@@ -7,6 +7,7 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.desc.compiler.GameStateArena;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -97,27 +98,11 @@ public class TargetLogic implements Serializable {
 	 * @throws TargetNotFoundException If the entity isn't found.
 	 */
 	public Entity findEntity(GameContext context, EntityReference targetKey) throws TargetNotFoundException {
-		int targetId = targetKey.getId();
 		Entity environmentResult = findInEnvironment(context, targetKey);
-
 		if (environmentResult != null) {
 			return environmentResult;
 		}
-
-		Optional<Entity> entity = context.getPlayer(0).findEntity(targetId)
-				.or(() -> context.getPlayer(1).findEntity(targetId));
-
-		if (entity.isPresent()) {
-			return entity.get();
-		} else {
-			// Check the triggers
-			for (Trigger trigger : context.getTriggers()) {
-				if (trigger instanceof Enchantment && ((Enchantment) trigger).getId() == targetId) {
-					return (Entity) trigger;
-				}
-			}
-			throw new TargetNotFoundException("not found", targetKey);
-		}
+		return GameStateArena.findEntityFast(context, targetKey);
 	}
 
 	private Entity findInEnvironment(GameContext context, EntityReference targetKey) {

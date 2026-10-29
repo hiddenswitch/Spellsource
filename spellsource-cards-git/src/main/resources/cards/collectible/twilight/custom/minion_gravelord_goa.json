@@ -14,7 +14,8 @@
       "target": "SELF",
       "spell": {
         "class": "custom.RepeatAllAftermathsSpell"
-      }
+      },
+      "name": "Gravelord Goa's Legacy"
     }
   },
   "attributes": {

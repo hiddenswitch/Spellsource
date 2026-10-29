@@ -10,7 +10,8 @@
     "class": "BuffSpell",
     "target": "ALL_MINIONS",
     "attackBonus": 3,
-    "hpBonus": 2
+    "hpBonus": 2,
+    "name": "Burst of Power"
   },
   "collectible": true,
   "set": "CUSTOM",

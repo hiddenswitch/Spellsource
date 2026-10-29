@@ -41,10 +41,17 @@ import java.util.stream.Collectors;
 public class ResurrectSpell extends Spell {
 
 	@SuppressWarnings("unchecked")
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+	protected void onCast(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			EntityFilter cardFilter,
+			@Default(1) int value,
+			boolean exclusive,
+			SpellDesc spell,
+			Attribute attribute) {
 		List<Minion> deadMinions = new ArrayList<>();
-		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		List<Entity> graveyard = new ArrayList<>(player.getGraveyard());
 		for (Entity deadEntity : graveyard) {
 			if (deadEntity.diedOnBattlefield()) {
@@ -54,15 +61,13 @@ public class ResurrectSpell extends Spell {
 			}
 		}
 
-		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		// Implements unusual Diamond Spellstone unique minions behaviour
-		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
 		if (exclusive) {
 			Set<EntityReference> references = deadMinions.stream().map(Entity::getReference).collect(Collectors.toSet());
 			deadMinions.removeIf(deadMinion -> deadMinion.hasAttribute(Attribute.COPIED_FROM)
 					&& references.contains((EntityReference) deadMinion.getAttribute(Attribute.COPIED_FROM)));
 		}
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < value; i++) {
 			if (deadMinions.isEmpty()) {
 				return;
 			}
@@ -72,12 +77,11 @@ public class ResurrectSpell extends Spell {
 			boolean summoned = context.getLogic().summon(player.getId(), minion, source, -1, false);
 			if (summoned) {
 				minion = (Minion) minion.transformResolved(context);
-				if (desc.containsKey(SpellArg.SPELL)
+				if (spell != null
 						&& minion.isInPlay()) {
-					SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, minion, minion);
+					SpellUtils.castChildSpell(context, player, spell, source, minion, minion);
 				}
 
-				var attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 				if (attribute != null && resurrectedMinion.hasAttribute(attribute)) {
 					// special coding to remagnetize the mechs for Kangor's Endless Army
 					if (attribute == Attribute.MAGNETS) {

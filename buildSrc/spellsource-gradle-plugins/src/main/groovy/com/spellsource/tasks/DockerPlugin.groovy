@@ -12,11 +12,18 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.process.ExecOperations
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.ecr.EcrClient
+import javax.inject.Inject
 
 class DockerPlugin implements Plugin<Project> {
+  private final ExecOperations execOps
 
+  @Inject
+  DockerPlugin(ExecOperations execOps) {
+    this.execOps = execOps
+  }
 
   @Override
   void apply(Project project) {
@@ -26,6 +33,7 @@ class DockerPlugin implements Plugin<Project> {
     // todo: make this work in other projects
     def awsAccountId = project.properties['awsAccountId'] as String
     def awsRegion = project.properties['awsRegion'] as String
+    def execOperations = this.execOps
 
     project.afterEvaluate {
       project.extensions.configure(DockerExtension, {
@@ -68,7 +76,7 @@ class DockerPlugin implements Plugin<Project> {
           return false
         }
         def versionOutput = new ByteArrayOutputStream()
-        project.exec {
+        execOperations.exec {
           commandLine("docker", "version", "-f", "{{.Server.Os}}")
           standardOutput(versionOutput)
         }
@@ -78,8 +86,8 @@ class DockerPlugin implements Plugin<Project> {
         if (!Os.isFamily(Os.FAMILY_WINDOWS)) {
           throw new GradleException('Cannot build or use Windows containers on non-Windows platforms, so dependencies on the Windows docker daemon cannot be used on your current platform')
         }
-        if (project.file("C:\\Program Files\\Docker\\Docker\\DockerCli.exe").exists()) {
-          project.exec {
+        if (new File("C:\\Program Files\\Docker\\Docker\\DockerCli.exe").exists()) {
+          execOperations.exec {
             commandLine "C:\\Program Files\\Docker\\Docker\\DockerCli.exe", "-SwitchWindowsEngine"
           }
         }
@@ -91,14 +99,14 @@ class DockerPlugin implements Plugin<Project> {
           return false
         }
         def versionOutput = new ByteArrayOutputStream()
-        project.exec {
+        execOperations.exec {
           commandLine("docker", "version", "-f", "{{.Server.Os}}")
           standardOutput(versionOutput)
         }
         return !versionOutput.toString().trim().equalsIgnoreCase("linux")
       }
       doLast {
-        project.exec {
+        execOperations.exec {
           commandLine "C:\\Program Files\\Docker\\Docker\\DockerCli.exe", "-SwitchLinuxEngine"
         }
       }
@@ -228,10 +236,12 @@ class DockerPlugin implements Plugin<Project> {
                   return "$remoteDestination:$tag".toString()
                 }
 
+                def dockerBuilderProp = Boolean.parseBoolean(project.findProperty("docker.builder") as String ?: "false")
                 def createCraneImageTask = project.tasks.register("createAndPushImageCrane_${repositoryName}_${imageName}_${platformArchTuple.suffix}") { task ->
                   group = 'docker'
                   dependsOn prepareContext
                   inputs.dir(project.relativeProjectPath(dockerFileFile.parent))
+                  notCompatibleWithConfigurationCache("Uses Dockerfile.ParseResult at execution time")
 
 
                   def reversed = parsedDockerfile.statements.asList()
@@ -248,7 +258,7 @@ class DockerPlugin implements Plugin<Project> {
 
                   doLast {
                     def layerPath = "$task.temporaryDir/img.tar"
-                    def target = project.file(layerPath)
+                    def target = new File(layerPath)
                     target.createNewFile()
                     try (def tar = parseResult.buildDockerFolderTar()) {
                       try (def targetOutputStream = new FileOutputStream(target)) {
@@ -257,7 +267,7 @@ class DockerPlugin implements Plugin<Project> {
                     }
 
                     ecrImages.forEach { tag ->
-                      project.exec {
+                      execOperations.exec {
                         commandLine "crane", "append", "--platform=${platformArchTuple.platform}/${platformArchTuple.dockerArch}", "-f", layerPath, "-t", tag, "-b", lastFrom
                       }
                     }
@@ -267,7 +277,7 @@ class DockerPlugin implements Plugin<Project> {
                 def createImageTask = project.tasks.register("createImage_${repositoryName}_${imageName}_${platformArchTuple.suffix}", DockerBuildImage) {
                   group = 'docker'
                   dependsOn prepareContext, platformArchTuple.daemonTask
-                  onlyIf { correctLocalArch || Boolean.parseBoolean(project.findProperty("docker.builder") as String ?: "false") }
+                  onlyIf { correctLocalArch || dockerBuilderProp }
                   inputDir.set(project.file(dockerFileFile.parent))
                   dockerFile.set(dockerFileFile)
                   quiet.set(false)
@@ -314,32 +324,33 @@ class DockerPlugin implements Plugin<Project> {
                 def commands = ["docker", "manifest", "create", latestTag] + ecrImages.collectMany { ["--amend", it] }
 
                 doLast {
-                  project.exec {
+                  execOperations.exec {
                     commandLine(commands)
                   }
-                  project.exec {
+                  execOperations.exec {
                     commandLine "docker", "manifest", "push", latestTag
                   }
                 }
               }
 
+              def dockerContextPath = project.file(dockerFileFile.parent).absolutePath
               def createImageKaniko = project.tasks.register("createImageKaniko_${repositoryName}_${imageName}") {
                 group = 'docker'
                 dependsOn prepareContext
                 def kanikoBin = "/kaniko/executor"
                 onlyIf {
                   try {
-                    return project.file(kanikoBin).exists()
+                    return new File(kanikoBin).exists()
                   } catch (Throwable ignored) {
                     return false
                   }
                 }
                 doFirst {
-                  project.file('/kaniko/.docker/config.json').text = "{ \"credsStore\": \"ecr-login\" }"
+                  new File('/kaniko/.docker/config.json').text = "{ \"credsStore\": \"ecr-login\" }"
                 }
                 doLast {
-                  project.exec {
-                    commandLine kanikoBin, "--dockerfile=${dockerFileFile.absolutePath}", "--context=${project.file(dockerFileFile.parent).absolutePath}", "--destination=${remoteDestination}"
+                  execOperations.exec {
+                    commandLine kanikoBin, "--dockerfile=${dockerFileFile.absolutePath}", "--context=${dockerContextPath}", "--destination=${remoteDestination}"
                   }
                 }
               }

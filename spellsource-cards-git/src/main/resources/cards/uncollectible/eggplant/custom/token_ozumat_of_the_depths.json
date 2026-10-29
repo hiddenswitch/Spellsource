@@ -24,7 +24,8 @@
               "class": "CastCardsSpell",
               "card": "token_ozumat's_nightmare"
             }
-          }
+          },
+          "name": "Ozumat of's Pact"
         },
         {
           "class": "CastCardsSpell",

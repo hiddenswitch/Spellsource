@@ -32,7 +32,8 @@
           "target": "SELF"
         },
         "maxFires": 1
-      }
+      },
+      "name": "Gravtisk's Boon"
     }
   },
   "collectible": true,

@@ -138,7 +138,39 @@ public class AddEnchantmentSpell extends Spell {
 		List<Enchantment> added = new ArrayList<>();
 
 		if (enchantmentDesc != null) {
+			if (desc.containsKey(SpellArg.CARD)) {
+				enchantmentCard = null;
+			}
 			var enchantment = context.getLogic().addEnchantment(player, source, source.getSourceCard(), target, enchantmentDesc, true);
+			String explicitName = desc.getString(SpellArg.NAME);
+			if ((explicitName == null || explicitName.isEmpty()) && enchantmentDesc.getName() != null && !enchantmentDesc.getName().isEmpty()) {
+				explicitName = enchantmentDesc.getName();
+			}
+			if ((explicitName == null || explicitName.isEmpty()) && !desc.containsKey(SpellArg.CARD) && desc.getSynthesizedEnchantmentCard() != null) {
+				explicitName = desc.getSynthesizedEnchantmentCard().getName();
+			}
+			if (explicitName != null && !explicitName.isEmpty()) {
+				String finalName = explicitName;
+				enchantment.ifPresent(e -> e.setName(finalName));
+			}
+			String explicitDesc = desc.getString(SpellArg.DESCRIPTION);
+			if ((explicitDesc == null || explicitDesc.isEmpty()) && enchantmentDesc.getDescription() != null && !enchantmentDesc.getDescription().isEmpty()) {
+				explicitDesc = enchantmentDesc.getDescription();
+			}
+			if ((explicitDesc == null || explicitDesc.isEmpty()) && !desc.containsKey(SpellArg.CARD) && desc.getSynthesizedEnchantmentCard() != null) {
+				explicitDesc = desc.getSynthesizedEnchantmentCard().getDescription();
+			}
+			if (explicitDesc != null && !explicitDesc.isEmpty()) {
+				String finalDesc = explicitDesc;
+				enchantment.ifPresent(e -> e.setDescription(finalDesc));
+			}
+			if (desc.containsKey(SpellArg.CARD)) {
+				enchantment.ifPresent(e -> {
+					if (e.getSpell() != null && !e.getSpell().containsKey(SpellArg.CARD)) {
+						e.setSpell(e.getSpell().addArg(SpellArg.CARD, desc.get(SpellArg.CARD)));
+					}
+				});
+			}
 			// For compatibility reasons, if the target (i.e. the enchantment's host) is in the opponent's deck or hand, deck
 			// enchantments will also be active in the hand. It will be the responsibility of the card author to make them
 			// expire when drawn using the RemoveEnchantmentsSpell

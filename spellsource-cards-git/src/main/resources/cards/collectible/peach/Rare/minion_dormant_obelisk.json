@@ -15,19 +15,21 @@
       "sourcePlayer": "BOTH"
     },
     "spell": {
-	  "class": "MetaSpell",
-	  "spells": [
-	    {
+      "class": "MetaSpell",
+      "spells": [
+        {
           "class": "BuffSpell",
           "target": "SELF",
-          "attackBonus": 3
-	    },
-	    {
+          "attackBonus": 3,
+          "name": "Dormant Obelisk's Fury"
+        },
+        {
           "class": "AddAttributeSpell",
           "attribute": "UNTARGETABLE_BY_SPELLS",
-          "target": "SELF"
+          "target": "SELF",
+          "name": "Dormant Obelisk's Shroud"
         }
-	  ]
+      ]
     }
   },
   "collectible": true,

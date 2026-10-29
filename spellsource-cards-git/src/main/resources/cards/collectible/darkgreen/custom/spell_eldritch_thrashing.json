@@ -16,7 +16,8 @@
         "token_tauntentacle",
         "token_tentacle"
       ]
-    }
+    },
+    "name": "Eldritch Thrashing"
   },
   "collectible": true,
   "fileFormatVersion": 1,

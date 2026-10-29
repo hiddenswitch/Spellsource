@@ -46,18 +46,21 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 		return secretCards;
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
+	protected void onCast(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			CardSource cardSource,
+			EntityFilter cardFilter,
+			@Default(1) int howMany) {
 		if (cardSource == null) {
 			cardSource = new CardSourceDesc(DeckSource.class).create();
 		}
-		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
 
 		CardList secretCards = findSecretCards(cardSource.getCards(context, source, player));
-		if (filter != null) {
-			secretCards = secretCards.filtered(filter.matcher(context, player, source));
+		if (cardFilter != null) {
+			secretCards = secretCards.filtered(cardFilter.matcher(context, player, source));
 		}
 
 		for (int i = 0; i < howMany; i++) {
@@ -75,6 +78,7 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 
 	protected void putSecretIntoPlay(GameContext context, Player player, Card secretCard) {
 		if (secretCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+			secretCard = secretCard.getCopy();
 			secretCard.setId(context.getLogic().generateId());
 			secretCard.setOwner(player.getId());
 			secretCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);

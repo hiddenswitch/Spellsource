@@ -30,12 +30,14 @@ public final class RemoveEnchantmentSpell extends Spell {
 		return new SpellDesc(RemoveEnchantmentSpell.class, target.getReference(), null, false);
 	}
 
-	protected void onCast(GameContext context, Player player, Entity source, Entity target, CardList cards, @Default(Integer.MAX_VALUE) int howMany) {
+	public void onCast(GameContext context, Player player, Entity source, Entity target, CardList cards, @Default(Integer.MAX_VALUE) int howMany) {
+		if (target != null && target.getEntityType() == EntityType.ENCHANTMENT) {
+			var enchantment = (Enchantment) target;
+			enchantment.onRemove(context);
+			enchantment.expire(context);
+			return;
+		}
 		if (cards.isEmpty()) {
-			if (target.getEntityType() == EntityType.ENCHANTMENT) {
-				var enchantment = (Enchantment) target;
-				enchantment.expire(context);
-			}
 			return;
 		}
 		Set<String> cardIds = cards.stream().map(Card::getCardId).collect(Collectors.toSet());
@@ -43,11 +45,22 @@ public final class RemoveEnchantmentSpell extends Spell {
 			if (howMany <= 0) {
 				break;
 			}
-			if (e instanceof Enchantment) {
-				Enchantment enchantment = (Enchantment) e;
-				if (enchantment.getSourceCard() != null && cardIds.contains(enchantment.getSourceCard().getCardId())) {
-					howMany--;
-					enchantment.expire(context);
+			if (e instanceof Enchantment enchantment) {
+				Card srcCard = enchantment.getSourceCard();
+				if (srcCard != null) {
+					String cid = srcCard.getCardId();
+					boolean matches = cardIds.contains(cid);
+					if (!matches && cid != null) {
+						int idx = cid.indexOf("__ench_");
+						if (idx > 0 && cardIds.contains(cid.substring(0, idx))) {
+							matches = true;
+						}
+					}
+					if (matches) {
+						howMany--;
+						enchantment.onRemove(context);
+						enchantment.expire(context);
+					}
 				}
 			}
 		}

@@ -10,18 +10,20 @@ public class AndCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		Condition[] conditions = (Condition[]) desc.get(ConditionArg.CONDITIONS);
-		if (conditions == null) {
-			return true;
-		}
-		for (Condition condition : conditions) {
-			if (!condition.isFulfilled(context, player, source, target)) {
-				return false;
+	protected boolean isFulfilled(GameContext context, Player player, Entity source, Entity target, Condition[] conditions) {
+		if (conditions != null) {
+			for (Condition condition : conditions) {
+				if (!condition.isFulfilled(context, player, source, target)) {
+					return false;
+				}
 			}
 		}
+
+		return true;
+	}
+
+	@Override
+	protected boolean multipleTargetsEvaluatedAsAnd() {
 		return true;
 	}
 }
-

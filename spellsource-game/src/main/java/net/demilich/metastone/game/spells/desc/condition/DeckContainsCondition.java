@@ -18,12 +18,17 @@ public class DeckContainsCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		var cardId = (String) desc.get(ConditionArg.CARD);
-		var cardFilter = (EntityFilter) desc.get(ConditionArg.CARD_FILTER);
-		for (Card card : player.getDeck()) {
-			if (cardFilter == null || cardFilter.matches(context, player, card, source) || Objects.equals(cardId, card.getCardId())) {
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			String card,
+			EntityFilter cardFilter) {
+		for (Card deckCard : player.getDeck()) {
+			if ((cardFilter != null && cardFilter.matches(context, player, deckCard, source))
+					|| (card != null && Objects.equals(card, deckCard.getCardId()))
+					|| (cardFilter == null && card == null)) {
 				return true;
 			}
 		}

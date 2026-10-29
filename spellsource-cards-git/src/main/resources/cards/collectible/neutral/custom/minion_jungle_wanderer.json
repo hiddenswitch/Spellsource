@@ -17,9 +17,11 @@
         "spell": {
           "class": "AddAttributeSpell",
           "target": "OUTPUT",
-          "attribute": "RUSH"
+          "attribute": "RUSH",
+          "name": "Jungle Wanderer's Dash"
         }
-      }
+      },
+      "name": "Jungle Wanderer's Legacy"
     }
   },
   "attributes": {

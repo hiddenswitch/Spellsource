@@ -17,7 +17,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_MINIONS",
-      "attackBonus": 2
+      "attackBonus": 2,
+      "name": "Ancestral Wardrum's Rally"
     }
   },
   "attributes": {},

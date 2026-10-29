@@ -7,15 +7,23 @@
   "description": "Choose an allied unit. Deal its Attack to units opposite it.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
-    "class": "OppositeEffectSpell",
-    "spell2": {
-      "class": "DamageSpell",
-      "value": {
-        "class": "AttributeValueProvider",
-        "target": "TARGET",
-        "attribute": "ATTACK"
+    "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "ATTACK"
+    },
+    "spells": [
+      {
+        "class": "OppositeEffectSpell",
+        "spell2": {
+          "class": "DamageSpell",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          }
+        }
       }
-    }
+    ]
   },
   "attributes": {},
   "collectible": true,

@@ -15,7 +15,8 @@
       "attribute": "IMMUNE",
       "revertTrigger": {
         "class": "TurnEndTrigger"
-      }
+      },
+      "name": "Forest Familiar's Immunity"
     }
   },
   "attributes": {

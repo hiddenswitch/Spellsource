@@ -26,12 +26,14 @@
           {
             "class": "SetAttackSpell",
             "value": 1,
-            "exclusive": true
+            "exclusive": true,
+            "name": "No Strings On Me's Humility"
           },
           {
             "class": "SetHpSpell",
             "value": 1,
-            "exclusive": true
+            "exclusive": true,
+            "name": "No Strings On Me's Mark"
           }
         ]
       },

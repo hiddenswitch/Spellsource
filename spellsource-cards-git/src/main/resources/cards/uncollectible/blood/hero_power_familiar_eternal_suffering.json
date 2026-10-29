@@ -10,7 +10,8 @@
     "class": "HeroPowerSpell",
     "spell": {
       "class": "BuffSpell",
-      "hpBonus": 4
+      "hpBonus": 4,
+      "name": "Eternal Suffering's Ward"
     }
   },
   "collectible": false,

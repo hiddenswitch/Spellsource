@@ -26,8 +26,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public final class RandomDeck extends GameDeck {
 	private static final long serialVersionUID = 1L;
-	private static final ConcurrentMap<CandidatePoolKey, List<Card>> CLASS_CARD_CACHE = new ConcurrentHashMap<>();
-	private static final ConcurrentMap<CandidatePoolKey, List<Card>> NEUTRAL_CARD_CACHE = new ConcurrentHashMap<>();
+	private static final ConcurrentMap<CatalogueFormatKey, java.util.Map<String, List<Card>>> POOL_CACHE = new ConcurrentHashMap<>();
 
 	/**
 	 * Creates a random deck, 50% Class cards and 50% Neutrals on average, with the specified hero class and format.
@@ -107,19 +106,20 @@ public final class RandomDeck extends GameDeck {
 	}
 
 	private static List<Card> cachedClassCards(CardCatalogue cardCatalogue, DeckFormat deckFormat, String heroClass) {
-		return CLASS_CARD_CACHE.computeIfAbsent(new CandidatePoolKey(cardCatalogue, deckFormat, heroClass), key ->
-				Collections.unmodifiableList(loadDeckCandidates(key.cardCatalogue, key.deckFormat, key.heroClass, false)));
+		return POOL_CACHE.computeIfAbsent(new CatalogueFormatKey(cardCatalogue, deckFormat),
+				key -> buildCandidatePools(key.cardCatalogue, key.deckFormat))
+				.getOrDefault(heroClass, Collections.emptyList());
 	}
 
 	private static List<Card> cachedNeutralCards(CardCatalogue cardCatalogue, DeckFormat deckFormat) {
-		return NEUTRAL_CARD_CACHE.computeIfAbsent(new CandidatePoolKey(cardCatalogue, deckFormat, HeroClass.ANY), key ->
-				Collections.unmodifiableList(loadDeckCandidates(key.cardCatalogue, key.deckFormat, HeroClass.ANY, true)));
+		return POOL_CACHE.computeIfAbsent(new CatalogueFormatKey(cardCatalogue, deckFormat),
+				key -> buildCandidatePools(key.cardCatalogue, key.deckFormat))
+				.getOrDefault(HeroClass.ANY, Collections.emptyList());
 	}
 
-	private static List<Card> loadDeckCandidates(CardCatalogue cardCatalogue, DeckFormat deckFormat, String heroClass, boolean neutralOnly) {
-		var result = new ArrayList<Card>();
-		var catalogueCards = new ArrayList<>(cardCatalogue.getCards().values());
-		for (var card : catalogueCards) {
+	private static java.util.Map<String, List<Card>> buildCandidatePools(CardCatalogue cardCatalogue, DeckFormat deckFormat) {
+		var pools = new java.util.HashMap<String, List<Card>>(32);
+		for (var card : cardCatalogue.getCards().values()) {
 			var cardType = card.getCardType();
 			if (!deckFormat.isInFormat(card)
 					|| !card.isCollectible()
@@ -130,36 +130,37 @@ public final class RandomDeck extends GameDeck {
 					|| cardType == com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType.FORMAT) {
 				continue;
 			}
-
-			boolean heroMatches = neutralOnly ? card.hasHeroClass(HeroClass.ANY) : card.hasHeroClass(heroClass);
-			if (!heroMatches) {
-				continue;
+			if (!card.isReadOnly()) {
+				card.freeze();
 			}
-
-			var copy = card.getCopy();
-			copy.freeze();
-			result.add(copy);
+			String[] classes = card.getHeroClasses();
+			if (classes != null) {
+				for (String hc : classes) {
+					if (hc != null) {
+						pools.computeIfAbsent(hc, k -> new ArrayList<>()).add(card);
+					}
+				}
+			}
 		}
-		return result;
+		return pools;
 	}
 
-	private record CandidatePoolKey(CardCatalogue cardCatalogue, DeckFormat deckFormat, String heroClass) {
+	private record CatalogueFormatKey(CardCatalogue cardCatalogue, DeckFormat deckFormat) {
 		@Override
 		public boolean equals(Object other) {
 			if (this == other) {
 				return true;
 			}
-			if (!(other instanceof CandidatePoolKey that)) {
+			if (!(other instanceof CatalogueFormatKey that)) {
 				return false;
 			}
 			return cardCatalogue == that.cardCatalogue
-					&& Objects.equals(deckFormat, that.deckFormat)
-					&& Objects.equals(heroClass, that.heroClass);
+					&& Objects.equals(deckFormat, that.deckFormat);
 		}
 
 		@Override
 		public int hashCode() {
-			return 31 * System.identityHashCode(cardCatalogue) + Objects.hash(deckFormat, heroClass);
+			return 31 * System.identityHashCode(cardCatalogue) + Objects.hashCode(deckFormat);
 		}
 	}
 }

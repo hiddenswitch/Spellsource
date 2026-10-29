@@ -21,7 +21,8 @@
               "class": "AttributeValueProvider",
               "target": "SELF",
               "attribute": "ATTACK"
-            }
+            },
+            "name": "Ugar Frostflame's Might"
           },
           {
             "class": "SetHpSpell",
@@ -30,7 +31,8 @@
               "class": "AttributeValueProvider",
               "target": "SELF",
               "attribute": "HP"
-            }
+            },
+            "name": "Ugar Frostflame's Vitality"
           }
         ]
       },

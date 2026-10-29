@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.desc.condition;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.spells.Default;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
@@ -15,11 +16,13 @@ public class MinionOnBoardCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		var cardFilter = (EntityFilter) desc.get(ConditionArg.CARD_FILTER);
-		var value = desc.containsKey(ConditionArg.VALUE) ? desc.getInt(ConditionArg.VALUE) : 1;
-
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			EntityFilter cardFilter,
+			@Default(1) int value) {
 		var count = 0;
 		for (var minion : player.getMinions()) {
 			if ((cardFilter == null || cardFilter.matches(context, player, minion, source)) && !context.getSummonReferenceStack().contains(minion.getReference())) {

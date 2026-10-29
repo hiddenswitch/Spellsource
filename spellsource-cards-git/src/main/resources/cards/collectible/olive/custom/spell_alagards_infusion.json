@@ -5,14 +5,7 @@
   "heroClass": "OLIVE",
   "rarity": "LEGENDARY",
   "description": "Give all units in your hand and deck \"Opener: Cast a random Storyteller spell\".",
-  "condition": {
-    "class": "AnyMatchFilterCondition",
-    "target": "FRIENDLY_HAND",
-    "filter": {
-      "class": "CardFilter",
-      "cardType": "SPELL"
-    }
-  },
+  "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [

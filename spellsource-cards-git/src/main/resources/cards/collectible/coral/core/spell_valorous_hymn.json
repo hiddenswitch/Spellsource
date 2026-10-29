@@ -12,11 +12,13 @@
       {
         "class": "BuffSpell",
         "attackBonus": 3,
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Valorous Hymn"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "RUSH"
+        "attribute": "RUSH",
+        "name": "Valorous Hymn"
       }
     ]
   },

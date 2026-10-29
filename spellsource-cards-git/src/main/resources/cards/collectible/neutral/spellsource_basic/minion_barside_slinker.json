@@ -20,7 +20,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "SELF",
-      "attribute": "STEALTH"
+      "attribute": "STEALTH",
+      "name": "Barside Slinker's Veil"
     }
   },
   "collectible": true,

@@ -18,11 +18,13 @@
       "spells": [
         {
           "class": "BuffSpell",
-          "attackBonus": 2
+          "attackBonus": 2,
+          "name": "Peacock Mystic's Rally"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "RUSH"
+          "attribute": "RUSH",
+          "name": "Peacock Mystic's Dash"
         }
       ]
     }

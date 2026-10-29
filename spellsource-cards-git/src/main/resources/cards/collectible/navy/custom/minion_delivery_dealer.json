@@ -11,7 +11,7 @@
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
-      "targetPlayer": "BOTH"
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "BothPlayersSpell",

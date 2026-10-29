@@ -518,8 +518,15 @@ public final class ComponentSignatureAnalyzer {
 						&& params.get(4).descriptorString().endsWith("Entity;"));
 			}
 			case CONDITION -> {
-				if (!name.equals("isFulfilled")) {
+				if (!name.equals("isFulfilled") && !name.equals("isFulfilled$0")) {
 					yield false;
+				}
+				if (name.equals("isFulfilled$0")) {
+					yield params.size() == 4
+							&& params.get(0).descriptorString().endsWith("GameContext;")
+							&& params.get(1).descriptorString().endsWith("Player;")
+							&& params.get(2).descriptorString().endsWith("Entity;")
+							&& params.get(3).descriptorString().endsWith("Entity;");
 				}
 				// Standard 5-arg is (GameContext, Player, ConditionDesc, Entity, Entity)
 				// Standard 4-arg is final public wrapper in Condition
@@ -546,13 +553,29 @@ public final class ComponentSignatureAnalyzer {
 						&& params.get(2).descriptorString().endsWith("Entity;")
 						&& params.get(3).descriptorString().endsWith("Entity;"));
 			}
+			case CARD_SOURCE -> {
+				if (!name.equals("match")
+						|| !mm.methodTypeSymbol().returnType().descriptorString().endsWith("CardList;")) {
+					yield false;
+				}
+				if (params.size() == 3
+						&& params.get(0).descriptorString().endsWith("GameContext;")
+						&& params.get(1).descriptorString().endsWith("Entity;")
+						&& params.get(2).descriptorString().endsWith("Player;")) {
+					yield false;
+				}
+				yield params.size() > 3
+						&& params.get(0).descriptorString().endsWith("GameContext;")
+						&& params.get(1).descriptorString().endsWith("Entity;")
+						&& params.get(2).descriptorString().endsWith("Player;");
+			}
 			default -> false;
 		};
 	}
 
 	private static void extractTypedParameters(MethodModel mm, ComponentKind kind, RawClassAnalysis out) {
 		List<ClassDesc> paramTypes = mm.methodTypeSymbol().parameterList();
-		int prefixLen = hasDescInPrefix(paramTypes) ? 5 : 4;
+		int prefixLen = (kind == ComponentKind.CARD_SOURCE) ? 3 : (hasDescInPrefix(paramTypes) ? 5 : 4);
 		Optional<MethodParametersAttribute> mpaOpt = mm.findAttribute(Attributes.methodParameters());
 		if (mpaOpt.isEmpty()) {
 			return;
@@ -606,6 +629,8 @@ public final class ComponentSignatureAnalyzer {
 				String argKey = camelToUpperSnake(pName);
 				if (argKey.equals("TARGET_REFERENCE")) {
 					argKey = "TARGET";
+				} else if (argKey.equals("SOURCE_REFERENCE")) {
+					argKey = "SOURCE";
 				}
 				out.directArgs.add(argKey);
 				out.inferredArgTypes.put(argKey, simpleType);
@@ -836,7 +861,6 @@ public final class ComponentSignatureAnalyzer {
 						&& !targetName.startsWith("build")
 						&& !targetName.equals("<init>")
 						&& !targetName.equals("onCast")
-						&& !(targetName.equals("applyRevertTrigger") && !ownerInternalName.equals(targetOwner))
 						&& !targetName.equals("cast")
 						&& !targetName.equals("test")
 						&& !targetName.equals("provideValue")

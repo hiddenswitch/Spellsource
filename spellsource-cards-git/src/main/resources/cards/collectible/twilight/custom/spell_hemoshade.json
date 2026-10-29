@@ -30,7 +30,8 @@
           "value": {
             "class": "GatekeeperShaValueProvider",
             "offset": 0
-          }
+          },
+          "name": "Hemoshade"
         },
         "card": "token_vampire_shadow"
       }

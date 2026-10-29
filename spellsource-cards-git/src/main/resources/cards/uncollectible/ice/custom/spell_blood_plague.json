@@ -10,10 +10,14 @@
     "class": "AddDeathrattleSpell",
     "target": "ALL_MINIONS",
     "spell": {
-      "class": "DamageSpell",
-      "target": "ADJACENT_MINIONS",
-      "value": 1
-    }
+      "class": "custom.AdjacentDeathrattleSpell",
+      "target": "SELF",
+      "spell2": {
+        "class": "DamageSpell",
+        "value": 1
+      }
+    },
+    "name": "Blood Plague"
   },
   "collectible": true,
   "set": "CUSTOM",

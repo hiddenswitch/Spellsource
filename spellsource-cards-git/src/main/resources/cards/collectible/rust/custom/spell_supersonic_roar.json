@@ -12,7 +12,8 @@
       {
         "class": "TemporaryAttackSpell",
         "target": "ENEMY_MINIONS",
-        "value": -3
+        "value": -3,
+        "name": "Supersonic Roar"
       },
       {
         "class": "DrawCardSpell",

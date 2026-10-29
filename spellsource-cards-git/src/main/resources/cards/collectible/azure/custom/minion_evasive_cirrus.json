@@ -15,7 +15,8 @@
       "spells": [
         {
           "class": "AddAttributeSpell",
-          "attribute": "DIVINE_SHIELD"
+          "attribute": "DIVINE_SHIELD",
+          "name": "Cloud Veil"
         }
       ]
     }

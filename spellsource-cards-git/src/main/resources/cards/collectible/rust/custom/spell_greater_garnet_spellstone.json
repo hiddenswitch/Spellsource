@@ -10,7 +10,8 @@
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
     "attackBonus": 4,
-    "hpBonus": 4
+    "hpBonus": 4,
+    "name": "Greater Garnet Lunstone"
   },
   "collectible": false,
   "set": "CUSTOM",

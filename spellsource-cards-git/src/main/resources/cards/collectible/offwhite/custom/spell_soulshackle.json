@@ -20,7 +20,8 @@
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Soulshackle"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -35,7 +36,8 @@
             "targetPlayer": "OPPONENT"
           },
           "maxFires": 1
-        }
+        },
+        "name": "Soulshackle"
       }
     ]
   },

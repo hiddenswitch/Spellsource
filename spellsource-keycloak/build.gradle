@@ -4,7 +4,11 @@ plugins {
 
 version "1.0.0"
 
+def keycloakDockerDir = project(':spellsource-containers').layout.projectDirectory.dir("src/main/resources/docker/keycloak").asFile
+def themeJarName = "${project.name}-${project.version}.jar"
+
 tasks.register('buildTheme', Jar) {
+  def fs = services.get(org.gradle.api.file.FileSystemOperations)
   inputs.dir 'src'
   inputs.file 'keycloak-themes.json'
 
@@ -17,11 +21,11 @@ tasks.register('buildTheme', Jar) {
   }
 
   doLast {
-    copy {
+    fs.copy {
       from outputs.files
-      into "${project(':spellsource-containers').projectDir}/src/main/resources/docker/keycloak"
+      into keycloakDockerDir
 
-      rename "${project.name}-${project.version}.jar", "spellsource-keycloak-theme.jar"
+      rename themeJarName, "spellsource-keycloak-theme.jar"
     }
   }
 }

@@ -18,11 +18,13 @@
             "class": "PlayerAttributeValueProvider",
             "playerAttribute": "HAND_COUNT",
             "targetPlayer": "SELF"
-          }
+          },
+          "name": "Theatrical Frontliner's Ward"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Theatrical Frontliner's Guard"
         }
       ]
     }

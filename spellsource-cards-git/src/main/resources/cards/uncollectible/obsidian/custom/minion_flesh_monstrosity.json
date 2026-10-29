@@ -24,7 +24,8 @@
             "class": "AttributeValueProvider",
             "target": "TARGET",
             "attribute": "HP"
-          }
+          },
+          "name": "Flesh Monstrosity's Empowerment"
         },
         {
           "class": "custom.AddActorEffectsToTargetActorSpell",

@@ -15,7 +15,8 @@
       "class": "CardFilter",
       "cardType": "MINION"
     },
-    "hpBonus": 2
+    "hpBonus": 2,
+    "name": "Handsized Flamethrower's Blessing"
   },
   "attributes": {
     "DEATHRATTLES": true

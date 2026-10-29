@@ -10,8 +10,18 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell",
-      "target": "FRIENDLY_HERO_POWER"
+      "class": "ChangeHeroPowerSpell",
+      "card": "hero_power_double_scatter_shot"
+    }
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ModifyDurabilitySpell",
+      "value": -1
     }
   },
   "attributes": {

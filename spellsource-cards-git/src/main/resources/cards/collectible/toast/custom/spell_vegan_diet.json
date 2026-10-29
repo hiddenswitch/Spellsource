@@ -11,11 +11,13 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Vegan Diet"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "CANNOT_ATTACK"
+        "attribute": "CANNOT_ATTACK",
+        "name": "Vegan Diet"
       }
     ]
   },

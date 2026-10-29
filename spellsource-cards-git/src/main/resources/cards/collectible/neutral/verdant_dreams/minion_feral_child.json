@@ -17,7 +17,8 @@
       "target": "OTHER_FRIENDLY_MINIONS",
       "attackBonus": 1,
       "hpBonus": 1,
-      "randomTarget": true
+      "randomTarget": true,
+      "name": "Feral Child's Blessing"
     }
   },
   "collectible": true,

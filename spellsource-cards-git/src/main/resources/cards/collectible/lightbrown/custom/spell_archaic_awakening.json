@@ -12,11 +12,13 @@
       {
         "class": "BuffSpell",
         "attackBonus": 2,
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Archaic Awakening"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "DECAY"
+        "attribute": "DECAY",
+        "name": "Archaic Awakening"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -28,7 +30,8 @@
           "spell": {
             "class": "DecaySpell"
           }
-        }
+        },
+        "name": "Archaic Awakening"
       }
     ]
   },

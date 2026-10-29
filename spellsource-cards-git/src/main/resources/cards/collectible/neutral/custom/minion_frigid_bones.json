@@ -15,7 +15,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "EVENT_TARGET",
-      "attribute": "FROZEN"
+      "attribute": "FROZEN",
+      "name": "Frigid Bones' Frost"
     }
   },
   "collectible": true,

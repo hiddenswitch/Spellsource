@@ -12,7 +12,8 @@
       {
         "class": "SetHpSpell",
         "target": "FRIENDLY_HERO",
-        "value": 1
+        "value": 1,
+        "name": "Dream of Death"
       },
       {
         "class": "DrainSpell",

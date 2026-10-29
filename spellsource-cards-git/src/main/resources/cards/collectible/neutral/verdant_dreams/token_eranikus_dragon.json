@@ -12,7 +12,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "OUTPUT",
-      "value": 3
+      "value": 3,
+      "name": "Dragons"
     },
     "cardFilter": {
       "class": "RaceFilter",

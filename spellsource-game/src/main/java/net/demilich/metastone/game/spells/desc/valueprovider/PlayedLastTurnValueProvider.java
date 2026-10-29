@@ -13,8 +13,7 @@ public class PlayedLastTurnValueProvider extends ValueProvider {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
+	protected int provideValue(GameContext context, Player player, Entity target, Entity host, EntityFilter filter) {
 		Map<String, Map<Integer, Integer>> cardIds = player.getStatistics().getCardsPlayed();
 		int count = 0;
 		int turn = context.getTurn();
@@ -23,7 +22,6 @@ public class PlayedLastTurnValueProvider extends ValueProvider {
 		} else {
 			turn -= 1;
 		}
-		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
 		for (String cardId : cardIds.keySet()) {
 			Entity entity = context.getCardById(cardId);
 			if (filter == null || filter.matches(context, player, entity, host)) {

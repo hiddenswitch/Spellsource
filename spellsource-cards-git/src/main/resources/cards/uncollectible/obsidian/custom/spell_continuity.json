@@ -16,7 +16,8 @@
         "filter": {
           "class": "SpecificCardFilter",
           "secondaryTarget": "TARGET"
-        }
+        },
+        "name": "Continuity"
       },
       {
         "class": "BuffSpell",
@@ -25,7 +26,8 @@
         "filter": {
           "class": "SpecificCardFilter",
           "secondaryTarget": "TARGET"
-        }
+        },
+        "name": "Continuity"
       },
       {
         "class": "BuffSpell",
@@ -34,7 +36,8 @@
         "filter": {
           "class": "SpecificCardFilter",
           "secondaryTarget": "TARGET"
-        }
+        },
+        "name": "Continuity"
       }
     ]
   },

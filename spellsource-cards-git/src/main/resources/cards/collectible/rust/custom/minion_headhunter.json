@@ -22,12 +22,14 @@
             {
               "class": "AddAttributeSpell",
               "target": "OUTPUT",
-              "attribute": "ECHO"
+              "attribute": "ECHO",
+              "name": "Headhunter's Blessing"
             },
             {
               "class": "AddAttributeSpell",
               "target": "OUTPUT",
-              "attribute": "REMOVES_SELF_AT_END_OF_TURN"
+              "attribute": "REMOVES_SELF_AT_END_OF_TURN",
+              "name": "Headhunter's Blessing"
             }
           ]
         }

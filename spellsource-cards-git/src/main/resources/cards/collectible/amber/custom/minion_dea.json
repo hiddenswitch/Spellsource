@@ -28,12 +28,14 @@
           {
             "class": "SetAttackSpell",
             "value": 0,
-            "exclusive": true
+            "exclusive": true,
+            "name": "Dea's Humility"
           },
           {
             "class": "SetHpSpell",
             "value": 0,
-            "exclusive": true
+            "exclusive": true,
+            "name": "Dea's Mark"
           }
         ]
       }

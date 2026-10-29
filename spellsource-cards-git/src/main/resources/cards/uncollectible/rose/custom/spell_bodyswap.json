@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 0,
-        "hpBonus": 10
+        "hpBonus": 10,
+        "name": "Bodyswap"
       },
       {
         "class": "SwapHpSpell",

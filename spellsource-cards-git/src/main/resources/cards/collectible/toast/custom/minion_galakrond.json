@@ -30,7 +30,8 @@
             "target": "OTHER_FRIENDLY_MINIONS",
             "attribute": "HP",
             "operation": "ADD"
-          }
+          },
+          "name": "Galakrond's Empowerment"
         },
         {
           "class": "DestroySpell",

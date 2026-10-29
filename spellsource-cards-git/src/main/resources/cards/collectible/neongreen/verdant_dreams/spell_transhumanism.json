@@ -20,7 +20,8 @@
             "manaCost": 1
           },
           "multiplier": 2
-        }
+        },
+        "name": "Transhumanism"
       },
       {
         "class": "DiscardSpell",

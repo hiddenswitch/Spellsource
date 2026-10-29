@@ -12,11 +12,13 @@
       {
         "class": "BuffSpell",
         "attackBonus": 1,
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Noble Stallion"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "RUSH"
+        "attribute": "RUSH",
+        "name": "Noble Stallion"
       }
     ]
   },

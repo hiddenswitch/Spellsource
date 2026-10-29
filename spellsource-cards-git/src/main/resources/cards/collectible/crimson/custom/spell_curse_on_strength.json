@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "TemporaryAttackSpell",
-        "value": -4
+        "value": -4,
+        "name": "Curse on Strength"
       },
       {
         "class": "DrawCardSpell",

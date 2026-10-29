@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.desc.condition;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.spells.Default;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
 
@@ -14,9 +15,14 @@ public class ManaMaxedCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		return (player.getMaxMana() >= GameLogic.MAX_MANA || player.getMana() >= GameLogic.MAX_MANA);
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			@Default(GameLogic.MAX_MANA) Integer value) {
+		int maxMana = value != null ? value : context.getLogic().getMaxManaCap(player);
+		return player.getMaxMana() >= maxMana || player.getMana() >= maxMana;
 	}
 
 	@Override

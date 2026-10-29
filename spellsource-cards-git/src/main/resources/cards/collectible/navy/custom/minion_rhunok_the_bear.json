@@ -25,7 +25,8 @@
         "spell": {
           "class": "AddAttributeSpell",
           "target": "OUTPUT",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Shapesifter Ryal's Guard"
         },
         "targetPlayer": "SELF"
       }

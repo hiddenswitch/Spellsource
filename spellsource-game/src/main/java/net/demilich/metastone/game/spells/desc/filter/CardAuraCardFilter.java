@@ -21,8 +21,7 @@ public class CardAuraCardFilter extends SpecificCardFilter {
 		super(desc);
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host, String card, String[] cards) {
 		if (entity == null) {
 			return false;
 		}
@@ -34,6 +33,17 @@ public class CardAuraCardFilter extends SpecificCardFilter {
 		if (desc == null) {
 			return false;
 		}
-		return getDesc().getCardOrCards().contains(desc.getId());
+		String cardId = desc.getId();
+		if (card != null && card.equals(cardId)) {
+			return true;
+		}
+		if (cards != null) {
+			for (String c : cards) {
+				if (c.equals(cardId)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

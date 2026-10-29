@@ -15,7 +15,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 7,
-        "hpBonus": 7
+        "hpBonus": 7,
+        "name": "Zalmah's Blessing"
       },
       {
         "class": "ModifyAttributeSpell",

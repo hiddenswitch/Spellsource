@@ -13,7 +13,8 @@
       "spell": {
         "class": "BuffSpell",
         "target": "OUTPUT",
-        "value": 10
+        "value": 10,
+        "name": "Doomed Expedition"
       },
       "targetPlayer": "SELF"
     },

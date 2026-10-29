@@ -19,7 +19,8 @@
       "targetEntityType": "MINION"
     },
     "spell": {
-      "class": "SwapAttackAndHpSpell"
+      "class": "SwapAttackAndHpSpell",
+      "target": "SELF"
     }
   },
   "collectible": true,

@@ -16,7 +16,8 @@
         "class": "AttributeValueProvider",
         "target": "FRIENDLY_SIGNATURE",
         "attribute": "BASE_MANA_COST"
-      }
+      },
+      "name": "Center-Stage Screamer's Fury"
     }
   },
   "attributes": {

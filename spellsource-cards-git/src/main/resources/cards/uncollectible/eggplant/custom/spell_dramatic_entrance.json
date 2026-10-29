@@ -20,17 +20,20 @@
         "spells": [
           {
             "class": "BuffSpell",
-            "hpBonus": 5
+            "hpBonus": 5,
+            "name": "Dramatic Entrance"
           },
           {
             "class": "AddAttributeSpell",
-            "attribute": "TAUNT"
+            "attribute": "TAUNT",
+            "name": "Dramatic Entrance"
           }
         ]
       },
       "maxFires": 1,
       "oneTurn": true
-    }
+    },
+    "name": "Dramatic Entrance"
   },
   "collectible": true,
   "set": "CUSTOM",

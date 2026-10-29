@@ -110,5 +110,21 @@ public abstract class ValueProvider implements Serializable, HasDesc<ValueProvid
 	public void setDesc(Desc<?, ?> desc) {
 		this.desc = (ValueProviderDesc) desc;
 	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (this == other) {
+			return true;
+		}
+		if (!(other instanceof ValueProvider rhs)) {
+			return false;
+		}
+		return java.util.Objects.equals(this.desc, rhs.desc);
+	}
+
+	@Override
+	public int hashCode() {
+		return desc != null ? desc.hashCode() : 0;
+	}
 }
 

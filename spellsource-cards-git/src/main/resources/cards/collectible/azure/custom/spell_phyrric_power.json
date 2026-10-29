@@ -11,11 +11,13 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 5
+        "value": 5,
+        "name": "Phyrric Power"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "DECAY"
+        "attribute": "DECAY",
+        "name": "Phyrric Power"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -27,7 +29,8 @@
           "spell": {
             "class": "DecaySpell"
           }
-        }
+        },
+        "name": "Phyrric Power"
       }
     ]
   },

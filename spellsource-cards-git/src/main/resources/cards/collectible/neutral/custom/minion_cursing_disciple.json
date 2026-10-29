@@ -14,7 +14,8 @@
       "spell": {
         "class": "SummonSpell",
         "card": "token_revenant"
-      }
+      },
+      "name": "Mortician Magician's Legacy"
     }
   },
   "attributes": {

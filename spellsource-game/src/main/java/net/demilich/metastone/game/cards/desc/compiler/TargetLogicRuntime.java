@@ -10,9 +10,14 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.TargetLogic;
+import net.demilich.metastone.game.spells.aura.ModifyBuffSpellAura;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
+import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
@@ -40,7 +45,72 @@ public final class TargetLogicRuntime {
 	}
 
 	private static List<Entity> getEntities(TargetLogic logic, GameContext context, Player player, TargetSelection targetRequirement) {
-		return logic.getEntities(context, player, targetRequirement, true);
+		return getEntities(logic, context, player, targetRequirement, true);
+	}
+
+	public static <E extends Entity> List<E> withoutPermanents(List<E> in) {
+		int size = in.size();
+		ArrayList<E> out = new ArrayList<>(size);
+		for (int i = 0; i < size; i++) {
+			E e = in.get(i);
+			if (!e.hasAttribute(Attribute.PERMANENT)) {
+				out.add(e);
+			}
+		}
+		return out;
+	}
+
+	private static void addMinions(List<Entity> out, List<Minion> minions, boolean omitPermanents) {
+		for (int i = 0, n = minions.size(); i < n; i++) {
+			Minion m = minions.get(i);
+			if (!omitPermanents || !m.hasAttribute(Attribute.PERMANENT)) {
+				out.add(m);
+			}
+		}
+	}
+
+	public static List<Entity> getEntities(
+			TargetLogic logic,
+			GameContext context,
+			Player player,
+			TargetSelection targetRequirement,
+			boolean omitPermanents) {
+		Player opponent = context.getOpponent(player);
+		ArrayList<Entity> entities = new ArrayList<>(16);
+		if (targetRequirement == TargetSelection.ENEMY_HERO
+				|| targetRequirement == TargetSelection.ENEMY_CHARACTERS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.HEROES) {
+			var hero = opponent.getHero();
+			if (!omitPermanents || !hero.hasAttribute(Attribute.PERMANENT)) {
+				entities.add(hero);
+			}
+		}
+		if (targetRequirement == TargetSelection.ENEMY_MINIONS
+				|| targetRequirement == TargetSelection.ENEMY_CHARACTERS
+				|| targetRequirement == TargetSelection.MINIONS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.FRIENDLY_HERO_AND_MINIONS) {
+			addMinions(entities, opponent.getMinions(), omitPermanents);
+		}
+		if (targetRequirement == TargetSelection.FRIENDLY_HERO
+				|| targetRequirement == TargetSelection.FRIENDLY_CHARACTERS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.HEROES
+				|| targetRequirement == TargetSelection.FRIENDLY_HERO_AND_MINIONS) {
+			var hero = player.getHero();
+			if (!omitPermanents || !hero.hasAttribute(Attribute.PERMANENT)) {
+				entities.add(hero);
+			}
+		}
+		if (targetRequirement == TargetSelection.FRIENDLY_MINIONS
+				|| targetRequirement == TargetSelection.FRIENDLY_CHARACTERS
+				|| targetRequirement == TargetSelection.MINIONS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.FRIENDLY_HERO_AND_MINIONS) {
+			addMinions(entities, player.getMinions(), omitPermanents);
+		}
+		return entities;
 	}
 
 	@FunctionalInterface
@@ -447,5 +517,389 @@ public final class TargetLogicRuntime {
 			}
 		}
 		throw new NullPointerException("invalid spec");
+	}
+
+	private static int countMinionZone(
+			GameContext context,
+			Player player,
+			Entity host,
+			List<Minion> minions,
+			Entity excluded,
+			CompiledEntityFilter filter) {
+		int count = 0;
+		for (int i = 0, n = minions.size(); i < n; i++) {
+			Minion m = minions.get(i);
+			if (m == excluded || m.hasAttribute(Attribute.PERMANENT)) {
+				continue;
+			}
+			Entity resolved = m.transformResolved(context);
+			if (filter == null || filter.matches(context, player, resolved, host)) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	private static int countZoneList(
+			GameContext context,
+			Player player,
+			Entity host,
+			List<? extends Entity> zone,
+			CompiledEntityFilter filter) {
+		int count = 0;
+		for (int i = 0, n = zone.size(); i < n; i++) {
+			Entity resolved = zone.get(i).transformResolved(context);
+			if (filter == null || filter.matches(context, player, resolved, host)) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public static int countEntities(
+			GameContext context,
+			Player player,
+			Entity target,
+			Entity originalHost,
+			EntityReference descTarget,
+			CompiledEntityFilter filter) {
+		Entity host = originalHost;
+		if (originalHost == null && descTarget != null && !descTarget.isTargetGroup()) {
+			host = context.resolveSingleTarget(descTarget);
+		}
+		EntityReference ref = descTarget != null ? descTarget : (target != null ? target.getReference() : null);
+		if (ref == null || ref.equals(EntityReference.NONE)) {
+			return 0;
+		}
+		if (ref == EntityReference.FRIENDLY_MINIONS) {
+			return countMinionZone(context, player, host, player.getMinions(), null, filter);
+		}
+		if (ref == EntityReference.ENEMY_MINIONS) {
+			return countMinionZone(context, player, host, context.getOpponent(player).getMinions(), null, filter);
+		}
+		if (ref == EntityReference.OTHER_FRIENDLY_MINIONS) {
+			return countMinionZone(context, player, host, player.getMinions(), originalHost, filter);
+		}
+		if (ref == EntityReference.OTHER_ENEMY_MINIONS) {
+			return countMinionZone(context, player, host, context.getOpponent(player).getMinions(), originalHost, filter);
+		}
+		if (ref == EntityReference.ALL_MINIONS) {
+			return countMinionZone(context, player, host, context.getOpponent(player).getMinions(), null, filter)
+					+ countMinionZone(context, player, host, player.getMinions(), null, filter);
+		}
+		if (ref == EntityReference.ALL_OTHER_MINIONS) {
+			return countMinionZone(context, player, host, context.getOpponent(player).getMinions(), originalHost, filter)
+					+ countMinionZone(context, player, host, player.getMinions(), originalHost, filter);
+		}
+		if (ref == EntityReference.FRIENDLY_HAND) {
+			return filter == null ? player.getHand().size() : countZoneList(context, player, host, player.getHand(), filter);
+		}
+		if (ref == EntityReference.ENEMY_HAND) {
+			Player opp = context.getOpponent(player);
+			return filter == null ? opp.getHand().size() : countZoneList(context, player, host, opp.getHand(), filter);
+		}
+		if (ref == EntityReference.BOTH_HANDS) {
+			Player opp = context.getOpponent(player);
+			return filter == null
+					? player.getHand().size() + opp.getHand().size()
+					: countZoneList(context, player, host, player.getHand(), filter) + countZoneList(context, player, host, opp.getHand(), filter);
+		}
+		if (ref == EntityReference.FRIENDLY_DECK) {
+			return filter == null ? player.getDeck().size() : countZoneList(context, player, host, player.getDeck(), filter);
+		}
+		if (ref == EntityReference.ENEMY_DECK) {
+			Player opp = context.getOpponent(player);
+			return filter == null ? opp.getDeck().size() : countZoneList(context, player, host, opp.getDeck(), filter);
+		}
+		if (ref == EntityReference.FRIENDLY_GRAVEYARD) {
+			return filter == null ? player.getGraveyard().size() : countZoneList(context, player, host, player.getGraveyard(), filter);
+		}
+		if (ref == EntityReference.ENEMY_GRAVEYARD) {
+			Player opp = context.getOpponent(player);
+			return filter == null ? opp.getGraveyard().size() : countZoneList(context, player, host, opp.getGraveyard(), filter);
+		}
+		List<Entity> relevantEntities = context.resolveTarget(player, originalHost, ref);
+		if (relevantEntities == null) {
+			return 0;
+		}
+		if (filter == null) {
+			return relevantEntities.size();
+		}
+		int count = 0;
+		for (int i = 0, size = relevantEntities.size(); i < size; i++) {
+			if (filter.matches(context, player, relevantEntities.get(i), host)) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public static int countMinions(
+			GameContext context,
+			Player player,
+			Entity source,
+			CompiledEntityFilter filter) {
+		List<Minion> minions = player.getMinions();
+		int count = 0;
+		for (int i = 0, n = minions.size(); i < n; i++) {
+			Minion m = minions.get(i);
+			if (!m.hasAttribute(Attribute.PERMANENT) && (filter == null || filter.matches(context, player, m, source))) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public static int countGraveyard(
+			GameContext context,
+			Player player,
+			Entity source,
+			CompiledEntityFilter filter) {
+		var graveyard = player.getGraveyard();
+		int count = 0;
+		for (int i = 0, n = graveyard.size(); i < n; i++) {
+			Entity deadEntity = graveyard.get(i);
+			if (deadEntity.diedOnBattlefield() && (filter == null || filter.matches(context, player, deadEntity, source))) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public static int provideValueForAttack(GameContext context, Entity entity) {
+		if (entity instanceof Actor source) {
+			int value = 0;
+			if (source.getEntityType() == EntityType.HERO) {
+				Player player = context.getPlayer(source.getOwner());
+				if (!player.getWeaponZone().isEmpty() && player.getWeaponZone().get(0).isActive()) {
+					value += Math.max(0, player.getWeaponZone().get(0).getAttack());
+				}
+			}
+			value += Math.max(0, source.getAttack());
+			return value;
+		}
+		if (entity instanceof Card card) {
+			if (card.getCardType() == CardType.MINION) {
+				return card.getDesc().getBaseAttack() + card.getBonusAttack();
+			}
+			return card.getAttributeValue(Attribute.ATTACK);
+		}
+		return entity.getAttributeValue(Attribute.ATTACK);
+	}
+
+	public static int provideValueForHp(Entity entity) {
+		if (entity instanceof Actor source) {
+			return source.getHp();
+		}
+		if (entity instanceof Card card) {
+			if (card.getCardType() == CardType.MINION) {
+				return card.getDesc().getBaseHp() + card.getBonusHp();
+			}
+			return card.getAttributeValue(Attribute.HP);
+		}
+		return entity.getAttributeValue(Attribute.HP);
+	}
+
+	public static int evalSelfAttributeAttack(GameContext context, Entity host) {
+		if (host == null) {
+			return 0;
+		}
+		return provideValueForAttack(context, host.transformResolved(context));
+	}
+
+	public static int sumAttributeOnTarget(
+			GameContext context,
+			Player player,
+			Entity host,
+			EntityReference target,
+			Attribute attribute,
+			EntityFilter filter) {
+		if (target == EntityReference.SELF) {
+			if (host == null) {
+				return 0;
+			}
+			Entity resolved = host.transformResolved(context);
+			if (filter != null && !filter.matches(context, player, resolved, host)) {
+				return 0;
+			}
+			if (attribute == Attribute.ATTACK) {
+				return provideValueForAttack(context, resolved);
+			}
+			if (attribute == Attribute.HP) {
+				return provideValueForHp(resolved);
+			}
+			return AttributeValueProvider.provideValueForAttribute(context, attribute, resolved);
+		}
+		if (target == EntityReference.FRIENDLY_MINIONS || target == EntityReference.ENEMY_MINIONS) {
+			List<Minion> minions = (target == EntityReference.FRIENDLY_MINIONS ? player : context.getOpponent(player)).getMinions();
+			int value = 0;
+			for (int i = 0, n = minions.size(); i < n; i++) {
+				Minion m = minions.get(i);
+				if (m.hasAttribute(Attribute.PERMANENT)) {
+					continue;
+				}
+				Entity resolved = m.transformResolved(context);
+				if (filter == null || filter.matches(context, player, resolved, host)) {
+					if (attribute == Attribute.ATTACK) {
+						value += provideValueForAttack(context, resolved);
+					} else if (attribute == Attribute.HP) {
+						value += provideValueForHp(resolved);
+					} else {
+						value += AttributeValueProvider.provideValueForAttribute(context, attribute, resolved);
+					}
+				}
+			}
+			return value;
+		}
+		List<Entity> entities = context.resolveTarget(player, host, target);
+		if (entities == null) {
+			return 0;
+		}
+		int value = 0;
+		for (int i = 0, size = entities.size(); i < size; i++) {
+			Entity entity = entities.get(i);
+			if (filter == null || filter.matches(context, player, entity, host)) {
+				if (attribute == Attribute.ATTACK) {
+					value += provideValueForAttack(context, entity);
+				} else if (attribute == Attribute.HP) {
+					value += provideValueForHp(entity);
+				} else {
+					value += AttributeValueProvider.provideValueForAttribute(context, attribute, entity);
+				}
+			}
+		}
+		return value;
+	}
+
+	public static int evalReduceVP(
+			GameContext context,
+			Player player,
+			Entity targetEntity,
+			Entity host,
+			EntityReference target,
+			Attribute attribute,
+			AlgebraicOperation operation,
+			CompiledEntityFilter filter,
+			CompiledValueProvider value1Vp,
+			int constValue1,
+			boolean hasValue1,
+			boolean hasValue2,
+			int constValue2,
+			CompiledValueProvider value2Vp) {
+		int value;
+		if (operation == AlgebraicOperation.MAXIMUM) {
+			value = Integer.MIN_VALUE;
+		} else if (operation == AlgebraicOperation.MINIMUM) {
+			value = Integer.MAX_VALUE;
+		} else if (operation == AlgebraicOperation.MULTIPLY) {
+			value = 1;
+		} else if (operation == AlgebraicOperation.DIVIDE
+				|| operation == AlgebraicOperation.MODULO
+				|| operation == AlgebraicOperation.NEGATE) {
+			throw new UnsupportedOperationException("Cannot do a reduce with a DIVIDE, MODULO or NEGATE operator.");
+		} else {
+			value = 0;
+		}
+
+		boolean matchedAny = false;
+		if (target == EntityReference.FRIENDLY_MINIONS || target == EntityReference.ENEMY_MINIONS) {
+			List<Minion> minions = (target == EntityReference.FRIENDLY_MINIONS ? player : context.getOpponent(player)).getMinions();
+			for (int i = 0, n = minions.size(); i < n; i++) {
+				Minion m = minions.get(i);
+				if (m.hasAttribute(Attribute.PERMANENT)) {
+					continue;
+				}
+				Entity entity = m.transformResolved(context);
+				if (filter != null && !filter.matches(context, player, entity, host)) {
+					continue;
+				}
+				matchedAny = true;
+				int itemVal;
+				if (hasValue1) {
+					itemVal = value1Vp != null ? value1Vp.compute(context, player, entity, targetEntity) : constValue1;
+				} else if (attribute != null) {
+					itemVal = attribute == Attribute.ATTACK
+							? provideValueForAttack(context, entity)
+							: (attribute == Attribute.HP ? provideValueForHp(entity) : AttributeValueProvider.provideValueForAttribute(context, attribute, entity));
+				} else {
+					continue;
+				}
+				value = operation == AlgebraicOperation.ADD ? (value + itemVal) : operation.performOperation(value, itemVal);
+			}
+		} else {
+			List<Entity> entities = target != null
+					? context.resolveTarget(player, host, target)
+					: Collections.singletonList(targetEntity);
+			if (entities == null) {
+				return 0;
+			}
+			for (int i = 0, n = entities.size(); i < n; i++) {
+				Entity entity = entities.get(i);
+				if (filter != null && !filter.matches(context, player, entity, host)) {
+					continue;
+				}
+				matchedAny = true;
+				int itemVal;
+				if (hasValue1) {
+					itemVal = value1Vp != null ? value1Vp.compute(context, player, entity, targetEntity) : constValue1;
+				} else if (attribute != null) {
+					itemVal = attribute == Attribute.ATTACK
+							? provideValueForAttack(context, entity)
+							: (attribute == Attribute.HP ? provideValueForHp(entity) : AttributeValueProvider.provideValueForAttribute(context, attribute, entity));
+				} else {
+					continue;
+				}
+				value = operation == AlgebraicOperation.ADD ? (value + itemVal) : operation.performOperation(value, itemVal);
+			}
+		}
+
+		if (!matchedAny) {
+			if (hasValue2) {
+				return value2Vp != null ? value2Vp.compute(context, player, targetEntity, host) : constValue2;
+			}
+			return 0;
+		}
+		return value;
+	}
+
+	public static void execFastBuffSpell(
+			GameContext context,
+			Player player,
+			net.demilich.metastone.game.spells.desc.SpellDesc desc,
+			Entity source,
+			Entity target,
+			int attackBonus,
+			int hpBonus,
+			boolean hasAttack,
+			boolean hasHp) {
+		if (target == null) {
+			return;
+		}
+		GameStateArena.TriggerList trigs = GameStateArena.getContextArena(context).triggers;
+		if ((trigs.kindMask & GameStateArena.KIND_MODIFY_BUFF_AURA) != 0) {
+			for (int i = 0, n = trigs.size; i < n; i++) {
+				if (trigs.elements[i] instanceof ModifyBuffSpellAura aura && !aura.isExpired() && aura.isActivated()) {
+					DescBytecodeCompiler.execBuffSpell(context, player, desc, source, target, attackBonus, hpBonus, 0, 0, false, hasAttack, hasHp);
+					return;
+				}
+			}
+		}
+		if (attackBonus != 0 || hpBonus != 0) {
+			net.demilich.metastone.game.spells.trigger.Enchantment.attachBuffEnchantment(context, player, desc, source, target, attackBonus, hpBonus, 0);
+		}
+		if (attackBonus != 0) {
+			if (target instanceof net.demilich.metastone.game.entities.heroes.Hero) {
+				target.modifyAttribute(Attribute.TEMPORARY_ATTACK_BONUS, attackBonus);
+			} else {
+				target.modifyAttribute(Attribute.ATTACK_BONUS, attackBonus);
+			}
+		}
+		if (hpBonus != 0) {
+			if (target instanceof Weapon weapon) {
+				context.getLogic().modifyDurability(weapon, hpBonus);
+			} else {
+				context.getLogic().modifyHpSpell(source, target, hpBonus);
+			}
+		}
 	}
 }

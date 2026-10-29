@@ -30,7 +30,8 @@
           },
           "maxFires": 1,
           "oneTurn": true
-        }
+        },
+        "name": "Forgotten Science"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -46,7 +47,8 @@
             "card": "enchantment_forgotten_science_aura"
           },
           "maxFires": 1
-        }
+        },
+        "name": "Forgotten Science"
       }
     ]
   },

@@ -10,18 +10,17 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "BuffSpell",
+        "class": "TemporaryAttackSpell",
         "target": "FRIENDLY_MINIONS",
-        "attackBonus": 2,
-        "hpBonus": 0,
-        "randomTarget": true
+        "value": 2,
+        "randomTarget": true,
+        "name": "Wild Resonance"
       },
       {
-        "class": "BuffSpell",
+        "class": "TemporaryAttackSpell",
         "target": "FRIENDLY_HERO",
-        "attackBonus": 2,
-        "hpBonus": 0,
-        "randomTarget": true
+        "value": 2,
+        "name": "Wild Resonance"
       }
     ]
   },

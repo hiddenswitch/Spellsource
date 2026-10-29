@@ -23,7 +23,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "EVENT_TARGET",
-      "attackBonus": 2
+      "attackBonus": 2,
+      "name": "Bluefist Trainer's Rally"
     }
   },
   "collectible": true,

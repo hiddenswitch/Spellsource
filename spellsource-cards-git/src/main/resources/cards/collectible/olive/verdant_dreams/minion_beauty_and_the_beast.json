@@ -22,7 +22,8 @@
         {
           "class": "BuffSpell",
           "target": "TRIGGER_HOST",
-          "hpBonus": 2
+          "hpBonus": 2,
+          "name": "Beauty and's Ward"
         }
       ]
     }

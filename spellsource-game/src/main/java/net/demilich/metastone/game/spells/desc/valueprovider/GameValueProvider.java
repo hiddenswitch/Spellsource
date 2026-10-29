@@ -44,9 +44,10 @@ public class GameValueProvider extends ValueProvider {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		GameValue gameValue = (GameValue) getDesc().get(ValueProviderArg.GAME_VALUE);
+	protected int provideValue(GameContext context, Player player, Entity target, Entity host, GameValue gameValue) {
+		if (gameValue == null) {
+			return 0;
+		}
 		switch (gameValue) {
 			case LAST_MANA_COST:
 				return (int) context.getEnvironment().get(Environment.LAST_MANA_COST);
@@ -62,5 +63,4 @@ public class GameValueProvider extends ValueProvider {
 		}
 		return 0;
 	}
-
 }

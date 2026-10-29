@@ -9,7 +9,8 @@
   "spell": {
     "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
-    "armorBonus": 5
+    "armorBonus": 5,
+    "name": "Small Shield"
   },
   "collectible": true,
   "set": "CUSTOM",

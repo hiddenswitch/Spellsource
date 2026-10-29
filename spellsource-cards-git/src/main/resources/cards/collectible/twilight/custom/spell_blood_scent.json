@@ -19,7 +19,8 @@
         "class": "GatekeeperShaValueProvider",
         "offset": 1
       }
-    }
+    },
+    "name": "Blood Scent"
   },
   "collectible": true,
   "fileFormatVersion": 1,

@@ -9,6 +9,10 @@
   "spell": {
     "class": "MetaSpell",
     "target": "ENEMY_MINIONS",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "BASE_MANA_COST"
+    },
     "randomTarget": true,
     "spells": [
       {
@@ -18,9 +22,8 @@
         "class": "DamageSpell",
         "target": "ENEMY_HERO",
         "value": {
-          "class": "AttributeValueProvider",
-          "target": "TARGET",
-          "attribute": "BASE_MANA_COST"
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
         }
       }
     ]

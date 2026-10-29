@@ -11,22 +11,49 @@
     "spells": [
       {
         "class": "RecruitSpell",
-        "value": {
-          "class": "AlgebraicValueProvider",
-          "operation": "SUBTRACT",
-          "value1": 7,
-          "value2": {
-            "class": "EntityCountValueProvider",
-            "target": "FRIENDLY_MINIONS"
-          }
-        }
+        "value": 7,
+        "cardLocation": "HAND",
+        "spell": {
+          "class": "AddAttributeSpell",
+          "target": "OUTPUT",
+          "attribute": "RESERVED_BOOLEAN_3",
+          "name": "Dream of Anarchy"
+        },
+        "targetPlayer": "SELF"
       },
       {
-        "class": "FightSpell",
+        "class": "RecruitSpell",
+        "value": 7,
+        "cardLocation": "HAND",
+        "spell": {
+          "class": "AddAttributeSpell",
+          "target": "OUTPUT",
+          "attribute": "RESERVED_BOOLEAN_3",
+          "name": "Dream of Anarchy"
+        },
+        "targetPlayer": "OPPONENT"
+      },
+      {
+        "class": "MetaSpell",
         "target": "ALL_MINIONS",
-        "exclusive": true,
-        "randomTarget": true,
-        "secondaryTarget": "OUTPUT"
+        "filter": {
+          "class": "AttributeFilter",
+          "attribute": "RESERVED_BOOLEAN_3",
+          "operation": "HAS"
+        },
+        "spells": [
+          {
+            "class": "FightSpell",
+            "target": "ALL_MINIONS",
+            "exclusive": true,
+            "randomTarget": true,
+            "secondaryTarget": "SPELL_TARGET"
+          },
+          {
+            "class": "RemoveAttributeSpell",
+            "attribute": "RESERVED_BOOLEAN_3"
+          }
+        ]
       }
     ]
   },

@@ -18,13 +18,15 @@
         },
         "spell": {
           "class": "DestroySpell",
-          "target": "SELF"
+          "target": "TRIGGER_HOST"
         }
-      }
+      },
+      "name": "Twilight Mercenary's Boon"
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "STEALTH": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

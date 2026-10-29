@@ -25,7 +25,8 @@
               "attribute": "FROZEN",
               "invert": true,
               "operation": "HAS"
-            }
+            },
+            "name": "Rime Chill"
           },
           {
             "class": "DamageSpell",
@@ -35,7 +36,8 @@
         ]
       },
       "persistentOwner": true
-    }
+    },
+    "name": "Rime"
   },
   "collectible": true,
   "set": "CUSTOM",

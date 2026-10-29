@@ -12,7 +12,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "ADJACENT_MINIONS",
-      "attribute": "TAUNT"
+      "attribute": "TAUNT",
+      "name": "Captain of's Guard"
     }
   },
   "attributes": {

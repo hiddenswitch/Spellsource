@@ -21,7 +21,8 @@
         "target": "EVENT_TARGET",
         "value": 3
       }
-    }
+    },
+    "name": "What Big Fangs!"
   },
   "collectible": true,
   "set": "CUSTOM",

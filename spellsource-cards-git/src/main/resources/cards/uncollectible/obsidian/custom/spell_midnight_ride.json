@@ -33,7 +33,8 @@
               }
             ]
           }
-        }
+        },
+        "name": "Midnight Ride"
       },
       "targetPlayer": "OWNER"
     }

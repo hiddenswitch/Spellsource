@@ -40,11 +40,16 @@ public final class ReviveMinionSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		int hpAdjustment = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
+	protected void onCast(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			int hpBonus,
+			int boardPosition,
+			SpellDesc spell1,
+			SpellDesc spell) {
 		Actor targetActor = (Actor) target;
-		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
 		Card card = targetActor.getSourceCard();
 		// Bring back the weapon. Happens when a weapon gets a minion's aftermath
 		if (GameLogic.isCardType(card.getCardType(), CardType.WEAPON)) {
@@ -52,19 +57,19 @@ public final class ReviveMinionSpell extends Spell {
 			return;
 		}
 
-		if (desc.containsKey(SpellArg.SPELL1)) {
-			SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL1), source, target, targetActor);
+		if (spell1 != null) {
+			SpellUtils.castChildSpell(context, player, spell1, source, target, targetActor);
 		}
 
 		Minion minion = card.minion();
-		if (hpAdjustment != 0) {
-			minion.setHp(hpAdjustment);
+		if (hpBonus != 0) {
+			minion.setHp(hpBonus);
 		}
 		if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
 			// The minion may have been transformed during summon
 			Entity resultingMinion = minion.transformResolved(context);
-			if (resultingMinion.isInPlay() && desc.containsKey(SpellArg.SPELL)) {
-				SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, resultingMinion);
+			if (resultingMinion.isInPlay() && spell != null) {
+				SpellUtils.castChildSpell(context, player, spell, source, target, resultingMinion);
 			}
 		}
 	}

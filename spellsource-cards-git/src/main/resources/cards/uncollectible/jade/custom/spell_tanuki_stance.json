@@ -12,11 +12,13 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Tanuki Stance"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Tanuki Stance"
       }
     ]
   },

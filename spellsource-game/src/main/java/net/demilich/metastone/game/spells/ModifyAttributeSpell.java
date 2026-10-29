@@ -6,6 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ import java.util.Map;
  * Supports a {@link SpellArg#REVERT_TRIGGER}, which when triggered will call this spell with the negative of the value
  * specified on the target.
  */
-public class ModifyAttributeSpell extends RevertableSpell {
+public class ModifyAttributeSpell extends Spell {
 	private static Logger LOGGER = LoggerFactory.getLogger(ModifyAttributeSpell.class);
 
 	public static SpellDesc create(EntityReference target, Attribute tag, int value) {
@@ -46,13 +47,11 @@ public class ModifyAttributeSpell extends RevertableSpell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target) {
-		return ModifyAttributeSpell.create(target, (Attribute) desc.get(SpellArg.ATTRIBUTE), -desc.getValue(SpellArg.VALUE, context, player, context.resolveSingleTarget(target), source, 0));
-	}
-
-	protected void onCast(GameContext context, Player player, Entity source, Entity target, Attribute attribute, int value) {
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target, Attribute attribute, int value) {
 		target.modifyAttribute(attribute, value);
+		if (value != 0 || desc.containsKey(SpellArg.REVERT_TRIGGER) || desc.containsKey(SpellArg.SECOND_REVERT_TRIGGER)) {
+			Enchantment.attachModifyAttributeEnchantment(context, player, desc, source, target, attribute, value);
+		}
 	}
 }
 

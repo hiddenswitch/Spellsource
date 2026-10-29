@@ -15,7 +15,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
-      "armorBonus": 6
+      "armorBonus": 6,
+      "name": "Ironplate Samurai's Aegis"
     }
   },
   "attributes": {

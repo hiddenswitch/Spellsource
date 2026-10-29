@@ -17,7 +17,8 @@
     "spell": {
       "class": "TemporaryAttackSpell",
       "target": "TRIGGER_HOST",
-      "value": 2
+      "value": 2,
+      "name": "Savage Sprite's Rally"
     }
   },
   "collectible": true,

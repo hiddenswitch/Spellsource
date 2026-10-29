@@ -19,7 +19,8 @@
     "spell2": {
       "class": "BuffSpell",
       "attackBonus": 4,
-      "hpBonus": 6
+      "hpBonus": 6,
+      "name": "Ceaseless Power"
     }
   },
   "collectible": true,

@@ -18,7 +18,8 @@
     },
     "spell2": {
       "class": "BuffSpell",
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Enchanted Springs"
     }
   },
   "collectible": false,

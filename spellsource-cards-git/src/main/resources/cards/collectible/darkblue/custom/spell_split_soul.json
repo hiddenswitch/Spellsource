@@ -31,12 +31,14 @@
             {
               "class": "SetAttackSpell",
               "value": 1,
-              "exclusive": true
+              "exclusive": true,
+              "name": "Split Soul"
             },
             {
               "class": "SetHpSpell",
               "value": 1,
-              "exclusive": true
+              "exclusive": true,
+              "name": "Split Soul"
             }
           ]
         }

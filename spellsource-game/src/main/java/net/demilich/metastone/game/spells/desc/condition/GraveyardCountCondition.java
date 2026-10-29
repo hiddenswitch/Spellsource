@@ -6,7 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
 /**
- * Counts entities matching the {@link ConditionArg#FILTER} using the evaluation rules of the {@link CountCondition}.
+ * Counts the entities in the graveyard of {@code player} optionally matching {@link ConditionArg#FILTER}.
  */
 public class GraveyardCountCondition extends CountCondition {
 
@@ -15,15 +15,21 @@ public class GraveyardCountCondition extends CountCondition {
 	}
 
 	@Override
-	protected int getCountForPlayer(GameContext context, Player player, Entity source, Entity target) {
-		int count = 0;
-		EntityFilter filter = (EntityFilter) getDesc().get(ConditionArg.FILTER);
-		for (Entity deadEntity : player.getGraveyard()) {
-			if (deadEntity.diedOnBattlefield() && (filter == null || filter.matches(context, player, deadEntity, source))) {
-				count++;
-			}
-		}
-		return count;
+	protected int getCountForPlayer(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			EntityFilter filter,
+			EntityFilter cardFilter) {
+		return (int) player.getGraveyard()
+				.stream()
+				.filter(e -> filter == null || filter.matches(context, player, e, source))
+				.count();
 	}
 
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
+	}
 }

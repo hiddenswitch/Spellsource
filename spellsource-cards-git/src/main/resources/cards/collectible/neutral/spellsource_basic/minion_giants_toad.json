@@ -12,7 +12,8 @@
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
     "attackBonus": 2,
-    "hpBonus": 2
+    "hpBonus": 2,
+    "name": "Giant's Toad's Blessing"
   },
   "attributes": {
     "DEATHRATTLES": true

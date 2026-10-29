@@ -25,7 +25,8 @@
       "spell": {
         "class": "AddAttributeSpell",
         "target": "EVENT_TARGET",
-        "attribute": "FROZEN"
+        "attribute": "FROZEN",
+        "name": "Frost Presence"
       }
     }
   ],

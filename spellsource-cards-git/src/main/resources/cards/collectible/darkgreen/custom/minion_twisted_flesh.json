@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "description": "Whenever this takes damage from your cards or Skill, restore it to full Health.",
-  "passiveTrigger": {
+  "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
       "hostTargetType": "IGNORE_OTHER_TARGETS",

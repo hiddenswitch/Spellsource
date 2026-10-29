@@ -9,12 +9,14 @@
   "spell": {
     "class": "AdjacentEffectSpell",
     "spell1": {
-     "class": "BuffSpell",
-     "value": 1
-  },
+      "class": "BuffSpell",
+      "value": 1,
+      "name": "Warm Up"
+    },
     "spell2": {
-     "class": "BuffSpell",
-     "value": 1
+      "class": "BuffSpell",
+      "value": 1,
+      "name": "Warm Up"
     }
   },
   "collectible": true,

@@ -19,7 +19,8 @@
         "card": "spell_palm_strike"
       },
       "oneTurn": true
-    }
+    },
+    "name": "Monastery's Teachings"
   },
   "collectible": false,
   "set": "CUSTOM",

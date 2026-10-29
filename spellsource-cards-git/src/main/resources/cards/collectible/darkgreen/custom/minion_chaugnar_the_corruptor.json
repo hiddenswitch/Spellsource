@@ -28,7 +28,8 @@
           "filter": {
             "class": "CardFilter",
             "cardType": "MINION"
-          }
+          },
+          "name": "Chaugnar's Boon"
         },
         {
           "class": "BuffSpell",
@@ -38,7 +39,8 @@
             "class": "CardFilter",
             "cardType": "MINION"
           },
-          "hpBonus": 5
+          "hpBonus": 5,
+          "name": "Chaugnar's Blessing"
         }
       ]
     }

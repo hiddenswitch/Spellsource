@@ -28,9 +28,11 @@
         "spell": {
           "class": "BuffSpell",
           "target": "FRIENDLY_CHARACTERS",
-          "hpBonus": 2
+          "hpBonus": 2,
+          "name": "Thundering Jade Serpent's Ward"
         }
-      }
+      },
+      "name": "Thundering Jade Serpent's Boon"
     }
   },
   "attributes": {

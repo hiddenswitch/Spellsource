@@ -23,7 +23,8 @@
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
           "attackBonus": 1,
-          "randomTarget": true
+          "randomTarget": true,
+          "name": "Organ Donor's Rally"
         },
         "howMany": {
           "class": "AttributeValueProvider",
@@ -43,12 +44,13 @@
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
           "hpBonus": 1,
-          "randomTarget": true
+          "randomTarget": true,
+          "name": "Organ Donor's Ward"
         },
         "howMany": {
           "class": "AttributeValueProvider",
           "target": "SELF",
-          "attribute": "BASE_HP"
+          "attribute": "MAX_HP"
         }
       }
     ]

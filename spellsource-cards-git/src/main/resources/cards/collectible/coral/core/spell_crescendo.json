@@ -9,7 +9,8 @@
   "spell": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
-    "value": 2
+    "value": 2,
+    "name": "Crescendo"
   },
   "collectible": true,
   "set": "CORE",

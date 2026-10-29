@@ -21,7 +21,8 @@
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_HERO",
-          "armorBonus": 8
+          "armorBonus": 8,
+          "name": "Molten Cauterizer's Aegis"
         }
       ]
     }

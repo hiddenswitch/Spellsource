@@ -11,11 +11,13 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 7
+        "value": 7,
+        "name": "Dreams of Strength"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Dreams of Strength"
       }
     ],
     "filter": {

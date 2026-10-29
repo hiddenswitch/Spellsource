@@ -24,13 +24,22 @@
           "class": "MinionCountCondition",
           "value": 0,
           "operation": "GREATER",
+          "filter": {
+            "class": "IsDestroyedFilter",
+            "invert": true
+          },
           "targetPlayer": "SELF"
         },
         "spell": {
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
           "attackBonus": 1,
-          "randomTarget": true
+          "filter": {
+            "class": "IsDestroyedFilter",
+            "invert": true
+          },
+          "randomTarget": true,
+          "name": "Feeding Frenzy"
         },
         "howMany": {
           "class": "AttributeValueProvider",
@@ -43,13 +52,22 @@
           "class": "MinionCountCondition",
           "value": 0,
           "operation": "GREATER",
+          "filter": {
+            "class": "IsDestroyedFilter",
+            "invert": true
+          },
           "targetPlayer": "SELF"
         },
         "spell": {
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
           "hpBonus": 1,
-          "randomTarget": true
+          "filter": {
+            "class": "IsDestroyedFilter",
+            "invert": true
+          },
+          "randomTarget": true,
+          "name": "Feeding Frenzy"
         },
         "howMany": {
           "class": "AttributeValueProvider",

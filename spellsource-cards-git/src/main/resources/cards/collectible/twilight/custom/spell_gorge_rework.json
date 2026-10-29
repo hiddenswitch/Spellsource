@@ -14,7 +14,8 @@
         "value": {
           "class": "GatekeeperShaValueProvider",
           "offset": 4
-        }
+        },
+        "name": "Gorge"
       },
       {
         "class": "AddDeathrattleSpell",
@@ -25,7 +26,8 @@
         "spell": {
           "class": "DamageSpell",
           "target": "ALL_MINIONS"
-        }
+        },
+        "name": "Gorge"
       }
     ]
   },

@@ -24,7 +24,8 @@
           "card": "spell_amplify"
         }
       }
-    }
+    },
+    "name": "Amplify"
   },
   "collectible": true,
   "set": "CORE",

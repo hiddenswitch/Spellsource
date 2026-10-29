@@ -16,7 +16,8 @@
         "class": "DiedThisTurnValueProvider",
         "multiplier": 2,
         "targetPlayer": "BOTH"
-      }
+      },
+      "name": "Reborn Champion's Empowerment"
     }
   },
   "attributes": {

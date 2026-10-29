@@ -24,7 +24,8 @@
         "armorBonus": {
           "class": "GatekeeperShaValueProvider",
           "offset": 12
-        }
+        },
+        "name": "Hemoshield"
       }
     ]
   },

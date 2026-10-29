@@ -3,6 +3,7 @@ package net.demilich.metastone.game.behaviour;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.desc.compiler.GameStateArena;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.cards.Attribute;
 
@@ -51,25 +52,7 @@ public class TranspositionTable {
 			return cachedKey;
 		}
 
-		int hash = context.getActivePlayerId();
-
-		for (Player player : context.getPlayers()) {
-			hash = mergeHashes(hash, player.getMana());
-			hash = mergeHashes(hash, player.getMaxMana());
-			hash = mergeHashes(hash, hash(player.getHero()));
-			for (Card handCard : player.getHand()) {
-				hash = mergeHashes(hash, hash(handCard));
-			}
-
-			for (Card deckCard : player.getDeck()) {
-				hash = mergeHashes(hash, hash(deckCard));
-			}
-			for (Entity minion : player.getMinions()) {
-				hash = mergeHashes(hash, hash(minion));
-				hash = mergeHashes(hash, context.getLogic().getActiveTriggers(minion.getReference()).size());
-			}
-
-		}
+		int hash = GameStateArena.hashGameContext(context);
 		cachedState = context;
 		cachedKey = hash;
 		return hash;

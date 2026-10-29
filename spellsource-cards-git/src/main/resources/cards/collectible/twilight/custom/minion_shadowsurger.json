@@ -15,7 +15,8 @@
       "class": "AttributeValueProvider",
       "target": "SELF",
       "attribute": "ATTACK"
-    }
+    },
+    "name": "Shadowsurger's Rally"
   },
   "attributes": {
     "DEATHRATTLES": true

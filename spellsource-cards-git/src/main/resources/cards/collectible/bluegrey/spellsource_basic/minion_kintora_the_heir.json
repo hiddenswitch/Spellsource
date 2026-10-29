@@ -23,7 +23,8 @@
               "class": "SpecificCardFilter",
               "card": "token_lesser_oni"
             }
-          }
+          },
+          "name": "Kintora's Pact"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -37,12 +38,14 @@
                 {
                   "class": "SetAttackSpell",
                   "value": 4,
-                  "exclusive": false
+                  "exclusive": false,
+                  "name": "Kintora's Might"
                 },
                 {
                   "class": "SetHpSpell",
                   "value": 4,
-                  "exclusive": false
+                  "exclusive": false,
+                  "name": "Kintora's Vitality"
                 }
               ]
             },
@@ -53,7 +56,8 @@
             "removeEffect": {
               "class": "NullSpell"
             }
-          }
+          },
+          "name": "Kintora's Pact"
         }
       ]
     }

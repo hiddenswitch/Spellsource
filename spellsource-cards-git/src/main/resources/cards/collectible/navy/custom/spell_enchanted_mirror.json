@@ -12,7 +12,8 @@
       "class": "BuffSpell",
       "target": "OUTPUT",
       "attackBonus": 2,
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Enchanted Mirror"
     },
     "targetPlayer": "SELF"
   },

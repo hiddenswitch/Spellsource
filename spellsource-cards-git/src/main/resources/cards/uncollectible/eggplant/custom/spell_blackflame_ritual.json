@@ -19,7 +19,8 @@
             "class": "ManaCostProvider",
             "target": "SELF"
           },
-          "exclusive": false
+          "exclusive": false,
+          "name": "Blackflame Ritual"
         },
         {
           "class": "SetHpSpell",
@@ -28,7 +29,8 @@
             "class": "ManaCostProvider",
             "target": "SELF"
           },
-          "exclusive": false
+          "exclusive": false,
+          "name": "Blackflame Ritual"
         }
       ]
     },

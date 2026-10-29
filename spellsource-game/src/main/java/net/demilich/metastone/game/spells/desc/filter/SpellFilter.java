@@ -16,8 +16,7 @@ public class SpellFilter extends EntityFilter {
 		super(desc);
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host, SpellDesc spell) {
 		SpellDesc topLevelSpell = null;
 		if (entity instanceof Card) {
 			Card card = (Card) entity;
@@ -29,10 +28,9 @@ public class SpellFilter extends EntityFilter {
 			return false;
 		}
 		List<SpellDesc> spellDescs = topLevelSpell.spellStream(true).collect(Collectors.toList());
-		SpellDesc testForSpell = (SpellDesc) getDesc().get(EntityFilterArg.SPELL);
 		for (SpellDesc spellDesc : spellDescs) {
 			boolean test = true;
-			for (Map.Entry<SpellArg, Object> spellArgObjectEntry : testForSpell.entrySet()) {
+			for (Map.Entry<SpellArg, Object> spellArgObjectEntry : spell.entrySet()) {
 				if (spellDesc.get(spellArgObjectEntry.getKey()) != spellArgObjectEntry.getValue()) {
 					test = false;
 				}

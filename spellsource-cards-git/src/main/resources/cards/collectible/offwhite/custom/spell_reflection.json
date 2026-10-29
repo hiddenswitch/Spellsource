@@ -14,11 +14,13 @@
       "spells": [
         {
           "class": "SetAttackSpell",
-          "value": 3
+          "value": 3,
+          "name": "Reflection"
         },
         {
           "class": "SetHpSpell",
-          "value": 3
+          "value": 3,
+          "name": "Reflection"
         }
       ]
     }

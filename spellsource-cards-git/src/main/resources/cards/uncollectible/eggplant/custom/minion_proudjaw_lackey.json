@@ -21,10 +21,12 @@
         "spell": {
           "class": "BuffSpell",
           "target": "EVENT_TARGET",
-          "value": 2
+          "value": 2,
+          "name": "Proudjaw Lackey's Blessing"
         },
         "maxFires": 1
-      }
+      },
+      "name": "Proudjaw Lackey's Pact"
     }
   },
   "attributes": {

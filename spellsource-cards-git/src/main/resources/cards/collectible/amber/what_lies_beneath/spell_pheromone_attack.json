@@ -28,7 +28,8 @@
             "target": "FRIENDLY_PLAYER",
             "card": "enchantment_minions_have_dash"
           }
-        }
+        },
+        "name": "Attack Pheromone"
       },
       {
         "class": "DrawCardSpell",

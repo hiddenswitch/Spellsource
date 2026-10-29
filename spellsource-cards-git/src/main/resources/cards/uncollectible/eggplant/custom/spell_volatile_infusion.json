@@ -25,10 +25,12 @@
           "spell": {
             "class": "RecruitSpell"
           }
-        }
+        },
+        "name": "Volatile Infusion"
       },
       "maxFires": 1
-    }
+    },
+    "name": "Volatile Infusion"
   },
   "collectible": true,
   "set": "CUSTOM",

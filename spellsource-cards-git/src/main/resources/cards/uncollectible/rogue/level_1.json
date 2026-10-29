@@ -14,7 +14,8 @@
       {
         "class": "SetHpSpell",
         "target": "FRIENDLY_HERO",
-        "value": 15
+        "value": 15,
+        "name": "Level 1"
       }
     ]
   },

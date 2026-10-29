@@ -15,7 +15,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "OTHER_FRIENDLY_MINIONS",
-      "attackBonus": 1
+      "attackBonus": 1,
+      "name": "Zai'Ko's Rally"
     }
   },
   "collectible": true,

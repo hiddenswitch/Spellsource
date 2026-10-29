@@ -12,7 +12,8 @@
     "target": "FRIENDLY_MINIONS",
     "attackBonus": 3,
     "hpBonus": 2,
-    "randomTarget": true
+    "randomTarget": true,
+    "name": "Breaker Javelin's Blessing"
   },
   "attributes": {
     "DEATHRATTLES": true

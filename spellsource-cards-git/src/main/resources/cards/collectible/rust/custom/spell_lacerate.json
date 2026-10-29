@@ -18,9 +18,10 @@
     "spell2": {
       "class": "SupremacySpell",
       "spell": {
-        "class": "BuffSpell",
+        "class": "TemporaryAttackSpell",
         "target": "FRIENDLY_HERO",
-        "attackBonus": 3
+        "value": 3,
+        "name": "Lacerate"
       }
     }
   },

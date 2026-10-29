@@ -15,11 +15,13 @@
       "spells": [
         {
           "class": "AddAttributeSpell",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Illusory Troupe"
         },
         {
           "class": "SetAttackSpell",
-          "value": 1
+          "value": 1,
+          "name": "Illusory Troupe"
         }
       ]
     },

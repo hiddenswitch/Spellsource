@@ -18,7 +18,7 @@
     },
     "value2": 3
   },
-  "targetSelection": "MINIONS",
+  "targetSelection": "NONE",
   "spell": {
     "class": "MultiTargetSpell",
     "target": "FRIENDLY_HAND",
@@ -26,7 +26,8 @@
     "spell": {
       "class": "BuffSpell",
       "attackBonus": 3,
-      "hpBonus": 0
+      "hpBonus": 0,
+      "name": "Ready to Shakedown"
     },
     "filter": {
       "class": "CardFilter",

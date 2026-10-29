@@ -22,14 +22,20 @@ public class EntityEqualsCondition extends EntityEqualityCondition {
 
 	public static ConditionDesc create(EntityReference lhs, EntityReference rhs) {
 		var desc = new ConditionDesc(EntityEqualsCondition.class);
-		desc.put(ConditionArg.SECONDARY_TARGET,rhs);
-		desc.put(ConditionArg.TARGET,lhs);
+		desc.put(ConditionArg.SECONDARY_TARGET, rhs);
+		desc.put(ConditionArg.TARGET, lhs);
 		return desc;
 	}
 
 	@Override
-	protected List<Entity> rhs(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		var entity = context.resolveSingleTarget(player, source, (EntityReference) desc.get(ConditionArg.SECONDARY_TARGET));
+	protected List<Entity> rhs(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			EntityReference targetReference,
+			EntityReference secondaryTarget) {
+		var entity = context.resolveSingleTarget(player, source, secondaryTarget);
 		if (entity == null) {
 			return Collections.emptyList();
 		}

@@ -13,7 +13,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "ADJACENT_MINIONS",
-      "attackBonus": 2
+      "attackBonus": 2,
+      "name": "Vermillion Glider's Rally"
     }
   },
   "attributes": {

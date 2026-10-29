@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-        "attribute": "WINDFURY"
+        "attribute": "WINDFURY",
+        "name": "Overclock"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -24,7 +25,8 @@
             "class": "DestroySpell",
             "target": "SELF"
           }
-        }
+        },
+        "name": "Overclock"
       }
     ]
   },

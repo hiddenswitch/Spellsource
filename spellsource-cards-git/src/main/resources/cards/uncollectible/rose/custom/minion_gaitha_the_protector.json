@@ -20,7 +20,8 @@
           "revertTrigger": {
             "class": "TurnStartTrigger",
             "targetPlayer": "SELF"
-          }
+          },
+          "name": "Gaitha's Blessing"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -37,13 +38,15 @@
               "revertTrigger": {
                 "class": "TurnStartTrigger",
                 "targetPlayer": "SELF"
-              }
+              },
+              "name": "Gaitha's Blessing"
             }
           },
           "revertTrigger": {
             "class": "TurnStartTrigger",
             "targetPlayer": "SELF"
-          }
+          },
+          "name": "Gaitha's Pact"
         }
       ]
     }

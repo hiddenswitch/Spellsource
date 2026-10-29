@@ -24,7 +24,8 @@
       "class": "BuffSpell",
       "target": "SELF",
       "attackBonus": 1,
-      "hpBonus": 0
+      "hpBonus": 0,
+      "name": "Living Ebon Blade Greatsword's Empowerment"
     }
   },
   "attributes": {},

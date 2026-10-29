@@ -25,7 +25,8 @@
           "cardType": "MINION"
         },
         "hpBonus": 0
-      }
+      },
+      "name": "Overpower's Pact"
     }
   },
   "collectible": false,

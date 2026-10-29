@@ -18,7 +18,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 3,
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Hemoshape: Plating"
       }
     ]
   },

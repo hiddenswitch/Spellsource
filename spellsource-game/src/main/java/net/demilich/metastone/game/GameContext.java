@@ -199,10 +199,10 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	private DeckFormat deckFormat;
 	private TargetLogic targetLogic = DEFAULT_TARGET_LOGIC;
 	private List<Trigger> triggers;
-	private Deque<GameLogic.QueuedTrigger> deferredTriggersQueue = new ArrayDeque<>(4);
-	private Deque<GameAction> actionStack = new ArrayDeque<>(4);
-	private Set<Trigger> processingTriggers = new LinkedHashSet<>(4);
-	private Map<Environment, Object> environment = new EnumMap<>(Environment.class);
+	private Deque<GameLogic.QueuedTrigger> deferredTriggersQueue;
+	private Deque<GameAction> actionStack;
+	private Set<Trigger> processingTriggers;
+	private Map<Environment, Object> environment;
 	private Map<String, AtomicInteger> variables;
 	private int activePlayerId = -1;
 	private Player winner;
@@ -237,11 +237,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 
 	public GameContext(@NotNull CardCatalogue cardCatalogue, @NotNull DeckFormat deckFormat) {
 		Objects.requireNonNull(cardCatalogue);
-		this.triggers = new ArrayList<>();
-		this.variables = new LinkedHashMap<>();
-		this.tempCards = new CardArrayList();
 		this.trace = new Trace();
-		this.externalLogicComponents = new HashMap<>();
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setLogic(new GameLogic());
 		setDeckFormat(deckFormat);
@@ -251,9 +247,10 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	protected GameContext(@NotNull GameState state) {
-		this.variables = state.getVariables() != null ? state.getVariables() : new LinkedHashMap<>(4);
+		if (state.getVariables() != null && !state.getVariables().isEmpty()) {
+			this.variables = state.getVariables();
+		}
 		this.trace = new Trace();
-		this.externalLogicComponents = new HashMap<>(4);
 		this.behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		this.cardCatalogue = ClasspathCardCatalogue.INSTANCE;
 		this.trace.setCardCatalogue(this.cardCatalogue);
@@ -267,6 +264,10 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @param fromContext The other context to copy.
 	 */
 	public GameContext(GameContext fromContext) {
+		this(fromContext, true);
+	}
+
+	public GameContext(GameContext fromContext, boolean eagerUnshare) {
 		GameLogic logicClone = fromContext.getLogic().clone();
 		Player player1Clone = fromContext.getPlayer1().clone();
 		Player player2Clone = fromContext.getPlayer2().clone();
@@ -319,12 +320,50 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 		}
 	}
 
+	protected void copyNonArenaFieldsFrom(GameContext fromContext) {
+		GameLogic logicClone = fromContext.logic.clone();
+		this.logic = logicClone;
+		logicClone.setContext(this);
+		Behaviour b0 = fromContext.behaviours[0];
+		Behaviour b1 = fromContext.behaviours[1];
+		this.behaviours = new Behaviour[]{b0 == null ? null : b0.clone(), b1 == null ? null : b1.clone()};
+		this.cardCatalogue = fromContext.cardCatalogue;
+		this.deckFormat = fromContext.deckFormat;
+		if (fromContext.tempCards != null && !fromContext.tempCards.isEmpty()) {
+			this.tempCards = fromContext.tempCards.clone();
+		}
+		this.activePlayerId = fromContext.activePlayerId;
+		this.turn = fromContext.turn;
+		this.actionsThisTurn = fromContext.actionsThisTurn;
+		this.result = fromContext.result;
+		this.turnState = fromContext.turnState;
+		this.winner = fromContext.winner;
+		this.ignoreEvents = fromContext.ignoreEvents;
+		if (fromContext.trace != null) {
+			this.trace = fromContext.trace.clone();
+		} else {
+			this.trace = new Trace();
+		}
+		if (fromContext.variables != null && !fromContext.variables.isEmpty()) {
+			this.variables = new LinkedHashMap<>(fromContext.variables.size());
+			for (var kv : fromContext.variables.entrySet()) {
+				this.variables.put(kv.getKey(), new AtomicInteger(kv.getValue().intValue()));
+			}
+		}
+		if (fromContext.externalLogicComponents != null && !fromContext.externalLogicComponents.isEmpty()) {
+			this.externalLogicComponents = new HashMap<>(fromContext.externalLogicComponents);
+		}
+	}
+
 	/**
 	 * Gets the current game context.
 	 *
 	 * @return a game context instance
 	 */
 	public static GameContext current() {
+		if (GameScope.CURRENT_CONTEXT.isBound()) {
+			return GameScope.CURRENT_CONTEXT.get();
+		}
 		return currentContext.get();
 	}
 
@@ -376,7 +415,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 */
 	@Override
 	public GameContext clone() {
-		return new GameContext(this);
+		return new GameContext(this, false);
 	}
 
 	/**
@@ -513,9 +552,11 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 * @return A clone of the {@link Card}.
 	 */
 	public Card getCardById(String cardId) {
-		for (Card tempCard : getTempCards()) {
-			if (tempCard.getCardId().equalsIgnoreCase(cardId)) {
-				return tempCard.clone();
+		if (tempCards != null && !tempCards.isEmpty()) {
+			for (Card tempCard : tempCards) {
+				if (tempCard.getCardId().equalsIgnoreCase(cardId)) {
+					return tempCard.clone();
+				}
 			}
 		}
 		return cardCatalogue.getCardById(cardId);
@@ -1255,7 +1296,14 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	public CardList getTempCards() {
+		if (tempCards == null) {
+			tempCards = new CardArrayList();
+		}
 		return tempCards;
+	}
+
+	public boolean hasTempCards() {
+		return tempCards != null && !tempCards.isEmpty();
 	}
 
 	public void setTempCards(CardList tempCards) {
@@ -2019,15 +2067,32 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 		return triggers;
 	}
 
+	public boolean hasDeferredTriggers() {
+		return deferredTriggersQueue != null && !deferredTriggersQueue.isEmpty();
+	}
+
 	public Deque<GameLogic.QueuedTrigger> getDeferredTriggersQueue() {
+		if (deferredTriggersQueue == null) {
+			deferredTriggersQueue = new ArrayDeque<>(4);
+		}
 		return deferredTriggersQueue;
 	}
 
+	public boolean hasProcessingTriggers() {
+		return processingTriggers != null && !processingTriggers.isEmpty();
+	}
+
 	public Set<Trigger> getProcessingTriggers() {
+		if (processingTriggers == null) {
+			processingTriggers = new LinkedHashSet<>(4);
+		}
 		return processingTriggers;
 	}
 
 	public Deque<GameAction> getActionStack() {
+		if (actionStack == null) {
+			actionStack = new ArrayDeque<>(4);
+		}
 		return actionStack;
 	}
 
@@ -2038,7 +2103,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 
 	@Nullable
 	public GameAction getCurrentAction() {
-		return actionStack.peekLast();
+		return actionStack == null ? null : actionStack.peekLast();
 	}
 
 	public void onNotificationWillFire(Notification event) {
@@ -2086,10 +2151,12 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	 */
 	public Card getOverriddenCardById(String overrideCardId) {
 		Card target = null;
-		for (var card : getTempCards()) {
-			if (card.getCardId().equalsIgnoreCase(overrideCardId)) {
-				target = card;
-				break;
+		if (tempCards != null && !tempCards.isEmpty()) {
+			for (var card : tempCards) {
+				if (card.getCardId().equalsIgnoreCase(overrideCardId)) {
+					target = card;
+					break;
+				}
 			}
 		}
 

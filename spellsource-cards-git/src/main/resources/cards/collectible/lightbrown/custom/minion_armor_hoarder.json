@@ -15,7 +15,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
-      "armorBonus": 5
+      "armorBonus": 5,
+      "name": "Armor Hoarder's Aegis"
     }
   },
   "attributes": {},

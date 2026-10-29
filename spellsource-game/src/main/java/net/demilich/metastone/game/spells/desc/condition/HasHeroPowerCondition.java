@@ -13,14 +13,17 @@ public class HasHeroPowerCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			String card) {
 		var heroPower = player.getHeroPowerZone().get(0);
 		if (heroPower.getCardId() == null) {
 			return false;
 		}
-		var cardId = (String) desc.get(ConditionArg.CARD);
-		return heroPower.getCardId().equalsIgnoreCase(cardId);
+		return heroPower.getCardId().equalsIgnoreCase(card);
 	}
 
 	@Override

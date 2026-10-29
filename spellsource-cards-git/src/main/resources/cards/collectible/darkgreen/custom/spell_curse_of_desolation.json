@@ -10,7 +10,7 @@
     "value": 3,
     "targetPlayer": "OPPONENT"
   },
-  "targetSelection": "MINIONS",
+  "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "DestroySpell"
   },

@@ -17,7 +17,8 @@
       "target": "FRIENDLY_HERO",
       "armorBonus": {
         "class": "EventValueProvider"
-      }
+      },
+      "name": "Zatha'hun's Aegis"
     }
   },
   "battlecry": {

@@ -14,11 +14,13 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Forgotten Ancestor's Guard"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "LIFESTEAL"
+        "attribute": "LIFESTEAL",
+        "name": "Forgotten Ancestor's Lifedrain"
       }
     ]
   },

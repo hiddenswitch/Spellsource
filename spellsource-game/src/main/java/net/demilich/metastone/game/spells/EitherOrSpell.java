@@ -46,18 +46,21 @@ import org.slf4j.LoggerFactory;
 public class EitherOrSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(EitherOrSpell.class);
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
-		SpellDesc either = (SpellDesc) desc.get(SpellArg.SPELL1);
-		SpellDesc or = (SpellDesc) desc.get(SpellArg.SPELL2);
-		if (desc.containsKey(SpellArg.CARD)) {
-			Object cardArg = desc.get(SpellArg.CARD);
-			either = either.addArg(SpellArg.CARD, cardArg);
-			or = or.addArg(SpellArg.CARD, cardArg);
+	protected void onCast(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			Condition condition,
+			SpellDesc spell1,
+			SpellDesc spell2,
+			String card) {
+		if (card != null) {
+			spell1 = spell1.addArg(SpellArg.CARD, card);
+			spell2 = spell2.addArg(SpellArg.CARD, card);
 		}
 
-		SpellDesc spellToCast = condition.isFulfilled(context, player, source, target) ? either : or;
+		SpellDesc spellToCast = condition.isFulfilled(context, player, source, target) ? spell1 : spell2;
 		SpellUtils.castChildSpell(context, player, spellToCast, source, target);
 	}
 

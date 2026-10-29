@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.desc.source;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 
 /**
@@ -16,7 +17,7 @@ public final class TopThreeCardsOfDeckSource extends TopCardsOfDeckSource {
 	}
 
 	@Override
-	protected int howMany(GameContext context, Entity source, Player player) {
-		return 3;
+	protected CardList match(GameContext context, Entity source, Player player) {
+		return super.match(context, source, player, 3);
 	}
 }

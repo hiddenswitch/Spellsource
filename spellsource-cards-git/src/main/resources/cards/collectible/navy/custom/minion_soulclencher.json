@@ -18,7 +18,8 @@
           "class": "SpecificCardFilter",
           "card": "token_knight"
         },
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Soulclencher's Blessing"
       },
       {
         "class": "BuffSpell",
@@ -28,7 +29,8 @@
           "class": "SpecificCardFilter",
           "card": "token_knight"
         },
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Soulclencher's Blessing"
       }
     ]
   },

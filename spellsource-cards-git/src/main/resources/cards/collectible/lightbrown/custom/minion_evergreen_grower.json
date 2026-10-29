@@ -17,7 +17,8 @@
         "class": "RaceFilter",
         "race": "ELEMENTAL"
       },
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Evergreen Grower's Blessing"
     }
   },
   "attributes": {

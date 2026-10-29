@@ -7,32 +7,38 @@
   "description": "Restore #[5] Health. If you target a unit, give it +[5] Health. Otherwise, draw [1].",
   "targetSelection": "ANY",
   "spell": {
-    "class": "HealSpell",
-    "value": {
-      "class": "GatekeeperShaValueProvider",
-      "offset": 5
-    },
-    "spell": {
-      "class": "EitherOrSpell",
-      "condition": {
-        "class": "CardPropertyCondition",
-        "cardType": "MINION"
-      },
-      "spell1": {
-        "class": "BuffSpell",
-        "hpBonus": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": {
           "class": "GatekeeperShaValueProvider",
           "offset": 5
         }
       },
-      "spell2": {
-        "class": "DrawCardSpell",
-        "value": {
-          "class": "GatekeeperShaValueProvider",
-          "offset": 1
+      {
+        "class": "EitherOrSpell",
+        "condition": {
+          "class": "CardPropertyCondition",
+          "cardType": "MINION"
+        },
+        "spell1": {
+          "class": "BuffSpell",
+          "hpBonus": {
+            "class": "GatekeeperShaValueProvider",
+            "offset": 5
+          },
+          "name": "Crimson Gift"
+        },
+        "spell2": {
+          "class": "DrawCardSpell",
+          "value": {
+            "class": "GatekeeperShaValueProvider",
+            "offset": 1
+          }
         }
       }
-    }
+    ]
   },
   "collectible": true,
   "fileFormatVersion": 1,

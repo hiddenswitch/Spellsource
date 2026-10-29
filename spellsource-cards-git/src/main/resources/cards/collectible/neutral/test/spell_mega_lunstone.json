@@ -25,7 +25,8 @@
             "value": 100
           },
           "oneTurn": true
-        }
+        },
+        "name": "Mega Lunstone"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -39,7 +40,8 @@
             "value": 100
           },
           "oneTurn": true
-        }
+        },
+        "name": "Mega Lunstone"
       }
     ]
   },

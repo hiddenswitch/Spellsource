@@ -22,7 +22,8 @@
           "filter": {
             "class": "SpecificCardFilter",
             "card": "minion_removed_card"
-          }
+          },
+          "name": "Cult Reverand's Blessing"
         },
         {
           "class": "BuffSpell",
@@ -31,7 +32,8 @@
           "filter": {
             "class": "SpecificCardFilter",
             "card": "minion_removed_card"
-          }
+          },
+          "name": "Cult Reverand's Blessing"
         },
         {
           "class": "ModifyAttributeSpell",

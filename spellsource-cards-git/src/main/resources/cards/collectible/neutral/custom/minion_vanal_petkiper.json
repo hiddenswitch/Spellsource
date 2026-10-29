@@ -112,7 +112,8 @@
             },
             "attackBonus": 1,
             "hpBonus": 1
-          }
+          },
+          "name": "Vanal Petkiper's Pact"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -130,7 +131,8 @@
             },
             "attackBonus": 1,
             "hpBonus": 1
-          }
+          },
+          "name": "Vanal Petkiper's Pact"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -148,7 +150,8 @@
             },
             "attackBonus": 1,
             "hpBonus": 1
-          }
+          },
+          "name": "Vanal Petkiper's Pact"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -166,7 +169,8 @@
             },
             "attackBonus": 1,
             "hpBonus": 1
-          }
+          },
+          "name": "Vanal Petkiper's Pact"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -184,7 +188,8 @@
             },
             "attackBonus": 1,
             "hpBonus": 1
-          }
+          },
+          "name": "Vanal Petkiper's Pact"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -202,7 +207,8 @@
             },
             "attackBonus": 1,
             "hpBonus": 1
-          }
+          },
+          "name": "Vanal Petkiper's Pact"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -220,7 +226,8 @@
             },
             "attackBonus": 1,
             "hpBonus": 1
-          }
+          },
+          "name": "Vanal Petkiper's Pact"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -238,7 +245,8 @@
             },
             "attackBonus": 1,
             "hpBonus": 1
-          }
+          },
+          "name": "Vanal Petkiper's Pact"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -256,7 +264,8 @@
             },
             "attackBonus": 1,
             "hpBonus": 1
-          }
+          },
+          "name": "Vanal Petkiper's Pact"
         }
       ]
     }

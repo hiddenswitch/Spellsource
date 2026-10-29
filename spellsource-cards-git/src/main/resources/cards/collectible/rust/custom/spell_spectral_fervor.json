@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 2,
-        "hpBonus": 0
+        "hpBonus": 0,
+        "name": "Spectral Fervor"
       },
       {
         "class": "DrawCardSpell",

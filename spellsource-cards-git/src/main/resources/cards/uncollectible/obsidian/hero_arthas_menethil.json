@@ -14,7 +14,8 @@
         {
           "class": "AddAttributeSpell",
           "target": "ALL_CHARACTERS",
-          "attribute": "FROZEN"
+          "attribute": "FROZEN",
+          "name": "Arthas Menethil's Frost"
         },
         {
           "class": "AddEnchantmentSpell",

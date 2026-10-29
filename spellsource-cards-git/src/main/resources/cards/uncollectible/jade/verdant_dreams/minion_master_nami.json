@@ -19,11 +19,13 @@
       "spells": [
         {
           "class": "AddAttributeSpell",
-          "attribute": "UNTARGETABLE_BY_SPELLS"
+          "attribute": "UNTARGETABLE_BY_SPELLS",
+          "name": "Master Nami's Shroud"
         },
         {
           "class": "BuffSpell",
-          "hpBonus": 3
+          "hpBonus": 3,
+          "name": "Master Nami's Ward"
         }
       ]
     }

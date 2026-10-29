@@ -285,10 +285,18 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 			Future<Buffer> pingFuture;
 			try {
 				pingFuture = this.connection.ping(Buffer.buffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8}));
+			} catch (UnsupportedOperationException e) {
+				return Future.succeededFuture();
 			} catch (Throwable t) {
 				this.close();
 				return Future.failedFuture(t);
 			}
+			pingFuture = pingFuture.recover(err -> {
+				if (err instanceof UnsupportedOperationException) {
+					return Future.succeededFuture(Buffer.buffer());
+				}
+				return Future.failedFuture(err);
+			});
 			Future<Void> pingCheck = any(pingFuture.mapEmpty(), this.closePromise.future())
 					.compose(cf -> {
 						if (this.cancelled.get() || this.matched.get() || isResponseDead()) {

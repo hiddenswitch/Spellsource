@@ -17,7 +17,8 @@
         "spell": {
           "class": "AddAttributeSpell",
           "target": "OUTPUT",
-          "attribute": "RUSH"
+          "attribute": "RUSH",
+          "name": "Gleamwing Patron's Dash"
         },
         "targetPlayer": "SELF"
       },

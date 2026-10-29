@@ -21,7 +21,8 @@
         }
       },
       "oneTurn": true
-    }
+    },
+    "name": "Draconic Insight"
   },
   "attributes": {},
   "collectible": true,

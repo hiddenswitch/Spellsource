@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-        "attribute": "IMMUNE"
+        "attribute": "IMMUNE",
+        "name": "Power for a Price"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -24,7 +25,8 @@
             "class": "SilenceSpell",
             "target": "SELF"
           }
-        }
+        },
+        "name": "Power for a Price"
       }
     ]
   },

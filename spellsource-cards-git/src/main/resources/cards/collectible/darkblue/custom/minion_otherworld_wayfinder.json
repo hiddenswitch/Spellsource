@@ -18,7 +18,8 @@
       "filter": {
         "class": "RaceFilter",
         "race": "SPIRIT"
-      }
+      },
+      "name": "Otherworld Wayfinder's Legacy"
     }
   },
   "attributes": {

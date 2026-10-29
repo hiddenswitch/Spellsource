@@ -8,6 +8,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Map;
@@ -110,7 +111,7 @@ public class SetHpSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	protected void onCast(GameContext context, Player player, Entity source, Entity target, int value, @Default(bool = true) boolean exclusive) {
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target, int value, @Default(bool = true) boolean exclusive) {
 		target.getAttributes().remove(Attribute.HP_BONUS);
 		if (target instanceof Actor) {
 			context.getLogic().setHpAndMaxHp((Actor) target, value);
@@ -120,6 +121,9 @@ public class SetHpSpell extends Spell {
 
 		if (!exclusive) {
 			target.setAttribute(Attribute.BASE_HP, value);
+			Enchantment.clearHpEnchantmentsOnTarget(context, target);
+		} else {
+			Enchantment.attachSetHpEnchantment(context, player, desc, source, target, value);
 		}
 
 		// We might be undestroying the minion

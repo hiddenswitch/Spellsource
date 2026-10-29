@@ -13,11 +13,13 @@
       {
         "class": "BuffSpell",
         "attackBonus": 2,
-        "hpBonus": 0
+        "hpBonus": 0,
+        "name": "Pay Rise"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "RUSH"
+        "attribute": "RUSH",
+        "name": "Pay Rise"
       }
     ]
   },

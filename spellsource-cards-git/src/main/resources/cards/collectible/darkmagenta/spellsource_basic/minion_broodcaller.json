@@ -60,7 +60,8 @@
               "spell": {
                 "class": "AddAttributeSpell",
                 "target": "OUTPUT",
-                "attribute": "CHARGE"
+                "attribute": "CHARGE",
+                "name": "Broodcaller's Blitz"
               },
               "boardPositionRelative": "LEFT",
               "card": "token_whelp"
@@ -70,7 +71,8 @@
               "spell": {
                 "class": "AddAttributeSpell",
                 "target": "OUTPUT",
-                "attribute": "CHARGE"
+                "attribute": "CHARGE",
+                "name": "Broodcaller's Blitz"
               },
               "boardPositionRelative": "RIGHT",
               "card": "token_whelp"

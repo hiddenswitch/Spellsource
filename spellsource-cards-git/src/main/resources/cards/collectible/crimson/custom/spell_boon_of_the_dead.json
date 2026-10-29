@@ -13,7 +13,8 @@
       "class": "DamageSpell",
       "target": "ENEMY_HERO",
       "value": 2
-    }
+    },
+    "name": "Corpse Explosion"
   },
   "collectible": true,
   "fileFormatVersion": 1,

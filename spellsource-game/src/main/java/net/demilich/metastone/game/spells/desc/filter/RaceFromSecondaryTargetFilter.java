@@ -23,9 +23,7 @@ public class RaceFromSecondaryTargetFilter extends RaceFilter {
 		super(desc);
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		EntityReference secondaryTarget = (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET);
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host, EntityReference secondaryTarget) {
 		if (secondaryTarget == null) {
 			return false;
 		}

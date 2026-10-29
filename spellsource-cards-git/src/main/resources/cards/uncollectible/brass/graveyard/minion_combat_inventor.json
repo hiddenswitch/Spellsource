@@ -19,7 +19,8 @@
         "class": "AttributeValueProvider",
         "target": "SELF",
         "attribute": "HP"
-      }
+      },
+      "name": "Combat Inventor's Aegis"
     }
   },
   "collectible": true,

@@ -25,11 +25,13 @@
           "spell": {
             "class": "DecaySpell"
           }
-        }
+        },
+        "name": "Snap Their Bones"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "DECAY"
+        "attribute": "DECAY",
+        "name": "Snap Their Bones"
       }
     ]
   },

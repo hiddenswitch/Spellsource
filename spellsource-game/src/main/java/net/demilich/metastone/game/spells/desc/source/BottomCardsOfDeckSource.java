@@ -5,11 +5,12 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.Default;
+
+import static java.util.stream.Collectors.toCollection;
 
 /**
- * Returns the bottom N cards of the deck, where N defaults to 3.
- * <p>
- * Implements the Dredge keyword from Hearthstone's Voyage to the Sunken City.
+ * Returns the bottom {@link CardSourceArg#VALUE} cards of the {@code player}'s deck.
  */
 public class BottomCardsOfDeckSource extends DeckSource {
 
@@ -17,11 +18,11 @@ public class BottomCardsOfDeckSource extends DeckSource {
 		super(desc);
 	}
 
-	@Override
-	protected CardList match(GameContext context, Entity source, Player player) {
+	protected CardList match(GameContext context, Entity source, Player player, @Default(3) int value) {
 		CardList deck = super.match(context, source, player);
-		int value = getDesc().getValue(CardSourceArg.VALUE, context, player, player, source, 3);
-		int count = Math.min(value, deck.size());
-		return new CardArrayList(deck.subList(0, count));
+		return deck
+				.stream()
+				.skip(Math.max(deck.size() - value, 0))
+				.collect(toCollection(CardArrayList::new));
 	}
 }

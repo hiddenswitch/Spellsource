@@ -28,7 +28,8 @@
           "filter": {
             "class": "SpecificCardFilter",
             "card": "minion_removed_card"
-          }
+          },
+          "name": "Dark Order Knight's Blessing"
         },
         {
           "class": "BuffSpell",
@@ -40,7 +41,8 @@
           "filter": {
             "class": "SpecificCardFilter",
             "card": "minion_removed_card"
-          }
+          },
+          "name": "Dark Order Knight's Blessing"
         },
         {
           "class": "ModifyAttributeSpell",

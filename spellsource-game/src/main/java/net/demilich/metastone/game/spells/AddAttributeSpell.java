@@ -5,6 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
@@ -41,7 +42,7 @@ import java.util.Objects;
  *
  * @see ModifyAttributeSpell for the spell appropriate for an integer-valued attribute.
  */
-public class AddAttributeSpell extends RevertableSpell {
+public class AddAttributeSpell extends Spell {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(AddAttributeSpell.class);
 
@@ -97,18 +98,15 @@ public class AddAttributeSpell extends RevertableSpell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target) {
-		return RemoveAttributeSpell.create(target, (Attribute) desc.get(SpellArg.ATTRIBUTE));
-	}
-
-	protected void onCast(GameContext context, Player player, Entity source, Entity target, Attribute attribute, Integer value) {
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target, Attribute attribute, Integer value) {
 		Objects.requireNonNull(target, source.getSourceCard().getCardId());
 		if (value != null) {
 			LOGGER.error("onCast {} {}: Cannot use an integer value in an AddAttributeSpell. Use ModifyAttributeSpell instead.", context.getGameId(), source);
 			throw new IllegalArgumentException("VALUE");
 		}
+		boolean alreadyHad = target.hasAttribute(attribute);
 		context.getLogic().applyAttribute(target, attribute, source);
+		Enchantment.attachAddAttributeEnchantment(context, player, desc, source, target, attribute, alreadyHad);
 	}
 }
 

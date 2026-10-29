@@ -34,7 +34,7 @@
       "cardSource": {
         "class": "UncollectibleCatalogueSource"
       },
-      "howMany": 2,
+      "howMany": 1,
       "targetPlayer": "SELF"
     }
   },

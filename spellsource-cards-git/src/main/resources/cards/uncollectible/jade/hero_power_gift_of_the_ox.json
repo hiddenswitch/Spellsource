@@ -12,7 +12,8 @@
       "class": "BuffSpell",
       "target": "FRIENDLY_CHARACTERS",
       "attackBonus": 0,
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Gift of's Blessing"
     }
   },
   "collectible": false,

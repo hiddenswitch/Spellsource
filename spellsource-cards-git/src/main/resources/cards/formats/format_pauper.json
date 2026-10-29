@@ -3,6 +3,13 @@
   "type": "FORMAT",
   "rarity": "FREE",
   "description": "Only Free and Common Cards.",
+  "ruleCards": [
+    "enchantment_constructed_rules",
+    "enchantment_rule_mana",
+    "enchantment_rule_draw",
+    "enchantment_rule_hero_power",
+    "enchantment_rule_deck_size"
+  ],
   "condition": {
     "class": "AndCondition",
     "conditions": [

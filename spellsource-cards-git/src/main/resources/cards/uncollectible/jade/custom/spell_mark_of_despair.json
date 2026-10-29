@@ -17,7 +17,8 @@
         "class": "DestroySpell",
         "target": "SELF"
       }
-    }
+    },
+    "name": "Touch of Sorrow"
   },
   "attributes": {},
   "collectible": false,

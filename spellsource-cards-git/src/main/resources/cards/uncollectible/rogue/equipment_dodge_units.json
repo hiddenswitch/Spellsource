@@ -12,7 +12,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "EVENT_TARGET",
-      "attribute": "DIVINE_SHIELD"
+      "attribute": "DIVINE_SHIELD",
+      "name": "Dodge Units"
     }
   },
   "gameTriggers": [

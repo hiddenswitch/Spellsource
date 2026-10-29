@@ -16,7 +16,8 @@
       "hpBonus": {
         "class": "EntityCountValueProvider",
         "target": "OTHER_FRIENDLY_MINIONS"
-      }
+      },
+      "name": "Nature Rager's Fortitude"
     }
   },
   "attributes": {

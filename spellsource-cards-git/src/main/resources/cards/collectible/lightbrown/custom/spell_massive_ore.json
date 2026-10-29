@@ -9,7 +9,8 @@
   "spell": {
     "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
-    "armorBonus": 10
+    "armorBonus": 10,
+    "name": "Massive Ore"
   },
   "collectible": true,
   "set": "CUSTOM",

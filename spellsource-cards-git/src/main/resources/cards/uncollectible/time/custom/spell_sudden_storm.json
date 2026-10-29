@@ -7,6 +7,7 @@
   "description": "Copy a cost-1 card you added to your hand this turn. Repeat once.",
   "spell": {
     "class": "CopyCardSpell",
+    "value": 2,
     "cardFilter": {
       "class": "AndFilter",
       "filters": [

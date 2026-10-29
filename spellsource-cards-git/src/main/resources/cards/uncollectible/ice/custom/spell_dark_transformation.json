@@ -24,7 +24,8 @@
       "target": "TRIGGER_HOST",
       "attackBonus": 6,
       "hpBonus": 6
-    }
+    },
+    "name": "Dark Transformation"
   },
   "collectible": true,
   "set": "CUSTOM",

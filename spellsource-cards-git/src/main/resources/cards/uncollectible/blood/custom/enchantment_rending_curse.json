@@ -21,7 +21,8 @@
           "filter": {
             "class": "IsDestroyedFilter",
             "invert": true
-          }
+          },
+          "name": "Rending Curse"
         }
       }
     ]

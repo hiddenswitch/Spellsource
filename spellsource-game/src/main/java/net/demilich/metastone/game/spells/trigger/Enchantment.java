@@ -4,16 +4,20 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType
 import com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
+import net.demilich.metastone.game.entities.heroes.Hero;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.HasValue;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.AddEnchantmentSpell;
 import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.aura.DoubleTurnEndTriggersAura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -93,9 +97,29 @@ public class Enchantment extends Entity implements Trigger {
 	protected boolean copyToActor;
 	protected Zones[] zones;
 	protected boolean added;
+	protected int attackBonus;
+	protected int hpBonus;
+	protected int armorBonus;
+	protected int temporaryAttackBonus;
+	protected Integer setAttack;
+	protected Integer setHp;
+	protected Attribute appliedAttribute;
+	protected boolean hadNativeAttribute;
+	protected Attribute removedAttribute;
+	protected Attribute modifiedAttribute;
+	protected int attributeDelta;
+	protected Attribute cardIdAttribute;
+	protected boolean hasRevertableModification;
 
 	public Enchantment() {
 		this.entrySet = null;
+	}
+
+	private Enchantment(boolean hasTriggers) {
+		this.entrySet = null;
+		this.expirationTriggers = java.util.Collections.emptyList();
+		this.activationTriggers = java.util.Collections.emptyList();
+		this.triggers = hasTriggers ? new ArrayList<>(2) : java.util.Collections.emptyList();
 	}
 
 	public Enchantment(HasEntrySet<?, ?> entrySet) {
@@ -105,6 +129,12 @@ public class Enchantment extends Entity implements Trigger {
 	@Override
 	public Enchantment clone() {
 		Enchantment clone = (Enchantment) super.clone();
+		if (this.added) {
+			if (this.spell != null && !this.spell.isReadOnly()) {
+				clone.spell = this.spell.clone();
+			}
+			return clone;
+		}
 		int nTrigs = this.getTriggers().size();
 		if (nTrigs == 0) {
 			clone.setTriggers(java.util.Collections.emptyList());
@@ -150,8 +180,26 @@ public class Enchantment extends Entity implements Trigger {
 		return EntityType.ENCHANTMENT;
 	}
 
+	public void onRemovedBySilence(GameContext context, Entity host) {
+		if (spell != null && getFires() == 0 && host != null && host.isInPlay() && !host.isDestroyed()
+				&& getTriggers().stream().anyMatch(t -> t instanceof SilenceTrigger)) {
+			setFires(1);
+			SpellUtils.castChildSpell(context, context.getPlayer(getOwner()), spell, host, host);
+		}
+	}
+
+	public void clearRevertableModification() {
+		this.hasRevertableModification = false;
+	}
+
 	public void expire(GameContext context) {
+		if (expired) {
+			return;
+		}
 		expired = true;
+		if (context != null) {
+			onRemove(context);
+		}
 	}
 
 	@Override
@@ -239,7 +287,11 @@ public class Enchantment extends Entity implements Trigger {
 		}
 
 		if (spellCasts) {
-			cast(ownerId, spell, event);
+			if (spell != null) {
+				cast(ownerId, spell, event);
+			} else if (hasRevertableModification) {
+				onRemove(event.getGameContext());
+			}
 		}
 
 		if (getMaxFires() != null
@@ -247,6 +299,377 @@ public class Enchantment extends Entity implements Trigger {
 			expire(event.getGameContext());
 		}
 		return spellCasts;
+	}
+
+	public void onRemove(GameContext context) {
+		if (!hasRevertableModification || context == null || hostReference == null) {
+			return;
+		}
+		hasRevertableModification = false;
+		Entity host = context.resolveSingleTarget(hostReference, false);
+		if (host == null || host.hasAttribute(Attribute.SILENCED)) {
+			return;
+		}
+		if (spell != null && getFires() == 0 && host.isInPlay() && !host.isDestroyed()
+				&& getTriggers().stream().anyMatch(t -> t instanceof SilenceTrigger)) {
+			setFires(1);
+			SpellUtils.castChildSpell(context, context.getPlayer(getOwner()), spell, host, host);
+		}
+		if (attackBonus != 0) {
+			if (host instanceof Hero) {
+				if (host.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS)) {
+					int next = host.getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS) - attackBonus;
+					if (next == 0) {
+						host.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
+					} else {
+						host.setAttribute(Attribute.TEMPORARY_ATTACK_BONUS, next);
+					}
+				}
+			} else {
+				host.modifyAttribute(Attribute.ATTACK_BONUS, -attackBonus);
+			}
+		}
+		if (temporaryAttackBonus != 0) {
+			if (host.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS)) {
+				int next = host.getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS) - temporaryAttackBonus;
+				if (next == 0) {
+					host.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
+				} else {
+					host.setAttribute(Attribute.TEMPORARY_ATTACK_BONUS, next);
+				}
+			}
+		}
+		if (setAttack != null) {
+			host.setAttribute(Attribute.ATTACK, host.getAttributeValue(Attribute.BASE_ATTACK));
+		}
+		if (hpBonus != 0) {
+			if (host instanceof Weapon weapon) {
+				context.getLogic().modifyDurability(weapon, -hpBonus);
+			} else {
+				context.getLogic().modifyHpSpell(this, host, -hpBonus);
+			}
+		}
+		if (setHp != null) {
+			if (host instanceof Actor actor) {
+				int baseHp = actor.getAttributeValue(Attribute.BASE_HP);
+				int oldMaxHp = actor.getMaxHp();
+				actor.setMaxHp(baseHp);
+				if (actor.getHp() > baseHp) {
+					actor.setHp(baseHp);
+				} else if (oldMaxHp < baseHp) {
+					actor.setHp(actor.getHp() + baseHp - oldMaxHp);
+				}
+			} else if (host instanceof Card) {
+				host.getAttributes().remove(Attribute.HP);
+			}
+		}
+		if (armorBonus != 0) {
+			if (host.getEntityType() == EntityType.HERO) {
+				context.getLogic().gainArmor(context.getPlayer(host.getOwner()), -armorBonus);
+			} else if (getOwner() >= 0) {
+				context.getLogic().gainArmor(context.getPlayer(getOwner()), -armorBonus);
+			}
+		}
+		if (appliedAttribute != null) {
+			Attribute attrToRemove = appliedAttribute;
+			appliedAttribute = null;
+			if (!hadNativeAttribute && !hasOtherActiveAttributeEnchantment(context, host, attrToRemove, this)) {
+				Player ownerPlayer = getOwner() >= 0 ? context.getPlayer(getOwner()) : context.getActivePlayer();
+				context.getLogic().removeAttribute(ownerPlayer, null, host, attrToRemove);
+			}
+		}
+		if (removedAttribute != null) {
+			context.getLogic().applyAttribute(host, removedAttribute, this);
+		}
+		if (modifiedAttribute != null && attributeDelta != 0) {
+			host.modifyAttribute(modifiedAttribute, -attributeDelta);
+		}
+		if (cardIdAttribute != null) {
+			Player ownerPlayer = getOwner() >= 0 ? context.getPlayer(getOwner()) : context.getActivePlayer();
+			context.getLogic().removeAttribute(ownerPlayer, null, host, cardIdAttribute);
+		}
+	}
+
+	public void setHasRevertableModification(boolean hasRevertableModification) {
+		this.hasRevertableModification = hasRevertableModification;
+	}
+
+	public static boolean hasActiveAttributeEnchantment(GameContext context, Entity target, Attribute attribute) {
+		if (context == null || target == null || attribute == null) {
+			return false;
+		}
+		for (Trigger t : context.getLogic().getActiveTriggers(target.getReference())) {
+			if (t instanceof Enchantment ench && !ench.isExpired() && ench.appliedAttribute == attribute) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean hasOtherActiveAttributeEnchantment(GameContext context, Entity target, Attribute attribute, Enchantment self) {
+		if (context == null || target == null || attribute == null) {
+			return false;
+		}
+		for (Trigger t : context.getLogic().getActiveTriggers(target.getReference())) {
+			if (t instanceof Enchantment ench && ench != self && !ench.isExpired() && ench.appliedAttribute == attribute) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static void clearAttackEnchantmentsOnTarget(GameContext context, Entity target) {
+		if (context == null || target == null) {
+			return;
+		}
+		for (Trigger t : context.getLogic().getActiveTriggers(target.getReference())) {
+			if (t instanceof Enchantment ench && !ench.isExpired()) {
+				ench.attackBonus = 0;
+				ench.temporaryAttackBonus = 0;
+				ench.setAttack = null;
+			}
+		}
+	}
+
+	public static void clearHpEnchantmentsOnTarget(GameContext context, Entity target) {
+		if (context == null || target == null) {
+			return;
+		}
+		for (Trigger t : context.getLogic().getActiveTriggers(target.getReference())) {
+			if (t instanceof Enchantment ench && !ench.isExpired()) {
+				ench.hpBonus = 0;
+				ench.setHp = null;
+			}
+		}
+	}
+
+	public static void onAttributeRemovedFromTarget(GameContext context, Entity target, Attribute attribute) {
+		if (context == null || target == null || attribute == null) {
+			return;
+		}
+		if (attribute.name().startsWith("AURA_")) {
+			return;
+		}
+		for (Trigger t : context.getLogic().getActiveTriggers(target.getReference())) {
+			if (t instanceof Enchantment ench && !ench.isExpired() && ench.appliedAttribute == attribute) {
+				ench.appliedAttribute = null;
+				if (!ench.usesSpellTrigger
+						&& ench.attackBonus == 0
+						&& ench.hpBonus == 0
+						&& ench.armorBonus == 0
+						&& ench.temporaryAttackBonus == 0
+						&& ench.setAttack == null
+						&& ench.setHp == null
+						&& ench.removedAttribute == null
+						&& ench.modifiedAttribute == null
+						&& ench.cardIdAttribute == null) {
+					ench.hasRevertableModification = false;
+					ench.expired = true;
+				}
+			}
+		}
+	}
+
+	private static Enchantment createInlineEnchantment(SpellDesc desc, Entity source, Entity target) {
+		Object rawTrigger = desc != null ? desc.get(SpellArg.REVERT_TRIGGER) : null;
+		Object rawSecondTrigger = desc != null ? desc.get(SpellArg.SECOND_REVERT_TRIGGER) : null;
+		boolean hasTriggers = rawTrigger != null || rawSecondTrigger != null;
+		Enchantment ench = new Enchantment(hasTriggers);
+		if (hasTriggers) {
+			if (rawTrigger instanceof EventTriggerDesc triggerDesc) {
+				ench.getTriggers().add(triggerDesc.create());
+			} else if (rawTrigger instanceof EventTrigger trigger) {
+				ench.getTriggers().add(trigger.clone());
+			}
+			if (rawSecondTrigger instanceof EventTriggerDesc secondTriggerDesc) {
+				ench.getTriggers().add(secondTriggerDesc.create());
+			} else if (rawSecondTrigger instanceof EventTrigger secondTrigger) {
+				ench.getTriggers().add(secondTrigger.clone());
+			}
+			ench.setUsesSpellTrigger(true);
+			ench.setMaxFires(1);
+		} else {
+			ench.setUsesSpellTrigger(false);
+			if (target instanceof Card) {
+				ench.setCopyToActor(true);
+			}
+		}
+		ench.hasRevertableModification = true;
+		Card synthCard = desc != null ? desc.getSynthesizedEnchantmentCard() : null;
+		if (synthCard != null) {
+			ench.setSourceCard(synthCard);
+			ench.setName(synthCard.getName());
+		} else if (source != null && source.getSourceCard() != null) {
+			ench.setSourceCard(source.getSourceCard());
+			ench.setName(source.getSourceCard().getName());
+		}
+		if (desc != null) {
+			String explicitName = desc.getString(SpellArg.NAME);
+			if (explicitName != null && !explicitName.isEmpty()) {
+				ench.setName(explicitName);
+			}
+		}
+		return ench;
+	}
+
+	public static void attachBuffEnchantment(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			int attackBonus,
+			int hpBonus,
+			int armorBonus) {
+		if (target == null
+				|| source instanceof Aura
+				|| (attackBonus == 0 && hpBonus == 0 && armorBonus == 0)
+				|| target.hasAttribute(Attribute.CANT_GAIN_ENCHANTMENTS)) {
+			return;
+		}
+		if (context.getTriggers().size() >= 128
+				&& (desc == null || (!desc.containsKey(SpellArg.REVERT_TRIGGER) && !desc.containsKey(SpellArg.SECOND_REVERT_TRIGGER)))) {
+			return;
+		}
+		Enchantment ench = createInlineEnchantment(desc, source, target);
+		ench.attackBonus = attackBonus;
+		ench.hpBonus = hpBonus;
+		ench.armorBonus = armorBonus;
+		if (target instanceof Hero && !ench.getUsesSpellTrigger() && attackBonus != 0 && hpBonus == 0 && armorBonus == 0) {
+			ench.setOneTurn(true);
+		}
+		context.getLogic().addEnchantment(player, ench, source, target);
+	}
+
+	public static void attachTemporaryAttackEnchantment(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			int temporaryAttackBonus) {
+		if (target == null || source instanceof Aura || temporaryAttackBonus == 0 || target.hasAttribute(Attribute.CANT_GAIN_ENCHANTMENTS)) {
+			return;
+		}
+		Enchantment ench = createInlineEnchantment(desc, source, target);
+		ench.temporaryAttackBonus = temporaryAttackBonus;
+		ench.setOneTurn(true);
+		context.getLogic().addEnchantment(player, ench, source, target);
+	}
+
+	public static void attachSetAttackEnchantment(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			int attackValue) {
+		if (target == null || source instanceof Aura || target.hasAttribute(Attribute.CANT_GAIN_ENCHANTMENTS)) {
+			return;
+		}
+		clearAttackEnchantmentsOnTarget(context, target);
+		Enchantment ench = createInlineEnchantment(desc, source, target);
+		ench.setAttack = attackValue;
+		context.getLogic().addEnchantment(player, ench, source, target);
+	}
+
+	public static void attachSetHpEnchantment(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			int hpValue) {
+		if (target == null || source instanceof Aura || target.hasAttribute(Attribute.CANT_GAIN_ENCHANTMENTS)) {
+			return;
+		}
+		clearHpEnchantmentsOnTarget(context, target);
+		Enchantment ench = createInlineEnchantment(desc, source, target);
+		ench.setHp = hpValue;
+		context.getLogic().addEnchantment(player, ench, source, target);
+	}
+
+	public static void attachAddAttributeEnchantment(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			Attribute attribute) {
+		attachAddAttributeEnchantment(context, player, desc, source, target, attribute, false);
+	}
+
+	public static void attachAddAttributeEnchantment(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			Attribute attribute,
+			boolean alreadyHadAttribute) {
+		if (target == null || source instanceof Aura || attribute == null || target.hasAttribute(Attribute.CANT_GAIN_ENCHANTMENTS)) {
+			return;
+		}
+		boolean hasRevert = desc != null && (desc.containsKey(SpellArg.REVERT_TRIGGER) || desc.containsKey(SpellArg.SECOND_REVERT_TRIGGER));
+		if (!hasRevert && (attribute.name().startsWith("AURA_") || context.getTriggers().size() >= 128)) {
+			return;
+		}
+		boolean hadNative = alreadyHadAttribute && !hasActiveAttributeEnchantment(context, target, attribute);
+		Enchantment ench = createInlineEnchantment(desc, source, target);
+		ench.appliedAttribute = attribute;
+		ench.hadNativeAttribute = hadNative;
+		context.getLogic().addEnchantment(player, ench, source, target);
+	}
+
+	public static void attachRemoveAttributeEnchantment(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			Attribute attribute) {
+		if (target == null || source instanceof Aura || attribute == null || target.hasAttribute(Attribute.CANT_GAIN_ENCHANTMENTS)) {
+			return;
+		}
+		Enchantment ench = createInlineEnchantment(desc, source, target);
+		ench.removedAttribute = attribute;
+		context.getLogic().addEnchantment(player, ench, source, target);
+	}
+
+	public static void attachModifyAttributeEnchantment(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			Attribute attribute,
+			int delta) {
+		if (target == null || source instanceof Aura || attribute == null || target.hasAttribute(Attribute.CANT_GAIN_ENCHANTMENTS)) {
+			return;
+		}
+		if (context.getTriggers().size() >= 128
+				&& (desc == null || (!desc.containsKey(SpellArg.REVERT_TRIGGER) && !desc.containsKey(SpellArg.SECOND_REVERT_TRIGGER)))) {
+			return;
+		}
+		Enchantment ench = createInlineEnchantment(desc, source, target);
+		ench.modifiedAttribute = attribute;
+		ench.attributeDelta = delta;
+		context.getLogic().addEnchantment(player, ench, source, target);
+	}
+
+	public static void attachSetCardEnchantment(
+			GameContext context,
+			Player player,
+			SpellDesc desc,
+			Entity source,
+			Entity target,
+			Attribute cardIdAttribute) {
+		if (target == null || source instanceof Aura || cardIdAttribute == null) {
+			return;
+		}
+		Enchantment ench = createInlineEnchantment(desc, source, target);
+		ench.cardIdAttribute = cardIdAttribute;
+		context.getLogic().addEnchantment(player, ench, source, target);
 	}
 
 	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
@@ -515,6 +938,10 @@ public class Enchantment extends Entity implements Trigger {
 		firesThisSequence = 0;
 	}
 
+	public int getFiresThisSequence() {
+		return firesThisSequence;
+	}
+
 	public Enchantment setTriggers(List<EventTrigger> triggers) {
 		this.triggers = triggers;
 		return this;
@@ -617,5 +1044,115 @@ public class Enchantment extends Entity implements Trigger {
 
 	public HasEntrySet<?, ?> getEntrySet() {
 		return entrySet;
+	}
+
+	public int getAttackBonus() {
+		return attackBonus;
+	}
+
+	public int getHpBonus() {
+		return hpBonus;
+	}
+
+	public int getArmorBonus() {
+		return armorBonus;
+	}
+
+	public int getTemporaryAttackBonus() {
+		return temporaryAttackBonus;
+	}
+
+	public Integer getSetAttack() {
+		return setAttack;
+	}
+
+	public Integer getSetHp() {
+		return setHp;
+	}
+
+	public Attribute getAppliedAttribute() {
+		return appliedAttribute;
+	}
+
+	public Attribute getRemovedAttribute() {
+		return removedAttribute;
+	}
+
+	public Attribute getModifiedAttribute() {
+		return modifiedAttribute;
+	}
+
+	public int getAttributeDelta() {
+		return attributeDelta;
+	}
+
+	public Attribute getCardIdAttribute() {
+		return cardIdAttribute;
+	}
+
+	public String getRuntimeDescription() {
+		if (attackBonus != 0 && hpBonus != 0) {
+			return (attackBonus >= 0 ? "+" : "") + attackBonus + "/" + (hpBonus >= 0 ? "+" : "") + hpBonus + ".";
+		}
+		if (attackBonus != 0) {
+			return (attackBonus >= 0 ? "+" : "") + attackBonus + " Attack.";
+		}
+		if (hpBonus != 0) {
+			return (hpBonus >= 0 ? "+" : "") + hpBonus + " Health.";
+		}
+		if (temporaryAttackBonus != 0) {
+			return (temporaryAttackBonus >= 0 ? "+" : "") + temporaryAttackBonus + " Attack this turn.";
+		}
+		if (armorBonus != 0) {
+			return (armorBonus >= 0 ? "+" : "") + armorBonus + " Armor.";
+		}
+		if (setAttack != null && setHp != null) {
+			return "Stats set to " + setAttack + "/" + setHp + ".";
+		}
+		if (setAttack != null) {
+			return "Attack set to " + setAttack + ".";
+		}
+		if (setHp != null) {
+			return "Health set to " + setHp + ".";
+		}
+		if (appliedAttribute != null) {
+			return formatAttributeName(appliedAttribute);
+		}
+		if (modifiedAttribute != null && attributeDelta != 0) {
+			return (attributeDelta >= 0 ? "+" : "") + attributeDelta + " " + formatAttributeName(modifiedAttribute) + ".";
+		}
+		if (hasAttribute(Attribute.DESCRIPTION) && getAttribute(Attribute.DESCRIPTION) instanceof String customDesc && !customDesc.isEmpty()) {
+			return customDesc;
+		}
+		return null;
+	}
+
+	private static String formatAttributeName(Attribute attr) {
+		return switch (attr) {
+			case TAUNT, AURA_TAUNT -> "Taunt.";
+			case DIVINE_SHIELD -> "Divine Shield.";
+			case WINDFURY, AURA_WINDFURY -> "Windfury.";
+			case POISONOUS, AURA_POISONOUS -> "Poisonous.";
+			case LIFESTEAL, AURA_LIFESTEAL -> "Lifesteal.";
+			case STEALTH, AURA_STEALTH -> "Stealth.";
+			case FROZEN -> "Frozen.";
+			case RUSH, AURA_RUSH -> "Rush.";
+			case CHARGE, AURA_CHARGE -> "Charge.";
+			case IMMUNE, AURA_IMMUNE -> "Immune.";
+			case DEFLECT -> "Deflect.";
+			case UNTARGETABLE_BY_SPELLS, AURA_UNTARGETABLE_BY_SPELLS -> "Elusive.";
+			case CANNOT_ATTACK, AURA_CANNOT_ATTACK -> "Can't Attack.";
+			case SPELL_DAMAGE, AURA_SPELL_DAMAGE -> "Spell Damage.";
+			default -> {
+				String[] words = attr.name().toLowerCase().split("_");
+				StringBuilder sb = new StringBuilder();
+				for (String w : words) {
+					if (w.isEmpty()) continue;
+					if (!sb.isEmpty()) sb.append(' ');
+					sb.append(Character.toUpperCase(w.charAt(0))).append(w.substring(1));
+				}
+				yield sb.append('.').toString();
+			}
+		};
 	}
 }

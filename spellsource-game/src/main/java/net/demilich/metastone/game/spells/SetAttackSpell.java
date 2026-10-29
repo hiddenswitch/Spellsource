@@ -6,6 +6,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,15 +85,19 @@ public class SetAttackSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	protected void onCast(GameContext context, Player player, Entity source, Entity target, int value, @Default(bool = true) boolean exclusive) {
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target, int value, @Default(bool = true) boolean exclusive) {
 		target.setAttribute(Attribute.ATTACK, value);
 		target.getAttributes().remove(Attribute.ATTACK_BONUS);
 		if (exclusive) {
 			target.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
-			target.getAttributes().remove(Attribute.CONDITIONAL_ATTACK_BONUS);
+			if (!target.hasAttribute(Attribute.ENRAGED)) {
+				target.getAttributes().remove(Attribute.CONDITIONAL_ATTACK_BONUS);
+			}
+			Enchantment.attachSetAttackEnchantment(context, player, desc, source, target, value);
 		} else {
 			logger.debug("onCast {} {}: Calling non-exclusively, the BASE_ATTACK was changed to {} on target {}", context.getGameId(), source, value, target);
 			target.setAttribute(Attribute.BASE_ATTACK, value);
+			Enchantment.clearAttackEnchantmentsOnTarget(context, target);
 		}
 	}
 

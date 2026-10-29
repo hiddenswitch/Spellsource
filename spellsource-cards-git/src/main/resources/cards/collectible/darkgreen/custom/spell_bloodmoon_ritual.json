@@ -9,7 +9,7 @@
     "class": "MinionOnBoardCondition",
     "value": 3
   },
-  "targetSelection": "MINIONS",
+  "targetSelection": "NONE",
   "spell": {
     "class": "DestroySpell",
     "target": "ALL_MINIONS"

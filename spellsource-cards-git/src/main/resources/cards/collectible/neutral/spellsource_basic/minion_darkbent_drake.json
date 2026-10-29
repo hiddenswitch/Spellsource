@@ -15,7 +15,8 @@
       "value": {
         "class": "PlayerAttributeValueProvider",
         "playerAttribute": "SPELLS_CAST"
-      }
+      },
+      "name": "Darkbent Drake's Empowerment"
     }
   },
   "attributes": {

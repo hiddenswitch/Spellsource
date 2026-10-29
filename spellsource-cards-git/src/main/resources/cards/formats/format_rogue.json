@@ -33,6 +33,13 @@
   "secondPlayerBonusCards": [
     "spell_lunstone"
   ],
+  "ruleCards": [
+    "enchantment_constructed_rules",
+    "enchantment_rule_mana",
+    "enchantment_rule_draw",
+    "enchantment_rule_hero_power",
+    "enchantment_rule_deck_size"
+  ],
   "sets": [
     "SPELLSOURCE",
     "SPELLSOURCE_BASIC",

@@ -15,7 +15,8 @@
       "attribute": "RUSH",
       "invert": true,
       "operation": "HAS"
-    }
+    },
+    "name": "Possession"
   },
   "collectible": true,
   "set": "CUSTOM",

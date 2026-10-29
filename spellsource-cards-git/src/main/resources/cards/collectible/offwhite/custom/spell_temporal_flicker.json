@@ -12,12 +12,14 @@
       {
         "class": "AddAttributeSpell",
         "target": "ENEMY_MINIONS",
-        "attribute": "FROZEN"
+        "attribute": "FROZEN",
+        "name": "Temporal Flicker Chill"
       },
       {
         "class": "AddAttributeSpell",
         "target": "FRIENDLY_MINIONS",
-        "attribute": "CHARGE"
+        "attribute": "CHARGE",
+        "name": "Temporal Flicker"
       }
     ]
   },

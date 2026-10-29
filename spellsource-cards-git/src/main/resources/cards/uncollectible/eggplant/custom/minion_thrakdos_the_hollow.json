@@ -24,17 +24,19 @@
           "cardCostModifier": {
             "class": "CardCostModifier",
             "value": 1,
-            "cardType": "SPELL",
+            "cardType": "MINION",
             "expirationTrigger": {
               "class": "TurnEndTrigger",
               "targetPlayer": "SELF"
             },
             "operation": "SET",
+            "race": "ELEMENTAL",
             "targetPlayer": "SELF"
           }
         },
         "maxFires": 1
-      }
+      },
+      "name": "Thrakdos' Pact"
     }
   },
   "attributes": {

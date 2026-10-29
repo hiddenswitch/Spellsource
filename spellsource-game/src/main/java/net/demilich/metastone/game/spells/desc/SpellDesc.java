@@ -86,6 +86,7 @@ import static java.util.stream.Collectors.toList;
 public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantmentDesc<Aftermath> {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(SpellDesc.class);
+	private transient Card synthesizedEnchantmentCard;
 
 	public SpellDesc() {
 		super(SpellArg.class);
@@ -93,6 +94,17 @@ public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantm
 
 	public SpellDesc(Map<SpellArg, Object> arguments) {
 		super(arguments, SpellArg.class);
+		if (arguments instanceof SpellDesc other) {
+			this.synthesizedEnchantmentCard = other.synthesizedEnchantmentCard;
+		}
+	}
+
+	public Card getSynthesizedEnchantmentCard() {
+		return synthesizedEnchantmentCard;
+	}
+
+	public void setSynthesizedEnchantmentCard(Card synthesizedEnchantmentCard) {
+		this.synthesizedEnchantmentCard = synthesizedEnchantmentCard;
 	}
 
 	public SpellDesc(Class<? extends Spell> spellClass, EntityReference target, EntityFilter filter, boolean randomTarget) {
@@ -317,7 +329,9 @@ public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantm
 		CardList cards = source.getCards(context, host, player);
 		EntityFilter filter = getCardFilter();
 		if (filter == null) {
-			return cards;
+			return cards instanceof net.demilich.metastone.game.cards.CardZone
+					? new net.demilich.metastone.game.cards.CardArrayList(cards)
+					: cards;
 		}
 		return cards.filtered(c -> filter.matches(context, player, c, host));
 	}

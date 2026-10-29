@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus": 6
+        "hpBonus": 6,
+        "name": "Shelter"
       },
       {
         "class": "DrawCardSpell",

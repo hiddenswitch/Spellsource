@@ -10,11 +10,13 @@
     "class": "AdjacentEffectSpell",
     "spell1": {
       "class": "AddAttributeSpell",
-      "attribute": "FROZEN"
+      "attribute": "FROZEN",
+      "name": "Frozen Pulse Chill"
     },
     "spell2": {
       "class": "AddAttributeSpell",
-      "attribute": "FROZEN"
+      "attribute": "FROZEN",
+      "name": "Frozen Pulse Chill"
     }
   },
   "collectible": true,

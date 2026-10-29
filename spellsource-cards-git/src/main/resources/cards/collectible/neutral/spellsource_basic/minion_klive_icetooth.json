@@ -19,7 +19,8 @@
           },
           "spell": {
             "class": "AddAttributeSpell",
-            "attribute": "FROZEN"
+            "attribute": "FROZEN",
+            "name": "Klive Icetooth's Frost"
           }
         },
         {

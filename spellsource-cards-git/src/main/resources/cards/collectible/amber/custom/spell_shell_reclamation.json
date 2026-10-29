@@ -15,7 +15,8 @@
         "class": "RaceFilter",
         "race": "BEAST"
       }
-    }
+    },
+    "name": "Shell Reclamation"
   },
   "attributes": {},
   "collectible": true,

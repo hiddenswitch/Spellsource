@@ -28,67 +28,79 @@ public class WebGrpcServerRequest<Req, Resp> extends GrpcServerRequestImpl<Req, 
 
   static class TextMessageDeframer implements GrpcMessageDeframer {
 
-    private long maxMessageSize;
-    private boolean processed;
-    private Buffer buffer;
-    private Object result;
+    private final Http2GrpcMessageDeframer inner;
+    private Buffer pending;
+
+    TextMessageDeframer(String encoding, WireFormat format) {
+      this.inner = new Http2GrpcMessageDeframer(encoding, format);
+    }
 
     @Override
     public void maxMessageSize(long maxMessageSize) {
-      this.maxMessageSize = maxMessageSize;
+      this.inner.maxMessageSize(maxMessageSize);
     }
 
     @Override
     public void update(Buffer chunk) {
-      if (processed) {
+      if (chunk == null || chunk.length() == 0) {
         return;
       }
-      if (buffer == null) {
-        buffer = chunk;
+      if (pending == null) {
+        pending = chunk;
       } else {
         try {
-          buffer.appendBuffer(chunk);
+          pending.appendBuffer(chunk);
         } catch (IndexOutOfBoundsException e) {
-          // Work around because we cannot happend to slices
-          //          java.lang.IndexOutOfBoundsException: writerIndex(270) + minWritableBytes(120) exceeds maxCapacity(270): UnpooledSlicedByteBuf(ridx: 0, widx: 270, cap: 270/270, unwrapped: VertxUnsafeHeapByteBuf(ridx: 0, widx: 0, cap: 270))
-          //          at io.netty.buffer@4.2.0.RC3/io.netty.buffer.AbstractByteBuf.ensureWritable0(AbstractByteBuf.java:294)
-          //          at io.netty.buffer@4.2.0.RC3/io.netty.buffer.AbstractByteBuf.ensureWritable(AbstractByteBuf.java:280)
-          //          at io.netty.buffer@4.2.0.RC3/io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1103)
-          //          at io.vertx.core@5.0.0-SNAPSHOT/io.vertx.core.buffer.impl.BufferImpl.appendBuffer(BufferImpl.java:256)
-          //          at io.vertx.core@5.0.0-SNAPSHOT/io.vertx.core.buffer.impl.BufferImpl.appendBuffer(BufferImpl.java:41)
-          buffer = buffer.copy();
-          buffer.appendBuffer(chunk);
+          pending = pending.copy();
+          pending.appendBuffer(chunk);
         }
       }
-      if (result == null && buffer.length() > maxMessageSize) {
-        result = new MessageSizeOverflowException(buffer.length());
-        buffer = null;
-        processed = true;
+      int totalLen = pending.length();
+      int usableEnd = (totalLen / 4) * 4;
+      if (usableEnd == 0) {
+        return;
+      }
+      int start = 0;
+      for (int i = 0; i + 4 <= usableEnd; i += 4) {
+        if (pending.getByte(i + 2) == (byte) '=' || pending.getByte(i + 3) == (byte) '=') {
+          Buffer slice = pending.slice(start, i + 4);
+          BufferInternal decoded = BufferInternal.buffer(Base64.decode(((BufferInternal) slice).getByteBuf()));
+          inner.update(decoded);
+          start = i + 4;
+        }
+      }
+      if (start < usableEnd) {
+        Buffer slice = pending.slice(start, usableEnd);
+        BufferInternal decoded = BufferInternal.buffer(Base64.decode(((BufferInternal) slice).getByteBuf()));
+        inner.update(decoded);
+        start = usableEnd;
+      }
+      if (start >= totalLen) {
+        pending = null;
+      } else if (start > 0) {
+        pending = pending.getBuffer(start, totalLen);
       }
     }
 
     @Override
     public void end() {
-      if (!processed) {
-        BufferInternal decoded = BufferInternal.buffer(Base64.decode(((BufferInternal)buffer).getByteBuf()));
-        buffer = null;
-        result = GrpcMessage.message("identity", decoded.slice(5, decoded.length()));
+      if (pending != null && pending.length() > 0) {
+        BufferInternal decoded = BufferInternal.buffer(Base64.decode(((BufferInternal) pending).getByteBuf()));
+        pending = null;
+        if (decoded.length() > 0) {
+          inner.update(decoded);
+        }
       }
+      inner.end();
     }
 
     @Override
     public Object next() {
-      if (result != null) {
-        Object ret = result;
-        result = null;
-        return ret;
-      } else {
-        return null;
-      }
+      return inner.next();
     }
   }
 
   public WebGrpcServerRequest(ContextInternal context, GrpcProtocol protocol, WireFormat format, long maxMessageSize, HttpServerRequest httpRequest, GrpcMessageDecoder<Req> messageDecoder, GrpcMethodCall methodCall) {
-    super(context, protocol, format, httpRequest, httpRequest.version() != HttpVersion.HTTP_2 && GrpcMediaType.isGrpcWebText(httpRequest.getHeader(CONTENT_TYPE)) ? new TextMessageDeframer() : new Http2GrpcMessageDeframer(httpRequest.headers().get(GrpcHeaderNames.GRPC_ENCODING), format), messageDecoder, methodCall);
+    super(context, protocol, format, httpRequest, protocol == GrpcProtocol.WEB_TEXT || GrpcMediaType.isGrpcWebText(httpRequest.getHeader(CONTENT_TYPE)) ? new TextMessageDeframer(httpRequest.headers().get(GrpcHeaderNames.GRPC_ENCODING), format) : new Http2GrpcMessageDeframer(httpRequest.headers().get(GrpcHeaderNames.GRPC_ENCODING), format), messageDecoder, methodCall);
   }
 }

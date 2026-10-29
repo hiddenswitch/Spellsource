@@ -25,7 +25,8 @@
     "spell1": {
       "class": "BuffSpell",
       "attackBonus": 4,
-      "hpBonus": 4
+      "hpBonus": 4,
+      "name": "Abomination's Might"
     },
     "spell2": {
       "class": "DamageSpell",

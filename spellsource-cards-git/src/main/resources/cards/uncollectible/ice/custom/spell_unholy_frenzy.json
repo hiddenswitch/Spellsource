@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
-        "attackBonus": 2
+        "attackBonus": 2,
+        "name": "Unholy Frenzy"
       },
       {
         "class": "AddDeathrattleSpell",
@@ -20,7 +21,8 @@
         "spell": {
           "class": "ReceiveCardSpell",
           "card": "spell_rune"
-        }
+        },
+        "name": "Unholy Frenzy"
       }
     ]
   },

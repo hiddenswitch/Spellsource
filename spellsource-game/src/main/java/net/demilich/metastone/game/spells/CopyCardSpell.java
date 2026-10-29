@@ -12,6 +12,9 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.trigger.Aftermath;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.Opener;
 import net.demilich.metastone.game.targeting.IdFactory;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 import org.slf4j.Logger;
@@ -19,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 /**
@@ -72,22 +76,35 @@ public class CopyCardSpell extends Spell {
 		// location
 
 		if (clone.getId() != IdFactory.UNASSIGNED
-				&& clone.getZone() != Zones.REMOVED_FROM_PLAY) {
-			context.getLogic().getActiveTriggers(inCard.getReference())
-					.stream()
-					.filter(e -> e instanceof CardCostModifier)
-					.map(e -> (CardCostModifier) e)
-					.filter(CardCostModifier::targetsSelf)
-					.map(CardCostModifier::clone)
-					.peek(c -> c.setHostReference(clone.getReference()))
-					.forEach(c -> context.getLogic().addEnchantment(player, c, source, clone));
+				&& clone.getZone() != Zones.REMOVED_FROM_PLAY
+				&& inCard.getId() != IdFactory.UNASSIGNED) {
+			for (var trigger : context.getLogic().getActiveTriggers(inCard.getReference())) {
+				if (trigger instanceof CardCostModifier ccm) {
+					if (ccm.targetsSelf()) {
+						var copy = ccm.getCopy();
+						copy.setHostReference(clone.getReference());
+						context.getLogic().addEnchantment(player, copy, source, clone);
+					}
+				} else if (trigger instanceof Enchantment ench) {
+					if (ench.isCopyToActor()
+							|| ench instanceof Opener
+							|| ench instanceof Aftermath
+							|| (ench.getSourceCard() != null && !Objects.equals(ench.getSourceCard().getCardId(), inCard.getCardId()))) {
+						var copy = ench.getCopy();
+						copy.setHostReference(clone.getReference());
+						context.getLogic().addEnchantment(player, copy, source, clone);
+					}
+				}
+			}
 		}
 
-		if (inCard.hasAttribute(Attribute.ATTACK_BONUS)) {
-			clone.modifyAttribute(Attribute.ATTACK_BONUS, (int) inCard.getAttribute(Attribute.ATTACK_BONUS));
-		}
-		if (inCard.hasAttribute(Attribute.HP_BONUS)) {
-			clone.modifyAttribute(Attribute.HP_BONUS, (int) inCard.getAttribute(Attribute.HP_BONUS));
+		if (!inCard.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
+			if (inCard.hasAttribute(Attribute.ATTACK_BONUS)) {
+				clone.modifyAttribute(Attribute.ATTACK_BONUS, (int) inCard.getAttribute(Attribute.ATTACK_BONUS));
+			}
+			if (inCard.hasAttribute(Attribute.HP_BONUS)) {
+				clone.modifyAttribute(Attribute.HP_BONUS, (int) inCard.getAttribute(Attribute.HP_BONUS));
+			}
 		}
 		if (inCard.hasAttribute(Attribute.DEATHRATTLES)) {
 			clone.setAttribute(Attribute.DEATHRATTLES, inCard.getAttribute(Attribute.DEATHRATTLES));
@@ -133,6 +150,19 @@ public class CopyCardSpell extends Spell {
 		}
 
 		List<SpellDesc> subSpells = desc.subSpells(0);
+		if (numberOfCardsToCopy == -1) {
+			for (Card card : sourceCollection) {
+				peek(card, context, player);
+				Card output = copyCard(context, player, source, card, (playerId, c) -> context.getLogic().receiveCard(playerId, c));
+				if (output == null || output.getZone() != Zones.HAND) {
+					continue;
+				}
+				for (SpellDesc subSpell : subSpells) {
+					SpellUtils.castChildSpell(context, player, subSpell, source, target, output);
+				}
+			}
+			return;
+		}
 		for (int i = 0; i < numberOfCardsToCopy; i++) {
 			if (sourceCollection.isEmpty()) {
 				return;

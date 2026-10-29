@@ -13,7 +13,8 @@
       "fireCondition": {
         "class": "CardPropertyCondition",
         "cardType": "MINION"
-      }
+      },
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "PutMinionOnBoardSpell",
@@ -24,7 +25,19 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "DrawCardSpell",
-      "value": 1
+      "value": 1,
+      "spell": {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "CardPropertyCondition",
+          "target": "OUTPUT",
+          "cardType": "MINION"
+        },
+        "spell": {
+          "class": "PutMinionOnBoardSpell",
+          "target": "OUTPUT"
+        }
+      }
     }
   },
   "attributes": {

@@ -10,7 +10,8 @@
     "class": "HeroPowerSpell",
     "spell": {
       "class": "TemporaryAttackSpell",
-      "value": 2
+      "value": 2,
+      "name": "Hone Claws' Rally"
     }
   },
   "attributes": {},

@@ -19,7 +19,8 @@
           "filter": {
             "class": "SpecificCardFilter",
             "card": "minion_removed_card"
-          }
+          },
+          "name": "Meat Tenderizer's Blessing"
         },
         {
           "class": "BuffSpell",
@@ -28,7 +29,8 @@
           "filter": {
             "class": "SpecificCardFilter",
             "card": "minion_removed_card"
-          }
+          },
+          "name": "Meat Tenderizer's Blessing"
         },
         {
           "class": "ModifyAttributeSpell",

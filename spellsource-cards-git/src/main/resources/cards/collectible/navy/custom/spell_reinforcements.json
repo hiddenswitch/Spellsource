@@ -13,7 +13,8 @@
       "playerAttribute": "HAND_COUNT",
       "targetPlayer": "SELF"
     },
-    "hpBonus": 0
+    "hpBonus": 0,
+    "name": "Reinforcements"
   },
   "collectible": true,
   "set": "CUSTOM",

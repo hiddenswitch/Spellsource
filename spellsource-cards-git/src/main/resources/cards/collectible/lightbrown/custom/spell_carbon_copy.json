@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Carbon Copy"
       },
       {
         "class": "ShuffleToDeckSpell",
@@ -19,7 +20,8 @@
         "spell": {
           "class": "BuffSpell",
           "target": "OUTPUT",
-          "hpBonus": 3
+          "hpBonus": 3,
+          "name": "Carbon Copy"
         },
         "howMany": 2
       }

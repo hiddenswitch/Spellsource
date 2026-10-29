@@ -22,7 +22,8 @@
             "target": "ALL_MINIONS"
           },
           "maxFires": 1
-        }
+        },
+        "name": "Worldsculpt"
       },
       {
         "class": "ModifyAttributeSpell",

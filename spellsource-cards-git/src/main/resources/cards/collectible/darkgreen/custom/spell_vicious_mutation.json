@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 4,
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Vicious Mutation"
       },
       {
         "class": "FightSpell",

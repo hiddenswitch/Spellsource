@@ -25,7 +25,8 @@
           "class": "AttributeValueProvider",
           "target": "TARGET",
           "attribute": "HP"
-        }
+        },
+        "name": "Your Heart will Explode..."
       },
       {
         "class": "BuffSpell",
@@ -43,7 +44,8 @@
           "class": "AttributeValueProvider",
           "target": "TARGET",
           "attribute": "HP"
-        }
+        },
+        "name": "Your Heart will Explode..."
       },
       {
         "class": "ModifyAttributeSpell",

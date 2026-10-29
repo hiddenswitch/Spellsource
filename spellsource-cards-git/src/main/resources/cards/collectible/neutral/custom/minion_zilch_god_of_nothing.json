@@ -22,13 +22,13 @@
           "class": "AndCondition",
           "conditions": [
             {
-              "class": "DeckContainsCondition",
-              "target": "FRIENDLY_HAND",
+              "class": "HoldsCardCondition",
               "cardFilter": {
                 "class": "AndFilter",
                 "filters": [
                   {
                     "class": "CardFilter",
+                    "cardType": "MINION",
                     "attribute": "STARTED_IN_DECK"
                   },
                   {
@@ -38,7 +38,7 @@
                     "operation": "HAS"
                   },
                   {
-                    "class": "CardFilter",
+                    "class": "AttributeFilter",
                     "value": 0,
                     "attribute": "ATTACK",
                     "operation": "GREATER"
@@ -49,12 +49,12 @@
             },
             {
               "class": "DeckContainsCondition",
-              "target": "FRIENDLY_DECK",
               "cardFilter": {
                 "class": "AndFilter",
                 "filters": [
                   {
                     "class": "CardFilter",
+                    "cardType": "MINION",
                     "attribute": "STARTED_IN_DECK"
                   },
                   {
@@ -64,7 +64,7 @@
                     "operation": "HAS"
                   },
                   {
-                    "class": "CardFilter",
+                    "class": "AttributeFilter",
                     "value": 0,
                     "attribute": "ATTACK",
                     "operation": "GREATER"
@@ -86,7 +86,8 @@
                 "class": "CardFilter",
                 "cardType": "MINION"
               },
-              "hpBonus": -1
+              "hpBonus": -1,
+              "name": "Zilch's Curse"
             },
             {
               "class": "RevealCardSpell",

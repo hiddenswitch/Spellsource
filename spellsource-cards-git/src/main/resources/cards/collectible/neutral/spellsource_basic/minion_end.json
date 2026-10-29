@@ -27,11 +27,13 @@
       "spells": [
         {
           "class": "SetAttackSpell",
-          "value": 10
+          "value": 10,
+          "name": "End's Might"
         },
         {
           "class": "SetHpSpell",
-          "value": 10
+          "value": 10,
+          "name": "End's Vitality"
         }
       ]
     }

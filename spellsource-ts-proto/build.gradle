@@ -13,8 +13,9 @@ tasks.register('compileTypescript', YarnTask) {
   dependsOn ':yarnWorkspace'
 
   args = ['--cwd', 'ts-proto', 'run', 'build']
-  inputs.dir('ts-proto/src/')
+  inputs.dir('ts-proto/src/').withPathSensitivity(PathSensitivity.RELATIVE)
   outputs.dir('ts-proto/build/')
+  outputs.cacheIf { true }
 }
 
 node {

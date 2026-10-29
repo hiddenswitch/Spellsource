@@ -27,6 +27,8 @@ public final class ToggleCostModifier extends CardCostModifier {
 
 		triggerDesc = (EventTriggerDesc) desc.get(CardCostModifierArg.TOGGLE_OFF_TRIGGER);
 		this.toggleOffTrigger = triggerDesc.create();
+		this.getTriggers().add(this.toggleOnTrigger);
+		this.getTriggers().add(this.toggleOffTrigger);
 	}
 
 	@Override
@@ -47,7 +49,7 @@ public final class ToggleCostModifier extends CardCostModifier {
 
 	@Override
 	public boolean interestedIn(com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType eventType) {
-		return eventType == toggleOnTrigger.interestedIn() || eventType == toggleOffTrigger.interestedIn();
+		return eventType == toggleOnTrigger.interestedIn() || eventType == toggleOffTrigger.interestedIn() || super.interestedIn(eventType);
 	}
 
 	@Override

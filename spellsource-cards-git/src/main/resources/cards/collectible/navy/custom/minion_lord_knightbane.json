@@ -16,7 +16,8 @@
         "class": "AttributeAura",
         "target": "ENEMY_MINIONS",
         "attribute": "AURA_TAKE_DOUBLE_DAMAGE"
-      }
+      },
+      "name": "Lord Knightbane's Pact"
     }
   },
   "attributes": {

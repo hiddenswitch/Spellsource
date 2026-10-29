@@ -37,11 +37,13 @@
         {
           "class": "BuffSpell",
           "attackBonus": 4,
-          "hpBonus": 3
+          "hpBonus": 3,
+          "name": "Justin Thyme's Blessing"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "CHARGE"
+          "attribute": "CHARGE",
+          "name": "Justin Thyme's Blitz"
         }
       ]
     }

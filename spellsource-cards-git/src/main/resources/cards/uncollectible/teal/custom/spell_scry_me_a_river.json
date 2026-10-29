@@ -18,7 +18,8 @@
         "class": "DrawCardSpell"
       },
       "oneTurn": true
-    }
+    },
+    "name": "Scry Me a River"
   },
   "attributes": {},
   "collectible": true,

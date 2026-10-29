@@ -16,7 +16,8 @@
       "class": "BuffSpell",
       "target": "TRIGGER_HOST",
       "attackBonus": 2,
-      "hpBonus": 0
+      "hpBonus": 0,
+      "name": "Faceless Envoy's Blessing"
     }
   },
   "attributes": {},

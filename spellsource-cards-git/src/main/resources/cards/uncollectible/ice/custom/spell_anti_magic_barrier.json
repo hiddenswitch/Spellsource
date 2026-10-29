@@ -11,11 +11,13 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 2
+        "value": 2,
+        "name": "Anti-Magic Barrier"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "UNTARGETABLE_BY_SPELLS"
+        "attribute": "UNTARGETABLE_BY_SPELLS",
+        "name": "Anti-Magic Barrier"
       }
     ]
   },

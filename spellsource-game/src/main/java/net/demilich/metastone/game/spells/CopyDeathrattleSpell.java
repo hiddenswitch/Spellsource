@@ -55,11 +55,12 @@ public class CopyDeathrattleSpell extends AddDeathrattleSpell {
 			if (desc.containsKey(SpellArg.RANDOM_TARGET)) {
 				impliedCards.shuffle(context.getLogic().getRandom());
 			}
-			aftermathsStream = impliedCards.stream().filter(c -> c.getDesc().getDeathrattle() != null).map(c -> new CardAftermathTuple(c.getDesc().getDeathrattle(), c, false));
+			aftermathsStream = impliedCards.stream()
+					.flatMap(c -> context.getLogic().getAftermaths(c).stream())
+					.map(a -> new CardAftermathTuple(a.getSpell(), a.getSourceCard(), false));
 		} else if (target instanceof Card card) {
-			if (card.getDesc().getDeathrattle() != null) {
-				aftermathsStream = Stream.of(new CardAftermathTuple(card.getDesc().getDeathrattle(), card, false));
-			}
+			aftermathsStream = context.getLogic().getAftermaths(card).stream()
+					.map(a -> new CardAftermathTuple(a.getSpell(), a.getSourceCard(), false));
 		}
 		var aftermaths = Streams.concat(aftermathsStream, desc.spellStream(0, false).map(s -> new CardAftermathTuple(s, source.getSourceCard(), false))).toList();
 		Actor finalCopyTo = copyTo;

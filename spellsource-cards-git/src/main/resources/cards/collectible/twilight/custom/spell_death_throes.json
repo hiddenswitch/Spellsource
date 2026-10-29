@@ -32,11 +32,13 @@
                 "spell": {
                   "class": "DecaySpell"
                 }
-              }
+              },
+              "name": "Death Throes"
             },
             {
               "class": "AddAttributeSpell",
-              "attribute": "DECAY"
+              "attribute": "DECAY",
+              "name": "Death Throes"
             }
           ]
         }

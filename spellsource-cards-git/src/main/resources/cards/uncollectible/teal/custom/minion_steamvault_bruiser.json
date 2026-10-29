@@ -32,19 +32,22 @@
             {
               "class": "BuffSpell",
               "target": "SELF",
-              "hpBonus": 4
+              "hpBonus": 4,
+              "name": "Steamvault Bruiser's Fortitude"
             },
             {
               "class": "AddAttributeSpell",
               "target": "SELF",
-              "attribute": "TAUNT"
+              "attribute": "TAUNT",
+              "name": "Steamvault Bruiser's Guard"
             }
           ]
         },
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "CHARGE"
+          "attribute": "CHARGE",
+          "name": "Steamvault Bruiser's Blitz"
         }
       ]
     }

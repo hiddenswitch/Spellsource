@@ -18,7 +18,8 @@
         "value": 2
       },
       "maxFires": 1
-    }
+    },
+    "name": "Engaging Story"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -17,7 +17,8 @@
         "class": "EntityCountValueProvider",
         "target": "OTHER_FRIENDLY_MINIONS",
         "multiplier": 2
-      }
+      },
+      "name": "Clamouring Crusher's Fortitude"
     }
   },
   "attributes": {

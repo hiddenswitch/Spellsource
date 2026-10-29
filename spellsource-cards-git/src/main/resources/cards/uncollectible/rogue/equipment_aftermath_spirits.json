@@ -14,7 +14,8 @@
       "spell": {
         "class": "SummonSpell",
         "card": "token_spirit"
-      }
+      },
+      "name": "Aftermath Spirits"
     }
   },
   "gameTriggers": [

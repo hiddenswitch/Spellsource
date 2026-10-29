@@ -21,7 +21,8 @@
         "attribute": "HP"
       },
       "persistentOwner": true
-    }
+    },
+    "name": "Essence of Pain"
   },
   "collectible": true,
   "fileFormatVersion": 1,

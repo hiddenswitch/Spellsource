@@ -12,7 +12,8 @@
     "spell": {
       "class": "BuffSpell",
       "attackBonus": 2,
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Tribemaster's Blessing"
     }
   },
   "attributes": {

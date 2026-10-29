@@ -24,7 +24,8 @@
               "token_xenodrone_02",
               "token_xenodrone_01"
             ]
-          }
+          },
+          "name": "Progeny's Rally"
         },
         {
           "class": "SummonSpell",

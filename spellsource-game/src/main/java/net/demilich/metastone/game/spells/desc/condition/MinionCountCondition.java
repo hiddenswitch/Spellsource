@@ -3,15 +3,16 @@ package net.demilich.metastone.game.spells.desc.condition;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.logic.TargetLogic;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
-import java.util.List;
-
 /**
- * {@code true} if the minion count with the specified {@link ConditionArg#FILTER} or {@link ConditionArg#CARD_FILTER}
- * evaluates to true with the specified {@link ConditionArg#OPERATION} and {@link ConditionArg#VALUE}.
+ * Evaluates to {@code true} if the player's minion count filtered by {@link ConditionArg#FILTER} or {@link
+ * ConditionArg#CARD_FILTER} satisfies the {@link ConditionArg#OPERATION} with {@link ConditionArg#VALUE}.
+ * <p>
+ * Note that this includes {@link net.demilich.metastone.game.entities.minions.Permanent} entities on the battlefield;
+ * the class name is a misnomer.
+ * <p>
+ * Does not use the {@link ConditionArg#TARGET} parameter.
  */
 public class MinionCountCondition extends CountCondition {
 
@@ -20,19 +21,21 @@ public class MinionCountCondition extends CountCondition {
 	}
 
 	@Override
-	protected int getCountForPlayer(GameContext context, Player player, Entity source, Entity target) {
-		List<Minion> minions = TargetLogic.withoutPermanents(player.getMinions());
-		int count = 0;
-		EntityFilter filter = (EntityFilter) getDesc().get(ConditionArg.FILTER);
-		if (filter == null) {
-			filter = (EntityFilter) getDesc().get(ConditionArg.CARD_FILTER);
-		}
-		for (Entity minion : minions) {
-			if (filter == null || filter.matches(context, player, minion, source)) {
-				count++;
-			}
-		}
-		return count;
+	protected int getCountForPlayer(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			EntityFilter filter,
+			EntityFilter cardFilter) {
+		EntityFilter activeFilter = filter != null ? filter : cardFilter;
+		return (int) player.getMinions().stream()
+				.filter(activeFilter != null ? activeFilter.matcher(context, player, source) : m -> true)
+				.count();
+	}
+
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
 	}
 }
-

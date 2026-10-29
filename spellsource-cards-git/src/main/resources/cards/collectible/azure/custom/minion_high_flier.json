@@ -40,7 +40,8 @@
           "class": "CardFilter",
           "cardType": "SPELL"
         }
-      }
+      },
+      "name": "Mistweaver's Empowerment"
     }
   },
   "attributes": {

@@ -13,11 +13,13 @@
       {
         "class": "BuffSpell",
         "attackBonus": 1,
-        "hpBonus": 1
+        "hpBonus": 1,
+        "name": "Ruler's Talisman"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "RUSH"
+        "attribute": "RUSH",
+        "name": "Ruler's Talisman"
       }
     ]
   },

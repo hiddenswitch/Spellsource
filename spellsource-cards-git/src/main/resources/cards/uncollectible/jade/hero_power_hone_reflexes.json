@@ -10,7 +10,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
-      "attackBonus": 3
+      "attackBonus": 3,
+      "name": "Hone Reflexes' Rally"
     }
   },
   "collectible": false,

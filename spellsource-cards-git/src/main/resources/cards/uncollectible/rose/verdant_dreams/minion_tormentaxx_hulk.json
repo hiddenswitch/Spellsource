@@ -24,7 +24,8 @@
         "target": "EVENT_TARGET",
         "attribute": "BASE_MANA_COST",
         "multiplier": -1
-      }
+      },
+      "name": "Tormentaxx Hulk's Rally"
     }
   },
   "collectible": true,

@@ -27,7 +27,8 @@
         }
       },
       "oneTurn": true
-    }
+    },
+    "name": "Mind Tear"
   },
   "attributes": {
     "DISCOVER": true

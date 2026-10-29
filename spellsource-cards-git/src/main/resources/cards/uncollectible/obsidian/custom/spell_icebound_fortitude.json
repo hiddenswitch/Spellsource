@@ -12,12 +12,14 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "armorBonus": 10
+        "armorBonus": 10,
+        "name": "Icebound Fortitude"
       },
       {
         "class": "AddAttributeSpell",
         "target": "FRIENDLY_HERO",
-        "attribute": "FROZEN"
+        "attribute": "FROZEN",
+        "name": "Icebound Fortitude"
       }
     ]
   },

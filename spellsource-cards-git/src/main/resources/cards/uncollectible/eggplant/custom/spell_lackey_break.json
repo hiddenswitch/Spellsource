@@ -18,13 +18,15 @@
         "class": "BuffSpell",
         "target": "EVENT_TARGET",
         "attackBonus": 1,
-        "hpBonus": 1
+        "hpBonus": 1,
+        "name": "Lackey Break"
       }
     },
     "revertTrigger": {
       "class": "TurnStartTrigger",
       "targetPlayer": "BOTH"
-    }
+    },
+    "name": "Lackey Break"
   },
   "collectible": true,
   "set": "CUSTOM",

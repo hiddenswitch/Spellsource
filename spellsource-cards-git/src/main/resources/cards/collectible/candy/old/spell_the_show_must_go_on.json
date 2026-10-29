@@ -19,7 +19,8 @@
         "card": "token_performer"
       },
       "oneTurn": true
-    }
+    },
+    "name": "The Show Must Go On"
   },
   "collectible": false,
   "set": "CUSTOM",

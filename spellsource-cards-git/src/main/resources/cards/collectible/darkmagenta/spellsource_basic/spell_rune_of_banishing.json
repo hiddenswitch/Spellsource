@@ -27,7 +27,7 @@
           "value": 4,
           "operation": "GREATER_OR_EQUAL"
         },
-        "targetPlayer": "BOTH"
+        "targetPlayer": "EITHER"
       },
       "spell": {
         "class": "DestroySpell"

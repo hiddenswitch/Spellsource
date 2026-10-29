@@ -8,10 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * {@code true} if the {@code target} or the single entity resolved by {@link ConditionArg#TARGET} is damaged.
+ * Evaluates to {@code true} if the {@code target} (which must be an {@link Actor}) {@link Actor#isWounded()}.
  */
 public class IsDamagedCondition extends Condition {
-
 	private static Logger LOGGER = LoggerFactory.getLogger(IsDamagedCondition.class);
 
 	public IsDamagedCondition(ConditionDesc desc) {
@@ -19,17 +18,16 @@ public class IsDamagedCondition extends Condition {
 	}
 
 	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+	public boolean isFulfilled(GameContext context, Player player, Entity source, Entity target) {
 		if (!(target instanceof Actor)) {
-			LOGGER.warn("isFulfilled {} {}: target {} is not actor", context.getGameId(), desc, target);
+			LOGGER.warn("isFulfilled {} {}: target {} is not actor", context.getGameId(), this, target);
 			return false;
 		}
 		return ((Actor) target).isWounded();
 	}
 
 	@Override
-	protected boolean usesFilter() {
-		return false;
+	protected boolean multipleTargetsEvaluatedAsAnd() {
+		return true;
 	}
 }
-

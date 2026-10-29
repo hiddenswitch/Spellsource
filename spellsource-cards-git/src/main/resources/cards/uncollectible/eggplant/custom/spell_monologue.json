@@ -20,7 +20,8 @@
         "value": 5
       },
       "maxFires": 1
-    }
+    },
+    "name": "Monologue"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -29,7 +29,8 @@
             }
           },
           "maxFires": 1
-        }
+        },
+        "name": "Ichor Blast"
       }
     ]
   },

@@ -11,7 +11,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "OUTPUT",
-      "attribute": "TAUNT"
+      "attribute": "TAUNT",
+      "name": "Mob Party"
     },
     "cards": [
       "minion_trigger_happy_rebel",

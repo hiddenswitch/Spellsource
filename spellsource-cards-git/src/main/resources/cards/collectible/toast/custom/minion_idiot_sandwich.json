@@ -14,7 +14,8 @@
     "spell2": {
       "class": "BuffSpell",
       "attackBonus": 2,
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Idiot Sandwich's Blessing"
     }
   },
   "attributes": {

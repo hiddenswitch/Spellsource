@@ -30,7 +30,8 @@
       "revertTrigger": {
         "class": "TurnEndTrigger",
         "targetPlayer": "SELF"
-      }
+      },
+      "name": "Breezecatcher's Fury"
     }
   },
   "attributes": {

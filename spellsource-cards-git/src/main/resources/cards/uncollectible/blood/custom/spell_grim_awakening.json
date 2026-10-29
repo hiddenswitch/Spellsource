@@ -12,12 +12,14 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
-        "attackBonus": 1
+        "attackBonus": 1,
+        "name": "Grim Awakening"
       },
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Grim Awakening"
       },
       {
         "class": "DrainSpell",

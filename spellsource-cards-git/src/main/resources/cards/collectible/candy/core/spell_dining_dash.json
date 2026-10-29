@@ -20,7 +20,8 @@
         "value": 1
       },
       "oneTurn": true
-    }
+    },
+    "name": "Dining Dash"
   },
   "collectible": true,
   "set": "CUSTOM",

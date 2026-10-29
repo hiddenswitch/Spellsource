@@ -24,7 +24,8 @@
         "class": "RaceFilter",
         "race": "FAE"
       },
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Glimmer Dancer's Ward"
     }
   },
   "attributes": {

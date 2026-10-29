@@ -20,11 +20,13 @@
       "spells": [
         {
           "class": "BuffSpell",
-          "attackBonus": 2
+          "attackBonus": 2,
+          "name": "Nezumi Master's Rally"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "DIVINE_SHIELD"
+          "attribute": "DIVINE_SHIELD",
+          "name": "Nezumi Master's Dodge"
         }
       ]
     }

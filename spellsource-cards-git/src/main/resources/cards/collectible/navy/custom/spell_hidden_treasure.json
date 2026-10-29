@@ -18,7 +18,8 @@
         "value": 3
       },
       "maxFires": 1
-    }
+    },
+    "name": "Hidden Treasure"
   },
   "collectible": true,
   "set": "CUSTOM",

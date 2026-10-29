@@ -26,14 +26,16 @@
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE",
           "multiplier": -1
-        }
+        },
+        "name": "Forge Suit"
       },
       {
         "class": "BuffSpell",
         "hpBonus": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
-        }
+        },
+        "name": "Forge Suit"
       }
     ]
   },

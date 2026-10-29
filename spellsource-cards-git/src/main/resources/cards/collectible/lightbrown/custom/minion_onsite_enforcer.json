@@ -15,6 +15,7 @@
     }
   },
   "attributes": {
+    "BATTLECRY": true,
     "RUSH": true,
     "TAUNT": true
   },

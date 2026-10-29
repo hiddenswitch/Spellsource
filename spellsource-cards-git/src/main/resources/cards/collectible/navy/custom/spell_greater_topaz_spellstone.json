@@ -10,7 +10,8 @@
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
     "attackBonus": 4,
-    "hpBonus": 0
+    "hpBonus": 0,
+    "name": "Greater Topaz Lunstone"
   },
   "collectible": false,
   "set": "CUSTOM",

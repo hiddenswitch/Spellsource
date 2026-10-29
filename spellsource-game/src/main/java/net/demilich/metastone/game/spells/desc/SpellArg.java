@@ -25,7 +25,6 @@ import net.demilich.metastone.game.spells.ModifyDamageSpell;
 import net.demilich.metastone.game.spells.ModifyMaxManaSpell;
 import net.demilich.metastone.game.spells.ReceiveCardSpell;
 import net.demilich.metastone.game.spells.RecruitSpell;
-import net.demilich.metastone.game.spells.RevertableSpell;
 import net.demilich.metastone.game.spells.SetDescriptionSpell;
 import net.demilich.metastone.game.spells.SetRaceSpell;
 import net.demilich.metastone.game.spells.ShuffleToDeckSpell;
@@ -323,8 +322,8 @@ public enum SpellArg {
 	 */
 	RANDOM_TARGET,
 	/**
-	 * Used by the {@link RevertableSpell} series of spells to indicate which {@link
-	 * net.demilich.metastone.game.spells.trigger.EventTrigger} will cause the effects to be "reverted."
+	 * Used by spells such as {@link BuffSpell} and {@link AddAttributeSpell} to indicate which {@link
+	 * net.demilich.metastone.game.spells.trigger.EventTrigger} will cause the enchantment's effects to expire.
 	 *
 	 * @see AddAttributeSpell for an example of a spell that uses this arg.
 	 */
@@ -335,8 +334,8 @@ public enum SpellArg {
 	 */
 	SECRET,
 	/**
-	 * Used by the {@link RevertableSpell} series of spells to indicate another {@link
-	 * net.demilich.metastone.game.spells.trigger.EventTrigger} that will cause the effects to be "reverted."
+	 * Used by spells such as {@link BuffSpell} and {@link AddAttributeSpell} to indicate another {@link
+	 * net.demilich.metastone.game.spells.trigger.EventTrigger} that will cause the enchantment's effects to expire.
 	 *
 	 * @see AddAttributeSpell for an example of a spell that uses this arg.
 	 */

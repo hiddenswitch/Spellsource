@@ -11,7 +11,8 @@
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
       "class": "AddAttributeSpell",
-      "attribute": "TAUNT"
+      "attribute": "TAUNT",
+      "name": "Soultracker's Guard"
     }
   },
   "attributes": {

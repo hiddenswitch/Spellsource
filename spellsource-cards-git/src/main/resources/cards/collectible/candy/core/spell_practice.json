@@ -8,7 +8,8 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",
-    "attackBonus": 3
+    "attackBonus": 3,
+    "name": "Practice"
   },
   "collectible": true,
   "set": "CUSTOM",

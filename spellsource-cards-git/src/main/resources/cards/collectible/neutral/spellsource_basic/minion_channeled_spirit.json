@@ -13,7 +13,8 @@
     "target": "FRIENDLY_MINIONS",
     "attackBonus": 2,
     "hpBonus": 2,
-    "randomTarget": true
+    "randomTarget": true,
+    "name": "Channeled Spirit's Blessing"
   },
   "attributes": {
     "DEATHRATTLES": true

@@ -169,6 +169,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	private Boolean legacy;
 	private String hero;
 	private String[] secondPlayerBonusCards;
+	private String[] ruleCards;
 	private TargetSelection targetSelectionOverride;
 	private ConditionDesc targetSelectionCondition;
 	private Spellsource.Art art;
@@ -1436,6 +1437,15 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 		this.secondPlayerBonusCards = secondPlayerBonusCards;
 	}
 
+	public String[] getRuleCards() {
+		return ruleCards;
+	}
+
+	public void setRuleCards(String[] ruleCards) {
+		checkNotFrozen();
+		this.ruleCards = ruleCards;
+	}
+
 	public ConditionDesc getTargetSelectionCondition() {
 		return targetSelectionCondition;
 	}
@@ -1481,6 +1491,63 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	private transient List<AbstractEnchantmentDesc<?>> cachedEnchantmentDescs;
+	private transient Boolean cachedHasHandOrDeckEnchantments;
+
+	@JsonIgnore
+	public boolean hasHandOrDeckEnchantments() {
+		if (readOnly) {
+			Boolean c = cachedHasHandOrDeckEnchantments;
+			if (c != null) {
+				return c;
+			}
+			boolean val = computeHasHandOrDeckEnchantments();
+			cachedHasHandOrDeckEnchantments = val;
+			return val;
+		}
+		return computeHasHandOrDeckEnchantments();
+	}
+
+	private boolean computeHasHandOrDeckEnchantments() {
+		if (getType() == CardType.ENCHANTMENT
+				|| deckTrigger != null || deckTriggers != null
+				|| passiveTrigger != null || passiveTriggers != null
+				|| gameTriggers != null) {
+			return true;
+		}
+		if (trigger != null && containsHandOrDeckZone(trigger.getZones())) {
+			return true;
+		}
+		if (triggers != null) {
+			for (var t : triggers) {
+				if (t != null && containsHandOrDeckZone(t.getZones())) {
+					return true;
+				}
+			}
+		}
+		if (aura != null && containsHandOrDeckZone(aura.getZones())) {
+			return true;
+		}
+		if (auras != null) {
+			for (var a : auras) {
+				if (a != null && containsHandOrDeckZone(a.getZones())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private static boolean containsHandOrDeckZone(Zones[] zones) {
+		if (zones == null) {
+			return false;
+		}
+		for (Zones z : zones) {
+			if (z == Zones.HAND || z == Zones.DECK) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@JsonIgnore
 	public List<AbstractEnchantmentDesc<?>> getEnchantmentDescList() {

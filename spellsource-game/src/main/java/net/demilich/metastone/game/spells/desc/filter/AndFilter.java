@@ -4,33 +4,35 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 
-import java.util.Map;
-
 /**
- * Evaluates to {@code true} for every {@code target} if all of the filters in {@link EntityFilterArg#FILTERS} also
- * evaluate to true for the target.
- * <p>
- * If {@link EntityFilterArg#FILTERS} is empty, evaluates to {@code true}.
+ * Evaluates to {@code true} when an {@code entity} passes all the sub-filters in {@link EntityFilterArg#FILTERS}, or if
+ * the filters list is empty.
+ *
+ * @see #create() for the pass-through {@code true} filter, which will match all entities.
+ * @see #create(EntityFilter...) to create an {@code AndFilter} from an array of existing filters.
+ * @see NullFilter for a filter that returns {@code false}.
  */
 public class AndFilter extends EntityFilter {
+	private static final AndFilter INSTANCE = new AndFilter(new EntityFilterDesc(AndFilter.class));
 
 	public static AndFilter create() {
-		return new AndFilter(new EntityFilterDesc(AndFilter.class));
+		return INSTANCE;
 	}
 
 	public static AndFilter create(EntityFilter... filters) {
-		Map<EntityFilterArg, Object> arguments = new EntityFilterDesc(AndFilter.class);
+		if (filters == null || filters.length == 0) {
+			return INSTANCE;
+		}
+		EntityFilterDesc arguments = new EntityFilterDesc(AndFilter.class);
 		arguments.put(EntityFilterArg.FILTERS, filters);
-		return new AndFilter(new EntityFilterDesc(arguments));
+		return new AndFilter(arguments);
 	}
 
 	public AndFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		EntityFilter[] filters = (EntityFilter[]) getDesc().get(EntityFilterArg.FILTERS);
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host, EntityFilter[] filters) {
 		if (filters == null) {
 			return true;
 		}
@@ -40,5 +42,10 @@ public class AndFilter extends EntityFilter {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return super.equals(other);
 	}
 }

@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "SetHpSpell",
-        "value": 1
+        "value": 1,
+        "name": "Rotten Curse"
       },
       {
         "class": "AddAttributeSpell",
@@ -19,7 +20,8 @@
         "revertTrigger": {
           "class": "TurnStartTrigger",
           "targetPlayer": "SELF"
-        }
+        },
+        "name": "Rotten Curse"
       }
     ]
   },

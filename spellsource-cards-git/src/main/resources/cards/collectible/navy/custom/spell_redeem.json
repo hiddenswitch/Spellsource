@@ -11,7 +11,8 @@
     "value": {
       "class": "AttributeValueProvider",
       "attribute": "ATTACK"
-    }
+    },
+    "name": "Redeem"
   },
   "collectible": true,
   "set": "CUSTOM",

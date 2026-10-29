@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.desc.condition;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.spells.Default;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.ReservoirsAlwaysActiveAura;
@@ -22,18 +23,24 @@ public class ReservoirCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			Integer value1,
+			@Default(15) Integer value2,
+			@Default(20) int value) {
 		var forced = reservoirsForced(context, player, source);
 		if (forced != null) {
 			return forced;
 		}
 
-		if (desc.containsKey(ConditionArg.VALUE1) && desc.containsKey(ConditionArg.VALUE2)) {
-			return player.getDeck().size() >= desc.getValue(ConditionArg.VALUE1, context, player, target, source, 0)
-					&& player.getDeck().size() <= desc.getValue(ConditionArg.VALUE2, context, player, target, source, 15);
+		int deckSize = player.getDeck().size();
+		if (value1 != null && value2 != null) {
+			return deckSize >= value1 && deckSize <= value2;
 		} else {
-			return player.getDeck().size() >= desc.getValue(ConditionArg.VALUE, context, player, target, source, 20);
+			return deckSize >= value;
 		}
 	}
 

@@ -17,17 +17,19 @@ public class HasEntitiesOnBoardCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		var cardNames = (String[]) desc.get(ConditionArg.CARDS);
-
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			String[] cards) {
 		List<Actor> checkedActors = new ArrayList<Actor>(player.getMinions());
 		if (!player.getWeaponZone().isEmpty()) {
 			checkedActors.add(player.getWeaponZone().get(0));
 		}
 		checkedActors.add(player.getHero());
 
-		for (var cardName : cardNames) {
+		for (var cardName : cards) {
 			var check = false;
 			for (var actor : checkedActors) {
 				if (actor.getSourceCard().getCardId().equalsIgnoreCase(cardName)) {

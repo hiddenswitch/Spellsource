@@ -25,7 +25,8 @@
         "value1": {
           "class": "ManaCostProvider"
         }
-      }
+      },
+      "name": "Emissary of's Fury"
     }
   },
   "attributes": {

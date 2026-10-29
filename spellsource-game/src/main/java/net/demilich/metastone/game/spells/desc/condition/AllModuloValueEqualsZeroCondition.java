@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.desc.condition;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.spells.Default;
 import net.demilich.metastone.game.entities.Entity;
 
 /**
@@ -69,11 +70,14 @@ public class AllModuloValueEqualsZeroCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		var attributeValue = desc.getValue(ConditionArg.VALUE1, context, player, target, source, 0);
-		var moduloValue = desc.getValue(ConditionArg.VALUE2, context, player, target, source, 2);
-		return attributeValue % moduloValue == 0;
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			int value1,
+			@Default(2) int value2) {
+		return value1 % value2 == 0;
 	}
 
 	@Override

@@ -23,7 +23,8 @@
           "hpBonus": {
             "class": "AttributeValueProvider",
             "attribute": "HP"
-          }
+          },
+          "name": "Absysoma's Blessing"
         },
         {
           "class": "DoubleAttackSpell"

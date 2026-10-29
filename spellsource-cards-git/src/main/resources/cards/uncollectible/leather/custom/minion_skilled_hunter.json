@@ -19,7 +19,8 @@
           "class": "HasEnchantmentFilter",
           "card": "enchantment_marked"
         }
-      }
+      },
+      "name": "Skilled Hunter's Empowerment"
     }
   },
   "attributes": {

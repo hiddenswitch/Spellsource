@@ -17,10 +17,12 @@
       "spell": {
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
-        "value": 1
+        "value": 1,
+        "name": "Enlivened Audience"
       },
       "oneTurn": true
-    }
+    },
+    "name": "Enlivened Audience"
   },
   "collectible": true,
   "set": "CUSTOM",

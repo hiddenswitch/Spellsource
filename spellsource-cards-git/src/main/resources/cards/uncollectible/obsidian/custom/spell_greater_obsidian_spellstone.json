@@ -10,7 +10,8 @@
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
     "value": 6,
-    "randomTarget": true
+    "randomTarget": true,
+    "name": "Greater Obsidian Lunstone"
   },
   "collectible": false,
   "set": "CUSTOM",

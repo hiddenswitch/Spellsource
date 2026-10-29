@@ -21,13 +21,15 @@
         {
           "class": "AddAttributeSpell",
           "target": "EVENT_SOURCE",
-          "attribute": "COUNTERED"
+          "attribute": "COUNTERED",
+          "name": "Kinru's Blessing"
         },
         {
           "class": "BuffSpell",
           "target": "EVENT_TARGET",
           "attackBonus": 3,
-          "hpBonus": 3
+          "hpBonus": 3,
+          "name": "Kinru's Blessing"
         }
       ]
     }

@@ -18,7 +18,8 @@
           "cardType": "MINION"
         },
         "hpBonus": 2,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Stolen Supplies"
       },
       {
         "class": "BuffSpell",
@@ -29,7 +30,8 @@
           "cardType": "MINION"
         },
         "hpBonus": -2,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Stolen Supplies"
       }
     ]
   },

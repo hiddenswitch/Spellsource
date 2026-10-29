@@ -2,31 +2,29 @@ package net.demilich.metastone.game.spells.desc.valueprovider;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.desc.filter.CardFilter;
+import net.demilich.metastone.game.spells.desc.filter.AndFilter;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.desc.source.DeckSource;
 
-/**
- * Returns the index of the first entity that matches the {@link ValueProviderArg#CARD_FILTER} in the specified {@link
- * ValueProviderArg#CARD_SOURCE}.
- */
+import java.util.Objects;
+
 public class IndexInSourceValueProvider extends ValueProvider {
+
 	public IndexInSourceValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		CardSource source = (CardSource) getDesc().get(ValueProviderArg.CARD_SOURCE);
-		CardFilter filter = (CardFilter) getDesc().get(ValueProviderArg.CARD_FILTER);
-		int i = 0;
-		for (Card card : source.getCards(context, host, player)) {
-			if (filter != null && !filter.matches(context, player, card, host)) {
-				i++;
-			} else return i;
-		}
-
-		return -1;
+	protected int provideValue(
+			GameContext context,
+			Player player,
+			Entity target,
+			Entity host,
+			CardSource cardSource,
+			EntityFilter cardFilter) {
+		var source = (CardSource) Objects.requireNonNullElseGet(cardSource, DeckSource::create);
+		var filter = (EntityFilter) Objects.requireNonNullElseGet(cardFilter, AndFilter::create);
+		return source.getCards(context, host, player).filtered(filter.matcher(context, player, host)).indexOf(target);
 	}
 }

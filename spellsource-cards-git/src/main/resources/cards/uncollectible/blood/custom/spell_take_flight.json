@@ -13,7 +13,8 @@
     "revertTrigger": {
       "class": "TurnStartTrigger",
       "targetPlayer": "SELF"
-    }
+    },
+    "name": "Take Flight"
   },
   "collectible": false,
   "fileFormatVersion": 1,

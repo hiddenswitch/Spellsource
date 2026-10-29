@@ -28,7 +28,8 @@
         "spell": {
           "class": "BuffSpell",
           "attackBonus": 1,
-          "hpBonus": 1
+          "hpBonus": 1,
+          "name": "Garbasu Monster's Blessing"
         }
       }
     }

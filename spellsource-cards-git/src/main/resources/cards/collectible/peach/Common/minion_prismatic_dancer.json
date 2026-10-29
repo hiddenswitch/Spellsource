@@ -17,7 +17,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "attackBonus": 1
+      "attackBonus": 1,
+      "name": "Prismatic Dancer's Fury"
     }
   },
   "collectible": true,

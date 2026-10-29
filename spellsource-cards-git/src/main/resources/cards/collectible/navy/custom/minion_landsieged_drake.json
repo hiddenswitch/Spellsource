@@ -12,7 +12,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "value": 3,
+      "value": 4,
       "card": "token_knight",
       "targetPlayer": "OPPONENT"
     }

@@ -20,7 +20,8 @@
         "revertTrigger": {
           "class": "TurnStartTrigger",
           "targetPlayer": "SELF"
-        }
+        },
+        "name": "Espionage"
       }
     ]
   },

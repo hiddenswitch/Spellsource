@@ -16,7 +16,8 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "armorBonus": 6
+        "armorBonus": 6,
+        "name": "At Others' Expense"
       }
     ]
   },

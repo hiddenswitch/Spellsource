@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "hpBonus": 5
+        "hpBonus": 5,
+        "name": "Hemoshield"
       },
       {
         "class": "AddEnchantmentSpell",

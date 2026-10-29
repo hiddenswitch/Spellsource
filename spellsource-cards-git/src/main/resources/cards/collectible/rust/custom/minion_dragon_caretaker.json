@@ -15,7 +15,8 @@
         "class": "CardFilter",
         "race": "DRAGON"
       },
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Dragon Caretaker's Ward"
     }
   },
   "attributes": {

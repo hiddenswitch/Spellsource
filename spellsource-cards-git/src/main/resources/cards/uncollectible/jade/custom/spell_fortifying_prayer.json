@@ -10,7 +10,8 @@
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
     "attackBonus": 0,
-    "hpBonus": 2
+    "hpBonus": 2,
+    "name": "Inner Peace"
   },
   "collectible": false,
   "set": "CUSTOM",

@@ -13,7 +13,8 @@
     "class": "MetaSpell",
     "spell1": {
       "class": "BuffSpell",
-      "value": 4
+      "value": 4,
+      "name": "Star of the Night"
     },
     "spell2": {
       "class": "DrawCardSpell",

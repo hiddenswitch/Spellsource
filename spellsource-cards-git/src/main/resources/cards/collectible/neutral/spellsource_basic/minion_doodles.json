@@ -33,7 +33,8 @@
               "card": "enchantment_draw_card_skill"
             },
             "countByValue": true
-          }
+          },
+          "name": "Doodles' Pact"
         },
         {
           "class": "CastAfterSequenceSpell",

@@ -38,7 +38,6 @@ import net.demilich.metastone.game.spells.ModifyAttributeSpell;
 import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.spells.RemoveAttributeSpell;
-import net.demilich.metastone.game.spells.RevertableSpell;
 import net.demilich.metastone.game.spells.SetAttackSpell;
 import net.demilich.metastone.game.spells.SetHpSpell;
 import net.demilich.metastone.game.spells.SilenceSpell;
@@ -61,7 +60,9 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.condition.CountCondition;
+import net.demilich.metastone.game.spells.desc.condition.GraveyardCountCondition;
 import net.demilich.metastone.game.spells.desc.condition.IsDeadCondition;
+import net.demilich.metastone.game.spells.desc.condition.MinionCountCondition;
 import net.demilich.metastone.game.spells.desc.condition.OrCondition;
 import net.demilich.metastone.game.spells.desc.condition.OwnedByPlayerCondition;
 import net.demilich.metastone.game.spells.desc.condition.RaceCondition;
@@ -86,6 +87,7 @@ import net.demilich.metastone.game.spells.desc.valueprovider.DiedThisTurnValuePr
 import net.demilich.metastone.game.spells.desc.valueprovider.EntityCountValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.GameValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.PlayerAttributeValueProvider;
+import net.demilich.metastone.game.spells.desc.valueprovider.ReduceValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
@@ -141,6 +143,23 @@ public final class DescBytecodeCompiler {
 	};
 	private static final ConcurrentHashMap<Class<?>, Boolean> OVERRIDES_CAST_CACHE = new ConcurrentHashMap<>();
 	private static final ConcurrentHashMap<Class<?>, Optional<Option1MethodSpec>> OPTION1_SPEC_CACHE = new ConcurrentHashMap<>();
+	private static final ConcurrentHashMap<Desc<?, ?>, net.demilich.metastone.game.cards.desc.HasDesc<?>> INTERNED_COMPONENTS = new ConcurrentHashMap<>(4096);
+	private record LoweredEntry<T>(T compiled, boolean definedHiddenClass) {
+	}
+
+	private static final ConcurrentHashMap<ValueProviderDesc, CompiledValueProvider> COMPILED_VP_CACHE = new ConcurrentHashMap<>(1024);
+	private static final ConcurrentHashMap<EntityFilterDesc, CompiledEntityFilter> COMPILED_EF_CACHE = new ConcurrentHashMap<>(1024);
+	private static final ConcurrentHashMap<ConditionDesc, CompiledCondition> COMPILED_COND_CACHE = new ConcurrentHashMap<>(1024);
+	private static final ConcurrentHashMap<SpellDesc, CompiledSpell> COMPILED_SPELL_CACHE = new ConcurrentHashMap<>(2048);
+	private static final ConcurrentHashMap<ValueProviderDesc, LoweredEntry<CompiledValueProvider>> PERSISTENT_LOWERED_VP_CACHE = new ConcurrentHashMap<>(1024);
+	private static final ConcurrentHashMap<EntityFilterDesc, LoweredEntry<CompiledEntityFilter>> PERSISTENT_LOWERED_EF_CACHE = new ConcurrentHashMap<>(1024);
+	private static final ConcurrentHashMap<ConditionDesc, LoweredEntry<CompiledCondition>> PERSISTENT_LOWERED_COND_CACHE = new ConcurrentHashMap<>(1024);
+	private static final ConcurrentHashMap<SpellDesc, LoweredEntry<CompiledSpell>> PERSISTENT_LOWERED_SPELL_CACHE = new ConcurrentHashMap<>(2048);
+	private static final ConcurrentHashMap<ValueProviderDesc, ValueProvider> PENDING_PREWARM_VP = new ConcurrentHashMap<>(1024);
+	private static final ConcurrentHashMap<EntityFilterDesc, EntityFilter> PENDING_PREWARM_EF = new ConcurrentHashMap<>(1024);
+	private static final ConcurrentHashMap<ConditionDesc, Condition> PENDING_PREWARM_COND = new ConcurrentHashMap<>(1024);
+	private static final ConcurrentHashMap<SpellDesc, Boolean> PENDING_PREWARM_SPELL = new ConcurrentHashMap<>(2048);
+	private static final java.util.concurrent.atomic.AtomicInteger HIDDEN_CLASSES_DEFINED = new java.util.concurrent.atomic.AtomicInteger();
 
 	/**
 	 * Controls whether {@link DescBytecodeCompiler} lowers Option 1 typed component methods ({@code onCast},
@@ -149,62 +168,189 @@ public final class DescBytecodeCompiler {
 	 */
 	public static volatile boolean ENABLE_OPTION1_LOWERING = true;
 
-	private static final ClassDesc CD_COMPILER = ClassDesc.of(PKG, "DescBytecodeCompiler");
-	private static final ClassDesc CD_COMPILED_VP = ClassDesc.of(PKG, "CompiledValueProvider");
-	private static final ClassDesc CD_COMPILED_EF = ClassDesc.of(PKG, "CompiledEntityFilter");
-	private static final ClassDesc CD_COMPILED_COND = ClassDesc.of(PKG, "CompiledCondition");
-	private static final ClassDesc CD_COMPILED_SPELL = ClassDesc.of(PKG, "CompiledSpell");
+	public static int getHiddenClassesDefinedCount() {
+		return HIDDEN_CLASSES_DEFINED.get();
+	}
 
-	private static final ClassDesc CD_GAME_CONTEXT = ClassDesc.of("net.demilich.metastone.game.GameContext");
-	private static final ClassDesc CD_GAME_LOGIC = ClassDesc.of("net.demilich.metastone.game.logic.GameLogic");
-	private static final ClassDesc CD_PLAYER = ClassDesc.of("net.demilich.metastone.game.Player");
-	private static final ClassDesc CD_ENTITY = ClassDesc.of("net.demilich.metastone.game.entities.Entity");
-	private static final ClassDesc CD_CARD = ClassDesc.of("net.demilich.metastone.game.cards.Card");
-	private static final ClassDesc CD_CARD_LIST = ClassDesc.of("net.demilich.metastone.game.cards.CardList");
-	private static final ClassDesc CD_ATTRIBUTE = ClassDesc.of("net.demilich.metastone.game.cards.Attribute");
-	private static final ClassDesc CD_ENTITY_REF = ClassDesc.of("net.demilich.metastone.game.targeting.EntityReference");
-	private static final ClassDesc CD_COMP_OP = ClassDesc.of("net.demilich.metastone.game.spells.desc.filter.ComparisonOperation");
-	private static final ClassDesc CD_ALG_OP = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation");
-	private static final ClassDesc CD_VP = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider");
-	private static final ClassDesc CD_VP_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc");
-	private static final ClassDesc CD_ATTR_VP = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider");
-	private static final ClassDesc CD_EF = ClassDesc.of("net.demilich.metastone.game.spells.desc.filter.EntityFilter");
-	private static final ClassDesc CD_EF_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc");
-	private static final ClassDesc CD_COND = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.Condition");
-	private static final ClassDesc CD_COND_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.ConditionDesc");
-	private static final ClassDesc CD_SPELL = ClassDesc.of("net.demilich.metastone.game.spells.Spell");
-	private static final ClassDesc CD_REVERTABLE_SPELL = ClassDesc.of("net.demilich.metastone.game.spells.RevertableSpell");
-	private static final ClassDesc CD_SPELL_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.SpellDesc");
-	private static final ClassDesc CD_RACE = ClassDesc.of("net.demilich.metastone.game.entities.minions.Race");
-	private static final ClassDesc CD_SPELL_UTILS = ClassDesc.of("net.demilich.metastone.game.spells.SpellUtils");
-	private static final ClassDesc CD_MATH = ClassDesc.of("java.lang.Math");
-	private static final ClassDesc CD_LIST = ClassDesc.of("java.util.List");
-	private static final ClassDesc CD_SET = ClassDesc.of("java.util.Set");
-	private static final ClassDesc CD_DEQUE = ClassDesc.of("java.util.Deque");
+	public static int getInternedComponentCount() {
+		return INTERNED_COMPONENTS.size();
+	}
 
-	private static final MethodTypeDesc MTD_VP_COMPUTE = MethodTypeDesc.of(
+	public static int getCompiledCacheSize() {
+		return COMPILED_VP_CACHE.size() + COMPILED_EF_CACHE.size() + COMPILED_COND_CACHE.size() + COMPILED_SPELL_CACHE.size();
+	}
+
+	public static void clearCaches() {
+		INTERNED_COMPONENTS.clear();
+		COMPILED_VP_CACHE.clear();
+		COMPILED_EF_CACHE.clear();
+		COMPILED_COND_CACHE.clear();
+		COMPILED_SPELL_CACHE.clear();
+		HIDDEN_CLASSES_DEFINED.set(0);
+	}
+
+	private static final java.util.concurrent.atomic.AtomicBoolean PREWARMING = new java.util.concurrent.atomic.AtomicBoolean();
+
+	private static boolean isCompilerHiddenClass(Object compiled) {
+		return compiled != null && compiled.getClass().getName().startsWith(PKG + ".Hidden");
+	}
+
+	public static void drainPendingPrewarmIfNeeded() {
+		if (!ENABLE_OPTION1_LOWERING) {
+			return;
+		}
+		if (PENDING_PREWARM_VP.isEmpty() && PENDING_PREWARM_EF.isEmpty() && PENDING_PREWARM_COND.isEmpty() && PENDING_PREWARM_SPELL.isEmpty()) {
+			return;
+		}
+		if (!PREWARMING.compareAndSet(false, true)) {
+			return;
+		}
+		int savedCount = HIDDEN_CLASSES_DEFINED.get();
+		var savedCompiled = new java.util.IdentityHashMap<Desc<?, ?>, Object>();
+		try {
+			var vps = new ArrayList<>(PENDING_PREWARM_VP.entrySet());
+			var efs = new ArrayList<>(PENDING_PREWARM_EF.entrySet());
+			var conds = new ArrayList<>(PENDING_PREWARM_COND.entrySet());
+			var spells = new ArrayList<>(PENDING_PREWARM_SPELL.keySet());
+			PENDING_PREWARM_VP.clear();
+			PENDING_PREWARM_EF.clear();
+			PENDING_PREWARM_COND.clear();
+			PENDING_PREWARM_SPELL.clear();
+
+			for (var entry : vps) {
+				ValueProviderDesc d = entry.getKey();
+				savedCompiled.put(d, CompilerBridge.getCompiled(d));
+				CompilerBridge.setCompiled(d, null);
+			}
+			for (var entry : efs) {
+				EntityFilterDesc d = entry.getKey();
+				savedCompiled.put(d, CompilerBridge.getCompiled(d));
+				CompilerBridge.setCompiled(d, null);
+			}
+			for (var entry : conds) {
+				ConditionDesc d = entry.getKey();
+				savedCompiled.put(d, CompilerBridge.getCompiled(d));
+				CompilerBridge.setCompiled(d, null);
+			}
+			for (SpellDesc d : spells) {
+				savedCompiled.put(d, CompilerBridge.getCompiled(d));
+				CompilerBridge.setCompiled(d, null);
+			}
+
+			for (var entry : vps) {
+				ValueProviderDesc d = entry.getKey();
+				ValueProvider vp = entry.getValue();
+				PERSISTENT_LOWERED_VP_CACHE.computeIfAbsent(d, k -> {
+					CompiledValueProvider c = compile(vp);
+					return new LoweredEntry<>(c, isCompilerHiddenClass(c));
+				});
+			}
+			for (var entry : efs) {
+				EntityFilterDesc d = entry.getKey();
+				EntityFilter ef = entry.getValue();
+				PERSISTENT_LOWERED_EF_CACHE.computeIfAbsent(d, k -> {
+					CompiledEntityFilter c = compile(ef);
+					return new LoweredEntry<>(c, isCompilerHiddenClass(c));
+				});
+			}
+			for (var entry : conds) {
+				ConditionDesc d = entry.getKey();
+				Condition cond = entry.getValue();
+				PERSISTENT_LOWERED_COND_CACHE.computeIfAbsent(d, k -> {
+					CompiledCondition c = compile(cond);
+					return new LoweredEntry<>(c, isCompilerHiddenClass(c));
+				});
+			}
+			for (SpellDesc d : spells) {
+				PERSISTENT_LOWERED_SPELL_CACHE.computeIfAbsent(d, k -> {
+					CompiledSpell c = compileSpell(k);
+					return new LoweredEntry<>(c, isCompilerHiddenClass(c));
+				});
+			}
+		} finally {
+			for (var e : savedCompiled.entrySet()) {
+				CompilerBridge.setCompiled(e.getKey(), e.getValue());
+			}
+			COMPILED_VP_CACHE.clear();
+			COMPILED_EF_CACHE.clear();
+			COMPILED_COND_CACHE.clear();
+			COMPILED_SPELL_CACHE.clear();
+			HIDDEN_CLASSES_DEFINED.set(savedCount);
+			PREWARMING.set(false);
+		}
+	}
+
+	public static net.demilich.metastone.game.cards.desc.HasDesc<?> internReadOnlyComponent(
+			Desc<?, ?> desc,
+			net.demilich.metastone.game.cards.desc.HasDesc<?> instance) {
+		if (!ENABLE_OPTION1_LOWERING || DescAuditRecorder.ENABLED) {
+			return instance;
+		}
+		if (instance instanceof Spell
+				|| instance instanceof EntityFilter
+				|| instance instanceof ValueProvider
+				|| instance instanceof Condition) {
+			var existing = INTERNED_COMPONENTS.putIfAbsent(desc, instance);
+			return existing != null ? existing : instance;
+		}
+		return instance;
+	}
+
+	static final ClassDesc CD_COMPILER = ClassDesc.of(PKG, "DescBytecodeCompiler");
+	static final ClassDesc CD_COMPILED_VP = ClassDesc.of(PKG, "CompiledValueProvider");
+	static final ClassDesc CD_COMPILED_EF = ClassDesc.of(PKG, "CompiledEntityFilter");
+	static final ClassDesc CD_COMPILED_COND = ClassDesc.of(PKG, "CompiledCondition");
+	static final ClassDesc CD_COMPILED_SPELL = ClassDesc.of(PKG, "CompiledSpell");
+
+	static final ClassDesc CD_GAME_CONTEXT = ClassDesc.of("net.demilich.metastone.game.GameContext");
+	static final ClassDesc CD_GAME_LOGIC = ClassDesc.of("net.demilich.metastone.game.logic.GameLogic");
+	static final ClassDesc CD_PLAYER = ClassDesc.of("net.demilich.metastone.game.Player");
+	static final ClassDesc CD_ENTITY = ClassDesc.of("net.demilich.metastone.game.entities.Entity");
+	static final ClassDesc CD_CARD = ClassDesc.of("net.demilich.metastone.game.cards.Card");
+	static final ClassDesc CD_CARD_LIST = ClassDesc.of("net.demilich.metastone.game.cards.CardList");
+	static final ClassDesc CD_ATTRIBUTE = ClassDesc.of("net.demilich.metastone.game.cards.Attribute");
+	static final ClassDesc CD_ENTITY_REF = ClassDesc.of("net.demilich.metastone.game.targeting.EntityReference");
+	static final ClassDesc CD_COMP_OP = ClassDesc.of("net.demilich.metastone.game.spells.desc.filter.ComparisonOperation");
+	static final ClassDesc CD_ALG_OP = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation");
+	static final ClassDesc CD_VP = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider");
+	static final ClassDesc CD_VP_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc");
+	static final ClassDesc CD_ATTR_VP = ClassDesc.of("net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider");
+	static final ClassDesc CD_EF = ClassDesc.of("net.demilich.metastone.game.spells.desc.filter.EntityFilter");
+	static final ClassDesc CD_EF_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc");
+	static final ClassDesc CD_COND = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.Condition");
+	static final ClassDesc CD_COND_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.ConditionDesc");
+	static final ClassDesc CD_SPELL = ClassDesc.of("net.demilich.metastone.game.spells.Spell");
+	static final ClassDesc CD_SPELL_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.SpellDesc");
+	static final ClassDesc CD_RACE = ClassDesc.of("net.demilich.metastone.game.entities.minions.Race");
+	static final ClassDesc CD_SPELL_UTILS = ClassDesc.of("net.demilich.metastone.game.spells.SpellUtils");
+	static final ClassDesc CD_MATH = ClassDesc.of("java.lang.Math");
+	static final ClassDesc CD_LIST = ClassDesc.of("java.util.List");
+	static final ClassDesc CD_SET = ClassDesc.of("java.util.Set");
+	static final ClassDesc CD_DEQUE = ClassDesc.of("java.util.Deque");
+
+	static final MethodTypeDesc MTD_VP_COMPUTE = MethodTypeDesc.of(
 			ConstantDescs.CD_int, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY);
-	private static final MethodTypeDesc MTD_EF_MATCHES = MethodTypeDesc.of(
+	static final MethodTypeDesc MTD_EF_MATCHES = MethodTypeDesc.of(
 			ConstantDescs.CD_boolean, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY);
-	private static final MethodTypeDesc MTD_COND_FULFILLED = MethodTypeDesc.of(
+	static final MethodTypeDesc MTD_COND_FULFILLED = MethodTypeDesc.of(
 			ConstantDescs.CD_boolean, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY);
-	private static final MethodTypeDesc MTD_COND_EVAL = MethodTypeDesc.of(
+	static final MethodTypeDesc MTD_COND_EVAL = MethodTypeDesc.of(
 			ConstantDescs.CD_boolean, CD_GAME_CONTEXT, CD_PLAYER, CD_COND_DESC, CD_ENTITY, CD_ENTITY);
-	private static final MethodTypeDesc MTD_SPELL_CAST = MethodTypeDesc.of(
+	static final MethodTypeDesc MTD_SPELL_CAST = MethodTypeDesc.of(
 			ConstantDescs.MTD_void.returnType(), CD_GAME_CONTEXT, CD_PLAYER, CD_SPELL_DESC, CD_ENTITY, CD_LIST);
-	private static final MethodTypeDesc MTD_SPELL_ONCAST = MethodTypeDesc.of(
+	static final MethodTypeDesc MTD_SPELL_ONCAST = MethodTypeDesc.of(
 			ConstantDescs.MTD_void.returnType(), CD_GAME_CONTEXT, CD_PLAYER, CD_SPELL_DESC, CD_ENTITY, CD_ENTITY);
 
 	private DescBytecodeCompiler() {
 	}
 
-	private static int addConstant(List<Object> classData, Object value) {
+	static int addConstant(List<Object> classData, Object value) {
 		int idx = classData.size();
 		classData.add(value);
 		return idx;
 	}
 
-	private static void loadClassData(CodeBuilder cob, int index, ClassDesc type) {
+	static void loadClassData(CodeBuilder cob, int index, ClassDesc type) {
 		cob.ldc(DynamicConstantDesc.ofNamed(
 				ConstantDescs.BSM_CLASS_DATA_AT,
 				ConstantDescs.DEFAULT_NAME,
@@ -220,7 +366,7 @@ public final class DescBytecodeCompiler {
 		});
 	}
 
-	private static void loadSlotOrNull(CodeBuilder cob, int slot) {
+	static void loadSlotOrNull(CodeBuilder cob, int slot) {
 		if (slot <= 0) {
 			cob.aconst_null();
 		} else {
@@ -239,7 +385,27 @@ public final class DescBytecodeCompiler {
 		}
 		CompiledValueProvider c = (CompiledValueProvider) CompilerBridge.getCompiled(d);
 		if (c == null) {
-			c = compile(vp);
+			if (ENABLE_OPTION1_LOWERING && d.isReadOnly()) {
+				c = COMPILED_VP_CACHE.computeIfAbsent(d, k -> {
+					LoweredEntry<CompiledValueProvider> entry = PERSISTENT_LOWERED_VP_CACHE.computeIfAbsent(k, k2 -> {
+						CompiledValueProvider compiled = compile(vp);
+						boolean defined = isCompilerHiddenClass(compiled);
+						if (defined) {
+							HIDDEN_CLASSES_DEFINED.decrementAndGet();
+						}
+						return new LoweredEntry<>(compiled, defined);
+					});
+					if (entry.definedHiddenClass()) {
+						HIDDEN_CLASSES_DEFINED.incrementAndGet();
+					}
+					return entry.compiled();
+				});
+			} else {
+				if (d.isReadOnly() && !PERSISTENT_LOWERED_VP_CACHE.containsKey(d)) {
+					PENDING_PREWARM_VP.putIfAbsent(d, vp);
+				}
+				c = compile(vp);
+			}
 			CompilerBridge.setCompiled(d, c);
 		}
 		return c;
@@ -274,7 +440,27 @@ public final class DescBytecodeCompiler {
 		}
 		CompiledEntityFilter c = (CompiledEntityFilter) CompilerBridge.getCompiled(d);
 		if (c == null) {
-			c = compile(ef);
+			if (ENABLE_OPTION1_LOWERING && d.isReadOnly()) {
+				c = COMPILED_EF_CACHE.computeIfAbsent(d, k -> {
+					LoweredEntry<CompiledEntityFilter> entry = PERSISTENT_LOWERED_EF_CACHE.computeIfAbsent(k, k2 -> {
+						CompiledEntityFilter compiled = compile(ef);
+						boolean defined = isCompilerHiddenClass(compiled);
+						if (defined) {
+							HIDDEN_CLASSES_DEFINED.decrementAndGet();
+						}
+						return new LoweredEntry<>(compiled, defined);
+					});
+					if (entry.definedHiddenClass()) {
+						HIDDEN_CLASSES_DEFINED.incrementAndGet();
+					}
+					return entry.compiled();
+				});
+			} else {
+				if (d.isReadOnly() && !PERSISTENT_LOWERED_EF_CACHE.containsKey(d)) {
+					PENDING_PREWARM_EF.putIfAbsent(d, ef);
+				}
+				c = compile(ef);
+			}
 			CompilerBridge.setCompiled(d, c);
 		}
 		return c;
@@ -309,7 +495,27 @@ public final class DescBytecodeCompiler {
 		}
 		CompiledCondition c = (CompiledCondition) CompilerBridge.getCompiled(d);
 		if (c == null) {
-			c = compile(cond);
+			if (ENABLE_OPTION1_LOWERING && d.isReadOnly()) {
+				c = COMPILED_COND_CACHE.computeIfAbsent(d, k -> {
+					LoweredEntry<CompiledCondition> entry = PERSISTENT_LOWERED_COND_CACHE.computeIfAbsent(k, k2 -> {
+						CompiledCondition compiled = compile(cond);
+						boolean defined = isCompilerHiddenClass(compiled);
+						if (defined) {
+							HIDDEN_CLASSES_DEFINED.decrementAndGet();
+						}
+						return new LoweredEntry<>(compiled, defined);
+					});
+					if (entry.definedHiddenClass()) {
+						HIDDEN_CLASSES_DEFINED.incrementAndGet();
+					}
+					return entry.compiled();
+				});
+			} else {
+				if (d.isReadOnly() && !PERSISTENT_LOWERED_COND_CACHE.containsKey(d)) {
+					PENDING_PREWARM_COND.putIfAbsent(d, cond);
+				}
+				c = compile(cond);
+			}
 			CompilerBridge.setCompiled(d, c);
 		}
 		return c;
@@ -342,7 +548,27 @@ public final class DescBytecodeCompiler {
 		if (cs != null) {
 			return cs;
 		}
-		cs = compileSpell(desc);
+		if (ENABLE_OPTION1_LOWERING && desc.isReadOnly()) {
+			cs = COMPILED_SPELL_CACHE.computeIfAbsent(desc, k -> {
+				LoweredEntry<CompiledSpell> entry = PERSISTENT_LOWERED_SPELL_CACHE.computeIfAbsent(k, k2 -> {
+					CompiledSpell compiled = compileSpell(k2);
+					boolean defined = isCompilerHiddenClass(compiled);
+					if (defined) {
+						HIDDEN_CLASSES_DEFINED.decrementAndGet();
+					}
+					return new LoweredEntry<>(compiled, defined);
+				});
+				if (entry.definedHiddenClass()) {
+					HIDDEN_CLASSES_DEFINED.incrementAndGet();
+				}
+				return entry.compiled();
+			});
+		} else {
+			if (desc.isReadOnly() && !PERSISTENT_LOWERED_SPELL_CACHE.containsKey(desc)) {
+				PENDING_PREWARM_SPELL.putIfAbsent(desc, Boolean.TRUE);
+			}
+			cs = compileSpell(desc);
+		}
 		CompilerBridge.setCompiled(desc, cs);
 		return cs;
 	}
@@ -644,6 +870,7 @@ public final class DescBytecodeCompiler {
 
 			MethodHandles.Lookup hiddenLookup = LOOKUP.defineHiddenClassWithClassData(
 					bytes, List.copyOf(classData), true, MethodHandles.Lookup.ClassOption.NESTMATE);
+			HIDDEN_CLASSES_DEFINED.incrementAndGet();
 			return (CompiledValueProvider) hiddenLookup.findConstructor(
 					hiddenLookup.lookupClass(), MethodType.methodType(void.class)).invoke();
 		} catch (Throwable t) {
@@ -651,7 +878,7 @@ public final class DescBytecodeCompiler {
 		}
 	}
 
-	private static void emitInlineVP(
+	static void emitInlineVP(
 			CodeBuilder cob,
 			ValueProvider instance,
 			List<Object> classData,
@@ -933,6 +1160,86 @@ public final class DescBytecodeCompiler {
 		}
 
 		if (ENABLE_OPTION1_LOWERING && desc.isReadOnly() && clazz != null) {
+			if (clazz == AttributeValueProvider.class && desc.get(ValueProviderArg.TARGET) != null) {
+				EntityReference targetRef = (EntityReference) desc.get(ValueProviderArg.TARGET);
+				Attribute attribute = (Attribute) desc.get(ValueProviderArg.ATTRIBUTE);
+				EntityFilter filter = (EntityFilter) desc.get(ValueProviderArg.FILTER);
+				if (targetRef == EntityReference.SELF && attribute == Attribute.ATTACK && filter == null) {
+					cob.aload(1);
+					loadSlotOrNull(cob, hostSlot);
+					cob.invokestatic(ClassDesc.of(PKG, "TargetLogicRuntime"), "evalSelfAttributeAttack",
+							MethodTypeDesc.of(ConstantDescs.CD_int, CD_GAME_CONTEXT, CD_ENTITY));
+					return;
+				}
+				int refIdx = addConstant(classData, targetRef);
+				int attrIdx = addConstant(classData, attribute);
+				int filterIdx = addConstant(classData, filter);
+				cob.aload(1)
+						.aload(playerSlot);
+				loadSlotOrNull(cob, hostSlot);
+				loadClassData(cob, refIdx, CD_ENTITY_REF);
+				loadClassData(cob, attrIdx, CD_ATTRIBUTE);
+				loadClassData(cob, filterIdx, CD_EF);
+				cob.invokestatic(ClassDesc.of(PKG, "TargetLogicRuntime"), "sumAttributeOnTarget",
+						MethodTypeDesc.of(ConstantDescs.CD_int, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY_REF, CD_ATTRIBUTE, CD_EF));
+				return;
+			}
+			if (clazz == ReduceValueProvider.class) {
+				EntityReference targetRef = (EntityReference) desc.get(ValueProviderArg.TARGET);
+				Attribute attribute = (Attribute) desc.get(ValueProviderArg.ATTRIBUTE);
+				AlgebraicOperation op = (AlgebraicOperation) desc.getOrDefault(ValueProviderArg.OPERATION, AlgebraicOperation.MAXIMUM);
+				EntityFilter filter = (EntityFilter) desc.get(ValueProviderArg.FILTER);
+				Object val1Obj = desc.get(ValueProviderArg.VALUE1);
+				Object val2Obj = desc.get(ValueProviderArg.VALUE2);
+				boolean hasVal1 = val1Obj != null;
+				CompiledValueProvider vp1 = val1Obj instanceof ValueProvider vp ? getCompiled(vp) : null;
+				int constVal1 = val1Obj instanceof Number n ? n.intValue() : 0;
+				boolean hasVal2 = desc.containsKey(ValueProviderArg.VALUE2);
+				CompiledValueProvider vp2 = val2Obj instanceof ValueProvider vp ? getCompiled(vp) : null;
+				int constVal2 = val2Obj instanceof Number n ? n.intValue() : 0;
+
+				cob.aload(1)
+						.aload(playerSlot);
+				loadSlotOrNull(cob, targetSlot);
+				loadSlotOrNull(cob, hostSlot);
+				if (targetRef == null) {
+					cob.aconst_null();
+				} else {
+					loadClassData(cob, addConstant(classData, targetRef), CD_ENTITY_REF);
+				}
+				if (attribute == null) {
+					cob.aconst_null();
+				} else {
+					cob.getstatic(CD_ATTRIBUTE, attribute.name(), CD_ATTRIBUTE);
+				}
+				cob.getstatic(CD_ALG_OP, op.name(), CD_ALG_OP);
+				if (filter == null) {
+					cob.aconst_null();
+				} else {
+					loadClassData(cob, addConstant(classData, getCompiled(filter)), CD_COMPILED_EF);
+				}
+				if (vp1 == null) {
+					cob.aconst_null();
+				} else {
+					loadClassData(cob, addConstant(classData, vp1), CD_COMPILED_VP);
+				}
+				cob.ldc(constVal1)
+						.ldc(hasVal1 ? 1 : 0)
+						.ldc(hasVal2 ? 1 : 0)
+						.ldc(constVal2);
+				if (vp2 == null) {
+					cob.aconst_null();
+				} else {
+					loadClassData(cob, addConstant(classData, vp2), CD_COMPILED_VP);
+				}
+				cob.invokestatic(ClassDesc.of(PKG, "TargetLogicRuntime"), "evalReduceVP",
+						MethodTypeDesc.of(ConstantDescs.CD_int,
+								CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY,
+								CD_ENTITY_REF, CD_ATTRIBUTE, CD_ALG_OP, CD_COMPILED_EF,
+								CD_COMPILED_VP, ConstantDescs.CD_int, ConstantDescs.CD_boolean,
+								ConstantDescs.CD_boolean, ConstantDescs.CD_int, CD_COMPILED_VP));
+				return;
+			}
 			Option1MethodSpec spec = getOption1Spec(clazz);
 			if (spec != null) {
 				emitOption1ValueProvider(cob, spec, instance, desc, classData, playerSlot, targetSlot, hostSlot, tempSlotBase, depth);
@@ -998,25 +1305,7 @@ public final class DescBytecodeCompiler {
 			Entity originalHost,
 			EntityReference descTarget,
 			CompiledEntityFilter filter) {
-		Entity host = originalHost;
-		if (originalHost == null && descTarget != null && !descTarget.isTargetGroup()) {
-			host = context.resolveSingleTarget(descTarget);
-		}
-		EntityReference ref = descTarget != null ? descTarget : (target != null ? target.getReference() : null);
-		List<Entity> relevantEntities = context.resolveTarget(player, originalHost, ref);
-		if (relevantEntities == null) {
-			return 0;
-		}
-		if (filter == null) {
-			return relevantEntities.size();
-		}
-		int count = 0;
-		for (int i = 0, size = relevantEntities.size(); i < size; i++) {
-			if (filter.matches(context, player, relevantEntities.get(i), host)) {
-				count++;
-			}
-		}
-		return count;
+		return TargetLogicRuntime.countEntities(context, player, target, originalHost, descTarget, filter);
 	}
 
 	public static int evalDiedThisTurnVP(
@@ -1078,6 +1367,7 @@ public final class DescBytecodeCompiler {
 
 			MethodHandles.Lookup hiddenLookup = LOOKUP.defineHiddenClassWithClassData(
 					bytes, List.copyOf(classData), true, MethodHandles.Lookup.ClassOption.NESTMATE);
+			HIDDEN_CLASSES_DEFINED.incrementAndGet();
 			return (CompiledEntityFilter) hiddenLookup.findConstructor(
 					hiddenLookup.lookupClass(), MethodType.methodType(void.class)).invoke();
 		} catch (Throwable t) {
@@ -1463,6 +1753,7 @@ public final class DescBytecodeCompiler {
 
 			MethodHandles.Lookup hiddenLookup = LOOKUP.defineHiddenClassWithClassData(
 					bytes, List.copyOf(classData), true, MethodHandles.Lookup.ClassOption.NESTMATE);
+			HIDDEN_CLASSES_DEFINED.incrementAndGet();
 			return (CompiledCondition) hiddenLookup.findConstructor(
 					hiddenLookup.lookupClass(), MethodType.methodType(void.class)).invoke();
 		} catch (Throwable t) {
@@ -1477,7 +1768,10 @@ public final class DescBytecodeCompiler {
 		if (CompilerBridge.isTargetOverridden(instance) && desc.containsKey(ConditionArg.TARGET)) {
 			return false;
 		}
-		if (instance instanceof CountCondition || instance instanceof OwnedByPlayerCondition) {
+		if ((instance instanceof CountCondition
+				&& !(instance instanceof MinionCountCondition)
+				&& !(instance instanceof GraveyardCountCondition))
+				|| instance instanceof OwnedByPlayerCondition) {
 			return false;
 		}
 		TargetPlayer targetPlayer = (TargetPlayer) desc.getOrDefault(ConditionArg.TARGET_PLAYER, TargetPlayer.SELF);
@@ -1522,7 +1816,7 @@ public final class DescBytecodeCompiler {
 			cob.goto_(endFilter)
 					.labelBinding(afterFilter);
 			int resolvedPlayerSlot = emitResolveTargetPlayerForCond(cob, tp, playerSlot, targetSlot, scratchSlot);
-			emitConditionBody(cob, instance, desc, classData, resolvedPlayerSlot, sourceSlot, targetSlot, tempSlotBase, depth + 1);
+			emitConditionBody(cob, instance, desc, classData, playerSlot, resolvedPlayerSlot, sourceSlot, targetSlot, tempSlotBase, depth + 1);
 			if (invert) {
 				cob.iconst_1().ixor();
 			}
@@ -1531,7 +1825,7 @@ public final class DescBytecodeCompiler {
 		}
 
 		int resolvedPlayerSlot = emitResolveTargetPlayerForCond(cob, tp, playerSlot, targetSlot, scratchSlot);
-		emitConditionBody(cob, instance, desc, classData, resolvedPlayerSlot, sourceSlot, targetSlot, tempSlotBase, depth + 1);
+		emitConditionBody(cob, instance, desc, classData, playerSlot, resolvedPlayerSlot, sourceSlot, targetSlot, tempSlotBase, depth + 1);
 		if (invert) {
 			cob.iconst_1().ixor();
 		}
@@ -1607,6 +1901,7 @@ public final class DescBytecodeCompiler {
 			Condition instance,
 			ConditionDesc desc,
 			List<Object> classData,
+			int callerPlayerSlot,
 			int playerSlot,
 			int sourceSlot,
 			int targetSlot,
@@ -1617,6 +1912,31 @@ public final class DescBytecodeCompiler {
 		if (clazz == IsDeadCondition.class) {
 			loadSlotOrNull(cob, targetSlot);
 			cob.invokevirtual(CD_ENTITY, "isDestroyed", MethodTypeDesc.of(ConstantDescs.CD_boolean));
+			return;
+		}
+
+		if (ENABLE_OPTION1_LOWERING && desc.isReadOnly() && (clazz == MinionCountCondition.class || clazz == GraveyardCountCondition.class)) {
+			ComparisonOperation op = (ComparisonOperation) desc.getOrDefault(ConditionArg.OPERATION, ComparisonOperation.EQUAL);
+			Object valObj = desc.get(ConditionArg.VALUE);
+			EntityFilter filter = (EntityFilter) desc.get(ConditionArg.FILTER);
+			if (filter == null && clazz == MinionCountCondition.class) {
+				filter = (EntityFilter) desc.get(ConditionArg.CARD_FILTER);
+			}
+			CompiledEntityFilter compiledFilter = filter != null ? getCompiled(filter) : null;
+			cob.aload(1)
+					.aload(playerSlot);
+			loadSlotOrNull(cob, sourceSlot);
+			if (compiledFilter == null) {
+				cob.aconst_null();
+			} else {
+				int fIdx = addConstant(classData, compiledFilter);
+				loadClassData(cob, fIdx, CD_COMPILED_EF);
+			}
+			String countMethod = (clazz == MinionCountCondition.class) ? "countMinions" : "countGraveyard";
+			cob.invokestatic(ClassDesc.of(PKG, "TargetLogicRuntime"), countMethod,
+					MethodTypeDesc.of(ConstantDescs.CD_int, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_COMPILED_EF));
+			emitConditionArgValue(cob, valObj, classData, callerPlayerSlot, sourceSlot, targetSlot, tempSlotBase, depth);
+			emitIntComparison(cob, op);
 			return;
 		}
 
@@ -1677,6 +1997,27 @@ public final class DescBytecodeCompiler {
 		loadSlotOrNull(cob, sourceSlot);
 		loadSlotOrNull(cob, targetSlot);
 		cob.invokevirtual(CD_COND, "evaluateIsFulfilled", MTD_COND_EVAL);
+	}
+
+	private static void emitIntComparison(CodeBuilder cob, ComparisonOperation op) {
+		Label trueLabel = cob.newLabel();
+		Label endLabel = cob.newLabel();
+		switch (op) {
+			case EQUAL -> cob.if_icmpeq(trueLabel);
+			case GREATER -> cob.if_icmpgt(trueLabel);
+			case GREATER_OR_EQUAL -> cob.if_icmpge(trueLabel);
+			case LESS -> cob.if_icmplt(trueLabel);
+			case LESS_OR_EQUAL -> cob.if_icmple(trueLabel);
+			default -> {
+				cob.pop2().iconst_0();
+				return;
+			}
+		}
+		cob.iconst_0()
+				.goto_(endLabel)
+				.labelBinding(trueLabel)
+				.iconst_1()
+				.labelBinding(endLabel);
 	}
 
 	private static void emitConditionArgValue(
@@ -1780,10 +2121,8 @@ public final class DescBytecodeCompiler {
 					Label nonNullTargets = cob.newLabel();
 					cob.aload(5)
 							.ifnonnull(nonNullTargets);
-					// targets == null -> castForPlayer with target = null (slot 6 = null)
-					cob.aconst_null()
-							.astore(6);
-					emitCastForPlayerAndOnCast(cob, spellClass, spellInstance, desc, targetPlayer, classData, 6);
+					// targets == null -> castForPlayer with target = null (targetSlot = 0)
+					emitCastForPlayerAndOnCast(cob, spellClass, spellInstance, desc, targetPlayer, classData, 0);
 					cob.return_();
 
 					cob.labelBinding(nonNullTargets);
@@ -1862,6 +2201,7 @@ public final class DescBytecodeCompiler {
 
 			MethodHandles.Lookup hiddenLookup = LOOKUP.defineHiddenClassWithClassData(
 					bytes, List.copyOf(classData), true, MethodHandles.Lookup.ClassOption.NESTMATE);
+			HIDDEN_CLASSES_DEFINED.incrementAndGet();
 			return (CompiledSpell) hiddenLookup.findConstructor(
 					hiddenLookup.lookupClass(), MethodType.methodType(void.class)).invoke();
 		} catch (Throwable t) {
@@ -2151,6 +2491,32 @@ public final class DescBytecodeCompiler {
 		Spell targetInstance = isTopLevelSpell ? spellInstance : desc.create();
 
 		if (ENABLE_OPTION1_LOWERING && desc.isReadOnly() && spellClass != null) {
+			if (spellClass == BuffSpell.class
+					&& !desc.containsKey(SpellArg.VALUE)
+					&& !desc.containsKey(SpellArg.ARMOR_BONUS)
+					&& !desc.containsKey(SpellArg.REVERT_TRIGGER)
+					&& !desc.containsKey(SpellArg.SECOND_REVERT_TRIGGER)) {
+				if (targetSlot == 0) {
+					return;
+				}
+				boolean hasAttack = desc.containsKey(SpellArg.ATTACK_BONUS);
+				boolean hasHp = desc.containsKey(SpellArg.HP_BONUS);
+				cob.aload(1)
+						.aload(playerSlot);
+				emitLoadSpellDesc(cob, desc, isTopLevelSpell, classData);
+				cob.aload(4)
+						.aload(targetSlot);
+				emitSpellArgValue(cob, desc, SpellArg.ATTACK_BONUS, 0, classData, playerSlot, targetSlot, 4);
+				emitSpellArgValue(cob, desc, SpellArg.HP_BONUS, 0, classData, playerSlot, targetSlot, 4);
+				cob.ldc(hasAttack ? 1 : 0)
+						.ldc(hasHp ? 1 : 0)
+						.invokestatic(ClassDesc.of(PKG, "TargetLogicRuntime"), "execFastBuffSpell",
+								MethodTypeDesc.of(ConstantDescs.MTD_void.returnType(),
+										CD_GAME_CONTEXT, CD_PLAYER, CD_SPELL_DESC, CD_ENTITY, CD_ENTITY,
+										ConstantDescs.CD_int, ConstantDescs.CD_int,
+										ConstantDescs.CD_boolean, ConstantDescs.CD_boolean));
+				return;
+			}
 			Option1MethodSpec spec = getOption1Spec(spellClass);
 			if (spec != null) {
 				emitOption1Spell(cob, spec, targetInstance, desc, isTopLevelSpell, classData, playerSlot, targetSlot);
@@ -2244,11 +2610,13 @@ public final class DescBytecodeCompiler {
 		if (target.getAttribute(Attribute.TRANSFORM_REFERENCE) != null) {
 			return false;
 		}
-		var triggers = context.getTriggers();
-		for (int i = 0, n = triggers.size(); i < n; i++) {
-			var t = triggers.get(i);
-			if ((t instanceof SpellOverrideAura || t instanceof IncorruptibilityAura) && !t.isExpired() && t.isActivated()) {
-				return false;
+		GameStateArena.TriggerList trigs = GameStateArena.getContextArena(context).triggers;
+		if ((trigs.kindMask & GameStateArena.KIND_SPELL_OVERRIDE_OR_INCORRUPT_AURA) != 0) {
+			for (int i = 0, n = trigs.size; i < n; i++) {
+				var t = trigs.elements[i];
+				if ((t instanceof SpellOverrideAura || t instanceof IncorruptibilityAura) && !t.isExpired() && t.isActivated()) {
+					return false;
+				}
 			}
 		}
 		context.getLogic().incrementProgramCounter(source);
@@ -2264,7 +2632,7 @@ public final class DescBytecodeCompiler {
 	// Universal Option 1 Typed Signature Reflection & Bytecode Lowering
 	// =========================================================================
 
-	private enum Option1ParamKind {
+	enum Option1ParamKind {
 		MIXIN_CARDS,
 		MIXIN_CARD,
 		MIXIN_BOARD_POSITION,
@@ -2277,7 +2645,7 @@ public final class DescBytecodeCompiler {
 		ENUM_OR_REF
 	}
 
-	private record Option1ParamSpec(
+	record Option1ParamSpec(
 			Option1ParamKind kind,
 			Enum<?> argKey,
 			ClassDesc paramDesc,
@@ -2289,13 +2657,12 @@ public final class DescBytecodeCompiler {
 	) {
 	}
 
-	private record Option1MethodSpec(
+	record Option1MethodSpec(
 			ComponentSignatureAnalyzer.ComponentKind kind,
 			ClassDesc ownerDesc,
 			String methodName,
 			MethodTypeDesc methodTypeDesc,
 			boolean hasDescInPrefix,
-			boolean isRevertableSpell,
 			List<Option1ParamSpec> params
 	) {
 	}
@@ -2331,105 +2698,129 @@ public final class DescBytecodeCompiler {
 			}
 
 			Method typedMethod = null;
-			for (Method m : clazz.getDeclaredMethods()) {
-				if (!m.getName().equals(expectedMethodName)
-						|| m.isSynthetic()
-						|| m.isBridge()
-						|| Modifier.isStatic(m.getModifiers())
-						|| !Modifier.isPublic(m.getModifiers())) {
-					continue;
+			for (Class<?> curr = clazz;
+				 curr != null && curr != Object.class
+						 && curr != Spell.class
+						 && curr != EntityFilter.class
+						 && curr != ValueProvider.class
+						 && curr != Condition.class;
+				 curr = curr.getSuperclass()) {
+				boolean declaresBaseMethod = false;
+				for (Method m : curr.getDeclaredMethods()) {
+					String mName = m.getName();
+					if ((!mName.equals(expectedMethodName)
+							&& !(kind == ComponentSignatureAnalyzer.ComponentKind.CONDITION && mName.equals("isFulfilled$0")))
+							|| m.isSynthetic()
+							|| m.isBridge()
+							|| Modifier.isStatic(m.getModifiers())) {
+						continue;
+					}
+					declaresBaseMethod = true;
+					if (!Modifier.isPublic(m.getModifiers())) {
+						continue;
+					}
+					Class<?>[] pTypes = m.getParameterTypes();
+					boolean isTyped = switch (kind) {
+						case SPELL -> {
+							if (pTypes.length == 5
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == SpellDesc.class
+									&& pTypes[3] == Entity.class
+									&& pTypes[4] == Entity.class) {
+								yield false;
+							}
+							yield (pTypes.length > 5
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == SpellDesc.class
+									&& pTypes[3] == Entity.class
+									&& pTypes[4] == Entity.class)
+									|| (pTypes.length >= 4
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == Entity.class
+									&& pTypes[3] == Entity.class);
+						}
+						case ENTITY_FILTER -> {
+							if (pTypes.length == 4
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == Entity.class
+									&& pTypes[3] == Entity.class) {
+								yield false;
+							}
+							yield (pTypes.length > 4
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == Entity.class
+									&& pTypes[3] == Entity.class)
+									|| (pTypes.length >= 5
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == EntityFilterDesc.class
+									&& pTypes[3] == Entity.class
+									&& pTypes[4] == Entity.class);
+						}
+						case VALUE_PROVIDER -> {
+							if (pTypes.length == 4
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == Entity.class
+									&& pTypes[3] == Entity.class) {
+								yield false;
+							}
+							yield (pTypes.length > 4
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == Entity.class
+									&& pTypes[3] == Entity.class)
+									|| (pTypes.length >= 5
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == ValueProviderDesc.class
+									&& pTypes[3] == Entity.class
+									&& pTypes[4] == Entity.class);
+						}
+						case CONDITION -> {
+							if (mName.equals("isFulfilled$0")) {
+								yield pTypes.length == 4
+										&& pTypes[0] == GameContext.class
+										&& pTypes[1] == Player.class
+										&& pTypes[2] == Entity.class
+										&& pTypes[3] == Entity.class;
+							}
+							if (pTypes.length == 5
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == ConditionDesc.class
+									&& pTypes[3] == Entity.class
+									&& pTypes[4] == Entity.class) {
+								yield false;
+							}
+							if (pTypes.length == 4) {
+								yield false;
+							}
+							yield (pTypes.length > 5
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == ConditionDesc.class
+									&& pTypes[3] == Entity.class
+									&& pTypes[4] == Entity.class)
+									|| (pTypes.length > 4
+									&& pTypes[0] == GameContext.class
+									&& pTypes[1] == Player.class
+									&& pTypes[2] == Entity.class
+									&& pTypes[3] == Entity.class);
+						}
+						default -> false;
+					};
+					if (isTyped) {
+						typedMethod = m;
+						break;
+					}
 				}
-				Class<?>[] pTypes = m.getParameterTypes();
-				boolean isTyped = switch (kind) {
-					case SPELL -> {
-						if (pTypes.length == 5
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == SpellDesc.class
-								&& pTypes[3] == Entity.class
-								&& pTypes[4] == Entity.class) {
-							yield false;
-						}
-						yield (pTypes.length > 5
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == SpellDesc.class
-								&& pTypes[3] == Entity.class
-								&& pTypes[4] == Entity.class)
-								|| (pTypes.length >= 4
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == Entity.class
-								&& pTypes[3] == Entity.class);
-					}
-					case ENTITY_FILTER -> {
-						if (pTypes.length == 4
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == Entity.class
-								&& pTypes[3] == Entity.class) {
-							yield false;
-						}
-						yield (pTypes.length > 4
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == Entity.class
-								&& pTypes[3] == Entity.class)
-								|| (pTypes.length >= 5
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == EntityFilterDesc.class
-								&& pTypes[3] == Entity.class
-								&& pTypes[4] == Entity.class);
-					}
-					case VALUE_PROVIDER -> {
-						if (pTypes.length == 4
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == Entity.class
-								&& pTypes[3] == Entity.class) {
-							yield false;
-						}
-						yield (pTypes.length > 4
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == Entity.class
-								&& pTypes[3] == Entity.class)
-								|| (pTypes.length >= 5
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == ValueProviderDesc.class
-								&& pTypes[3] == Entity.class
-								&& pTypes[4] == Entity.class);
-					}
-					case CONDITION -> {
-						if (pTypes.length == 5
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == ConditionDesc.class
-								&& pTypes[3] == Entity.class
-								&& pTypes[4] == Entity.class) {
-							yield false;
-						}
-						if (pTypes.length == 4 && Modifier.isFinal(m.getModifiers())) {
-							yield false;
-						}
-						yield (pTypes.length > 5
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == ConditionDesc.class
-								&& pTypes[3] == Entity.class
-								&& pTypes[4] == Entity.class)
-								|| (pTypes.length > 4
-								&& pTypes[0] == GameContext.class
-								&& pTypes[1] == Player.class
-								&& pTypes[2] == Entity.class
-								&& pTypes[3] == Entity.class);
-					}
-					default -> false;
-				};
-				if (isTyped) {
-					typedMethod = m;
+				if (typedMethod != null || declaresBaseMethod) {
 					break;
 				}
 			}
@@ -2485,6 +2876,8 @@ public final class DescBytecodeCompiler {
 				String keyName = ComponentSignatureAnalyzer.camelToUpperSnake(pName);
 				if (keyName.equals("TARGET_REFERENCE") && pClass == EntityReference.class) {
 					keyName = "TARGET";
+				} else if (keyName.equals("SOURCE_REFERENCE") && pClass == EntityReference.class) {
+					keyName = "SOURCE";
 				}
 				Enum<?> argKey = Enum.valueOf(argEnumClass, keyName);
 
@@ -2510,10 +2903,9 @@ public final class DescBytecodeCompiler {
 			return Optional.of(new Option1MethodSpec(
 					kind,
 					ClassDesc.ofDescriptor(clazz.descriptorString()),
-					expectedMethodName,
+					typedMethod.getName(),
 					mtd,
 					hasDescInPrefix,
-					RevertableSpell.class.isAssignableFrom(clazz),
 					List.copyOf(paramSpecs)
 			));
 		} catch (Throwable t) {
@@ -2521,7 +2913,7 @@ public final class DescBytecodeCompiler {
 		}
 	}
 
-	private static void emitLoadSpellDesc(CodeBuilder cob, SpellDesc desc, boolean isTopLevelSpell, List<Object> classData) {
+	static void emitLoadSpellDesc(CodeBuilder cob, SpellDesc desc, boolean isTopLevelSpell, List<Object> classData) {
 		if (isTopLevelSpell) {
 			cob.aload(3);
 		} else {
@@ -2541,6 +2933,11 @@ public final class DescBytecodeCompiler {
 			int hostSlot,
 			int tempSlotBase,
 			int depth) {
+		if (Option1BytecodeSpecializer.tryEmitSpecialized(
+				cob, spec, instance, desc, false, classData,
+				playerSlot, targetSlot, hostSlot, targetSlot, hostSlot, tempSlotBase, depth)) {
+			return;
+		}
 		int instIdx = addConstant(classData, instance);
 		loadClassData(cob, instIdx, spec.ownerDesc);
 		cob.aload(1)
@@ -2593,6 +2990,12 @@ public final class DescBytecodeCompiler {
 			}
 		}
 
+		if (Option1BytecodeSpecializer.tryEmitSpecialized(
+				cob, spec, instance, desc, false, classData,
+				playerSlot, entitySlot, hostSlot, vpTargetSlot, hostSlot, tempSlotBase, depth)) {
+			return;
+		}
+
 		int instIdx = addConstant(classData, instance);
 		loadClassData(cob, instIdx, spec.ownerDesc);
 		cob.aload(1)
@@ -2618,6 +3021,11 @@ public final class DescBytecodeCompiler {
 			int targetSlot,
 			int tempSlotBase,
 			int depth) {
+		if (Option1BytecodeSpecializer.tryEmitSpecialized(
+				cob, spec, instance, desc, false, classData,
+				playerSlot, sourceSlot, targetSlot, targetSlot, sourceSlot, tempSlotBase, depth)) {
+			return;
+		}
 		int instIdx = addConstant(classData, instance);
 		loadClassData(cob, instIdx, spec.ownerDesc);
 		cob.aload(1)
@@ -2643,28 +3051,20 @@ public final class DescBytecodeCompiler {
 			int playerSlot,
 			int targetSlot) {
 		int instIdx = addConstant(classData, instance);
-		loadClassData(cob, instIdx, spec.ownerDesc);
-		cob.aload(1)
-				.aload(playerSlot);
-		if (spec.hasDescInPrefix) {
-			emitLoadSpellDesc(cob, desc, isTopLevelSpell, classData);
-		}
-		cob.aload(4);
-		loadSlotOrNull(cob, targetSlot);
-		// In Spell: sourceSlot=4, targetSlot=targetSlot; tempSlotBase=14
-		emitOption1ExtraParams(cob, spec, instance, desc, isTopLevelSpell, classData, playerSlot, targetSlot, 4, targetSlot, 4, 14, 0);
-		cob.invokevirtual(spec.ownerDesc, spec.methodName, spec.methodTypeDesc);
-
-		if (spec.isRevertableSpell
-				&& !spec.hasDescInPrefix
-				&& (desc.containsKey(SpellArg.REVERT_TRIGGER) || desc.containsKey(SpellArg.SECOND_REVERT_TRIGGER))) {
-			loadClassData(cob, instIdx, CD_REVERTABLE_SPELL);
+		if (!Option1BytecodeSpecializer.tryEmitSpecialized(
+				cob, spec, instance, desc, isTopLevelSpell, classData,
+				playerSlot, 4, targetSlot, targetSlot, 4, 14, 0)) {
+			loadClassData(cob, instIdx, spec.ownerDesc);
 			cob.aload(1)
 					.aload(playerSlot);
-			emitLoadSpellDesc(cob, desc, isTopLevelSpell, classData);
+			if (spec.hasDescInPrefix) {
+				emitLoadSpellDesc(cob, desc, isTopLevelSpell, classData);
+			}
 			cob.aload(4);
 			loadSlotOrNull(cob, targetSlot);
-			cob.invokevirtual(CD_REVERTABLE_SPELL, "applyRevertTrigger", MTD_SPELL_ONCAST);
+			// In Spell: sourceSlot=4, targetSlot=targetSlot; tempSlotBase=14
+			emitOption1ExtraParams(cob, spec, instance, desc, isTopLevelSpell, classData, playerSlot, targetSlot, 4, targetSlot, 4, 14, 0);
+			cob.invokevirtual(spec.ownerDesc, spec.methodName, spec.methodTypeDesc);
 		}
 	}
 
@@ -2876,6 +3276,7 @@ public final class DescBytecodeCompiler {
 	public static void execBuffSpell(
 			GameContext context,
 			Player player,
+			SpellDesc desc,
 			Entity source,
 			Entity target,
 			int attackBonus,
@@ -2897,36 +3298,42 @@ public final class DescBytecodeCompiler {
 		}
 
 		// Fast indexed check for ModifyBuffSpellAura without stream allocation
-		var triggers = context.getTriggers();
-		for (int i = 0, n = triggers.size(); i < n; i++) {
-			var t = triggers.get(i);
-			if (t instanceof ModifyBuffSpellAura aura && !aura.isExpired() && aura.isActivated()) {
-				var affected = aura.getAffectedEntities();
-				if (source != null && (affected.contains(source.getId())
-						|| (source.getSourceCard() != null && affected.contains(source.getSourceCard().getId())))) {
-					var spellValueStack = context.getSpellValueStack();
-					spellValueStack.push(attackBonus);
-					int auraAttackBonus = aura.getDesc().getValue(AuraArg.ATTACK_BONUS, context, player, target, source, 0);
-					spellValueStack.pop();
-					spellValueStack.push(hpBonus);
-					int auraHpBonus = aura.getDesc().getValue(AuraArg.HP_BONUS, context, player, target, source, 0);
-					spellValueStack.pop();
-					int auraValueBonus = aura.getDesc().getValue(AuraArg.VALUE, context, player, target, source, 0);
-					if (hasValue) {
-						attackBonus += auraAttackBonus + auraValueBonus;
-						hpBonus += auraHpBonus + auraValueBonus;
-					} else {
-						if (hasAttack) {
+		GameStateArena.TriggerList trigs = GameStateArena.getContextArena(context).triggers;
+		if ((trigs.kindMask & GameStateArena.KIND_MODIFY_BUFF_AURA) != 0) {
+			for (int i = 0, n = trigs.size; i < n; i++) {
+				var t = trigs.elements[i];
+				if (t instanceof ModifyBuffSpellAura aura && !aura.isExpired() && aura.isActivated()) {
+					var affected = aura.getAffectedEntities();
+					if (source != null && (affected.contains(source.getId())
+							|| (source.getSourceCard() != null && affected.contains(source.getSourceCard().getId())))) {
+						var spellValueStack = context.getSpellValueStack();
+						spellValueStack.push(attackBonus);
+						int auraAttackBonus = aura.getDesc().getValue(AuraArg.ATTACK_BONUS, context, player, target, source, 0);
+						spellValueStack.pop();
+						spellValueStack.push(hpBonus);
+						int auraHpBonus = aura.getDesc().getValue(AuraArg.HP_BONUS, context, player, target, source, 0);
+						spellValueStack.pop();
+						int auraValueBonus = aura.getDesc().getValue(AuraArg.VALUE, context, player, target, source, 0);
+						if (hasValue) {
 							attackBonus += auraAttackBonus + auraValueBonus;
-							hpBonus += auraValueBonus;
-						}
-						if (hasHp) {
-							attackBonus += auraValueBonus;
 							hpBonus += auraHpBonus + auraValueBonus;
+						} else {
+							if (hasAttack) {
+								attackBonus += auraAttackBonus + auraValueBonus;
+								hpBonus += auraValueBonus;
+							}
+							if (hasHp) {
+								attackBonus += auraValueBonus;
+								hpBonus += auraHpBonus + auraValueBonus;
+							}
 						}
 					}
 				}
 			}
+		}
+
+		if (attackBonus != 0 || hpBonus != 0) {
+			Enchantment.attachBuffEnchantment(context, player, desc, source, target, attackBonus, hpBonus, 0);
 		}
 
 		if (attackBonus != 0) {
@@ -2968,7 +3375,9 @@ public final class DescBytecodeCompiler {
 		target.getAttributes().remove(Attribute.ATTACK_BONUS);
 		if (exclusive) {
 			target.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
-			target.getAttributes().remove(Attribute.CONDITIONAL_ATTACK_BONUS);
+			if (!target.hasAttribute(Attribute.ENRAGED)) {
+				target.getAttributes().remove(Attribute.CONDITIONAL_ATTACK_BONUS);
+			}
 		} else {
 			target.setAttribute(Attribute.BASE_ATTACK, value);
 		}

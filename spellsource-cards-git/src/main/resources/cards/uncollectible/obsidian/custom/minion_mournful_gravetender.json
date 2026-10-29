@@ -8,7 +8,7 @@
   "rarity": "RARE",
   "description": "Opener: Source an allied unit that died this game. Give it +1/+1",
   "battlecry": {
-    "targetSelection": "MINIONS",
+    "targetSelection": "NONE",
     "spell": {
       "class": "DiscoverSpell",
       "spell": {
@@ -16,7 +16,8 @@
         "spell": {
           "class": "BuffSpell",
           "target": "OUTPUT",
-          "value": 1
+          "value": 1,
+          "name": "Mournful Gravetender's Blessing"
         },
         "targetPlayer": "SELF"
       },

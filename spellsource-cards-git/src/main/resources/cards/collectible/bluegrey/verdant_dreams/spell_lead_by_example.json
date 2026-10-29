@@ -12,7 +12,8 @@
       "class": "AttributeValueProvider",
       "target": "FRIENDLY_HERO",
       "attribute": "ATTACK"
-    }
+    },
+    "name": "Lead by Example"
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

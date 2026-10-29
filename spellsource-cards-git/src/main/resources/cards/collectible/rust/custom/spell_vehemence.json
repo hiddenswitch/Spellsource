@@ -19,7 +19,8 @@
       "class": "BuffSpell",
       "target": "FRIENDLY_MINIONS",
       "attackBonus": 1,
-      "hpBonus": 1
+      "hpBonus": 1,
+      "name": "Vehemence"
     },
     "spell2": {
       "class": "DrawCardSpell"

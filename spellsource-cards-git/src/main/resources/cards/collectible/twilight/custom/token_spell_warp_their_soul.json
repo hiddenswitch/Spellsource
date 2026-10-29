@@ -30,7 +30,8 @@
           }
         ]
       }
-    }
+    },
+    "name": "Warp Their Soul"
   },
   "collectible": false,
   "fileFormatVersion": 1,

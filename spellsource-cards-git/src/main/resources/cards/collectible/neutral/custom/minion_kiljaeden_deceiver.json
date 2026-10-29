@@ -16,11 +16,13 @@
       "spells": [
         {
           "class": "SetAttackSpell",
-          "value": 0
+          "value": 0,
+          "name": "Shapeshifter Boudas' Humility"
         },
         {
           "class": "SetHpSpell",
-          "value": 2
+          "value": 2,
+          "name": "Shapeshifter Boudas' Vitality"
         },
         {
           "class": "AddDeathrattleSpell",
@@ -30,7 +32,8 @@
               "class": "SummonSpell",
               "card": "minion_kiljaeden_deceiver"
             }
-          }
+          },
+          "name": "Shapeshifter Boudas' Legacy"
         }
       ]
     },

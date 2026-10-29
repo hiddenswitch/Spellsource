@@ -15,7 +15,8 @@
         "class": "SummonSpell",
         "card": "token_spirit",
         "value": 2
-      }
+      },
+      "name": "Aftermath Spirits II"
     }
   },
   "gameTriggers": [

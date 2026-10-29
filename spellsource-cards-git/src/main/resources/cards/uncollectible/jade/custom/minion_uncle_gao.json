@@ -28,15 +28,18 @@
               "spells": [
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "RUSH"
+                  "attribute": "RUSH",
+                  "name": "Uncle Gao's Dash"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "POISONOUS"
+                  "attribute": "POISONOUS",
+                  "name": "Uncle Gao's Venom"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "DEFLECT"
+                  "attribute": "DEFLECT",
+                  "name": "Uncle Gao's Deflection"
                 }
               ]
             },
@@ -51,15 +54,18 @@
               "spells": [
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "RUSH"
+                  "attribute": "RUSH",
+                  "name": "Uncle Gao's Dash"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "POISONOUS"
+                  "attribute": "POISONOUS",
+                  "name": "Uncle Gao's Venom"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "DEFLECT"
+                  "attribute": "DEFLECT",
+                  "name": "Uncle Gao's Deflection"
                 }
               ]
             },
@@ -74,15 +80,18 @@
               "spells": [
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "RUSH"
+                  "attribute": "RUSH",
+                  "name": "Uncle Gao's Dash"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "POISONOUS"
+                  "attribute": "POISONOUS",
+                  "name": "Uncle Gao's Venom"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "DEFLECT"
+                  "attribute": "DEFLECT",
+                  "name": "Uncle Gao's Deflection"
                 }
               ]
             },
@@ -97,15 +106,18 @@
               "spells": [
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "RUSH"
+                  "attribute": "RUSH",
+                  "name": "Uncle Gao's Dash"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "POISONOUS"
+                  "attribute": "POISONOUS",
+                  "name": "Uncle Gao's Venom"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "DEFLECT"
+                  "attribute": "DEFLECT",
+                  "name": "Uncle Gao's Deflection"
                 }
               ]
             },
@@ -120,15 +132,18 @@
               "spells": [
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "RUSH"
+                  "attribute": "RUSH",
+                  "name": "Uncle Gao's Dash"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "POISONOUS"
+                  "attribute": "POISONOUS",
+                  "name": "Uncle Gao's Venom"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "DEFLECT"
+                  "attribute": "DEFLECT",
+                  "name": "Uncle Gao's Deflection"
                 }
               ]
             },
@@ -143,15 +158,18 @@
               "spells": [
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "RUSH"
+                  "attribute": "RUSH",
+                  "name": "Uncle Gao's Dash"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "POISONOUS"
+                  "attribute": "POISONOUS",
+                  "name": "Uncle Gao's Venom"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "DEFLECT"
+                  "attribute": "DEFLECT",
+                  "name": "Uncle Gao's Deflection"
                 }
               ]
             },
@@ -166,15 +184,18 @@
               "spells": [
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "RUSH"
+                  "attribute": "RUSH",
+                  "name": "Uncle Gao's Dash"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "POISONOUS"
+                  "attribute": "POISONOUS",
+                  "name": "Uncle Gao's Venom"
                 },
                 {
                   "class": "AddAttributeSpell",
-                  "attribute": "DEFLECT"
+                  "attribute": "DEFLECT",
+                  "name": "Uncle Gao's Deflection"
                 }
               ]
             },

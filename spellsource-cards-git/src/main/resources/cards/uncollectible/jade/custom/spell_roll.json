@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-        "attribute": "KEEPS_ENCHANTMENTS"
+        "attribute": "KEEPS_ENCHANTMENTS",
+        "name": "Roll"
       },
       {
         "class": "ReturnToHandWithEnchantmentsSpell"

@@ -39,7 +39,8 @@
           "hpBonus": {
             "class": "AttributeValueProvider",
             "attribute": "HP"
-          }
+          },
+          "name": "Uccian Hydra's Ward"
         }
       ]
     }

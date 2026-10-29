@@ -12,7 +12,8 @@
       "class": "ReviveMinionSpell",
       "target": "SELF",
       "targetPlayer": "OPPONENT"
-    }
+    },
+    "name": "Escape Position"
   },
   "collectible": true,
   "set": "CUSTOM",

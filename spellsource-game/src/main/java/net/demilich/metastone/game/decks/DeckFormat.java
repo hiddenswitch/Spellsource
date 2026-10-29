@@ -1,7 +1,10 @@
 package net.demilich.metastone.game.decks;
 
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
+import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 
 import java.io.Serializable;
@@ -19,9 +22,11 @@ public class DeckFormat implements Serializable, Cloneable {
 	private String name = "";
 	private Set<String> sets;
 	private String[] secondPlayerBonusCards = new String[0];
+	private String[] ruleCards = new String[0];
 	private ConditionDesc validDeckCondition;
 	private transient List<String> setsList;
 	private transient List<String> secondPlayerBonusCardsList;
+	private transient List<String> ruleCardsList;
 
 
 	public DeckFormat() {
@@ -104,13 +109,14 @@ public class DeckFormat implements Serializable, Cloneable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		DeckFormat that = (DeckFormat) o;
-		return Objects.equals(name, that.name) && Objects.equals(sets, that.sets) && Arrays.equals(secondPlayerBonusCards, that.secondPlayerBonusCards) && Objects.equals(validDeckCondition, that.validDeckCondition);
+		return Objects.equals(name, that.name) && Objects.equals(sets, that.sets) && Arrays.equals(secondPlayerBonusCards, that.secondPlayerBonusCards) && Arrays.equals(ruleCards, that.ruleCards) && Objects.equals(validDeckCondition, that.validDeckCondition);
 	}
 
 	@Override
 	public int hashCode() {
 		int result = Objects.hash(name, sets, validDeckCondition);
 		result = 31 * result + Arrays.hashCode(secondPlayerBonusCards);
+		result = 31 * result + Arrays.hashCode(ruleCards);
 		return result;
 	}
 
@@ -131,6 +137,48 @@ public class DeckFormat implements Serializable, Cloneable {
 	public DeckFormat setValidDeckCondition(ConditionDesc validDeckCondition) {
 		this.validDeckCondition = validDeckCondition;
 		return this;
+	}
+
+	public String[] getRuleCards() {
+		return ruleCards;
+	}
+
+	public List<String> getRuleCardsList() {
+		List<String> cached = ruleCardsList;
+		if (cached == null) {
+			cached = ruleCards == null || ruleCards.length == 0
+					? Collections.emptyList()
+					: Collections.unmodifiableList(Arrays.asList(ruleCards));
+			ruleCardsList = cached;
+		}
+		return cached;
+	}
+
+	public DeckFormat setRuleCards(String[] ruleCards) {
+		this.ruleCards = ruleCards == null ? new String[0] : ruleCards;
+		this.ruleCardsList = null;
+		return this;
+	}
+
+	public DeckFormat withRuleCards(String... ruleCards) {
+		return setRuleCards(ruleCards);
+	}
+
+	/**
+	 * Evaluates whether the given {@link Player}'s deck is valid in this format, checking both set membership and
+	 * {@link #getValidDeckCondition()}.
+	 */
+	public boolean isValidDeck(GameContext context, Player player) {
+		for (Card card : player.getDeck()) {
+			if (!isInFormat(card)) {
+				return false;
+			}
+		}
+		if (validDeckCondition == null) {
+			return true;
+		}
+		Condition topCondition = validDeckCondition.create();
+		return topCondition.isFulfilled(context, player, player, player);
 	}
 
 	public Set<String> getSets() {

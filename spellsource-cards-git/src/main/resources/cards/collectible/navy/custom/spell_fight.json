@@ -14,14 +14,16 @@
         "target": "FRIENDLY_MINIONS",
         "attackBonus": 3,
         "hpBonus": 3,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Fight!"
       },
       {
         "class": "BuffSpell",
         "target": "ENEMY_MINIONS",
         "attackBonus": 3,
         "hpBonus": 3,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Fight!"
       }
     ]
   },

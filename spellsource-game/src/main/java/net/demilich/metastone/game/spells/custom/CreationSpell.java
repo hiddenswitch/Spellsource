@@ -38,7 +38,7 @@ public final class CreationSpell extends Spell {
 		SpellDesc desc1 = NullSpell.create();
 		desc1.put(SpellArg.SPELL,NullSpell.create());
 		DiscoverAction chosen = SpellUtils.discoverCard(context, player, source, desc1, cards);
-		if (player.getHand().size() >= GameLogic.MAX_HAND_CARDS) {
+		if (player.getHand().size() >= context.getLogic().getMaxHandCards(player)) {
 			return;
 		}
 		Card card = chosen.getCard().getCopy();

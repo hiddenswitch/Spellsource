@@ -14,12 +14,14 @@
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_HERO",
-          "armorBonus": 8
+          "armorBonus": 8,
+          "name": "Winds of Northrend's Aegis"
         },
         {
           "class": "AddAttributeSpell",
           "target": "FRIENDLY_HERO",
-          "attribute": "FROZEN"
+          "attribute": "FROZEN",
+          "name": "Winds of Northrend's Frost"
         }
       ]
     }

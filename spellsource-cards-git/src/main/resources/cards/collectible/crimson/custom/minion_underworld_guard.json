@@ -19,7 +19,8 @@
       "class": "BuffSpell",
       "target": "SELF",
       "attackBonus": 1,
-      "hpBonus": 3
+      "hpBonus": 3,
+      "name": "Underworld Guard's Empowerment"
     }
   },
   "attributes": {

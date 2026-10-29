@@ -16,11 +16,13 @@
         {
           "class": "BuffSpell",
           "attackBonus": 0,
-          "hpBonus": 4
+          "hpBonus": 4,
+          "name": "Novice Enchantress' Blessing"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "UNTARGETABLE_BY_SPELLS"
+          "attribute": "UNTARGETABLE_BY_SPELLS",
+          "name": "Novice Enchantress' Shroud"
         }
       ]
     }

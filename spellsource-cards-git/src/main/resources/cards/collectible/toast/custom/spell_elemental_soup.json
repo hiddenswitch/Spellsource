@@ -15,11 +15,13 @@
       "spells": [
         {
           "class": "SetAttackSpell",
-          "value": 5
+          "value": 5,
+          "name": "Elemental Soup"
         },
         {
           "class": "SetHpSpell",
-          "value": 5
+          "value": 5,
+          "name": "Elemental Soup"
         }
       ]
     },

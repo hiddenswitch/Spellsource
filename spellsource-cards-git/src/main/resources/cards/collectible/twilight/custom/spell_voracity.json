@@ -14,7 +14,8 @@
         "value": {
           "class": "GatekeeperShaValueProvider",
           "offset": 2
-        }
+        },
+        "name": "Voracity"
       },
       {
         "class": "TemporaryAttackSpell",
@@ -22,7 +23,8 @@
         "value": {
           "class": "GatekeeperShaValueProvider",
           "offset": 2
-        }
+        },
+        "name": "Voracity"
       }
     ]
   },

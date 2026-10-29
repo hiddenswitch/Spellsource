@@ -13,7 +13,8 @@
       "class": "EntityCountValueProvider",
       "target": "FRIENDLY_MINIONS",
       "multiplier": 3
-    }
+    },
+    "name": "Swarm Shield"
   },
   "collectible": true,
   "set": "CUSTOM",

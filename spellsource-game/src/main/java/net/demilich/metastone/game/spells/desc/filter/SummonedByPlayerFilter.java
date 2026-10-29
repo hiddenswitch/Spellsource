@@ -17,10 +17,9 @@ public class SummonedByPlayerFilter extends EntityFilter {
 		super(desc);
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host, TargetPlayer targetPlayer) {
 		int playerId;
-		switch ((TargetPlayer) getDesc().get(EntityFilterArg.TARGET_PLAYER)) {
+		switch (targetPlayer) {
 			case OPPONENT:
 				playerId = context.getOpponent(player).getId();
 				break;

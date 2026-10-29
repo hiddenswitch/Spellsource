@@ -15,7 +15,8 @@
       "spell": {
         "class": "SummonSpell",
         "card": "minion_captain_karver"
-      }
+      },
+      "name": "Captain Karver's Legacy"
     }
   },
   "attributes": {

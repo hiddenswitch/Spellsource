@@ -6,7 +6,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +20,6 @@ import org.slf4j.LoggerFactory;
  * This spell does <b>not</b> put the enchantments, like triggers and auras, into play from the newly converted card
  * ID.
  * <p>
- * This spell is a {@link RevertableSpell}, so it is suitable for use in auras.
- * <p>
  * For <b>example,</b> to set the enemy's hero power's card to yours:
  * <pre>
  *     {
@@ -31,7 +29,7 @@ import org.slf4j.LoggerFactory;
  *     }
  * </pre>
  */
-public final class SetCardSpell extends RevertableSpell {
+public final class SetCardSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(SetCardSpell.class);
 
@@ -51,16 +49,6 @@ public final class SetCardSpell extends RevertableSpell {
 	}
 
 	@Override
-	protected SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target) {
-		Entity copyTo = context.resolveSingleTarget(player, source, desc.getSecondaryTarget());
-		if (copyTo != null) {
-			// Bake in the copy to reference for the revert spell
-			target = copyTo.getReference();
-		}
-		return RemoveAttributeSpell.create(target, (Attribute) desc.getOrDefault(SpellArg.ATTRIBUTE, Attribute.CARD_ID));
-	}
-
-	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 
 		Attribute attr = (Attribute) desc.getOrDefault(SpellArg.ATTRIBUTE, Attribute.CARD_ID);
@@ -73,6 +61,9 @@ public final class SetCardSpell extends RevertableSpell {
 		Entity copyTo = context.resolveSingleTarget(player, source, desc.getSecondaryTarget());
 		String cardId;
 		if (copyTo != null) {
+			if (target == null || target.getSourceCard() == null) {
+				return;
+			}
 			cardId = target.getSourceCard().getCardId();
 			target = copyTo;
 		} else {
@@ -93,6 +84,6 @@ public final class SetCardSpell extends RevertableSpell {
 			return;
 		}
 
-		super.onCast(context, player, desc, source, target);
+		Enchantment.attachSetCardEnchantment(context, player, desc, source, target, attr);
 	}
 }

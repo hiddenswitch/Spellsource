@@ -23,13 +23,15 @@
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Glacial Wyvern's Guard"
         },
         {
           "class": "BuffSpell",
           "target": "SELF",
           "attackBonus": 1,
-          "hpBonus": 1
+          "hpBonus": 1,
+          "name": "Glacial Wyvern's Empowerment"
         }
       ]
     }

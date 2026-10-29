@@ -23,7 +23,8 @@
             "class": "AttributeValueProvider",
             "target": "TARGET",
             "attribute": "ATTACK"
-          }
+          },
+          "name": "Mimicking Hornnose's Might"
         },
         {
           "class": "SetHpSpell",
@@ -32,7 +33,8 @@
             "class": "AttributeValueProvider",
             "target": "TARGET",
             "attribute": "HP"
-          }
+          },
+          "name": "Mimicking Hornnose's Vitality"
         }
       ]
     }

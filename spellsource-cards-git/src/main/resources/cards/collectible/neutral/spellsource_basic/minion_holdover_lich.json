@@ -34,7 +34,8 @@
           "revertTrigger": {
             "class": "TurnEndTrigger",
             "targetPlayer": "BOTH"
-          }
+          },
+          "name": "Holdover Lich's Blessing"
         },
         {
           "class": "AddEnchantmentSpell",
@@ -47,7 +48,8 @@
               "class": "DestroySpell",
               "target": "SELF"
             }
-          }
+          },
+          "name": "Holdover Lich's Boon"
         }
       ]
     }

@@ -20,7 +20,8 @@
       "class": "BuffSpell",
       "target": "SELF",
       "attackBonus": 1,
-      "hpBonus": 1
+      "hpBonus": 1,
+      "name": "Feathered Whisperer's Empowerment"
     }
   },
   "attributes": {

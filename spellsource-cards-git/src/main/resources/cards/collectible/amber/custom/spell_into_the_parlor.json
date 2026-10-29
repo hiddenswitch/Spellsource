@@ -23,7 +23,8 @@
             "class": "DestroySpell",
             "target": "SELF"
           }
-        }
+        },
+        "name": "Parlor Web"
       }
     ]
   },

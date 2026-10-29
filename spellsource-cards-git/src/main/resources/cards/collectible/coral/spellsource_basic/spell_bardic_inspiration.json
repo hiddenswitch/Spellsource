@@ -14,7 +14,8 @@
       "class": "CardFilter",
       "cardType": "MINION"
     },
-    "hpBonus": 1
+    "hpBonus": 1,
+    "name": "Bardic Inspiration"
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

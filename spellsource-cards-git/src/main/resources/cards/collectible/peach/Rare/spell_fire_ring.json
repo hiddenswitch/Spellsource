@@ -19,10 +19,11 @@
       "class": "ChooseOneOptionSpell",
       "name": "Normal",
       "description": "Give a unit +2/+2.",
-	  "spell": {
+      "spell": {
         "class": "BuffSpell",
-		"value": 2
-	  }
+        "value": 2,
+        "name": "Fire Ring"
+      }
     },
     "spell2": {
       "class": "ChooseOneOptionSpell",
@@ -31,7 +32,8 @@
       "spells": [
         {
           "class": "BuffSpell",
-          "value": 2
+          "value": 2,
+          "name": "Fire Ring"
         },
         {
           "class": "DamageSpell",
@@ -46,10 +48,10 @@
         }
       ]
     },
-	"spell": {
+    "spell": {
       "class": "BuffSpell",
-	  "value": 2
-	}
+      "value": 2
+    }
   },
   "attributes": {
     "IMBUE": true

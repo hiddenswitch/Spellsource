@@ -15,7 +15,8 @@
     "spell": {
       "class": "TemporaryAttackSpell",
       "target": "FRIENDLY_WEAPON",
-      "value": 1
+      "value": 1,
+      "name": "Katar's Rally"
     }
   },
   "attributes": {},

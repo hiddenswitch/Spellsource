@@ -21,7 +21,8 @@
         "cardType": "MINION"
       },
       "hpBonus": 2,
-      "randomTarget": true
+      "randomTarget": true,
+      "name": "Noteweaver's Blessing"
     }
   },
   "collectible": false,

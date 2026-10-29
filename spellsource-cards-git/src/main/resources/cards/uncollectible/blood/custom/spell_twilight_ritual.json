@@ -12,7 +12,8 @@
       "class": "CardCountValueProvider",
       "multiplier": 2,
       "targetPlayer": "SELF"
-    }
+    },
+    "name": "Twilight Ritual"
   },
   "collectible": false,
   "fileFormatVersion": 1,

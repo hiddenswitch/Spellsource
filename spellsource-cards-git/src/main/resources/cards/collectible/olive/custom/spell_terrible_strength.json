@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 2
+        "value": 2,
+        "name": "Terrible Strength"
       },
       {
         "class": "DestroySpell",

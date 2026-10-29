@@ -18,7 +18,8 @@
       "target": "EVENT_TARGET",
       "spell2": {
         "class": "AddAttributeSpell",
-        "attribute": "FROZEN"
+        "attribute": "FROZEN",
+        "name": "Avalanche Acolyte's Frost"
       }
     }
   },

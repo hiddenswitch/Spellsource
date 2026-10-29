@@ -23,7 +23,8 @@
           "attribute": "FROZEN",
           "invert": true,
           "operation": "HAS"
-        }
+        },
+        "name": "Howling Blast Chill"
       }
     ]
   },

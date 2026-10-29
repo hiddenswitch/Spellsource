@@ -5,18 +5,26 @@
   "heroClass": "CORAL",
   "rarity": "EPIC",
   "description": "Receive all spells you cast last turn.",
-  "targetSelection": "ANY",
+  "targetSelection": "NONE",
   "spell": {
     "class": "CopyCardSpell",
     "value": -1,
     "cardFilter": {
-      "class": "CardFilter",
-      "value": {
-        "class": "LastTurnValueProvider"
-      },
-      "attribute": "PLAYED_FROM_HAND_OR_DECK",
-      "cardType": "SPELL",
-      "operation": "EQUAL"
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        {
+          "class": "AttributeFilter",
+          "value": {
+            "class": "LastTurnValueProvider"
+          },
+          "attribute": "PLAYED_FROM_HAND_OR_DECK",
+          "operation": "EQUAL"
+        }
+      ]
     },
     "cardSource": {
       "class": "GraveyardCardsSource",

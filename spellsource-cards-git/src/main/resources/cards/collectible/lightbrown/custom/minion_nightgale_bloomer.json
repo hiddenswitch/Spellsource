@@ -17,7 +17,8 @@
         "class": "RaceFilter",
         "race": "ELEMENTAL"
       },
-      "hpBonus": 7
+      "hpBonus": 7,
+      "name": "Nightgale Bloomer's Blessing"
     }
   },
   "attributes": {

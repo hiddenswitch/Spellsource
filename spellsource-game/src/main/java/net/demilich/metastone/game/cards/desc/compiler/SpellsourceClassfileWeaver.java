@@ -77,6 +77,9 @@ public final class SpellsourceClassfileWeaver {
 	private static final ClassDesc CD_COND = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.Condition");
 	private static final ClassDesc CD_COND_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.ConditionDesc");
 	private static final ClassDesc CD_COND_ARG = ClassDesc.of("net.demilich.metastone.game.spells.desc.condition.ConditionArg");
+	private static final ClassDesc CD_CS = ClassDesc.of("net.demilich.metastone.game.spells.desc.source.CardSource");
+	private static final ClassDesc CD_CS_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.source.CardSourceDesc");
+	private static final ClassDesc CD_CS_ARG = ClassDesc.of("net.demilich.metastone.game.spells.desc.source.CardSourceArg");
 	private static final ClassDesc CD_SPELL = ClassDesc.of("net.demilich.metastone.game.spells.Spell");
 	private static final ClassDesc CD_SPELL_DESC = ClassDesc.of("net.demilich.metastone.game.spells.desc.SpellDesc");
 	private static final ClassDesc CD_SPELL_ARG = ClassDesc.of("net.demilich.metastone.game.spells.desc.SpellArg");
@@ -88,6 +91,14 @@ public final class SpellsourceClassfileWeaver {
 	private static final ClassDesc CD_TARGET_LOGIC = ClassDesc.of("net.demilich.metastone.game.logic.TargetLogic");
 	private static final ClassDesc CD_ENTITY_REF = ClassDesc.of("net.demilich.metastone.game.targeting.EntityReference");
 	private static final ClassDesc CD_LIST = ClassDesc.of("java.util.List");
+	private static final ClassDesc CD_DEQUE = ClassDesc.of("java.util.Deque");
+	private static final ClassDesc CD_MAP = ClassDesc.of("java.util.Map");
+	private static final ClassDesc CD_GAME_STATE_ARENA = ClassDesc.of("net.demilich.metastone.game.cards.desc.compiler.GameStateArena");
+	private static final ClassDesc CD_ENTITY_ZONE = ClassDesc.of("net.demilich.metastone.game.entities.EntityZone");
+	private static final ClassDesc CD_CARD_ZONE = ClassDesc.of("net.demilich.metastone.game.cards.CardZone");
+	private static final ClassDesc CD_ENTITY_LOOKUP = ClassDesc.of("net.demilich.metastone.game.entities.EntityLookup");
+	private static final ClassDesc CD_ZONES = ClassDesc.of("com.hiddenswitch.spellsource.rpc.Spellsource$ZonesMessage$Zones");
+	private static final ClassDesc CD_GAME_STATS = ClassDesc.of("net.demilich.metastone.game.statistics.GameStatistics");
 
 	private static final MethodTypeDesc MTD_VP_COMPUTE = MethodTypeDesc.of(
 			ConstantDescs.CD_int, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY);
@@ -97,6 +108,8 @@ public final class SpellsourceClassfileWeaver {
 			ConstantDescs.CD_boolean, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY);
 	private static final MethodTypeDesc MTD_COND_EVAL = MethodTypeDesc.of(
 			ConstantDescs.CD_boolean, CD_GAME_CONTEXT, CD_PLAYER, CD_COND_DESC, CD_ENTITY, CD_ENTITY);
+	private static final MethodTypeDesc MTD_CS_MATCH = MethodTypeDesc.of(
+			CD_CARD_LIST, CD_GAME_CONTEXT, CD_ENTITY, CD_PLAYER);
 	private static final MethodTypeDesc MTD_SPELL_ONCAST = MethodTypeDesc.of(
 			ConstantDescs.CD_void, CD_GAME_CONTEXT, CD_PLAYER, CD_SPELL_DESC, CD_ENTITY, CD_ENTITY);
 	private static final MethodTypeDesc MTD_SPELL_CAST = MethodTypeDesc.of(
@@ -123,6 +136,7 @@ public final class SpellsourceClassfileWeaver {
 
 	public static void weaveAll(Path classesDir) throws IOException {
 		weaveAttributeMapAndCardAttributeMap(classesDir);
+		weaveEntityZoneCardZoneAndLookup(classesDir);
 		weaveCompilerBridge(classesDir);
 		weaveDesc(classesDir);
 		weaveValueProvider(classesDir);
@@ -131,6 +145,7 @@ public final class SpellsourceClassfileWeaver {
 		weaveSpellAndSpellDesc(classesDir);
 		weaveEventTriggerAndEnchantment(classesDir);
 		weaveEntityCardAndGameLogic(classesDir);
+		weavePlayerAndGameContext(classesDir);
 		weaveTargetLogic(classesDir);
 		weaveZeroArgCreateMemoization(classesDir);
 		weaveTypedComponentSignatures(classesDir);
@@ -211,6 +226,114 @@ public final class SpellsourceClassfileWeaver {
 				Files.write(cardsDir.resolve(targetFileName), remapped);
 			}
 		}
+	}
+
+	private static void weaveEntityZoneCardZoneAndLookup(Path classesDir) throws IOException {
+		Path compilerDir = classesDir.resolve("net/demilich/metastone/game/cards/desc/compiler");
+		Path entitiesDir = classesDir.resolve("net/demilich/metastone/game/entities");
+		Path cardsDir = classesDir.resolve("net/demilich/metastone/game/cards");
+
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(entitiesDir, "EntityLookup$*.class")) {
+			for (Path p : stream) {
+				Files.deleteIfExists(p);
+			}
+		}
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(entitiesDir, "EntityZone$*.class")) {
+			for (Path p : stream) {
+				Files.deleteIfExists(p);
+			}
+		}
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(cardsDir, "CardZone$*.class")) {
+			for (Path p : stream) {
+				Files.deleteIfExists(p);
+			}
+		}
+
+		Map<String, String> zoneReplacements = new LinkedHashMap<>();
+		zoneReplacements.put(
+				"net/demilich/metastone/game/cards/desc/compiler/EntityLookupTemplate",
+				"net/demilich/metastone/game/entities/EntityLookup");
+		zoneReplacements.put(
+				"net/demilich/metastone/game/cards/desc/compiler/EntityZoneTemplate",
+				"net/demilich/metastone/game/entities/EntityZone");
+		zoneReplacements.put(
+				"net/demilich/metastone/game/cards/desc/compiler/CardZoneTemplate",
+				"net/demilich/metastone/game/cards/CardZone");
+		zoneReplacements.put("EntityLookupTemplate.java", "EntityLookup.java");
+		zoneReplacements.put("EntityZoneTemplate.java", "EntityZone.java");
+		zoneReplacements.put("CardZoneTemplate.java", "CardZone.java");
+
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(compilerDir, "EntityLookupTemplate*.class")) {
+			for (Path templatePath : stream) {
+				String fileName = templatePath.getFileName().toString();
+				String targetFileName = fileName.replace("EntityLookupTemplate", "EntityLookup");
+				byte[] raw = Files.readAllBytes(templatePath);
+				byte[] remapped = remapConstantPoolUtf8(raw, zoneReplacements);
+				ClassFile.of().parse(remapped);
+				Files.write(entitiesDir.resolve(targetFileName), remapped);
+			}
+		}
+
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(compilerDir, "EntityZoneTemplate*.class")) {
+			for (Path templatePath : stream) {
+				String fileName = templatePath.getFileName().toString();
+				String targetFileName = fileName.replace("EntityZoneTemplate", "EntityZone");
+				byte[] raw = Files.readAllBytes(templatePath);
+				byte[] remapped = remapConstantPoolUtf8(raw, zoneReplacements);
+				ClassFile.of().parse(remapped);
+				Files.write(entitiesDir.resolve(targetFileName), remapped);
+			}
+		}
+
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(compilerDir, "CardZoneTemplate*.class")) {
+			for (Path templatePath : stream) {
+				String fileName = templatePath.getFileName().toString();
+				String targetFileName = fileName.replace("CardZoneTemplate", "CardZone");
+				byte[] raw = Files.readAllBytes(templatePath);
+				byte[] remapped = remapConstantPoolUtf8(raw, zoneReplacements);
+				ClassFile.of().parse(remapped);
+				Files.write(cardsDir.resolve(targetFileName), remapped);
+			}
+		}
+
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(compilerDir, "GameStateArena*.class")) {
+			for (Path arenaPath : stream) {
+				byte[] raw = Files.readAllBytes(arenaPath);
+				byte[] remapped = remapConstantPoolUtf8(raw, zoneReplacements);
+				ClassFile.of().parse(remapped);
+				Files.write(arenaPath, remapped);
+			}
+		}
+
+		Path mainArenaPath = compilerDir.resolve("GameStateArena.class");
+		ClassFile cf = ClassFile.of();
+		ClassModel arenaModel = cf.parse(mainArenaPath);
+		byte[] wovenArena = cf.build(arenaModel.thisClass().asSymbol(), clb -> {
+			for (ClassElement ce : arenaModel) {
+				if (ce instanceof MethodModel mm) {
+					String name = mm.methodName().stringValue();
+					if (name.equals("getContextArena")) {
+						clb.withMethodBody(name, mm.methodTypeSymbol(), mm.flags().flagsMask(), cob -> {
+							cob.aload(0)
+									.getfield(CD_GAME_CONTEXT, "arena", CD_GAME_STATE_ARENA)
+									.areturn();
+						});
+						continue;
+					}
+					if (name.equals("setEnchantmentArena")) {
+						clb.withMethodBody(name, mm.methodTypeSymbol(), mm.flags().flagsMask(), cob -> {
+							cob.aload(0)
+									.aload(1)
+									.putfield(CD_ENCHANTMENT, "arena", CD_GAME_STATE_ARENA)
+									.return_();
+						});
+						continue;
+					}
+				}
+				clb.with(ce);
+			}
+		});
+		Files.write(mainArenaPath, wovenArena);
 	}
 
 	private static byte[] remapConstantPoolUtf8(byte[] bytes, Map<String, String> replacements) throws IOException {
@@ -368,6 +491,29 @@ public final class SpellsourceClassfileWeaver {
 			if (ce instanceof MethodModel mm) {
 				String name = mm.methodName().stringValue();
 				String desc = mm.methodType().stringValue();
+				if (name.equals("create") && desc.equals("()Lnet/demilich/metastone/game/cards/desc/HasDesc;")) {
+					clb.transformMethod(mm, (mb, me) -> {
+						if (me instanceof CodeModel cm) {
+							mb.transformCode(cm, (cob, coe) -> {
+								if (coe instanceof FieldInstruction fi
+										&& fi.opcode() == Opcode.PUTFIELD
+										&& fi.name().equalsString("cachedInstance")) {
+									ClassDesc cdHasDesc = ClassDesc.of("net.demilich.metastone.game.cards.desc.HasDesc");
+									cob.aload(0)
+											.swap()
+											.invokestatic(CD_COMPILER, "internReadOnlyComponent",
+													MethodTypeDesc.of(cdHasDesc, CD_DESC, cdHasDesc))
+											.dup()
+											.astore(3);
+								}
+								cob.with(coe);
+							});
+						} else {
+							mb.with(me);
+						}
+					});
+					return;
+				}
 				if (name.equals("put") && desc.equals("(Ljava/lang/Enum;Ljava/lang/Object;)Ljava/lang/Object;")) {
 					clb.transformMethod(mm, (mb, me) -> {
 						if (me instanceof CodeModel cm) {
@@ -717,6 +863,57 @@ public final class SpellsourceClassfileWeaver {
 			});
 			Files.write(spellDescPath, wovenSpellDesc);
 		}
+
+		Path spellUtilsPath = classesDir.resolve("net/demilich/metastone/game/spells/SpellUtils.class");
+		if (Files.exists(spellUtilsPath)) {
+			ClassModel suModel = cf.parse(spellUtilsPath);
+			MethodTypeDesc mtdHasAura = MethodTypeDesc.of(ConstantDescs.CD_boolean, CD_GAME_CONTEXT, ConstantDescs.CD_int, ConstantDescs.CD_Class);
+			MethodTypeDesc mtdGetAurasByPlayer = MethodTypeDesc.of(CD_LIST, CD_GAME_CONTEXT, ConstantDescs.CD_int, ConstantDescs.CD_Class);
+			MethodTypeDesc mtdGetAurasByTarget = MethodTypeDesc.of(CD_LIST, CD_GAME_CONTEXT, ConstantDescs.CD_Class, CD_ENTITY);
+			MethodTypeDesc mtdGetBonusesFromAura = MethodTypeDesc.of(CD_SPELL_DESC.arrayType(), CD_GAME_CONTEXT, ConstantDescs.CD_int, ConstantDescs.CD_Class, CD_ENTITY, CD_ENTITY);
+			byte[] wovenSu = cf.build(suModel.thisClass().asSymbol(), clb -> {
+				for (ClassElement ce : suModel) {
+					if (ce instanceof MethodModel mm) {
+						String mName = mm.methodName().stringValue();
+						MethodTypeDesc mtd = mm.methodTypeSymbol();
+						if (mName.equals("hasAura") && mtd.equals(mtdHasAura)) {
+							clb.withMethodBody(mName, mtd, mm.flags().flagsMask(), cob -> {
+								cob.aload(0).iload(1).aload(2)
+										.invokestatic(CD_GAME_STATE_ARENA, "hasAuraFast", mtdHasAura)
+										.ireturn();
+							});
+							continue;
+						}
+						if (mName.equals("getAuras") && mtd.equals(mtdGetAurasByPlayer)) {
+							clb.withMethodBody(mName, mtd, mm.flags().flagsMask(), cob -> {
+								cob.aload(0).iload(1).aload(2)
+										.invokestatic(CD_GAME_STATE_ARENA, "getAurasByPlayerFast", mtdGetAurasByPlayer)
+										.areturn();
+							});
+							continue;
+						}
+						if (mName.equals("getAuras") && mtd.equals(mtdGetAurasByTarget)) {
+							clb.withMethodBody(mName, mtd, mm.flags().flagsMask(), cob -> {
+								cob.aload(0).aload(1).aload(2)
+										.invokestatic(CD_GAME_STATE_ARENA, "getAurasByTargetFast", mtdGetAurasByTarget)
+										.areturn();
+							});
+							continue;
+						}
+						if (mName.equals("getBonusesFromAura") && mtd.equals(mtdGetBonusesFromAura)) {
+							clb.withMethodBody(mName, mtd, mm.flags().flagsMask(), cob -> {
+								cob.aload(0).iload(1).aload(2).aload(3).aload(4)
+										.invokestatic(CD_GAME_STATE_ARENA, "getBonusesFromAuraFast", mtdGetBonusesFromAura)
+										.areturn();
+							});
+							continue;
+						}
+					}
+					clb.with(ce);
+				}
+			});
+			Files.write(spellUtilsPath, wovenSu);
+		}
 	}
 
 	// =========================================================================
@@ -784,6 +981,7 @@ public final class SpellsourceClassfileWeaver {
 		ClassModel enchModel = cf.parse(enchPath);
 		if (!hasField(enchModel, "interestedMask")) {
 			MethodTypeDesc mtdInterestedIn = MethodTypeDesc.of(ConstantDescs.CD_boolean, CD_GAME_EVENT_TYPE);
+			MethodTypeDesc mtdSetHostRef = MethodTypeDesc.of(ConstantDescs.CD_void, CD_ENTITY_REF);
 			byte[] step1 = cf.transformClass(enchModel, (clb, ce) -> {
 				if (ce instanceof MethodModel mm) {
 					String name = mm.methodName().stringValue();
@@ -820,6 +1018,28 @@ public final class SpellsourceClassfileWeaver {
 						});
 						return;
 					}
+					if (name.equals("setHostReference") && mm.methodTypeSymbol().equals(mtdSetHostRef)) {
+						clb.withMethodBody("setHostReference", mtdSetHostRef, mm.flags().flagsMask(), cob -> {
+							Label done = cob.newLabel();
+							cob.aload(0)
+									.aload(1)
+									.putfield(CD_ENCHANTMENT, "hostReference", CD_ENTITY_REF)
+									.aload(0)
+									.getfield(CD_ENCHANTMENT, "arena", CD_GAME_STATE_ARENA)
+									.astore(2)
+									.aload(2)
+									.ifnull(done)
+									.aload(1)
+									.ifnull(done)
+									.aload(2)
+									.aload(1)
+									.invokevirtual(CD_ENTITY_REF, "getId", MethodTypeDesc.of(ConstantDescs.CD_int))
+									.invokevirtual(CD_GAME_STATE_ARENA, "recordHostBit", MethodTypeDesc.of(ConstantDescs.CD_void, ConstantDescs.CD_int))
+									.labelBinding(done)
+									.return_();
+						});
+						return;
+					}
 				}
 				clb.with(ce);
 			});
@@ -830,6 +1050,7 @@ public final class SpellsourceClassfileWeaver {
 					clb.with(ce);
 				}
 				clb.withField("interestedMask", ConstantDescs.CD_long, ClassFile.ACC_PUBLIC | ClassFile.ACC_TRANSIENT);
+				clb.withField("arena", CD_GAME_STATE_ARENA, ClassFile.ACC_PUBLIC | ClassFile.ACC_TRANSIENT);
 			});
 			Files.write(enchPath, finalEnch);
 		}
@@ -1026,6 +1247,406 @@ public final class SpellsourceClassfileWeaver {
 	}
 
 	// =========================================================================
+	// 9b. Player.class & GameContext.class Arena Weaving
+	// =========================================================================
+
+	private static void weavePlayerAndGameContext(Path classesDir) throws IOException {
+		ClassFile cf = ClassFile.of();
+
+		// 1. Weave Player.class
+		Path playerPath = classesDir.resolve("net/demilich/metastone/game/Player.class");
+		ClassModel playerModel = cf.parse(playerPath);
+		if (!hasMethod(playerModel, "cloneWithArena")) {
+			MethodTypeDesc mtdPlayerCopy = MethodTypeDesc.of(ConstantDescs.CD_void, CD_PLAYER);
+			MethodTypeDesc mtdPlayerArenaCopy = MethodTypeDesc.of(ConstantDescs.CD_void, CD_PLAYER, CD_GAME_STATE_ARENA);
+			MethodTypeDesc mtdCloneWithArena = MethodTypeDesc.of(CD_PLAYER, CD_GAME_STATE_ARENA);
+			MethodTypeDesc mtdEzInit = MethodTypeDesc.of(ConstantDescs.CD_void, ConstantDescs.CD_int, CD_ZONES, CD_ENTITY_LOOKUP, CD_GAME_STATE_ARENA);
+			MethodTypeDesc mtdCzInit = MethodTypeDesc.of(ConstantDescs.CD_void, ConstantDescs.CD_int, CD_ZONES, CD_ENTITY_LOOKUP, CD_GAME_STATE_ARENA);
+
+			String[][] ezFields = new String[][]{
+					{"playerZone", "PLAYER"},
+					{"secretZone", "SECRET"},
+					{"quests", "QUEST"},
+					{"minions", "BATTLEFIELD"},
+					{"removedFromPlay", "REMOVED_FROM_PLAY"},
+					{"graveyard", "GRAVEYARD"},
+					{"setAsideZone", "SET_ASIDE_ZONE"},
+					{"heroZone", "HERO"},
+					{"heroPowerZone", "HERO_POWER"},
+					{"weaponZone", "WEAPON"},
+					{"enchantments", "ENCHANTMENT"}
+			};
+			String[][] czFields = new String[][]{
+					{"deck", "DECK"},
+					{"hand", "HAND"},
+					{"discoverZone", "DISCOVER"}
+			};
+
+			byte[] wovenPlayer = cf.build(playerModel.thisClass().asSymbol(), clb -> {
+				for (ClassElement ce : playerModel) {
+					if (ce instanceof MethodModel mm
+							&& mm.methodName().equalsString(ConstantDescs.INIT_NAME)
+							&& mm.methodTypeSymbol().equals(mtdPlayerCopy)) {
+						clb.withMethodBody(ConstantDescs.INIT_NAME, mtdPlayerCopy, mm.flags().flagsMask(), cob -> {
+							cob.aload(0)
+									.aload(1)
+									.aload(1)
+									.getfield(CD_PLAYER, "lookup", CD_ENTITY_LOOKUP)
+									.getfield(CD_ENTITY_LOOKUP, "arena", CD_GAME_STATE_ARENA)
+									.iconst_0()
+									.invokevirtual(CD_GAME_STATE_ARENA, "cloneArena", MethodTypeDesc.of(CD_GAME_STATE_ARENA, ConstantDescs.CD_boolean))
+									.invokespecial(CD_PLAYER, ConstantDescs.INIT_NAME, mtdPlayerArenaCopy)
+									.return_();
+						});
+						continue;
+					}
+					clb.with(ce);
+				}
+
+				clb.withMethodBody(ConstantDescs.INIT_NAME, mtdPlayerArenaCopy, ClassFile.ACC_PUBLIC, cob -> {
+					cob.aload(0)
+							.aload(1)
+							.invokespecial(CD_ENTITY, ConstantDescs.INIT_NAME, MethodTypeDesc.of(ConstantDescs.CD_void, CD_ENTITY))
+							.aload(1)
+							.invokevirtual(CD_PLAYER, "getId", MethodTypeDesc.of(ConstantDescs.CD_int))
+							.istore(3)
+							.new_(CD_ENTITY_LOOKUP)
+							.dup()
+							.iload(3)
+							.aload(2)
+							.invokespecial(CD_ENTITY_LOOKUP, ConstantDescs.INIT_NAME, MethodTypeDesc.of(ConstantDescs.CD_void, ConstantDescs.CD_int, CD_GAME_STATE_ARENA))
+							.astore(4)
+							.aload(0)
+							.aload(4)
+							.putfield(CD_PLAYER, "lookup", CD_ENTITY_LOOKUP);
+
+					for (String[] f : ezFields) {
+						cob.aload(0)
+								.new_(CD_ENTITY_ZONE)
+								.dup()
+								.iload(3)
+								.getstatic(CD_ZONES, f[1], CD_ZONES)
+								.aload(4)
+								.aload(2)
+								.invokespecial(CD_ENTITY_ZONE, ConstantDescs.INIT_NAME, mtdEzInit)
+								.putfield(CD_PLAYER, f[0], CD_ENTITY_ZONE);
+					}
+					for (String[] f : czFields) {
+						cob.aload(0)
+								.new_(CD_CARD_ZONE)
+								.dup()
+								.iload(3)
+								.getstatic(CD_ZONES, f[1], CD_ZONES)
+								.aload(4)
+								.aload(2)
+								.invokespecial(CD_CARD_ZONE, ConstantDescs.INIT_NAME, mtdCzInit)
+								.putfield(CD_PLAYER, f[0], CD_CARD_ZONE);
+					}
+
+					cob.aload(0)
+							.aload(1)
+							.getfield(CD_PLAYER, "mana", ConstantDescs.CD_int)
+							.putfield(CD_PLAYER, "mana", ConstantDescs.CD_int)
+							.aload(0)
+							.aload(1)
+							.getfield(CD_PLAYER, "maxMana", ConstantDescs.CD_int)
+							.putfield(CD_PLAYER, "maxMana", ConstantDescs.CD_int)
+							.aload(0)
+							.aload(1)
+							.getfield(CD_PLAYER, "lockedMana", ConstantDescs.CD_int)
+							.putfield(CD_PLAYER, "lockedMana", ConstantDescs.CD_int)
+							.aload(0)
+							.aload(1)
+							.invokevirtual(CD_PLAYER, "getStatistics", MethodTypeDesc.of(CD_GAME_STATS))
+							.invokevirtual(CD_GAME_STATS, "clone", MethodTypeDesc.of(CD_GAME_STATS))
+							.putfield(CD_PLAYER, "statistics", CD_GAME_STATS)
+							.aload(2)
+							.iload(3)
+							.aload(0)
+							.invokevirtual(CD_GAME_STATE_ARENA, "bindClonedPlayer", MethodTypeDesc.of(ConstantDescs.CD_void, ConstantDescs.CD_int, CD_PLAYER))
+							.return_();
+				});
+
+				clb.withMethodBody("cloneWithArena", mtdCloneWithArena, ClassFile.ACC_PUBLIC, cob -> {
+					cob.new_(CD_PLAYER)
+							.dup()
+							.aload(0)
+							.aload(1)
+							.invokespecial(CD_PLAYER, ConstantDescs.INIT_NAME, mtdPlayerArenaCopy)
+							.areturn();
+				});
+			});
+			Files.write(playerPath, wovenPlayer);
+		}
+
+		// 2. Weave GameContext.class
+		Path ctxPath = classesDir.resolve("net/demilich/metastone/game/GameContext.class");
+		ClassModel ctxModel = cf.parse(ctxPath);
+		if (!hasField(ctxModel, "arena")) {
+			ClassDesc cdEnvMap = ClassDesc.of("net.demilich.metastone.game.cards.desc.compiler.GameStateArena$EnvironmentMap");
+			ClassDesc cdTrigList = ClassDesc.of("net.demilich.metastone.game.cards.desc.compiler.GameStateArena$TriggerList");
+			ClassDesc cdRefStackView = ClassDesc.of("net.demilich.metastone.game.cards.desc.compiler.GameStateArena$RefStackView");
+			ClassDesc cdIntStackView = ClassDesc.of("net.demilich.metastone.game.cards.desc.compiler.GameStateArena$IntStackView");
+			ClassDesc cdPlayerArr = CD_PLAYER.arrayType();
+			ClassDesc cdArrays = ClassDesc.of("java.util.Arrays");
+			ClassDesc cdCollections = ClassDesc.of("java.util.Collections");
+
+			MethodTypeDesc mtdCtxCopy = MethodTypeDesc.of(ConstantDescs.CD_void, CD_GAME_CONTEXT);
+			MethodTypeDesc mtdCtxCopyBool = MethodTypeDesc.of(ConstantDescs.CD_void, CD_GAME_CONTEXT, ConstantDescs.CD_boolean);
+			MethodTypeDesc mtdCloneWithArena = MethodTypeDesc.of(CD_PLAYER, CD_GAME_STATE_ARENA);
+
+			Map<String, Integer> refStacks = Map.of(
+					"getSummonReferenceStack", GameStateArena.STACK_SUMMON_REF,
+					"getEventTargetStack", GameStateArena.STACK_EVENT_TARGET_REF,
+					"getSpellTargetStack", GameStateArena.STACK_SPELL_TARGET_REF,
+					"getOutputStack", GameStateArena.STACK_OUTPUT_REF,
+					"getEventSourceStack", GameStateArena.STACK_EVENT_SOURCE_REF,
+					"getTriggerHostStack", GameStateArena.STACK_TRIGGER_HOST_REF
+			);
+			Map<String, Integer> intStacks = Map.of(
+					"getSpellValueStack", GameStateArena.STACK_SPELL_VALUE,
+					"getEventValueStack", GameStateArena.STACK_EVENT_VALUE
+			);
+
+			byte[] step1 = cf.transformClass(ctxModel, (clb, ce) -> {
+				if (ce instanceof MethodModel mm) {
+					String name = mm.methodName().stringValue();
+					String desc = mm.methodType().stringValue();
+					if (name.equals(ConstantDescs.INIT_NAME)
+							&& (desc.equals("(Lnet/demilich/metastone/game/cards/CardCatalogue;Lnet/demilich/metastone/game/decks/DeckFormat;)V")
+							|| desc.equals("(Lcom/hiddenswitch/spellsource/common/GameState;)V"))) {
+						clb.transformMethod(mm, (mb, me) -> {
+							if (me instanceof CodeModel cm) {
+								mb.transformCode(cm, new java.lang.classfile.CodeTransform() {
+									private boolean inserted = false;
+
+									@Override
+									public void accept(java.lang.classfile.CodeBuilder cob, CodeElement coe) {
+										cob.with(coe);
+										if (!inserted
+												&& coe instanceof InvokeInstruction ii
+												&& ii.opcode() == Opcode.INVOKESPECIAL
+												&& ii.owner().asInternalName().equals("java/lang/Object")
+												&& ii.name().equalsString(ConstantDescs.INIT_NAME)) {
+											inserted = true;
+											cob.new_(CD_GAME_STATE_ARENA)
+													.dup()
+													.invokespecial(CD_GAME_STATE_ARENA, ConstantDescs.INIT_NAME, ConstantDescs.MTD_void)
+													.dup()
+													.aload(0)
+													.swap()
+													.putfield(CD_GAME_CONTEXT, "arena", CD_GAME_STATE_ARENA)
+													.dup()
+													.getfield(CD_GAME_STATE_ARENA, "envMap", cdEnvMap)
+													.aload(0)
+													.swap()
+													.putfield(CD_GAME_CONTEXT, "environment", CD_MAP)
+													.getfield(CD_GAME_STATE_ARENA, "triggers", cdTrigList)
+													.aload(0)
+													.swap()
+													.putfield(CD_GAME_CONTEXT, "triggers", CD_LIST);
+										}
+									}
+								});
+							} else {
+								mb.with(me);
+							}
+						});
+						return;
+					}
+					if (name.equals(ConstantDescs.INIT_NAME) && mm.methodTypeSymbol().equals(mtdCtxCopyBool)) {
+						clb.withMethodBody(ConstantDescs.INIT_NAME, mtdCtxCopyBool, mm.flags().flagsMask(), cob -> {
+							cob.aload(0)
+									.invokespecial(ConstantDescs.CD_Object, ConstantDescs.INIT_NAME, ConstantDescs.MTD_void)
+									.aload(0)
+									.iconst_2()
+									.anewarray(CD_PLAYER)
+									.putfield(CD_GAME_CONTEXT, "players", cdPlayerArr)
+									.aload(0)
+									.aload(0)
+									.getfield(CD_GAME_CONTEXT, "players", cdPlayerArr)
+									.invokestatic(cdArrays, "asList", MethodTypeDesc.of(CD_LIST, ConstantDescs.CD_Object.arrayType()))
+									.invokestatic(cdCollections, "unmodifiableList", MethodTypeDesc.of(CD_LIST, CD_LIST))
+									.putfield(CD_GAME_CONTEXT, "playersList", CD_LIST)
+									.aload(0)
+									.getstatic(CD_GAME_CONTEXT, "DEFAULT_TARGET_LOGIC", CD_TARGET_LOGIC)
+									.putfield(CD_GAME_CONTEXT, "targetLogic", CD_TARGET_LOGIC)
+									.aload(1)
+									.getfield(CD_GAME_CONTEXT, "arena", CD_GAME_STATE_ARENA)
+									.iload(2)
+									.invokevirtual(CD_GAME_STATE_ARENA, "cloneArena", MethodTypeDesc.of(CD_GAME_STATE_ARENA, ConstantDescs.CD_boolean))
+									.astore(3)
+									.aload(0)
+									.aload(3)
+									.putfield(CD_GAME_CONTEXT, "arena", CD_GAME_STATE_ARENA)
+									.aload(0)
+									.aload(3)
+									.getfield(CD_GAME_STATE_ARENA, "envMap", cdEnvMap)
+									.putfield(CD_GAME_CONTEXT, "environment", CD_MAP)
+									.aload(0)
+									.aload(3)
+									.getfield(CD_GAME_STATE_ARENA, "triggers", cdTrigList)
+									.putfield(CD_GAME_CONTEXT, "triggers", CD_LIST)
+									.aload(0)
+									.getfield(CD_GAME_CONTEXT, "players", cdPlayerArr)
+									.iconst_0()
+									.aload(1)
+									.getfield(CD_GAME_CONTEXT, "players", cdPlayerArr)
+									.iconst_0()
+									.aaload()
+									.aload(3)
+									.invokevirtual(CD_PLAYER, "cloneWithArena", mtdCloneWithArena)
+									.aastore()
+									.aload(0)
+									.getfield(CD_GAME_CONTEXT, "players", cdPlayerArr)
+									.iconst_1()
+									.aload(1)
+									.getfield(CD_GAME_CONTEXT, "players", cdPlayerArr)
+									.iconst_1()
+									.aaload()
+									.aload(3)
+									.invokevirtual(CD_PLAYER, "cloneWithArena", mtdCloneWithArena)
+									.aastore()
+									.aload(0)
+									.aload(1)
+									.invokevirtual(CD_GAME_CONTEXT, "copyNonArenaFieldsFrom", mtdCtxCopy)
+									.return_();
+						});
+						return;
+					}
+					if (name.equals("setPlayer") && desc.equals("(ILnet/demilich/metastone/game/Player;)Lnet/demilich/metastone/game/GameContext;")) {
+						clb.withMethodBody(name, mm.methodTypeSymbol(), mm.flags().flagsMask(), cob -> {
+							cob.aload(0)
+									.getfield(CD_GAME_CONTEXT, "players", cdPlayerArr)
+									.iload(1)
+									.aload(2)
+									.aastore()
+									.aload(0)
+									.getfield(CD_GAME_CONTEXT, "arena", CD_GAME_STATE_ARENA)
+									.iload(1)
+									.aload(2)
+									.invokestatic(CD_GAME_STATE_ARENA, "bindPlayerToArena",
+											MethodTypeDesc.of(ConstantDescs.CD_void, CD_GAME_STATE_ARENA, ConstantDescs.CD_int, CD_PLAYER))
+									.aload(0)
+									.areturn();
+						});
+						return;
+					}
+					if (name.equals("setEnvironment") && desc.equals("(Ljava/util/Map;)V")) {
+						clb.withMethodBody(name, mm.methodTypeSymbol(), mm.flags().flagsMask(), cob -> {
+							cob.aload(0)
+									.getfield(CD_GAME_CONTEXT, "arena", CD_GAME_STATE_ARENA)
+									.dup()
+									.aload(1)
+									.invokevirtual(CD_GAME_STATE_ARENA, "syncEnvironmentFrom", MethodTypeDesc.of(ConstantDescs.CD_void, CD_MAP))
+									.getfield(CD_GAME_STATE_ARENA, "envMap", cdEnvMap)
+									.aload(0)
+									.swap()
+									.putfield(CD_GAME_CONTEXT, "environment", CD_MAP)
+									.return_();
+						});
+						return;
+					}
+					if (name.equals("setTriggers") && desc.equals("(Ljava/util/List;)V")) {
+						clb.withMethodBody(name, mm.methodTypeSymbol(), mm.flags().flagsMask(), cob -> {
+							cob.aload(0)
+									.getfield(CD_GAME_CONTEXT, "arena", CD_GAME_STATE_ARENA)
+									.dup()
+									.aload(1)
+									.invokevirtual(CD_GAME_STATE_ARENA, "syncTriggersFrom", MethodTypeDesc.of(ConstantDescs.CD_void, CD_LIST))
+									.getfield(CD_GAME_STATE_ARENA, "triggers", cdTrigList)
+									.aload(0)
+									.swap()
+									.putfield(CD_GAME_CONTEXT, "triggers", CD_LIST)
+									.return_();
+						});
+						return;
+					}
+					Integer refStackIdx = refStacks.get(name);
+					if (refStackIdx != null && desc.equals("()Ljava/util/Deque;")) {
+						int idx = refStackIdx;
+						clb.withMethodBody(name, mm.methodTypeSymbol(), mm.flags().flagsMask(), cob -> {
+							cob.aload(0)
+									.getfield(CD_GAME_CONTEXT, "arena", CD_GAME_STATE_ARENA)
+									.bipush(idx)
+									.invokevirtual(CD_GAME_STATE_ARENA, "getRefStack", MethodTypeDesc.of(CD_DEQUE, ConstantDescs.CD_int))
+									.areturn();
+						});
+						return;
+					}
+					Integer intStackIdx = intStacks.get(name);
+					if (intStackIdx != null && desc.equals("()Ljava/util/Deque;")) {
+						int idx = intStackIdx;
+						clb.withMethodBody(name, mm.methodTypeSymbol(), mm.flags().flagsMask(), cob -> {
+							cob.aload(0)
+									.getfield(CD_GAME_CONTEXT, "arena", CD_GAME_STATE_ARENA)
+									.bipush(idx)
+									.invokevirtual(CD_GAME_STATE_ARENA, "getIntStack", MethodTypeDesc.of(CD_DEQUE, ConstantDescs.CD_int))
+									.areturn();
+						});
+						return;
+					}
+					if (name.equals("getEventValue") && desc.equals("()I")) {
+						clb.withMethodBody(name, mm.methodTypeSymbol(), mm.flags().flagsMask(), cob -> {
+							cob.aload(0)
+									.getfield(CD_GAME_CONTEXT, "arena", CD_GAME_STATE_ARENA)
+									.bipush(GameStateArena.STACK_EVENT_VALUE)
+									.invokevirtual(CD_GAME_STATE_ARENA, "peekInt", MethodTypeDesc.of(ConstantDescs.CD_int, ConstantDescs.CD_int))
+									.ireturn();
+						});
+						return;
+					}
+				}
+				clb.with(ce);
+			});
+
+			ClassModel intermediate = cf.parse(step1);
+			byte[] finalCtx = cf.build(intermediate.thisClass().asSymbol(), clb -> {
+				for (ClassElement ce : intermediate) {
+					clb.with(ce);
+				}
+				clb.withField("arena", CD_GAME_STATE_ARENA, ClassFile.ACC_PUBLIC);
+			});
+			Files.write(ctxPath, finalCtx);
+		}
+
+		Path gsvbPath = classesDir.resolve("net/demilich/metastone/game/behaviour/GameStateValueBehaviour.class");
+		if (Files.exists(gsvbPath)) {
+			ClassModel gsvbModel = cf.parse(gsvbPath);
+			MethodTypeDesc mtdPostProcess = MethodTypeDesc.of(ConstantDescs.CD_void, ConstantDescs.CD_int, CD_GAME_CONTEXT);
+			byte[] wovenGsvb = cf.build(gsvbModel.thisClass().asSymbol(), clb -> {
+				for (ClassElement ce : gsvbModel) {
+					if (ce instanceof MethodModel mm
+							&& mm.methodName().equalsString("postProcess")
+							&& mm.methodTypeSymbol().equals(mtdPostProcess)) {
+						clb.transformMethod(mm, (mb, me) -> {
+							if (me instanceof CodeModel cm) {
+								mb.withCode(cob -> {
+									Label continueLabel = cob.newLabel();
+									cob.aload(2)
+											.invokestatic(CD_GAME_STATE_ARENA, "hasTurnTriggers",
+													MethodTypeDesc.of(ConstantDescs.CD_boolean, CD_GAME_CONTEXT))
+											.ifne(continueLabel)
+											.return_()
+											.labelBinding(continueLabel);
+									for (CodeElement elem : cm) {
+										cob.with(elem);
+									}
+								});
+							} else {
+								mb.with(me);
+							}
+						});
+						continue;
+					}
+					clb.with(ce);
+				}
+			});
+			Files.write(gsvbPath, wovenGsvb);
+		}
+	}
+
+	// =========================================================================
 	// 10. TargetLogic.class Weaving
 	// =========================================================================
 
@@ -1038,6 +1659,12 @@ public final class SpellsourceClassfileWeaver {
 				CD_LIST, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY_REF);
 		MethodTypeDesc mtdRuntimeResolve = MethodTypeDesc.of(
 				CD_LIST, CD_TARGET_LOGIC, CD_GAME_CONTEXT, CD_PLAYER, CD_ENTITY, CD_ENTITY_REF);
+		ClassDesc cdTargetSelection = ClassDesc.of("net.demilich.metastone.game.targeting.TargetSelection");
+		MethodTypeDesc mtdGetEntities = MethodTypeDesc.of(
+				CD_LIST, CD_GAME_CONTEXT, CD_PLAYER, cdTargetSelection, ConstantDescs.CD_boolean);
+		MethodTypeDesc mtdRuntimeGetEntities = MethodTypeDesc.of(
+				CD_LIST, CD_TARGET_LOGIC, CD_GAME_CONTEXT, CD_PLAYER, cdTargetSelection, ConstantDescs.CD_boolean);
+		MethodTypeDesc mtdWithoutPermanents = MethodTypeDesc.of(CD_LIST, CD_LIST);
 
 		byte[] woven = cf.build(model.thisClass().asSymbol(), clb -> {
 			for (ClassElement ce : model) {
@@ -1046,6 +1673,24 @@ public final class SpellsourceClassfileWeaver {
 					clb.withMethodBody("resolveTargetKey", mtdResolveTargetKey, mm.flags().flagsMask(), cob -> {
 						cob.aload(0).aload(1).aload(2).aload(3).aload(4)
 								.invokestatic(CD_TARGET_RUNTIME, "resolveTargetKey", mtdRuntimeResolve)
+								.areturn();
+					});
+					continue;
+				}
+				if (ce instanceof MethodModel mm && mm.methodName().equalsString("getEntities")
+						&& mm.methodTypeSymbol().equals(mtdGetEntities)) {
+					clb.withMethodBody("getEntities", mtdGetEntities, mm.flags().flagsMask(), cob -> {
+						cob.aload(0).aload(1).aload(2).aload(3).iload(4)
+								.invokestatic(CD_TARGET_RUNTIME, "getEntities", mtdRuntimeGetEntities)
+								.areturn();
+					});
+					continue;
+				}
+				if (ce instanceof MethodModel mm && mm.methodName().equalsString("withoutPermanents")
+						&& mm.methodTypeSymbol().equals(mtdWithoutPermanents)) {
+					clb.withMethodBody("withoutPermanents", mtdWithoutPermanents, mm.flags().flagsMask(), cob -> {
+						cob.aload(0)
+								.invokestatic(CD_TARGET_RUNTIME, "withoutPermanents", mtdWithoutPermanents)
 								.areturn();
 					});
 					continue;
@@ -1158,7 +1803,7 @@ public final class SpellsourceClassfileWeaver {
 			String internalName = entry.getKey();
 			ClassModel cm = entry.getValue();
 			ComponentSignatureAnalyzer.ComponentKind kind = resolveComponentKind(internalName, modelByInternal);
-			if (kind == null) {
+			if (kind == null || internalName.equals(kind.baseInternalName)) {
 				continue;
 			}
 			MethodModel typedMethod = null;
@@ -1177,15 +1822,142 @@ public final class SpellsourceClassfileWeaver {
 				continue;
 			}
 			if (hasExactMethod(cm, stdMethodName, stdMtd)
-					&& (typedMethod.flags().flagsMask() & ClassFile.ACC_PUBLIC) != 0) {
+					&& areAllMembersPublic(cm, stdMethodName, stdMtd)) {
 				continue;
 			}
 
-			boolean isRevertableSpell = kind == ComponentSignatureAnalyzer.ComponentKind.SPELL
-					&& extendsClass(internalName, "net/demilich/metastone/game/spells/RevertableSpell", modelByInternal);
-			byte[] wovenBytes = buildTypedBridgeClass(cf, cm, kind, typedMethod, stdMethodName, stdMtd, isRevertableSpell);
+			byte[] wovenBytes = buildTypedBridgeClass(cf, cm, kind, typedMethod, stdMethodName, stdMtd);
 			Files.write(pathByInternal.get(internalName), wovenBytes);
+			modelByInternal.put(internalName, cf.parse(wovenBytes));
 		}
+
+		// Ensure all classes, fields, and non-conflicting methods under net/demilich/metastone/game/spells/
+		// (including synthetic $1 switchmap classes and base classes) are public so specialized bytecode in
+		// net.demilich.metastone.game.cards.desc.compiler.Hidden* can access them directly.
+		for (Map.Entry<String, ClassModel> entry : modelByInternal.entrySet()) {
+			String internalName = entry.getKey();
+			if (!internalName.startsWith("net/demilich/metastone/game/spells/")) {
+				continue;
+			}
+			ClassModel cm = entry.getValue();
+			if ((cm.flags().flagsMask() & ClassFile.ACC_INTERFACE) != 0) {
+				continue;
+			}
+			if (isClassAndMembersPublic(cm)) {
+				continue;
+			}
+			byte[] promotedBytes = promoteClassAndMembersToPublic(cf, cm, modelByInternal);
+			Files.write(pathByInternal.get(internalName), promotedBytes);
+		}
+	}
+
+	private static boolean isClassAndMembersPublic(ClassModel cm) {
+		if ((cm.flags().flagsMask() & ClassFile.ACC_PUBLIC) == 0) {
+			return false;
+		}
+		for (FieldModel fm : cm.fields()) {
+			if ((fm.flags().flagsMask() & ClassFile.ACC_PUBLIC) == 0) {
+				return false;
+			}
+		}
+		for (MethodModel mm : cm.methods()) {
+			if (mm.methodName().equalsString(ConstantDescs.CLASS_INIT_NAME)) {
+				continue;
+			}
+			if ((mm.flags().flagsMask() & ClassFile.ACC_PUBLIC) == 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static boolean hasHierarchyMethodConflict(ClassModel cm, MethodModel mm, Map<String, ClassModel> models) {
+		String name = mm.methodName().stringValue();
+		if (name.equals(ConstantDescs.INIT_NAME) || name.equals(ConstantDescs.CLASS_INIT_NAME)) {
+			return false;
+		}
+		List<ClassDesc> params = mm.methodTypeSymbol().parameterList();
+		String curr = cm.superclass().map(e -> e.asInternalName()).orElse(null);
+		while (curr != null && !curr.equals("java/lang/Object")) {
+			ClassModel sup = models.get(curr);
+			if (sup == null) {
+				break;
+			}
+			for (MethodModel sm : sup.methods()) {
+				if (sm.methodName().equalsString(name) && sm.methodTypeSymbol().parameterList().equals(params)) {
+					boolean smStatic = (sm.flags().flagsMask() & ClassFile.ACC_STATIC) != 0;
+					boolean mmStatic = (mm.flags().flagsMask() & ClassFile.ACC_STATIC) != 0;
+					boolean smFinal = (sm.flags().flagsMask() & ClassFile.ACC_FINAL) != 0;
+					if (smStatic != mmStatic || smFinal || !sm.methodTypeSymbol().returnType().equals(mm.methodTypeSymbol().returnType())) {
+						return true;
+					}
+				}
+			}
+			curr = sup.superclass().map(e -> e.asInternalName()).orElse(null);
+		}
+		return false;
+	}
+
+	private static byte[] promoteClassAndMembersToPublic(ClassFile cf, ClassModel cm, Map<String, ClassModel> models) {
+		ClassDesc ownerDesc = cm.thisClass().asSymbol();
+		return cf.build(ownerDesc, clb -> {
+			int classFlags = (cm.flags().flagsMask() & ~(ClassFile.ACC_PROTECTED | ClassFile.ACC_PRIVATE)) | ClassFile.ACC_PUBLIC;
+			clb.withFlags(classFlags);
+			for (ClassElement ce : cm) {
+				if (ce instanceof java.lang.classfile.AccessFlags) {
+					continue;
+				}
+				if (ce instanceof FieldModel fm) {
+					int newFlags = (fm.flags().flagsMask() & ~(ClassFile.ACC_PROTECTED | ClassFile.ACC_PRIVATE)) | ClassFile.ACC_PUBLIC;
+					clb.withField(fm.fieldName().stringValue(), fm.fieldTypeSymbol(), fb -> {
+						fb.withFlags(newFlags);
+						for (var fe : fm) {
+							if (!(fe instanceof java.lang.classfile.AccessFlags)) {
+								fb.with(fe);
+							}
+						}
+					});
+					continue;
+				}
+				if (ce instanceof MethodModel mm && !mm.methodName().equalsString(ConstantDescs.CLASS_INIT_NAME)) {
+					int oldFlags = mm.flags().flagsMask();
+					boolean canPromote = (oldFlags & ClassFile.ACC_PRIVATE) == 0 || !hasHierarchyMethodConflict(cm, mm, models);
+					int newFlags = canPromote
+							? ((oldFlags & ~(ClassFile.ACC_PROTECTED | ClassFile.ACC_PRIVATE)) | ClassFile.ACC_PUBLIC)
+							: oldFlags;
+					clb.withMethod(mm.methodName().stringValue(), mm.methodTypeSymbol(), newFlags, mb -> {
+						for (MethodElement me : mm) {
+							if (!(me instanceof java.lang.classfile.AccessFlags)) {
+								mb.with(me);
+							}
+						}
+					});
+					continue;
+				}
+				clb.with(ce);
+			}
+		});
+	}
+
+	private static boolean areAllMembersPublic(ClassModel cm, String stdMethodName, MethodTypeDesc stdMtd) {
+		for (FieldModel fm : cm.fields()) {
+			if ((fm.flags().flagsMask() & ClassFile.ACC_PUBLIC) == 0) {
+				return false;
+			}
+		}
+		for (MethodModel mm : cm.methods()) {
+			String name = mm.methodName().stringValue();
+			if (name.equals(ConstantDescs.CLASS_INIT_NAME)) {
+				continue;
+			}
+			if (name.equals(stdMethodName) && mm.methodTypeSymbol().equals(stdMtd)) {
+				continue;
+			}
+			if ((mm.flags().flagsMask() & ClassFile.ACC_PUBLIC) == 0) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private static boolean extendsClass(
@@ -1231,6 +2003,7 @@ public final class SpellsourceClassfileWeaver {
 			case ENTITY_FILTER -> "test";
 			case VALUE_PROVIDER -> "provideValue";
 			case CONDITION -> "isFulfilled";
+			case CARD_SOURCE -> "match";
 			default -> null;
 		};
 	}
@@ -1241,6 +2014,7 @@ public final class SpellsourceClassfileWeaver {
 			case ENTITY_FILTER -> MTD_EF_MATCHES;
 			case VALUE_PROVIDER -> MTD_VP_COMPUTE;
 			case CONDITION -> MTD_COND_EVAL;
+			case CARD_SOURCE -> MTD_CS_MATCH;
 			default -> null;
 		};
 	}
@@ -1271,18 +2045,20 @@ public final class SpellsourceClassfileWeaver {
 			ComponentSignatureAnalyzer.ComponentKind kind,
 			MethodModel typedMethod,
 			String stdMethodName,
-			MethodTypeDesc stdMtd,
-			boolean isRevertableSpell) {
+			MethodTypeDesc stdMtd) {
 		ClassDesc ownerDesc = cm.thisClass().asSymbol();
 		List<ClassDesc> paramTypes = typedMethod.methodTypeSymbol().parameterList();
 		boolean hasDescInPrefix = ComponentSignatureAnalyzer.hasDescInPrefix(paramTypes);
-		int prefixLen = hasDescInPrefix ? 5 : 4;
+		int prefixLen = (kind == ComponentSignatureAnalyzer.ComponentKind.CARD_SOURCE) ? 3 : (hasDescInPrefix ? 5 : 4);
+		String targetTypedMethodName = (kind == ComponentSignatureAnalyzer.ComponentKind.CONDITION && paramTypes.size() == 4)
+				? "isFulfilled$0"
+				: typedMethod.methodName().stringValue();
 
 		Optional<MethodParametersAttribute> mpaOpt = typedMethod.findAttribute(Attributes.methodParameters());
-		if (mpaOpt.isEmpty()) {
+		if (mpaOpt.isEmpty() && prefixLen < paramTypes.size()) {
 			throw new IllegalStateException("Missing -parameters MethodParametersAttribute on " + ownerDesc.displayName() + "." + typedMethod.methodName().stringValue());
 		}
-		List<MethodParameterInfo> paramInfos = mpaOpt.get().parameters();
+		List<MethodParameterInfo> paramInfos = mpaOpt.map(MethodParametersAttribute::parameters).orElse(Collections.emptyList());
 		Optional<RuntimeVisibleParameterAnnotationsAttribute> rvpaOpt =
 				typedMethod.findAttribute(Attributes.runtimeVisibleParameterAnnotations());
 		List<List<Annotation>> paramAnns = rvpaOpt.map(RuntimeVisibleParameterAnnotationsAttribute::parameterAnnotations)
@@ -1297,11 +2073,22 @@ public final class SpellsourceClassfileWeaver {
 					// Strip previously woven synthetic standard bridge when re-weaving
 					continue;
 				}
-				if (ce instanceof MethodModel mm
-						&& mm.methodName().equals(typedMethod.methodName())
-						&& mm.methodTypeSymbol().equals(typedMethod.methodTypeSymbol())) {
+				if (ce instanceof FieldModel fm) {
+					int newFlags = (fm.flags().flagsMask() & ~(ClassFile.ACC_PROTECTED | ClassFile.ACC_PRIVATE)) | ClassFile.ACC_PUBLIC;
+					clb.withField(fm.fieldName().stringValue(), fm.fieldTypeSymbol(), fb -> {
+						fb.withFlags(newFlags);
+						for (var fe : fm) {
+							if (!(fe instanceof java.lang.classfile.AccessFlags)) {
+								fb.with(fe);
+							}
+						}
+					});
+					continue;
+				}
+				if (ce instanceof MethodModel mm && !mm.methodName().equalsString(ConstantDescs.CLASS_INIT_NAME)) {
 					int newFlags = (mm.flags().flagsMask() & ~(ClassFile.ACC_PROTECTED | ClassFile.ACC_PRIVATE)) | ClassFile.ACC_PUBLIC;
-					clb.withMethod(mm.methodName().stringValue(), mm.methodTypeSymbol(), newFlags, mb -> {
+					String mName = (mm == typedMethod) ? targetTypedMethodName : mm.methodName().stringValue();
+					clb.withMethod(mName, mm.methodTypeSymbol(), newFlags, mb -> {
 						for (MethodElement me : mm) {
 							if (!(me instanceof java.lang.classfile.AccessFlags)) {
 								mb.with(me);
@@ -1315,6 +2102,7 @@ public final class SpellsourceClassfileWeaver {
 
 			clb.withMethodBody(stdMethodName, stdMtd, ClassFile.ACC_PROTECTED | ClassFile.ACC_SYNTHETIC, cob -> {
 				final int descSlot;
+				final int playerSlot;
 				final int targetSlot;
 				final int hostSlot;
 				final ClassDesc cdDescSub;
@@ -1323,6 +2111,7 @@ public final class SpellsourceClassfileWeaver {
 				switch (kind) {
 					case SPELL -> {
 						descSlot = 3;
+						playerSlot = 2;
 						targetSlot = 5;
 						hostSlot = 4;
 						cdDescSub = CD_SPELL_DESC;
@@ -1330,6 +2119,7 @@ public final class SpellsourceClassfileWeaver {
 					}
 					case CONDITION -> {
 						descSlot = 3;
+						playerSlot = 2;
 						targetSlot = 5;
 						hostSlot = 4;
 						cdDescSub = CD_COND_DESC;
@@ -1337,6 +2127,7 @@ public final class SpellsourceClassfileWeaver {
 					}
 					case ENTITY_FILTER -> {
 						descSlot = 5;
+						playerSlot = 2;
 						targetSlot = 6;
 						hostSlot = 4;
 						cdDescSub = CD_EF_DESC;
@@ -1354,6 +2145,7 @@ public final class SpellsourceClassfileWeaver {
 					}
 					case VALUE_PROVIDER -> {
 						descSlot = 5;
+						playerSlot = 2;
 						targetSlot = 3;
 						hostSlot = 4;
 						cdDescSub = CD_VP_DESC;
@@ -1362,26 +2154,44 @@ public final class SpellsourceClassfileWeaver {
 								.invokevirtual(CD_VP, "getDesc", MethodTypeDesc.of(CD_VP_DESC))
 								.astore(descSlot);
 					}
+					case CARD_SOURCE -> {
+						descSlot = 4;
+						playerSlot = 3;
+						targetSlot = 3;
+						hostSlot = 2;
+						cdDescSub = CD_CS_DESC;
+						cdArgEnum = CD_CS_ARG;
+						cob.aload(0)
+								.invokevirtual(CD_CS, "getDesc", MethodTypeDesc.of(CD_CS_DESC))
+								.astore(descSlot);
+					}
 					default -> throw new IllegalStateException("Unsupported kind: " + kind);
 				}
 
 				// Push 'this' and prefix arguments
-				cob.aload(0)
-						.aload(1)
-						.aload(2);
-				if (kind == ComponentSignatureAnalyzer.ComponentKind.SPELL
-						|| kind == ComponentSignatureAnalyzer.ComponentKind.CONDITION) {
-					if (hasDescInPrefix) {
-						cob.aload(3);
-					}
-					cob.aload(4)
-							.aload(5);
+				if (kind == ComponentSignatureAnalyzer.ComponentKind.CARD_SOURCE) {
+					cob.aload(0)
+							.aload(1)
+							.aload(2)
+							.aload(3);
 				} else {
-					if (hasDescInPrefix) {
-						cob.aload(descSlot);
+					cob.aload(0)
+							.aload(1)
+							.aload(2);
+					if (kind == ComponentSignatureAnalyzer.ComponentKind.SPELL
+							|| kind == ComponentSignatureAnalyzer.ComponentKind.CONDITION) {
+						if (hasDescInPrefix) {
+							cob.aload(3);
+						}
+						cob.aload(4)
+								.aload(5);
+					} else {
+						if (hasDescInPrefix) {
+							cob.aload(descSlot);
+						}
+						cob.aload(3)
+								.aload(4);
 					}
-					cob.aload(3)
-							.aload(4);
 				}
 
 				// Evaluate and push each extra typed argument
@@ -1458,12 +2268,14 @@ public final class SpellsourceClassfileWeaver {
 					String argKey = ComponentSignatureAnalyzer.camelToUpperSnake(pName);
 					if (argKey.equals("TARGET_REFERENCE") && pType.equals(CD_ENTITY_REF)) {
 						argKey = "TARGET";
+					} else if (argKey.equals("SOURCE_REFERENCE") && pType.equals(CD_ENTITY_REF)) {
+						argKey = "SOURCE";
 					}
 					if (pType.equals(ConstantDescs.CD_int)) {
 						cob.aload(descSlot)
 								.getstatic(cdArgEnum, argKey, cdArgEnum)
 								.aload(1)
-								.aload(2)
+								.aload(playerSlot)
 								.aload(targetSlot)
 								.aload(hostSlot)
 								.ldc(defaultInt)
@@ -1480,7 +2292,7 @@ public final class SpellsourceClassfileWeaver {
 								.aload(descSlot)
 								.getstatic(cdArgEnum, argKey, cdArgEnum)
 								.aload(1)
-								.aload(2)
+								.aload(playerSlot)
 								.aload(targetSlot)
 								.aload(hostSlot)
 								.ldc(defaultInt)
@@ -1508,10 +2320,19 @@ public final class SpellsourceClassfileWeaver {
 											MethodTypeDesc.of(ConstantDescs.CD_boolean, ConstantDescs.CD_Enum));
 						}
 					} else if (pType.equals(ConstantDescs.CD_String) && hasDefaultAnn) {
-						cob.aload(descSlot)
-								.getstatic(cdArgEnum, argKey, cdArgEnum)
-								.invokevirtual(cdDescSub, "getString",
-										MethodTypeDesc.of(ConstantDescs.CD_String, ConstantDescs.CD_Enum));
+						if (!defaultStr.isEmpty()) {
+							cob.aload(descSlot)
+									.getstatic(cdArgEnum, argKey, cdArgEnum)
+									.ldc(defaultStr)
+									.invokevirtual(cdDescSub, "getOrDefault",
+											MethodTypeDesc.of(ConstantDescs.CD_Object, ConstantDescs.CD_Object, ConstantDescs.CD_Object))
+									.checkcast(ConstantDescs.CD_String);
+						} else {
+							cob.aload(descSlot)
+									.getstatic(cdArgEnum, argKey, cdArgEnum)
+									.invokevirtual(cdDescSub, "getString",
+											MethodTypeDesc.of(ConstantDescs.CD_String, ConstantDescs.CD_Enum));
+						}
 					} else if (pType.equals(CD_VP)) {
 						cob.aload(descSlot)
 								.getstatic(cdArgEnum, argKey, cdArgEnum)
@@ -1535,23 +2356,13 @@ public final class SpellsourceClassfileWeaver {
 					}
 				}
 
-				cob.invokevirtual(ownerDesc, typedMethod.methodName().stringValue(), typedMethod.methodTypeSymbol());
-				if (isRevertableSpell && !hasDescInPrefix) {
-					cob.aload(0)
-							.aload(1)
-							.aload(2)
-							.aload(3)
-							.aload(4)
-							.aload(5)
-							.invokevirtual(
-									ClassDesc.of("net.demilich.metastone.game.spells.RevertableSpell"),
-									"applyRevertTrigger",
-									MTD_SPELL_ONCAST);
-				}
+				cob.invokevirtual(ownerDesc, targetTypedMethodName, typedMethod.methodTypeSymbol());
 				if (stdMtd.returnType().equals(ConstantDescs.CD_void)) {
 					cob.return_();
-				} else {
+				} else if (stdMtd.returnType().isPrimitive()) {
 					cob.ireturn();
+				} else {
+					cob.areturn();
 				}
 			});
 		});

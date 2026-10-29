@@ -24,7 +24,8 @@
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "FROZEN"
+          "attribute": "FROZEN",
+          "name": "Chains of Ice"
         }
       ]
     },
@@ -36,7 +37,8 @@
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "FROZEN"
+          "attribute": "FROZEN",
+          "name": "Chains of Ice"
         }
       ]
     }

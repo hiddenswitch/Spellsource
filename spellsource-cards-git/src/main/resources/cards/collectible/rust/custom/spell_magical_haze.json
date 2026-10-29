@@ -19,7 +19,8 @@
         "spell": {
           "class": "AddAttributeSpell",
           "target": "OUTPUT",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Magical Haze"
         },
         "cardFilter": {
           "class": "CardFilter",

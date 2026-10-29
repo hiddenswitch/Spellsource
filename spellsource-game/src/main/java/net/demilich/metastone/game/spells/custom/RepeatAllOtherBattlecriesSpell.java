@@ -48,7 +48,11 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 					&& RepeatAllOtherBattlecriesSpell.class.equals(c.getDesc().getBattlecry().getSpell().getDescClass()));
 			int limit = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 			if (cards.size() > limit) {
-				cards = new CardArrayList(cards.subList(cards.size() - limit, cards.size()));
+				if (desc.getBool(SpellArg.EXCLUSIVE)) {
+					cards = new CardArrayList(cards.subList(0, limit));
+				} else {
+					cards = new CardArrayList(cards.subList(cards.size() - limit, cards.size()));
+				}
 			}
 		} else {
 			cards.shuffle(context.getLogic().getRandom());
@@ -61,7 +65,8 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 		// Replay the battlecries with targets chosen randomly
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
-			if (!card.hasBattlecry()) {
+			var cardOpeners = context.getLogic().getOpeners(card);
+			if (!card.hasBattlecry() && !card.hasChoices() && cardOpeners.isEmpty()) {
 				logger.error("onCast {} {}: Matched a card {} that does not have a opener specified.", context.getGameId(), source, card);
 				continue;
 			}
@@ -130,10 +135,36 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 						break;
 				}
 			}
+			return executeOpenerActionRandomly(context, player, battlecryCardSource, battlecrySource, action);
 		} else {
+			var openers = context.getLogic().getOpeners(battlecryCardSource);
+			if (!openers.isEmpty()) {
+				boolean anyCast = false;
+				for (var opener : openers) {
+					Card srcCard = opener.getSourceCard() != null ? opener.getSourceCard() : battlecryCardSource;
+					if (castOpenerRandomly(context, player, srcCard, battlecrySource, opener.getOpenerDesc())) {
+						anyCast = true;
+					}
+				}
+				return anyCast;
+			}
+			if (battlecryCardSource.getDesc().getBattlecry() == null) {
+				logger.error("onCast {} {}: Matched a card {} that does not have a battlecry action.", context.getGameId(), battlecrySource, battlecryCardSource);
+				return true;
+			}
 			action = battlecryCardSource.getDesc().getBattlecry().toOpenerAction();
+			return executeOpenerActionRandomly(context, player, battlecryCardSource, battlecrySource, action);
 		}
+	}
 
+	public static boolean castOpenerRandomly(GameContext context, Player player, Card battlecryCardSource, Actor battlecrySource, OpenerDesc openerDesc) {
+		if (openerDesc == null) {
+			return false;
+		}
+		return executeOpenerActionRandomly(context, player, battlecryCardSource, battlecrySource, openerDesc.toOpenerAction());
+	}
+
+	private static boolean executeOpenerActionRandomly(GameContext context, Player player, Card battlecryCardSource, Actor battlecrySource, OpenerAction action) {
 		if (action == null) {
 			logger.error("onCast {} {}: Matched a card {} that does not have a battlecry action.", context.getGameId(), battlecrySource, battlecryCardSource);
 			return true;

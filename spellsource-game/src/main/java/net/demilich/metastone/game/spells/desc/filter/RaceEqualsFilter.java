@@ -12,9 +12,8 @@ public final class RaceEqualsFilter extends EntityFilter {
 		super(desc);
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		Entity comparedTo = context.resolveSingleTarget(player, host, (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET));
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host, EntityReference secondaryTarget) {
+		Entity comparedTo = context.resolveSingleTarget(player, host, secondaryTarget);
 
 		if (entity == null || comparedTo == null) {
 			return false;

@@ -26,23 +26,21 @@ public final class DistinctTribesValueProvider extends ValueProvider {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
+	protected int provideValue(GameContext context, Player player, Entity target, Entity host, EntityReference targetReference, EntityFilter filter, String race) {
 		List<Entity> targets;
-		if (getDesc().containsKey(ValueProviderArg.TARGET)) {
-			targets = context.resolveTarget(player, host, (EntityReference) getDesc().get(ValueProviderArg.TARGET));
+		if (targetReference != null) {
+			targets = context.resolveTarget(player, host, targetReference);
 		} else if (target != null) {
 			targets = new ArrayList<>(Collections.singletonList(target));
 		} else {
 			targets = new ArrayList<>();
 		}
-		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
 		Stream<String> raceStream = targets.stream()
 				.filter(e -> filter == null || filter.matches(context, player, e, host))
 				.flatMap(e -> Arrays.stream(e.getRaces()))
 				.filter(r -> !r.equals(Race.NONE));
-		if (getDesc().containsKey(ValueProviderArg.RACE)) {
-			raceStream = Stream.concat(Stream.of((String) getDesc().get(ValueProviderArg.RACE)), raceStream);
+		if (race != null) {
+			raceStream = Stream.concat(Stream.of(race), raceStream);
 		}
 		return (int) raceStream.distinct().count();
 	}

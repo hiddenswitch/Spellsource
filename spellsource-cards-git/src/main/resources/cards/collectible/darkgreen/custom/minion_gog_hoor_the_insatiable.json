@@ -18,13 +18,15 @@
         {
           "class": "AddAttributeSpell",
           "target": "EVENT_TARGET",
-          "attribute": "COUNTERED"
+          "attribute": "COUNTERED",
+          "name": "Gog-Hoor's Blessing"
         },
         {
           "class": "BuffSpell",
           "target": "TRIGGER_HOST",
           "attackBonus": 2,
-          "hpBonus": 2
+          "hpBonus": 2,
+          "name": "Gog-Hoor's Blessing"
         }
       ]
     }

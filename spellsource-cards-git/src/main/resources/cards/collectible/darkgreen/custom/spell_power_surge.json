@@ -15,11 +15,13 @@
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "RUSH"
+        "attribute": "RUSH",
+        "name": "Power Surge"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Power Surge"
       }
     ]
   },

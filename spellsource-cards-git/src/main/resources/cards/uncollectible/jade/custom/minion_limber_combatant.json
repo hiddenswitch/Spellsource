@@ -15,7 +15,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "SELF",
-      "attribute": "DIVINE_SHIELD"
+      "attribute": "DIVINE_SHIELD",
+      "name": "Limber Combatant's Dodge"
     }
   },
   "attributes": {

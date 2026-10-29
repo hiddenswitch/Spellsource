@@ -21,7 +21,8 @@
         "race": "ELEMENTAL"
       },
       "hpBonus": 2,
-      "randomTarget": true
+      "randomTarget": true,
+      "name": "Drillflame Commander's Blessing"
     }
   },
   "collectible": true,

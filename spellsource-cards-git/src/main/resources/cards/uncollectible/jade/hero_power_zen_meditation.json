@@ -16,7 +16,8 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "attackBonus": 2
+        "attackBonus": 2,
+        "name": "Zen Meditation's Rally"
       }
     ]
   },

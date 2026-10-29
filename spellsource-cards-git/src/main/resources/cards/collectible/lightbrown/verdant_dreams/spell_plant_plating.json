@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Plant Plating"
       },
       {
         "class": "BuffSpell",
@@ -20,7 +21,8 @@
           "class": "AttributeValueProvider",
           "target": "TARGET",
           "attribute": "HP"
-        }
+        },
+        "name": "Plant Plating"
       }
     ]
   },

@@ -19,7 +19,8 @@
           "cardType": "MINION"
         },
         "hpBonus": 2,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Power Bringer's Blessing"
       },
       {
         "class": "BuffSpell",
@@ -30,7 +31,8 @@
           "cardType": "MINION"
         },
         "hpBonus": 2,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Power Bringer's Blessing"
       }
     ]
   },

@@ -17,7 +17,8 @@
         "class": "DestroySpell",
         "target": "TRIGGER_HOST"
       }
-    }
+    },
+    "name": "Weak Point"
   },
   "attributes": {},
   "collectible": true,

@@ -328,7 +328,7 @@ public class ServerGameContext extends GameContext implements Server {
 		});
 		consumer.pause();
 		// setMaxBufferedMessages removed in Vert.x 5
-		consumer.bodyStream().pipeTo(response);
+		consumer.bodyStream().pipe().endOnComplete(false).endOnFailure(false).to(response);
 		consumer.completion().onSuccess(v -> consumer.resume());
 		request.resume();
 	}

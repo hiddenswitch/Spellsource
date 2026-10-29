@@ -12,7 +12,8 @@
     "attribute": "IMMUNE",
     "revertTrigger": {
       "class": "TurnEndTrigger"
-    }
+    },
+    "name": "Veiled Protection"
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

@@ -17,7 +17,7 @@
       "class": "ConditionalSpell",
       "condition": {
         "class": "IsDeadCondition",
-        "target": "SELF",
+        "target": "TRIGGER_HOST",
         "invert": true
       },
       "spell": {

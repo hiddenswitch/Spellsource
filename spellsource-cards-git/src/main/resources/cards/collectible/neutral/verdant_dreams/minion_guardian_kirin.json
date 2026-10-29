@@ -12,7 +12,8 @@
     "target": "SELF",
     "spell2": {
       "class": "AddAttributeSpell",
-      "attribute": "TAUNT"
+      "attribute": "TAUNT",
+      "name": "Guardian Kirin's Guard"
     }
   },
   "attributes": {

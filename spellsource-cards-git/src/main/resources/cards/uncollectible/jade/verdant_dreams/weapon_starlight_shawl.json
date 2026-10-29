@@ -25,7 +25,8 @@
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_WEAPON",
-          "hpBonus": -1
+          "hpBonus": -1,
+          "name": "Starlight Shawl's Curse"
         }
       ]
     }

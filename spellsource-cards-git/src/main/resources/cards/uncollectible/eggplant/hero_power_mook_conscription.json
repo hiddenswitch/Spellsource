@@ -18,7 +18,8 @@
         "spell": {
           "class": "AddAttributeSpell",
           "target": "OUTPUT",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Mook Conscription's Guard"
         }
       },
       "cardFilter": {

@@ -7,12 +7,22 @@
   "description": "Choose an allied unit. Deal its Attack to all enemy units.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
-    "class": "DamageSpell",
-    "target": "ENEMY_MINIONS",
+    "class": "MetaSpell",
     "value": {
       "class": "AttributeValueProvider",
+      "target": "TARGET",
       "attribute": "ATTACK"
-    }
+    },
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        }
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

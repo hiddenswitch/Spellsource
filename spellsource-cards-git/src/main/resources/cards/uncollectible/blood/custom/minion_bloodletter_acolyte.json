@@ -19,7 +19,8 @@
         "class": "CardFilter",
         "cardType": "MINION"
       },
-      "hpBonus": 1
+      "hpBonus": 1,
+      "name": "Bloodletter Acolyte's Ward"
     }
   },
   "collectible": false,

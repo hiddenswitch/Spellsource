@@ -19,7 +19,8 @@
         "secret_secret_of_twilight"
       ],
       "randomTarget": true
-    }
+    },
+    "name": "Moonlight Dancers"
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

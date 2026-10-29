@@ -12,7 +12,8 @@
     "spell": {
       "class": "SummonSpell",
       "card": "token_ooze"
-    }
+    },
+    "name": "Gelatinous Rebirth"
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

@@ -24,7 +24,8 @@
         },
         "spell1": {
           "class": "AddAttributeSpell",
-          "attribute": "IMMUNE"
+          "attribute": "IMMUNE",
+          "name": "Excalibur's Immunity"
         },
         "spell2": {
           "class": "RemoveAttributeSpell",

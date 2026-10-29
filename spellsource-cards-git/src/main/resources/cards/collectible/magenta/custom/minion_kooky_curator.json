@@ -13,7 +13,16 @@
       "class": "FromDeckToHandSpell",
       "value": 2,
       "cardFilter": {
-        "class": "OddCostFilter"
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "OddCostFilter"
+          }
+        ]
       }
     }
   },

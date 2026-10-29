@@ -668,6 +668,68 @@ public class SpellUtils {
 		processKeptEnchantments(target, card.getAttributes());
 	}
 
+	public static List<net.demilich.metastone.game.spells.trigger.Enchantment> extractKeptEnchantments(GameContext context, Entity target) {
+		if (context == null
+				|| target == null
+				|| !target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)
+				|| target.hasAttribute(Attribute.SILENCED)
+				|| target.getId() == IdFactory.UNASSIGNED) {
+			return Collections.emptyList();
+		}
+		Card baseCard = target.getSourceCard();
+		String baseCardId = baseCard != null ? baseCard.getCardId() : null;
+		SpellDesc baseDeathrattle = baseCard != null ? baseCard.getDesc().getDeathrattle() : null;
+		net.demilich.metastone.game.spells.desc.OpenerDesc baseBattlecry = baseCard != null ? baseCard.getDesc().getBattlecry() : null;
+		List<net.demilich.metastone.game.spells.trigger.Enchantment> copies = null;
+		for (var t : context.getTriggers()) {
+			if (t instanceof net.demilich.metastone.game.spells.trigger.Enchantment ench
+					&& Objects.equals(ench.getHostReference(), target.getReference())
+					&& !ench.oneTurnOnly()
+					&& (ench.getMaxFires() == null || ench.getFires() < ench.getMaxFires())) {
+				boolean isDynamic;
+				if (ench instanceof net.demilich.metastone.game.spells.trigger.Aftermath a) {
+					isDynamic = baseDeathrattle == null || a.getSpell() != baseDeathrattle;
+				} else if (ench instanceof net.demilich.metastone.game.spells.trigger.Opener o) {
+					isDynamic = baseBattlecry == null || o.getOpenerDesc() != baseBattlecry;
+				} else {
+					isDynamic = ench.isCopyToActor()
+							|| (ench.getSourceCard() != null && !Objects.equals(ench.getSourceCard().getCardId(), baseCardId));
+				}
+				if (isDynamic) {
+					if (copies == null) {
+						copies = new ArrayList<>(2);
+					}
+					var copy = ench.getCopy();
+					copy.setCopyToActor(true);
+					copies.add(copy);
+				}
+			}
+		}
+		return copies != null ? copies : Collections.emptyList();
+	}
+
+	public static void applyKeptEnchantments(
+			GameContext context,
+			Player player,
+			Entity source,
+			Card destinationCard,
+			List<net.demilich.metastone.game.spells.trigger.Enchantment> keptEnchantments) {
+		if (context == null
+				|| destinationCard == null
+				|| destinationCard.getId() == IdFactory.UNASSIGNED
+				|| destinationCard.getZone() == Zones.REMOVED_FROM_PLAY
+				|| keptEnchantments == null
+				|| keptEnchantments.isEmpty()) {
+			return;
+		}
+		for (int i = 0, n = keptEnchantments.size(); i < n; i++) {
+			var copy = keptEnchantments.get(i).getCopy();
+			copy.setCopyToActor(true);
+			copy.setHostReference(destinationCard.getReference());
+			context.getLogic().addEnchantment(player, copy, source, destinationCard);
+		}
+	}
+
 	/**
 	 * Casts a subspell on a card that was returned by {@link GameLogic#receiveCard(int, Card)}. Will not execute if the
 	 * output is null or in the {@link Zones#GRAVEYARD}.
@@ -684,7 +746,7 @@ public class SpellUtils {
 		// card may be null (i.e. try to draw from deck, but already in
 		// fatigue)
 		if (output == null
-				|| output.getZone() == Zones.GRAVEYARD) {
+				|| (output.getZone() == Zones.GRAVEYARD && !output.hasAttribute(Attribute.DISCARDED) && !output.hasAttribute(Attribute.ROASTED))) {
 			return;
 		}
 		if (spell == null) {

@@ -22,7 +22,8 @@
         "targetPlayer": "OPPONENT"
       },
       "maxFires": 1
-    }
+    },
+    "name": "Fleeting Firebug's Pact"
   },
   "attributes": {
     "DEATHRATTLES": true

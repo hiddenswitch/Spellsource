@@ -17,7 +17,8 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "attackBonus": 1
+        "attackBonus": 1,
+        "name": "Effuse's Rally"
       }
     ]
   },

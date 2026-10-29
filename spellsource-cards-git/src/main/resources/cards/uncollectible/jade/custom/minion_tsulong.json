@@ -23,7 +23,8 @@
       "spell": {
         "class": "SummonSpell",
         "card": "token_tsulong"
-      }
+      },
+      "name": "Tsulong's Legacy"
     }
   },
   "attributes": {

@@ -15,7 +15,8 @@
       "hpBonus": {
         "class": "AttributeValueProvider",
         "attribute": "HP"
-      }
+      },
+      "name": "Ichor Surger's Ward"
     }
   },
   "attributes": {

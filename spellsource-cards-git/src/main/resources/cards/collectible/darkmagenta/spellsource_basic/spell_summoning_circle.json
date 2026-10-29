@@ -18,13 +18,15 @@
         "class": "BuffSpell",
         "target": "EVENT_TARGET",
         "attackBonus": 1,
-        "hpBonus": 1
+        "hpBonus": 1,
+        "name": "Summoning Circle"
       }
     },
     "revertTrigger": {
       "class": "TurnStartTrigger",
       "targetPlayer": "SELF"
-    }
+    },
+    "name": "Summoning Circle"
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

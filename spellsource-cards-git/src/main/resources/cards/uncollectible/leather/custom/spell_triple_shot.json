@@ -10,7 +10,7 @@
     "class": "AdjacentEffectSpell",
     "spell1": {
       "class": "DamageSpell",
-      "value": 3
+      "value": 1
     },
     "spell2": {
       "class": "DamageSpell",

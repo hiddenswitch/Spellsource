@@ -19,7 +19,8 @@
         "value": 1
       },
       "persistentOwner": true
-    }
+    },
+    "name": "Crate of Dynamite"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -26,7 +26,8 @@
       "revertTrigger": {
         "class": "TurnEndTrigger",
         "targetPlayer": "OPPONENT"
-      }
+      },
+      "name": "Shitakiri's Deflection"
     }
   },
   "attributes": {

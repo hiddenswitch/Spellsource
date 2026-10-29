@@ -7,6 +7,7 @@ import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.ChooseOneOverride;
+import net.demilich.metastone.game.cards.desc.compiler.GameStateArena;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -29,56 +30,40 @@ import java.util.stream.Collectors;
 public class ActionLogic implements Serializable {
 	private final TargetLogic targetLogic = new TargetLogic();
 
-	private List<GameAction> getHeroAttackActions(GameContext context, Player player) {
-		List<GameAction> heroAttackActions = new ArrayList<GameAction>();
+	private void collectHeroAttackActions(GameContext context, Player player, List<GameAction> actions) {
 		Hero hero = player.getHero();
 		if (!hero.canAttackThisTurn(context)) {
-			return heroAttackActions;
+			return;
 		}
-		rollout(new PhysicalAttackAction(hero.getReference()), context, player, heroAttackActions);
-
-		return heroAttackActions;
+		rollout(new PhysicalAttackAction(hero.getReference()), context, player, actions);
 	}
 
-	private List<GameAction> getHeroPowerActions(GameContext context, Player player) {
-		List<GameAction> heroPowerActions = new ArrayList<GameAction>();
+	private void collectHeroPowerActions(GameContext context, Player player, List<GameAction> actions) {
 		Card heroPower = player.getHeroPowerZone().get(0);
 
 		if (!context.getLogic().canPlayCard(player, heroPower)) {
-			return heroPowerActions;
+			return;
 		}
 		if (heroPower.isChooseOne()) {
-			rolloutChooseOnesWithOverrides(context, player, heroPowerActions, heroPower);
+			rolloutChooseOnesWithOverrides(context, player, actions, heroPower);
 		} else {
 			heroPower.processTargetSelectionOverride(context, player);
-			rollout(heroPower.play(), context, player, heroPowerActions);
+			rollout(heroPower.play(), context, player, actions);
 		}
-
-		return heroPowerActions;
 	}
 
-	private List<GameAction> getPhysicalAttackActions(GameContext context, Player player) {
-		List<GameAction> physicalAttackActions = new ArrayList<GameAction>();
-		physicalAttackActions.addAll(getHeroAttackActions(context, player));
+	private void collectPhysicalAttackActions(GameContext context, Player player, List<GameAction> physicalAttackActions) {
+		collectHeroAttackActions(context, player, physicalAttackActions);
 
-		for (Minion minion : player.getMinions()) {
+		var minions = player.getMinions();
+		for (int m = 0, n = minions.size(); m < n; m++) {
+			Minion minion = minions.get(m);
 			if (!minion.canAttackThisTurn(context)) {
 				continue;
 			}
 
-			List<PhysicalAttackTargetOverrideAura> filters = null;
-			var triggers = context.getTriggers();
-			for (int i = 0, size = triggers.size(); i < size; i++) {
-				var trigger = triggers.get(i);
-				if (trigger instanceof PhysicalAttackTargetOverrideAura aura
-						&& !trigger.isExpired()
-						&& minion.getReference().equals(trigger.getHostReference())) {
-					if (filters == null) {
-						filters = new ArrayList<>(2);
-					}
-					filters.add(aura);
-				}
-			}
+			List<PhysicalAttackTargetOverrideAura> filters =
+					GameStateArena.getPhysicalAttackTargetOverrideAurasFast(context, minion);
 			if (filters != null) {
 				Set<EntityReference> common = new LinkedHashSet<>();
 
@@ -100,14 +85,14 @@ public class ActionLogic implements Serializable {
 				rollout(new PhysicalAttackAction(minion.getReference()), context, player, physicalAttackActions);
 			}
 		}
-		return physicalAttackActions;
 	}
 
-	private List<GameAction> getPlayCardActions(GameContext context, Player player) {
-		List<GameAction> playCardActions = new ArrayList<GameAction>();
-		playCardActions.addAll(getHeroPowerActions(context, player));
+	private void collectPlayCardActions(GameContext context, Player player, List<GameAction> playCardActions) {
+		collectHeroPowerActions(context, player, playCardActions);
 
-		for (Card card : player.getHand()) {
+		var hand = player.getHand();
+		for (int c = 0, n = hand.size(); c < n; c++) {
+			Card card = hand.get(c);
 			if (!context.getLogic().canPlayCard(player, card)) {
 				continue;
 			}
@@ -120,7 +105,6 @@ public class ActionLogic implements Serializable {
 			}
 
 		}
-		return playCardActions;
 	}
 
 	private void rolloutChooseOnesWithOverrides(GameContext context, Player player, List<GameAction> playCardActions, Card card) {
@@ -173,10 +157,11 @@ public class ActionLogic implements Serializable {
 		}
 	}
 
-	private List<GameAction> getTapActions(GameContext context, Player player) {
-		List<GameAction> tapActions = new ArrayList<GameAction>();
+	private void collectTapActions(GameContext context, Player player, List<GameAction> tapActions) {
 		// Minion taps (activated abilities on the battlefield)
-		for (Minion minion : player.getMinions()) {
+		var minions = player.getMinions();
+		for (int m = 0, n = minions.size(); m < n; m++) {
+			Minion minion = minions.get(m);
 			Card sourceCard = minion.getSourceCard();
 			var taps = sourceCard.getDesc().getTaps();
 			if (taps == null) {
@@ -207,7 +192,9 @@ public class ActionLogic implements Serializable {
 			}
 		}
 		// Hand card taps (e.g. Forge)
-		for (Card card : player.getHand()) {
+		var hand = player.getHand();
+		for (int c = 0, n = hand.size(); c < n; c++) {
+			Card card = hand.get(c);
 			var taps = card.getDesc().getTaps();
 			if (taps == null) {
 				continue;
@@ -233,14 +220,13 @@ public class ActionLogic implements Serializable {
 				rollout(action, context, player, tapActions);
 			}
 		}
-		return tapActions;
 	}
 
 	public List<GameAction> getValidActions(GameContext context, Player player) {
-		List<GameAction> validActions = new ArrayList<GameAction>();
-		validActions.addAll(getPhysicalAttackActions(context, player));
-		validActions.addAll(getPlayCardActions(context, player));
-		validActions.addAll(getTapActions(context, player));
+		List<GameAction> validActions = new ArrayList<GameAction>(16);
+		collectPhysicalAttackActions(context, player, validActions);
+		collectPlayCardActions(context, player, validActions);
+		collectTapActions(context, player, validActions);
 		if (context.getTurnState() != TurnState.TURN_ENDED) {
 			final EndTurnAction endTurnAction = new EndTurnAction(player.getId());
 			endTurnAction.setSourceReference(player.getReference());
@@ -248,7 +234,7 @@ public class ActionLogic implements Serializable {
 		}
 
 		// Assign the ids
-		for (int i = 0; i < validActions.size(); i++) {
+		for (int i = 0, n = validActions.size(); i < n; i++) {
 			validActions.get(i).setId(i);
 		}
 

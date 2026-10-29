@@ -20,7 +20,8 @@
           "min": 1
         },
         "howMany": 1
-      }
+      },
+      "name": "Boom II"
     }
   },
   "gameTriggers": [

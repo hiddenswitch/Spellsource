@@ -18,7 +18,8 @@
           "spell": {
             "class": "BuffSpell",
             "attackBonus": 1,
-            "hpBonus": 1
+            "hpBonus": 1,
+            "name": "Fox Dance"
           }
         },
         "spell2": {

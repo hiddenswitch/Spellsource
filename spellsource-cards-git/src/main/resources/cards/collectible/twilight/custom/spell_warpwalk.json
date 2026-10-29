@@ -11,14 +11,16 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-        "attribute": "UNTARGETABLE_BY_SPELLS"
+        "attribute": "UNTARGETABLE_BY_SPELLS",
+        "name": "Warpwalk"
       },
       {
         "class": "AddDeathrattleSpell",
         "spell": {
           "class": "ReturnTargetToHandSpell",
           "target": "SELF"
-        }
+        },
+        "name": "Warpwalk"
       }
     ]
   },

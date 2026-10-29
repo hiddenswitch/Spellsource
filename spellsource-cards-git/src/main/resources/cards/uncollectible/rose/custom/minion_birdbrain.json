@@ -21,11 +21,13 @@
       },
       "spell1": {
         "class": "BuffSpell",
-        "attackBonus": 3
+        "attackBonus": 3,
+        "name": "Birdbrain's Rally"
       },
       "spell2": {
         "class": "BuffSpell",
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Birdbrain's Ward"
       }
     }
   },

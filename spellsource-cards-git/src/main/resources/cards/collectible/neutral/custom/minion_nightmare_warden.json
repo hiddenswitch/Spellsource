@@ -20,7 +20,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "value": 1
+      "value": 1,
+      "name": "Nightmare Warden's Empowerment"
     }
   },
   "attributes": {

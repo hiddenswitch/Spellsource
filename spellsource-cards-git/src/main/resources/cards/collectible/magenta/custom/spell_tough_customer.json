@@ -12,11 +12,13 @@
       {
         "class": "BuffSpell",
         "attackBonus": 3,
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Tough Customer"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Tough Customer"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -30,7 +32,8 @@
             "card": "spell_gold_coin"
           },
           "persistentOwner": true
-        }
+        },
+        "name": "Tough Customer"
       }
     ]
   },

@@ -10,10 +10,7 @@ public class RandomValueProvider extends ValueProvider {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		int min = getDesc().getValue(ValueProviderArg.MIN, context, player, target, host, 0);
-		int max = getDesc().getValue(ValueProviderArg.MAX, context, player, target, host, 0);
+	protected int provideValue(GameContext context, Player player, Entity target, Entity host, int min, int max) {
 		int diff = max - min;
 		return min + context.getLogic().random(diff + 1);
 	}

@@ -22,7 +22,8 @@
               "class": "AttributeValueProvider",
               "target": "OUTPUT",
               "attribute": "ATTACK"
-            }
+            },
+            "name": "Nightmare Wraith's Might"
           },
           {
             "class": "SetHpSpell",
@@ -30,7 +31,8 @@
               "class": "AttributeValueProvider",
               "target": "OUTPUT",
               "attribute": "HP"
-            }
+            },
+            "name": "Nightmare Wraith's Vitality"
           }
         ]
       },

@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.decks.validation;
 
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import net.demilich.metastone.game.decks.GameDeck;
@@ -20,7 +21,11 @@ public final class DefaultDeckValidator implements DeckValidator {
 
 	@Override
 	public boolean canAddCardToDeck(Card card, GameDeck deck) {
-		if (deck.getCards().getCount() > GameLogic.DECK_SIZE) {
+		int maxDeckSize = deck.getDeckSize();
+		if (card.hasAttribute(Attribute.DECK_SIZE)) {
+			maxDeckSize = Math.max(maxDeckSize, card.getAttributeValue(Attribute.DECK_SIZE));
+		}
+		if (deck.getCards().getCount() > maxDeckSize) {
 			return false;
 		}
 		int cardInDeckCount = deck.containsHowMany(card);

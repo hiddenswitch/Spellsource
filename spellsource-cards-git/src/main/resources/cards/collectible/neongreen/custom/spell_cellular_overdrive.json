@@ -13,7 +13,8 @@
     "hpBonus": 2,
     "revertTrigger": {
       "class": "TurnEndTrigger"
-    }
+    },
+    "name": "Cellular Overdrive"
   },
   "collectible": true,
   "set": "CUSTOM",

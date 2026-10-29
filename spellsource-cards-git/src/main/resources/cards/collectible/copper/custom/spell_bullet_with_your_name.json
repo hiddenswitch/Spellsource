@@ -23,11 +23,13 @@
             "value": 1
           },
           "persistentOwner": true
-        }
+        },
+        "name": "Bullet With Your Name"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "QUICK_DRAW"
+        "attribute": "QUICK_DRAW",
+        "name": "Bullet With Your Name"
       }
     ]
   },

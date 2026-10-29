@@ -17,11 +17,13 @@
         "spells": [
           {
             "class": "SetAttackSpell",
-            "value": 10
+            "value": 10,
+            "name": "Dominate"
           },
           {
             "class": "SetHpSpell",
-            "value": 10
+            "value": 10,
+            "name": "Dominate"
           }
         ]
       },

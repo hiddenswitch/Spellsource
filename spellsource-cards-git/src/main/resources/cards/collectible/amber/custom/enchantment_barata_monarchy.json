@@ -16,11 +16,13 @@
       {
         "class": "BuffSpell",
         "attackBonus": 1,
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Barata Monarchy"
       },
       {
         "class": "AddDeathrattleSpell",
-        "card": "enchantment_barata_monarchy"
+        "card": "enchantment_barata_monarchy",
+        "name": "Barata Monarchy"
       }
     ]
   },

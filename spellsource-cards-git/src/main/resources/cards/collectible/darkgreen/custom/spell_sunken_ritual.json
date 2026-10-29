@@ -12,15 +12,18 @@
       {
         "class": "BuffSpell",
         "attackBonus": 4,
-        "hpBonus": 4
+        "hpBonus": 4,
+        "name": "Sunken Ritual"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "CANNOT_ATTACK_HEROES"
+        "attribute": "CANNOT_ATTACK_HEROES",
+        "name": "Sunken Ritual"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Sunken Ritual"
       }
     ]
   },

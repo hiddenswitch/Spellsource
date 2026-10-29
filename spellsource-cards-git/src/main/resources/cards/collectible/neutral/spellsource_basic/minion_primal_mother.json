@@ -30,7 +30,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "hpBonus": 3
+      "hpBonus": 3,
+      "name": "Primal Mother's Fortitude"
     }
   },
   "attributes": {

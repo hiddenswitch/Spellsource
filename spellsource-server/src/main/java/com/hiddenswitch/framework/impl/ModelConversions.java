@@ -501,10 +501,17 @@ public class ModelConversions {
 			.collect(toList()));
 
 		var visibleEntityIds = entities.stream().map(Entity::getId).collect(Collectors.toSet());
+		var hostEntityIds = new HashSet<>(visibleEntityIds);
 
 		entities.addAll(workingContext.getTriggers()
 			.stream()
-			.filter(f -> f instanceof Enchantment && visibleEntityIds.contains(f.getHostReference().getId()))
+			.filter(f -> f instanceof Enchantment enchantment
+				&& !(f instanceof Secret)
+				&& !(f instanceof Quest)
+				&& !f.isExpired()
+				&& f.getHostReference() != null
+				&& hostEntityIds.contains(f.getHostReference().getId())
+				&& visibleEntityIds.add(enchantment.getId()))
 			.map(t -> getEntity(workingContext, (Enchantment) t, localPlayerId).build())
 			.collect(toList()));
 
@@ -695,7 +702,42 @@ public class ModelConversions {
 				.setId(-1);
 		}
 
-		var entity = getEntity(workingContext, enchantment.getSourceCard(), localPlayerId);
+		var sourceCard = enchantment.getSourceCard();
+		var entity = sourceCard != null ? getEntity(workingContext, sourceCard, localPlayerId) : Entity.newBuilder();
+		if (sourceCard != null && sourceCard.getCardId() != null) {
+			var cardId = sourceCard.getCardId();
+			int synthIdx = cardId.indexOf("__ench_");
+			if (synthIdx > 0) {
+				String baseCardId = cardId.substring(0, synthIdx);
+				entity.setCardId(baseCardId);
+				if (!entity.hasArt() && workingContext != null && workingContext.getCardCatalogue() != null) {
+					var baseCard = workingContext.getCardCatalogue().getCardById(baseCardId);
+					if (baseCard != null) {
+						var baseArt = toArt(baseCard);
+						if (baseArt != null) {
+							entity.setArt(baseArt);
+						}
+					}
+				}
+			}
+		}
+		if (enchantment.getName() != null && !enchantment.getName().isEmpty()) {
+			entity.setName(enchantment.getName());
+		}
+		var runtimeDesc = enchantment.getRuntimeDescription();
+		if (runtimeDesc != null && !runtimeDesc.isEmpty()) {
+			entity.setDescription(runtimeDesc);
+		}
+		int totalAtkBonus = enchantment.getAttackBonus() + enchantment.getTemporaryAttackBonus();
+		if (totalAtkBonus != 0) {
+			entity.setAttack(totalAtkBonus);
+		}
+		if (enchantment.getHpBonus() != 0) {
+			entity.setHp(enchantment.getHpBonus());
+		}
+		if (enchantment.getArmorBonus() != 0) {
+			entity.setArmor(enchantment.getArmorBonus());
+		}
 		if (enchantment instanceof Secret
 			&& localPlayerId != enchantment.getOwner()) {
 			// Censor information about the secret if it does not belong to the player.
@@ -721,6 +763,7 @@ public class ModelConversions {
 			.setOwner(enchantment.getOwner())
 			.setHost(enchantment.getHostReference() != null ? enchantment.getHostReference().getId() : -1)
 			.setEnchantmentType(enchantment.getClass().getSimpleName())
+			.setUncensored(!enchantment.hasAttribute(Attribute.HIDDEN))
 			.setPlayable(false);
 		return entity;
 	}
@@ -772,6 +815,9 @@ public class ModelConversions {
 			owningPlayer = Player.empty();
 		}
 
+		if (description == null) {
+			description = "";
+		}
 		entity.setDescription(description.replace("$", "").replace("#", "")
 			.replace("[", "").replace("]", ""));
 

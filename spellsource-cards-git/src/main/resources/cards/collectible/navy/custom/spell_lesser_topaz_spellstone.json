@@ -24,7 +24,8 @@
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
     "attackBonus": 2,
-    "hpBonus": 0
+    "hpBonus": 0,
+    "name": "Lesser Topaz Lunstone"
   },
   "collectible": false,
   "set": "CUSTOM",

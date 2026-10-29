@@ -101,7 +101,9 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 	 * @param player  The casting player
 	 * @return A list of cards pre-filter.
 	 */
-	protected abstract CardList match(GameContext context, Entity source, Player player);
+	protected CardList match(GameContext context, Entity source, Player player) {
+		return new CardArrayList();
+	}
 
 	/**
 	 * Provides cards performantly, on demand, without having to iterate through the entire card catalogue for many kinds
@@ -136,6 +138,22 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 	@Override
 	public void setDesc(Desc<?, ?> desc) {
 		this.desc = (CardSourceDesc) desc;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (this == other) {
+			return true;
+		}
+		if (!(other instanceof CardSource rhs)) {
+			return false;
+		}
+		return java.util.Objects.equals(this.desc, rhs.desc);
+	}
+
+	@Override
+	public int hashCode() {
+		return desc != null ? desc.hashCode() : 0;
 	}
 }
 

@@ -5,12 +5,13 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
- * Evaluates to {@code true} when the {@link ConditionArg#TARGET} from the perspective of the {@link
- * EntityReference#TRIGGER_HOST} and the {@link EntityReference#EVENT_TARGET} are the same.
+ * Evaluates to {@code true} if the {@link EntityReference#EVENT_TARGET} equals the {@link ConditionArg#TARGET} list of
+ * entities.
+ * <p>
+ * Note that {@link ConditionArg#TARGET} will not be resolved element-by-element here.
  */
 public class EventTargetMatchesReferenceCondition extends EntityEqualityCondition {
 
@@ -18,19 +19,26 @@ public class EventTargetMatchesReferenceCondition extends EntityEqualityConditio
 		super(desc);
 	}
 
-
 	@Override
-	protected List<Entity> lhs(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		return context.resolveTarget(player, context.resolveTarget(player, source, EntityReference.TRIGGER_HOST).get(0), (EntityReference) desc.get(ConditionArg.TARGET));
+	protected List<Entity> lhs(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			EntityReference targetReference,
+			EntityReference secondaryTarget) {
+		return context.resolveTarget(player, source, targetReference);
 	}
 
 	@Override
-	protected List<Entity> rhs(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		var entity = context.resolveSingleTarget(EntityReference.EVENT_TARGET);
-		if (entity == null) {
-			return Collections.emptyList();
-		}
-		return Collections.singletonList(entity);
+	protected List<Entity> rhs(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			EntityReference targetReference,
+			EntityReference secondaryTarget) {
+		return context.resolveTarget(player, source, EntityReference.EVENT_TARGET);
 	}
 
 	@Override

@@ -22,9 +22,17 @@ import java.util.stream.Stream;
  * A place that stores {@link CardCatalogueRecordImpl} records that were generated from the "cards" Java package.
  */
 public interface CardCatalogue {
+	String[] DEFAULT_RULE_CARDS = new String[]{
+			"enchantment_constructed_rules",
+			"enchantment_rule_mana",
+			"enchantment_rule_draw",
+			"enchantment_rule_hero_power",
+			"enchantment_rule_deck_size"
+	};
 	String FORMAT_NAME_ALL = "All";
 	DeckFormat all = new DeckFormat()
-			.withName(FORMAT_NAME_ALL);
+			.withName(FORMAT_NAME_ALL)
+			.setRuleCards(DEFAULT_RULE_CARDS);
 
 	static String latestImplementedHearthstoneExpansion() {
 		return CardSet.PERILS_IN_PARADISE;

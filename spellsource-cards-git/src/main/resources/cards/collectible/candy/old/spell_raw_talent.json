@@ -9,7 +9,8 @@
   "spell": {
     "class": "BuffSpell",
     "attackBonus": 2,
-    "hpBonus": 1
+    "hpBonus": 1,
+    "name": "Raw Talent"
   },
   "collectible": false,
   "set": "CUSTOM",

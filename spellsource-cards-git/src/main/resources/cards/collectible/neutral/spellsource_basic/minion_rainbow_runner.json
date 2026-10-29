@@ -16,7 +16,8 @@
       "class": "RaceFilter",
       "race": "FAE"
     },
-    "hpBonus": 1
+    "hpBonus": 1,
+    "name": "Rainbow Runner's Blessing"
   },
   "attributes": {
     "DEATHRATTLES": true

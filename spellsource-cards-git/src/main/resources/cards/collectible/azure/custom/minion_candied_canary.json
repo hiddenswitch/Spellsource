@@ -19,7 +19,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "value": 2
+      "value": 2,
+      "name": "Sugar Rush"
     }
   },
   "attributes": {

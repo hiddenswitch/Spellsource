@@ -15,7 +15,8 @@
         "class": "AttributeAura",
         "target": "FRIENDLY_HERO_POWER",
         "attribute": "AURA_COSTS_HEALTH_INSTEAD_OF_MANA"
-      }
+      },
+      "name": "Survivalist Yukono's Pact"
     }
   },
   "attributes": {

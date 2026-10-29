@@ -17,7 +17,8 @@
         "class": "AttributeValueProvider",
         "target": "FRIENDLY_WEAPON",
         "attribute": "ATTACK"
-      }
+      },
+      "name": "Veteran of's Empowerment"
     }
   },
   "attributes": {

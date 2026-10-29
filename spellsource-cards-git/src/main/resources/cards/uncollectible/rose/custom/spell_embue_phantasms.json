@@ -21,7 +21,8 @@
         "spell": {
           "class": "SummonSpell",
           "card": "token_voodoo_spirit"
-        }
+        },
+        "name": "Embue Phantasms"
       }
     }
   },

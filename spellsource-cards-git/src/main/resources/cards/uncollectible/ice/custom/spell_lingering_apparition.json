@@ -20,7 +20,8 @@
         "class": "TurnStartTrigger",
         "targetPlayer": "BOTH"
       }
-    }
+    },
+    "name": "Lingering Apparition"
   },
   "attributes": {},
   "collectible": true,

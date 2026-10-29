@@ -1,5 +1,5 @@
 {
-  "name": "Mad Prophecy",
+  "name": "Souldrinking",
   "baseManaCost": 9,
   "type": "ENCHANTMENT",
   "heroClass": "EGGPLANT",
@@ -16,7 +16,8 @@
         {
           "class": "AddAttributeSpell",
           "target": "EVENT_TARGET",
-          "attribute": "LIFESTEAL"
+          "attribute": "LIFESTEAL",
+          "name": "Souldrinking"
         },
         {
           "class": "RemoveEnchantmentSpell",

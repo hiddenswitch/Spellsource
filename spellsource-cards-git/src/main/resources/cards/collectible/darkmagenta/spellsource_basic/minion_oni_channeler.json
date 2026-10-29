@@ -16,7 +16,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "EVENT_TARGET",
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Oni Channeler's Ward"
     }
   },
   "collectible": true,

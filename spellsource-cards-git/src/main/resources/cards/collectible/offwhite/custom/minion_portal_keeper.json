@@ -16,8 +16,7 @@
       "value1": {
         "class": "CardCountValueProvider",
         "offset": {
-          "class": "BoardCountValueProvider",
-          "offset": -1
+          "class": "BoardCountValueProvider"
         }
       },
       "value2": 1

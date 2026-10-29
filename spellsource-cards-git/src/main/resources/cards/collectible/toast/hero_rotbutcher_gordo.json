@@ -21,9 +21,17 @@
           "spell": {
             "class": "RecastWhileSpell",
             "condition": {
-              "class": "CardCountCondition",
-              "value": 10,
-              "operation": "LESS"
+              "class": "AndCondition",
+              "conditions": [
+                {
+                  "class": "CardCountCondition",
+                  "value": 10,
+                  "operation": "LESS"
+                },
+                {
+                  "class": "DeckContainsCondition"
+                }
+              ]
             },
             "spell": {
               "class": "DrawCardSpell"
@@ -36,7 +44,8 @@
           "spell": {
             "class": "MissilesSpell",
             "target": "ENEMY_CHARACTERS",
-            "value": 1
+            "value": 1,
+            "howMany": 1
           }
         }
       ]

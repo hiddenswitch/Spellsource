@@ -18,7 +18,8 @@
           "value": {
             "class": "DiedThisTurnValueProvider",
             "targetPlayer": "SELF"
-          }
+          },
+          "name": "General Yokura's Empowerment"
         },
         {
           "class": "FightSpell",

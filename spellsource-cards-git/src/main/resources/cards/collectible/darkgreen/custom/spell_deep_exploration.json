@@ -21,7 +21,8 @@
           "value": 3,
           "targetPlayer": "SELF"
         }
-      }
+      },
+      "name": "Deep Exploration"
     },
     "targetPlayer": "OWNER"
   },

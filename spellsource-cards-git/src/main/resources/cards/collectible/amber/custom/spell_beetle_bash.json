@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "armorBonus": 4
+        "armorBonus": 4,
+        "name": "Beetle Bash"
       },
       {
         "class": "SummonSpell",

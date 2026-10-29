@@ -29,10 +29,12 @@
             "card": "minion_lord_xah_dorah"
           },
           "maxFires": 1
-        }
+        },
+        "name": "Lord Xah'dorah's Pact"
       },
       "maxFires": 1
-    }
+    },
+    "name": "Lord Xah'dorah's Pact"
   },
   "attributes": {
     "DEATHRATTLES": true

@@ -17,7 +17,8 @@
         "target": "TRIGGER_HOST",
         "secondaryTarget": "EVENT_TARGET"
       }
-    }
+    },
+    "name": "Paranoia"
   },
   "collectible": true,
   "set": "CUSTOM",

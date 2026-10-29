@@ -34,7 +34,8 @@
         },
         "revertTrigger": {
           "class": "TurnEndTrigger"
-        }
+        },
+        "name": "M. A. D."
       }
     ]
   },

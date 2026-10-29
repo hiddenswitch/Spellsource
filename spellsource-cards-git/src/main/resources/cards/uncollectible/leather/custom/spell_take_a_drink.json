@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 2,
-        "hpBonus": 1
+        "hpBonus": 1,
+        "name": "Take a Drink"
       },
       {
         "class": "BuffSpell",
@@ -23,7 +24,8 @@
           "cardType": "MINION"
         },
         "hpBonus": 2,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Take a Drink"
       }
     ]
   },

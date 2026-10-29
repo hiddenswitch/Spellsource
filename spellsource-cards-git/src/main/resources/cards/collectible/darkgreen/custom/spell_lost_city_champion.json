@@ -13,7 +13,8 @@
       "spell": {
         "class": "AddAttributeSpell",
         "target": "OUTPUT",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Lost City's Guardian"
       }
     },
     "cardFilter": {

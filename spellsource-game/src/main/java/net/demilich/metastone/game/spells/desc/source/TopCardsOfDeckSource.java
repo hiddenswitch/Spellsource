@@ -5,11 +5,12 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.utils.MathUtils;
+import net.demilich.metastone.game.spells.Default;
+
+import static java.util.stream.Collectors.toCollection;
 
 /**
- * Returns the top N cards of the deck, where N is defined by the {@link CardSourceArg#VALUE} arg
- *
+ * Returns the top {@link CardSourceArg#VALUE} cards from the deck.
  */
 public class TopCardsOfDeckSource extends DeckSource {
 
@@ -17,14 +18,10 @@ public class TopCardsOfDeckSource extends DeckSource {
 		super(desc);
 	}
 
-	@Override
-	protected CardList match(GameContext context, Entity source, Player player) {
-		CardList deck = super.match(context, source, player);
-		int value = howMany(context, source, player);
-		return new CardArrayList(deck.subList(MathUtils.clamp( deck.size() - value, 0, deck.size()), deck.size()));
-	}
-
-	protected int howMany(GameContext context, Entity source, Player player) {
-		return getDesc().getValue(CardSourceArg.VALUE, context, player, player, source, 3);
+	protected CardList match(GameContext context, Entity source, Player player, @Default(3) int value) {
+		return super.match(context, source, player)
+				.stream()
+				.limit(value)
+				.collect(toCollection(CardArrayList::new));
 	}
 }

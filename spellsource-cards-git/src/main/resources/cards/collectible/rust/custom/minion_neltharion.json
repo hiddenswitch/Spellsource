@@ -23,7 +23,8 @@
           "value": {
             "class": "DestroyedThisSequenceValueProvider",
             "multiplier": 2
-          }
+          },
+          "name": "Iroh's Empowerment"
         }
       ]
     }

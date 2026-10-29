@@ -24,11 +24,13 @@
       "spells": [
         {
           "class": "AddAttributeSpell",
-          "attribute": "DIVINE_SHIELD"
+          "attribute": "DIVINE_SHIELD",
+          "name": "Fumewalker Zin's Dodge"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "STEALTH"
+          "attribute": "STEALTH",
+          "name": "Fumewalker Zin's Veil"
         }
       ]
     }

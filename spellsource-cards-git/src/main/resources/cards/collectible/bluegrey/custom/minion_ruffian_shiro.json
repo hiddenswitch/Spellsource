@@ -37,7 +37,8 @@
               "class": "AttributeValueProvider",
               "target": "SELF",
               "attribute": "HP"
-            }
+            },
+            "name": "Ruffian Shiro's Blessing"
           }
         },
         {
@@ -58,7 +59,8 @@
             "target": "SELF",
             "attribute": "HP"
           },
-          "randomTarget": true
+          "randomTarget": true,
+          "name": "Ruffian Shiro's Blessing"
         }
       ]
     },

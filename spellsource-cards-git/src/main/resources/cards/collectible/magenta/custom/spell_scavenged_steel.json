@@ -15,7 +15,8 @@
         "spell": {
           "class": "BuffSpell",
           "target": "OUTPUT",
-          "hpBonus": -1
+          "hpBonus": -1,
+          "name": "Scavenged Steel"
         }
       },
       "cardFilter": {

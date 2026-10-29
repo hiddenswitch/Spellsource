@@ -533,7 +533,9 @@ export function parseAsepriteBuffer(
 
   if (activeSlices.length > 0 && rawFrames.length > 0) {
     for (const slice of activeSlices) {
-      if (!slice.name.trim() || slice.keys.length === 0) continue;
+      const trimmedSliceName = slice.name.trim();
+      if (!trimmedSliceName || slice.keys.length === 0) continue;
+      if (activeTags.some((t) => t.name.trim() === trimmedSliceName)) continue;
       for (let k = 0; k < slice.keys.length; k++) {
         const key = slice.keys[k];
         const frameIdx = Math.max(0, Math.min(rawFrames.length - 1, key.frameNumber));

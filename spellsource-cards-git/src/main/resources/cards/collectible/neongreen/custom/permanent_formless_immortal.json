@@ -17,7 +17,8 @@
         "class": "BuffSpell",
         "target": "OTHER_FRIENDLY_MINIONS",
         "hpBonus": 2,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Formless Immortal's Ward"
       }
     },
     {

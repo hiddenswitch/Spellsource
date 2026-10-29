@@ -16,7 +16,8 @@
         "cardType": "MINION"
       },
       "cardLocation": "DECK"
-    }
+    },
+    "name": "Second Wave"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -8,6 +8,7 @@ import net.demilich.metastone.game.spells.aura.ModifyTemporaryAttackSpellAura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
@@ -37,6 +38,7 @@ public class TemporaryAttackSpell extends Spell {
 	protected void onCast(
 			GameContext context,
 			Player player,
+			SpellDesc desc,
 			Entity source,
 			Entity target,
 			int value,
@@ -51,6 +53,7 @@ public class TemporaryAttackSpell extends Spell {
 
 		if (bonus != 0) {
 			targetActor.modifyAttribute(Attribute.TEMPORARY_ATTACK_BONUS, bonus);
+			Enchantment.attachTemporaryAttackEnchantment(context, player, desc, source, targetActor, bonus);
 		}
 	}
 

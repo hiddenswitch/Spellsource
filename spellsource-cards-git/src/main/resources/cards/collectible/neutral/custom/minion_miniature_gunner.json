@@ -41,12 +41,14 @@
         "spell1": {
           "class": "AddAttributeSpell",
           "target": "TRIGGER_HOST",
-          "attribute": "MEGA_WINDFURY"
+          "attribute": "MEGA_WINDFURY",
+          "name": "Miniature Gunner's Blessing"
         },
         "spell2": {
           "class": "AddAttributeSpell",
           "target": "TRIGGER_HOST",
-          "attribute": "WINDFURY"
+          "attribute": "WINDFURY",
+          "name": "Miniature Gunner's Fury"
         }
       }
     }

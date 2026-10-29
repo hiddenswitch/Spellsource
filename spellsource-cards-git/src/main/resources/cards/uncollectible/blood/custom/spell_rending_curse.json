@@ -8,7 +8,8 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",
-    "card": "enchantment_rending_curse"
+    "card": "enchantment_rending_curse",
+    "name": "Rending Curse"
   },
   "collectible": false,
   "set": "CUSTOM",

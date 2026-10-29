@@ -16,7 +16,8 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_WEAPON",
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Restore Artifact"
       }
     ]
   },

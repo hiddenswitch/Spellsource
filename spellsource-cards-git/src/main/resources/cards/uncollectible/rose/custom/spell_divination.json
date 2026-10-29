@@ -8,7 +8,8 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",
-    "hpBonus": 2
+    "hpBonus": 2,
+    "name": "Divination"
   },
   "collectible": false,
   "set": "CUSTOM",

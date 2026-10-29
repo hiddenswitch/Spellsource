@@ -7,10 +7,18 @@
   "description": "Shuffle two 'Stolen Supplies' into your opponent's deck. Draw.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ShuffleToDeckSpell",
-    "value": 2,
-    "card": "spell_stolen_supplies",
-    "targetPlayer": "OPPONENT"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ShuffleToDeckSpell",
+        "card": "spell_stolen_supplies",
+        "howMany": 2,
+        "targetPlayer": "OPPONENT"
+      },
+      {
+        "class": "DrawCardSpell"
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

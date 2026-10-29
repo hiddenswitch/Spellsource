@@ -18,7 +18,8 @@
         "class": "CardFilter",
         "cardType": "MINION"
       },
-      "randomTarget": true
+      "randomTarget": true,
+      "name": "Woven Venom"
     }
   },
   "attributes": {

@@ -10,11 +10,13 @@
     "class": "AdjacentEffectSpell",
     "spell1": {
       "class": "BuffSpell",
-      "value": 2
+      "value": 2,
+      "name": "Night of a Lifetime"
     },
     "spell2": {
       "class": "BuffSpell",
-      "value": 2
+      "value": 2,
+      "name": "Night of a Lifetime"
     }
   },
   "collectible": true,

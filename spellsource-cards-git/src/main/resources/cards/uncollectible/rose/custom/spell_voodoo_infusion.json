@@ -12,14 +12,16 @@
       {
         "class": "BuffSpell",
         "attackBonus": 3,
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Voodoo Infusion"
       },
       {
         "class": "BuffSpell",
         "hpBonus": {
           "class": "AttributeValueProvider",
           "attribute": "HP"
-        }
+        },
+        "name": "Voodoo Infusion"
       }
     ]
   },

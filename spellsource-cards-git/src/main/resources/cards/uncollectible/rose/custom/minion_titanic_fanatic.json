@@ -12,7 +12,8 @@
     "target": "SELF",
     "spell2": {
       "class": "BuffSpell",
-      "hpBonus": 3
+      "hpBonus": 3,
+      "name": "Titanic Fanatic's Ward"
     }
   },
   "attributes": {

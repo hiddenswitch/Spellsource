@@ -11,7 +11,8 @@
     "targetSelection": "FRIENDLY_CHARACTERS",
     "spell": {
       "class": "TemporaryAttackSpell",
-      "value": 3
+      "value": 3,
+      "name": "Rallying Elder's Rally"
     }
   },
   "attributes": {

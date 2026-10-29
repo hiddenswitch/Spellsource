@@ -13,7 +13,8 @@
       "class": "AddAttributeSpell",
       "target": "ENEMY_MINIONS",
       "attribute": "FROZEN",
-      "randomTarget": true
+      "randomTarget": true,
+      "name": "Cerith Scepter's Frost"
     }
   },
   "attributes": {

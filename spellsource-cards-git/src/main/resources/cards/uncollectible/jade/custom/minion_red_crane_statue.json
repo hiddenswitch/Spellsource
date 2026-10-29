@@ -17,7 +17,8 @@
       "class": "BuffSpell",
       "target": "EVENT_TARGET",
       "attackBonus": 0,
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Red Crane Statue's Blessing"
     }
   },
   "collectible": false,

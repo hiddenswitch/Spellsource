@@ -16,7 +16,8 @@
         "class": "AttributeFilter",
         "attribute": "STEALTH",
         "operation": "HAS"
-      }
+      },
+      "name": "Shadow Ninja's Dodge"
     }
   },
   "attributes": {

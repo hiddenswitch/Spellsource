@@ -25,7 +25,8 @@
           "hpBonus": {
             "class": "AttributeValueProvider",
             "attribute": "HP"
-          }
+          },
+          "name": "Hero-Smasher Thag's Blessing"
         },
         {
           "class": "DoubleAttackSpell"

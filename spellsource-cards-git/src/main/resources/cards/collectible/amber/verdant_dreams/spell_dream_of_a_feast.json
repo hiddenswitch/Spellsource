@@ -10,11 +10,19 @@
     "class": "SummonSpell",
     "value": 6,
     "cardFilter": {
-      "class": "CardFilter",
-      "value": 2,
-      "attribute": "ATTACK",
-      "cardType": "MINION",
-      "operation": "EQUAL"
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        {
+          "class": "AttributeFilter",
+          "value": 2,
+          "attribute": "ATTACK",
+          "operation": "EQUAL"
+        }
+      ]
     },
     "targetPlayer": "SELF"
   },

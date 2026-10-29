@@ -27,7 +27,8 @@
             "card": "token_knight",
             "targetPlayer": "SELF"
           }
-        }
+        },
+        "name": "Army Recruits"
       }
     ]
   },

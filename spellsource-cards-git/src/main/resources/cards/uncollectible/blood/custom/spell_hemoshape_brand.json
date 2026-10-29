@@ -20,7 +20,8 @@
         "spell": {
           "class": "ReturnTargetToHandSpell",
           "target": "SELF"
-        }
+        },
+        "name": "Hemoshape: Brand"
       }
     ]
   },

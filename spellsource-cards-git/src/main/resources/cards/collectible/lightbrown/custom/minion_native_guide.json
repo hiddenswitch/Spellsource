@@ -16,7 +16,8 @@
       "class": "BuffSpell",
       "target": "SELF",
       "attackBonus": 2,
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Native Guide's Empowerment"
     }
   },
   "attributes": {

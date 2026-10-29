@@ -12,7 +12,8 @@
     "target": "SELF",
     "spell2": {
       "class": "BuffSpell",
-      "attackBonus": 3
+      "attackBonus": 3,
+      "name": "Sword Swallower's Rally"
     }
   },
   "attributes": {

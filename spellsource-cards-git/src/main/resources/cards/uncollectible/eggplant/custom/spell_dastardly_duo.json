@@ -14,12 +14,14 @@
         "spell": {
           "class": "AddAttributeSpell",
           "target": "OUTPUT",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Dastardly Duo"
         }
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Dastardly Duo"
       }
     ]
   },

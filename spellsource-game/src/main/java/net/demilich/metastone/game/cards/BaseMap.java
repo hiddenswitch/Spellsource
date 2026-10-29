@@ -92,6 +92,7 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 				this.data = new SharedData<>(newValues, d.b0, d.b1, d.b2, d.b3, d.b4, false);
 			} else {
 				d.values[idx] = value;
+				d.hash = 0;
 			}
 			return previous;
 		} else {
@@ -123,6 +124,7 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 				d.b2 = nb2;
 				d.b3 = nb3;
 				d.b4 = nb4;
+				d.hash = 0;
 			}
 			return null;
 		}
@@ -182,6 +184,7 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 			d.b2 = nb2;
 			d.b3 = nb3;
 			d.b4 = nb4;
+			d.hash = 0;
 		}
 		return previous;
 	}
@@ -402,6 +405,128 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 		}
 	}
 
+	private static boolean valueEquals(Object a, Object b) {
+		if (a == b) {
+			return true;
+		}
+		if (a == null || b == null) {
+			return false;
+		}
+		if (a instanceof Object[] arrA && b instanceof Object[] arrB) {
+			int len = arrA.length;
+			if (len != arrB.length) {
+				return false;
+			}
+			for (int i = 0; i < len; i++) {
+				if (!valueEquals(arrA[i], arrB[i])) {
+					return false;
+				}
+			}
+			return true;
+		}
+		if (a instanceof int[] ia && b instanceof int[] ib) {
+			return Arrays.equals(ia, ib);
+		}
+		if (a instanceof net.demilich.metastone.game.cards.desc.HasDesc<?> ha
+				&& b instanceof net.demilich.metastone.game.cards.desc.HasDesc<?> hb
+				&& !(a instanceof net.demilich.metastone.game.cards.desc.Desc<?, ?>)
+				&& !(b instanceof net.demilich.metastone.game.cards.desc.Desc<?, ?>)) {
+			if (a.getClass() != b.getClass()) {
+				return false;
+			}
+			return Objects.equals(ha.getDesc(), hb.getDesc());
+		}
+		return a.equals(b);
+	}
+
+	private static int valueHashCode(Object v) {
+		if (v == null) {
+			return 0;
+		}
+		if (v instanceof Object[] arr) {
+			int h = 1;
+			for (int i = 0, len = arr.length; i < len; i++) {
+				h = 31 * h + valueHashCode(arr[i]);
+			}
+			return h;
+		}
+		if (v instanceof int[] ia) {
+			return Arrays.hashCode(ia);
+		}
+		if (v instanceof net.demilich.metastone.game.cards.desc.HasDesc<?> hv
+				&& !(v instanceof net.demilich.metastone.game.cards.desc.Desc<?, ?>)) {
+			var d = hv.getDesc();
+			return d != null ? d.hashCode() : v.getClass().hashCode();
+		}
+		return v.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o instanceof BaseMap<?, ?> other) {
+			if (this.keyType != other.keyType) {
+				return false;
+			}
+			SharedData<V> d1 = this.data;
+			SharedData<?> d2 = other.data;
+			if (d1 == d2) {
+				return true;
+			}
+			if (d1.b0 != d2.b0 || d1.b1 != d2.b1 || d1.b2 != d2.b2 || d1.b3 != d2.b3 || d1.b4 != d2.b4) {
+				return false;
+			}
+			Object[] v1 = d1.values;
+			Object[] v2 = d2.values;
+			if (v1 == v2) {
+				return true;
+			}
+			for (int i = 0, len = v1.length; i < len; i++) {
+				if (!valueEquals(v1[i], v2[i])) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		SharedData<V> d = this.data;
+		if (d == EMPTY_DATA) {
+			return 0;
+		}
+		int h = d.hash;
+		if (h != 0 && (this.readOnly || d.shared)) {
+			return h;
+		}
+		h = computeHash(d);
+		if (this.readOnly || d.shared) {
+			d.hash = h;
+		}
+		return h;
+	}
+
+	private int computeHash(SharedData<V> d) {
+		int h = 0;
+		int idx = 0;
+		Object[] vals = d.values;
+		K[] universe = this.keyUniverse;
+		for (int wordIndex = 0; wordIndex < 5; wordIndex++) {
+			long word = d.word(wordIndex);
+			int baseOrdinal = wordIndex << 6;
+			while (word != 0L) {
+				int ordinal = baseOrdinal + Long.numberOfTrailingZeros(word);
+				h += universe[ordinal].hashCode() ^ valueHashCode(vals[idx++]);
+				word &= word - 1L;
+			}
+		}
+		return h;
+	}
+
 	private int findNext(int fromIndex) {
 		if (fromIndex >= 320) {
 			return -1;
@@ -424,6 +549,7 @@ public abstract class BaseMap<K extends Enum<K>, V> extends AbstractMap<K, V> im
 		private Object[] values;
 		private long b0, b1, b2, b3, b4;
 		private boolean shared;
+		private transient int hash;
 
 		private SharedData(Object[] values, long b0, long b1, long b2, long b3, long b4, boolean shared) {
 			this.values = values;

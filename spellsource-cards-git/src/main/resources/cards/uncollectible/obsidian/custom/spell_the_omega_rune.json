@@ -18,7 +18,8 @@
           "attribute": "FROZEN",
           "invert": true,
           "operation": "HAS"
-        }
+        },
+        "name": "The Omega Rune Chill"
       },
       {
         "class": "SummonSpell",
@@ -44,9 +45,11 @@
           "spell": {
             "class": "AddAttributeSpell",
             "target": "EVENT_TARGET",
-            "attribute": "LIFESTEAL"
+            "attribute": "LIFESTEAL",
+            "name": "The Omega Rune"
           }
-        }
+        },
+        "name": "The Omega Rune"
       }
     ]
   },

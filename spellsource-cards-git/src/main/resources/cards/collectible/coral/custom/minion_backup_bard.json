@@ -12,7 +12,8 @@
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
       "class": "AddAttributeSpell",
-      "attribute": "RUSH"
+      "attribute": "RUSH",
+      "name": "Novice Performer's Dash"
     }
   },
   "attributes": {

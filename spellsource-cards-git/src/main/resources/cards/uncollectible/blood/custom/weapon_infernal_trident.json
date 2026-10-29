@@ -19,7 +19,8 @@
           {
             "class": "BuffSpell",
             "attackBonus": 0,
-            "hpBonus": 3
+            "hpBonus": 3,
+            "name": "Infernal Trident's Blessing"
           },
           {
             "class": "SwapAttackAndHpSpell"

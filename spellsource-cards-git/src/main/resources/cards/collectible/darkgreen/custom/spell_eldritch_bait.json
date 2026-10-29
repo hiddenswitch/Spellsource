@@ -11,7 +11,8 @@
     "spell": {
       "class": "RecruitSpell",
       "targetPlayer": "SELF"
-    }
+    },
+    "name": "Eldritch Bait"
   },
   "fileFormatVersion": 1,
   "sets": [

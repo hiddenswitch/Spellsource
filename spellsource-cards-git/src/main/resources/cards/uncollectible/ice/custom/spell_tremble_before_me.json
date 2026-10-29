@@ -8,7 +8,8 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddAttributeSpell",
-    "attribute": "FROZEN"
+    "attribute": "FROZEN",
+    "name": "Tremble Before Me! Chill"
   },
   "attributes": {
     "ECHO": true

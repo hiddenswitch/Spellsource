@@ -11,7 +11,8 @@
     "targetSelection": "FRIENDLY_CHARACTERS",
     "spell": {
       "class": "BuffSpell",
-      "hpBonus": 3
+      "hpBonus": 3,
+      "name": "Runic Sorceress' Ward"
     }
   },
   "attributes": {

@@ -16,7 +16,8 @@
           "class": "AttributeValueProvider",
           "target": "LEFTMOST_ENEMY_MINION",
           "attribute": "HP"
-        }
+        },
+        "name": "Gorge"
       },
       {
         "class": "DestroySpell",

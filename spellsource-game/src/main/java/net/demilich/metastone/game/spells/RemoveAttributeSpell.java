@@ -5,6 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 
@@ -16,7 +17,7 @@ import java.util.Map;
  * The removal can be reverted by specifying a {@link SpellArg#REVERT_TRIGGER} {@link
  * net.demilich.metastone.game.spells.trigger.EventTrigger}.
  */
-public class RemoveAttributeSpell extends RevertableSpell {
+public class RemoveAttributeSpell extends Spell {
 	public static SpellDesc create(Attribute tag) {
 		return create(null, tag);
 	}
@@ -28,12 +29,10 @@ public class RemoveAttributeSpell extends RevertableSpell {
 		return new SpellDesc(arguments);
 	}
 
-	@Override
-	protected SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target) {
-		return AddAttributeSpell.create(target, (Attribute) desc.get(SpellArg.ATTRIBUTE));
-	}
-
-	protected void onCast(GameContext context, Player player, Entity source, Entity target, Attribute attribute) {
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target, Attribute attribute) {
 		context.getLogic().removeAttribute(player, null, target, attribute);
+		if (desc.containsKey(SpellArg.REVERT_TRIGGER)) {
+			Enchantment.attachRemoveAttributeEnchantment(context, player, desc, source, target, attribute);
+		}
 	}
 }

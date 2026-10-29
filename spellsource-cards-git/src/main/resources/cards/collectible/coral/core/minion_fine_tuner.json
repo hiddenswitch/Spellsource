@@ -11,7 +11,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_WEAPON",
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Fine Tuner's Ward"
     }
   },
   "attributes": {

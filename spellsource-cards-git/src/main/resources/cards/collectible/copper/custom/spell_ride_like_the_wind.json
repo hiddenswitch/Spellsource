@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "attackBonus": 2
+        "attackBonus": 2,
+        "name": "Ride like the Wind!"
       },
       {
         "class": "DrawCardSpell",

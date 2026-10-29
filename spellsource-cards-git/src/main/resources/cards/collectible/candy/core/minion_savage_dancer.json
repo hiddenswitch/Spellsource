@@ -89,12 +89,14 @@
                   }
                 },
                 "maxFires": 1
-              }
+              },
+              "name": "Bladedancer's Pact"
             }
           ]
         },
         "maxFires": 1
-      }
+      },
+      "name": "Bladedancer's Pact"
     }
   },
   "attributes": {

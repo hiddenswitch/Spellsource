@@ -30,7 +30,8 @@
           "class": "BuffSpell",
           "target": "SELF",
           "attackBonus": 2,
-          "hpBonus": 2
+          "hpBonus": 2,
+          "name": "Runebinder's Empowerment"
         }
       ]
     }

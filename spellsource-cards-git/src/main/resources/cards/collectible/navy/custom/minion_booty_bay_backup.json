@@ -18,7 +18,8 @@
         "class": "RaceFilter",
         "race": "SPIRIT"
       },
-      "hpBonus": 0
+      "hpBonus": 0,
+      "name": "Pearl Bay Ghost's Blessing"
     }
   },
   "attributes": {

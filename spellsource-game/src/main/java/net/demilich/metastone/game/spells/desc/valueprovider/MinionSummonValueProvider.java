@@ -13,11 +13,9 @@ public class MinionSummonValueProvider extends ValueProvider {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
+	protected int provideValue(GameContext context, Player player, Entity target, Entity host, EntityFilter filter) {
 		Map<String, Integer> minionIds = player.getStatistics().getMinionsSummoned();
 		int count = 0;
-		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
 		for (String minionId : minionIds.keySet()) {
 			Entity entity = context.getCardById(minionId);
 			if (filter == null || filter.matches(context, player, entity, host)) {

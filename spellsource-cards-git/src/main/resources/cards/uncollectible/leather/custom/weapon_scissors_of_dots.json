@@ -20,7 +20,8 @@
       "attribute": "IMMUNE",
       "revertTrigger": {
         "class": "TurnEndTrigger"
-      }
+      },
+      "name": "Scissors of D.O.T.S.'s Immunity"
     }
   },
   "attributes": {

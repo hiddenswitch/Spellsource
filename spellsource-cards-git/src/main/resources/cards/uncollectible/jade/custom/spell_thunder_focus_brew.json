@@ -11,11 +11,13 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Thunder Focus Brew"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "UNTARGETABLE_BY_SPELLS"
+        "attribute": "UNTARGETABLE_BY_SPELLS",
+        "name": "Thunder Focus Brew"
       }
     ]
   },

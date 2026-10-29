@@ -17,7 +17,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "TRIGGER_HOST",
-      "attribute": "STEALTH"
+      "attribute": "STEALTH",
+      "name": "Enenra's Veil"
     }
   },
   "collectible": true,

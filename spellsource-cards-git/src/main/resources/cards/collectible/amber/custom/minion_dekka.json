@@ -31,8 +31,9 @@
           "hpBonus": {
             "class": "AttributeValueProvider",
             "target": "EVENT_TARGET",
-            "attribute": "HP"
-          }
+            "attribute": "MAX_HP"
+          },
+          "name": "Dekka's Blessing"
         },
         {
           "class": "custom.AddActorEffectsToTargetActorSpell",

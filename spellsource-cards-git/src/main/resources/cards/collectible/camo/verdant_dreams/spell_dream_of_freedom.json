@@ -30,7 +30,8 @@
           "attribute": "RUSH",
           "invert": true,
           "operation": "HAS"
-        }
+        },
+        "name": "Dream of Freedom"
       }
     ]
   },

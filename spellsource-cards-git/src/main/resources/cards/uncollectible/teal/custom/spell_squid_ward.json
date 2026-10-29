@@ -11,16 +11,17 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "target": "SELF",
         "attackBonus": 2,
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Squid Ward"
       },
       {
         "class": "AddDeathrattleSpell",
         "spell": {
           "class": "ShuffleMinionToDeckSpell",
           "target": "SELF"
-        }
+        },
+        "name": "Squid Ward"
       }
     ]
   },

@@ -28,7 +28,8 @@
             "filter": {
               "class": "SpecificCardFilter",
               "card": "minion_removed_card"
-            }
+            },
+            "name": "Harsh Food Critic's Blessing"
           },
           {
             "class": "BuffSpell",
@@ -40,7 +41,8 @@
             "filter": {
               "class": "SpecificCardFilter",
               "card": "minion_removed_card"
-            }
+            },
+            "name": "Harsh Food Critic's Blessing"
           },
           {
             "class": "ModifyAttributeSpell",

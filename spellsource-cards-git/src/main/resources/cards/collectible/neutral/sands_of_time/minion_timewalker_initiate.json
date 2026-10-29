@@ -16,7 +16,8 @@
       "class": "BuffSpell",
       "target": "SELF",
       "attackBonus": 1,
-      "hpBonus": 1
+      "hpBonus": 1,
+      "name": "Patient Initiate's Empowerment"
     }
   },
   "collectible": true,

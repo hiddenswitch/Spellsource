@@ -14,14 +14,19 @@ public class TriggerOpenerSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		if (target.getSourceCard() == null || !target.getSourceCard().hasBattlecry()) {
+		if (!(target instanceof Actor actor)) {
 			return;
 		}
 
-		if (!(target instanceof Actor)) {
+		if (actor.getSourceCard() != null && actor.getSourceCard().hasChoices()) {
+			RepeatAllOtherBattlecriesSpell.castBattlecryRandomly(context, player, actor.getSourceCard(), actor);
 			return;
 		}
 
-		RepeatAllOtherBattlecriesSpell.castBattlecryRandomly(context, player, target.getSourceCard(), (Actor) target);
+		var openers = context.getLogic().getOpeners(actor);
+		for (var opener : openers) {
+			var srcCard = opener.getSourceCard() != null ? opener.getSourceCard() : actor.getSourceCard();
+			RepeatAllOtherBattlecriesSpell.castOpenerRandomly(context, player, srcCard, actor, opener.getOpenerDesc());
+		}
 	}
 }

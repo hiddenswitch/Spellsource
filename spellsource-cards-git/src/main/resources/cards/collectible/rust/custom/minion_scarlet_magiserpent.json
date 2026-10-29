@@ -14,7 +14,8 @@
       "target": "SELF",
       "value": {
         "class": "CardCountValueProvider"
-      }
+      },
+      "name": "Scarlet Magiserpent's Empowerment"
     }
   },
   "attributes": {

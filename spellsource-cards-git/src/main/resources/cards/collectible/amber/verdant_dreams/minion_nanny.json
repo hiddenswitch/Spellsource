@@ -22,7 +22,8 @@
         "cardType": "MINION"
       },
       "hpBonus": 1,
-      "randomTarget": true
+      "randomTarget": true,
+      "name": "Nanny's Blessing"
     }
   },
   "collectible": true,

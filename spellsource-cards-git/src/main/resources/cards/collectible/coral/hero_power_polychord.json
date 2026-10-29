@@ -15,7 +15,8 @@
       "cardType": "MINION"
     },
     "hpBonus": 2,
-    "randomTarget": true
+    "randomTarget": true,
+    "name": "Polychord's Blessing"
   },
   "collectible": false,
   "set": "SPELLSOURCE_BASIC",

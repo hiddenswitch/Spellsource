@@ -19,7 +19,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "EVENT_TARGET",
-      "value": 2
+      "value": 2,
+      "name": "Stonecold Sergeant's Blessing"
     }
   },
   "collectible": true,

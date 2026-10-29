@@ -12,14 +12,16 @@
     "spells": [
       {
         "class": "TemporaryAttackSpell",
-        "value": 2
+        "value": 2,
+        "name": "Sanguiphage's Rally"
       },
       {
         "class": "AddAttributeSpell",
         "attribute": "WINDFURY",
         "revertTrigger": {
           "class": "TurnEndTrigger"
-        }
+        },
+        "name": "Sanguiphage's Fury"
       }
     ]
   },

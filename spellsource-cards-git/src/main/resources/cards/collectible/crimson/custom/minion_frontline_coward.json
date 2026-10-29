@@ -32,11 +32,13 @@
             {
               "class": "BuffSpell",
               "attackBonus": 1,
-              "hpBonus": 1
+              "hpBonus": 1,
+              "name": "Frontline Coward's Blessing"
             },
             {
               "class": "AddAttributeSpell",
-              "attribute": "TAUNT"
+              "attribute": "TAUNT",
+              "name": "Frontline Coward's Guard"
             }
           ]
         }

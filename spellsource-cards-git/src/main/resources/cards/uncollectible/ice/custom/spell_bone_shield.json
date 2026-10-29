@@ -12,12 +12,14 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "armorBonus": 3
+        "armorBonus": 3,
+        "name": "Bone Shield"
       },
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_WEAPON",
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Bone Shield"
       }
     ]
   },

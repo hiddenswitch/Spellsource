@@ -11,7 +11,8 @@
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
-    "armorBonus": 5
+    "armorBonus": 5,
+    "name": "Feral Forager's Aegis"
   },
   "attributes": {
     "DEATHRATTLES": true

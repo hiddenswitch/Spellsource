@@ -15,7 +15,8 @@
         "armorBonus": {
           "class": "DiedThisTurnValueProvider",
           "targetPlayer": "BOTH"
-        }
+        },
+        "name": "Scavenge"
       },
       {
         "class": "DrawCardSpell",

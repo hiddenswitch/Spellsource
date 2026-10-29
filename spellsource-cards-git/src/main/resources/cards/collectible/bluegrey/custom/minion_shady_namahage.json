@@ -17,7 +17,8 @@
         "class": "AttributeFilter",
         "attribute": "STEALTH",
         "operation": "HAS"
-      }
+      },
+      "name": "Shady Namahage's Fury"
     }
   },
   "attributes": {

@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'com.google.cloud.tools.jib' version '3.5.3'
+    id 'com.google.cloud.tools.jib' version "$googleContainerToolsJibVersion"
 }
 
 apply from: '../gradle/instrument.gradle'
@@ -46,23 +46,29 @@ jib {
 // kubectl honors KUBECONFIG and the active context.
 def trainerNamespace = providers.gradleProperty('namespace').orElse('spellsource')
 def renderedTrainer = layout.buildDirectory.file('jobset-rendered.yaml')
+def jobsetYamlFile = layout.projectDirectory.file('k8s/jobset.yaml').asFile
+def trainerDefaults = [replicas: '7', generations: '50', population: '12',
+    matchupsPerEval: '20', gamesPerMatchup: '6', gsvbDepth: '2', gsvbTimeout: '5000',
+    sigma: '20.0', mlflowUri: 'http://mlflow.appmana.svc.cluster.local', session: '', gameTimeout: '90000',
+    cpuRequest: '8', cpuLimit: '16', memoryRequest: '12Gi', memoryLimit: '24Gi',
+    trainerImage: 'harbor.appmana.com/appmana/spellsource-trainer:latest', namespace: 'spellsource']
+def trainerProviders = trainerDefaults.collectEntries { key, fallback ->
+    [(key): providers.gradleProperty(key).orElse(fallback)]
+}
 tasks.register('renderTrainer') {
     group = 'deployment'
     description = 'Render an ad hoc trainer JobSet without starting it'
+    inputs.file(jobsetYamlFile).withPathSensitivity(PathSensitivity.RELATIVE)
+    outputs.file(renderedTrainer)
     doLast {
-        def defaults = [replicas: '7', generations: '50', population: '12',
-            matchupsPerEval: '20', gamesPerMatchup: '6', gsvbDepth: '2', gsvbTimeout: '5000',
-            sigma: '20.0', mlflowUri: 'http://mlflow.appmana.svc.cluster.local', session: '', gameTimeout: '90000',
-            cpuRequest: '8', cpuLimit: '16', memoryRequest: '12Gi', memoryLimit: '24Gi',
-            trainerImage: 'harbor.appmana.com/appmana/spellsource-trainer:latest', namespace: 'spellsource']
         def names = [replicas: 'REPLICAS', generations: 'GENERATIONS', population: 'POPULATION',
             matchupsPerEval: 'MATCHUPS_PER_EVAL', gamesPerMatchup: 'GAMES_PER_MATCHUP',
             gsvbDepth: 'GSVB_DEPTH', gsvbTimeout: 'GSVB_TIMEOUT', sigma: 'SIGMA', mlflowUri: 'MLFLOW_URI',
             session: 'SESSION', gameTimeout: 'GAME_TIMEOUT', cpuRequest: 'CPU_REQUEST', cpuLimit: 'CPU_LIMIT',
             memoryRequest: 'MEMORY_REQUEST', memoryLimit: 'MEMORY_LIMIT', trainerImage: 'IMAGE', namespace: 'NAMESPACE']
-        def manifest = file('k8s/jobset.yaml').text
-        defaults.each { key, fallback ->
-            def value = providers.gradleProperty(key).getOrElse(fallback)
+        def manifest = jobsetYamlFile.text
+        trainerProviders.each { key, valProvider ->
+            def value = valProvider.get()
             if (value.contains('\n') || value.contains('"') || value.contains('\\')) {
                 throw new GradleException("Invalid trainer property ${key}")
             }
@@ -75,24 +81,27 @@ tasks.register('renderTrainer') {
     }
 }
 tasks.register('deployTrainer') {
+    def execOps = services.get(org.gradle.process.ExecOperations)
     group = 'deployment'
     description = 'Build and explicitly launch an ad hoc trainer JobSet'
     dependsOn 'jib', 'renderTrainer'
     doLast {
         // Preserve an existing run. Delete it explicitly before launching another.
-        exec { commandLine 'kubectl', 'create', '-f', renderedTrainer.get().asFile.absolutePath }
-        exec { commandLine 'kubectl', 'patch', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(),
+        execOps.exec { commandLine 'kubectl', 'create', '-f', renderedTrainer.get().asFile.absolutePath }
+        execOps.exec { commandLine 'kubectl', 'patch', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(),
             '--type=merge', '-p', '{"spec":{"suspend":false}}' }
     }
 }
 tasks.register('deleteTrainer') {
+    def execOps = services.get(org.gradle.process.ExecOperations)
     group = 'deployment'
-    doLast { exec { commandLine 'kubectl', 'delete', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(), '--ignore-not-found' } }
+    doLast { execOps.exec { commandLine 'kubectl', 'delete', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(), '--ignore-not-found' } }
 }
 tasks.register('trainerStatus') {
+    def execOps = services.get(org.gradle.process.ExecOperations)
     group = 'deployment'
     doLast {
-        exec { commandLine 'kubectl', 'get', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(), '-o', 'wide' }
-        exec { commandLine 'kubectl', 'get', 'pods', '-n', trainerNamespace.get(), '-l', 'jobset.sigs.k8s.io/jobset-name=gsvb-trainer' }
+        execOps.exec { commandLine 'kubectl', 'get', 'jobset', 'gsvb-trainer', '-n', trainerNamespace.get(), '-o', 'wide' }
+        execOps.exec { commandLine 'kubectl', 'get', 'pods', '-n', trainerNamespace.get(), '-l', 'jobset.sigs.k8s.io/jobset-name=gsvb-trainer' }
     }
 }

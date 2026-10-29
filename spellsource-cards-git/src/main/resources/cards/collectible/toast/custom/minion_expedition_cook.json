@@ -14,6 +14,7 @@
       "target": "FRIENDLY_DECK",
       "spell": {
         "class": "ConditionalSpell",
+        "target": "OUTPUT",
         "conditions": [
           {
             "class": "CardPropertyCondition",
@@ -34,11 +35,11 @@
         "spells": [
           {
             "class": "ShuffleToDeckSpell",
-            "card": "spell_dinosaur_chops"
+            "card": "spell_proto_drake_stew"
           },
           {
             "class": "ShuffleToDeckSpell",
-            "card": "spell_proto_drake_stew"
+            "card": "spell_dinosaur_chops"
           },
           {
             "class": "ShuffleToDeckSpell",

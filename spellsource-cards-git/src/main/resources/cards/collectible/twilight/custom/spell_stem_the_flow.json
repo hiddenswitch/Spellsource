@@ -16,7 +16,8 @@
       "class": "BuffSpell",
       "hpBonus": {
         "class": "EventValueProvider"
-      }
+      },
+      "name": "Stem the Flow"
     }
   },
   "collectible": true,

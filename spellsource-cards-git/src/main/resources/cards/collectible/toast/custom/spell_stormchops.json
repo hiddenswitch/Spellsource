@@ -12,7 +12,8 @@
       "class": "DamageSpell",
       "target": "ALL_MINIONS",
       "value": 3
-    }
+    },
+    "name": "Stormchops"
   },
   "attributes": {},
   "collectible": true,

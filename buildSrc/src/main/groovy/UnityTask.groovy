@@ -29,8 +29,15 @@ class UnityTask extends AbstractExecTask<UnityTask> {
     @Internal
     Provider<BuildService<BuildServiceParameters>> unity3d
 
+    private final File projectDirFile
+    private final File rootProjectDirFile
+    private final File buildDirFile
+
     UnityTask() {
         super(UnityTask.class)
+        this.projectDirFile = project.projectDir
+        this.rootProjectDirFile = project.rootProject.projectDir
+        this.buildDirFile = project.layout.buildDirectory.asFile.get()
     }
 
     @Override
@@ -43,17 +50,17 @@ class UnityTask extends AbstractExecTask<UnityTask> {
         inputs.dir("src/unity/Assets/")
         inputs.files("src/unity/ProjectSettings/EditorBuildSettings.asset")
         inputs.dir("src/unity/Packages/")
-        outputs.dir("${project.buildDir}/${outputDir}")
+        outputs.dir("${buildDirFile}/${outputDir}")
         return super.configure(closure)
     }
 
     @TaskAction
     protected void exec() {
-        workingDir "${project.projectDir}/src/unity/"
+        workingDir "${projectDirFile}/src/unity/"
         def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
         def commandLineArgs = ['./deploy.sh', flags]
         if (isWindows) {
-            commandLineArgs = ["${project.rootProject.projectDir}/bin/bash.exe"] + commandLineArgs
+            commandLineArgs = ["${rootProjectDirFile}/bin/bash.exe"] + commandLineArgs
         }
         commandLine commandLineArgs
         super.exec()

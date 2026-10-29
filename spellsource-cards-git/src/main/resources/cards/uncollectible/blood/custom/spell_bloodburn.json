@@ -11,7 +11,8 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Bloodburn"
       },
       {
         "class": "SwapAttackAndHpSpell"

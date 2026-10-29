@@ -12,7 +12,8 @@
     "spell": {
       "class": "ReviveMinionSpell",
       "target": "SELF"
-    }
+    },
+    "name": "Ritual of Undeath"
   },
   "collectible": true,
   "fileFormatVersion": 1,

@@ -16,7 +16,8 @@
       "spell": {
         "class": "BuffSpell",
         "attackBonus": 2,
-        "hpBonus": 0
+        "hpBonus": 0,
+        "name": "Silverbone Claw's Blessing"
       },
       "filter": {
         "class": "CardFilter",

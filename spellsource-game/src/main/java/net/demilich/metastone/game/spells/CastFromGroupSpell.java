@@ -138,7 +138,8 @@ public class CastFromGroupSpell extends Spell {
 			for (int j = 0; j < count; j++) {
 				List<SpellDesc> thisRoundsPossibleChoices = new ArrayList<SpellDesc>(allChoices);
 				List<SpellDesc> thisRoundsChoices = new ArrayList<SpellDesc>();
-				for (int i = 0; i < howMany; i++) {
+				int choicesToOffer = Math.min(howMany, thisRoundsPossibleChoices.size());
+				for (int i = 0; i < choicesToOffer; i++) {
 					SpellDesc spell;
 					spell = context.getLogic().removeRandom(thisRoundsPossibleChoices);
 					thisRoundsChoices.add(spell);
@@ -163,6 +164,9 @@ public class CastFromGroupSpell extends Spell {
 					logger.warn("cast {} {}: Could not find SpellDesc {} in choices", context.getGameId(), source, chosen);
 				}
 				choices[j] = chosenIndex;
+				if (exclusive) {
+					allChoices.remove(chosen);
+				}
 
 				subCast(context, player, desc, source, originalTargets, validTargets, randomTarget, chosen);
 			}

@@ -10,11 +10,13 @@
     "class": "AdjacentEffectSpell",
     "spell1": {
       "class": "BuffSpell",
-      "value": 2
+      "value": 2,
+      "name": "Big Winners"
     },
     "spell2": {
       "class": "BuffSpell",
-      "value": 2
+      "value": 2,
+      "name": "Big Winners"
     }
   },
   "collectible": false,

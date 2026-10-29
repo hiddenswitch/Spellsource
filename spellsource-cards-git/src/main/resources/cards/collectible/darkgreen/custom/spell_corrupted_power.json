@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "attackBonus": 3,
-        "hpBonus": 3
+        "hpBonus": 3,
+        "name": "Corrupted Power"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -25,7 +26,8 @@
             "class": "DestroySpell",
             "target": "SELF"
           }
-        }
+        },
+        "name": "Corrupted Power"
       }
     ]
   },

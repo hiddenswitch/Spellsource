@@ -3,8 +3,6 @@
   "baseManaCost": 5,
   "type": "WEAPON",
   "heroClass": "ICE",
-  "baseAttack": 3,
-  "baseHp": 2,
   "rarity": "RARE",
   "description": "Also damages the units next to whomever this attacks. Deals double damage to the target unit if it is Frozen.",
   "trigger": {
@@ -51,5 +49,7 @@
   },
   "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "damage": 3,
+  "durability": 2
 }

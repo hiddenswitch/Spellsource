@@ -12,11 +12,13 @@
       {
         "class": "BuffSpell",
         "attackBonus": 4,
-        "hpBonus": 8
+        "hpBonus": 8,
+        "name": "The Eternity Gauntlets"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "WINDFURY"
+        "attribute": "WINDFURY",
+        "name": "The Eternity Gauntlets"
       }
     ]
   },

@@ -20,7 +20,8 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

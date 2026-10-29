@@ -22,7 +22,8 @@
               "class": "RoastSpell"
             }
           }
-        }
+        },
+        "name": "Deathwing's Dinner"
       },
       {
         "class": "DamageSpell",

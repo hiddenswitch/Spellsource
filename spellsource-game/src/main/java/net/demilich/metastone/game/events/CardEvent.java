@@ -46,6 +46,11 @@ public class CardEvent extends BasicGameEvent implements HasCard {
 		this.card = new WeakReference<>(card);
 	}
 
+	public CardEvent(GameEventType eventType, boolean isClientInterested, @NotNull GameContext context, Entity source, Entity target, int targetPlayerId, int sourcePlayerId, Card card) {
+		super(eventType, isClientInterested, context, source, target, targetPlayerId, sourcePlayerId);
+		this.card = new WeakReference<>(card);
+	}
+
 	public CardEvent(GameEventType eventType, GameContext context, int targetPlayerId, int sourcePlayerId, Card card, Entity target) {
 		super(eventType, context, target, targetPlayerId, sourcePlayerId);
 		this.card = new WeakReference<>(card);

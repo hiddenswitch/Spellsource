@@ -30,8 +30,7 @@
       "cardSource": {
         "class": "GraveyardCardsSource",
         "targetPlayer": "SELF"
-      },
-      "offset": -1
+      }
     },
     "card": "token_skeptic"
   },

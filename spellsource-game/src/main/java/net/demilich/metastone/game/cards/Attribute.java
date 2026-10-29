@@ -1121,6 +1121,10 @@ public enum Attribute {
 	 */
 	CASTED_ON_FRIENDLY_MINION,
 	/**
+	 * Indicates that the spell was played targeting a friendly character (minion or hero). Implements Lady Liadrin.
+	 */
+	CASTED_ON_FRIENDLY_CHARACTER,
+	/**
 	 * Tracks the amount of times an actor has attacked over the course of a game
 	 */
 	@Tier(Tier.Type.INLINE_INT)
@@ -1438,6 +1442,18 @@ public enum Attribute {
 	 */
 	EXTRA_HAND_CARDS,
 	/**
+	 * The number of extra maximum mana crystals a player can have beyond the default {@link net.demilich.metastone.game.logic.GameLogic#MAX_MANA}.
+	 */
+	EXTRA_MAX_MANA,
+	/**
+	 * Tracks how many pieces of C'Thun, the Shattered a player has cast this game.
+	 */
+	CTHUN_PIECES_PLAYED,
+	/**
+	 * Tracks how many friendly Secrets have triggered this game for a player.
+	 */
+	SECRETS_TRIGGERED,
+	/**
 	 * When set on an {@link net.demilich.metastone.game.entities.Actor}, prevents all healing to that actor.
 	 */
 	IMMUNE_TO_HEALING,
@@ -1519,6 +1535,45 @@ public enum Attribute {
 	 * Stores a String for the card id that is considered the upgrade to this
 	 */
 	UPGRADE,
+	/**
+	 * Maximum mana crystal cap for a player (default {@link net.demilich.metastone.game.logic.GameLogic#MAX_MANA}, i.e. 10).
+	 * Set by format rule enchantments and modified by cards such as Wildheart Guff, Audio Amplifier, New Heights, and
+	 * Ysera, Emerald Aspect.
+	 */
+	MAX_MANA,
+	/**
+	 * Aura bonus to a player's maximum mana crystal cap ({@link #MAX_MANA}).
+	 */
+	AURA_MAX_MANA,
+	/**
+	 * Base maximum hand size for a player (default {@link net.demilich.metastone.game.logic.GameLogic#MAX_HAND_CARDS}, i.e. 10).
+	 * Set by format rule enchantments and modified by cards such as Audio Amplifier. Combined with {@link #EXTRA_HAND_CARDS}.
+	 */
+	MAX_HAND_SIZE,
+	/**
+	 * Number of empty mana crystals granted to a player at the start of their turn (default 1).
+	 */
+	MANA_PER_TURN,
+	/**
+	 * Aura bonus to the number of empty mana crystals granted to a player at the start of their turn ({@link #MANA_PER_TURN}).
+	 */
+	AURA_MANA_PER_TURN,
+	/**
+	 * Number of cards drawn by a player at the start of their turn (default 1).
+	 */
+	CARDS_DRAWN_PER_TURN,
+	/**
+	 * Aura bonus to the number of cards drawn by a player at the start of their turn ({@link #CARDS_DRAWN_PER_TURN}).
+	 */
+	AURA_CARDS_DRAWN_PER_TURN,
+	/**
+	 * Constructed deck size requirement for a player or card (default 30; 40 for Prince Renathal).
+	 */
+	DECK_SIZE,
+	/**
+	 * Internal marker indicating that format rule enchantments have been applied to the player.
+	 */
+	FORMAT_RULES_APPLIED,
 	/**
 	 * The last attribute specially marked as unused, for enumeration purposes.
 	 */

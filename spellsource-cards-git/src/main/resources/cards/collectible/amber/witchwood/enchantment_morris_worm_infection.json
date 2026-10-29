@@ -12,13 +12,15 @@
       {
         "class": "BuffSpell",
         "attackBonus": 2,
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Infection"
       },
       {
         "class": "AddDeathrattleSpell",
         "target": "FRIENDLY_MINIONS",
         "card": "enchantment_morris_worm_infection",
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Infection"
       }
     ]
   },

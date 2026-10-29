@@ -28,7 +28,8 @@
         "value": {
           "class": "GatekeeperShaValueProvider",
           "offset": 0
-        }
+        },
+        "name": "Hemoblade"
       }
     ]
   },

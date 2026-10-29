@@ -19,7 +19,8 @@
         "class": "PlayerAttributeValueProvider",
         "multiplier": 2,
         "playerAttribute": "INVOKED_CARDS"
-      }
+      },
+      "name": "Slippery Mook's Empowerment"
     }
   },
   "attributes": {

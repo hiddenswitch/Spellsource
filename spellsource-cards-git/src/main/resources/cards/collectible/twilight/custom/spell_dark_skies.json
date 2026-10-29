@@ -29,8 +29,8 @@
           "class": "AddEnchantmentSpell",
           "trigger": {
             "eventTrigger": {
-              "class": "SpellCastedTrigger",
-              "hostTargetType": "IGNORE_OTHER_SOURCES"
+              "class": "CardPlayedTrigger",
+              "hostTargetType": "IGNORE_OTHER_TARGETS"
             },
             "spell": {
               "class": "DamageSpell",
@@ -41,7 +41,8 @@
               },
               "ignoreSpellDamage": true
             }
-          }
+          },
+          "name": "Dark Skies"
         }
       ]
     },

@@ -109,12 +109,14 @@
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "CHARGE"
+          "attribute": "CHARGE",
+          "name": "Discarded Creation's Blitz"
         },
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "RUSH"
+          "attribute": "RUSH",
+          "name": "Discarded Creation's Dash"
         }
       ]
     }

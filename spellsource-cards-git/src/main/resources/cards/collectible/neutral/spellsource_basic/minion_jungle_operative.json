@@ -15,7 +15,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "attackBonus": 6
+      "attackBonus": 6,
+      "name": "Jungle Operative's Fury"
     }
   },
   "attributes": {

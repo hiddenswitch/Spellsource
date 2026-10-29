@@ -20,12 +20,14 @@
         "spell": {
           "class": "AddAttributeSpell",
           "target": "OUTPUT",
-          "attribute": "RUSH"
+          "attribute": "RUSH",
+          "name": "United Retaliation"
         },
         "cardLocation": "HAND"
       },
       "oneTurn": true
-    }
+    },
+    "name": "United Retaliation"
   },
   "attributes": {},
   "collectible": true,

@@ -9,7 +9,7 @@
   "spell": {
     "class": "DamageSpell",
     "target": "ENEMY_HERO",
-    "value": 5
+    "value": 7
   },
   "collectible": true,
   "set": "GRAVEYARD",

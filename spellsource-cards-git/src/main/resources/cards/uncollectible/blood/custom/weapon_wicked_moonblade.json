@@ -17,7 +17,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_MINIONS",
-      "hpBonus": 1
+      "hpBonus": 1,
+      "name": "Wicked Moonblade's Ward"
     }
   },
   "attributes": {},

@@ -23,7 +23,8 @@
         "armorBonus": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
-        }
+        },
+        "name": "Recipe For Power"
       }
     ]
   },

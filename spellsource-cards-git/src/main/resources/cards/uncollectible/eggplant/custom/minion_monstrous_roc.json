@@ -15,7 +15,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "RecruitSpell",
-      "filter": {
+      "cardFilter": {
         "class": "SpecificCardFilter",
         "card": "minion_monstrous_roc"
       }

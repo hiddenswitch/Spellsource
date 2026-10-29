@@ -32,10 +32,12 @@
         "spell": {
           "class": "AddAttributeSpell",
           "target": "EVENT_TARGET",
-          "attribute": "STEALTH"
+          "attribute": "STEALTH",
+          "name": "Kuroko Puppet's Veil"
         },
         "maxFires": 1
-      }
+      },
+      "name": "Kuroko Puppet's Pact"
     }
   },
   "attributes": {

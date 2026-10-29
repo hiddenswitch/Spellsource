@@ -10,16 +10,19 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "DiscoverSpell",
-      "value": 2,
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION"
-      },
-      "cardSource": {
-        "class": "GraveyardDiedMinionsSource",
-        "distinct": true,
-        "targetPlayer": "BOTH"
+      "class": "CastRepeatedlySpell",
+      "howMany": 2,
+      "spell": {
+        "class": "DiscoverSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        "cardSource": {
+          "class": "GraveyardDiedMinionsSource",
+          "distinct": true,
+          "targetPlayer": "BOTH"
+        }
       }
     }
   },

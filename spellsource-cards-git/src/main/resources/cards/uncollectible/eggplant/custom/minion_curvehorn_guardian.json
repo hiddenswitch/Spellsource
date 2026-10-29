@@ -28,17 +28,20 @@
             "spells": [
               {
                 "class": "SetAttackSpell",
-                "value": 3
+                "value": 3,
+                "name": "Curvehorn Guardian's Might"
               },
               {
                 "class": "SetHpSpell",
-                "value": 3
+                "value": 3,
+                "name": "Curvehorn Guardian's Vitality"
               }
             ]
           }
         },
         "maxFires": 1
-      }
+      },
+      "name": "Curvehorn Guardian's Pact"
     }
   },
   "attributes": {

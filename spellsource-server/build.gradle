@@ -289,12 +289,17 @@ tasks.register('stopKeycloakContainer', DockerStopContainer) {
 }
 
 tasks.register('jooqGenerate') {
+  def execOps = services.get(org.gradle.process.ExecOperations)
+  def jooqGenFiles = configurations.jooqGenerator
+  def projDir = project.projectDir
+  def rootProjDir = project.rootProject.projectDir
+  def postgresContainerId = startPostgresContainer.containerId
   // Do all migrations first
   dependsOn flywayMigrate
   finalizedBy = [stopKeycloakContainer, stopPostgresContainer]
-  def outputDir = "$project.projectDir/src/main/java"
+  def outputDir = "$projDir/src/main/java"
 
-  inputs.dir("$project.projectDir/src/main/resources/db/migration")
+  inputs.dir("$projDir/src/main/resources/db/migration")
   outputs.dir(outputDir + '/com/hiddenswitch/framework/schema')
 
   def configuration = new Configuration()
@@ -338,25 +343,25 @@ tasks.register('jooqGenerate') {
 
   doLast() {
     def cl = new URLClassLoader(
-        configurations.jooqGenerator.files.collect { it.toURI().toURL() } as URL[],
+        jooqGenFiles.files.collect { it.toURI().toURL() } as URL[],
         GenerationTool.classLoader
     )
     Thread.currentThread().setContextClassLoader(cl)
     GenerationTool.generate(configuration)
-    exec {
+    execOps.exec {
       // dump the generated ddl to a file
-      workingDir project.projectDir
+      workingDir projDir
       // this is using docker-wrapped pg_dump
       environment('PGPASSWORD', localPassword)
       environment('PGDATABASE', localDatabaseName)
       environment('PGUSER', localUsername)
-      def containerId = startPostgresContainer.containerId.get()
+      def containerId = postgresContainerId.get()
       environment('DOCKER_OPTS', "--link " + containerId + ":database")
       if (isWindows) {
         // postgres is bound to localhost
-        commandLine "$project.rootProject.projectDir\\bin\\pg_dump.exe", '-h', 'localhost', '-s', '-f', "$project.projectDir\\src\\main\\resources\\db\\ddl.sql"
+        commandLine "$rootProjDir\\bin\\pg_dump.exe", '-h', 'localhost', '-s', '-f', "$projDir\\src\\main\\resources\\db\\ddl.sql"
       } else {
-        commandLine "$project.rootProject.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', "/git/$project.projectDir.name/src/main/resources/db/ddl.sql"
+        commandLine "$rootProjDir/bin/pg_dump", '-h', "database", '-s', '-f', "/git/$projDir.name/src/main/resources/db/ddl.sql"
       }
     }
   }
@@ -444,12 +449,16 @@ graphqlCodegen {
   subscriptionReturnType = "org.reactivestreams.Publisher"
   // generateDataFetchingEnvironmentArgumentInApis = true
   
+  def fs = services.get(org.gradle.api.file.FileSystemOperations)
+  def graphqlOutPath = outputDir.path
   doLast {
-    copy {
-      from "${outputDir.path}/com/hiddenswitch/framework/graphql"
-      into outputDir.path
+    fs.copy {
+      from "${graphqlOutPath}/com/hiddenswitch/framework/graphql"
+      into graphqlOutPath
     }
-    delete "${outputDir.path}/com"
+    fs.delete {
+      delete "${graphqlOutPath}/com"
+    }
   }
 }
 

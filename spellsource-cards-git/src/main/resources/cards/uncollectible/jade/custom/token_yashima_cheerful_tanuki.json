@@ -14,12 +14,14 @@
       {
         "class": "AddAttributeSpell",
         "target": "FRIENDLY_MINIONS",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Yashima's Guard"
       },
       {
         "class": "AddAttributeSpell",
         "target": "FRIENDLY_MINIONS",
-        "attribute": "DEFLECT"
+        "attribute": "DEFLECT",
+        "name": "Yashima's Deflection"
       }
     ]
   },

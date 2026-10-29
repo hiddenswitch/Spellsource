@@ -17,11 +17,13 @@
       "spell": {
         "class": "BuffSpell",
         "target": "EVENT_TARGET",
-        "attackBonus": 4
+        "attackBonus": 4,
+        "name": "Savage Anger"
       },
       "maxFires": 1,
       "oneTurn": true
-    }
+    },
+    "name": "Savage Anger"
   },
   "collectible": true,
   "set": "CUSTOM",

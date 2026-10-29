@@ -27,12 +27,14 @@
           {
             "class": "BuffSpell",
             "value": 2,
-            "target": "EVENT_TARGET"
+            "target": "EVENT_TARGET",
+            "name": "Twirling Baton's Blessing"
           },
           {
             "class": "BuffSpell",
             "target": "FRIENDLY_WEAPON",
-            "hpBonus": -1
+            "hpBonus": -1,
+            "name": "Twirling Baton's Curse"
           }
         ]
       }

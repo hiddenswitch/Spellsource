@@ -13,7 +13,8 @@
       "class": "HealSpell",
       "target": "FRIENDLY_HERO",
       "value": 4
-    }
+    },
+    "name": "Enlightenment"
   },
   "collectible": false,
   "set": "CUSTOM",

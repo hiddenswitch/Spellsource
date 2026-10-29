@@ -31,7 +31,8 @@
             "class": "AttributeValueProvider",
             "target": "EVENT_TARGET",
             "attribute": "HP"
-          }
+          },
+          "name": "Covetous Devotee's Blessing"
         },
         {
           "class": "BuffSpell",
@@ -49,7 +50,8 @@
             "class": "AttributeValueProvider",
             "target": "EVENT_TARGET",
             "attribute": "HP"
-          }
+          },
+          "name": "Covetous Devotee's Blessing"
         },
         {
           "class": "ModifyAttributeSpell",

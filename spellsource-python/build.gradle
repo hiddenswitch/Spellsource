@@ -12,13 +12,16 @@ def scriptsDir = isWindows ? "${venvDir}/Scripts" : "${venvDir}/bin"
 
 def fileExt = isWindows ? ".exe" : ""
 tasks.register('run') {
+  def execOps = services.get(org.gradle.process.ExecOperations)
+  def workDirFile = layout.projectDirectory.dir("workdir").asFile
+  def comfyCmd = [layout.projectDirectory.file("${scriptsDir}/comfyui${fileExt}").asFile.path, "--listen", "--enable-cors-header"]
   group('spellsource')
   dependsOn ':venv'
   doLast {
     // Run the comfyui binary from the virtual environment
-    exec {
-      workingDir(layout.projectDirectory.dir("workdir"))
-      commandLine([layout.projectDirectory.file("${scriptsDir}/comfyui${fileExt}").asFile.path, "--listen", "--enable-cors-header"])
+    execOps.exec {
+      workingDir(workDirFile)
+      commandLine(comfyCmd)
     }
   }
 }

@@ -28,7 +28,8 @@
           "target": "SELF",
           "attribute": "ATTACK",
           "offset": -1
-        }
+        },
+        "name": "Ceaseless Ghast's Might"
       }
     }
   },

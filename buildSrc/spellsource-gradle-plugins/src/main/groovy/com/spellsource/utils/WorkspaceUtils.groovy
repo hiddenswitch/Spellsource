@@ -3,6 +3,7 @@ package com.spellsource.utils
 import groovy.json.JsonSlurper
 import org.gradle.api.Project
 import org.gradle.api.file.CopySpec
+import org.gradle.api.file.FileSystemOperations
 
 class WorkspaceUtils {
 
@@ -20,7 +21,7 @@ class WorkspaceUtils {
     return ignores
   }
 
-  static def createDist(Project project, String distDir, boolean includeSelf) {
+  static Set<String> resolveWorkspaceDependencies(Project project, boolean includeSelf) {
     def slurper = new JsonSlurper()
     def parent = project.parent
     def parentPackage = slurper.parse(project.file("${parent.projectDir}/package.json"))
@@ -31,7 +32,7 @@ class WorkspaceUtils {
       return [parent.subprojects.find({ p -> it.startsWith(p.name) })?.name, pkg.exists() ? slurper.parse(pkg) : null]
     })
 
-    def dependencies = new HashSet([project.name])
+    def dependencies = new HashSet<String>([project.name])
     while (true) {
       def prevSize = dependencies.size()
       dependencies.addAll(packages.findAll({ entry ->
@@ -47,8 +48,11 @@ class WorkspaceUtils {
     if (!includeSelf) {
       dependencies.remove(project.name)
     }
+    return dependencies
+  }
 
-    def ignores = gitignoreToList(project.file("$parent.projectDir/.gitignore")) + gitignoreToList(project.file("$project.projectDir/.gitignore"))
+  static def createDist(FileSystemOperations fs, File parentProjectDir, File projectDir, Set<String> dependencies, String distDir) {
+    def ignores = gitignoreToList(new File(parentProjectDir, ".gitignore")) + gitignoreToList(new File(projectDir, ".gitignore"))
     ignores.add 'build.gradle'
     ignores.add '**/csharp'
     ignores.add 'docker/'
@@ -56,20 +60,49 @@ class WorkspaceUtils {
     ignores.add '**/*Dockerfile'
 
     dependencies.forEach { p ->
+      fs.copy { CopySpec c ->
+        c.from new File(parentProjectDir, p)
+        c.into "$distDir/$p/"
+        c.exclude ignores
+      }
+    }
+
+    fs.copy { CopySpec c ->
+      c.from new File(parentProjectDir, "yarn.lock"), new File(parentProjectDir, "package.json"), new File(parentProjectDir, "tsconfig.json"), new File(parentProjectDir, ".yarnrc.yml")
+      c.into distDir
+    }
+
+    fs.copy { CopySpec c ->
+      c.from new File(parentProjectDir, ".yarn")
+      c.into "$distDir/.yarn/"
+    }
+  }
+
+  static def createDist(Project project, String distDir, boolean includeSelf) {
+    def dependencies = resolveWorkspaceDependencies(project, includeSelf)
+    def ignores = gitignoreToList(project.file("${project.parent.projectDir}/.gitignore")) + gitignoreToList(project.file("${project.projectDir}/.gitignore"))
+    ignores.add 'build.gradle'
+    ignores.add '**/csharp'
+    ignores.add 'docker/'
+    ignores.add '**/node_modules'
+    ignores.add '**/*Dockerfile'
+
+    def parentDir = project.parent.projectDir
+    dependencies.forEach { p ->
       project.copy { CopySpec c ->
-        c.from "$parent.projectDir/$p"
+        c.from "$parentDir/$p"
         c.into "$distDir/$p/"
         c.exclude ignores
       }
     }
 
     project.copy { CopySpec c ->
-      c.from "$parent.projectDir/yarn.lock", "$parent.projectDir/package.json", "$parent.projectDir/tsconfig.json", "$parent.projectDir/.yarnrc.yml"
+      c.from "$parentDir/yarn.lock", "$parentDir/package.json", "$parentDir/tsconfig.json", "$parentDir/.yarnrc.yml"
       c.into distDir
     }
 
     project.copy { CopySpec c ->
-      c.from "$parent.projectDir/.yarn"
+      c.from "$parentDir/.yarn"
       c.into "$distDir/.yarn/"
     }
   }

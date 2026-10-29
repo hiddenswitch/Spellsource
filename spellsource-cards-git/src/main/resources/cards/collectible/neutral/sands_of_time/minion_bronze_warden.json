@@ -20,7 +20,8 @@
     "spell": {
       "class": "BuffSpell",
       "attackBonus": 3,
-      "hpBonus": 3
+      "hpBonus": 3,
+      "name": "Bogovey Enchantress' Blessing"
     }
   },
   "attributes": {

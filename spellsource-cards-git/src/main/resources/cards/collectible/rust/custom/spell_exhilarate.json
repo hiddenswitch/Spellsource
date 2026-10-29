@@ -11,7 +11,8 @@
     "attackBonus": {
       "class": "CardCountValueProvider"
     },
-    "hpBonus": 0
+    "hpBonus": 0,
+    "name": "Exhilarate"
   },
   "attributes": {},
   "collectible": true,

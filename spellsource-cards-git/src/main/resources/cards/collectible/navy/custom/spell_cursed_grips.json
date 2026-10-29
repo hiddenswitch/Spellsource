@@ -26,7 +26,8 @@
           }
         }
       }
-    }
+    },
+    "name": "Cursed Grips"
   },
   "collectible": true,
   "set": "CUSTOM",

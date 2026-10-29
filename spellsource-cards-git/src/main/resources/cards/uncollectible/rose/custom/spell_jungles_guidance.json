@@ -9,7 +9,8 @@
   "spell": {
     "class": "BuffSpell",
     "attackBonus": 2,
-    "hpBonus": 1
+    "hpBonus": 1,
+    "name": "Jungle's Guidance"
   },
   "collectible": true,
   "set": "CUSTOM",

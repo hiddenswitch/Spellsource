@@ -48,7 +48,8 @@
         {
           "class": "AddAttributeSpell",
           "target": "EVENT_SOURCE",
-          "attribute": "COUNTERED"
+          "attribute": "COUNTERED",
+          "name": "Finale Architect's Blessing"
         }
       ]
     }

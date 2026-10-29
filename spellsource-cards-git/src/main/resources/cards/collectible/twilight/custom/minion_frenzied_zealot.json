@@ -12,7 +12,8 @@
     "spell": {
       "class": "TemporaryAttackSpell",
       "target": "FRIENDLY_HERO",
-      "value": 3
+      "value": 3,
+      "name": "Frenzied Zealot's Rally"
     }
   },
   "attributes": {

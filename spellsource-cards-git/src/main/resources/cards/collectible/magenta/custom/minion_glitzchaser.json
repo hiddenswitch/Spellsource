@@ -26,7 +26,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "attackBonus": 1
+      "attackBonus": 1,
+      "name": "Glitzchaser's Fury"
     }
   },
   "collectible": true,

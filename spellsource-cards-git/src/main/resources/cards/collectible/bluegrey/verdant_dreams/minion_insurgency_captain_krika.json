@@ -27,7 +27,8 @@
         "class": "AttributeAura",
         "target": "FRIENDLY_MINIONS",
         "attribute": "AURA_RUSH"
-      }
+      },
+      "name": "Insurgency Captain Krika's Pact"
     }
   },
   "attributes": {

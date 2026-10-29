@@ -18,7 +18,8 @@
       "target": "TRIGGER_HOST",
       "spell2": {
         "class": "BuffSpell",
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Swift Foodporter's Ward"
       }
     }
   },

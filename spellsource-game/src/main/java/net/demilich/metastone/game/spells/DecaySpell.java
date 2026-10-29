@@ -57,8 +57,7 @@ public final class DecaySpell extends Spell {
 		return new SpellDesc(DamageSpell.class);
 	}
 
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+	protected void onCast(GameContext context, Player player, Entity source, Entity target, Integer value) {
 
 		if (target == null) {
 			target = source;
@@ -70,13 +69,21 @@ public final class DecaySpell extends Spell {
 		}
 
 		if (target instanceof Minion) {
-			int damage = getDamage(context, player, desc, source, target);
+			int damage = 0;
+			if (value == null && !context.getDamageStack().isEmpty()) {
+				Integer peek = context.getDamageStack().peek();
+				if (peek != null) {
+					damage = peek;
+				}
+			} else {
+				damage = value != null ? value : 1;
+			}
 			if (damage < 0) {
 				logger.error("onCast {} {}: Suspicious negative damage call", context.getGameId(), source);
 			}
 			context.getLogic().damage(player, (Actor) target, damage, source, true, EnumSet.of(DamageType.DECAY));
-		} else if (target instanceof Weapon) {
-			int durabilityChange = desc.getValue(SpellArg.VALUE, context, player, target, source, -1);
+		} else if (target instanceof Weapon && !player.getWeaponZone().isEmpty()) {
+			int durabilityChange = value != null ? value : -1;
 			context.getLogic().modifyDurability(player.getWeaponZone().get(0), durabilityChange);
 		}
 	}

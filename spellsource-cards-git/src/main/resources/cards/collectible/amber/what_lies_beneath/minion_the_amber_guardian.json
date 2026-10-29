@@ -18,12 +18,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "DestroySpell",
-      "target": "ALL_MINIONS",
-      "filter": {
-        "class": "EntityEqualsFilter",
-        "invert": true,
-        "secondaryTarget": "TRIGGER_HOST"
-      }
+      "target": "ALL_OTHER_MINIONS"
     }
   },
   "attributes": {

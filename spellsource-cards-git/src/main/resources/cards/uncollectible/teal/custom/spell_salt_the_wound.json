@@ -18,7 +18,8 @@
     "spell2": {
       "class": "AddAttributeSpell",
       "target": "ENEMY_MINIONS",
-      "attribute": "FROZEN"
+      "attribute": "FROZEN",
+      "name": "Salt the Wound Chill"
     }
   },
   "attributes": {},

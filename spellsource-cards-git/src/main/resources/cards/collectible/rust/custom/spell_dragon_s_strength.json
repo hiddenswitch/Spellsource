@@ -9,7 +9,8 @@
   "spell": {
     "class": "BuffSpell",
     "attackBonus": 6,
-    "hpBonus": 6
+    "hpBonus": 6,
+    "name": "Dragon's Strength"
   },
   "attributes": {},
   "collectible": true,

@@ -26,7 +26,7 @@ namespace HiddenSwitch.Proto {
           string.Concat(
             "ChJoaWRkZW5zd2l0Y2gucHJvdG8SDGhpZGRlbnN3aXRjaBoeZ29vZ2xlL3By",
             "b3RvYnVmL3dyYXBwZXJzLnByb3RvGhtnb29nbGUvcHJvdG9idWYvZW1wdHku",
-            "cHJvdG8aEXNwZWxsc291cmNlLnByb3RvIvMSChNTZXJ2ZXJDb25maWd1cmF0",
+            "cHJvdG8aEXNwZWxsc291cmNlLnByb3RvIqQUChNTZXJ2ZXJDb25maWd1cmF0",
             "aW9uEkMKAnBnGAEgASgLMjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3Vy",
             "YXRpb24uUG9zdGdyZXNDb25maWd1cmF0aW9uEkkKCGtleWNsb2FrGAIgASgL",
             "MjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uS2V5Y2xvYWtD",
@@ -56,84 +56,89 @@ namespace HiddenSwitch.Proto {
             "DwoHYXV0aFVybBgBIAEoCRIVCg1wdWJsaWNBdXRoVXJsGAggASgJEhUKDWFk",
             "bWluVXNlcm5hbWUYAiABKAkSFQoNYWRtaW5QYXNzd29yZBgDIAEoCRIQCghj",
             "bGllbnRJZBgEIAEoCRIUCgxjbGllbnRTZWNyZXQYBSABKAkSGAoQcmVhbG1E",
-            "aXNwbGF5TmFtZRgGIAEoCRIPCgdyZWFsbUlkGAcgASgJGsYBChJSZWRpc0Nv",
+            "aXNwbGF5TmFtZRgGIAEoCRIPCgdyZWFsbUlkGAcgASgJGukCChJSZWRpc0Nv",
             "bmZpZ3VyYXRpb24SWQoMaG9zdFBvcnRVc2VyGAEgASgLMkEuaGlkZGVuc3dp",
             "dGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uUmVkaXNDb25maWd1cmF0aW9uLkhv",
-            "c3RQb3J0VXNlckgAEg0KA3VyaRgCIAEoCUgAGjgKDEhvc3RQb3J0VXNlchIM",
-            "CgRob3N0GAEgASgJEgwKBHBvcnQYAiABKAUSDAoEdXNlchgDIAEoCUIMCgpj",
-            "b25uZWN0aW9uGpUBChFHcnBjQ29uZmlndXJhdGlvbhIhChlzZXJ2ZXJLZWVw",
-            "QWxpdmVUaW1lTWlsbGlzGAEgASgDEiQKHHNlcnZlcktlZXBBbGl2ZVRpbWVv",
-            "dXRNaWxsaXMYAiABKAMSKQohc2VydmVyUGVybWl0S2VlcEFsaXZlV2l0aG91",
-            "dENhbGxzGAMgASgIEgwKBHBvcnQYBCABKAUadgoYTWF0Y2htYWtpbmdDb25m",
-            "aWd1cmF0aW9uEiAKGGVucXVldWVMb2NrVGltZW91dE1pbGxpcxgBIAEoAxIb",
-            "ChNzY2FuRnJlcXVlbmN5TWlsbGlzGAIgASgDEhsKE21heFRpY2tldHNUb1By",
-            "b2Nlc3MYAyABKAUaOQoSRGVja3NDb25maWd1cmF0aW9uEiMKG2NhY2hlZERl",
-            "Y2tUaW1lVG9MaXZlTWludXRlcxgBIAEoAxoyChhBcHBsaWNhdGlvbkNvbmZp",
-            "Z3VyYXRpb24SFgoOdXNlQnJvYWRjYXN0ZXIYASABKAgaLwoWTWlncmF0aW9u",
-            "Q29uZmlndXJhdGlvbhIVCg1zaG91bGRNaWdyYXRlGAEgASgIGmkKFE1ldHJp",
-            "Y3NDb25maWd1cmF0aW9uEgwKBHBvcnQYASABKAUSFQoNbGl2ZW5lc3NSb3V0",
-            "ZRgCIAEoCRIWCg5yZWFkaW5lc3NSb3V0ZRgDIAEoCRIUCgxtZXRyaWNzUm91",
-            "dGUYBCABKAkaKwoYUmF0ZUxpbWl0ZXJDb25maWd1cmF0aW9uEg8KB2VuYWJs",
-            "ZWQYASABKAgaTAoTSmFlZ2VyQ29uZmlndXJhdGlvbhIPCgdlbmFibGVkGAEg",
-            "ASgIEhEKCWFnZW50SG9zdBgCIAEoCRIRCglhZ2VudFBvcnQYAyABKAUahAEK",
-            "ElZlcnR4Q29uZmlndXJhdGlvbhIjCht1c2VJbmZpbmlzcGFuQ2x1c3Rlck1h",
-            "bmFnZXIYASABKAgSGgoNaW5maW5zcGFuUG9ydBgCIAEoBUgAiAEBEhsKE2lu",
-            "ZmluaXNwYW5BZGRyZXNzZXMYAyABKAlCEAoOX2luZmluc3BhblBvcnQaFAoS",
-            "Q2FyZHNDb25maWd1cmF0aW9uGiMKFEdyYXBoUUxDb25maWd1cmF0aW9uEgsK",
-            "A3VybBgFIAEoCUoECAQQBSK2AgoTQ2xpZW50Q29uZmlndXJhdGlvbhJJCghh",
-            "Y2NvdW50cxgBIAEoCzI3LmhpZGRlbnN3aXRjaC5DbGllbnRDb25maWd1cmF0",
-            "aW9uLkFjY291bnRzQ29uZmlndXJhdGlvbhJHCgdncmFwaFFsGAIgASgLMjYu",
-            "aGlkZGVuc3dpdGNoLkNsaWVudENvbmZpZ3VyYXRpb24uR3JhcGhRbENvbmZp",
-            "Z3VyYXRpb24aXwoVQWNjb3VudHNDb25maWd1cmF0aW9uEiAKGGtleWNsb2Fr",
-            "UmVzZXRQYXNzd29yZFVybBgBIAEoCRIkChxrZXljbG9ha0FjY291bnRNYW5h",
-            "Z2VtZW50VXJsGAIgASgJGioKFEdyYXBoUWxDb25maWd1cmF0aW9uEhIKCmdy",
-            "YXBoUWxVcmwYASABKAkiOAoPR2V0Q2FyZHNSZXF1ZXN0EhUKDUlmX05vbmVf",
-            "TWF0Y2gYASABKAkSDgoGdXNlcklkGAIgASgJIqEBChBHZXRDYXJkc1Jlc3Bv",
-            "bnNlEjcKB2NvbnRlbnQYASABKAsyJi5oaWRkZW5zd2l0Y2guR2V0Q2FyZHNS",
-            "ZXNwb25zZS5Db250ZW50Eg8KB3ZlcnNpb24YAiABKAkSEAoIY2FjaGVkT2sY",
-            "AyABKAgaMQoHQ29udGVudBImCgVjYXJkcxgBIAMoCzIXLnNwZWxsc291cmNl",
-            "LkNhcmRSZWNvcmQiOQoMTG9naW5SZXF1ZXN0EhcKD3VzZXJuYW1lT3JFbWFp",
-            "bBgBIAEoCRIQCghwYXNzd29yZBgCIAEoCSJnChRDcmVhdGVBY2NvdW50UmVx",
-            "dWVzdBINCgVlbWFpbBgBIAEoCRIQCgh1c2VybmFtZRgCIAEoCRIQCghwYXNz",
-            "d29yZBgDIAEoCRINCgVkZWNrcxgEIAEoCBINCgVndWVzdBgFIAEoCCIsChVD",
-            "aGFuZ2VQYXNzd29yZFJlcXVlc3QSEwoLbmV3UGFzc3dvcmQYASABKAkiggEK",
-            "EkxvZ2luT3JDcmVhdGVSZXBseRI+ChNhY2Nlc3NUb2tlblJlc3BvbnNlGAEg",
-            "ASgLMiEuaGlkZGVuc3dpdGNoLkFjY2Vzc1Rva2VuUmVzcG9uc2USLAoKdXNl",
-            "ckVudGl0eRgCIAEoCzIYLmhpZGRlbnN3aXRjaC5Vc2VyRW50aXR5IiQKE0Fj",
-            "Y2Vzc1Rva2VuUmVzcG9uc2USDQoFdG9rZW4YASABKAkiTwoKVXNlckVudGl0",
-            "eRIKCgJpZBgBIAEoCRINCgVlbWFpbBgCIAEoCRIQCgh1c2VybmFtZRgKIAEo",
-            "CRIUCgxwcml2YWN5VG9rZW4YCyABKAkiIQoSR2V0QWNjb3VudHNSZXF1ZXN0",
-            "EgsKA2lkcxgBIAMoCSJCChBHZXRBY2NvdW50c1JlcGx5Ei4KDHVzZXJFbnRp",
-            "dGllcxgBIAMoCzIYLmhpZGRlbnN3aXRjaC5Vc2VyRW50aXR5MtQCCg9VbmF1",
-            "dGhlbnRpY2F0ZWQSVwoNQ3JlYXRlQWNjb3VudBIiLmhpZGRlbnN3aXRjaC5D",
-            "cmVhdGVBY2NvdW50UmVxdWVzdBogLmhpZGRlbnN3aXRjaC5Mb2dpbk9yQ3Jl",
-            "YXRlUmVwbHkiABJHCgVMb2dpbhIaLmhpZGRlbnN3aXRjaC5Mb2dpblJlcXVl",
-            "c3QaIC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5IgASTgoLVmVy",
-            "aWZ5VG9rZW4SIS5oaWRkZW5zd2l0Y2guQWNjZXNzVG9rZW5SZXNwb25zZRoa",
-            "Lmdvb2dsZS5wcm90b2J1Zi5Cb29sVmFsdWUiABJPChBHZXRDb25maWd1cmF0",
-            "aW9uEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GiEuaGlkZGVuc3dpdGNoLkNs",
-            "aWVudENvbmZpZ3VyYXRpb24iADJjChRVbmF1dGhlbnRpY2F0ZWRDYXJkcxJL",
-            "CghHZXRDYXJkcxIdLmhpZGRlbnN3aXRjaC5HZXRDYXJkc1JlcXVlc3QaHi5o",
-            "aWRkZW5zd2l0Y2guR2V0Q2FyZHNSZXNwb25zZSIAMmcKEkF1dGhlbnRpY2F0",
-            "ZWRDYXJkcxJRCg5HZXRDYXJkc0J5VXNlchIdLmhpZGRlbnN3aXRjaC5HZXRD",
-            "YXJkc1JlcXVlc3QaHi5oaWRkZW5zd2l0Y2guR2V0Q2FyZHNSZXNwb25zZSIA",
-            "Ms8CCghBY2NvdW50cxJGCgpHZXRBY2NvdW50EhYuZ29vZ2xlLnByb3RvYnVm",
-            "LkVtcHR5Gh4uaGlkZGVuc3dpdGNoLkdldEFjY291bnRzUmVwbHkiABJRCgtH",
-            "ZXRBY2NvdW50cxIgLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50c1JlcXVlc3Qa",
-            "Hi5oaWRkZW5zd2l0Y2guR2V0QWNjb3VudHNSZXBseSIAElkKDkNoYW5nZVBh",
-            "c3N3b3JkEiMuaGlkZGVuc3dpdGNoLkNoYW5nZVBhc3N3b3JkUmVxdWVzdBog",
-            "LmhpZGRlbnN3aXRjaC5Mb2dpbk9yQ3JlYXRlUmVwbHkiABJNChlSZXF1ZXN0",
-            "UGFzc3dvcmRSZXNldEVtYWlsEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhYu",
-            "Z29vZ2xlLnByb3RvYnVmLkVtcHR5IgAyTAoFR2FtZXMSQwoJSXNJbk1hdGNo",
-            "EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhwuZ29vZ2xlLnByb3RvYnVmLlN0",
-            "cmluZ1ZhbHVlIgBCNwoeY29tLmhpZGRlbnN3aXRjaC5mcmFtZXdvcmsucnBj",
-            "UACqAhJIaWRkZW5Td2l0Y2guUHJvdG9iBnByb3RvMw=="));
+            "c3RQb3J0VXNlckgAEg0KA3VyaRgCIAEoCUgAEl8KD3NlbnRpbmVsU2VydmVy",
+            "cxgDIAEoCzJELmhpZGRlbnN3aXRjaC5TZXJ2ZXJDb25maWd1cmF0aW9uLlJl",
+            "ZGlzQ29uZmlndXJhdGlvbi5TZW50aW5lbFNlcnZlcnNIABo4CgxIb3N0UG9y",
+            "dFVzZXISDAoEaG9zdBgBIAEoCRIMCgRwb3J0GAIgASgFEgwKBHVzZXIYAyAB",
+            "KAkaQAoPU2VudGluZWxTZXJ2ZXJzEhkKEXNlbnRpbmVsQWRkcmVzc2VzGAEg",
+            "AygJEhIKCm1hc3Rlck5hbWUYAiABKAlCDAoKY29ubmVjdGlvbhqVAQoRR3Jw",
+            "Y0NvbmZpZ3VyYXRpb24SIQoZc2VydmVyS2VlcEFsaXZlVGltZU1pbGxpcxgB",
+            "IAEoAxIkChxzZXJ2ZXJLZWVwQWxpdmVUaW1lb3V0TWlsbGlzGAIgASgDEikK",
+            "IXNlcnZlclBlcm1pdEtlZXBBbGl2ZVdpdGhvdXRDYWxscxgDIAEoCBIMCgRw",
+            "b3J0GAQgASgFGnYKGE1hdGNobWFraW5nQ29uZmlndXJhdGlvbhIgChhlbnF1",
+            "ZXVlTG9ja1RpbWVvdXRNaWxsaXMYASABKAMSGwoTc2NhbkZyZXF1ZW5jeU1p",
+            "bGxpcxgCIAEoAxIbChNtYXhUaWNrZXRzVG9Qcm9jZXNzGAMgASgFGjkKEkRl",
+            "Y2tzQ29uZmlndXJhdGlvbhIjChtjYWNoZWREZWNrVGltZVRvTGl2ZU1pbnV0",
+            "ZXMYASABKAMaMgoYQXBwbGljYXRpb25Db25maWd1cmF0aW9uEhYKDnVzZUJy",
+            "b2FkY2FzdGVyGAEgASgIGi8KFk1pZ3JhdGlvbkNvbmZpZ3VyYXRpb24SFQoN",
+            "c2hvdWxkTWlncmF0ZRgBIAEoCBppChRNZXRyaWNzQ29uZmlndXJhdGlvbhIM",
+            "CgRwb3J0GAEgASgFEhUKDWxpdmVuZXNzUm91dGUYAiABKAkSFgoOcmVhZGlu",
+            "ZXNzUm91dGUYAyABKAkSFAoMbWV0cmljc1JvdXRlGAQgASgJGisKGFJhdGVM",
+            "aW1pdGVyQ29uZmlndXJhdGlvbhIPCgdlbmFibGVkGAEgASgIGkwKE0phZWdl",
+            "ckNvbmZpZ3VyYXRpb24SDwoHZW5hYmxlZBgBIAEoCBIRCglhZ2VudEhvc3QY",
+            "AiABKAkSEQoJYWdlbnRQb3J0GAMgASgFGoQBChJWZXJ0eENvbmZpZ3VyYXRp",
+            "b24SIwobdXNlSW5maW5pc3BhbkNsdXN0ZXJNYW5hZ2VyGAEgASgIEhoKDWlu",
+            "Zmluc3BhblBvcnQYAiABKAVIAIgBARIbChNpbmZpbmlzcGFuQWRkcmVzc2Vz",
+            "GAMgASgJQhAKDl9pbmZpbnNwYW5Qb3J0GhQKEkNhcmRzQ29uZmlndXJhdGlv",
+            "bhoxChRHcmFwaFFMQ29uZmlndXJhdGlvbhILCgN1cmwYBSABKAkSDAoEcG9y",
+            "dBgGIAEoBUoECAQQBSK2AgoTQ2xpZW50Q29uZmlndXJhdGlvbhJJCghhY2Nv",
+            "dW50cxgBIAEoCzI3LmhpZGRlbnN3aXRjaC5DbGllbnRDb25maWd1cmF0aW9u",
+            "LkFjY291bnRzQ29uZmlndXJhdGlvbhJHCgdncmFwaFFsGAIgASgLMjYuaGlk",
+            "ZGVuc3dpdGNoLkNsaWVudENvbmZpZ3VyYXRpb24uR3JhcGhRbENvbmZpZ3Vy",
+            "YXRpb24aXwoVQWNjb3VudHNDb25maWd1cmF0aW9uEiAKGGtleWNsb2FrUmVz",
+            "ZXRQYXNzd29yZFVybBgBIAEoCRIkChxrZXljbG9ha0FjY291bnRNYW5hZ2Vt",
+            "ZW50VXJsGAIgASgJGioKFEdyYXBoUWxDb25maWd1cmF0aW9uEhIKCmdyYXBo",
+            "UWxVcmwYASABKAkiOAoPR2V0Q2FyZHNSZXF1ZXN0EhUKDUlmX05vbmVfTWF0",
+            "Y2gYASABKAkSDgoGdXNlcklkGAIgASgJIqEBChBHZXRDYXJkc1Jlc3BvbnNl",
+            "EjcKB2NvbnRlbnQYASABKAsyJi5oaWRkZW5zd2l0Y2guR2V0Q2FyZHNSZXNw",
+            "b25zZS5Db250ZW50Eg8KB3ZlcnNpb24YAiABKAkSEAoIY2FjaGVkT2sYAyAB",
+            "KAgaMQoHQ29udGVudBImCgVjYXJkcxgBIAMoCzIXLnNwZWxsc291cmNlLkNh",
+            "cmRSZWNvcmQiOQoMTG9naW5SZXF1ZXN0EhcKD3VzZXJuYW1lT3JFbWFpbBgB",
+            "IAEoCRIQCghwYXNzd29yZBgCIAEoCSJnChRDcmVhdGVBY2NvdW50UmVxdWVz",
+            "dBINCgVlbWFpbBgBIAEoCRIQCgh1c2VybmFtZRgCIAEoCRIQCghwYXNzd29y",
+            "ZBgDIAEoCRINCgVkZWNrcxgEIAEoCBINCgVndWVzdBgFIAEoCCIsChVDaGFu",
+            "Z2VQYXNzd29yZFJlcXVlc3QSEwoLbmV3UGFzc3dvcmQYASABKAkiggEKEkxv",
+            "Z2luT3JDcmVhdGVSZXBseRI+ChNhY2Nlc3NUb2tlblJlc3BvbnNlGAEgASgL",
+            "MiEuaGlkZGVuc3dpdGNoLkFjY2Vzc1Rva2VuUmVzcG9uc2USLAoKdXNlckVu",
+            "dGl0eRgCIAEoCzIYLmhpZGRlbnN3aXRjaC5Vc2VyRW50aXR5IiQKE0FjY2Vz",
+            "c1Rva2VuUmVzcG9uc2USDQoFdG9rZW4YASABKAkiTwoKVXNlckVudGl0eRIK",
+            "CgJpZBgBIAEoCRINCgVlbWFpbBgCIAEoCRIQCgh1c2VybmFtZRgKIAEoCRIU",
+            "Cgxwcml2YWN5VG9rZW4YCyABKAkiIQoSR2V0QWNjb3VudHNSZXF1ZXN0EgsK",
+            "A2lkcxgBIAMoCSJCChBHZXRBY2NvdW50c1JlcGx5Ei4KDHVzZXJFbnRpdGll",
+            "cxgBIAMoCzIYLmhpZGRlbnN3aXRjaC5Vc2VyRW50aXR5MtQCCg9VbmF1dGhl",
+            "bnRpY2F0ZWQSVwoNQ3JlYXRlQWNjb3VudBIiLmhpZGRlbnN3aXRjaC5DcmVh",
+            "dGVBY2NvdW50UmVxdWVzdBogLmhpZGRlbnN3aXRjaC5Mb2dpbk9yQ3JlYXRl",
+            "UmVwbHkiABJHCgVMb2dpbhIaLmhpZGRlbnN3aXRjaC5Mb2dpblJlcXVlc3Qa",
+            "IC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5IgASTgoLVmVyaWZ5",
+            "VG9rZW4SIS5oaWRkZW5zd2l0Y2guQWNjZXNzVG9rZW5SZXNwb25zZRoaLmdv",
+            "b2dsZS5wcm90b2J1Zi5Cb29sVmFsdWUiABJPChBHZXRDb25maWd1cmF0aW9u",
+            "EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GiEuaGlkZGVuc3dpdGNoLkNsaWVu",
+            "dENvbmZpZ3VyYXRpb24iADJjChRVbmF1dGhlbnRpY2F0ZWRDYXJkcxJLCghH",
+            "ZXRDYXJkcxIdLmhpZGRlbnN3aXRjaC5HZXRDYXJkc1JlcXVlc3QaHi5oaWRk",
+            "ZW5zd2l0Y2guR2V0Q2FyZHNSZXNwb25zZSIAMmcKEkF1dGhlbnRpY2F0ZWRD",
+            "YXJkcxJRCg5HZXRDYXJkc0J5VXNlchIdLmhpZGRlbnN3aXRjaC5HZXRDYXJk",
+            "c1JlcXVlc3QaHi5oaWRkZW5zd2l0Y2guR2V0Q2FyZHNSZXNwb25zZSIAMs8C",
+            "CghBY2NvdW50cxJGCgpHZXRBY2NvdW50EhYuZ29vZ2xlLnByb3RvYnVmLkVt",
+            "cHR5Gh4uaGlkZGVuc3dpdGNoLkdldEFjY291bnRzUmVwbHkiABJRCgtHZXRB",
+            "Y2NvdW50cxIgLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50c1JlcXVlc3QaHi5o",
+            "aWRkZW5zd2l0Y2guR2V0QWNjb3VudHNSZXBseSIAElkKDkNoYW5nZVBhc3N3",
+            "b3JkEiMuaGlkZGVuc3dpdGNoLkNoYW5nZVBhc3N3b3JkUmVxdWVzdBogLmhp",
+            "ZGRlbnN3aXRjaC5Mb2dpbk9yQ3JlYXRlUmVwbHkiABJNChlSZXF1ZXN0UGFz",
+            "c3dvcmRSZXNldEVtYWlsEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhYuZ29v",
+            "Z2xlLnByb3RvYnVmLkVtcHR5IgAyTAoFR2FtZXMSQwoJSXNJbk1hdGNoEhYu",
+            "Z29vZ2xlLnByb3RvYnVmLkVtcHR5GhwuZ29vZ2xlLnByb3RvYnVmLlN0cmlu",
+            "Z1ZhbHVlIgBCNwoeY29tLmhpZGRlbnN3aXRjaC5mcmFtZXdvcmsucnBjUACq",
+            "AhJIaWRkZW5Td2l0Y2guUHJvdG9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Spellsource.Proto.SpellsourceReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Parser, new[]{ "Pg", "Keycloak", "Redis", "GrpcConfiguration", "Matchmaking", "Application", "Decks", "Migration", "Metrics", "RateLimiter", "Jaeger", "Vertx", "Cards", "Graphql" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration.Parser, new[]{ "Host", "Port", "Database", "User", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration.Parser, new[]{ "AuthUrl", "PublicAuthUrl", "AdminUsername", "AdminPassword", "ClientId", "ClientSecret", "RealmDisplayName", "RealmId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Parser, new[]{ "HostPortUser", "Uri" }, new[]{ "Connection" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser.Parser, new[]{ "Host", "Port", "User" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Parser, new[]{ "HostPortUser", "Uri", "SentinelServers" }, new[]{ "Connection" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser.Parser, new[]{ "Host", "Port", "User" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.SentinelServers), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.SentinelServers.Parser, new[]{ "SentinelAddresses", "MasterName" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration.Parser, new[]{ "ServerKeepAliveTimeMillis", "ServerKeepAliveTimeoutMillis", "ServerPermitKeepAliveWithoutCalls", "Port" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration.Parser, new[]{ "EnqueueLockTimeoutMillis", "ScanFrequencyMillis", "MaxTicketsToProcess" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration.Parser, new[]{ "CachedDeckTimeToLiveMinutes" }, null, null, null, null),
@@ -144,7 +149,7 @@ namespace HiddenSwitch.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.JaegerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.JaegerConfiguration.Parser, new[]{ "Enabled", "AgentHost", "AgentPort" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration.Parser, new[]{ "UseInfinispanClusterManager", "InfinspanPort", "InfinispanAddresses" }, new[]{ "InfinspanPort" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.CardsConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.CardsConfiguration.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.GraphQLConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.GraphQLConfiguration.Parser, new[]{ "Url" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.GraphQLConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.GraphQLConfiguration.Parser, new[]{ "Url", "Port" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ClientConfiguration), global::HiddenSwitch.Proto.ClientConfiguration.Parser, new[]{ "Accounts", "GraphQl" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration), global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration.Parser, new[]{ "KeycloakResetPasswordUrl", "KeycloakAccountManagementUrl" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ClientConfiguration.Types.GraphQlConfiguration), global::HiddenSwitch.Proto.ClientConfiguration.Types.GraphQlConfiguration.Parser, new[]{ "GraphQlUrl" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsRequest), global::HiddenSwitch.Proto.GetCardsRequest.Parser, new[]{ "IfNoneMatch", "UserId" }, null, null, null, null),
@@ -1823,6 +1828,9 @@ namespace HiddenSwitch.Proto {
             case ConnectionOneofCase.Uri:
               Uri = other.Uri;
               break;
+            case ConnectionOneofCase.SentinelServers:
+              SentinelServers = other.SentinelServers.Clone();
+              break;
           }
 
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -1872,12 +1880,25 @@ namespace HiddenSwitch.Proto {
           }
         }
 
+        /// <summary>Field number for the "sentinelServers" field.</summary>
+        public const int SentinelServersFieldNumber = 3;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.SentinelServers SentinelServers {
+          get { return connectionCase_ == ConnectionOneofCase.SentinelServers ? (global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.SentinelServers) connection_ : null; }
+          set {
+            connection_ = value;
+            connectionCase_ = value == null ? ConnectionOneofCase.None : ConnectionOneofCase.SentinelServers;
+          }
+        }
+
         private object connection_;
         /// <summary>Enum of possible cases for the "connection" oneof.</summary>
         public enum ConnectionOneofCase {
           None = 0,
           HostPortUser = 1,
           Uri = 2,
+          SentinelServers = 3,
         }
         private ConnectionOneofCase connectionCase_ = ConnectionOneofCase.None;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1910,6 +1931,7 @@ namespace HiddenSwitch.Proto {
           }
           if (!object.Equals(HostPortUser, other.HostPortUser)) return false;
           if (Uri != other.Uri) return false;
+          if (!object.Equals(SentinelServers, other.SentinelServers)) return false;
           if (ConnectionCase != other.ConnectionCase) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
@@ -1920,6 +1942,7 @@ namespace HiddenSwitch.Proto {
           int hash = 1;
           if (connectionCase_ == ConnectionOneofCase.HostPortUser) hash ^= HostPortUser.GetHashCode();
           if (HasUri) hash ^= Uri.GetHashCode();
+          if (connectionCase_ == ConnectionOneofCase.SentinelServers) hash ^= SentinelServers.GetHashCode();
           hash ^= (int) connectionCase_;
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
@@ -1947,6 +1970,10 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(18);
             output.WriteString(Uri);
           }
+          if (connectionCase_ == ConnectionOneofCase.SentinelServers) {
+            output.WriteRawTag(26);
+            output.WriteMessage(SentinelServers);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -1965,6 +1992,10 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(18);
             output.WriteString(Uri);
           }
+          if (connectionCase_ == ConnectionOneofCase.SentinelServers) {
+            output.WriteRawTag(26);
+            output.WriteMessage(SentinelServers);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(ref output);
           }
@@ -1980,6 +2011,9 @@ namespace HiddenSwitch.Proto {
           }
           if (HasUri) {
             size += 1 + pb::CodedOutputStream.ComputeStringSize(Uri);
+          }
+          if (connectionCase_ == ConnectionOneofCase.SentinelServers) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(SentinelServers);
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -2002,6 +2036,12 @@ namespace HiddenSwitch.Proto {
               break;
             case ConnectionOneofCase.Uri:
               Uri = other.Uri;
+              break;
+            case ConnectionOneofCase.SentinelServers:
+              if (SentinelServers == null) {
+                SentinelServers = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.SentinelServers();
+              }
+              SentinelServers.MergeFrom(other.SentinelServers);
               break;
           }
 
@@ -2037,6 +2077,15 @@ namespace HiddenSwitch.Proto {
                 Uri = input.ReadString();
                 break;
               }
+              case 26: {
+                global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.SentinelServers subBuilder = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.SentinelServers();
+                if (connectionCase_ == ConnectionOneofCase.SentinelServers) {
+                  subBuilder.MergeFrom(SentinelServers);
+                }
+                input.ReadMessage(subBuilder);
+                SentinelServers = subBuilder;
+                break;
+              }
             }
           }
         #endif
@@ -2067,6 +2116,15 @@ namespace HiddenSwitch.Proto {
               }
               case 18: {
                 Uri = input.ReadString();
+                break;
+              }
+              case 26: {
+                global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.SentinelServers subBuilder = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.SentinelServers();
+                if (connectionCase_ == ConnectionOneofCase.SentinelServers) {
+                  subBuilder.MergeFrom(SentinelServers);
+                }
+                input.ReadMessage(subBuilder);
+                SentinelServers = subBuilder;
                 break;
               }
             }
@@ -2343,6 +2401,231 @@ namespace HiddenSwitch.Proto {
                   }
                   case 26: {
                     User = input.ReadString();
+                    break;
+                  }
+                }
+              }
+            }
+            #endif
+
+          }
+
+          [global::System.SerializableAttribute]
+          [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+          public sealed partial class SentinelServers : pb::IMessage<SentinelServers>
+          #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+              , pb::IBufferMessage
+          #endif
+          {
+            private static readonly pb::MessageParser<SentinelServers> _parser = new pb::MessageParser<SentinelServers>(() => new SentinelServers());
+            private pb::UnknownFieldSet _unknownFields;
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public static pb::MessageParser<SentinelServers> Parser { get { return _parser; } }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public static pbr::MessageDescriptor Descriptor {
+              get { return global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Descriptor.NestedTypes[1]; }
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            pbr::MessageDescriptor pb::IMessage.Descriptor {
+              get { return Descriptor; }
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public SentinelServers() {
+              OnConstruction();
+            }
+
+            partial void OnConstruction();
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public SentinelServers(SentinelServers other) : this() {
+              sentinelAddresses_ = other.sentinelAddresses_.Clone();
+              masterName_ = other.masterName_;
+              _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public SentinelServers Clone() {
+              return new SentinelServers(this);
+            }
+
+            /// <summary>Field number for the "sentinelAddresses" field.</summary>
+            public const int SentinelAddressesFieldNumber = 1;
+            private static readonly pb::FieldCodec<string> _repeated_sentinelAddresses_codec
+                = pb::FieldCodec.ForString(10);
+            private readonly pbc::RepeatedField<string> sentinelAddresses_ = new pbc::RepeatedField<string>();
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public pbc::RepeatedField<string> SentinelAddresses {
+              get { return sentinelAddresses_; }
+            }
+
+            /// <summary>Field number for the "masterName" field.</summary>
+            public const int MasterNameFieldNumber = 2;
+            private string masterName_ = "";
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public string MasterName {
+              get { return masterName_; }
+              set {
+                masterName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+              }
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public override bool Equals(object other) {
+              return Equals(other as SentinelServers);
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public bool Equals(SentinelServers other) {
+              if (ReferenceEquals(other, null)) {
+                return false;
+              }
+              if (ReferenceEquals(other, this)) {
+                return true;
+              }
+              if(!sentinelAddresses_.Equals(other.sentinelAddresses_)) return false;
+              if (MasterName != other.MasterName) return false;
+              return Equals(_unknownFields, other._unknownFields);
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public override int GetHashCode() {
+              int hash = 1;
+              hash ^= sentinelAddresses_.GetHashCode();
+              if (MasterName.Length != 0) hash ^= MasterName.GetHashCode();
+              if (_unknownFields != null) {
+                hash ^= _unknownFields.GetHashCode();
+              }
+              return hash;
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public override string ToString() {
+              return pb::JsonFormatter.ToDiagnosticString(this);
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public void WriteTo(pb::CodedOutputStream output) {
+            #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+              output.WriteRawMessage(this);
+            #else
+              sentinelAddresses_.WriteTo(output, _repeated_sentinelAddresses_codec);
+              if (MasterName.Length != 0) {
+                output.WriteRawTag(18);
+                output.WriteString(MasterName);
+              }
+              if (_unknownFields != null) {
+                _unknownFields.WriteTo(output);
+              }
+            #endif
+            }
+
+            #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+              sentinelAddresses_.WriteTo(ref output, _repeated_sentinelAddresses_codec);
+              if (MasterName.Length != 0) {
+                output.WriteRawTag(18);
+                output.WriteString(MasterName);
+              }
+              if (_unknownFields != null) {
+                _unknownFields.WriteTo(ref output);
+              }
+            }
+            #endif
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public int CalculateSize() {
+              int size = 0;
+              size += sentinelAddresses_.CalculateSize(_repeated_sentinelAddresses_codec);
+              if (MasterName.Length != 0) {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(MasterName);
+              }
+              if (_unknownFields != null) {
+                size += _unknownFields.CalculateSize();
+              }
+              return size;
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public void MergeFrom(SentinelServers other) {
+              if (other == null) {
+                return;
+              }
+              sentinelAddresses_.Add(other.sentinelAddresses_);
+              if (other.MasterName.Length != 0) {
+                MasterName = other.MasterName;
+              }
+              _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            public void MergeFrom(pb::CodedInputStream input) {
+            #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+              input.ReadRawMessage(this);
+            #else
+              uint tag;
+              while ((tag = input.ReadTag()) != 0) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
+                  default:
+                    _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                    break;
+                  case 10: {
+                    sentinelAddresses_.AddEntriesFrom(input, _repeated_sentinelAddresses_codec);
+                    break;
+                  }
+                  case 18: {
+                    MasterName = input.ReadString();
+                    break;
+                  }
+                }
+              }
+            #endif
+            }
+
+            #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+            void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+              uint tag;
+              while ((tag = input.ReadTag()) != 0) {
+              if ((tag & 7) == 4) {
+                // Abort on any end group tag.
+                return;
+              }
+              switch(tag) {
+                  default:
+                    _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                    break;
+                  case 10: {
+                    sentinelAddresses_.AddEntriesFrom(ref input, _repeated_sentinelAddresses_codec);
+                    break;
+                  }
+                  case 18: {
+                    MasterName = input.ReadString();
                     break;
                   }
                 }
@@ -4808,6 +5091,7 @@ namespace HiddenSwitch.Proto {
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public GraphQLConfiguration(GraphQLConfiguration other) : this() {
           url_ = other.url_;
+          port_ = other.port_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -4829,6 +5113,18 @@ namespace HiddenSwitch.Proto {
           }
         }
 
+        /// <summary>Field number for the "port" field.</summary>
+        public const int PortFieldNumber = 6;
+        private int port_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int Port {
+          get { return port_; }
+          set {
+            port_ = value;
+          }
+        }
+
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
@@ -4845,6 +5141,7 @@ namespace HiddenSwitch.Proto {
             return true;
           }
           if (Url != other.Url) return false;
+          if (Port != other.Port) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -4853,6 +5150,7 @@ namespace HiddenSwitch.Proto {
         public override int GetHashCode() {
           int hash = 1;
           if (Url.Length != 0) hash ^= Url.GetHashCode();
+          if (Port != 0) hash ^= Port.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -4875,6 +5173,10 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(42);
             output.WriteString(Url);
           }
+          if (Port != 0) {
+            output.WriteRawTag(48);
+            output.WriteInt32(Port);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -4889,6 +5191,10 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(42);
             output.WriteString(Url);
           }
+          if (Port != 0) {
+            output.WriteRawTag(48);
+            output.WriteInt32(Port);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(ref output);
           }
@@ -4901,6 +5207,9 @@ namespace HiddenSwitch.Proto {
           int size = 0;
           if (Url.Length != 0) {
             size += 1 + pb::CodedOutputStream.ComputeStringSize(Url);
+          }
+          if (Port != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(Port);
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -4916,6 +5225,9 @@ namespace HiddenSwitch.Proto {
           }
           if (other.Url.Length != 0) {
             Url = other.Url;
+          }
+          if (other.Port != 0) {
+            Port = other.Port;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -4940,6 +5252,10 @@ namespace HiddenSwitch.Proto {
                 Url = input.ReadString();
                 break;
               }
+              case 48: {
+                Port = input.ReadInt32();
+                break;
+              }
             }
           }
         #endif
@@ -4961,6 +5277,10 @@ namespace HiddenSwitch.Proto {
                 break;
               case 42: {
                 Url = input.ReadString();
+                break;
+              }
+              case 48: {
+                Port = input.ReadInt32();
                 break;
               }
             }

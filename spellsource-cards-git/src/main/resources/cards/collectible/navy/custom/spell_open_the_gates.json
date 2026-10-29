@@ -19,7 +19,8 @@
         "card": "token_whelp"
       },
       "persistentOwner": true
-    }
+    },
+    "name": "Open the Gates"
   },
   "collectible": true,
   "set": "CUSTOM",

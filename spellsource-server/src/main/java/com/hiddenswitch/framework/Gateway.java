@@ -89,7 +89,16 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 					.failureHandler(rc -> {
 						var response = rc.response();
 						response.setStatusCode(200);
-						response.putHeader("content-type", "application/grpc");
+						var reqContentType = rc.request().getHeader("content-type");
+						var respContentType = "application/grpc";
+						if (reqContentType != null) {
+							if (reqContentType.startsWith("application/grpc-web-text")) {
+								respContentType = "application/grpc-web-text";
+							} else if (reqContentType.startsWith("application/grpc-web")) {
+								respContentType = "application/grpc-web";
+							}
+						}
+						response.putHeader("content-type", respContentType);
 						response.putHeader("grpc-status", GrpcStatus.UNAUTHENTICATED.toString());
 						response.putHeader("grpc-message", "Unauthenticated");
 						response.end();

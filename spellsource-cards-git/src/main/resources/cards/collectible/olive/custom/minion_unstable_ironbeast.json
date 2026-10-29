@@ -15,11 +15,13 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 3
+        "value": 3,
+        "name": "Unstable Ironbeast's Blessing"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Unstable Ironbeast's Guard"
       }
     ]
   },

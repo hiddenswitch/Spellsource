@@ -16,7 +16,8 @@
       "filter": {
         "class": "RaceFilter",
         "race": "ELEMENTAL"
-      }
+      },
+      "name": "Tempest Elemental's Shroud"
     }
   },
   "attributes": {

@@ -8,7 +8,8 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddAttributeSpell",
-    "attribute": "TAKE_DOUBLE_DAMAGE"
+    "attribute": "TAKE_DOUBLE_DAMAGE",
+    "name": "Marked for Death"
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

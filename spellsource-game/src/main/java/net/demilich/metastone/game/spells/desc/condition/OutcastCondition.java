@@ -23,7 +23,7 @@ public final class OutcastCondition extends Condition {
 	}
 
 	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+	public boolean isFulfilled(GameContext context, Player player, Entity source, Entity target) {
 		// If already played, check the triggered attribute
 		if (source.hasAttribute(Attribute.OUTCAST_TRIGGERED)) {
 			return true;

@@ -13,23 +13,20 @@ public class TargetSelectionFilter extends EntityFilter {
 		super(desc);
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host, EntityReference secondaryTarget, TargetSelection targetSelection) {
 		var card = entity.getSourceCard();
 
-		if (getDesc().containsKey(EntityFilterArg.SECONDARY_TARGET) && card.isSpell()) {
-			Entity target = context.resolveSingleTarget(player, host, (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET));
+		if (secondaryTarget != null && card.isSpell()) {
+			Entity target = context.resolveSingleTarget(player, host, secondaryTarget);
 
 			if (target == null || (card.isSpell() && !card.canBeCastOn(context, player, target))) {
 				return false;
 			}
-			TargetSelection targetSelection = card.getTargetSelection();
-			List<Entity> entities = context.getTargetLogic().getEntities(context, player, targetSelection, true);
+			TargetSelection cardTargetSelection = card.getTargetSelection();
+			List<Entity> entities = context.getTargetLogic().getEntities(context, player, cardTargetSelection, true);
 
 			return entities.stream().anyMatch(e -> e.getId() == target.getId());
 		}
-
-		var targetSelection = (TargetSelection) getDesc().get(EntityFilterArg.TARGET_SELECTION);
 
 		if (targetSelection == null) {
 			targetSelection = TargetSelection.NONE;

@@ -12,7 +12,8 @@
     "targetSelection": "ANY",
     "spell": {
       "class": "TemporaryAttackSpell",
-      "value": 4
+      "value": 4,
+      "name": "Drakonid Commander's Rally"
     }
   },
   "attributes": {

@@ -1,0 +1,31 @@
+{
+  "name": "Turn Draw",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Players have a maximum hand size of 10 cards and draw 1 card at the start of their turn.",
+  "onInitialized": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SetAttributeSpell",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "MAX_HAND_SIZE",
+        "value": 10
+      },
+      {
+        "class": "SetAttributeSpell",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "CARDS_DRAWN_PER_TURN",
+        "value": 1
+      }
+    ]
+  },
+  "attributes": {
+    "HIDDEN": true
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

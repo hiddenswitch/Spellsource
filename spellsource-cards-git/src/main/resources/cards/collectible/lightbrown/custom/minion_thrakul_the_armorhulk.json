@@ -22,18 +22,21 @@
       "spells": [
         {
           "class": "BuffSpell",
-          "armorBonus": -20
+          "armorBonus": -20,
+          "name": "Thra'kul's Aegis"
         },
         {
           "class": "AddAttributeSpell",
           "target": "SELF",
-          "attribute": "CHARGE"
+          "attribute": "CHARGE",
+          "name": "Thra'kul's Blitz"
         },
         {
           "class": "BuffSpell",
           "target": "SELF",
           "attackBonus": 10,
-          "hpBonus": 10
+          "hpBonus": 10,
+          "name": "Thra'kul's Empowerment"
         }
       ]
     }

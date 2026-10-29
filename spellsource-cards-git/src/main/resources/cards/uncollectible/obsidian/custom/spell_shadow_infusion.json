@@ -15,7 +15,8 @@
         "target": "SELF"
       },
       "howMany": 2
-    }
+    },
+    "name": "Shadow Infusion"
   },
   "collectible": true,
   "set": "CUSTOM",

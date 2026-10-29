@@ -9,7 +9,8 @@
   "spell": {
     "class": "BuffSpell",
     "attackBonus": 4,
-    "hpBonus": 1
+    "hpBonus": 1,
+    "name": "Refurbish"
   },
   "collectible": true,
   "set": "GRAVEYARD",

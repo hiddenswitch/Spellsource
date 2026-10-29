@@ -11,7 +11,8 @@
     "class": "HeroPowerSpell",
     "spell": {
       "class": "TemporaryAttackSpell",
-      "value": 1
+      "value": 1,
+      "name": "Sharpen Claws' Rally"
     }
   },
   "attributes": {},

@@ -24,10 +24,12 @@
             "class": "RaceFilter",
             "race": "MECH"
           }
-        }
+        },
+        "name": "Blacksteel Shell"
       },
       "maxFires": 1
-    }
+    },
+    "name": "Blacksteel Shell"
   },
   "collectible": true,
   "set": "CUSTOM",

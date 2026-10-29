@@ -14,11 +14,13 @@
         {
           "class": "BuffSpell",
           "attackBonus": 3,
-          "hpBonus": 4
+          "hpBonus": 4,
+          "name": "Whimsical Generator"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Whimsical Generator"
         }
       ]
     },
@@ -28,11 +30,13 @@
         {
           "class": "BuffSpell",
           "attackBonus": 3,
-          "hpBonus": 4
+          "hpBonus": 4,
+          "name": "Whimsical Generator"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Whimsical Generator"
         }
       ]
     }

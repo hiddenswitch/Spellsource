@@ -19,7 +19,8 @@
         {
           "class": "AddAttributeSpell",
           "target": "EVENT_TARGET",
-          "attribute": "RESERVED_BOOLEAN_1"
+          "attribute": "RESERVED_BOOLEAN_1",
+          "name": "Slamhammer Knight's Blessing"
         },
         {
           "class": "DamageSpell",

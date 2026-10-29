@@ -16,7 +16,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "TRIGGER_HOST",
-      "attackBonus": 1
+      "attackBonus": 1,
+      "name": "Terrified Tanuki's Rally"
     }
   },
   "attributes": {

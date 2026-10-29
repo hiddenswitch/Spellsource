@@ -19,19 +19,29 @@ public final class RoastSpell extends DiscardSpell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		for (int i = 0; i < value; i++) {
+			Card card = null;
 			// Use the TARGET_PLAYER to indicate whose card should be roasted.
 			if (desc.containsKey(SpellArg.CARD_FILTER) && !player.getDeck().isEmpty()) {
 				EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-				target = context.getLogic().getRandom(player.getDeck().filtered(cardFilter.matcher(context, player, source)));
-			} else if (!desc.containsKey(SpellArg.TARGET)) {
-				target = player.getDeck().peek();
+				card = context.getLogic().getRandom(player.getDeck().filtered(cardFilter.matcher(context, player, source)));
+			} else if (target instanceof Card && player.getDeck().contains(target)) {
+				card = (Card) target;
+			} else if (!desc.containsKey(SpellArg.TARGET) || !(target instanceof Card)) {
+				card = player.getDeck().peek();
 			}
 
-			if (target == null) {
+			if (card == null) {
 				return;
 			}
 
-			context.getLogic().discardCard(player, (Card) target);
+			context.getLogic().discardCard(player, card);
+			if (card.hasAttribute(Attribute.ROASTED)) {
+				context.getOutputStack().push(card.getReference());
+				for (SpellDesc subSpell : desc.subSpells(0)) {
+					SpellUtils.castChildSpell(context, player, subSpell, source, target);
+				}
+				context.getOutputStack().pop();
+			}
 		}
 	}
 }

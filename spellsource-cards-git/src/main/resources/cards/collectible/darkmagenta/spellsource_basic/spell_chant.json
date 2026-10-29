@@ -17,11 +17,13 @@
       "spell": {
         "class": "BuffSpell",
         "target": "EVENT_TARGET",
-        "value": 2
+        "value": 2,
+        "name": "Chant"
       },
       "maxFires": 1,
       "oneTurn": true
-    }
+    },
+    "name": "Chant"
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

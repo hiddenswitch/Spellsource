@@ -16,7 +16,8 @@
           "class": "AttributeValueProvider",
           "target": "TARGET",
           "attribute": "ATTACK"
-        }
+        },
+        "name": "Sap Morale"
       },
       {
         "class": "TemporaryAttackSpell",
@@ -24,7 +25,8 @@
           "class": "AttributeValueProvider",
           "attribute": "ATTACK",
           "multiplier": -1
-        }
+        },
+        "name": "Sap Morale"
       }
     ]
   },

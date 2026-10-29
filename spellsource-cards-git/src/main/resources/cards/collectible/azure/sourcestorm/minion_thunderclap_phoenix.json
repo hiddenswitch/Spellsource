@@ -11,7 +11,7 @@
   "passiveTrigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "targetPlayer": "SELF"
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "CardCostModifierSpell",
@@ -31,6 +31,9 @@
       "value": 1,
       "card": "spell_lightning_strike"
     }
+  },
+  "attributes": {
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "SOURCESTORM",

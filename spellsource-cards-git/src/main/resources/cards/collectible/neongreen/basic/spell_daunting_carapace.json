@@ -11,11 +11,13 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus": 4
+        "hpBonus": 4,
+        "name": "Daunting Carapace"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Daunting Carapace"
       },
       {
         "class": "ModifyAttributeSpell",

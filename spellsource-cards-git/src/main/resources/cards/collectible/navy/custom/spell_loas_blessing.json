@@ -11,27 +11,33 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+        "attribute": "TAUNT",
+        "name": "Fury of Ryal"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "LIFESTEAL"
+        "attribute": "LIFESTEAL",
+        "name": "Fury of Ryal"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "WINDFURY"
+        "attribute": "WINDFURY",
+        "name": "Fury of Ryal"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "RUSH"
+        "attribute": "RUSH",
+        "name": "Fury of Ryal"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "DIVINE_SHIELD"
+        "attribute": "DIVINE_SHIELD",
+        "name": "Fury of Ryal"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "POISONOUS"
+        "attribute": "POISONOUS",
+        "name": "Fury of Ryal"
       }
     ]
   },

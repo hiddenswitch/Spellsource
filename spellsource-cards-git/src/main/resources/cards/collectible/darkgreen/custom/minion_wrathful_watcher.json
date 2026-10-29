@@ -24,7 +24,8 @@
           "filter": {
             "class": "SpecificCardFilter",
             "card": "minion_removed_card"
-          }
+          },
+          "name": "Wrathful Watcher's Blessing"
         },
         {
           "class": "BuffSpell",
@@ -33,7 +34,8 @@
           "filter": {
             "class": "SpecificCardFilter",
             "card": "minion_removed_card"
-          }
+          },
+          "name": "Wrathful Watcher's Blessing"
         },
         {
           "class": "ModifyAttributeSpell",

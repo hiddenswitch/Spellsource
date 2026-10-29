@@ -6,10 +6,11 @@
   "rarity": "RARE",
   "description": "Give your units +2/+2. (Deal [6] damage with your champion to upgrade).",
   "passiveTrigger": {
-    "countUntilCast": 7,
+    "countUntilCast": 6,
     "eventTrigger": {
       "class": "DamageCausedTrigger",
-      "targetPlayer": "SELF"
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "custom.TransformInHandSpell",
@@ -24,7 +25,8 @@
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
     "attackBonus": 2,
-    "hpBonus": 2
+    "hpBonus": 2,
+    "name": "Lesser Garnet Lunstone"
   },
   "collectible": true,
   "set": "CUSTOM",

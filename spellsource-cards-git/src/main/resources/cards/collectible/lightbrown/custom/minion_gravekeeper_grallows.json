@@ -21,7 +21,8 @@
         "spell": {
           "class": "SummonSpell",
           "card": "minion_gravekeeper_grallows"
-        }
+        },
+        "name": "Gravekeeper Grallows' Legacy"
       },
       {
         "class": "AddDescriptionSpell",

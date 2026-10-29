@@ -35,23 +35,27 @@ public class NumberOfCopiesCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			EntityReference targetReference,
+			EntityFilter filter,
+			int value,
+			ComparisonOperation operation) {
 		List<Entity> targets;
-		if (desc.containsKey(ConditionArg.TARGET)) {
-			targets = context.resolveTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET));
+		if (targetReference != null) {
+			targets = context.resolveTarget(player, source, targetReference);
 		} else {
 			targets = Collections.singletonList(target);
 		}
 
-		if (desc.containsKey(ConditionArg.FILTER)) {
+		if (filter != null) {
 			targets = targets.stream()
-					.filter(((EntityFilter) desc.get(ConditionArg.FILTER)).matcher(context, player, source))
+					.filter(filter.matcher(context, player, source))
 					.collect(Collectors.toList());
 		}
-
-		var targetValue = desc.getInt(ConditionArg.VALUE);
-		var operation = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
 
 		var ids = targets.stream().map(entity -> entity.getSourceCard().getCardId()).collect(Collectors.toList());
 
@@ -59,7 +63,7 @@ public class NumberOfCopiesCondition extends Condition {
 
 		for (var id : ids.stream().distinct().collect(Collectors.toList())) {
 			var copies = (int) ids.stream().filter(s -> s.equals(id)).count();
-			if (!SpellUtils.evaluateOperation(operation, copies, targetValue)) {
+			if (!SpellUtils.evaluateOperation(operation, copies, value)) {
 				result = false;
 			}
 		}

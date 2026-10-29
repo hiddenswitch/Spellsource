@@ -18,10 +18,12 @@
         "class": "BuffSpell",
         "target": "EVENT_TARGET",
         "attackBonus": 1,
-        "hpBonus": 1
+        "hpBonus": 1,
+        "name": "Sugary Celebration"
       },
       "oneTurn": true
-    }
+    },
+    "name": "Sugary Celebration"
   },
   "collectible": false,
   "set": "CUSTOM",

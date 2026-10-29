@@ -15,7 +15,8 @@
       "attribute": "INVERT_HEALING",
       "revertTrigger": {
         "class": "TurnEndTrigger"
-      }
+      },
+      "name": "Cursebrewing Witch's Blessing"
     }
   },
   "attributes": {

@@ -19,7 +19,8 @@
         "value": 2,
         "secondaryTarget": "TRIGGER_HOST"
       }
-    }
+    },
+    "name": "Blood Plague"
   },
   "attributes": {
     "DRAIN": true

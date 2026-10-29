@@ -28,7 +28,8 @@
             "operation": "SET"
           },
           "oneTurn": true
-        }
+        },
+        "name": "Resilience"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -57,10 +58,12 @@
                 "operation": "SET"
               },
               "oneTurn": true
-            }
+            },
+            "name": "Resilience"
           },
           "maxFires": 1
-        }
+        },
+        "name": "Resilience"
       }
     ]
   },

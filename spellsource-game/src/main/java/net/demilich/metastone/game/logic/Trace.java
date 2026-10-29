@@ -72,7 +72,13 @@ public class Trace implements Serializable, Cloneable {
 		setDeckCardIds(Arrays.asList(new DeckTrace().setPlayerId(0), new DeckTrace().setPlayerId(1)));
 		for (int i = 0; i < 2; i++) {
 			getHeroClasses().set(i, players[i].getHero().getHeroClass());
-			getDeckCardIds().get(i).setCardIds(players[i].getDeck().stream().map(Card::getCardId).collect(Collectors.toList()));
+			var deck = players[i].getDeck();
+			int n = deck.size();
+			List<String> cardIds = new ArrayList<>(n);
+			for (int j = 0; j < n; j++) {
+				cardIds.add(deck.get(j).getCardId());
+			}
+			getDeckCardIds().get(i).setCardIds(cardIds);
 		}
 	}
 

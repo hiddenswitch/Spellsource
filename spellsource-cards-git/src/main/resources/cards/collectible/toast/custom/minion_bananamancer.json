@@ -44,10 +44,12 @@
         "offset": {
           "class": "SpellDamageValueProvider"
         }
-      }
+      },
+      "name": "Bananamancer's Blessing"
     },
     "removeEffect": {
-      "class": "BuffSpell"
+      "class": "BuffSpell",
+      "name": "Bananamancer's Blessing"
     },
     "secondaryTrigger": {
       "class": "SpellCastedTrigger"

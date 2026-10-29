@@ -16,7 +16,8 @@
         "class": "AttributeValueProvider",
         "target": "FRIENDLY_HERO",
         "attribute": "ARMOR"
-      }
+      },
+      "name": "Hercules' Fortitude"
     }
   },
   "attributes": {

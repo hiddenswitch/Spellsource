@@ -8,6 +8,10 @@
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "HP"
+    },
     "spells": [
       {
         "class": "DestroySpell"
@@ -16,19 +20,18 @@
         "class": "HealSpell",
         "target": "FRIENDLY_HERO",
         "value": {
-          "class": "AttributeValueProvider",
-          "target": "TARGET",
-          "attribute": "HP"
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
         }
       },
       {
         "class": "TemporaryAttackSpell",
         "target": "FRIENDLY_HERO",
         "value": {
-          "class": "AttributeValueProvider",
-          "target": "TARGET",
-          "attribute": "HP"
-        }
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        },
+        "name": "You'll Do"
       }
     ]
   },

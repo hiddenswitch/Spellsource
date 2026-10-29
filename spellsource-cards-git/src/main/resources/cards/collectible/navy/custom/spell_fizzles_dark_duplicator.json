@@ -18,7 +18,8 @@
         "attribute": "RUSH",
         "invert": true,
         "operation": "HAS"
-      }
+      },
+      "name": "Fizzle's Dark Duplicator"
     }
   },
   "collectible": true,

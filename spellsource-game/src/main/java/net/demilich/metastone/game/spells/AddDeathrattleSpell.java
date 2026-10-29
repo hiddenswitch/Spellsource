@@ -112,7 +112,24 @@ public class AddDeathrattleSpell extends Spell {
 				spell = spell.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
 			}
 			var aftermath = spell.tryCreate(context, player, source, aftermathCandidate.enchantmentSource(), target, true);
-			context.getLogic().addEnchantment(player, aftermath.orElseThrow(), source, target);
+			var aftermathEntity = aftermath.orElseThrow();
+			String explicitName = desc.getString(SpellArg.NAME);
+			if ((explicitName == null || explicitName.isEmpty()) && spell.getString(SpellArg.NAME) != null && !spell.getString(SpellArg.NAME).isEmpty()) {
+				explicitName = spell.getString(SpellArg.NAME);
+			}
+			if ((explicitName == null || explicitName.isEmpty()) && aftermathCandidate.propagateCard() && desc.getSynthesizedEnchantmentCard() != null) {
+				explicitName = desc.getSynthesizedEnchantmentCard().getName();
+			}
+			if (explicitName != null && !explicitName.isEmpty()) {
+				aftermathEntity.setName(explicitName);
+			}
+			if (aftermathCandidate.propagateCard() && desc.getSynthesizedEnchantmentCard() != null) {
+				String synthDesc = desc.getSynthesizedEnchantmentCard().getDescription();
+				if (synthDesc != null && !synthDesc.isEmpty()) {
+					aftermathEntity.setDescription(synthDesc);
+				}
+			}
+			context.getLogic().addEnchantment(player, aftermathEntity, source, target);
 		});
 	}
 

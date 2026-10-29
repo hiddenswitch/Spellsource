@@ -22,7 +22,8 @@
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
           "attackBonus": 1,
-          "hpBonus": 1
+          "hpBonus": 1,
+          "name": "Power to the People"
         }
       },
       {
@@ -38,7 +39,8 @@
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
           "attackBonus": 1,
-          "hpBonus": 1
+          "hpBonus": 1,
+          "name": "Power to the People"
         }
       },
       {
@@ -54,7 +56,8 @@
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
           "attackBonus": 1,
-          "hpBonus": 1
+          "hpBonus": 1,
+          "name": "Power to the People"
         }
       }
     ]

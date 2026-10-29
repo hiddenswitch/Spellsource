@@ -361,10 +361,12 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	public @Nullable
 	GameAction requestAction(@NotNull GameContext context, @NotNull Player player, @NotNull List<GameAction> validActions) {
 		var tracer = GlobalTracer.get();
-		var span = tracer.buildSpan("GameStateValueBehaviour/requestAction")
-				.withTag("gameId", context.getGameId())
-				.withTag("deckId", (String) player.getAttributes().get(Attribute.DECK_ID))
-				.start();
+		var span = GlobalTracer.isRegistered()
+				? tracer.buildSpan("GameStateValueBehaviour/requestAction")
+					.withTag("gameId", context.getGameId())
+					.withTag("deckId", (String) player.getAttributes().get(Attribute.DECK_ID))
+					.start()
+				: io.opentracing.noop.NoopSpan.INSTANCE;
 
 		var oldMaxDepth = getMaxDepth();
 		var oldTimeout = getTimeout();
@@ -1144,7 +1146,12 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 							|| (e.getClass().equals(TurnEndTrigger.class) && (!turnEnded || enchantment.getOwner() == opponent.getId())))) {
 						// Correctly set the trigger stacks
 						context.getTriggerHostStack().push(trigger.getHostReference());
-						context.getLogic().castSpell(trigger.getOwner(), enchantment.getSpell(), trigger.getHostReference(), EntityReference.NONE, TargetSelection.NONE, true, null);
+						if (enchantment.getSpell() != null) {
+							context.getLogic().castSpell(trigger.getOwner(), enchantment.getSpell(), trigger.getHostReference(), EntityReference.NONE, TargetSelection.NONE, true, null);
+						} else {
+							enchantment.onRemove(context);
+							enchantment.expire(context);
+						}
 						context.getTriggerHostStack().pop();
 					}
 				}

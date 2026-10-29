@@ -31,7 +31,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "SELF",
-      "attribute": "DIVINE_SHIELD"
+      "attribute": "DIVINE_SHIELD",
+      "name": "Vengeful Spirit's Dodge"
     }
   },
   "collectible": true,

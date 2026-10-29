@@ -17,7 +17,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "FRIENDLY_MINIONS",
-      "attribute": "RUSH"
+      "attribute": "RUSH",
+      "name": "Trilling Trumpet's Dash"
     }
   },
   "collectible": true,

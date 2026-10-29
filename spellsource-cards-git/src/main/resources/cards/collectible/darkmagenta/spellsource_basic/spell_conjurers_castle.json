@@ -21,11 +21,13 @@
           "class": "PlayerAttributeValueProvider",
           "multiplier": 2,
           "playerAttribute": "LAST_MANA_COST"
-        }
+        },
+        "name": "Conjurer's Castle"
       },
       "maxFires": 1,
       "oneTurn": true
-    }
+    },
+    "name": "Conjurer's Castle"
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

@@ -21,7 +21,8 @@
         "card": "minion_eternal_steed"
       },
       "maxFires": 1
-    }
+    },
+    "name": "Eternal Steed's Pact"
   },
   "attributes": {
     "DEATHRATTLES": true

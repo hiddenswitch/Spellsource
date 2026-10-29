@@ -27,7 +27,8 @@
         }
       },
       "maxFiresPerSequence": 16
-    }
+    },
+    "name": "Death Chain"
   },
   "collectible": false,
   "set": "CUSTOM",

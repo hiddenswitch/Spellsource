@@ -11,7 +11,8 @@
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
       "class": "SetAttackSpell",
-      "value": 1
+      "value": 1,
+      "name": "Exotic Howler's Humility"
     }
   },
   "attributes": {

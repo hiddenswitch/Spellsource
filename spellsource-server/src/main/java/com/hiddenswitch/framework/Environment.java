@@ -617,14 +617,36 @@ public class Environment {
 
 			@Override
 			public void ping() {
-				connection.ping(Buffer.buffer(new byte[]{0, 1, 2, 3, 4, 5, 6, 7}))
+				Future<Buffer> pingFuture;
+				try {
+					pingFuture = connection.ping(Buffer.buffer(new byte[]{0, 1, 2, 3, 4, 5, 6, 7}));
+				} catch (UnsupportedOperationException e) {
+					var manager = managerRef.get();
+					if (manager != null) {
+						manager.onDataReceived();
+					}
+					return;
+				} catch (Throwable t) {
+					failHandler.handle(null);
+					return;
+				}
+				pingFuture
 						.onSuccess(pong -> {
 							var manager = managerRef.get();
 							if (manager != null) {
 								manager.onDataReceived();
 							}
 						})
-						.onFailure(t -> failHandler.handle(null));
+						.onFailure(t -> {
+							if (t instanceof UnsupportedOperationException) {
+								var manager = managerRef.get();
+								if (manager != null) {
+									manager.onDataReceived();
+								}
+							} else {
+								failHandler.handle(null);
+							}
+						});
 			}
 
 			@Override

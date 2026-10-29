@@ -12,7 +12,8 @@
       {
         "class": "AddAttributeSpell",
         "target": "FRIENDLY_PLAYER",
-        "attribute": "DISABLE_FATIGUE"
+        "attribute": "DISABLE_FATIGUE",
+        "name": "Death's Curse"
       },
       {
         "class": "RemoveCardSpell",

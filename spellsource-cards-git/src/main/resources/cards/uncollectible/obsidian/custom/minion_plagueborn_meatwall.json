@@ -10,13 +10,18 @@
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
       "targetPlayer": "SELF"
     },
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "value": 1
+      "value": 1,
+      "name": "Plagueborn Meatwall's Empowerment"
     }
+  },
+  "attributes": {
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -22,7 +22,8 @@
         "class": "BuffSpell",
         "target": "ENEMY_MINIONS",
         "hpBonus": -4,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Extraction"
       }
     }
   },

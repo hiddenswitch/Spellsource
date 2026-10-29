@@ -11,6 +11,9 @@
     "target": "FRIENDLY_HERO",
     "value": 2
   },
+  "attributes": {
+    "CASTS_WHEN_DRAWN": true
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

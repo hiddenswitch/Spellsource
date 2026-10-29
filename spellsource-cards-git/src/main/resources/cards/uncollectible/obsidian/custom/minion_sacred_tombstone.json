@@ -20,7 +20,8 @@
         "card": "minion_sacred_tombstone"
       },
       "maxFires": 1
-    }
+    },
+    "name": "Sacred Tombstone's Pact"
   },
   "attributes": {
     "DEATHRATTLES": true

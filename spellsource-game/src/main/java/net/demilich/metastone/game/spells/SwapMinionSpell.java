@@ -31,7 +31,13 @@ public class SwapMinionSpell extends Spell {
 
 	@SuppressWarnings("unchecked")
 	protected void onCast(GameContext context, Player player, Entity source, Entity target, EntityReference secondaryTarget) {
-		Minion swap = (Minion) context.resolveTarget(player, source, secondaryTarget).get(0);
+		if (target == null) {
+			return;
+		}
+		var resolved = context.resolveTarget(player, source, secondaryTarget);
+		if (resolved.isEmpty() || !(resolved.get(0) instanceof Minion swap)) {
+			return;
+		}
 		if (swap.equals(target)) {
 			logger.warn("onCast {} {}: Target {} was asked to swap with itself. SECONDARY_TARGET={}", context.getGameId(), source, target, secondaryTarget);
 			return;
@@ -39,10 +45,12 @@ public class SwapMinionSpell extends Spell {
 		boolean ownershipChangeRequired = swap.getOwner() != target.getOwner();
 		EntityLocation swapLocation = swap.getEntityLocation();
 		EntityLocation targetLocation = target.getEntityLocation();
-		swap.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
-		target.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
-		context.getPlayer(targetLocation.getPlayer()).getZone(targetLocation.getZone()).add(targetLocation.getIndex(), swap);
-		context.getPlayer(swapLocation.getPlayer()).getZone(swapLocation.getZone()).add(swapLocation.getIndex(), target);
+		context.getPlayer(swapLocation.getPlayer()).getZone(swapLocation.getZone()).remove(swap);
+		context.getPlayer(targetLocation.getPlayer()).getZone(targetLocation.getZone()).remove(target);
+		var targetZone = context.getPlayer(targetLocation.getPlayer()).getZone(targetLocation.getZone());
+		targetZone.add(Math.min(targetLocation.getIndex(), targetZone.size()), swap);
+		var swapZone = context.getPlayer(swapLocation.getPlayer()).getZone(swapLocation.getZone());
+		swapZone.add(Math.min(swapLocation.getIndex(), swapZone.size()), target);
 		if (ownershipChangeRequired) {
 			context.getLogic().innerChangeOwner(target, swapLocation.getPlayer());
 			context.getLogic().innerChangeOwner(swap, targetLocation.getPlayer());

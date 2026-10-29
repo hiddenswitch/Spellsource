@@ -16,7 +16,8 @@
         "revertTrigger": {
           "class": "TurnStartTrigger",
           "targetPlayer": "SELF"
-        }
+        },
+        "name": "Ryora's Protection"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -39,7 +40,8 @@
             "targetPlayer": "SELF"
           },
           "maxFires": 1
-        }
+        },
+        "name": "Ryora's Protection"
       }
     ]
   },

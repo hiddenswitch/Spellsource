@@ -19,7 +19,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "SELF",
-      "attribute": "CHARGE"
+      "attribute": "CHARGE",
+      "name": "Line Breaker's Blitz"
     }
   },
   "attributes": {

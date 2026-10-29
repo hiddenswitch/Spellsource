@@ -15,6 +15,10 @@ public final class SortDeckByManaCostSpell extends Spell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		player.getDeck().sort(Comparator.comparing((Card c) -> context.getLogic().getModifiedManaCost(player, c)).reversed());
+		var comparator = Comparator.comparing((Card c) -> context.getLogic().getModifiedManaCost(player, c));
+		if (!desc.getBool(net.demilich.metastone.game.spells.desc.SpellArg.EXCLUSIVE)) {
+			comparator = comparator.reversed();
+		}
+		player.getDeck().sort(comparator);
 	}
 }

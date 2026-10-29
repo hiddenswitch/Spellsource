@@ -14,7 +14,8 @@
       "spells": [
         {
           "class": "BuffSpell",
-          "hpBonus": 8
+          "hpBonus": 8,
+          "name": "Mollusk Meister's Ward"
         },
         {
           "class": "BuffSpell",
@@ -23,7 +24,8 @@
             "class": "AttributeValueProvider",
             "target": "TARGET",
             "attribute": "HP"
-          }
+          },
+          "name": "Mollusk Meister's Aegis"
         }
       ]
     }

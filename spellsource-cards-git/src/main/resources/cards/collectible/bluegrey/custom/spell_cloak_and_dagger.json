@@ -14,7 +14,8 @@
       "class": "AttributeFilter",
       "attribute": "STEALTH",
       "operation": "HAS"
-    }
+    },
+    "name": "Cloak and Dagger"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -12,11 +12,13 @@
       {
         "class": "BuffSpell",
         "attackBonus": 0,
-        "hpBonus": 6
+        "hpBonus": 6,
+        "name": "Crystal Wings"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "UNTARGETABLE_BY_SPELLS"
+        "attribute": "UNTARGETABLE_BY_SPELLS",
+        "name": "Crystal Wings"
       }
     ]
   },

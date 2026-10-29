@@ -16,7 +16,8 @@
         "class": "PlayerAttributeValueProvider",
         "playerAttribute": "HAND_COUNT",
         "targetPlayer": "SELF"
-      }
+      },
+      "name": "Moonlit Dragon's Fortitude"
     }
   },
   "attributes": {

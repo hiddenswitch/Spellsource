@@ -29,11 +29,13 @@
             "spell": {
               "class": "DecaySpell"
             }
-          }
+          },
+          "name": "Master Eroder's Boon"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "DECAY"
+          "attribute": "DECAY",
+          "name": "Master Eroder's Decay"
         }
       ]
     }

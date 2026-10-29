@@ -67,16 +67,19 @@ tasks.register("toolRestore", Exec) {
 }
 
 tasks.named("yarnRunStrawberryShake").configure {
+  def generatedFile = layout.projectDirectory.file("Generated/GraphQL.Client.cs").asFile
+  def targetClientFile = layout.projectDirectory.file("../spellsource-client/src/unity/Assets/Scripts/GraphQL.Client.cs").asFile
   dependsOn "toolRestore"
-  inputs.file("schema.graphql")
-  inputs.dir("graphql/client")
-  inputs.dir("graphql/shared")
-  inputs.file(".graphqlrc.json")
-  outputs.file("Generated/GraphQL.Client.cs")
-  outputs.file("../spellsource-client/src/unity/Assets/Scripts/GraphQL.Client.cs")
+  inputs.file("schema.graphql").withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.dir("graphql/client").withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.dir("graphql/shared").withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.file(".graphqlrc.json").withPathSensitivity(PathSensitivity.RELATIVE)
+  outputs.file(generatedFile)
+  outputs.file(targetClientFile)
+  outputs.cacheIf { true }
 
   doLast {
-    def generated = file("Generated/GraphQL.Client.cs").getText('UTF-8')
+    def generated = generatedFile.getText('UTF-8')
         .replace('global::StrawberryShake.OperationExecutor<global::System.Text.Json.JsonDocument, ', 'global::Spellsource.UnityOperationExecutor<')
         .replace('public async global::System.Threading.Tasks.Task<', 'public global::System.Threading.Tasks.Task<')
         .replace('return await _operationExecutor.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);', 'return _operationExecutor.ExecuteAsync(request, cancellationToken);')
@@ -100,7 +103,7 @@ tasks.named("yarnRunStrawberryShake").configure {
 #endif"""
       generated = generated.substring(0, start) + replacement + generated.substring(end)
     }
-    file("../spellsource-client/src/unity/Assets/Scripts/GraphQL.Client.cs").setText(generated, 'UTF-8')
+    targetClientFile.setText(generated, 'UTF-8')
   }
   
   mustRunAfter ":spellsource-server:generateSchema"

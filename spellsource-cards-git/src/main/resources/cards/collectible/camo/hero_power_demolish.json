@@ -17,7 +17,8 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "armorBonus": 2
+        "armorBonus": 2,
+        "name": "Ransack's Aegis"
       }
     ]
   },

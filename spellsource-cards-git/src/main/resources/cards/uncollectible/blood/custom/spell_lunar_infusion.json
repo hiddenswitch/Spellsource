@@ -14,7 +14,8 @@
         "class": "AttributeValueProvider",
         "target": "OUTPUT",
         "attribute": "BASE_MANA_COST"
-      }
+      },
+      "name": "Lunar Infusion"
     },
     "cardFilter": {
       "class": "CardFilter",

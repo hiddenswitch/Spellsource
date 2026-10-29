@@ -68,7 +68,7 @@ public final class CelestialConduitSpell extends Spell {
 		discoverSpell.put(SpellArg.CARDS, desc.getCards());
 		discoverSpell.put(SpellArg.CARD_FILTER, desc.getCardFilter());
 		var invocations = 0;
-		while (sum.get() <= max && invocations < GameLogic.MAX_HAND_CARDS) {
+		while (sum.get() <= max && invocations < context.getLogic().getMaxHandCards(player)) {
 			if (Thread.currentThread().isInterrupted()) {
 				break;
 			}

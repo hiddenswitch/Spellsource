@@ -13,6 +13,7 @@ import net.demilich.metastone.game.spells.trigger.SilenceTrigger;
 import net.demilich.metastone.game.spells.trigger.TurnEndTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.Card;
 
 import java.util.Map;
 
@@ -64,6 +65,13 @@ public class MindControlOneTurnSpell extends MindControlSpell {
 		returnOnSilence.setOneTurn(true);
 		returnOnSilence.setMaxFires(1);
 		returnOnSilence.setUsesSpellTrigger(true);
+		returnOnSilence.setHasRevertableModification(true);
+		Card synthCard = desc.getSynthesizedEnchantmentCard();
+		if (synthCard != null) {
+			returnOnSilence.setSourceCard(synthCard);
+		} else if (source != null && source.getSourceCard() != null) {
+			returnOnSilence.setSourceCard(source.getSourceCard());
+		}
 
 		context.getLogic().addEnchantment(player, returnOnSilence, source, target);
 

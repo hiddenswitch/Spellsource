@@ -447,4 +447,33 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof EnchantmentDesc that)) return false;
+		return oneTurn == that.oneTurn
+				&& persistentOwner == that.persistentOwner
+				&& keepAfterTransform == that.keepAfterTransform
+				&& countByValue == that.countByValue
+				&& java.util.Objects.equals(eventTrigger, that.eventTrigger)
+				&& java.util.Objects.equals(spell, that.spell)
+				&& java.util.Objects.equals(maxFires, that.maxFires)
+				&& java.util.Objects.equals(maxFiresPerSequence, that.maxFiresPerSequence)
+				&& java.util.Objects.equals(countUntilCast, that.countUntilCast)
+				&& Arrays.equals(activationTriggers, that.activationTriggers)
+				&& Arrays.equals(expirationTriggers, that.expirationTriggers)
+				&& java.util.Objects.equals(name, that.name)
+				&& java.util.Objects.equals(description, that.description)
+				&& Arrays.equals(zones, that.zones);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = java.util.Objects.hash(eventTrigger, spell, oneTurn, persistentOwner, keepAfterTransform, maxFires, maxFiresPerSequence, countUntilCast, countByValue, name, description);
+		result = 31 * result + Arrays.hashCode(activationTriggers);
+		result = 31 * result + Arrays.hashCode(expirationTriggers);
+		result = 31 * result + Arrays.hashCode(zones);
+		return result;
+	}
 }

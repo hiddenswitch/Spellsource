@@ -306,6 +306,8 @@ message Art {
     Prefab spell = 10;
     Sprite sprite = 11;
     Sprite spriteShadow = 12;
+    string status_icon = 13;
+    string particle_hierarchy_json = 14;
 }
 
 // This stores extra human-annotated data for the GameStateValueBehaviour bot

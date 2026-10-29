@@ -30,7 +30,8 @@
         }
       },
       "maxFires": 1
-    }
+    },
+    "name": "Rehearsal"
   },
   "collectible": false,
   "set": "CUSTOM",

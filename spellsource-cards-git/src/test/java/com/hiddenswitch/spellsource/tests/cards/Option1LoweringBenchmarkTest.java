@@ -84,6 +84,7 @@ public class Option1LoweringBenchmarkTest extends TestBase {
 			Spell[] spellsLowered = new Spell[4];
 
 			// Compile Unlowered suite while ENABLE_OPTION1_LOWERING = false
+			DescBytecodeCompiler.clearCaches();
 			DescBytecodeCompiler.ENABLE_OPTION1_LOWERING = false;
 			for (int k = 0; k < 4; k++) {
 				ValueProvider innerVp = switch (k) {
@@ -131,6 +132,7 @@ public class Option1LoweringBenchmarkTest extends TestBase {
 			}
 
 			// Compile Lowered suite while ENABLE_OPTION1_LOWERING = true
+			DescBytecodeCompiler.clearCaches();
 			DescBytecodeCompiler.ENABLE_OPTION1_LOWERING = true;
 			for (int k = 0; k < 4; k++) {
 				ValueProvider innerVp = switch (k) {
@@ -278,6 +280,7 @@ public class Option1LoweringBenchmarkTest extends TestBase {
 		final int gsvbMatches = 15;
 
 		// Warmup
+		DescBytecodeCompiler.clearCaches();
 		DescBytecodeCompiler.ENABLE_OPTION1_LOWERING = true;
 		ClasspathCardCatalogue warmupCatalogue = new TestClasspathCardCatalogue();
 		warmupCatalogue.loadCardsFromPackage();
@@ -288,8 +291,10 @@ public class Option1LoweringBenchmarkTest extends TestBase {
 			} catch (Exception ignored) {
 			}
 		}
+		warmupCatalogue = null;
 
 		// Run with ENABLE_OPTION1_LOWERING = false (fresh catalogue so Descs compile with lowering disabled)
+		DescBytecodeCompiler.clearCaches();
 		DescBytecodeCompiler.ENABLE_OPTION1_LOWERING = false;
 		ClasspathCardCatalogue unloweredCatalogue = new TestClasspathCardCatalogue();
 		unloweredCatalogue.loadCardsFromPackage();
@@ -319,8 +324,14 @@ public class Option1LoweringBenchmarkTest extends TestBase {
 			}
 		}
 		long gsvbUnloweredNs = System.nanoTime() - t0;
+		int unloweredHiddenClasses = DescBytecodeCompiler.getHiddenClassesDefinedCount();
+		int unloweredInternedComponents = DescBytecodeCompiler.getInternedComponentCount();
+		System.gc();
+		long unloweredHeapBytes = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+		unloweredCatalogue = null;
 
 		// Run with ENABLE_OPTION1_LOWERING = true (fresh catalogue so Descs compile with lowering enabled)
+		DescBytecodeCompiler.clearCaches();
 		DescBytecodeCompiler.ENABLE_OPTION1_LOWERING = true;
 		ClasspathCardCatalogue loweredCatalogue = new TestClasspathCardCatalogue();
 		loweredCatalogue.loadCardsFromPackage();
@@ -350,6 +361,11 @@ public class Option1LoweringBenchmarkTest extends TestBase {
 			}
 		}
 		long gsvbLoweredNs = System.nanoTime() - t0;
+		int loweredHiddenClasses = DescBytecodeCompiler.getHiddenClassesDefinedCount();
+		int loweredInternedComponents = DescBytecodeCompiler.getInternedComponentCount();
+		int loweredCompiledCacheSize = DescBytecodeCompiler.getCompiledCacheSize();
+		System.gc();
+		long loweredHeapBytes = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
 		System.out.println("=== End-to-End Gameplay Benchmark ===");
 		System.out.println(String.format("PlayRandomBehaviour (%d matches):    Unlowered = %7.2f ms (%5.2f ms/match, %d turns) | Lowered = %7.2f ms (%5.2f ms/match, %d turns) | Speedup = %.2fx",
@@ -362,5 +378,146 @@ public class Option1LoweringBenchmarkTest extends TestBase {
 				gsvbUnloweredNs / 1e6, gsvbUnloweredNs / 1e6 / gsvbMatches, gsvbUnloweredTurns,
 				gsvbLoweredNs / 1e6, gsvbLoweredNs / 1e6 / gsvbMatches, gsvbLoweredTurns,
 				(double) gsvbUnloweredNs / gsvbLoweredNs));
+		System.out.println("=== Memory & Hidden-Class Deduplication Metrics ===");
+		System.out.println(String.format("Hidden Classes Defined: Unlowered (no dedup) = %d | Lowered (Desc cache dedup) = %d (%.2fx reduction)",
+				unloweredHiddenClasses, loweredHiddenClasses,
+				loweredHiddenClasses > 0 ? (double) unloweredHiddenClasses / loweredHiddenClasses : 1.0));
+		System.out.println(String.format("Interned Read-Only Component Singletons: Unlowered = %d | Lowered = %d | Compiled Cache Entries = %d",
+				unloweredInternedComponents, loweredInternedComponents, loweredCompiledCacheSize));
+		System.out.println(String.format("Post-GC Used Heap: Unlowered = %.2f MB | Lowered = %.2f MB",
+				unloweredHeapBytes / (1024.0 * 1024.0), loweredHeapBytes / (1024.0 * 1024.0)));
+	}
+
+	@Test
+	public void testMigratedOption1ComponentsEquivalence() {
+		runGym((context, player, opponent) -> {
+			Minion m1 = playMinionCard(context, player, 3, 4);
+			m1.setRace("BEAST");
+			Minion m2 = playMinionCard(context, player, 5, 2);
+			m2.setRace("DEMON");
+			Minion enemy = playMinionCard(context, opponent, 2, 6);
+			enemy.setRace("BEAST");
+			player.setMaxMana(10);
+			player.setMana(10);
+
+			for (boolean lowered : new boolean[]{false, true}) {
+				DescBytecodeCompiler.clearCaches();
+				DescBytecodeCompiler.ENABLE_OPTION1_LOWERING = lowered;
+
+				// 1. Conditions
+				ConditionDesc attrExists = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.AttributeExistsCondition.class);
+				attrExists.put(ConditionArg.TARGET, EntityReference.FRIENDLY_MINIONS);
+				attrExists.put(ConditionArg.ATTRIBUTE, Attribute.ATTACK);
+				attrExists.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertTrue(attrExists.create().isFulfilled(context, player, m1, m1));
+
+				ConditionDesc hasEntities = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.HasEntitiesOnBoardCondition.class);
+				hasEntities.put(ConditionArg.CARDS, new String[]{m1.getSourceCard().getCardId(), m2.getSourceCard().getCardId()});
+				hasEntities.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertTrue(hasEntities.create().isFulfilled(context, player, m1, m1));
+
+				ConditionDesc manaMaxed = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.ManaMaxedCondition.class);
+				manaMaxed.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertTrue(manaMaxed.create().isFulfilled(context, player, m1, m1));
+
+				ConditionDesc minionOnBoard = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.MinionOnBoardCondition.class);
+				minionOnBoard.put(ConditionArg.VALUE, 2);
+				minionOnBoard.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertTrue(minionOnBoard.create().isFulfilled(context, player, m1, m1));
+
+				ConditionDesc heroClassCond = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.HeroClassCondition.class);
+				heroClassCond.put(ConditionArg.HERO_CLASS, player.getHero().getHeroClass());
+				heroClassCond.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertEquals(
+						player.getHero().getSourceCard().hasHeroClass(player.getHero().getHeroClass()),
+						heroClassCond.create().isFulfilled(context, player, m1, m1));
+
+				ConditionDesc deckContains = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.DeckContainsCondition.class);
+				deckContains.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertEquals(!player.getDeck().isEmpty(), deckContains.create().isFulfilled(context, player, m1, m1));
+
+				ConditionDesc graveyardContains = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.GraveyardContainsCondition.class);
+				graveyardContains.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertFalse(graveyardContains.create().isFulfilled(context, player, m1, m1));
+
+				ConditionDesc numCopies = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.NumberOfCopiesCondition.class);
+				numCopies.put(ConditionArg.TARGET, EntityReference.FRIENDLY_MINIONS);
+				numCopies.put(ConditionArg.OPERATION, ComparisonOperation.LESS_OR_EQUAL);
+				numCopies.put(ConditionArg.VALUE, 2);
+				numCopies.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertTrue(numCopies.create().isFulfilled(context, player, m1, m1));
+
+				ConditionDesc playedLastTurn = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.PlayedLastTurnCondition.class);
+				playedLastTurn.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertFalse(playedLastTurn.create().isFulfilled(context, player, m1, m1));
+
+				ConditionDesc allModZero = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.AllModuloValueEqualsZeroCondition.class);
+				allModZero.put(ConditionArg.TARGET, EntityReference.FRIENDLY_MINIONS);
+				allModZero.put(ConditionArg.ATTRIBUTE, Attribute.HP);
+				allModZero.put(ConditionArg.VALUE, 2);
+				allModZero.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertTrue(allModZero.create().isFulfilled(context, player, m1, m1));
+
+				ConditionDesc hasHeroPower = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.HasHeroPowerCondition.class);
+				hasHeroPower.put(ConditionArg.CARD, player.getHeroPowerZone().get(0).getCardId());
+				hasHeroPower.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertTrue(hasHeroPower.create().isFulfilled(context, player, m1, m1));
+
+				ConditionDesc hasWeapon = new ConditionDesc(net.demilich.metastone.game.spells.desc.condition.HasWeaponCondition.class);
+				hasWeapon.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertFalse(hasWeapon.create().isFulfilled(context, player, m1, m1));
+
+				// 2. EntityFilters
+				EntityFilterDesc highestAttr = new EntityFilterDesc(net.demilich.metastone.game.spells.desc.filter.HighestAttributeFilter.class);
+				highestAttr.put(EntityFilterArg.ATTRIBUTE, Attribute.ATTACK);
+				highestAttr.put(EntityFilterArg.TARGET, EntityReference.FRIENDLY_MINIONS);
+				highestAttr.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertFalse(highestAttr.create().matches(context, player, m1, m1));
+				org.junit.jupiter.api.Assertions.assertTrue(highestAttr.create().matches(context, player, m2, m1));
+
+				EntityFilterDesc raceEquals = new EntityFilterDesc(net.demilich.metastone.game.spells.desc.filter.RaceEqualsFilter.class);
+				raceEquals.put(EntityFilterArg.SECONDARY_TARGET, EntityReference.SELF);
+				raceEquals.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertTrue(raceEquals.create().matches(context, player, enemy, m1));
+				org.junit.jupiter.api.Assertions.assertFalse(raceEquals.create().matches(context, player, m2, m1));
+
+				EntityFilterDesc raceFromSec = new EntityFilterDesc(net.demilich.metastone.game.spells.desc.filter.RaceFromSecondaryTargetFilter.class);
+				raceFromSec.put(EntityFilterArg.SECONDARY_TARGET, EntityReference.SELF);
+				raceFromSec.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertTrue(raceFromSec.create().matches(context, player, enemy, m1));
+
+				EntityFilterDesc entityEquals = new EntityFilterDesc(net.demilich.metastone.game.spells.desc.filter.EntityEqualsFilter.class);
+				entityEquals.put(EntityFilterArg.SECONDARY_TARGET, EntityReference.SELF);
+				entityEquals.setReadOnly(true);
+				org.junit.jupiter.api.Assertions.assertTrue(entityEquals.create().matches(context, player, m1, m1));
+				org.junit.jupiter.api.Assertions.assertFalse(entityEquals.create().matches(context, player, m2, m1));
+
+				// 3. ValueProviders
+				ValueProvider origVp = createVp(net.demilich.metastone.game.spells.desc.valueprovider.OriginalValueProvider.class,
+						ValueProviderArg.VALUE, 7);
+				org.junit.jupiter.api.Assertions.assertEquals(7, origVp.getValue(context, player, m1, m1));
+
+				ValueProvider spellDmgVp = createVp(net.demilich.metastone.game.spells.desc.valueprovider.SpellDamageValueProvider.class,
+						ValueProviderArg.VALUE, 4);
+				org.junit.jupiter.api.Assertions.assertEquals(4, spellDmgVp.getValue(context, player, m1, m1));
+
+				ValueProvider distinctTribesVp = createVp(net.demilich.metastone.game.spells.desc.valueprovider.DistinctTribesValueProvider.class,
+						ValueProviderArg.TARGET, EntityReference.FRIENDLY_MINIONS);
+				org.junit.jupiter.api.Assertions.assertEquals(2, distinctTribesVp.getValue(context, player, m1, m1));
+
+				ValueProvider minionSummonVp = createVp(net.demilich.metastone.game.spells.desc.valueprovider.MinionSummonValueProvider.class);
+				org.junit.jupiter.api.Assertions.assertTrue(minionSummonVp.getValue(context, player, m1, m1) >= 2);
+
+				// 4. Spells
+				SpellDesc eitherOr = new SpellDesc(net.demilich.metastone.game.spells.EitherOrSpell.class);
+				eitherOr.put(SpellArg.CONDITION, manaMaxed.create());
+				eitherOr.put(SpellArg.SPELL1, BuffSpell.create(EntityReference.SELF, 1, 1));
+				eitherOr.put(SpellArg.SPELL2, BuffSpell.create(EntityReference.SELF, 0, 0));
+				eitherOr.setReadOnly(true);
+				int prevAttack = m1.getAttack();
+				DescBytecodeCompiler.castSpell(eitherOr.create(), context, player, eitherOr, m1, Collections.singletonList(m1));
+				org.junit.jupiter.api.Assertions.assertEquals(prevAttack + 1, m1.getAttack());
+			}
+		}, HeroClass.BROWN, HeroClass.BROWN);
 	}
 }

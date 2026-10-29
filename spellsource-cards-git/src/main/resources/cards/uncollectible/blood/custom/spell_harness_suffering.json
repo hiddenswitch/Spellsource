@@ -15,7 +15,8 @@
       "filter": {
         "class": "DamagedFilter"
       }
-    }
+    },
+    "name": "Harness Suffering"
   },
   "collectible": false,
   "set": "CUSTOM",

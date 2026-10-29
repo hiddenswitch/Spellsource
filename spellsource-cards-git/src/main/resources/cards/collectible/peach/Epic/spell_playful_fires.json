@@ -53,7 +53,8 @@
         }
       },
       "oneTurn": true
-    }
+    },
+    "name": "Playful Fires"
   },
   "collectible": true,
   "set": "CUSTOM",

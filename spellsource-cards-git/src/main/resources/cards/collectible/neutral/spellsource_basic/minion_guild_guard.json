@@ -11,7 +11,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "OTHER_FRIENDLY_MINIONS",
-      "value": 1
+      "value": 1,
+      "name": "Guild Guard's Blessing"
     }
   },
   "attributes": {

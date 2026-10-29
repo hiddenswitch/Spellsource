@@ -11,8 +11,8 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "RoastSpell",
-      "target": "FRIENDLY_DECK",
-      "filter": {
+      "value": 3,
+      "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION",
         "manaCost": 1

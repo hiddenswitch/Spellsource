@@ -341,6 +341,8 @@ public class Card extends Entity implements HasChooseOneActions {
 		copy.getAttributes().remove(Attribute.STARTED_IN_DECK);
 		copy.getAttributes().remove(Attribute.BEING_PLAYED);
 		copy.getAttributes().remove(Attribute.TRANSFORM_REFERENCE);
+		copy.getAttributes().remove(Attribute.CASTED_ON_FRIENDLY_MINION);
+		copy.getAttributes().remove(Attribute.CASTED_ON_FRIENDLY_CHARACTER);
 		// Always use the origin copy if it isn't none
 		if (hasAttribute(Attribute.COPIED_FROM)) {
 			copy.getAttributes().put(Attribute.COPIED_FROM, getAttribute(Attribute.COPIED_FROM));
@@ -484,10 +486,14 @@ public class Card extends Entity implements HasChooseOneActions {
 		if (Objects.equals(heroClass, HeroClass.INHERIT)) {
 			return true;
 		}
-		String[] classes = getHeroClasses();
+		String singleClass = (String) getAttributes().getOrDefault(Attribute.HERO_CLASS, getDesc().getHeroClass());
+		if (Objects.equals(heroClass, singleClass)) {
+			return true;
+		}
+		String[] classes = getDesc().getHeroClasses();
 		if (classes != null) {
 			for (String h : classes) {
-				if (heroClass.equals(h)) {
+				if (Objects.equals(heroClass, h)) {
 					return true;
 				}
 			}

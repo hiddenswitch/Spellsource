@@ -25,12 +25,10 @@ public class PlayedThisTurnValueProvider extends ValueProvider {
 		super(desc);
 	}
 
-	@Override
-	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
+	protected int provideValue(GameContext context, Player player, Entity target, Entity host, EntityFilter filter, EntityFilter cardFilter) {
 		Map<String, Map<Integer, Integer>> cardIds = player.getStatistics().getCardsPlayed();
-		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
 		if (filter == null) {
-			filter = (EntityFilter) getDesc().get(ValueProviderArg.CARD_FILTER);
+			filter = cardFilter;
 		}
 		if (filter == null) {
 			filter = AndFilter.create();

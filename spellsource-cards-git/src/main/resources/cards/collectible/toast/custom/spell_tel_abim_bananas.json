@@ -12,11 +12,13 @@
       {
         "class": "BuffSpell",
         "attackBonus": 2,
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Tel'Abim Bananas"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "CANNOT_ATTACK_HEROES"
+        "attribute": "CANNOT_ATTACK_HEROES",
+        "name": "Tel'Abim Bananas"
       }
     ]
   },

@@ -13,7 +13,8 @@
     "spell": {
       "class": "TemporaryAttackSpell",
       "target": "FRIENDLY_HERO",
-      "value": 2
+      "value": 2,
+      "name": "Torchbearer's Rally"
     }
   },
   "attributes": {

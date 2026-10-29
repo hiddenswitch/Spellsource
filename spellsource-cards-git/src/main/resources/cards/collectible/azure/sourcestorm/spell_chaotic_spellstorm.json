@@ -25,6 +25,15 @@
           "cardType": "SPELL"
         },
         "randomTarget": true
+      },
+      {
+        "class": "ReplaceCardsSpell",
+        "target": "ENEMY_HAND",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        "randomTarget": true
       }
     ]
   },

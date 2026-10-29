@@ -12,11 +12,13 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 1
+        "value": 1,
+        "name": "Suzume Stance"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "DIVINE_SHIELD"
+        "attribute": "DIVINE_SHIELD",
+        "name": "Suzume Stance"
       }
     ]
   },

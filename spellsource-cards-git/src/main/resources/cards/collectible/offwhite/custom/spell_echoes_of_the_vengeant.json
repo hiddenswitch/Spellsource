@@ -15,11 +15,13 @@
       "spells": [
         {
           "class": "SetAttackSpell",
-          "value": 1
+          "value": 1,
+          "name": "Echoes of the Vengeant"
         },
         {
           "class": "SetHpSpell",
-          "value": 1
+          "value": 1,
+          "name": "Echoes of the Vengeant"
         }
       ]
     },

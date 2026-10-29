@@ -12,7 +12,8 @@
     "spell": {
       "class": "AddAttributeSpell",
       "target": "ENEMY_MINIONS",
-      "attribute": "TAUNT"
+      "attribute": "TAUNT",
+      "name": "Corrupted Defender's Guard"
     }
   },
   "attributes": {

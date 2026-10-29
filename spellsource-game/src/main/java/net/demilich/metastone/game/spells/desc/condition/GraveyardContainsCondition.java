@@ -16,26 +16,18 @@ public class GraveyardContainsCondition extends Condition {
 		super(desc);
 	}
 
-	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		String cardId;
-		if (desc.containsKey(ConditionArg.CARD)) {
-			cardId = (String) desc.get(ConditionArg.CARD);
-		} else {
-			cardId = target.getSourceCard().getCardId();
-		}
-
+	protected boolean isFulfilled(
+			GameContext context,
+			Player player,
+			Entity source,
+			Entity target,
+			String card) {
+		String cardId = card != null ? card : target.getSourceCard().getCardId();
 		for (var deadEntity : player.getGraveyard()) {
-			Card card;
-			if (deadEntity instanceof Actor && deadEntity.diedOnBattlefield()) {
-				var actor = (Actor) deadEntity;
-				card = actor.getSourceCard();
-			} else {
-				continue;
-			}
-
-			if (card.getCardId().equalsIgnoreCase(cardId)) {
-				return true;
+			if (deadEntity instanceof Actor actor && deadEntity.diedOnBattlefield()) {
+				if (actor.getSourceCard().getCardId().equalsIgnoreCase(cardId)) {
+					return true;
+				}
 			}
 		}
 		return false;

@@ -54,13 +54,37 @@ subprojects {
     }
   }
 
+  final String slf4jVer = slf4jVersion
+  final String jacksonVer = jacksonVersion
+  final String nettyVer = nettyVersion
+  final String rxJavaVer = rxJavaVersion
+  final String commonsIoVer = commonsIoVersion
+  final String vertxVer = vertxVersion
+  final String logbackVer = logbackVersion
+  final String log4jVer = log4jVersion
+  final String mockitoCoreVer = mockitoCoreVersion
+  final String guavaVer = guavaVersion
+  final String protocVer = protocVersion
+  final String jmhVer = jmhVersion
+  final String junitVer = junitVersion
+  final String kotlinVer = kotlinVersion
+  final String bytebuddyVer = bytebuddyVersion
+  final String j2objcVer = j2objcVersion
+  final String googleErrorproneVer = googleErrorproneVersion
+  final String gsonVer = gsonVersion
+  final String grpcVer = grpcVersion
+  final String testcontainersVer = testcontainersVersion
+  final String resteasyVer = resteasyVersion
+  final String micrometerVer = micrometerVersion
+  final String infinispanVer = infinispanVersion
+
   configurations.configureEach {
     resolutionStrategy {
       preferProjectModules()
       failOnVersionConflict()
       eachDependency { DependencyResolveDetails details ->
         if (details.requested.group == 'org.slf4j') {
-          details.useVersion slf4jVersion
+          details.useVersion slf4jVer
         }
         if ([
                 'com.fasterxml.jackson.core',
@@ -70,14 +94,18 @@ subprojects {
                 'com.fasterxml.jackson.module',
                 'com.fasterxml.jackson.dataformat'
         ].contains(details.requested.group)) {
-          details.useVersion jacksonVersion
+          if (details.requested.name == 'jackson-annotations' && jacksonVer.startsWith('2.2')) {
+            details.useVersion jacksonVer.tokenize('.')[0..1].join('.')
+          } else {
+            details.useVersion jacksonVer
+          }
         }
 
         if (details.requested.group == 'io.netty'
                 && details.requested.version.contains('Final')
                 && details.requested.name != 'netty-tcnative-boringssl-static'
                 && details.requested.name != 'netty-tcnative-classes') {
-          details.useVersion nettyVersion
+          details.useVersion nettyVer
         }
 
         if (details.requested.module.name == 'reactive-streams') {
@@ -85,52 +113,52 @@ subprojects {
         }
 
         if (details.requested.group == 'io.reactivex.rxjava3' && details.requested.module.name == "rxjava") {
-          details.useVersion rxJavaVersion
+          details.useVersion rxJavaVer
         }
 
         if (details.requested.group == 'commons-io') {
-          details.useVersion commonsIoVersion
+          details.useVersion commonsIoVer
         }
 
         if (details.requested.group == 'io.vertx' && !details.requested.version.toLowerCase().contains("snapshot")) {
           if (details.requested.module.name == "vertx-docgen") {
             details.useVersion "3.5.1"
           } else {
-            details.useVersion vertxVersion
+            details.useVersion vertxVer
           }
         }
 
         if (details.requested.group == 'ch.qos.logback') {
-          details.useVersion logbackVersion
+          details.useVersion logbackVer
         }
 
         if (details.requested.group == 'log4j') {
-          details.useVersion log4jVersion
+          details.useVersion log4jVer
         }
 
         if (details.requested.module.name == 'mockito-core') {
-          details.useVersion mockitoCoreVersion
+          details.useVersion mockitoCoreVer
         }
 
         if (details.requested.group == 'com.google.guava' && details.requested.module.name == 'guava') {
-          details.useVersion guavaVersion
+          details.useVersion guavaVer
         }
 
         if (details.requested.group == 'com.google.protobuf' &&
                 (details.requested.module.name == 'protobuf-java' || details.requested.module.name == 'protobuf-java-util')) {
-          details.useVersion protocVersion
+          details.useVersion protocVer
         }
 
         if (details.requested.group == 'org.openjdk.jmh') {
-          details.useVersion jmhVersion
+          details.useVersion jmhVer
         }
 
         if (details.requested.group == 'org.junit.jupiter') {
-          details.useVersion junitVersion
+          details.useVersion junitVer
         }
 
         if (details.requested.group == 'org.junit.platform') {
-          details.useVersion '1.14.3'
+          details.useVersion '1.14.4'
         }
 
         if (details.requested.group == 'org.jetbrains' && details.requested.name == 'annotations') {
@@ -138,15 +166,15 @@ subprojects {
         }
 
         if (details.requested.group == 'org.jetbrains.kotlin') {
-          details.useVersion kotlinVersion
+          details.useVersion kotlinVer
         }
 
         if (details.requested.group == 'net.bytebuddy') {
-          details.useVersion bytebuddyVersion
+          details.useVersion bytebuddyVer
         }
 
         if (details.requested.group == 'org.jboss.logging' && details.requested.name == 'jboss-logging') {
-          details.useVersion '3.6.2.Final'
+          details.useVersion '3.6.3.Final'
         }
 
         if (details.requested.group == 'org.keycloak' && (details.requested.name == 'keycloak-admin-client' || details.requested.name == 'keycloak-client-common-synced')) {
@@ -158,23 +186,23 @@ subprojects {
         }
 
         if (details.requested.group == 'com.google.j2objc') {
-          details.useVersion j2objcVersion
+          details.useVersion j2objcVer
         }
 
         if (details.requested.group == 'com.google.errorprone') {
-          details.useVersion googleErrorproneVersion
+          details.useVersion googleErrorproneVer
         }
 
         if (details.requested.group == 'com.google.code.gson') {
-          details.useVersion gsonVersion
+          details.useVersion gsonVer
         }
 
         if (details.requested.group == 'io.grpc') {
-          details.useVersion grpcVersion
+          details.useVersion grpcVer
         }
 
         if (details.requested.group == 'org.testcontainers') {
-          details.useVersion testcontainersVersion
+          details.useVersion testcontainersVer
         }
 
         if (details.requested.group == 'commons-codec') {
@@ -185,7 +213,7 @@ subprojects {
           if (details.requested.name == 'resteasy-tracing-api') {
             details.useVersion '2.0.2.Final'
           } else {
-            details.useVersion resteasyVersion
+            details.useVersion resteasyVer
           }
         }
 
@@ -198,7 +226,7 @@ subprojects {
         }
 
         if (details.requested.group == 'io.micrometer') {
-          details.useVersion micrometerVersion
+          details.useVersion micrometerVer
         }
 
         if (details.requested.group == 'com.github.ben-manes.caffeine') {
@@ -216,14 +244,14 @@ subprojects {
         if (details.requested.group == 'org.infinispan') {
           // Infinispan 15 merged -jakarta suffixed artifacts back to base names
           if (details.requested.name.endsWith('-jakarta')) {
-            details.useTarget "${details.requested.group}:${details.requested.name.replace('-jakarta', '')}:${infinispanVersion}"
+            details.useTarget "${details.requested.group}:${details.requested.name.replace('-jakarta', '')}:${infinispanVer}"
           } else {
-            details.useVersion infinispanVersion
+            details.useVersion infinispanVer
           }
         }
 
         if (details.requested.group == 'org.objenesis') {
-          details.useVersion '3.4'
+          details.useVersion '3.6'
         }
         
         if (details.requested.group == 'com.graphql-java' && details.requested.name == 'graphql-java') {
@@ -281,6 +309,7 @@ def pythonFiles = subprojects
 tasks.register('venv') {
   group('spellsource')
   description('Creates a Python environment and installs projects with setup.py or pyproject.toml files editably into it')
+  notCompatibleWithConfigurationCache("Uses dynamic script execution")
   def shell = isWindows ? ["./bin/sh.exe", "-c"] : ["sh", "-c"]
 
   inputs.files(pythonFiles.collect {
@@ -371,13 +400,14 @@ def binExt = isWindows ? ".cmd" : ""
 
 tasks.register("corepack", Exec) {
   def dirPath = ".gradle/yarn/yarn-v${yarnVersionStr}/${isWindows ? "" : "/bin"}"
+  def dirFile = layout.projectDirectory.dir(dirPath).asFile
   def path = "corepack${binExt}"
   if (isMacOs) {
     path = "/opt/homebrew/bin/corepack"
   }
-  outputs.dir(dirPath)
+  outputs.dir(dirFile)
   doFirst {
-    mkdir(dirPath)
+    dirFile.mkdirs()
   }
   commandLine path, "enable", "--install-directory", dirPath
 }

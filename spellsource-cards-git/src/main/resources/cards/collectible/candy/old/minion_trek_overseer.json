@@ -21,7 +21,8 @@
       "spell2": {
         "class": "BuffSpell",
         "attackBonus": 1,
-        "hpBonus": 1
+        "hpBonus": 1,
+        "name": "Trek Overseer's Blessing"
       }
     }
   },

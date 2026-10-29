@@ -15,18 +15,21 @@
     "spell1": {
       "class": "BuffSpell",
       "attackBonus": 2,
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Rising Flame"
     },
     "spell2": {
       "class": "MetaSpell",
       "spells": [
         {
           "class": "AddAttributeSpell",
-          "attribute": "RUSH"
+          "attribute": "RUSH",
+          "name": "Rising Flame"
         },
         {
           "class": "AddAttributeSpell",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "name": "Rising Flame"
         }
       ]
     }

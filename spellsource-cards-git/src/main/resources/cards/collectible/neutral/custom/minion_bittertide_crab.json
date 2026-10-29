@@ -21,13 +21,15 @@
       "spells": [
         {
           "class": "BuffSpell",
-          "armorBonus": -5
+          "armorBonus": -5,
+          "name": "Bittertide Crab's Aegis"
         },
         {
           "class": "BuffSpell",
           "target": "SELF",
           "attackBonus": 1,
-          "hpBonus": 1
+          "hpBonus": 1,
+          "name": "Bittertide Crab's Empowerment"
         }
       ]
     }

@@ -17,7 +17,8 @@
         "class": "SpecificCardFilter",
         "card": "spell_soar"
       }
-    }
+    },
+    "name": "Dream of Ascendance"
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

@@ -11,7 +11,8 @@
     "spell": {
       "class": "DestroySpell",
       "target": "ALL_MINIONS"
-    }
+    },
+    "name": "Mark of Twilight"
   },
   "collectible": true,
   "set": "CUSTOM",

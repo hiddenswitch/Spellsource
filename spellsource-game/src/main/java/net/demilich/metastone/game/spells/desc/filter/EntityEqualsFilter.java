@@ -47,11 +47,9 @@ public class EntityEqualsFilter extends EntityFilter {
 		return desc.create();
 	}
 
-	@Override
-	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		List<Entity> secondaries = context.resolveTarget(player, host, (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET));
-		if (getDesc().containsKey(EntityFilterArg.FILTERS)) {
-			EntityFilter[] filters = (EntityFilter[]) getDesc().get(EntityFilterArg.FILTERS);
+	protected boolean test(GameContext context, Player player, Entity entity, Entity host, EntityReference secondaryTarget, EntityFilter[] filters) {
+		List<Entity> secondaries = context.resolveTarget(player, host, secondaryTarget);
+		if (filters != null) {
 			for (EntityFilter filter : filters) {
 				secondaries.removeIf(entity1 -> !filter.test(context, player, entity1, host));
 			}

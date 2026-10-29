@@ -19,7 +19,8 @@
         },
         "revertTrigger": {
           "class": "TurnEndTrigger"
-        }
+        },
+        "name": "Roar of Dominance"
       },
       {
         "class": "ReceiveCardSpell",

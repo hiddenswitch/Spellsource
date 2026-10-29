@@ -18,7 +18,8 @@
         "target": "FRIENDLY_HAND",
         "attackBonus": 4,
         "hpBonus": 0,
-        "randomTarget": true
+        "randomTarget": true,
+        "name": "Firegate Vigilante's Blessing"
       }
     }
   },

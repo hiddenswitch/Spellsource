@@ -29,8 +29,9 @@ tasks.generateTypeScript {
 }
 
 tasks.named('compileJava', JavaCompile).configure {
+    def launcher = javaToolchains.launcherFor(java.toolchain)
     doLast {
-        def javaExe = javaToolchains.launcherFor(java.toolchain).get().executablePath.asFile.absolutePath
+        def javaExe = launcher.get().executablePath.asFile.absolutePath
         def classesDir = destinationDirectory.get().asFile.absolutePath
         def cp = classesDir + File.pathSeparator + classpath.asPath
         def pb = new ProcessBuilder(

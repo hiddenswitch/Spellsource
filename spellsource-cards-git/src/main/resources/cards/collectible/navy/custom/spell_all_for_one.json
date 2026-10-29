@@ -12,7 +12,8 @@
       "class": "EntityCountValueProvider",
       "target": "FRIENDLY_MINIONS"
     },
-    "hpBonus": 0
+    "hpBonus": 0,
+    "name": "All For One"
   },
   "collectible": true,
   "set": "CUSTOM",

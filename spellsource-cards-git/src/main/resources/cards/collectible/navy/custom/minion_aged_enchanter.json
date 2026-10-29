@@ -15,7 +15,8 @@
       "filter": {
         "class": "HasAttackedFilter"
       },
-      "hpBonus": 2
+      "hpBonus": 2,
+      "name": "Aged Enchanter's Blessing"
     }
   },
   "attributes": {

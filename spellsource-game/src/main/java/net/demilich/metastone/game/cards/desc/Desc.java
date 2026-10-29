@@ -144,11 +144,7 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 
 	@Override
 	public int hashCode() {
-		HashCodeBuilder builder = new HashCodeBuilder(113, 71);
-		for (Map.Entry entry : this.entrySet()) {
-			builder.append(entry.hashCode());
-		}
-		return builder.toHashCode();
+		return super.hashCode();
 	}
 
 	@Override

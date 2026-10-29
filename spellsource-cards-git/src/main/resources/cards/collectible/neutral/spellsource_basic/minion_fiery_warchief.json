@@ -10,7 +10,8 @@
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
-    "hpBonus": 2
+    "hpBonus": 2,
+    "name": "Fiery Warchief's Ward"
   },
   "attributes": {
     "DEATHRATTLES": true

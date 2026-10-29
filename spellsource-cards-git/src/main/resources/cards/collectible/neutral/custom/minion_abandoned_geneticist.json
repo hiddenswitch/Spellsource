@@ -26,11 +26,13 @@
           },
           {
             "class": "SetAttackSpell",
-            "value": 1
+            "value": 1,
+            "name": "Abandoned Geneticist's Humility"
           },
           {
             "class": "SetHpSpell",
-            "value": 1
+            "value": 1,
+            "name": "Abandoned Geneticist's Mark"
           }
         ]
       },

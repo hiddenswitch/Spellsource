@@ -37,7 +37,8 @@
         "filter": {
           "class": "CardFilter",
           "cardType": "MINION"
-        }
+        },
+        "name": "Renew It"
       },
       {
         "class": "SetHpSpell",
@@ -46,7 +47,8 @@
         "filter": {
           "class": "CardFilter",
           "cardType": "MINION"
-        }
+        },
+        "name": "Renew It"
       }
     ]
   },

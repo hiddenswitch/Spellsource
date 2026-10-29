@@ -18,7 +18,8 @@
       "target": "EVENT_TARGET",
       "value": {
         "class": "EventValueProvider"
-      }
+      },
+      "name": "Souldrinker's Rally"
     }
   },
   "attributes": {},

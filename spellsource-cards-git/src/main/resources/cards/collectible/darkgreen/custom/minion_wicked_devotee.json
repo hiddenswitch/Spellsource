@@ -15,7 +15,8 @@
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "attackBonus": 1
+      "attackBonus": 1,
+      "name": "Wicked Devotee's Fury"
     }
   },
   "collectible": true,

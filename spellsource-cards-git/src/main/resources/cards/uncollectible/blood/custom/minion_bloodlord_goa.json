@@ -15,7 +15,8 @@
       "target": "SELF",
       "spell": {
         "class": "custom.RepeatAllAftermathsSpell"
-      }
+      },
+      "name": "Bloodlord Goa's Legacy"
     }
   },
   "attributes": {

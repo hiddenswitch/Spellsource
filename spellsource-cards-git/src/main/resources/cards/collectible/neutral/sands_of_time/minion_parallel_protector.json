@@ -31,7 +31,8 @@
           "class": "CardFilter",
           "cardType": "SPELL"
         }
-      }
+      },
+      "name": "Parallel Protector's Fortitude"
     }
   },
   "attributes": {

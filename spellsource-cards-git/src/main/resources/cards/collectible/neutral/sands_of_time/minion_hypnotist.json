@@ -17,14 +17,16 @@
           "value": {
             "class": "AttributeValueProvider",
             "attribute": "BASE_MANA_COST"
-          }
+          },
+          "name": "Hypnotist's Might"
         },
         {
           "class": "SetHpSpell",
           "value": {
             "class": "AttributeValueProvider",
             "attribute": "BASE_MANA_COST"
-          }
+          },
+          "name": "Hypnotist's Vitality"
         }
       ]
     }

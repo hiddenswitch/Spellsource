@@ -18,7 +18,8 @@
         "class": "BuffSpell",
         "target": "TRIGGER_HOST",
         "attackBonus": 2,
-        "hpBonus": 2
+        "hpBonus": 2,
+        "name": "Steel Smold-a-Bot's Blessing"
       }
     }
   },

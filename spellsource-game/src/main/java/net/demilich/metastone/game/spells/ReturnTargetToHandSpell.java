@@ -82,7 +82,7 @@ public class ReturnTargetToHandSpell extends Spell {
 		if (desc.containsKey(SpellArg.TARGET_PLAYER)) {
 			owner = player;
 		}
-		if (owner.getHand().getCount() >= GameLogic.MAX_HAND_CARDS
+		if (owner.getHand().getCount() >= context.getLogic().getMaxHandCards(owner)
 				&& Actor.class.isAssignableFrom(target.getClass())) {
 			logger.debug("onCast: {} is destroyed because {}'s hand is full", target, owner.getName());
 			context.getLogic().markAsDestroyed((Actor) target, source);
@@ -91,6 +91,9 @@ public class ReturnTargetToHandSpell extends Spell {
 			// The minion might be destroyed or already returned to hand due to Baron Rivendare at this point.
 			// Doomerang may have returned Kingsbane
 			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());
+			var keptEnchantments = (target instanceof Actor)
+					? SpellUtils.extractKeptEnchantments(context, target)
+					: java.util.Collections.<net.demilich.metastone.game.spells.trigger.Enchantment>emptyList();
 			if (target.getZone() == Zones.BATTLEFIELD
 					|| target.getZone() == Zones.WEAPON) {
 				context.getLogic().removeActor((Actor) target, true);
@@ -112,6 +115,7 @@ public class ReturnTargetToHandSpell extends Spell {
 				returnedCard.getAttributes().remove(Attribute.DISCARDED);
 			} else {
 				context.getLogic().receiveCard(owner.getId(), returnedCard);
+				SpellUtils.applyKeptEnchantments(context, owner, source, returnedCard, keptEnchantments);
 			}
 			if (cardSpell != null && returnedCard.getZone() == Zones.HAND) {
 				SpellUtils.castChildSpell(context, player, cardSpell, source, target, returnedCard);
