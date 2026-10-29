@@ -312,6 +312,21 @@ public class TestBase {
 		return null;
 	}
 
+	/**
+	 * The triggers in play excluding the format's rule enchantments, which every game puts on both players.
+	 */
+	public static List<net.demilich.metastone.game.spells.trigger.Trigger> nonRuleTriggers(GameContext context) {
+		var ruleCardIds = new HashSet<>(Arrays.asList(CardCatalogue.DEFAULT_RULE_CARDS));
+		if (context.getDeckFormat() != null) {
+			ruleCardIds.addAll(context.getDeckFormat().getRuleCardsList());
+		}
+		return context.getTriggers().stream()
+				.filter(trigger -> !(trigger instanceof Enchantment enchantment
+						&& enchantment.getSourceCard() != null
+						&& ruleCardIds.contains(enchantment.getSourceCard().getCardId())))
+				.toList();
+	}
+
 	public static Card receive(GameContext context, Player player, int attack, int hp, int manaCost, Attribute... attributes) {
 		CardDesc desc = new CardDesc();
 		desc.setId(context.getLogic().generateCardId());

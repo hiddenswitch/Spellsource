@@ -31,6 +31,13 @@ public abstract class EntityEqualityCondition extends Condition {
 		if (lhs.isEmpty() || rhs.isEmpty()) {
 			return false;
 		}
+		return compare(lhs, rhs);
+	}
+
+	/**
+	 * Compares the non-empty {@code lhs} and {@code rhs} entity lists. By default, the lists must be equal.
+	 */
+	protected boolean compare(List<Entity> lhs, List<Entity> rhs) {
 		return Objects.equals(lhs, rhs);
 	}
 

@@ -119,7 +119,8 @@ public final class RandomDeck extends GameDeck {
 
 	private static java.util.Map<String, List<Card>> buildCandidatePools(CardCatalogue cardCatalogue, DeckFormat deckFormat) {
 		var pools = new java.util.HashMap<String, List<Card>>(32);
-		for (var card : cardCatalogue.getCards().values()) {
+		// getAll copies the catalogue under its lock; tests may add cards to the shared catalogue concurrently.
+		for (var card : cardCatalogue.getAll()) {
 			var cardType = card.getCardType();
 			if (!deckFormat.isInFormat(card)
 					|| !card.isCollectible()

@@ -75,7 +75,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(player.getMinions().size(), 2);
 			assertEquals(auraMinion.getAttack(), 4);
 			assertEquals(copy.getAttack(), 4);
-			assertEquals(context.getTriggers().size(), 2);
+			assertEquals(nonRuleTriggers(context).size(), 2);
 		});
 
 		runGym((context, player, opponent) -> {
@@ -487,9 +487,9 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(attacker.getAttack(), BASE_ATTACK + ENRAGE_ATTACK_BONUS);
 			assertTrue(attacker.hasAttribute(Attribute.ENRAGED));
 
-			// attack should be set to 1
+			// attack should be set to 1, and the active enrage bonus still applies on top of it
 			playCard(context, player, "spell_test_set_1_attack", attacker);
-			assertEquals(attacker.getAttack(), 1);
+			assertEquals(attacker.getAttack(), 1 + ENRAGE_ATTACK_BONUS);
 			assertTrue(attacker.hasAttribute(Attribute.ENRAGED));
 		});
 	}

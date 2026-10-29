@@ -16,6 +16,11 @@
       {
         "class": "MindControlSpell",
         "target": "ENEMY_MINIONS",
+        "filter": {
+          "class": "EntityEqualsFilter",
+          "secondaryTarget": "TARGET",
+          "invert": true
+        },
         "randomTarget": true
       }
     ]
