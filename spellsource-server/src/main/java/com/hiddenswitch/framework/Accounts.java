@@ -581,6 +581,10 @@ public class Accounts {
 
 	public static Future<JWTAuthOptions> jwtAuthOptions(WebClient webClient) {
 		var issuer = keycloakAuthUrl();
+		var cached = JWT_AUTH_OPTIONS_CACHE.get(issuer);
+		if (cached != null) {
+			return Future.succeededFuture(cached);
+		}
 		var issuerUri = URI.create(issuer);
 		var jwksUri = URI.create(String.format("%s://%s:%d%s",
 				issuerUri.getScheme(), issuerUri.getHost(), issuerUri.getPort(), issuerUri.getPath() + "realms/hiddenswitch/protocol/openid-connect/certs"));
@@ -604,7 +608,7 @@ public class Accounts {
 					jwtAuthOptions.setJwks(jwks);
 					jwtAuthOptions.setJWTOptions(jwtOptions);
 					// setPermissionsClaimKey removed in Vert.x 5
-
+					JWT_AUTH_OPTIONS_CACHE.putIfAbsent(issuer, jwtAuthOptions);
 					return Future.succeededFuture(jwtAuthOptions);
 				});
 	}

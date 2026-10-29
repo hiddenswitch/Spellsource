@@ -86,6 +86,8 @@ public class ServerGameContext extends GameContext implements Server {
 	private final transient Promise<Void> initialization = Promise.promise();
 	private final Context context;
 	private final List<MessageConsumer<?>> gameLifecycleConsumers = new ArrayList<>();
+	private final List<MessageConsumer<?>> clientConsumers = new CopyOnWriteArrayList<>();
+	private final List<Future<String>> userVerticleDeployments = new CopyOnWriteArrayList<>();
 	private final ClusteredGames cluster;
 	private final AbstractVirtualThreadVerticle verticle;
 	private final List<Configuration> playerConfigurations = new ArrayList<>();
@@ -220,6 +222,8 @@ public class ServerGameContext extends GameContext implements Server {
 					var serverGameContext = this;
 					// Improve robustness of the user's event bus handlers and interaction with the game context by giving it a
 					// distinct task queue from the game and/or other users.
+					Promise<Void> registration = Promise.promise();
+					registrationsReady.add(registration);
 					var userVerticle = new AbstractVirtualThreadVerticle() {
 						private UnityClientBehaviour client;
 						private MessageProducer<Spellsource.ServerToClientMessage> producer;
@@ -228,15 +232,14 @@ public class ServerGameContext extends GameContext implements Server {
 						public void startVirtual() {
 							var bus = Vertx.currentContext().owner().eventBus();
 							this.consumer = bus.consumer(getMessagesFromClientAddress(userId));
+							clientConsumers.add(this.consumer);
 							// setMaxBufferedMessages removed in Vert.x 5
 							// By using a publisher, we do not require that there be a working connection while sending
 							this.producer = new RetryMessageProducer<>(
-									bus.publisher(getMessagesFromServerAddress(userId)), 10, 1000);
+									bus.publisher(getMessagesFromServerAddress(userId)), 50, 100);
 							// The event bus
 
-							Promise<Void> registration = Promise.promise();
 							consumer.completion().onComplete(registration);
-							registrationsReady.add(registration);
 
 							// Create a client that handles game events and action/mulligan requests
 							this.client = new UnityClientBehaviour(serverGameContext,
@@ -284,9 +287,9 @@ public class ServerGameContext extends GameContext implements Server {
 					// The verticle takes time to deploy, which can interfere with the expectation that once a ServerGameContext
 					// is created, messages can be sent. handlersReady() should already be dealing with this, but it doesn't
 					// apparently, so the SubscribeGame method is configured to retry sending for now.
-					List<String> verticles = new CopyOnWriteArrayList<>();
-					vertx.deployVerticle(userVerticle, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
-							.onSuccess(verticles::add);
+					var deployFut = vertx.deployVerticle(userVerticle, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
+							.onFailure(registration::tryFail);
+					userVerticleDeployments.add(deployFut);
 					Promise<Client> fut = Promise.promise();
 					clientsReady.put(configuration.getPlayerId(), fut);
 				}
@@ -311,26 +314,25 @@ public class ServerGameContext extends GameContext implements Server {
 		// client. Messages are buffered and dequeued. A NO_HANDLERS exception indicates the ServerGameContext isn't ready
 		// yet. We retry, up to ten times, with a 1-second interval, to send, since most games are ready within 10s.
 		var publisher = eventBus.<Spellsource.ClientToServerMessage>publisher(getMessagesFromClientAddress(userId));
-		var retryPublisher = new RetryMessageProducer<>(publisher, 10, 1000, body -> body.getMessageType() == Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE);
+		var retryPublisher = new RetryMessageProducer<>(publisher, 50, 100, body -> body.getMessageType() == Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE);
+		var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(getMessagesFromServerAddress(userId));
+		var consumerReady = consumer.completion().otherwiseEmpty();
 		request.handler(body -> {
 			keepAliveManager.onDataReceived();
-			retryPublisher.write(body);
+			consumerReady.onComplete(v -> retryPublisher.write(body));
 		});
-
-		var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(getMessagesFromServerAddress(userId));
 		request.endHandler(v -> {
 			keepAliveManager.onTransportTermination();
+			retryPublisher.close();
 			consumer.unregister();
 		});
 		request.exceptionHandler(t -> {
 			keepAliveManager.onTransportTermination();
+			retryPublisher.close();
 			consumer.unregister();
 		});
-		consumer.pause();
-		// setMaxBufferedMessages removed in Vert.x 5
 		consumer.bodyStream().pipe().endOnComplete(false).endOnFailure(false).to(response);
-		consumer.completion().onSuccess(v -> consumer.resume());
-		request.resume();
+		consumerReady.onComplete(v -> request.resume());
 	}
 
 	/**
@@ -439,6 +441,9 @@ public class ServerGameContext extends GameContext implements Server {
 						bothClientsReady = Future.failedFuture(bothClientsReady.cause());
 					}
 				} catch (Throwable t) {
+					if (Throwables.getRootCause(t) instanceof InterruptedException) {
+						throw t;
+					}
 					bothClientsReady = Future.failedFuture(t);
 				}
 			} else {
@@ -505,11 +510,16 @@ public class ServerGameContext extends GameContext implements Server {
 				mulligansActive.complete(Collections.emptyList());
 			} else {
 				getBehaviours().get(getActivePlayerId()).mulliganAsync(this, getActivePlayer(), firstHandActive, res -> {
-					// TODO: Game started should not be set here, strictly speaking
-					// Fixes issues with mulligans not being dismissed correctly
-					getActivePlayer().setAttribute(Attribute.GAME_STARTED);
-					// Update this user
-					updateClientWithGameState(getActivePlayerId());
+					lock.lock();
+					try {
+						// TODO: Game started should not be set here, strictly speaking
+						// Fixes issues with mulligans not being dismissed correctly
+						getActivePlayer().setAttribute(Attribute.GAME_STARTED);
+						// Update this user
+						updateClientWithGameState(getActivePlayerId());
+					} finally {
+						lock.unlock();
+					}
 					mulligansActive.complete(res);
 				});
 			}
@@ -518,8 +528,13 @@ public class ServerGameContext extends GameContext implements Server {
 				mulligansNonActive.complete(Collections.emptyList());
 			} else {
 				getBehaviours().get(getNonActivePlayerId()).mulliganAsync(this, getNonActivePlayer(), firstHandNonActive, (res) -> {
-					getNonActivePlayer().setAttribute(Attribute.GAME_STARTED);
-					updateClientWithGameState(getNonActivePlayerId());
+					lock.lock();
+					try {
+						getNonActivePlayer().setAttribute(Attribute.GAME_STARTED);
+						updateClientWithGameState(getNonActivePlayerId());
+					} finally {
+						lock.unlock();
+					}
 					mulligansNonActive.complete(res);
 				});
 			}
@@ -691,7 +706,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			super.startTurn(playerId);
-			var state = new GameState(this, TurnState.TURN_IN_PROGRESS, true);
+			var state = new GameState(this, TurnState.TURN_IN_PROGRESS, false);
 			for (var updateClient : getClients()) {
 				updateClient.onUpdate(state);
 			}
@@ -900,6 +915,10 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	protected void notifyPlayersGameOver() {
 		for (var client : getClients()) {
+			var ready = clientsReady.get(client.getPlayerId());
+			if (ready != null && !ready.future().isComplete()) {
+				continue;
+			}
 			LOGGER.trace("notifyPlayersGameOver: notifying {}", client.getUserId());
 			client.sendGameOver(getGameStateCopy(), getWinner());
 		}
@@ -952,8 +971,30 @@ public class ServerGameContext extends GameContext implements Server {
 			super.endGame();
 			LOGGER.trace("endGame {}: called super.endGame", gameId);
 
+			var flushes = new ArrayList<Future<?>>();
+			for (var client : getClients()) {
+				var ready = clientsReady.get(client.getPlayerId());
+				if (ready != null && !ready.future().isComplete()) {
+					continue;
+				}
+				flushes.add(com.hiddenswitch.framework.Environment.timeout(client.lastWriteFuture(), 5000L, verticle.getVertx()).otherwiseEmpty());
+			}
+			if (Thread.currentThread().isVirtual() && !flushes.isEmpty()) {
+				await(Future.all(flushes));
+			}
+
+			var unregistrations = new ArrayList<Future<?>>();
 			for (var consumer : gameLifecycleConsumers) {
-				consumer.unregister();
+				unregistrations.add(consumer.unregister().otherwiseEmpty());
+			}
+			for (var consumer : clientConsumers) {
+				unregistrations.add(consumer.unregister().otherwiseEmpty());
+			}
+			for (var client : getClients()) {
+				client.close(Promise.promise());
+			}
+			if (Thread.currentThread().isVirtual() && !unregistrations.isEmpty()) {
+				await(Future.all(unregistrations));
 			}
 
 			RogueManager.handleGameEnd(Long.parseLong(gameId), getWinner() == null ? null : getWinner().getUserId());

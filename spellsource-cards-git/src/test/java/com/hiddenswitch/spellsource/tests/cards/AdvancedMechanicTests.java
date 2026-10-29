@@ -489,7 +489,14 @@ public class AdvancedMechanicTests extends TestBase {
 
 			// attack should be set to 1, and the active enrage bonus still applies on top of it
 			playCard(context, player, "spell_test_set_1_attack", attacker);
+			assertEquals(attacker.getAttack(), 1);
+			assertTrue(attacker.hasAttribute(Attribute.ENRAGED));
+			playCard(context, player, "spell_test_heal_12", attacker);
+			assertEquals(attacker.getAttack(), 1);
+			assertFalse(attacker.hasAttribute(Attribute.ENRAGED));
+			attack(context, opponent, attacker, defender1);
 			assertEquals(attacker.getAttack(), 1 + ENRAGE_ATTACK_BONUS);
+			assertTrue(attacker.hasAttribute(Attribute.ENRAGED));
 			assertTrue(attacker.hasAttribute(Attribute.ENRAGED));
 		});
 	}

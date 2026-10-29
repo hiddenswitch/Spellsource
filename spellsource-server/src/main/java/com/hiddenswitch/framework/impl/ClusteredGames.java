@@ -162,7 +162,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 						@Override
 						public void stopVirtual() {
 							var thread = serverGameContext.getThread();
-							if (thread != null && thread.isAlive() && !thread.isInterrupted() && !serverGameContext.isGameOver()) {
+							if (thread != null && thread.isAlive() && !thread.isInterrupted()) {
 								thread.interrupt();
 							}
 						}

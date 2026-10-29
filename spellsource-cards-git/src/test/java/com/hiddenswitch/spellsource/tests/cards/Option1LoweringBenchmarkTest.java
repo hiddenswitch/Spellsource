@@ -43,10 +43,12 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.api.parallel.Isolated;
 
 import java.util.Collections;
 import java.util.List;
 
+@Isolated
 @Execution(ExecutionMode.SAME_THREAD)
 public class Option1LoweringBenchmarkTest extends TestBase {
 

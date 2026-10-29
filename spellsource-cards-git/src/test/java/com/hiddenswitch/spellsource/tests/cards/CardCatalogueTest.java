@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ListCardCatalogue;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -45,9 +46,10 @@ public class CardCatalogueTest {
 				"  \"set\": \"CUSTOM\",\n" +
 				"  \"fileFormatVersion\": 1\n" +
 				"}";
-		assertEquals("minion_exampler_test", ClasspathCardCatalogue.INSTANCE.addOrReplaceCard(json));
-		assertNotNull(ClasspathCardCatalogue.INSTANCE.getCardById("minion_exampler_test"));
-		ClasspathCardCatalogue.INSTANCE.removeCard("minion_exampler_test");
-		assertThrows(NullPointerException.class, () -> ClasspathCardCatalogue.INSTANCE.getCardById("minion_exampler_test"));
+		var catalogue = new ListCardCatalogue(ClasspathCardCatalogue.INSTANCE);
+		assertEquals("minion_exampler_test", catalogue.addOrReplaceCard(json));
+		assertNotNull(catalogue.getCardById("minion_exampler_test"));
+		catalogue.removeCard("minion_exampler_test");
+		assertThrows(NullPointerException.class, () -> catalogue.getCardById("minion_exampler_test"));
 	}
 }

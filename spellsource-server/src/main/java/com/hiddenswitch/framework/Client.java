@@ -39,10 +39,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
+import java.util.WeakHashMap;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.vertx.await.Async.await;
@@ -50,6 +53,8 @@ import static io.vertx.core.Future.all;
 import static io.vertx.core.Future.any;
 
 public class Client {
+	private static final ConcurrentHashMap<String, JWT> JWT_CACHE = new ConcurrentHashMap<>();
+	private static final Map<Vertx, WebClient> SHARED_WEB_CLIENTS = new WeakHashMap<>();
 	protected final AtomicReference<GrpcClientWithOptions> managedChannel = new AtomicReference<>();
 	protected final Vertx vertx;
 	protected final WebClient webClient;
@@ -70,7 +75,7 @@ public class Client {
 		this.vertx = vertx;
 		this.webClient = webClient;
 		this.keycloakPath = keycloakPath;
-		this.jwt = new JWT();
+		this.jwt = JWT_CACHE.computeIfAbsent(keycloakPath, k -> new JWT());
 		loginUri = URI.create(keycloakPath + Accounts.KEYCLOAK_LOGIN_PATH).normalize().toString();
 	}
 
@@ -86,9 +91,21 @@ public class Client {
 	}
 
 	public Client(Vertx vertx) {
-		this(vertx, WebClient.create(vertx, new WebClientOptions()
-				.setKeepAlive(true)
-				.setProtocolVersion(HttpVersion.HTTP_2)));
+		this(vertx, sharedWebClient(vertx));
+	}
+
+	private static WebClient sharedWebClient(Vertx vertx) {
+		synchronized (SHARED_WEB_CLIENTS) {
+			var existing = SHARED_WEB_CLIENTS.get(vertx);
+			if (existing != null) {
+				return existing;
+			}
+			var created = WebClient.create(vertx, new WebClientOptions()
+					.setKeepAlive(true)
+					.setProtocolVersion(HttpVersion.HTTP_2));
+			SHARED_WEB_CLIENTS.put(vertx, created);
+			return created;
+		}
 	}
 
 	public Future<ServerToClientMessage> connectToGame() {
@@ -96,8 +113,10 @@ public class Client {
 		var promise = Promise.<ServerToClientMessage>promise();
 		var readerFut = legacy().subscribeGame(writerFut::tryComplete);
 
-		readerFut.onSuccess(reader -> reader.handler(promise::tryComplete));
-		readerFut.onSuccess(reader -> reader.exceptionHandler(promise::tryFail));
+		readerFut.onSuccess(reader -> {
+			reader.handler(promise::tryComplete);
+			reader.exceptionHandler(promise::tryFail);
+		});
 		readerFut.onFailure(cause -> {
 			promise.tryFail(cause);
 			writerFut.tryFail(cause);
@@ -119,43 +138,43 @@ public class Client {
 		var writerFut = writerPromise.future();
 		var gameOverPromise = Promise.<ServerToClientMessage>promise();
 
-		readerFut.onSuccess(reader -> reader.handler(message -> {
-			var writer = writerFut.result();
-			switch (message.getMessageType()) {
-				case ON_MULLIGAN:
-					writer.write(ClientToServerMessage.newBuilder()
-									.setMessageType(MessageTypeMessage.MessageType.UPDATE_MULLIGAN)
-									.setRepliesTo(message.getId())
-									.addDiscardedCardIndices(0)
-									.build())
-							.onFailure(gameOverPromise::tryFail);
-					break;
-				case ON_REQUEST_ACTION:
-					var actions = message.getActions();
-					if (actions.getCompatibilityCount() == 0) {
-						gameOverPromise.tryFail("Server offered no compatible game actions");
-						return;
-					}
-					writer.write(ClientToServerMessage.newBuilder()
-									.setMessageType(MessageType.UPDATE_ACTION)
-									.setRepliesTo(message.getId())
-									.setActionIndex(actions.getCompatibility(random.nextInt(actions.getCompatibilityCount())))
-									.build())
-							.onFailure(gameOverPromise::tryFail);
-					break;
-				case ON_GAME_END:
-					gameOverPromise.tryComplete(message);
-					break;
-			}
-		}));
+		readerFut.onSuccess(reader -> {
+			reader.exceptionHandler(gameOverPromise::tryFail);
+			reader.endHandler(ignored -> gameOverPromise.tryFail("Game stream ended before ON_GAME_END"));
+			reader.handler(message -> {
+				var writer = writerFut.result();
+				switch (message.getMessageType()) {
+					case ON_MULLIGAN:
+						writer.write(ClientToServerMessage.newBuilder()
+										.setMessageType(MessageTypeMessage.MessageType.UPDATE_MULLIGAN)
+										.setRepliesTo(message.getId())
+										.addDiscardedCardIndices(0)
+										.build())
+								.onFailure(gameOverPromise::tryFail);
+						break;
+					case ON_REQUEST_ACTION:
+						var actions = message.getActions();
+						if (actions.getCompatibilityCount() == 0) {
+							gameOverPromise.tryFail("Server offered no compatible game actions");
+							return;
+						}
+						writer.write(ClientToServerMessage.newBuilder()
+										.setMessageType(MessageType.UPDATE_ACTION)
+										.setRepliesTo(message.getId())
+										.setActionIndex(actions.getCompatibility(random.nextInt(actions.getCompatibilityCount())))
+										.build())
+								.onFailure(gameOverPromise::tryFail);
+						break;
+					case ON_GAME_END:
+						gameOverPromise.tryComplete(message);
+						break;
+				}
+			});
+		});
 
 		readerFut.onFailure(cause -> {
 			gameOverPromise.tryFail(cause);
 			writerPromise.tryFail(cause);
-		});
-		readerFut.onSuccess(reader -> {
-			reader.exceptionHandler(gameOverPromise::tryFail);
-			reader.endHandler(ignored -> gameOverPromise.tryFail("Game stream ended before ON_GAME_END"));
 		});
 
 		return writerFut
@@ -167,7 +186,13 @@ public class Client {
 							.onFailure(gameOverPromise::tryFail);
 					return gameOverPromise
 							.future()
-							.eventually(() -> writer.end());
+							.eventually(() -> {
+								try {
+									return writer.end().otherwiseEmpty();
+								} catch (Exception ignored) {
+									return Future.succeededFuture();
+								}
+							});
 				});
 	}
 
@@ -209,7 +234,10 @@ public class Client {
 		}))
 				.onComplete(ignored -> {
 					if (matchmakingResponseFut.future().succeeded()) {
-						matchmakingRequestsFut.future().result().end();
+						try {
+							matchmakingRequestsFut.future().result().end();
+						} catch (IllegalStateException ignoredClose) {
+						}
 					}
 					matchmakingResponseFut = null;
 				})
@@ -347,14 +375,22 @@ public class Client {
 
 	private Future<LoginOrCreateReply> handleCreateAccountReply(LoginOrCreateReply reply) {
 		Future<LoginOrCreateReply> jwtComplete;
-		if (this.jwt.isUnsecure()) {
+		boolean needsJwks;
+		synchronized (this.jwt) {
+			needsJwks = this.jwt.isUnsecure();
+		}
+		if (needsJwks) {
 			jwtComplete = Accounts.jwtAuthOptions(this.webClient)
 					.compose(jwtAuthOptions -> {
-						if (jwtAuthOptions.getJwks() != null) {
-							jwtAuthOptions.getJwks().forEach(jwk -> jwt.addJWK(new JWK(jwk)));
-						}
-						if (jwtAuthOptions.getPubSecKeys() != null) {
-							jwtAuthOptions.getPubSecKeys().forEach(psk -> jwt.addJWK(new JWK(psk)));
+						synchronized (this.jwt) {
+							if (this.jwt.isUnsecure()) {
+								if (jwtAuthOptions.getJwks() != null) {
+									jwtAuthOptions.getJwks().forEach(jwk -> jwt.addJWK(new JWK(jwk)));
+								}
+								if (jwtAuthOptions.getPubSecKeys() != null) {
+									jwtAuthOptions.getPubSecKeys().forEach(psk -> jwt.addJWK(new JWK(psk)));
+								}
+							}
 						}
 						return Future.succeededFuture(reply);
 					});
@@ -415,10 +451,8 @@ public class Client {
 							}, true);
 							keepAliveManager.onTransportStarted();
 							req.exceptionHandler(t -> keepAliveManager.onTransportTermination());
-							req.response().onSuccess(res -> {
-								res.endHandler(v -> keepAliveManager.onTransportTermination());
-							});
 							return req.response().flatMap(resp -> {
+								resp.end().onComplete(v -> keepAliveManager.onTransportTermination());
 								if (resp.status() != null && resp.status() != GrpcStatus.OK) {
 									keepAliveManager.onTransportTermination();
 									return Future.failedFuture(Status.fromCodeValue(resp.status().code).withDescription(resp.statusMessage()).asRuntimeException());

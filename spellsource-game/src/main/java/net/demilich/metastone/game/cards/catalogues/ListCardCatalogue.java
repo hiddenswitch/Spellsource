@@ -55,6 +55,9 @@ public class ListCardCatalogue implements CardCatalogue {
 	}
 
 	protected final ReadWriteLock lock = new ReentrantReadWriteLock();
+	protected final DeckFormat all = new DeckFormat()
+			.withName(FORMAT_NAME_ALL)
+			.setRuleCards(DEFAULT_RULE_CARDS);
 	protected final Map<String, DeckFormat> formatsByName = new LinkedHashMap<>(64);
 	protected final Set<String> bannedCardIds = new LinkedHashSet<>();
 	protected final Set<String> hardRemovalCardIds = new LinkedHashSet<>();
@@ -542,17 +545,30 @@ public class ListCardCatalogue implements CardCatalogue {
 		}
 	}
 
+	public ListCardCatalogue() {
+	}
+
+	public ListCardCatalogue(ListCardCatalogue other) {
+		copyFrom(other);
+	}
+
 	/**
 	 * Copies all cards and format indices from another {@link ListCardCatalogue} whose cards are already frozen.
 	 *
 	 * @param other The source catalogue to copy from.
 	 */
-	protected void copyFrom(ListCardCatalogue other) {
+	public void copyFrom(ListCardCatalogue other) {
 		lock.writeLock().lock();
 		other.lock.readLock().lock();
 		try {
 			clear();
+			this.all.getSets().clear();
+			this.all.withCardSets(other.all.getSets());
+			this.all.setRuleCards(other.all.getRuleCards());
 			formatsByName.putAll(other.formatsByName);
+			if (formatsByName.containsKey(FORMAT_NAME_ALL)) {
+				formatsByName.put(FORMAT_NAME_ALL, this.all);
+			}
 			bannedCardIds.addAll(other.bannedCardIds);
 			hardRemovalCardIds.addAll(other.hardRemovalCardIds);
 			cards.putAll(other.cards);

@@ -90,9 +90,7 @@ public class SetAttackSpell extends Spell {
 		target.getAttributes().remove(Attribute.ATTACK_BONUS);
 		if (exclusive) {
 			target.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
-			if (!target.hasAttribute(Attribute.ENRAGED)) {
-				target.getAttributes().remove(Attribute.CONDITIONAL_ATTACK_BONUS);
-			}
+			target.getAttributes().remove(Attribute.CONDITIONAL_ATTACK_BONUS);
 			Enchantment.attachSetAttackEnchantment(context, player, desc, source, target, value);
 		} else {
 			logger.debug("onCast {} {}: Calling non-exclusively, the BASE_ATTACK was changed to {} on target {}", context.getGameId(), source, value, target);

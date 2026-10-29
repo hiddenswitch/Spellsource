@@ -305,7 +305,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 						this.keepAliveManager.onDataReceived();
 						return Future.succeededFuture();
 					});
-			return Environment.timeout(pingCheck, 1000L, vertx)
+			return Environment.timeout(pingCheck, 5000L, vertx)
 					.onFailure(err -> this.close());
 		}
 

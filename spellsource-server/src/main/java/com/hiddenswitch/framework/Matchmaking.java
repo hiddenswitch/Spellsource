@@ -173,14 +173,14 @@ public class Matchmaking extends AbstractVerticle {
 	}
 
 	private static Future<Boolean> verifyTicketLive(Vertx vertx, MatchmakingTickets ticket, boolean botOpponent) {
-		return verifyTicketLive(vertx, ticket.getUserId(), botOpponent, 3);
+		return verifyTicketLive(vertx, ticket.getUserId(), botOpponent, 6);
 	}
 
 	private static Future<Boolean> verifyTicketLive(Vertx vertx, String userId, boolean botOpponent, int retriesLeft) {
 		return vertx.eventBus().<String>request(
 						MATCHMAKING_PREPARE + userId,
 						"ping",
-						new DeliveryOptions().setSendTimeout(1500L))
+						new DeliveryOptions().setSendTimeout(6000L))
 				.map(msg -> true)
 				.recover(cause -> {
 					if (cause instanceof ReplyException reply && reply.failureType() == ReplyFailure.NO_HANDLERS) {
@@ -209,12 +209,22 @@ public class Matchmaking extends AbstractVerticle {
 				.put("queueId", ticket.getQueueId())
 				.put("deckId", ticket.getDeckId())
 				.put("botDeckId", ticket.getBotDeckId());
+		return requeueLiveTicket(vertx, ticket.getUserId(), payload, 6);
+	}
+
+	private static Future<Void> requeueLiveTicket(Vertx vertx, String userId, JsonObject payload, int retriesLeft) {
 		return vertx.eventBus().<String>request(
-						MATCHMAKING_REQUEUE + ticket.getUserId(),
+						MATCHMAKING_REQUEUE + userId,
 						payload,
-						new DeliveryOptions().setSendTimeout(1500L))
+						new DeliveryOptions().setSendTimeout(6000L))
 				.<Void>mapEmpty()
-				.otherwiseEmpty();
+				.recover(cause -> {
+					if (cause instanceof ReplyException reply && reply.failureType() == ReplyFailure.NO_HANDLERS && retriesLeft > 0) {
+						return Future.future(promise -> vertx.setTimer(25L, ignored ->
+								requeueLiveTicket(vertx, userId, payload, retriesLeft - 1).onComplete(promise)));
+					}
+					return Future.succeededFuture();
+				});
 	}
 
 	private static Future<Void> abortCreatedGame(String gameId, MatchmakingTickets[] tickets) {
@@ -229,6 +239,7 @@ public class Matchmaking extends AbstractVerticle {
 			return Future.all(concedes).mapEmpty();
 		}
 		return Future.all(concedes)
+				.eventually(() -> withDslContext(dsl -> dsl.deleteFrom(GAME_USERS).where(GAME_USERS.GAME_ID.eq(numericGameId))).otherwiseEmpty())
 				.eventually(() -> withDslContext(dsl -> dsl.deleteFrom(GAMES).where(GAMES.ID.eq(numericGameId))).otherwiseEmpty())
 				.mapEmpty();
 	}
@@ -412,12 +423,12 @@ public class Matchmaking extends AbstractVerticle {
 		});
 	}
 
-	private void startLobbyMatch(Vertx vertx,
-	                             MatchmakingQueues configuration,
-	                             MatchmakingTickets[] thisGameTickets,
-	                             AtomicBoolean rescanRequested) {
+	private Future<Void> startLobbyMatch(Vertx vertx,
+	                                     MatchmakingQueues configuration,
+	                                     MatchmakingTickets[] thisGameTickets,
+	                                     AtomicBoolean rescanRequested) {
 		boolean botOpponent = Boolean.TRUE.equals(configuration.getBotOpponent());
-		createGame(configuration, thisGameTickets)
+		return createGame(configuration, thisGameTickets)
 				.onFailure(Environment.onFailure("could not create game"))
 				.compose(gameId -> {
 					if (botOpponent) {
@@ -453,7 +464,13 @@ public class Matchmaking extends AbstractVerticle {
 											rescanRequested.set(true);
 											cleanups.add(requeueLiveTicket(vertx, live));
 										}
-										return Future.all(cleanups).mapEmpty();
+										return Future.all(cleanups)
+												.onComplete(ar -> {
+													if (!stillLive.isEmpty()) {
+														vertx.eventBus().publish(MATCHMAKING_WAKE, configuration.getId());
+													}
+												})
+												.mapEmpty();
 									});
 						}
 						var notifications = new ArrayList<Future<?>>();
@@ -463,7 +480,8 @@ public class Matchmaking extends AbstractVerticle {
 						return Future.all(notifications).mapEmpty();
 					});
 				})
-				.onFailure(Environment.onFailure("could not notify users"));
+				.onFailure(Environment.onFailure("could not notify users"))
+				.otherwiseEmpty();
 	}
 
 	public Future<String> createGame(MatchmakingQueues configuration, MatchmakingTickets... tickets) {

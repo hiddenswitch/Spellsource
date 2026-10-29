@@ -67,6 +67,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final AtomicBoolean inboundMessagesClosed = new AtomicBoolean(false);
 	private final AtomicBoolean elapsed = new AtomicBoolean(false);
 	private final AtomicBoolean conceded = new AtomicBoolean(false);
+	private volatile Future<Void> lastWriteFuture = Future.succeededFuture();
 	private GameState lastStateSent;
 	private GameOver gameOver;
 	private boolean needsPowerHistory;
@@ -82,7 +83,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		// todo: investigate if this is going to cause issues, by retrying an old game's data into the client
 		// Presumably this gets closed before that could possibly happen
 		// todo: seemingly in the tests, there has to be at least one retry to receive the game over message
-		this.writer = new RetryMessageProducer<>(writer, 1, 1000);
+		this.writer = writer instanceof RetryMessageProducer<ServerToClientMessage> retryWriter
+				? retryWriter
+				: new RetryMessageProducer<>(writer, 1, 1000);
 		this.userId = userId;
 		this.playerId = playerId;
 		this.server = server;
@@ -530,7 +533,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					message.setGameOver(gameOver);
 				}
 		}
-		socket.write(message.build()).onFailure(Environment.onFailure());
+		this.lastWriteFuture = socket.write(message.build()).onFailure(Environment.onFailure());
+	}
+
+	@Override
+	public Future<Void> lastWriteFuture() {
+		return lastWriteFuture;
 	}
 
 	@Override

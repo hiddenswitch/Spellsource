@@ -18,6 +18,8 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 	private final int intervalMillis;
 	private final Deque<QueueItem<T>> waiting = new ArrayDeque<>();
 	private boolean hasInFlight;
+	private volatile boolean closed;
+	private Long retryTimerId;
 	private final Predicate<T> predicate;
 
 	public RetryMessageProducer(MessageProducer<T> messageProducer, int maxRetries, int intervalMillis) {
@@ -36,39 +38,91 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 		if (item == null) {
 			return Future.succeededFuture();
 		}
-		hasInFlight = true;
+		synchronized (this) {
+			if (closed) {
+				if (!item.completed) {
+					item.completed = true;
+					hasInFlight = false;
+					item.promise.tryFail("closed");
+				}
+				return Future.failedFuture("closed");
+			}
+			hasInFlight = true;
+		}
 
 		return producer
 				.write(item.message)
 				.recover(t -> {
 					// if there was no handler try again, up to retries - 1 times
-					if (t instanceof ReplyException replyException && replyException.failureType() == ReplyFailure.NO_HANDLERS && retries > 0) {
+					if (!closed && t instanceof ReplyException replyException && replyException.failureType() == ReplyFailure.NO_HANDLERS && retries > 0) {
 						var promise = Promise.<Void>promise();
-						vertx.setTimer(intervalMillis, v ->
+						synchronized (this) {
+							if (closed) {
+								if (!item.completed) {
+									item.completed = true;
+									hasInFlight = false;
+									item.promise.tryFail("closed");
+								}
+								return Future.failedFuture("closed");
+							}
+							retryTimerId = vertx.setTimer(intervalMillis, v -> {
+								synchronized (RetryMessageProducer.this) {
+									retryTimerId = null;
+									if (closed) {
+										if (!item.completed) {
+											item.completed = true;
+											hasInFlight = false;
+											item.promise.tryFail("closed");
+										}
+										promise.tryFail("closed");
+										return;
+									}
+								}
 								write(item, retries - 1)
-										.onComplete(promise));
+										.onComplete(promise);
+							});
+						}
 						return promise.future();
 					} else {
-						if (!item.completed) {
-							item.completed = true;
-							hasInFlight = false;
-							item.promise.fail(t);
+						QueueItem<T> next;
+						synchronized (this) {
+							if (!item.completed) {
+								item.completed = true;
+							}
+							next = closed ? null : waiting.pollFirst();
+							if (next == null) {
+								hasInFlight = false;
+							}
+						}
+						item.promise.tryFail(t);
+						if (next != null) {
+							write(next, next.initialRetries)
+									.onFailure(com.hiddenswitch.framework.Environment.onFailure("write failures"));
 						}
 						return Future.failedFuture(t);
 					}
 				})
 				.compose(v -> {
-					if (!item.completed) {
-						item.completed = true;
-						hasInFlight = false;
-						item.promise.complete();
+					QueueItem<T> next;
+					synchronized (this) {
+						if (!item.completed) {
+							item.completed = true;
+						}
+						next = closed ? null : waiting.pollFirst();
+						if (next == null) {
+							hasInFlight = false;
+						}
 					}
-					return write(waiting.pollFirst(), retries);
+					item.promise.tryComplete();
+					if (next == null) {
+						return Future.succeededFuture();
+					}
+					return write(next, next.initialRetries);
 				});
 	}
 
 	@Override
-	public MessageProducer<T> deliveryOptions(DeliveryOptions options) {
+	public synchronized MessageProducer<T> deliveryOptions(DeliveryOptions options) {
 		return producer.deliveryOptions(options);
 	}
 
@@ -80,9 +134,22 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 	@Override
 	public Future<Void> write(T body) {
 		var result = Promise.<T>promise();
-		waiting.addLast(new QueueItem<>(body, result));
-		if (!hasInFlight) {
-			write(waiting.pollFirst(), predicate.test(body) ? maxRetries : 0)
+		var initialRetries = predicate.test(body) ? maxRetries : 0;
+		var item = new QueueItem<>(body, result, initialRetries);
+		boolean startWrite = false;
+		synchronized (this) {
+			if (closed) {
+				return Future.failedFuture("closed");
+			}
+			if (!hasInFlight) {
+				hasInFlight = true;
+				startWrite = true;
+			} else {
+				waiting.addLast(item);
+			}
+		}
+		if (startWrite) {
+			write(item, initialRetries)
 					.onFailure(com.hiddenswitch.framework.Environment.onFailure("write failures"));
 		}
 		return result.future().map((Void) null);
@@ -95,21 +162,42 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 
 	@Override
 	public Future<Void> close() {
+		Long timerId;
+		Deque<QueueItem<T>> pending;
+		synchronized (this) {
+			closed = true;
+			timerId = retryTimerId;
+			retryTimerId = null;
+			pending = new ArrayDeque<>(waiting);
+			waiting.clear();
+			hasInFlight = false;
+		}
+		if (timerId != null) {
+			vertx.cancelTimer(timerId);
+		}
+		for (var item : pending) {
+			if (!item.completed) {
+				item.completed = true;
+				item.promise.tryFail("closed");
+			}
+		}
 		return producer.close();
 	}
 
-	public void trim() {
+	public synchronized void trim() {
 		waiting.clear();
 	}
 
 	private static final class QueueItem<X> {
 		final X message;
 		final Promise<X> promise;
+		final int initialRetries;
 		boolean completed;
 
-		QueueItem(X message, Promise<X> promise) {
+		QueueItem(X message, Promise<X> promise, int initialRetries) {
 			this.message = message;
 			this.promise = promise;
+			this.initialRetries = initialRetries;
 		}
 	}
 }

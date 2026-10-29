@@ -1256,8 +1256,8 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	public void setGameState(GameState state) {
-		this.setPlayer(GameContext.PLAYER_1, state.getPlayer1());
-		this.setPlayer(GameContext.PLAYER_2, state.getPlayer2());
+		this.setPlayer(GameContext.PLAYER_1, state.getPlayer1().clone());
+		this.setPlayer(GameContext.PLAYER_2, state.getPlayer2().clone());
 		this.setTempCards(state.getTempCards());
 		this.setEnvironment(state.getEnvironment());
 		this.setTriggers(state.getTriggers());

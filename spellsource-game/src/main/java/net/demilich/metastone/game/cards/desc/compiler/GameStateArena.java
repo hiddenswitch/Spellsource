@@ -855,6 +855,14 @@ public final class GameStateArena implements Serializable {
 							targetArena.s0 |= (1L << id);
 						} else if (id < 128) {
 							targetArena.s1 |= (1L << (id - 64));
+						} else {
+							int w = (id - 128) >>> 6;
+							if (targetArena.sMore == null) {
+								targetArena.sMore = new long[Math.max(w + 1, 2)];
+							} else if (w >= targetArena.sMore.length) {
+								targetArena.sMore = Arrays.copyOf(targetArena.sMore, Math.max(w + 1, targetArena.sMore.length << 1));
+							}
+							targetArena.sMore[w] |= (1L << (id & 63));
 						}
 					} else {
 						targetArena.clearEntityShared(id);

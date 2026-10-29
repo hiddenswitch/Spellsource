@@ -56,6 +56,10 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
   private Handler<GrpcMessage> messageHandler;
   private Handler<Void> endHandler;
   private Handler<InvalidMessageException> invalidMessageHandler;
+  private final java.util.ArrayDeque<GrpcMessage> pendingMessages = new java.util.ArrayDeque<>(4);
+  private boolean endReceived;
+  private boolean endDispatched;
+  private Throwable failureReceived;
   private GrpcMessage last;
   private final GrpcMessageDecoder<T> messageDecoder;
   private final Promise<Void> end;
@@ -159,7 +163,12 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
 
   @Override
   public final S exceptionHandler(Handler<Throwable> handler) {
-    exceptionHandler = handler;
+    synchronized (this) {
+      exceptionHandler = handler;
+      if (handler != null && failureReceived != null) {
+        context.dispatch(failureReceived, handler);
+      }
+    }
     return (S) this;
   }
 
@@ -171,7 +180,19 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
 
   @Override
   public final S messageHandler(Handler<GrpcMessage> handler) {
-    messageHandler = handler;
+    synchronized (this) {
+      messageHandler = handler;
+      if (handler != null) {
+        while (!pendingMessages.isEmpty()) {
+          GrpcMessage msg = pendingMessages.pollFirst();
+          context.dispatch(msg, handler);
+        }
+        if (endReceived && !endDispatched && endHandler != null) {
+          endDispatched = true;
+          context.dispatch(endHandler);
+        }
+      }
+    }
     return (S) this;
   }
 
@@ -186,7 +207,13 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
 
   @Override
   public final S endHandler(Handler<Void> endHandler) {
-    this.endHandler = endHandler;
+    synchronized (this) {
+      this.endHandler = endHandler;
+      if (endHandler != null && endReceived && pendingMessages.isEmpty() && !endDispatched) {
+        endDispatched = true;
+        context.dispatch(endHandler);
+      }
+    }
     return (S) this;
   }
 
@@ -215,9 +242,12 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
 
   public final void tryFail(Throwable err) {
     if (end.tryFail(err)) {
-      Handler<Throwable> handler = exceptionHandler;
-      if (handler != null) {
-        context.dispatch(err, handler);
+      synchronized (this) {
+        failureReceived = err;
+        Handler<Throwable> handler = exceptionHandler;
+        if (handler != null) {
+          context.dispatch(err, handler);
+        }
       }
     }
   }
@@ -228,17 +258,24 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
 
   protected void handleEnd() {
     end.tryComplete();
-    Handler<Void> handler = endHandler;
-    if (handler != null) {
-      context.dispatch(handler);
+    synchronized (this) {
+      endReceived = true;
+      if (pendingMessages.isEmpty() && !endDispatched && endHandler != null) {
+        endDispatched = true;
+        context.dispatch(endHandler);
+      }
     }
   }
 
   private void handleMessage(GrpcMessage msg) {
-    last = msg;
-    Handler<GrpcMessage> handler = messageHandler;
-    if (handler != null) {
-      context.dispatch(msg, messageHandler);
+    synchronized (this) {
+      last = msg;
+      Handler<GrpcMessage> handler = messageHandler;
+      if (handler != null) {
+        context.dispatch(msg, handler);
+      } else {
+        pendingMessages.addLast(msg);
+      }
     }
   }
 

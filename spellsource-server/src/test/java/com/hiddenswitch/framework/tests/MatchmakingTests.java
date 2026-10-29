@@ -68,11 +68,27 @@ public class MatchmakingTests extends FrameworkTestBase {
 			// These instances are created by the test, so VertxExtension does not
 			// close them when the test times out before its future chain finishes.
 			var closes = ownedVertices.stream()
-					.map(created -> created.compose(Vertx::close)).toList();
+					.map(created -> created.compose(vertx -> {
+						var clusterManager = ((VertxInternal) vertx).clusterManager();
+						var closeFut = vertx.close();
+						if (clusterManager instanceof InfinispanClusterManager infinispan) {
+							var cacheManager = (DefaultCacheManager) infinispan.getCacheContainer();
+							if (cacheManager != null) {
+								closeFut = closeFut.andThen(w -> {
+									try {
+										cacheManager.close();
+									} catch (IOException ignored) {
+									}
+								});
+							}
+						}
+						return closeFut;
+					})).toList();
 			if (!closes.isEmpty()) {
 				join(closes).toCompletionStage().toCompletableFuture().get(30, TimeUnit.SECONDS);
 			}
 		} finally {
+			ownedVertices.clear();
 			if (originalClusterTestConfiguration != null) {
 				Environment.setConfiguration(originalClusterTestConfiguration);
 				System.getProperties().remove(GameLogic.GAMES_TURN_TIME_MILLIS);
@@ -697,9 +713,11 @@ public class MatchmakingTests extends FrameworkTestBase {
 	@Test
 	@Timeout(value = 90, timeUnit = TimeUnit.SECONDS)
 	public void testUngracefulAppCloseDoesNotMatchmakeDeadPlayer(Vertx vertx, VertxTestContext testContext) {
-		var client1 = new Client(vertx);
-		var client2 = new Client(vertx);
-		var client3 = new Client(vertx);
+		var clientVertx = Vertx.vertx(new VertxOptions().setEventLoopPoolSize(CpuCoreSensor.availableProcessors()));
+		ownedVertices.add(Future.succeededFuture(clientVertx));
+		var client1 = new Client(clientVertx);
+		var client2 = new Client(clientVertx);
+		var client3 = new Client(clientVertx);
 		var gameCreated = checkpoint(1);
 		var queueId = UUID.randomUUID().toString();
 		var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
@@ -842,8 +860,10 @@ public class MatchmakingTests extends FrameworkTestBase {
 		int serverVertices = 2;
 		int waves = 4; // Each wave has 1 doomed client that ungracefully kills its connection + 2 live clients = 8 live clients + 4 doomed clients
 		var configuration = Environment.getConfiguration();
+		originalClusterTestConfiguration = configuration;
 		var queueId = UUID.randomUUID().toString();
 		var clientVertx = Vertx.vertx(new VertxOptions().setEventLoopPoolSize(CpuCoreSensor.availableProcessors()));
+		ownedVertices.add(Future.succeededFuture(clientVertx));
 
 		System.setProperty(GameLogic.GAMES_TURN_TIME_MILLIS, "6000");
 		var defaultConfiguration = Hiddenswitch.ServerConfiguration.newBuilder(Environment.getConfiguration()).build();
@@ -863,7 +883,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 							.with(Environment.vertxOptions())
 							.withClusterManager(new InfinispanClusterManager(cacheManager))
 							.buildClustered();
-				}).toList());
+				}).peek(ownedVertices::add).toList());
 
 		var liveClients = new ArrayList<Client>();
 		var doomedClients = new ArrayList<Client>();
@@ -1049,7 +1069,10 @@ public class MatchmakingTests extends FrameworkTestBase {
 			this.client = new ClientWithPort(this.vertx, port);
 			client.createAndLogin()
 					.compose(v -> client.matchmake(queueId))
-					.compose(v -> client.playUntilGameOver())
+					.compose(res -> {
+						java.util.Objects.requireNonNull(res, "matchmake returned null");
+						return client.playUntilGameOver();
+					})
 					.map((Void) null)
 					.onComplete(startPromise);
 		}

@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.impl;
 
 import io.vertx.core.Closeable;
+import io.vertx.core.Future;
 import net.demilich.metastone.game.events.GameEvent;
 
 /**
@@ -45,4 +46,8 @@ public interface Client extends ActionListener, GameEventListener, HasElapsableT
 	 * @return a scheduler for the client's context
 	 */
 	Scheduler getScheduler();
+
+	default Future<Void> lastWriteFuture() {
+		return Future.succeededFuture();
+	}
 }
