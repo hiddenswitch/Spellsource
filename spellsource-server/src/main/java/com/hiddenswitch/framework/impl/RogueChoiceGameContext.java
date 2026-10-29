@@ -9,6 +9,7 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.rogue.ChoiceSpell;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class RogueChoiceGameContext extends GameContext {
@@ -57,6 +58,9 @@ public class RogueChoiceGameContext extends GameContext {
 	}
 
 	public void setupExternalLogicComponents() {
+		if (externalLogicComponents == null) {
+			externalLogicComponents = new HashMap<>(4);
+		}
 		externalLogicComponents.put(ChoiceSpell.class, new ChoiceSpellImpl());
 	}
 }

@@ -348,7 +348,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					.setType(GameplayRequestType.MULLIGAN)
 					.setStarterCards(cards)
 					.setCallback(next));
-			onMulligan(id, context.getGameState(), cards, playerId);
+			onMulligan(id, context.getGameStateCopy(), cards, playerId);
 		} finally {
 			requestsLock.unlock();
 		}
@@ -417,7 +417,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (!getRequests().isEmpty()) {
 					throw new RuntimeException("requesting action outside resume() loop");
 				}
-				var state = context.getGameState();
+				var state = context.getGameStateCopy();
 				getRequests().add(request);
 				onRequestAction(id, state, validActions);
 			}
@@ -508,7 +508,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		for (var activityMonitor : getActivityMonitors()) {
 			activityMonitor.cancel();
 		}
-		sendGameOver(context.getGameState(), context.getWinner());
+		sendGameOver(context.getGameStateCopy(), context.getWinner());
 	}
 
 	private void sendMessage(ServerToClientMessage.Builder message) {
