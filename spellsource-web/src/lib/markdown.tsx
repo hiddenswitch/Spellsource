@@ -6,8 +6,9 @@ import rehypeStringify from "rehype-stringify";
 import { rehype } from "rehype";
 import rehypeParse from "rehype-parse";
 import rehypeReact from "rehype-react";
-import React, { createElement, Fragment, ReactNode, useMemo } from "react";
+import React, { Fragment, ReactNode, useMemo } from "react";
 import Link from "next/link";
+import { jsx, jsxs } from "react/jsx-runtime";
 import cx from "classnames";
 import path from "path";
 import fs from "fs";
@@ -20,7 +21,8 @@ export const htmlToReact = () =>
   rehype()
     .use(rehypeParse, { fragment: true })
     .use(rehypeReact, {
-      createElement,
+      jsx,
+      jsxs,
       Fragment,
       components: {
         a: ({ className, href, ...props }: any) =>

@@ -14,6 +14,8 @@ plugins {
   id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
   id "com.github.node-gradle.node"
 }
+def processOperations = objects.newInstance(com.spellsource.utils.ProcessOperations)
+
 
 apply from: "gradle/shell.gradle"
 apply from: "gradle/node.gradle"
@@ -24,7 +26,7 @@ dependencies {
 }
 
 allprojects {
-  project.version = '0.10.14'
+  project.version = '0.10.15-rc.15'
 }
 
 subprojects {
@@ -56,6 +58,7 @@ subprojects {
 
   final String slf4jVer = slf4jVersion
   final String jacksonVer = jacksonVersion
+  final String jacksonAnnotationsVer = jacksonAnnotationsVersion
   final String nettyVer = nettyVersion
   final String rxJavaVer = rxJavaVersion
   final String commonsIoVer = commonsIoVersion
@@ -94,11 +97,7 @@ subprojects {
                 'com.fasterxml.jackson.module',
                 'com.fasterxml.jackson.dataformat'
         ].contains(details.requested.group)) {
-          if (details.requested.name == 'jackson-annotations' && jacksonVer.startsWith('2.2')) {
-            details.useVersion jacksonVer.tokenize('.')[0..1].join('.')
-          } else {
-            details.useVersion jacksonVer
-          }
+          details.useVersion(details.requested.name == 'jackson-annotations' ? jacksonAnnotationsVer : jacksonVer)
         }
 
         if (details.requested.group == 'io.netty'
@@ -132,8 +131,12 @@ subprojects {
           details.useVersion logbackVer
         }
 
-        if (details.requested.group == 'log4j') {
+        if (details.requested.group == 'org.apache.logging.log4j') {
           details.useVersion log4jVer
+        }
+
+        if (details.requested.group == 'log4j' && details.requested.name == 'log4j') {
+          details.useTarget "org.slf4j:log4j-over-slf4j:$slf4jVer"
         }
 
         if (details.requested.module.name == 'mockito-core') {
@@ -158,7 +161,7 @@ subprojects {
         }
 
         if (details.requested.group == 'org.junit.platform') {
-          details.useVersion '1.14.4'
+          details.useVersion junitVer
         }
 
         if (details.requested.group == 'org.jetbrains' && details.requested.name == 'annotations') {
@@ -205,8 +208,12 @@ subprojects {
           details.useVersion testcontainersVer
         }
 
+        if (details.requested.group == 'commons-logging' && details.requested.name == 'commons-logging') {
+          details.useVersion '1.4.0'
+        }
+
         if (details.requested.group == 'commons-codec') {
-          details.useVersion '1.15'
+          details.useVersion '1.23.0'
         }
 
         if (details.requested.group == 'org.jboss.resteasy') {
@@ -218,11 +225,11 @@ subprojects {
         }
 
         if (details.requested.group == 'jakarta.xml.bind') {
-          details.useVersion "3.0.1"
+          details.useVersion "4.0.5"
         }
 
         if (details.requested.group == 'jakarta.activation') {
-          details.useVersion "2.1.3"
+          details.useVersion "2.1.4"
         }
 
         if (details.requested.group == 'io.micrometer') {
@@ -241,6 +248,14 @@ subprojects {
           details.useVersion '2.2.2'
         }
 
+        if (details.requested.group == 'org.yaml' && details.requested.name == 'snakeyaml') {
+          details.useVersion '2.7'
+        }
+
+        if (details.requested.group == 'io.smallrye.common') {
+          details.useVersion '2.21.1'
+        }
+
         if (details.requested.group == 'org.infinispan') {
           // Infinispan 15 merged -jakarta suffixed artifacts back to base names
           if (details.requested.name.endsWith('-jakarta')) {
@@ -255,7 +270,7 @@ subprojects {
         }
         
         if (details.requested.group == 'com.graphql-java' && details.requested.name == 'graphql-java') {
-          details.useVersion '20.7'
+          details.useVersion '26.1'
         }
         
         if (details.requested.group == 'org.apache.commons' && details.requested.name == 'commons-lang3') {
@@ -263,7 +278,7 @@ subprojects {
         }
         
         if (details.requested.group == 'org.wildfly.common' && details.requested.name == 'wildfly-common') {
-          details.useVersion '1.5.1.Final'
+          details.useVersion '2.0.1'
         }
 
         if (details.requested.group == 'org.jspecify') {
@@ -332,28 +347,28 @@ tasks.register('venv') {
   }
 
   doLast {
-    exec {
+    processOperations.execOperations.exec {
       commandLine(shell + ["curl -LsSf https://astral.sh/uv/install.sh | sh"])
     }
     if (!file(".venv").exists()) {
-      exec {
+      processOperations.execOperations.exec {
         commandLine("uv", "venv", "--seed")
       }
     }
     def venvSrc = "source .venv/${isWindows ? "scripts" : "bin"}/activate"
-    exec {
+    processOperations.execOperations.exec {
       commandLine(shell + ["$venvSrc; uv pip install -U wheel Cython poetry setuptools"])
     }
     if (!isMacOs) {
-      exec {
+      processOperations.execOperations.exec {
         commandLine(shell + ["$venvSrc; uv pip install --no-build-isolation --no-deps xformers==$xformersVersion --index-url https://download.pytorch.org/whl/"])
       }
     }
-    exec {
+    processOperations.execOperations.exec {
       commandLine(shell + ["$venvSrc; uv pip install -U torch==${torchVersion}${isWindows ? "+cu121" : ""} torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/${isWindows || isLinux ? "cu121" : ""}"])
     }
     paths.forEach { pythonProjectPath ->
-      exec {
+      processOperations.execOperations.exec {
         commandLine(shell + ["$venvSrc; uv pip install --no-build-isolation -e '${pythonProjectPath}'"] as List<String>)
       }
     }

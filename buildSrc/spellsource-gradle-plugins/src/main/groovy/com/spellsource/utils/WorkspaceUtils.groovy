@@ -51,7 +51,12 @@ class WorkspaceUtils {
     return dependencies
   }
 
-  static def createDist(FileSystemOperations fs, File parentProjectDir, File projectDir, Set<String> dependencies, String distDir) {
+  static List<String> rootWorkspaces(File parentProjectDir) {
+    def parentPackage = new JsonSlurper().parse(new File(parentProjectDir, "package.json"))
+    return (parentPackage.workspaces ?: []) as List<String>
+  }
+
+  static def createDist(FileSystemOperations fs, File parentProjectDir, File projectDir, Set<String> dependencies, List<String> workspaces, String distDir) {
     def ignores = gitignoreToList(new File(parentProjectDir, ".gitignore")) + gitignoreToList(new File(projectDir, ".gitignore"))
     ignores.add 'build.gradle'
     ignores.add '**/csharp'
@@ -67,42 +72,28 @@ class WorkspaceUtils {
       }
     }
 
+    // Preserve the complete workspace graph used by the immutable root lockfile.
+    // Unused workspaces need manifests only; application dependencies above include source.
+    workspaces.forEach { String workspace ->
+      fs.copy { CopySpec c ->
+        c.from new File(parentProjectDir, "$workspace/package.json")
+        c.into "$distDir/$workspace/"
+      }
+    }
+
     fs.copy { CopySpec c ->
       c.from new File(parentProjectDir, "yarn.lock"), new File(parentProjectDir, "package.json"), new File(parentProjectDir, "tsconfig.json"), new File(parentProjectDir, ".yarnrc.yml")
       c.into distDir
     }
 
+    // Root postinstall applies these patches in every application distribution.
+    fs.copy { CopySpec c ->
+      c.from new File(parentProjectDir, "spellsource-web/patches")
+      c.into "$distDir/spellsource-web/patches/"
+    }
+
     fs.copy { CopySpec c ->
       c.from new File(parentProjectDir, ".yarn")
-      c.into "$distDir/.yarn/"
-    }
-  }
-
-  static def createDist(Project project, String distDir, boolean includeSelf) {
-    def dependencies = resolveWorkspaceDependencies(project, includeSelf)
-    def ignores = gitignoreToList(project.file("${project.parent.projectDir}/.gitignore")) + gitignoreToList(project.file("${project.projectDir}/.gitignore"))
-    ignores.add 'build.gradle'
-    ignores.add '**/csharp'
-    ignores.add 'docker/'
-    ignores.add '**/node_modules'
-    ignores.add '**/*Dockerfile'
-
-    def parentDir = project.parent.projectDir
-    dependencies.forEach { p ->
-      project.copy { CopySpec c ->
-        c.from "$parentDir/$p"
-        c.into "$distDir/$p/"
-        c.exclude ignores
-      }
-    }
-
-    project.copy { CopySpec c ->
-      c.from "$parentDir/yarn.lock", "$parentDir/package.json", "$parentDir/tsconfig.json", "$parentDir/.yarnrc.yml"
-      c.into distDir
-    }
-
-    project.copy { CopySpec c ->
-      c.from "$parentDir/.yarn"
       c.into "$distDir/.yarn/"
     }
   }

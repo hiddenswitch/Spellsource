@@ -1,15 +1,24 @@
 schema: ../spellsource-graphql/schema.graphql
 documents: ../spellsource-graphql/graphql/shared/**/*.graphql
 generates:
-  src/__generated__/client.ts:
+  src/__generated__/schema.ts:
     plugins:
-      - typescript
-      - typescript-operations
-      - typescript-react-apollo
+    - typescript
     config:
       enumsAsConst: true
-      withHooks: true
-      scalars:
+      scalars: &id001
         BigInt: string
         DateTime: string
         Duration: number
+      defaultScalarType: any
+  src/__generated__/client.ts:
+    plugins:
+    - add:
+        content: export * from './schema';
+    - typescript-operations
+    - typed-document-node
+    config:
+      enumsAsConst: true
+      scalars: *id001
+      defaultScalarType: any
+      importSchemaTypesFrom: src/__generated__/schema.ts

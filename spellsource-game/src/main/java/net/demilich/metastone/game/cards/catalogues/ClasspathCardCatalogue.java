@@ -4,7 +4,6 @@ import com.hiddenswitch.spellsource.core.CardResource;
 import com.hiddenswitch.spellsource.core.CardResources;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,15 +57,22 @@ public class ClasspathCardCatalogue extends ListCardCatalogue {
 			List<CardResources> cardResources = null;
 			try (ScanResult scanResult =
 					     new ClassGraph()
+							     .enableClasspath()
 							     .enableClassInfo()
-							     .disableRuntimeInvisibleAnnotations()
-							     .acceptPackages("com.hiddenswitch.spellsource.cards.*")
+							     .acceptPackages("com.hiddenswitch.spellsource.cards")
 							     .scan()) {
 				cardResources = scanResult
 						.getAllClasses()
 						.stream()
 						.filter(info -> info.getName().contains("CardResources"))
-						.map(ClassInfo::loadClass)
+						.map(info -> {
+							try {
+								return Class.forName(info.getName(), false,
+										ClasspathCardCatalogue.class.getClassLoader());
+							} catch (ClassNotFoundException e) {
+								throw new IllegalStateException("Cannot load card resource class " + info.getName(), e);
+							}
+						})
 						.filter(CardResources.class::isAssignableFrom)
 						.filter(c -> !Modifier.isAbstract(c.getModifiers()))
 						.map(thisClass -> {

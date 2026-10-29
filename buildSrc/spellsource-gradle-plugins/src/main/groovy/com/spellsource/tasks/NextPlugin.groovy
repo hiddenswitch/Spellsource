@@ -25,6 +25,7 @@ class NextPlugin implements Plugin<Project> {
     def projectDir = project.projectDir
     def projectName = project.name
     def workspaceDeps = WorkspaceUtils.resolveWorkspaceDependencies(project, true)
+    def rootWorkspaces = WorkspaceUtils.rootWorkspaces(parentProjectDir)
     def fileSystemOps = this.fs
 
     def createDistTask = project.tasks.register('createDist') { task ->
@@ -43,7 +44,7 @@ class NextPlugin implements Plugin<Project> {
 
       def hasDockerProvider = project.provider { project.plugins.hasPlugin("docker") }
       doLast {
-        WorkspaceUtils.createDist(fileSystemOps, parentProjectDir, projectDir, workspaceDeps, distDir)
+        WorkspaceUtils.createDist(fileSystemOps, parentProjectDir, projectDir, workspaceDeps, rootWorkspaces, distDir)
 
         if (hasDockerProvider.get()) {
           def dockerDir = new File(projectDir, "docker/spellsource/${projectName.replaceFirst('spellsource-', '')}")

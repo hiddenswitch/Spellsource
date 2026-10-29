@@ -1,12 +1,13 @@
+import { useLazyQuery } from "@apollo/client/react";
 import React, {ChangeEvent, FormEvent, FunctionComponent, useEffect, useMemo, useRef, useState} from "react";
 import {Form, FormControl, ListGroup} from "react-bootstrap";
 import * as styles from "./creative-layout.module.scss";
 
-import {SearchNode, useIndex} from "../hooks/use-index";
+import {SearchNode, cardSearchNode, useIndex} from "../hooks/use-index";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useDebounce} from "react-use";
-import {useGetCollectionCardsLazyQuery} from "../__generated__/client"; // Search component
+import {GetCatalogueCardsDocument} from "../__generated__/client"; // Search component
 
 // Search component
 const Search: FunctionComponent<{
@@ -82,7 +83,7 @@ const Search: FunctionComponent<{
                 )*/
   };
 
-  const [getCards] = useGetCollectionCardsLazyQuery();
+  const [getCards] = useLazyQuery(GetCatalogueCardsDocument);
 
   useDebounce(
     async () => {
@@ -91,7 +92,8 @@ const Search: FunctionComponent<{
         return;
       }
 
-      const { data } = await getCards({ variables: { limit: 5, filter: { id: { includesInsensitive: query } } } });
+      const { data } = await getCards();
+      setResults((data?.catalogueCards ?? []).filter(card => [card.id, card.cardScript.name, card.cardScript.description].join(" ").toLocaleLowerCase().includes(query.toLocaleLowerCase())).slice(0, 5).map(card => cardSearchNode(card.cardScript)));
     },
     500,
     [query]

@@ -150,8 +150,15 @@ public class GameTests extends FrameworkTestBase {
 							.setMessageType(MessageType.UPDATE_MULLIGAN).setRepliesTo(message.getId()).build()).onFailure(completed::tryFail);
 					case ON_REQUEST_ACTION -> {
 						if (actionRequestId.compareAndSet(null, message.getId())) {
+							var endTurn = message.getActions().getAllList().stream()
+									.filter(action -> action.getActionType() == ActionTypeMessage.ActionType.END_TURN)
+									.findFirst();
+							if (endTurn.isEmpty()) {
+								completed.tryFail("Expected an end-turn action after mulligan");
+								return;
+							}
 							stream.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.UPDATE_ACTION)
-									.setRepliesTo(message.getId()).setActionIndex(0).build())
+									.setRepliesTo(message.getId()).setActionIndex(endTurn.get().getAction()).build())
 									.onFailure(completed::tryFail);
 						} else if (!message.getId().equals(actionRequestId.get())) {
 							// A new request can arrive while persistence is completing;

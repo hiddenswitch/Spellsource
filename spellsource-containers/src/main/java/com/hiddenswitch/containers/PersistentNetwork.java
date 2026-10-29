@@ -1,7 +1,5 @@
 package com.hiddenswitch.containers;
 
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.Network;
 
@@ -57,8 +55,4 @@ public class PersistentNetwork implements Network {
 		// persistent by design, remove with docker network rm
 	}
 
-	@Override
-	public Statement apply(Statement base, Description description) {
-		return base;
-	}
 }

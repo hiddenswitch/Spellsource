@@ -7,7 +7,7 @@ public class PostgresContainer extends GenericContainer<PostgresContainer> {
 	public static final int POSTGRESQL_PORT = 5432;
 
 	public PostgresContainer(String username, String password, String databaseName) {
-		super("docker.io/postgres:13.11-bullseye");
+		super("docker.io/postgres:18.6-trixie@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6");
 		withExposedPorts(POSTGRESQL_PORT);
 		withEnv("POSTGRES_DB", databaseName);
 		withEnv("POSTGRES_USER", username);

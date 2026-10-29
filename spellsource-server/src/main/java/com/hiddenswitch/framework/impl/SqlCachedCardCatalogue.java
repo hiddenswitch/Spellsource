@@ -85,6 +85,12 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 	private volatile GameContext workingContext;
 	private boolean sharedPerVertx;
 	private Promise<Void> initializedPromise;
+	private final Map<String, String> lastModifiedByCard = new ConcurrentHashMap<>();
+	private Future<Void> pendingCardRefresh = Future.succeededFuture();
+
+	public String getCardLastModified(String cardId) {
+		return lastModifiedByCard.get(cardId);
+	}
 
 	public static SqlCachedCardCatalogue forVertx() {
 		return VERTX_CATALOGUES.get();
@@ -162,6 +168,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		gitUserId = resolvedGitUserId;
 		try {
 			invalidated.clear();
+			lastModifiedByCard.clear();
 			copyFrom(baseCatalogue);
 			CARD_LOADS.increment(baseCatalogue.getCards().size());
 
@@ -227,6 +234,9 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		var cardDescs = cardDbRecords.stream()
 				.map(card -> {
 					try {
+						if (card.getLastModified() != null) {
+							lastModifiedByCard.put(card.getId(), card.getLastModified().toString());
+						}
 						var cardJson = card.getCardScript().put("id", card.getId());
 						var cardDesc = cardJson.mapTo(CardDesc.class);
 						// todo: should there be a dedicated metadata field for this? it could be mutated by buggy code
@@ -236,12 +246,8 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 							cardDesc.setAttributes(attributes);
 						}
 						attributes.put(Attribute.CREATED_BY_USER_ID, card.getCreatedBy());
-						if (card.getIsPublished()) {
-							attributes.put(Attribute.PUBLISHED, true);
-						}
-						if (card.getIsArchived()) {
-							attributes.put(Attribute.ARCHIVED, true);
-						}
+						attributes.put(Attribute.PUBLISHED, Boolean.TRUE.equals(card.getIsPublished()));
+						attributes.put(Attribute.ARCHIVED, Boolean.TRUE.equals(card.getIsArchived()));
 						return cardDesc;
 					} catch (Exception e) {
 						LOGGER.warn("Skipping malformed custom card {} in SQL: {}", card.getId(), e.getMessage());
@@ -263,7 +269,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		refreshInvalidCardsFromSql();
 	}
 
-	private void refreshInvalidCardsFromSql() {
+	private synchronized void refreshInvalidCardsFromSql() {
 		String invalid;
 		Set<String> toFetch = null;
 		while ((invalid = invalidated.pollFirst()) != null) {
@@ -274,15 +280,30 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		}
 		if (toFetch != null && !toFetch.isEmpty()) {
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
-			var getCards = cardsDao.findManyByCondition(CARDS.ID.in(toFetch).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false)));
-			getCards.onSuccess(cardDbRecords -> {
-				lock.writeLock().lock();
-				try {
-					loadFromCardDbRecords(cardDbRecords);
-				} finally {
-					lock.writeLock().unlock();
-				}
-			}).onFailure(t -> LOGGER.warn("Failed to refresh invalidated cards from SQL", t));
+			var requestedIds = Set.copyOf(toFetch);
+			pendingCardRefresh = pendingCardRefresh.recover(t -> Future.succeededFuture())
+				.compose(v -> cardsDao.findManyByCondition(CARDS.ID.in(requestedIds)
+					.and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false))))
+				.map(cardDbRecords -> {
+					lock.writeLock().lock();
+					try {
+						var withdrawn = new HashSet<>(requestedIds);
+						cardDbRecords.forEach(card -> withdrawn.remove(card.getId()));
+						var gitCards = getBaseGitCatalogue(gitUserId).getCards();
+						for (var id : withdrawn) {
+							removeCard(id);
+							lastModifiedByCard.remove(id);
+							var gitCard = gitCards.get(id);
+							if (gitCard != null) {
+								loadCards(List.of(gitCard.getDesc()));
+							}
+						}
+						loadFromCardDbRecords(cardDbRecords);
+						return (Void) null;
+					} finally {
+						lock.writeLock().unlock();
+					}
+				}).onFailure(t -> LOGGER.warn("Failed to refresh invalidated cards from SQL", t));
 		}
 	}
 

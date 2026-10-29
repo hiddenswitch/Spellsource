@@ -6,14 +6,16 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Checkout workspace generator
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"
           git submodule update --init spellsource-ts-proto/ts-proto
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 22
+          node-version: 26.12.1
+      - name: Install pinned Corepack
+        run: npm install --global corepack@0.36.0 && corepack enable
       - run: yarn install --immutable
       - run: yarn workspace spellsource-threejs codegen
       - run: git diff --exit-code -- spellsource-threejs/src/__generated__

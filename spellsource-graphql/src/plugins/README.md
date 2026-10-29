@@ -1,0 +1,1 @@
+The archived-record filter is the maintained PostGraphile 5 port from AppMana commit b1c9023e3 (`appmana-pg-omit-archived`). The original MIT license is retained alongside it. Preserve `includeArchived` semantics and relation filtering when updating this port.

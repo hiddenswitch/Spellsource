@@ -237,7 +237,7 @@ begin
 end;
 $$ language plpgsql volatile;
 
-create or replace function spellsource.save_card(card_id text, workspace jsonb, json jsonb) returns spellsource.cards as
+create or replace function spellsource.save_card(card_id text, workspace jsonb, "json" jsonb) returns spellsource.cards as
 $$
 declare
     card              spellsource.cards;
@@ -248,12 +248,12 @@ begin
 
     if (card is null) then
         insert into spellsource.cards (id, created_by, blockly_workspace, card_script, uri)
-        values (card_id, spellsource.get_user_id(), workspace, json, const_website_uri)
+        values (card_id, spellsource.get_user_id(), workspace, "json", const_website_uri)
         returning * into card;
     else
         update spellsource.cards
         set blockly_workspace = workspace,
-            card_script       = json,
+            card_script       = "json",
             last_modified     = now()
         where cards.succession = card.succession;
     end if;
@@ -287,7 +287,7 @@ end;
 $$ language plpgsql volatile;
 
 -- Publish a card from git, or don't if it's already up to date
-create or replace function spellsource.publish_git_card(card_id text, json jsonb, creator varchar) returns spellsource.cards as
+create or replace function spellsource.publish_git_card(card_id text, "json" jsonb, creator varchar) returns spellsource.cards as
 $$
 declare
     card          spellsource.cards;
@@ -299,7 +299,7 @@ begin
     select * from spellsource.cards where id = card_id and is_published and not is_archived into card;
 
     if (not (card is null)) then
-        if (card.card_script @> json and json @> card.card_script) then
+        if (card.card_script @> "json" and "json" @> card.card_script) then
             -- no changes needed
             return card;
         end if;
@@ -309,7 +309,7 @@ begin
 
     -- create the new published card; triggers will handle side effects
     insert into spellsource.cards (id, created_by, card_script, created_at, is_published, uri)
-    values (card_id, creator, json, created_time, true, const_git_uri)
+    values (card_id, creator, "json", created_time, true, const_git_uri)
     returning * into card;
 
     return card;

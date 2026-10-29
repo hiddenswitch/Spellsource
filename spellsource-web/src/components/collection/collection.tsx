@@ -1,7 +1,8 @@
+import { useQuery } from "@apollo/client/react";
 import { useSession } from "next-auth/react";
-import React, { FunctionComponent, useContext, useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { CardType } from "../../__generated__/spellsource-game";
-import { CollectionCardFragment, CollectionCardsOrderBy, useGetCollectionCardsQuery } from "../../__generated__/client";
+import { CollectionCardsOrderBy, GetCatalogueCardsDocument } from "../../__generated__/client";
 import { CardDef } from "./card-display";
 import { Dropdown, Form, Table } from "react-bootstrap";
 import { Button } from "../typed-bootstrap";
@@ -15,7 +16,7 @@ import { useRouter } from "next/router";
 import { useDebounce } from "react-use";
 import Link from "next/link";
 import { useDrag, useDrop } from "react-dnd";
-import { CardCache } from "../../pages/collection";
+import { CatalogueEntry, filterCatalogue } from "../../lib/collection-catalogue";
 import * as publicStyles from "../public-site-layout.module.scss";
 
 const ShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON", "HERO", "HERO_POWER", "CLASS"];
@@ -38,7 +39,7 @@ export const textDecorationStyle = (heroClass: string | null | undefined, classC
 });
 
 const CardRow: FunctionComponent<{
-  card: CollectionCardFragment;
+  card: CatalogueEntry;
   collection: CollectionProps;
 }> = ({ card, collection }) => {
   const cardScript = card.cardScript as CardDef;
@@ -76,7 +77,7 @@ const CardRow: FunctionComponent<{
   );
 };
 
-const CardTile: FunctionComponent<{ card: CollectionCardFragment; collection: CollectionProps }> = ({ card, collection }) => {
+const CardTile: FunctionComponent<{ card: CatalogueEntry; collection: CollectionProps }> = ({ card, collection }) => {
   const cardScript = card.cardScript as CardDef;
   const stats = !cardScript.baseAttack && !cardScript.baseHp && !cardScript.durability ? "" : `${cardScript.baseAttack ?? 0}/${cardScript.baseHp ?? cardScript.durability ?? 0}`;
   const namedSprite = cardScript.art?.sprite?.named as unknown;
@@ -121,7 +122,6 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
   const { classes, heroClass, setHeroClass, offset, setOffset, mainHeroClass, addToDeck, removeFromDeck } = props;
   const { data: session } = useSession();
 
-  const cache = useContext(CardCache);
 
   const router = useRouter();
   const user = session?.token?.sub;
@@ -139,34 +139,27 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
 
   const [_, cancelDebounce] = useDebounce(() => setSearch(searchVisual), 500, [searchVisual]);
 
-  const getCards = useGetCollectionCardsQuery({
-    variables: {
-      limit,
-      offset,
-      orderBy: orderBy ? [orderBy as CollectionCardsOrderBy, "COST_ASC", "NAME_ASC"] : ["COST_ASC", "NAME_ASC"],
-      filter: {
-        type: { in: [...cardTypes] },
-        class: heroClass ? (mainHeroClass && heroClass === "ALLOWED" ? { in: [mainHeroClass, "ANY"] } : { equalTo: heroClass }) : undefined,
-        searchMessage: search ? { includesInsensitive: search.trim() } : undefined,
-        collectible: { equalTo: !uncollectible },
-        createdBy: ownOnly ? { equalTo: user ?? "" } : undefined,
-      },
-    },
-    onCompleted: (data) => data.allCollectionCards?.nodes?.forEach((node) => (cache[node!.id!] = node!.cardScript)),
-  });
-  const cards = getCards?.data?.allCollectionCards?.nodes ?? getCards?.previousData?.allCollectionCards?.nodes ?? [];
-  const total = getCards?.data?.allCollectionCards?.totalCount ?? getCards?.previousData?.allCollectionCards?.totalCount ?? 0;
+  const getCards = useQuery(GetCatalogueCardsDocument);
+  const filteredCards = useMemo(() => filterCatalogue(getCards.data?.catalogueCards ?? [], {
+    types: cardTypes, heroClass, mainHeroClass, search, uncollectible, ownOnly, user, orderBy,
+  }), [getCards.data, cardTypes, heroClass, mainHeroClass, search, uncollectible, ownOnly, user, orderBy]);
+  const total = filteredCards.length;
+  const pageLimit = limitOptions.includes(limit) ? limit : defaultLimit;
+  const pageOffset = Math.max(0, Math.min(offset, Math.max(0, total - 1)));
+  const cards = filteredCards.slice(pageOffset, pageOffset + pageLimit);
 
-  const showing = Math.min(limit, cards.length);
+  const showing = Math.min(pageLimit, cards.length);
 
   const changeOffset = (delta: number = 0) => {
     if (getCards.data) {
-      const newOffset = clamp(offset + delta, 0, total - limit);
+      const newOffset = clamp(pageOffset + delta, 0, Math.max(0, total - pageLimit));
       setOffset(newOffset);
     }
   };
 
-  useEffect(changeOffset, [getCards.data]);
+  useEffect(() => {
+    if (offset < 0 || offset >= total && offset !== 0) setOffset(0);
+  }, [total, offset]);
 
   const [, collectionDrop] = useDrop({
     accept: ["deck-card"],
@@ -205,13 +198,13 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
             </div>
           </DropdownMenu>
         </Dropdown>
-        <Button disabled={!getCards.data || offset <= 0} variant={"secondary"} onClick={() => changeOffset(-limit)}>
+        <Button disabled={!getCards.data || offset <= 0} variant={"secondary"} onClick={() => changeOffset(-pageLimit)}>
           Prev
         </Button>
         <div className={"mb-1 text-center user-select-none"} aria-live={"polite"}>
-          {cards?.length ? offset + 1 : "0"}-{cards?.length ? offset + showing : "0"} of {cards?.length ? total : "0"}
+          {cards?.length ? pageOffset + 1 : "0"}-{cards?.length ? pageOffset + showing : "0"} of {cards?.length ? total : "0"}
         </div>
-        <Button disabled={!getCards.data || offset >= total - limit} variant={"secondary"} onClick={() => changeOffset(limit)}>
+        <Button disabled={!getCards.data || pageOffset >= total - pageLimit} variant={"secondary"} onClick={() => changeOffset(pageLimit)}>
           Next
         </Button>
         <div className={"w-100 d-none d-lg-block"} />
@@ -282,7 +275,9 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           </Button>
         </div>
       </div>
-      {getCards.loading && !cards.length ? (
+      {getCards.error ? (
+        <div role="alert" className={publicStyles.collectionLoading}>Unable to load cards. <Button onClick={() => void getCards.refetch()}>Retry</Button></div>
+      ) : getCards.loading && !cards.length ? (
         <div className={publicStyles.collectionLoading}>Loading cards...</div>
       ) : !cards.length ? (
         <div className={publicStyles.collectionLoading}>No cards match those filters.</div>

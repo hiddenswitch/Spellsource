@@ -17,7 +17,7 @@ public class GraphQLContainer extends GenericContainer<GraphQLContainer> {
 	public static final int NODE_INSPECTOR_PORT = 9229;
 
 	public GraphQLContainer() {
-		super("node:22");
+		super("node:26.12.1-bookworm-slim@sha256:28147155d47dc31abe0a46e0d12b59b2fb3d0a2dcc5dc65fce76a074180b16fe");
 		addEnv("NODE_ENV", "development");
 		addEnv("GRAPHILE_ENV", "development");
 		addEnv("SLEEP", "30"); // Allow the full pg schema to be setup before postgraphile introspection
@@ -30,7 +30,7 @@ public class GraphQLContainer extends GenericContainer<GraphQLContainer> {
 		withExtraHost("host.docker.internal", "host-gateway");
 		addFileSystemBind(repositoryRoot().toString(), "/spellsource", BindMode.READ_WRITE, SelinuxContext.NONE);
 		setWorkingDirectory("/spellsource/spellsource-graphql");
-		setCommand("yarn", "develop");
+		setCommand("node", "/spellsource/.yarn/releases/yarn-4.18.1.cjs", "develop");
 		waitingFor(Wait.forLogMessage(".*Server listening at .*", 1)
 				.withStartupTimeout(Duration.ofMinutes(5)));
 	}

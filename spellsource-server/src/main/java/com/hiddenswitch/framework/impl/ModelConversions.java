@@ -904,7 +904,9 @@ public class ModelConversions {
 		return entity;
 	}
 
-	private static final java.util.concurrent.ConcurrentHashMap<String, Optional<Art>> RESOLVED_ART_CACHE = new java.util.concurrent.ConcurrentHashMap<>(2048);
+	private record ResolvedArt(long revision, @Nullable Art art) {}
+
+	private static final java.util.concurrent.ConcurrentHashMap<String, ResolvedArt> RESOLVED_ART_CACHE = new java.util.concurrent.ConcurrentHashMap<>(2048);
 
 	public static @Nullable Art toArt(@Nullable Card card) {
 		if (card == null || card.getDesc() == null) {
@@ -912,12 +914,13 @@ public class ModelConversions {
 		}
 		var cardId = card.getCardId();
 		if (cardId != null && card.getDesc().isReadOnly()) {
+			var revision = Environment.getArtRevision();
 			var cached = RESOLVED_ART_CACHE.get(cardId);
-			if (cached != null) {
-				return cached.orElse(null);
+			if (cached != null && cached.revision() == revision) {
+				return cached.art();
 			}
 			var resolved = resolveArtUncached(card);
-			RESOLVED_ART_CACHE.putIfAbsent(cardId, Optional.ofNullable(resolved));
+			RESOLVED_ART_CACHE.put(cardId, new ResolvedArt(revision, resolved));
 			return resolved;
 		}
 		return resolveArtUncached(card);

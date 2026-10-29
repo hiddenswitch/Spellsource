@@ -1,0 +1,8 @@
+query getCatalogueCards {
+  catalogueCards {
+    id
+    createdBy
+    cardScript
+    lastModified
+  }
+}

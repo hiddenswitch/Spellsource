@@ -4,10 +4,7 @@ def allJvmArgs = [
   '-XX:+IgnoreUnrecognizedVMOptions',
   '-XX:+UnlockExperimentalVMOptions',
   '-XX:+UseCompactObjectHeaders',
-  '-XX:AutoBoxCacheMax=16384',
-  '-XX:+EnableJVMCI',
-  '-XX:+UseJVMCICompiler',
-  '-XX:+UseJVMCINativeLibrary'
+  '-XX:AutoBoxCacheMax=16384'
 ]
 
 tasks.withType(JavaCompile).configureEach {
@@ -25,9 +22,9 @@ tasks.withType(JavaExec).configureEach {
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_27
+  sourceCompatibility = JavaVersion.VERSION_25
   toolchain {
-    languageVersion = JavaLanguageVersion.of(27)
+    languageVersion = JavaLanguageVersion.of(25)
   }
 }
 

@@ -26,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -43,7 +45,7 @@ public class TraceTests extends TestBase {
 
 	public static Object[][] getTraces() {
 		try (ScanResult scanResult = new ClassGraph()
-				.disableRuntimeInvisibleAnnotations()
+				.enableClasspath()
 				.acceptPaths(getDirectoryPrefix()).scan()) {
 			List<Trace> traces = scanResult
 					.getResourcesWithExtension(".json")
@@ -51,7 +53,7 @@ public class TraceTests extends TestBase {
 					.filter(Objects::nonNull)
 					.map(c -> {
 						try {
-							Trace trace = Trace.load(c.getContentAsString());
+							Trace trace = Trace.load(c.loadAsString());
 							if (trace.getId() == null) {
 								trace.setId(c.toString());
 							}
@@ -104,10 +106,24 @@ public class TraceTests extends TestBase {
 	public void testTraceRecordedCorrectlyAndGameIsDeterministic() {
 		assertTimeoutPreemptively(Duration.ofMillis(10000), () -> {
 			GameContext context1 = fromTwoRandomDecks(cardCatalogue.spellsource(), cardCatalogue);
-			context1.play();
-			Trace trace = context1.getTrace().clone();
-			GameContext context2 = trace.replayContext();
-			assertEquals(context1.getTurn(), context2.getTurn());
+			try {
+				context1.play();
+				Trace trace = context1.getTrace().clone();
+				GameContext context2 = trace.replayContext();
+				assertEquals(context1.getTurn(), context2.getTurn(),
+						() -> "Replay input for turn-count mismatch:\n" + trace.dump());
+			} catch (Exception | AssertionError failure) {
+				try {
+					var directory = Path.of("build", "test-results", "test", "failing-traces");
+					Files.createDirectories(directory);
+					var path = directory.resolve(UUID.randomUUID() + ".json");
+					Files.writeString(path, context1.getTrace().dump());
+					failure.addSuppressed(new AssertionError("Replay input saved to " + path));
+				} catch (Exception captureFailure) {
+					failure.addSuppressed(captureFailure);
+				}
+				throw failure;
+			}
 			return null;
 		}, "timeout");
 	}

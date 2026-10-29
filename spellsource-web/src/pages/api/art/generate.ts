@@ -4,7 +4,6 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { awsAccessKeyId, awsBucketName, awsSecretAccessKey, comfyUrl } from "../../../lib/config";
 import sdxl from "../../../__generated__/sdxl-ordinary.json";
 import { PromptNode } from "../../../__generated__/comfyclient";
-import fetch from "node-fetch";
 import { GraphQLError } from "graphql/index";
 import { MutationGenerateArtArgs } from "../../../lib/art-generation";
 

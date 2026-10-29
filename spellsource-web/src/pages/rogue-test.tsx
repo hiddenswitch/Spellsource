@@ -1,28 +1,21 @@
+import { getServerSession } from "next-auth";
+import { NextOptions } from "./api/auth/[...nextauth]";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
+
 import Layout from "../components/creative-layout";
-import { useGetClassesQuery, useGetUserIdTestQuery, useStartRogueRunMutation } from "../__generated__/client";
+import { GetUserIdTestDocument, StartRogueRunDocument } from "../__generated__/client";
 import { Container } from "react-bootstrap";
 import { Button } from "../components/typed-bootstrap";
 
 export const getServerSideProps: GetServerSideProps = async (context) => ({
-  props: { session: await getSession(context) },
+  props: { session: await getServerSession(context.req, context.res, NextOptions) },
 });
 
 export default () => {
-  const getHeroClass = useGetClassesQuery({
-    variables: {
-      filter: {
-        collectible: { equalTo: true },
-      },
-    },
-  });
+  useQuery(GetUserIdTestDocument);
 
-  const classes = getHeroClass?.data?.allClasses?.nodes;
-
-  useGetUserIdTestQuery({ onCompleted: (data) => console.log(data) });
-
-  const [startRogueRun] = useStartRogueRunMutation();
+  const [startRogueRun] = useMutation(StartRogueRunDocument);
 
   return (
     <Layout className={"overflow-hidden"}>

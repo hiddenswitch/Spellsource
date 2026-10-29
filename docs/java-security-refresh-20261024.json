@@ -1,0 +1,894 @@
+{
+  "jackson": "2.22.4",
+  "jackson_annotations": "2.22",
+  "log4j": "2.26.1",
+  "codec_module": "Blackbird",
+  "changes": [
+    "Correct Log4j Maven group alignment",
+    "Bridge legacy log4j dependencies through SLF4J",
+    "Align integration gateway Node with production 26.12.1"
+  ],
+  "regression_tests": [
+    {
+      "name": "com.hiddenswitch.framework.tests.DiffTests",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hiddenswitch.framework.tests.ConfigurationTests",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "1"
+    },
+    {
+      "name": "com.hiddenswitch.framework.tests.JsonMessageCodecTests",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "full_server_suite": {
+    "result": "passed",
+    "counts": {
+      "tests": 105,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "command": "./gradlew :spellsource-server:test --console=plain"
+  },
+  "protobuf": {
+    "runtime": "4.36.2",
+    "compiler": "4.36.2",
+    "source": "https://github.com/protocolbuffers/protobuf/releases/tag/v36.2",
+    "server_suite": {
+      "tests": 105,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "card_suite": {
+      "result": "failed",
+      "counts": {
+        "tests": 27395,
+        "failures": 44,
+        "errors": 0,
+        "skipped": 14
+      },
+      "baseline_comparison": {
+        "protobuf": "4.29.0",
+        "jackson": "2.19.4",
+        "result": "all four named failures reproduced",
+        "tests": [
+          "VampireLordTests.testGatekeeperSha",
+          "VampireLordTests.testSoulscreamRework",
+          "StorytellerTests.testDramaticPlaywright",
+          "RingmasterTests.testFiredancer"
+        ],
+        "limitation": "randomized failures not individually replayed against baseline"
+      },
+      "after_fixes": {
+        "result": "passed",
+        "counts": {
+          "tests": 27395,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 14
+        },
+        "fixes": [
+          "Declare Gatekeeper Sha aura value",
+          "Capture revert values before mutation in generated spell paths",
+          "Expire explicitly targeted enchantments",
+          "Recompile all game classes before bytecode weaving"
+        ]
+      }
+    },
+    "generated_sources": "regenerated and compiled"
+  },
+  "clustering": {
+    "vertx": "5.2.2",
+    "infinispan": "16.3.1",
+    "jgroups": "5.5.7.Final",
+    "smallrye_common": "2.21.1",
+    "custom_adapter": "removed in favor of upstream InfinispanClusterManager",
+    "clustered_matchmaking": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "full_server_suite": {
+      "result": "passed",
+      "counts": {
+        "tests": 105,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      }
+    }
+  },
+  "combined_validation": {
+    "command": "./gradlew :spellsource-server:test :spellsource-cards-git:test --console=plain",
+    "result": "passed",
+    "counts": {
+      "spellsource-server": {
+        "tests": 105,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      },
+      "spellsource-cards-git": {
+        "tests": 27395,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 14
+      }
+    }
+  },
+  "common_libraries": {
+    "versions": {
+      "guavaVersion": {
+        "version": "33.7.2-jre",
+        "source": "https://repo.maven.apache.org/maven2/com/google/guava/guava/maven-metadata.xml"
+      },
+      "slf4jVersion": {
+        "version": "2.0.20",
+        "source": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/maven-metadata.xml"
+      },
+      "logbackVersion": {
+        "version": "1.6.5",
+        "source": "https://repo.maven.apache.org/maven2/ch/qos/logback/logback-classic/maven-metadata.xml"
+      },
+      "micrometerVersion": {
+        "version": "1.17.2",
+        "source": "https://repo.maven.apache.org/maven2/io/micrometer/micrometer-core/maven-metadata.xml"
+      },
+      "bytebuddyVersion": {
+        "version": "1.18.16",
+        "source": "https://repo.maven.apache.org/maven2/net/bytebuddy/byte-buddy/maven-metadata.xml"
+      },
+      "mockitoCoreVersion": {
+        "version": "5.24.0",
+        "source": "https://repo.maven.apache.org/maven2/org/mockito/mockito-core/maven-metadata.xml"
+      },
+      "gsonVersion": {
+        "version": "2.15.0",
+        "source": "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/maven-metadata.xml"
+      },
+      "system_stubs": {
+        "version": "2.1.8",
+        "source": "https://repo.maven.apache.org/maven2/uk/org/webcompere/system-stubs-jupiter/maven-metadata.xml"
+      }
+    },
+    "validation": "sequential full suite passed; prior parallel timeout and randomized replay mismatch remain documented and are not treated as proven fixed",
+    "targeted_validation": {
+      "nested_choice_overrides": "six affected tests passed using delegation",
+      "configuration_tests": "passed after System Stubs upgrade"
+    },
+    "sequential_validation": {
+      "result": "passed",
+      "command": "./gradlew --no-parallel :spellsource-server:test :spellsource-cards-git:test --console=plain",
+      "counts": {
+        "spellsource-server": {
+          "tests": 105,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 3
+        },
+        "spellsource-cards-git": {
+          "tests": 27395,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 14
+        }
+      }
+    }
+  },
+  "redisson_classgraph": {
+    "versions": {
+      "redisson": "4.8.0",
+      "classgraph": "6.0.0",
+      "snakeyaml": "2.7"
+    },
+    "compatibility_changes": [
+      "Enable classpath scanning explicitly in all four ClassGraph scans",
+      "Replace removed resource and class loading APIs",
+      "Remove unused runtime annotation option",
+      "Align SnakeYAML across Redisson and Jackson"
+    ],
+    "validation": {
+      "command": "./gradlew --no-parallel :spellsource-server:test :spellsource-cards-git:test",
+      "result": "passed",
+      "duration": "5m 49s",
+      "counts": {
+        "spellsource-server": {
+          "tests": 105,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 3
+        },
+        "spellsource-cards-git": {
+          "tests": 27395,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 14
+        }
+      },
+      "log": "/tmp/spellsource-redisson-classgraph-full-tests.log"
+    },
+    "candidate": "0.10.15-rc.9"
+  },
+  "flyway_postgresql": {
+    "candidate": "0.10.15-rc.10",
+    "flyway": "13.11.1",
+    "postgresql_test_image": "docker.io/postgres:18.6-trixie@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6",
+    "changes": [
+      "Add PostgreSQL module to application runtime and Gradle build classpaths",
+      "Quote json function parameter in historical V11 migration so new PostgreSQL 18 databases can bootstrap without changing argument names or function signatures",
+      "Add regression verifying repeated migrations execute zero pending migrations"
+    ],
+    "verification": {
+      "postgresql_13_focused": "6 environment tests passed before fixture upgrade",
+      "postgresql_18_focused": "7 environment tests passed with container reuse disabled",
+      "postgresql_18_full_server": {
+        "tests": 106,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      },
+      "command": "TESTCONTAINERS_REUSE_ENABLE=false ./gradlew --no-parallel :spellsource-server:test",
+      "duration": "3m 28s",
+      "log": "/tmp/spellsource-flyway13-pg18-server2.log"
+    },
+    "limitations": [
+      "Production-copy Flyway 13 rehearsal and published image acceptance remain pending",
+      "Historical V11 checksum changes; existing application repair step must be verified on production-copy history before promotion"
+    ],
+    "hosted_ci": {
+      "head": "db9024f1df43cb5d499342bba1a4fc72a820cdb2",
+      "all_workflows": "passed",
+      "server_run": 40097560731,
+      "server_image": "ghcr.io/hiddenswitch/spellsource@sha256:7f087e8c98b5388ddae105812cc4fde9052c62afd8fcca7acdc3c4589713aafb"
+    }
+  },
+  "rc9_hosted_ci": {
+    "head": "18aed55ffbc93aa603ec378e3ab06868f2dd7109",
+    "passing_runs": [
+      40096818742,
+      40096814826,
+      40096818746,
+      40096814834,
+      40096814825,
+      40096814861
+    ],
+    "failed_run": 40096814824,
+    "failure": "GraphQLTests.testMatchFoundDeliveredWhenSubscriptionOpensAfterGameCreated WebSocketHandshakeException Connection closed while handshake in process",
+    "status": "Unresolved; same test passed in local PostgreSQL 18 full suite but this does not establish cause or fix",
+    "report": "/tmp/spellsource-rc9-ci-server-reports",
+    "local_reproduction": {
+      "single_test": "passed",
+      "repetitions": 20,
+      "failures": 0,
+      "runtime": "rc10 dependencies and fresh PostgreSQL 18.6",
+      "log": "/tmp/spellsource-late-subscription-stress20.log",
+      "conclusion": "Not reproduced; no root cause or fix established"
+    }
+  },
+  "junit6": {
+    "version": "6.1.3",
+    "platform_alignment": "Jupiter and Platform now share junitVersion",
+    "initial_full_server": {
+      "tests": 106,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 3
+    },
+    "initial_failure": "Late-subscription matchFound delivery timed out; thread dump showed pending matchFound future and logs showed NO_HANDLERS until notification deadline",
+    "diagnostic_change": "Fail pending test promises on WebSocket close or error and bound matchFound delivery wait to 15 seconds",
+    "focused_graphql_rerun": {
+      "tests": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "full_card_suite": {
+      "tests": 27395,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 14
+    },
+    "log": "/tmp/spellsource-junit6-graphql-cards-tests.log",
+    "limitation": "No root cause or runtime fix established for intermittent notification failure; full hosted validation pending",
+    "candidate": "0.10.15-rc.11"
+  },
+  "testcontainers2": {
+    "version": "2.0.5",
+    "changes": [
+      "Rename toxiproxy and junit-jupiter modules to testcontainers-prefixed artifact names",
+      "Remove obsolete JUnit 4 TestRule hook from PersistentNetwork"
+    ],
+    "full_server_validation": {
+      "tests": 106,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "log": "/tmp/spellsource-testcontainers2-server2.log",
+    "candidate": "0.10.15-rc.12"
+  },
+  "startup_migration_rehearsal": {
+    "environment": "isolated production-copy PostgreSQL 18.6 and Keycloak 26.8.1",
+    "initial_image": "ghcr.io/hiddenswitch/spellsource@sha256:7f087e8c98b5388ddae105812cc4fde9052c62afd8fcca7acdc3c4589713aafb",
+    "findings": [
+      "Original rehearsal configuration omitted startup migration; explicitly enabled it before claiming migration coverage",
+      "Populated V14 migration failed while enabling trigger with deferred constraint events pending",
+      "Repeatable Java migration failed because Vertx 5 disallows await on worker threads",
+      "Undeploying migration context closed HTTP clients cached for application lifetime",
+      "Protobuf object hash checksum changed across JVM restarts"
+    ],
+    "fixes": [
+      "Flush deferred constraints before re-enabling card trigger",
+      "Execute migration calls from Vertx contexts in a virtual-thread verticle retained until application shutdown",
+      "Compute protobuf descriptor checksum from serialized bytes using CRC32"
+    ],
+    "validation": {
+      "rollback_sql_test": "passed with 459 published cards and 460 cards deleted inside transaction then rolled back",
+      "restored_backup": "/tmp/spellsource-before-flyway13.dump",
+      "startup": "V14 and two repeatable migrations applied successfully from restored pre-migration history",
+      "failed_history_entries": 0,
+      "focused_event_loop_migration_tests": {
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "browser_on_startup_fix_build": {
+        "status": 200,
+        "signed_in": true,
+        "has_access_token": true,
+        "error": false,
+        "mulligan_confirmed": true,
+        "game": {
+          "frames": {
+            "received": 13,
+            "errors": 0
+          },
+          "page_errors": [],
+          "graphql_responses": [
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            }
+          ],
+          "canvas_count": 1
+        },
+        "blocked_origins": [
+          "https://authjs.dev",
+          "https://fonts.googleapis.com"
+        ],
+        "conceded": true
+      },
+      "browser_server_image_id": "sha256:7fda80163d67f4e63e4727af7e0cb7e6f289f43a6d59381a6edb578722d0dbf1",
+      "final_local_image_id": "sha256:77a55b76b112766b289ec1f842456541c0850c07bda9ea3037180e47fc1946b7",
+      "final_restart": {
+        "readiness_status": 200,
+        "history_before": 70,
+        "history_after": 70,
+        "log": "Schema hiddenswitch is up to date. No migration necessary."
+      }
+    },
+    "limitations": [
+      "Local candidate image; published rc12 image acceptance remains pending",
+      "Gateway and website were the previously accepted rc7 rehearsal images",
+      "Production was not changed"
+    ],
+    "candidate": "0.10.15-rc.12"
+  },
+  "graphql26": {
+    "graphql_java": "26.1",
+    "graphql_java_tools": "io.github.graphql-java-kickstart:graphql-java-tools:14.5.0",
+    "extended_scalars": "24.0",
+    "kotlin": "2.4.21",
+    "future_adapter": "SchemaParser GenericWrapper.withTransformer converts Vertx Future to CompletionStage before light data fetcher execution",
+    "local_test_results": {
+      "spellsource-server": {
+        "tests": 106,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      },
+      "spellsource-cards-git": {
+        "tests": 27395,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 14
+      }
+    },
+    "server_log": "/tmp/spellsource-graphql26-full-server.log",
+    "card_log": "/tmp/spellsource-graphql26-card-tests.log",
+    "promotion_status": "Local collection compatibility checks passed; published candidate validation pending",
+    "root_cause": "V14 removes the cards_in_deck foreign key and git-authored SQL card records. Collection and deck UI still depend on these SQL views and relationships. Basic game browser acceptance does not cover deck editing.",
+    "initial_schema_operation_failure": {
+      "operations": 126,
+      "invalid_operations": 4,
+      "missing_field": "CardsInDeck.publishedCardByCardId",
+      "affected_clients": [
+        "spellsource-web",
+        "spellsource-threejs"
+      ]
+    }
+  },
+  "random_trace_diagnostics": {
+    "change": "Save the original game trace on exceptions and assertion failures from random play or replay; retain the original failure and 10000 repetitions",
+    "verified_with": "Deliberately injected exception produced a JSON trace and preserved original exception; injection restored before full passing card run",
+    "ci_artifact_action": "actions/upload-artifact v7.0.2 pinned cf430e030ddbb5b0abf93d22962f4752f3646cd9",
+    "unresolved_failure": "rc12 push CI repetition 640 hit GameLogic.castSpell program counter limit during initial play. No original replay input was retained. Diagnostics do not establish a root-cause fix."
+  },
+  "catalogue_api_repair": {
+    "status": "Implemented and locally verified; published candidate validation pending",
+    "query": "catalogueCards { id createdBy cardScript lastModified }",
+    "tests": {
+      "server_full": {
+        "tests": 111,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      },
+      "collection_filter_tests": 6,
+      "final_serialization_tests": 2,
+      "typescript": [
+        "spellsource-web passed",
+        "spellsource-threejs passed"
+      ],
+      "next_production_build": "passed",
+      "schema_operations": {
+        "operations": 128,
+        "errors": []
+      },
+      "browser": {
+        "status": 200,
+        "signed_in": true,
+        "has_access_token": true,
+        "error": false,
+        "initial_cards": 25,
+        "session_state": {
+          "has_subject": true,
+          "server_has_subject": true,
+          "server_has_session": true
+        },
+        "deck_created": true,
+        "added_card": "A Challenger Appears",
+        "saved_and_reloaded": true,
+        "editor_blocks": 1,
+        "graphql_errors": [],
+        "page_errors": []
+      },
+      "live_internal_metadata_check": {
+        "cards": 3320,
+        "internalMetadataRemoved": true
+      }
+    },
+    "logs": [
+      "/tmp/spellsource-catalogue-full-server.log",
+      "/tmp/spellsource-catalogue-public-script-tests.log",
+      "/tmp/spellsource-catalogue-ui-tests.log",
+      "/tmp/spellsource-catalogue-editor-build.log",
+      "/tmp/spellsource-catalogue-editor-browser3.log",
+      "/tmp/spellsource-catalogue-editor-browser-final.log"
+    ],
+    "remaining": [
+      "Verify CI and published candidate images before promotion"
+    ],
+    "ui_changes": [
+      "Collection filters and deck card display use published Git plus SQL definitions",
+      "Editor classes search and Git-card imports use the combined catalogue",
+      "Custom-card timestamps preserve recently changed sorting",
+      "SSR reads NextAuth sessions directly without a self-fetch",
+      "Apollo 4 SQL card lookups retain their result promises; Git references resolve locally",
+      "Internal ownership/publication attributes are omitted from editable card scripts"
+    ],
+    "candidate": "0.10.15-rc.13"
+  },
+  "catalogue_cache_withdrawal": {
+    "before": "Both archive and unpublish regression cases failed because stale cards remained cached",
+    "after": {
+      "com.hiddenswitch.framework.tests.SqlCardCatalogueTests": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "com.hiddenswitch.framework.tests.CatalogueVisibilityTests": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "com.hiddenswitch.framework.tests.GraphQLTests": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "behavior": [
+      "Remove custom cards absent from the refreshed published SQL result",
+      "Restore Git definitions when SQL overrides are withdrawn",
+      "Serialize SQL refreshes to prevent stale responses overwriting newer ones"
+    ],
+    "logs": [
+      "/tmp/spellsource-catalogue-withdraw-before.log",
+      "/tmp/spellsource-catalogue-withdraw-after.log"
+    ]
+  },
+  "buildtools_and_utility_refresh": {
+    "versions": {
+      "jib": "3.5.4",
+      "shadow": "9.6.1",
+      "error_prone_annotations": "2.51.0",
+      "commons_validator": "1.11.0",
+      "commons_logging": "1.4.0",
+      "zero_allocation_hashing": "2026.0"
+    },
+    "fixes": [
+      "Align commons-logging after validator dependency conflict",
+      "Pass the JVM argument list to JavaExec tasks instead of appending it to itself",
+      "Allow service and Kotlin metadata resources through Shadow duplicate filtering; fail on duplicate final archive entries"
+    ],
+    "server_tests": {
+      "tests": 111,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "shadow_services": {
+      "service_descriptors": 59,
+      "missing_providers": {},
+      "duplicate_entries": []
+    },
+    "container_entrypoint": "Verified each configured JVM flag appears once",
+    "logs": [
+      "/tmp/spellsource-buildtools-refresh2.log",
+      "/tmp/spellsource-shadow-merge-verification2.log"
+    ],
+    "status": "Locally validated; not yet released"
+  },
+  "rc13_ci": {
+    "commit": "e2fd113557c77889fd525d1d2507484bf1bd80d1",
+    "passed": [
+      "Three.js Client push",
+      "Three.js Client PR",
+      "Tests push",
+      "Tests PR",
+      "Build GraphQL Gateway",
+      "Build Website"
+    ],
+    "server_run": 40102672560,
+    "server_result": {
+      "tests": 111,
+      "failures": 2,
+      "skipped": 3
+    },
+    "failures": {
+      "testMatchFoundDeliveredWhenSubscriptionOpensAfterGameCreated": "WebSocket closed before matchFound delivery",
+      "testConnectToGameWaitsForGameMessageSubscription": "gameMessages subscription was not ready"
+    },
+    "reports": "/tmp/spellsource-rc13-server-reports",
+    "log": "/tmp/spellsource-rc13-server-failure.log",
+    "published_images": {
+      "web": "ghcr.io/hiddenswitch/spellsource/web@sha256:27c2f61ffefc42e19da81655d7481e43a690e3cb6782bbe9eea516cbcdd26a7e",
+      "graphql": "ghcr.io/hiddenswitch/spellsource-graphql@sha256:155549b04f793c10927ed996fb4b588ebb5ae9141292c8add51df29b456a647a"
+    },
+    "status": "Do not promote; investigate subscription readiness failures before the next candidate"
+  },
+  "rc13_subscription_investigation": {
+    "status": "Root cause reproduced and fixed; all 117 server tests pass (3 skipped); next candidate CI pending",
+    "diagnostics": "Readiness test records WebSocket errors and close status/reason; late matchFound test includes close status/reason. No runtime fix or timeout relaxation.",
+    "local_validation": {
+      "command": "JAVA_TOOL_OPTIONS=-XX:ActiveProcessorCount=2 TESTCONTAINERS_REUSE_ENABLE=false ./gradlew --no-parallel :spellsource-server:test --tests *.GraphQLTests --console=plain",
+      "result": {
+        "name": "com.hiddenswitch.framework.tests.GraphQLTests",
+        "tests": "31",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-24T14:43:01.123Z",
+        "hostname": "appmana-001",
+        "time": "61.002"
+      },
+      "log": "/tmp/spellsource-subscription-two-cpu.log"
+    },
+    "next": "Full server test and packaged build; publish next candidate and verify CI.",
+    "full_server_two_cpu": {
+      "tests": 111,
+      "failures": 0,
+      "skipped": 3,
+      "log": "/tmp/spellsource-server-two-cpu.log",
+      "dependency_state": "6965ec30a before jOOQ upgrade",
+      "conclusion": "Original CI subscription failure not reproduced; cause remains unresolved."
+    },
+    "root_cause": "Vert.x 5 CleanableWebSocketClient shuts down connections when the client wrapper becomes unreachable. Two tests discarded the wrapper after connect; another did not use it during cleanup.",
+    "reproduction": {
+      "full_suite": "117 tests; one failure: WebSocket closed before connection acknowledgement: 1000 null; /tmp/spellsource-jooq321-full-validation.log",
+      "forced_collection_before": "Both affected tests fail with WebSocket is closed after System.gc() and a 250 ms collection window; /tmp/spellsource-ws-gc-before.log",
+      "forced_collection_after": "Retain client until explicit close. All 31 GraphQL tests pass with collection regression enabled; /tmp/spellsource-ws-gc-after.log",
+      "source": "io.vertx:vertx-core:5.2.2 sources VertxImpl.createWebSocketClient, CleanableWebSocketClient, CleanableResource.Action.run"
+    }
+  },
+  "jooq_321_refresh": {
+    "status": "Full server tests and packaged shadowJar passed; candidate publication pending",
+    "versions": {
+      "jooq": "3.17.3 -> 3.21.9",
+      "jakarta.xml.bind-api": "3.0.1 -> 4.0.5"
+    },
+    "source": "https://github.com/jOOQ/jOOQ/releases/tag/version-3.21.9",
+    "generator": "Ported mode-aware JavaWriter factory compatibility from HiddenSwitch/forks-vertx-jooq commit 4ef546d to the existing Spellsource fork. Generated 727 Java files against PostgreSQL 18 rehearsal and compiled all of them in an isolated temporary directory.",
+    "runtime_repair": "Adapt wrapped-converter JSON/JSONB database values to Vert.x JSON values. Preserve JSON null using Tuple.JSON_NULL separately from SQL NULL.",
+    "validation": {
+      "initial_compile": "passed /tmp/spellsource-jooq321-compile.log",
+      "initial_runtime": "111 tests; 9 failures after upgrade /tmp/spellsource-jooq321-tests.log",
+      "targeted_after_fix": "40 tests; zero failures /tmp/spellsource-jooq321-json-fix2.log",
+      "json_roundtrip_regression": "6 tests; zero failures /tmp/spellsource-jooq321-json-regression.log"
+    },
+    "remaining": [
+      "Complete full server suite with WebSocket lifecycle fix",
+      "Publish next candidate and verify CI and packaged runtime",
+      "AppMana equivalent JSON fix committed at 3d8a373a9; dependent release pending"
+    ],
+    "fork_commit": "1a8ffc0f",
+    "fork_branch": "https://github.com/hiddenswitch/forks-jooq-vertx-5/tree/upgrade/jooq-3-21-20261024"
+  },
+  "rc14_candidate": {
+    "version": "0.10.15-rc.14",
+    "status": "Six workflows passed; server workflow failed clustered matchmaking timeout and subsequent port binding failures",
+    "changes": [
+      "Jib 3.5.4 and Shadow 9.6.1 with complete merged service providers",
+      "Utility library refresh",
+      "jOOQ 3.21.9 and JAXB 4.0.5; mode-aware code generator and reactive JSON bindings",
+      "WebSocket client lifecycle regression fix with forced collection"
+    ],
+    "validation": {
+      "tests": 117,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "log": "/tmp/spellsource-jooq321-ws-fixed-full.log",
+    "remaining": [
+      "CI publication and packaged acceptance",
+      "Production promotion after database migration readiness"
+    ],
+    "commit": "f1b714ffc40bbb6b55aab7c13ac110a456c1a162",
+    "ci": {
+      "server": 40105615128,
+      "website": 40105615131,
+      "gateway": 40105615426,
+      "tests_push": 40105615260,
+      "tests_pr": 40105618339,
+      "threejs_push": 40105615164,
+      "threejs_pr": 40105618284
+    },
+    "server_failure": {
+      "log": "/tmp/spellsource-rc14-server-failure.log",
+      "reports": "/tmp/spellsource-rc14-server-reports",
+      "artifact_id": 12565086148,
+      "first_failure": "MatchmakingTests.testManyClientsMatchmakeAcrossClusteredInstances with 60 clients timed out",
+      "graphql": "All 31 GraphQL tests passed in CI, including forced collection regression",
+      "next": "Diagnose clustered matchmaking stall and ensure independently created Vertx instances are closed on timeout before another release"
+    }
+  },
+  "utility_alignment": {
+    "status": "locally validated; not included in published rc14",
+    "versions": {
+      "commons-codec": "1.15 -> 1.23.0",
+      "jboss-logging": "3.6.2.Final -> 3.6.3.Final",
+      "jakarta.activation-api": "2.1.3 -> 2.1.4",
+      "wildfly-common": "1.5.1.Final -> 2.0.1"
+    },
+    "validation": "117 server tests; zero failures; three skipped; shadowJar passed",
+    "log": "/tmp/spellsource-utility-alignment.log",
+    "sources": [
+      "https://commons.apache.org/proper/commons-codec/changes.html",
+      "https://github.com/jboss-logging/jboss-logging/releases",
+      "https://repo.maven.apache.org/maven2/jakarta/activation/jakarta.activation-api/maven-metadata.xml",
+      "https://repo.maven.apache.org/maven2/org/wildfly/common/wildfly-common/maven-metadata.xml"
+    ]
+  },
+  "rc14_matchmaking_followup": {
+    "status": "cleanup and client failure contracts validated locally; original CI stall remains unproven fixed",
+    "fixes": [
+      "Close independently created test Vertx instances from JUnit teardown even if the future chain hangs",
+      "Fail playUntilGameOver when the stream ends before ON_GAME_END",
+      "Propagate subscription setup failures to pending writer promises in connectToGame and playUntilGameOver"
+    ],
+    "validation": {
+      "com.hiddenswitch.framework.tests.MatchmakingTests": {
+        "tests": "23",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      "com.hiddenswitch.framework.tests.ClientGameStreamTests": {
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    },
+    "logs": [
+      "/tmp/spellsource-matchmaking-cleanup-diagnostics.log",
+      "/tmp/spellsource-client-stream-contract.log",
+      "/tmp/spellsource-matchmaking-final-check.log"
+    ],
+    "forced_timeout": {
+      "method": "Temporary injected stall after clustered gateways started; clustered test timeout reduced to 20 seconds only for the experiment",
+      "result": "Clustered test timed out as expected; subsequent testQuickPlay passed with no port-binding failure",
+      "report": "/tmp/spellsource-matchmaking-forced-timeout.xml",
+      "restored": true
+    },
+    "remaining": [
+      "Monitor clustered matchmaking in further acceptance; one successful hosted run does not prove an intermittent stall eliminated"
+    ],
+    "full_server_validation": {
+      "tests": 121,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    }
+  },
+  "rc15_candidate": {
+    "version": "0.10.15-rc.15",
+    "status": "Hosted CI and published-image rehearsal acceptance passed; production promotion pending database cutover",
+    "changes": [
+      "Commons Codec 1.23.0, JBoss Logging 3.6.3.Final, Jakarta Activation 2.1.4, WildFly Common 2.0.1",
+      "JUnit teardown closes independently created clustered Vertx instances after timeouts",
+      "Game client propagates premature stream termination and subscription setup failures"
+    ],
+    "validation": {
+      "tests": 121,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "packaging": "shadowJar passed",
+    "log": "/tmp/spellsource-cluster-cleanup-full-validation.log",
+    "remaining": [
+      "Production database cutover and release promotion remain separate outstanding gates"
+    ],
+    "ci": {
+      "server": 40107922080,
+      "website": 40107922081,
+      "graphql": 40107922063,
+      "cards": [
+        40107922062,
+        40107927390
+      ],
+      "threejs": [
+        40107922067,
+        40107927434
+      ]
+    },
+    "hosted_tests": {
+      "server": {
+        "tests": 121,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3
+      },
+      "cards": {
+        "tests": 27395,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 14
+      }
+    },
+    "published_images": {
+      "server": "ghcr.io/hiddenswitch/spellsource@sha256:d200e16b64d3e665f52ad414ae4880f68772db85190e38693c2828cfdc00bd5f",
+      "graphql": "ghcr.io/hiddenswitch/spellsource-graphql@sha256:7b2600a3b0e8d9c4adc583c7f29a255ae88b94aef6c0c5fd1fe2ad7df390e50c",
+      "web": "ghcr.io/hiddenswitch/spellsource/web@sha256:3a8108330379d337d1d81a69de3ae404f3f3af5bfbdc9c1d74f5b2cca4ea309a"
+    },
+    "rehearsal": {
+      "environment": "Isolated production-copy PostgreSQL 18.6, Keycloak 26.8.1; all three services use immutable published rc15 digests listed above",
+      "readiness_http_status": 200,
+      "migration_history": {
+        "total": 70,
+        "failed": 0,
+        "startup": "Schema up to date; no migration necessary"
+      },
+      "containers": "All three running with zero restarts",
+      "catalogue_browser": {
+        "status": 200,
+        "signed_in": true,
+        "has_access_token": true,
+        "error": false,
+        "initial_cards": 25,
+        "session_state": {
+          "has_subject": true,
+          "server_has_subject": true,
+          "server_has_session": true
+        },
+        "deck_created": true,
+        "added_card": "A Challenger Appears",
+        "saved_and_reloaded": true,
+        "editor_blocks": 1,
+        "graphql_errors": [],
+        "page_errors": []
+      },
+      "game_browser": {
+        "status": 200,
+        "signed_in": true,
+        "has_access_token": true,
+        "error": false,
+        "mulligan_confirmed": true,
+        "game": {
+          "frames": {
+            "received": 13,
+            "errors": 0
+          },
+          "page_errors": [],
+          "graphql_responses": [
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            },
+            {
+              "status": 200,
+              "errors": false
+            }
+          ],
+          "canvas_count": 1
+        },
+        "blocked_origins": [
+          "https://authjs.dev",
+          "https://fonts.googleapis.com"
+        ],
+        "conceded": true
+      },
+      "rollback": "Previous rehearsal containers retained with -before-rc15 suffix, stopped and disconnected",
+      "limitations": [
+        "Browser routes public gateway requests to the isolated gateway; no production writes",
+        "Production database cutover and final stable release remain outstanding"
+      ]
+    }
+  }
+}

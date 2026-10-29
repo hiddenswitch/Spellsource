@@ -9,10 +9,13 @@ import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingQueuesDao;
 import graphql.kickstart.tools.GraphQLQueryResolver;
 import io.vertx.core.Future;
+import io.vertx.core.json.JsonObject;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.net.URI;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +50,35 @@ public class GraphQLQueryResolverImpl implements QueryResolver, GraphQLQueryReso
 	}
 
 	// ── cards ────────────────────────────────────────────────
+
+	@Override
+	public Future<List<CatalogueCard>> catalogueCards() {
+		if (cardCatalogue == null) {
+			return Future.failedFuture("card catalogue not initialized");
+		}
+		var cards = cardCatalogue.getAll().stream()
+			.filter(card -> card.hasAttribute(Attribute.PUBLISHED))
+			.filter(card -> !card.hasAttribute(Attribute.ARCHIVED))
+			.filter(card -> !"TEST".equals(card.getDesc().getSet()))
+			.sorted(Comparator.comparing(card -> card.getCardId()))
+			.map(card -> {
+				var script = JsonObject.mapFrom(card.getDesc());
+				var attributes = script.getJsonObject("attributes");
+				if (attributes != null) {
+					attributes.remove("CREATED_BY_USER_ID");
+					attributes.remove("PUBLISHED");
+					attributes.remove("ARCHIVED");
+				}
+				return new CatalogueCard.Builder()
+				.setId(card.getCardId())
+				.setLastModified(cardCatalogue.getCardLastModified(card.getCardId()))
+				.setCreatedBy((String) card.getDesc().getAttributes().get(Attribute.CREATED_BY_USER_ID))
+				.setCardScript(script.getMap())
+				.build();
+			})
+			.toList();
+		return Future.succeededFuture(cards);
+	}
 
 	@Override
 	public Future<GetCardsResponse> cards(String ifNoneMatch) throws Exception {

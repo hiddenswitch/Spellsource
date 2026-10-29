@@ -75,6 +75,7 @@ describe("WorkspaceUtils", () => {
       allIcons,
       userId: "",
       myCards: [],
+      catalogueCards: cards.map(([id, cardScript]) => ({ id, cardScript })),
       allArt: [],
       classes: Object.fromEntries(cards.filter(([, card]) => card.type === "CLASS")),
     };

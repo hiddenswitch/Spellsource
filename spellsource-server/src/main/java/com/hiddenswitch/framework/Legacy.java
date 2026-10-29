@@ -687,13 +687,14 @@ public class Legacy {
 		List<String> deckLists;
 		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
 		try (ScanResult scanResult = new ClassGraph()
+				.enableClasspath()
 				.acceptPaths("spellsource/decklists/current").scan()) {
 			deckLists = scanResult
 					.getResourcesWithExtension(".txt")
 					.stream()
 					.map(resource -> {
 						try {
-							return resource.getContentAsString();
+							return resource.loadAsString();
 						} catch (IOException e) {
 							throw new RuntimeException(e);
 						}

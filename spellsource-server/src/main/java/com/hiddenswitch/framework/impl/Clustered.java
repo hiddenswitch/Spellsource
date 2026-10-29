@@ -68,9 +68,7 @@ public interface Clustered {
 		ConfigurationBuilderHolder builderHolder = null;
 		var parser = new ParserRegistry(classLoader, false, properties);
 		try (var is = ispnConfig.openStream()) {
-			var xml = new String(is.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8)
-					.replace("urn:infinispan:config:16.2", "urn:infinispan:config:15.0")
-					.replace("infinispan-config-16.2.xsd", "infinispan-config-15.0.xsd");
+			var xml = new String(is.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
 			builderHolder = parser.parse(xml);
 		} catch (IOException e) {
 			throw new RuntimeException(e);

@@ -1,5 +1,6 @@
 scalar BigInt
 scalar DateTime
+scalar JSON
 
 # ─── Enums ────────────────────────────────────────────────────
 
@@ -346,6 +347,14 @@ type Entity {
 }
 
 # ─── Card catalogue ───────────────────────────────────────────
+
+"""Published card definitions from the combined Git and database catalogue."""
+type CatalogueCard {
+    id: String!
+    createdBy: String
+    cardScript: JSON!
+    lastModified: String
+}
 
 type CardRecord {
     id: BigInt!
@@ -709,6 +718,7 @@ type Query {
     configuration: ClientConfiguration!
 
     # cards
+    catalogueCards: [CatalogueCard!]!
     cards(ifNoneMatch: String): GetCardsResponse!
     cardsByUser(ifNoneMatch: String): GetCardsResponse!
 

@@ -98,7 +98,10 @@ public class Client {
 
 		readerFut.onSuccess(reader -> reader.handler(promise::tryComplete));
 		readerFut.onSuccess(reader -> reader.exceptionHandler(promise::tryFail));
-		readerFut.onFailure(promise::tryFail);
+		readerFut.onFailure(cause -> {
+			promise.tryFail(cause);
+			writerFut.tryFail(cause);
+		});
 
 		return writerFut.future()
 				.compose(writer -> {
@@ -128,10 +131,15 @@ public class Client {
 							.onFailure(gameOverPromise::tryFail);
 					break;
 				case ON_REQUEST_ACTION:
+					var actions = message.getActions();
+					if (actions.getCompatibilityCount() == 0) {
+						gameOverPromise.tryFail("Server offered no compatible game actions");
+						return;
+					}
 					writer.write(ClientToServerMessage.newBuilder()
 									.setMessageType(MessageType.UPDATE_ACTION)
 									.setRepliesTo(message.getId())
-									.setActionIndex(random.nextInt(message.getActions().getAllCount()))
+									.setActionIndex(actions.getCompatibility(random.nextInt(actions.getCompatibilityCount())))
 									.build())
 							.onFailure(gameOverPromise::tryFail);
 					break;
@@ -141,8 +149,14 @@ public class Client {
 			}
 		}));
 
-		readerFut.onFailure(gameOverPromise::tryFail);
-		readerFut.onSuccess(reader -> reader.exceptionHandler(gameOverPromise::tryFail));
+		readerFut.onFailure(cause -> {
+			gameOverPromise.tryFail(cause);
+			writerPromise.tryFail(cause);
+		});
+		readerFut.onSuccess(reader -> {
+			reader.exceptionHandler(gameOverPromise::tryFail);
+			reader.endHandler(ignored -> gameOverPromise.tryFail("Game stream ended before ON_GAME_END"));
+		});
 
 		return writerFut
 				.compose(writer -> {

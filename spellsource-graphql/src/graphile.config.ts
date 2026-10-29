@@ -1,11 +1,11 @@
-import PgOmitArchivedPlugin from "@graphile-contrib/pg-omit-archived";
+import PgOmitArchivedPlugin from "./plugins/pg-omit-archived";
 import { PostGraphileConnectionFilterPreset } from "postgraphile-plugin-connection-filter";
 import { makeV4Preset } from "postgraphile/presets/v4";
-import PostGraphileAmberPreset from "postgraphile/presets/amber";
+import { PostGraphileAmberPreset } from "postgraphile/presets/amber";
 import { makePgService } from "postgraphile/adaptors/pg";
 import { Pool } from "pg";
 import { pgDatabase, pgHost, pgPassword, pgPort, pgUser } from "./config";
-import { AuthRequest } from "./auth";
+import { AuthRequest, databaseSettings } from "./auth";
 
 export const pgPool = new Pool({
   user: pgUser,
@@ -46,10 +46,7 @@ const preset: GraphileConfig.Preset = {
       },
       pgSettings: (ctx) => {
         const req = ctx as unknown as AuthRequest;
-        return {
-          role: req.admin ? "admin" : req.auth ? "website" : undefined, // TODO use different roles for website / client / server ? or just rename role to "user"
-          "user.id": req.auth?.sub ?? "",
-        };
+        return databaseSettings(req);
       },
     }),
   ],

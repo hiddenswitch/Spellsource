@@ -29,7 +29,6 @@ import io.vertx.ext.web.handler.HttpException;
 import io.vertx.ext.web.handler.JWTAuthHandler;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandlerOptions;
-import io.vertx.ext.web.handler.graphql.instrumentation.VertxFutureAdapter;
 import io.vertx.ext.web.handler.graphql.ws.GraphQLWSHandler;
 import io.vertx.rxjava3.ext.web.RoutingContext;
 import io.vertx.rxjava3.ext.web.handler.graphql.GraphQLHandler;
@@ -57,7 +56,8 @@ public class GraphQL extends AbstractVirtualThreadVerticle {
 		var schema = SchemaParser.newParser()
 				.file("schema.graphqls")
 				.options(new SchemaParserOptions.Builder()
-						.genericWrappers(new SchemaParserOptions.GenericWrapper(Future.class, 0))
+						.genericWrappers(SchemaParserOptions.GenericWrapper.withTransformer(
+								Future.class, 0, Future::toCompletionStage, type -> type))
 						.build())
 				.resolvers(new GraphQLQueryResolverImpl(cardCatalogue), new GraphQLMutationResolverImpl(cardCatalogue), new GraphQLSubscriptionResolverImpl())
 				.scalars(
@@ -91,13 +91,13 @@ public class GraphQL extends AbstractVirtualThreadVerticle {
 									}
 								})
 								.build(),
-						ExtendedScalars.DateTime
+						ExtendedScalars.DateTime,
+						ExtendedScalars.Json
 				)
 				.build()
 				.makeExecutableSchema();
 
 		var gql = graphql.GraphQL.newGraphQL(schema)
-				.instrumentation(VertxFutureAdapter.create())
 				.build();
 
 		var handler = GraphQLHandler.create(gql);

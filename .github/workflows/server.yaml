@@ -1,7 +1,7 @@
 name: Build Server
 on:
   push:
-    branches: ['develop']
+    branches: ['develop', 'upgrade/security-release-*']
     tags: ['*']
     paths:
       - 'spellsource-server/**'
@@ -25,7 +25,7 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           lfs: true
       - run: git lfs checkout
@@ -33,24 +33,26 @@ jobs:
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"
           git submodule update --init vertx-jooq-fork spellsource-ts-proto/ts-proto
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
-          java-version: '24'
+          java-version: '25.0.5+8.0.LTS'
           distribution: temurin
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 22
+          node-version: 26.12.1
+      - name: Install pinned Corepack
+        run: npm install --global corepack@0.36.0 && corepack enable
       - name: Run server tests
-        run: ./gradlew --no-parallel spellsource-server:test spellsource-game:test
+        run: ./gradlew --no-parallel spellsource-server:test spellsource-cards-git:test
       - name: Retain server test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: server-test-reports
           path: |
             spellsource-server/build/test-results/test/
             spellsource-server/build/reports/tests/test/
-            spellsource-game/build/test-results/test/
+            spellsource-cards-git/build/test-results/test/
           retention-days: 14
       - name: Build and push server image
         run: ./gradlew spellsource-server:githubDockerPush

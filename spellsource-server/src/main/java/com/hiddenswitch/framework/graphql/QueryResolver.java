@@ -16,6 +16,8 @@ public interface QueryResolver {
     /**
      * cards
      */
+    io.vertx.core.Future<java.util.List<CatalogueCard>> catalogueCards() throws Exception;
+
     io.vertx.core.Future<GetCardsResponse> cards(String ifNoneMatch) throws Exception;
 
     io.vertx.core.Future<GetCardsResponse> cardsByUser(String ifNoneMatch) throws Exception;

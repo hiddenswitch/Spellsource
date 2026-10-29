@@ -30,6 +30,8 @@ tasks.generateTypeScript {
 
 tasks.named('compileJava', JavaCompile).configure {
     def launcher = javaToolchains.launcherFor(java.toolchain)
+    // The weaver rewrites every class after compilation. Recompile all classes when its source changes.
+    options.incremental = false
     doLast {
         def javaExe = launcher.get().executablePath.asFile.absolutePath
         def classesDir = destinationDirectory.get().asFile.absolutePath

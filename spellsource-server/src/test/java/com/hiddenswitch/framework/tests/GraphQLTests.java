@@ -558,6 +558,30 @@ public class GraphQLTests extends FrameworkTestBase {
 	// ── Cards Tests ──────────────────────────────────────────────
 
 	@Test
+	public void testPublishedCatalogueIncludesGitCards(Vertx vertx, VertxTestContext testContext) {
+		testVirtual(vertx, testContext, () -> {
+			await(startAll(vertx));
+			var result = await(graphql(graphqlClient(vertx), "{ catalogueCards { id createdBy cardScript } }"));
+			assertNull(result.getJsonArray("errors"), () -> result.encode());
+			var cards = result.getJsonObject("data").getJsonArray("catalogueCards");
+			assertFalse(cards.isEmpty());
+			boolean hasClass = false;
+			boolean hasAvenger = false;
+			for (var value : cards) {
+				var card = (JsonObject) value;
+				var script = card.getJsonObject("cardScript");
+				assertEquals(card.getString("id"), script.getString("id"));
+				assertNotEquals("TEST", script.getString("set"));
+				assertNotNull(script.getString("name"));
+				hasClass |= "CLASS".equals(script.getString("type"));
+				hasAvenger |= "minion_fassnu_avenger".equals(card.getString("id"));
+			}
+			assertTrue(hasClass, "class definitions must survive removal of Git cards from SQL");
+			assertTrue(hasAvenger, "Git card definitions must be available without a SQL card row");
+		});
+	}
+
+	@Test
 	public void testCardsQuery(Vertx vertx, VertxTestContext testContext) {
 		testVirtual(vertx, testContext, () -> {
 			await(startAll(vertx));
@@ -984,7 +1008,8 @@ public class GraphQLTests extends FrameworkTestBase {
 			assertNotNull(gameOverMessage.getJsonObject("gameOver"), "should have gameOver data");
 
 			// 10. Close WebSocket and verify we're no longer in a match
-			ws.close();
+			await(ws.close());
+			await(wsClient.close());
 			await(Environment.sleep(vertx, 1000));
 			var afterRes = await(graphql(webClient, "{ isInMatch }", null, token));
 			assertNull(afterRes.getJsonArray("errors"), "isInMatch after game errors: " + afterRes);
@@ -1020,14 +1045,34 @@ public class GraphQLTests extends FrameworkTestBase {
 			gameConsumer.handler(message -> firstMessage.tryComplete(message.body()));
 			await(gameConsumer.completion());
 
-			var ws = await(vertx.createWebSocketClient().connect(new WebSocketConnectOptions()
+			var wsClient = vertx.createWebSocketClient();
+			var ws = await(wsClient.connect(new WebSocketConnectOptions()
 					.setHost("localhost")
 					.setPort(GRAPHQL_PORT)
 					.setURI("/graphql")
 					.addSubProtocol("graphql-transport-ws")));
+			// Vert.x 5 cleans up an unreachable client even while its socket is in use.
+			// Keep the client alive through explicit close and exercise collection here.
+			System.gc();
+			await(Environment.sleep(vertx, 250));
 			var connectionAck = Promise.<Void>promise();
+			var subscriptionFailure = new java.util.concurrent.atomic.AtomicReference<String>();
+			ws.exceptionHandler(cause -> {
+				connectionAck.tryFail(cause);
+				subscriptionFailure.set(cause.toString());
+			});
+			ws.closeHandler(ignored -> {
+				var reason = "WebSocket closed: " + ws.closeStatusCode() + " " + ws.closeReason();
+				connectionAck.tryFail(reason);
+				subscriptionFailure.set(reason);
+			});
 			ws.textMessageHandler(text -> {
-				if ("connection_ack".equals(new JsonObject(text).getString("type"))) {
+				var message = new JsonObject(text);
+				if ("error".equals(message.getString("type"))
+						|| message.getJsonObject("payload", new JsonObject()).containsKey("errors")) {
+					subscriptionFailure.set(text);
+				}
+				if ("connection_ack".equals(message.getString("type"))) {
 					connectionAck.tryComplete();
 				}
 			});
@@ -1062,12 +1107,13 @@ public class GraphQLTests extends FrameworkTestBase {
 					.encode());
 
 			var response = await(connect);
-			assertNull(response.getJsonArray("errors"), "connectToGame errors: " + response);
+			assertNull(response.getJsonArray("errors"), "connectToGame errors: " + response + "; subscription failure: " + subscriptionFailure.get());
 			assertTrue(response.getJsonObject("data").getBoolean("connectToGame"));
 			assertEquals(Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE,
 					await(firstMessage.future()).getMessageType());
 
 			await(ws.close());
+			await(wsClient.close());
 			await(gameConsumer.unregister());
 		});
 	}
@@ -1147,13 +1193,26 @@ public class GraphQLTests extends FrameworkTestBase {
 			}
 			assertNotNull(createdGameId, "the bot queue should have created a game");
 
-			var ws = await(vertx.createWebSocketClient().connect(new WebSocketConnectOptions()
+			var wsClient = vertx.createWebSocketClient();
+			var ws = await(wsClient.connect(new WebSocketConnectOptions()
 					.setHost("localhost")
 					.setPort(GRAPHQL_PORT)
 					.setURI("/graphql")
 					.addSubProtocol("graphql-transport-ws")));
+			// Vert.x 5 cleans up an unreachable client even while its socket is in use.
+			// Keep the client alive through explicit close and exercise collection here.
+			System.gc();
+			await(Environment.sleep(vertx, 250));
 			var connectionAck = Promise.<Void>promise();
 			var matchFound = Promise.<String>promise();
+			ws.exceptionHandler(cause -> {
+				connectionAck.tryFail(cause);
+				matchFound.tryFail(cause);
+			});
+			ws.closeHandler(ignored -> {
+				connectionAck.tryFail("WebSocket closed before connection acknowledgement: " + ws.closeStatusCode() + " " + ws.closeReason());
+				matchFound.tryFail("WebSocket closed before matchFound delivery: " + ws.closeStatusCode() + " " + ws.closeReason());
+			});
 			ws.textMessageHandler(text -> {
 				var message = new JsonObject(text);
 				switch (message.getString("type")) {
@@ -1179,10 +1238,11 @@ public class GraphQLTests extends FrameworkTestBase {
 							}"""))
 					.encode());
 
-			assertEquals(createdGameId, await(matchFound.future()),
+			assertEquals(createdGameId, await(matchFound.future().timeout(15, TimeUnit.SECONDS)),
 					"matchFound must deliver the game created before the subscription opened");
 
 			await(ws.close());
+			await(wsClient.close());
 			await(Matchmaking.deleteQueue(queueId));
 		});
 	}

@@ -128,7 +128,7 @@ tasks.named("createDist").configure {
 }
 
 def projectVersion = System.getenv("PROJECT_VERSION") ?: project.version.toString()
-def spellsourceTags = ['latest', projectVersion]
+def spellsourceTags = projectVersion.startsWith('candidate-') ? [projectVersion] : ['latest', projectVersion]
 def spellsourceImage = "ghcr.io/hiddenswitch/${distDir.replace("docker/", "")}"
 
 tasks.register('githubDockerPush') {

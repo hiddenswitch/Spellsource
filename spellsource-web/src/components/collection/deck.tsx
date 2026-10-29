@@ -1,14 +1,15 @@
+import { useMutation } from "@apollo/client/react";
 import React, { FunctionComponent, useContext } from "react";
 import _, { isEqual } from "lodash";
 import { textDecorationStyle } from "./collection";
 import { Button } from "../typed-bootstrap";
 import { useDrag, useDrop } from "react-dnd";
-import { GetDeckQuery, GetDeckQueryVariables, GetDecksQuery, GetDecksQueryVariables, useCreateDeckMutation, useDeleteDeckMutation, useRenameDeckMutation, useSetCardsInDeckMutation } from "../../__generated__/client";
+import { GetDeckQuery, GetDeckQueryVariables, GetDecksQuery, GetDecksQueryVariables, CreateDeckDocument, DeleteDeckDocument, RenameDeckDocument, SetCardsInDeckDocument } from "../../__generated__/client";
 import { ListActions } from "react-use/lib/useList";
 import { useRouter } from "next/router";
 import { CardCache } from "../../pages/collection";
 import { CardDef } from "./card-display";
-import { QueryResult } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 
 export type GetDeckQueryDeck = GetDeckQuery["deckById"];
 interface DeckProps {
@@ -18,8 +19,8 @@ interface DeckProps {
   cardIds: string[];
   classColors: Record<string, string | undefined>;
   cardActions: ListActions<string>;
-  getDeck: QueryResult<GetDeckQuery, GetDeckQueryVariables>;
-  getDecks: QueryResult<GetDecksQuery, GetDecksQueryVariables>;
+  getDeck: useQuery.Result<GetDeckQuery, GetDeckQueryVariables>;
+  getDecks: useQuery.Result<GetDecksQuery, GetDecksQueryVariables>;
   setDeckId: (deckId: string) => Promise<boolean>;
   realCards: string[];
 }
@@ -69,10 +70,10 @@ export const Deck: FunctionComponent<DeckProps> = ({ deck, user, myDeck, cardIds
 
   const { set: setCards, removeAt: removeCard, push: addCardToDeck } = cardActions;
 
-  const [setCardsInDeck] = useSetCardsInDeckMutation();
-  const [deleteDeck] = useDeleteDeckMutation();
-  const [renameDeck] = useRenameDeckMutation();
-  const [createDeck] = useCreateDeckMutation();
+  const [setCardsInDeck] = useMutation(SetCardsInDeckDocument);
+  const [deleteDeck] = useMutation(DeleteDeckDocument);
+  const [renameDeck] = useMutation(RenameDeckDocument);
+  const [createDeck] = useMutation(CreateDeckDocument);
 
   const [, deckDrop] = useDrop({
     accept: ["collection-card"],

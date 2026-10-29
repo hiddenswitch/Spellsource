@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/client/react";
 import React, { useEffect, useState } from "react";
 import PublicSiteLayout, { ContentPanel, EmptyState, PublicPageHeader } from "../components/public-site-layout";
 import { ListGroup } from "react-bootstrap";
@@ -5,7 +6,7 @@ import { useRouter } from "next/router";
 import { isArray } from "lodash";
 import { cardSearchNode } from "../hooks/use-index";
 import CardDisplay, { CardDef } from "../components/collection/card-display";
-import { useGetCollectionCardsQuery } from "../__generated__/client";
+import { GetCatalogueCardsDocument } from "../__generated__/client";
 
 const SearchResults = () => {
   const router = useRouter();
@@ -16,15 +17,9 @@ const SearchResults = () => {
 
   const [offset, setOffset] = useState(0);
 
-  const getCards = useGetCollectionCardsQuery({
-    variables: {
-      offset,
-      limit: 20,
-      filter: { id: { includesInsensitive: query } },
-    },
-  });
+  const getCards = useQuery(GetCatalogueCardsDocument);
 
-  const results = (getCards?.data?.allCollectionCards?.nodes ?? []).map((node) => ({
+  const results = (getCards.data?.catalogueCards ?? []).filter(card => [card.id, card.cardScript.name, card.cardScript.description].join(" ").toLocaleLowerCase().includes((query ?? "").toLocaleLowerCase())).slice(offset, offset + 20).map((node) => ({
     ...cardSearchNode(node!.cardScript as CardDef),
     id: node!.id,
   }));

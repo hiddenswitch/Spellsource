@@ -42,26 +42,9 @@ export class CardSearchCategory extends SearchCategory {
       _data?: ContextType<typeof BlocklyDataContext>;
     } = this.workspace_;
 
-    const { getCollectionCards } = workspace["_data"]!;
-
-    const { data, error } = await getCollectionCards!({
-      variables: {
-        filter: { searchMessage: { includesInsensitive: query.trim() } },
-        limit: 25,
-      },
-    });
-
-    if (error) {
-      console.error(error);
-      return [
-        {
-          kind: "label",
-          text: "Encountered an error while searching",
-        },
-      ];
-    }
-
-    const cards = data!.allCollectionCards?.nodes ?? [];
+    const { catalogueCards } = workspace["_data"]!;
+    const search = query.trim().toLocaleLowerCase();
+    const cards = catalogueCards.filter(card => BlocklyMiscUtils.cardMessage(card.cardScript).toLocaleLowerCase().includes(search)).slice(0, 25);
 
     return cards.map((card) => ({
       kind: "block",

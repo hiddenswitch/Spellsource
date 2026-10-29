@@ -58,6 +58,52 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 		return await(cardsDao.findOneByCondition(CARDS.ID.eq(card.getCardId()).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false))));
 	}
 
+	@ParameterizedTest
+	@ValueSource(strings = {"archive", "unpublish"})
+	public void testWithdrawnCustomCardLeavesCatalogue(String transition, Vertx vertx, VertxTestContext testContext) {
+		testCachedCardCatalogue(vertx, testContext, catalogue -> {
+			var card = catalogue.getCardById("minion_abholos");
+			var desc = card.getDesc().clone();
+			var id = "test_withdraw_" + java.util.UUID.randomUUID();
+			desc.setId(id);
+			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+			ensureCardInSql(cardsDao, new net.demilich.metastone.game.cards.Card(desc));
+			for (int i = 0; i < 100 && !catalogue.getCards().containsKey(id); i++) {
+				await(Environment.sleep(20));
+			}
+			assertTrue(catalogue.getCards().containsKey(id), "published custom card should load");
+			assertNotNull(((SqlCachedCardCatalogue) catalogue).getCardLastModified(id));
+			await(Environment.withDslContext(dsl -> dsl.update(CARDS)
+				.set("archive".equals(transition) ? CARDS.IS_ARCHIVED : CARDS.IS_PUBLISHED, "archive".equals(transition))
+				.where(CARDS.ID.eq(id))));
+			for (int i = 0; i < 100 && catalogue.getCards().containsKey(id); i++) {
+				await(Environment.sleep(20));
+			}
+			assertFalse(catalogue.getCards().containsKey(id), "withdrawn custom card must leave the live catalogue");
+			assertNull(((SqlCachedCardCatalogue) catalogue).getCardLastModified(id));
+		});
+	}
+
+	@Test
+	public void testWithdrawnOverrideRestoresGitCard(Vertx vertx, VertxTestContext testContext) {
+		testCachedCardCatalogue(vertx, testContext, catalogue -> {
+			var original = catalogue.getCardById("minion_abholos");
+			var desc = original.getDesc().clone();
+			desc.setName("SQL override");
+			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+			ensureCardInSql(cardsDao, new net.demilich.metastone.game.cards.Card(desc));
+			for (int i = 0; i < 100 && !"SQL override".equals(catalogue.getCardById(desc.getId()).getName()); i++) {
+				await(Environment.sleep(20));
+			}
+			assertEquals("SQL override", catalogue.getCardById(desc.getId()).getName());
+			await(Environment.withDslContext(dsl -> dsl.update(CARDS).set(CARDS.IS_ARCHIVED, true).where(CARDS.ID.eq(desc.getId()))));
+			for (int i = 0; i < 100 && !original.getName().equals(catalogue.getCardById(desc.getId()).getName()); i++) {
+				await(Environment.sleep(20));
+			}
+			assertEquals(original.getName(), catalogue.getCardById(desc.getId()).getName());
+		});
+	}
+
 	@Test
 	public void testGetFormats(Vertx vertx, VertxTestContext vertxTestContext) {
 		testCachedCardCatalogue(vertx, vertxTestContext, catalogue -> {

@@ -3,8 +3,9 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath "org.jooq:jooq-codegen:3.17.3"
+    classpath "org.jooq:jooq-codegen:3.21.9"
     classpath "org.postgresql:postgresql:$postgresqlVersion"
+    classpath "org.flywaydb:flyway-database-postgresql:$flywayVersion"
   }
 }
 
@@ -49,10 +50,10 @@ def localDatabaseName = 'spellsource'
 def localPort = '5432'
 def mainClassNameConst = 'com.hiddenswitch.framework.EntryPoint'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
-def jvmArgs = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=80.0', '-XX:+UseG1GC', '-XX:MinHeapFreeRatio=10', '-XX:MaxHeapFreeRatio=20', '-XX:-ShrinkHeapInSteps', '-XX:G1PeriodicGCInterval=10000']
+def serverJvmArguments = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=80.0', '-XX:+UseG1GC', '-XX:MinHeapFreeRatio=10', '-XX:MaxHeapFreeRatio=20', '-XX:-ShrinkHeapInSteps', '-XX:G1PeriodicGCInterval=10000']
 
 dependencies {
-  compileOnly 'org.infinispan:infinispan-component-annotations:15.0.11.Final'
+  compileOnly "org.infinispan:infinispan-component-annotations:$infinispanVersion"
 
   implementation project(':spellsource-common')
   implementation project(':spellsource-game')
@@ -68,7 +69,7 @@ dependencies {
   implementation 'javax.activation:activation:1.1.1'
 
   // keycloak
-  implementation 'net.openhft:zero-allocation-hashing:0.16'
+  implementation 'net.openhft:zero-allocation-hashing:2026.0'
   implementation platform("org.keycloak.bom:keycloak-bom-parent:$keycloakVersion")
   implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: "$keycloakVersion") {
     exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
@@ -80,12 +81,12 @@ dependencies {
   implementation "ch.qos.logback:logback-classic:$logbackVersion"
 
   implementation group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
-  implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
+  implementation group: 'commons-validator', name: 'commons-validator', version: '1.11.0'
   implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion") {
     exclude group: 'jakarta.xml.bind', module: '*'
     exclude group: 'jakarta.activation', module: '*'
   }
-  implementation("com.fasterxml.jackson.module:jackson-module-afterburner:$jacksonVersion") {
+  implementation("com.fasterxml.jackson.module:jackson-module-blackbird:$jacksonVersion") {
     exclude group: 'jakarta.xml.bind', module: '*'
     exclude group: 'jakarta.activation', module: '*'
   }
@@ -105,7 +106,7 @@ dependencies {
   }
 
   implementation group: "io.netty", name: "netty-resolver-dns-native-macos", version: nettyVersion, classifier: "osx-aarch_64"
-  implementation 'org.jooq:jooq:3.17.3'
+  implementation 'org.jooq:jooq:3.21.9'
   implementation "io.vertx:vertx-pg-client:$vertxVersion"
   implementation(project(':vertx-jooq-fork:vertx-jooq-classic-reactive')) {
     exclude group: "io.vertx", module: '*'
@@ -126,22 +127,23 @@ dependencies {
     exclude group: 'io.micrometer', module: 'micrometer-core'
   }
   implementation "org.flywaydb:flyway-core:$flywayVersion"
-  implementation 'org.redisson:redisson:3.40.1'
+  runtimeOnly "org.flywaydb:flyway-database-postgresql:$flywayVersion"
+  implementation 'org.redisson:redisson:4.8.0'
   implementation(group: 'com.github.pcj', name: 'google-options', version: '1.0.0') {
     exclude group: 'com.google.guava', module: 'guava'
   }
 
   implementation "io.github.kobylynskyi:graphql-java-codegen:5.9.0"
-  implementation 'com.graphql-java-kickstart:graphql-java-tools:13.0.5'
-  implementation 'com.graphql-java:graphql-java:20.7'
-  implementation 'com.graphql-java:graphql-java-extended-scalars:20.2'
+  implementation 'io.github.graphql-java-kickstart:graphql-java-tools:14.5.0'
+  implementation 'com.graphql-java:graphql-java:26.1'
+  implementation 'com.graphql-java:graphql-java-extended-scalars:24.0'
 
 
   testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
   testImplementation(project(':spellsource-containers'))
   testImplementation project(':spellsource-testutils')
   testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
-  testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
+  testImplementation("org.testcontainers:testcontainers-junit-jupiter:$testcontainersVersion")
   testImplementation group: 'io.vertx', name: 'vertx-junit5', version: vertxVersion
   testImplementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
   testImplementation group: 'io.vertx', name: 'vertx-web-common', version: vertxVersion
@@ -150,7 +152,7 @@ dependencies {
   testImplementation 'org.jetbrains:annotations'
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
   testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
-  testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.2'
+  testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.1.8'
 
   testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 
@@ -173,6 +175,10 @@ jar {
 }
 
 shadowJar {
+  filesMatching(['META-INF/services/**', 'META-INF/*.kotlin_module']) {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+  }
+  failOnDuplicateEntries = true
   mergeServiceFiles()
   zip64 true
   manifest {
@@ -189,7 +195,7 @@ run {
   // opts the local supporting stack into testcontainers reuse so it survives
   // between runs (see StandaloneApplication)
   environment("TESTCONTAINERS_REUSE_ENABLE", "true")
-  jvmArgs.addAll(jvmArgs)
+  jvmArgs(serverJvmArguments)
 }
 
 tasks.register('purgeLocalServices', Exec) {
@@ -402,14 +408,14 @@ test {
   }
 }
 
-def spellsourceTags = ['latest', project.version.toString()]
+def spellsourceTags = project.version.toString().contains('-') ? [project.version.toString()] : ['latest', project.version.toString()]
 def spellsourceImage = 'ghcr.io/hiddenswitch/spellsource'
 jib {
   from {
-    image = "eclipse-temurin:24-ubi9-minimal"
+    image = "harbor.appmana.com/appmana-shared/java-runtime:1.0.0@sha256:6bd2c82657e8277be8ad3eecd95d17600e651c1aa437d83fa29e43ef4db4880e"
   }
   to {
-    image = spellsourceImage
+    image = "${spellsourceImage}:${project.version}"
     tags = spellsourceTags
     if (System.getenv('GITHUB_ACTIONS') != null) {
       auth {
@@ -420,7 +426,7 @@ jib {
   }
   container {
     ports = ['8080']
-    jvmFlags = jvmArgs
+    jvmFlags = serverJvmArguments
   }
 }
 
@@ -436,7 +442,8 @@ graphqlCodegen {
   packageName = "com.hiddenswitch.framework.graphql"
   customTypesMapping = [
       DateTime: "org.joda.time.DateTime",
-      BigInt: "java.lang.Long"
+      BigInt: "java.lang.Long",
+      JSON: "java.lang.Object"
   ]
   customAnnotationsMapping = [
       DateTime: ["@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.example.json.EpochMillisScalarDeserializer.class)"]
@@ -469,7 +476,12 @@ tasks.register("generateSchema", JavaExec) {
   classpath sourceSets.test.runtimeClasspath
   mainClass.set('com.hiddenswitch.framework.tests.applications.SchemaGeneratorEntryPoint')
   environment("TESTCONTAINERS_REUSE_ENABLE", "true")
-  jvmArgs.addAll(jvmArgs)
+  jvmArgs(serverJvmArguments)
   inputs.file("src/main/resources/schema.graphqls")
   outputs.file(rootProject.file("spellsource-graphql/schema.graphql"))
+}
+
+// Generated API sources are checked in; order explicit regeneration before compilation.
+tasks.named("compileJava") {
+  mustRunAfter(tasks.named("graphqlCodegen"))
 }
