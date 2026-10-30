@@ -8,9 +8,11 @@ import io.vertx.core.eventbus.ReplyFailure;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 public class RetryMessageProducer<T> implements MessageProducer<T> {
+	private static final AtomicInteger ACTIVE_PRODUCERS = new AtomicInteger();
 
 	private final Vertx vertx;
 	private final MessageProducer<T> producer;
@@ -33,97 +35,57 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 		this.intervalMillis = intervalMillis;
 		this.vertx = Vertx.currentContext().owner();
 		this.predicate = predicate;
+		ACTIVE_PRODUCERS.incrementAndGet();
+	}
+
+	public static int getActiveCount() {
+		return ACTIVE_PRODUCERS.get();
 	}
 
 	private Future<Void> write(QueueItem<T> item, int retries) {
-		if (item == null) {
-			return Future.succeededFuture();
-		}
-		synchronized (this) {
-			if (closed) {
-				if (!item.completed) {
-					item.completed = true;
-					hasInFlight = false;
-					inFlight = null;
-					item.promise.tryFail("closed");
-				}
-				return Future.failedFuture("closed");
-			}
-			hasInFlight = true;
-			inFlight = item;
-		}
-
 		return producer
 				.write(item.message)
 				.recover(t -> {
-					// if there was no handler try again, up to retries - 1 times
-					if (!closed && t instanceof ReplyException replyException && replyException.failureType() == ReplyFailure.NO_HANDLERS && retries > 0) {
-						var promise = Promise.<Void>promise();
-						synchronized (this) {
-							if (closed) {
-								if (!item.completed) {
-									item.completed = true;
-									hasInFlight = false;
-									item.promise.tryFail("closed");
-								}
-								return Future.failedFuture("closed");
-							}
+					synchronized (this) {
+						if (!closed && t instanceof ReplyException replyException && replyException.failureType() == ReplyFailure.NO_HANDLERS && retries > 0) {
+							var promise = Promise.<Void>promise();
 							retryTimerId = vertx.setTimer(intervalMillis, v -> {
 								synchronized (RetryMessageProducer.this) {
 									retryTimerId = null;
-									if (closed) {
-										if (!item.completed) {
-											item.completed = true;
-											hasInFlight = false;
-											item.promise.tryFail("closed");
-										}
-										promise.tryFail("closed");
-										return;
-									}
 								}
 								write(item, retries - 1)
 										.onComplete(promise);
 							});
+							return promise.future();
 						}
-						return promise.future();
-					} else {
-						QueueItem<T> next;
-						synchronized (this) {
-							if (!item.completed) {
-								item.completed = true;
-							}
-							next = closed ? null : waiting.pollFirst();
-							inFlight = next;
-							if (next == null) {
-								hasInFlight = false;
-							}
-						}
-						item.promise.tryFail(t);
-						if (next != null) {
-							write(next, next.initialRetries)
-									.onFailure(com.hiddenswitch.framework.Environment.onFailure("write failures"));
-						}
-						return Future.failedFuture(t);
 					}
+					advanceQueue(item, t);
+					return Future.failedFuture(t);
 				})
 				.compose(v -> {
-					QueueItem<T> next;
-					synchronized (this) {
-						if (!item.completed) {
-							item.completed = true;
-						}
-						next = closed ? null : waiting.pollFirst();
-						inFlight = next;
-						if (next == null) {
-							hasInFlight = false;
-						}
-					}
-					item.promise.tryComplete();
-					if (next == null) {
-						return Future.succeededFuture();
-					}
-					return write(next, next.initialRetries);
+					var next = advanceQueue(item, null);
+					return next == null ? Future.succeededFuture() : write(next, next.initialRetries);
 				});
+	}
+
+	private QueueItem<T> advanceQueue(QueueItem<T> item, Throwable failure) {
+		QueueItem<T> next;
+		synchronized (this) {
+			item.completed = true;
+			next = closed ? null : waiting.pollFirst();
+			inFlight = next;
+			hasInFlight = next != null;
+		}
+		if (failure != null) {
+			item.promise.tryFail(failure);
+			if (next != null) {
+				write(next, next.initialRetries)
+						.onFailure(com.hiddenswitch.framework.Environment.onFailure("write failures"));
+			}
+		} else {
+			item.promise.tryComplete();
+		}
+		return next;
 	}
 
 	@Override
@@ -171,7 +133,11 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 		Long timerId;
 		Deque<QueueItem<T>> pending;
 		synchronized (this) {
+			if (closed) {
+				return producer.close();
+			}
 			closed = true;
+			ACTIVE_PRODUCERS.decrementAndGet();
 			timerId = retryTimerId;
 			retryTimerId = null;
 			pending = new ArrayDeque<>(waiting);

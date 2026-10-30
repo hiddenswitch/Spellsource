@@ -1553,8 +1553,10 @@ public class GameTests extends FrameworkTestBase {
 			var f1 = producer1.write("RETRY_1", new io.vertx.core.eventbus.DeliveryOptions());
 			var f2 = producer1.write("RETRY_2");
 			var received2 = Promise.<String>promise();
+			var cRef = new AtomicReference<io.vertx.core.eventbus.MessageConsumer<String>>();
 			f1.onFailure(err -> {
 				var c = eb.<String>consumer(address1, msg -> received2.tryComplete(msg.body()));
+				cRef.set(c);
 				c.completion();
 			});
 
@@ -1569,6 +1571,7 @@ public class GameTests extends FrameworkTestBase {
 
 			Environment.sleep(vertx, 20)
 					.compose(ignored -> producer2.close())
+					.compose(ignored -> producer2.close())
 					.compose(ignored -> producer2.write("AFTER_CLOSE").otherwiseEmpty())
 					.compose(ignored -> received2.future())
 					.compose(val2 -> f2.map(val2))
@@ -1579,6 +1582,7 @@ public class GameTests extends FrameworkTestBase {
 						assertTrue(c1.failed(), "In-flight retrying message must fail when producer is closed");
 						assertTrue(c3.failed(), "Waiting message must fail when producer is closed");
 					}))
+					.eventually(() -> cRef.get() != null ? cRef.get().unregister().otherwiseEmpty() : Future.succeededFuture())
 					.eventually(producer1::close)
 					.onComplete(testContext.succeedingThenComplete());
 		});
@@ -1601,8 +1605,10 @@ public class GameTests extends FrameworkTestBase {
 						"m1", java.util.Collections.emptyList(), mulliganResult::set);
 				assertEquals("m1", mulliganReq.getCallbackId());
 				assertTrue(mulliganReq.getStarterCards().isEmpty());
-				mulliganReq.resolveIndices(java.util.Arrays.asList(-1, 5, null));
+				mulliganReq.resolveIndices(null);
 				assertNotNull(mulliganResult.get());
+				assertTrue(mulliganResult.get().isEmpty());
+				mulliganReq.resolveIndices(java.util.Arrays.asList(-1, 5, null));
 				assertTrue(mulliganResult.get().isEmpty());
 				mulliganReq.elapse(null);
 				assertTrue(mulliganResult.get().isEmpty());
@@ -1617,6 +1623,50 @@ public class GameTests extends FrameworkTestBase {
 				assertTrue(actionReq.isValidIndex(0));
 				actionReq.elapse(null);
 				assertEquals(endTurn, chosenAction.get());
+				actionReq.elapse(new java.util.Random(42L));
+				assertEquals(endTurn, chosenAction.get());
+
+				assertThrows(IllegalArgumentException.class,
+						() -> new com.hiddenswitch.framework.impl.UnityClientBehaviour(null, "u1", 0, -1L));
+				assertThrows(IllegalStateException.class,
+						() -> com.hiddenswitch.framework.impl.UnityClientBehaviour.getClientGameState(99, (net.demilich.metastone.game.GameContext) null));
+				assertThrows(IllegalArgumentException.class,
+						() -> new com.hiddenswitch.framework.impl.ServerGameContext("1", java.util.Collections.emptyList(), null, null));
+				assertThrows(NullPointerException.class,
+						() -> new com.hiddenswitch.framework.impl.ClusteredGames().createGameSession(new com.hiddenswitch.framework.impl.ConfigurationRequest()));
+				assertThrows(IllegalArgumentException.class,
+						() -> com.hiddenswitch.framework.impl.GraphQLGameBridge.awaitGameMessagesSubscriber("u1", "invalid id!"));
+
+				var colorProto = com.hiddenswitch.spellsource.rpc.Spellsource.Color.newBuilder().setR(1f).setG(0.5f).setB(0.25f).setA(1f).build();
+				var artBuilder = com.hiddenswitch.spellsource.rpc.Spellsource.Art.newBuilder()
+						.setHighlight(colorProto)
+						.setPrimary(colorProto)
+						.setSecondary(colorProto)
+						.setShadow(colorProto);
+				artBuilder.getBodyBuilder().setVertex(colorProto);
+				artBuilder.getLoopBuilder().setNamed("loop");
+				artBuilder.getMissileBuilder().setNamed("missile");
+				artBuilder.getOnCastBuilder().setNamed("cast");
+				artBuilder.getOnHitBuilder().setNamed("hit");
+				artBuilder.getSpellBuilder().setNamed("spell");
+				artBuilder.getSpriteBuilder().setNamed("sprite");
+				artBuilder.getSpriteShadowBuilder().setNamed("shadow");
+				var artProto = artBuilder.build();
+				var gqlMsg = com.hiddenswitch.framework.impl.GraphQLGameBridge.toGraphQL(
+						ServerToClientMessage.newBuilder()
+								.setMessageType(MessageType.EMOTE)
+								.setEmote(com.hiddenswitch.spellsource.rpc.Spellsource.Emote.newBuilder()
+										.setEntityId(1)
+										.setMessage(com.hiddenswitch.spellsource.rpc.Spellsource.Emote.EmoteMessage.WELL_PLAYED))
+								.setTimers(com.hiddenswitch.spellsource.rpc.Spellsource.Timers.newBuilder().setMillisRemaining(5000L))
+								.addStartingCards(com.hiddenswitch.spellsource.rpc.Spellsource.Entity.newBuilder()
+										.setId(10)
+										.setEntityType(com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType.CARD)
+										.setArt(artProto))
+								.build());
+				assertNotNull(gqlMsg.getEmote());
+				assertNotNull(gqlMsg.getTimers());
+				assertNotNull(gqlMsg.getStartingCards().get(0).getArt().getPrimary());
 			});
 
 			var timeoutFired = Promise.<Void>promise();
@@ -1636,6 +1686,195 @@ public class GameTests extends FrameworkTestBase {
 					.onSuccess(ignored -> activeMonitor.cancel())
 					.onComplete(testContext.succeedingThenComplete());
 		});
+	}
+
+	@SuppressWarnings("unchecked")
+	private static java.util.List<String> getDynamicEventBusAddresses(Vertx... vertxNodes) {
+		var result = new java.util.ArrayList<String>();
+		try {
+			var field = io.vertx.core.eventbus.impl.EventBusImpl.class.getDeclaredField("handlerMap");
+			field.setAccessible(true);
+			for (var v : vertxNodes) {
+				if (v == null) continue;
+				var map = (java.util.concurrent.ConcurrentMap<String, ?>) field.get(v.eventBus());
+				for (var key : map.keySet()) {
+					if (key.startsWith(Games.READER_ADDRESS_PREFIX)
+							|| key.startsWith(Games.WRITER_ADDRESS_PREFIX)
+							|| key.startsWith(Games.ADDRESS_IS_IN_GAME)
+							|| key.startsWith(Games.ADDRESS_CONCEDE_GAME)
+							|| key.startsWith("games:graphql-subscriber:")
+							|| key.startsWith(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_ENQUEUE)
+							|| key.startsWith(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_PREPARE)
+							|| key.startsWith(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_REQUEUE)
+							|| key.startsWith(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_QUEUE_CLOSED)) {
+						result.add(key);
+					}
+				}
+			}
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+
+	private Future<Void> awaitZeroDynamicResources(Vertx vertx, int baselineDeployments) {
+		var deadline = System.currentTimeMillis() + 10000L;
+		var promise = Promise.<Void>promise();
+		Runnable[] check = new Runnable[1];
+		check[0] = () -> {
+			var dynamicAddresses = getDynamicEventBusAddresses(vertx);
+			var activeProducers = com.hiddenswitch.framework.impl.RetryMessageProducer.getActiveCount();
+			var currentDeployments = vertx.deploymentIDs().size();
+			if (dynamicAddresses.isEmpty() && activeProducers == 0 && currentDeployments <= baselineDeployments) {
+				promise.tryComplete();
+			} else if (System.currentTimeMillis() >= deadline) {
+				promise.tryFail(String.format(
+						"Resource leak detected! dynamicEventBusAddresses=%s, activeProducers=%d, deployments=%d (baseline=%d)",
+						dynamicAddresses, activeProducers, currentDeployments, baselineDeployments));
+			} else {
+				vertx.setTimer(50L, id -> check[0].run());
+			}
+		};
+		check[0].run();
+		return promise.future();
+	}
+
+	/**
+	 * Accurately measures EventBus consumers (via EventBusImpl.handlerMap), RetryMessageProducers,
+	 * and deployed verticles across both normal game completion and error scenarios (mid-mulligan
+	 * disconnect/concede, matchmaking queue cancellation, and corrupt persisted checkpoint abandonment).
+	 */
+	@Test
+	@Timeout(value = 60, timeUnit = TimeUnit.SECONDS)
+	public void testResourceTeardownAcrossNormalAndErrorScenarios(Vertx vertx, VertxTestContext testContext) {
+		var client1 = new Client(vertx);
+		var client2 = new Client(vertx);
+		var baselineDeploymentsRef = new AtomicInteger();
+		var deckIdRef = new AtomicReference<String>();
+		var clusteredGamesRef = new AtomicReference<ClusteredGames>();
+
+		var mulligan1 = Promise.<ServerToClientMessage>promise();
+		var mulligan2 = Promise.<ServerToClientMessage>promise();
+		var gameEnd2 = Promise.<ServerToClientMessage>promise();
+		var w1 = Promise.<WriteStream<ClientToServerMessage>>promise();
+		var w2 = Promise.<WriteStream<ClientToServerMessage>>promise();
+
+		startGateway(vertx)
+				.compose(ignored -> join(client1.createAndLogin(), client2.createAndLogin()))
+				.compose(ignored -> {
+					var cg = new ClusteredGames();
+					clusteredGamesRef.set(cg);
+					return vertx.deployVerticle(cg, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD));
+				})
+				.compose(ignored -> {
+					baselineDeploymentsRef.set(vertx.deploymentIDs().size());
+					return client1.legacy().decksGetAll(Empty.getDefaultInstance());
+				})
+				.compose(decks -> {
+					var deckId = decks.getDecks(0).getCollection().getId();
+					deckIdRef.set(deckId);
+					return insertMultiplayerGameRecord(
+							client1.getUserEntity().getId(), deckId,
+							client2.getUserEntity().getId(), deckId)
+							.compose(gameId -> Games.createGame(multiplayerConfigurationRequest(
+									gameId.toString(),
+									client1.getUserEntity().getId(), deckId,
+									client2.getUserEntity().getId(), deckId,
+									0L)));
+				})
+				.compose(ignored -> {
+					client1.legacy().subscribeGame(w1::tryComplete).onSuccess(r1 -> r1.handler(msg -> {
+						if (msg.getMessageType() == MessageType.ON_MULLIGAN) {
+							mulligan1.tryComplete(msg);
+						}
+					})).onFailure(mulligan1::tryFail);
+
+					client2.legacy().subscribeGame(w2::tryComplete).onSuccess(r2 -> r2.handler(msg -> {
+						if (msg.getMessageType() == MessageType.ON_MULLIGAN) {
+							mulligan2.tryComplete(msg);
+						} else if (msg.getMessageType() == MessageType.ON_GAME_END) {
+							gameEnd2.tryComplete(msg);
+						}
+					})).onFailure(mulligan2::tryFail);
+
+					return all(
+							w1.future().compose(w -> w.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.FIRST_MESSAGE).build())),
+							w2.future().compose(w -> w.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.FIRST_MESSAGE).build()))
+					).compose(v -> all(mulligan1.future(), mulligan2.future()));
+				})
+				.compose(ignored -> {
+					// While the game is live, verify EventBus consumers, RetryMessageProducers, and Verticles ARE active
+					var liveConsumers = getDynamicEventBusAddresses(vertx);
+					var liveProducers = com.hiddenswitch.framework.impl.RetryMessageProducer.getActiveCount();
+					var liveDeployments = vertx.deploymentIDs().size();
+					testContext.verify(() -> {
+						assertEquals(1, clusteredGamesRef.get().getHostedGameCount());
+						assertTrue(liveConsumers.size() >= 8,
+								"Expected at least 8 dynamic EventBus consumers during 2-player game, found: " + liveConsumers);
+						assertTrue(liveProducers >= 4,
+								"Expected at least 4 active RetryMessageProducers during 2-player game, found: " + liveProducers);
+						assertEquals(baselineDeploymentsRef.get() + 3, liveDeployments,
+								"Expected +3 deployed verticles (1 ServerGameContext + 2 UnityClientBehaviour)");
+					});
+
+					// Simulate mid-mulligan stream end on client1 + concede from client2
+					w1.future().result().end();
+					w2.future().result().write(ClientToServerMessage.newBuilder().setMessageType(MessageType.CONCEDE).build());
+					return gameEnd2.future();
+				})
+				.compose(ignored -> {
+					w2.future().result().end();
+					return awaitZeroDynamicResources(vertx, baselineDeploymentsRef.get());
+				})
+				.onSuccess(ignored -> testContext.verify(() ->
+						assertEquals(0, clusteredGamesRef.get().getHostedGameCount())))
+				// 2. Matchmaking enqueue + immediate cancellation: verify all matchmaking consumers and tickets are cleaned up
+				.compose(ignored -> {
+					var cancelDone = Promise.<Void>promise();
+					client1.matchmaking().enqueue(req -> {
+						req.write(MatchmakingQueuePutRequest.newBuilder()
+								.setQueueId("constructed")
+								.setDeckId(deckIdRef.get())
+								.build());
+						vertx.setTimer(50L, id -> {
+							req.write(MatchmakingQueuePutRequest.newBuilder()
+									.setCancel(true)
+									.build());
+							req.end().onComplete(ar -> cancelDone.tryComplete());
+						});
+					});
+					return cancelDone.future();
+				})
+				.compose(ignored -> awaitZeroDynamicResources(vertx, baselineDeploymentsRef.get()))
+				// 3. Corrupt persisted trace recovery (ClusteredGames.abandonUnrestorableGame): verify clean abandonment & zero leaks
+				.compose(ignored -> Environment.query(dsl -> dsl.insertInto(GAMES)
+						.set(GAMES.STATUS, com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum.STARTED)
+						.set(GAMES.TRACE, new io.vertx.core.json.JsonObject().put("invalidTrace", true))
+						.returning(GAMES.ID)))
+				.compose(rows -> {
+					var corruptGameId = rows.iterator().next().getLong(GAMES.ID.getName());
+					return Environment.withDslContext(dsl -> dsl.insertInto(GAME_USERS)
+							.set(GAME_USERS.GAME_ID, corruptGameId)
+							.set(GAME_USERS.USER_ID, client1.getUserEntity().getId())
+							.set(GAME_USERS.DECK_ID, deckIdRef.get())
+							.set(GAME_USERS.PLAYER_INDEX, (short) 0))
+							.compose(ignored -> Games.getGameId(client1.getUserEntity().getId()))
+							.compose(restoredId -> {
+								testContext.verify(() -> assertNull(restoredId, "Corrupt checkpoint must be abandoned and return null gameId"));
+								return Environment.query(dsl -> dsl.select(GAMES.STATUS)
+										.from(GAMES)
+										.where(GAMES.ID.eq(corruptGameId)));
+							})
+							.onSuccess(rows2 -> testContext.verify(() -> {
+								var row = rows2.iterator().next();
+								assertEquals("FINISHED", row.getString(GAMES.STATUS.getName()),
+										"Abandoned corrupt game must be marked FINISHED in database");
+							}));
+				})
+				.compose(ignored -> awaitZeroDynamicResources(vertx, baselineDeploymentsRef.get()))
+				.eventually(client1::closeFut)
+				.eventually(client2::closeFut)
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	private static class ClientWithPort extends Client {

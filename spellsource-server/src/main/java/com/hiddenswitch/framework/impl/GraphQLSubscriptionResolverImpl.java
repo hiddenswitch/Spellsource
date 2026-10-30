@@ -108,6 +108,13 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 			MessageConsumer<String> consumer = eventBus.consumer(address);
 			MessageConsumer<String> prepareConsumer = eventBus.consumer(prepareAddress);
 			MessageConsumer<JsonObject> requeueConsumer = eventBus.consumer(requeueAddress);
+			Runnable cleanup = () -> {
+				if (cancelled.compareAndSet(false, true)) {
+					consumer.unregister();
+					prepareConsumer.unregister();
+					requeueConsumer.unregister();
+				}
+			};
 
 			subscriber.onSubscribe(new Subscription() {
 				@Override
@@ -117,10 +124,7 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 
 				@Override
 				public void cancel() {
-					cancelled.set(true);
-					consumer.unregister();
-					prepareConsumer.unregister();
-					requeueConsumer.unregister();
+					cleanup.run();
 				}
 			});
 
@@ -168,9 +172,8 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 			});
 
 			consumer.exceptionHandler(err -> {
-				if (!cancelled.get()) {
-					subscriber.onError(err);
-				}
+				cleanup.run();
+				subscriber.onError(err);
 			});
 		}
 	}

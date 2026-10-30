@@ -91,16 +91,7 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 	@Override
 	public void startVirtual() {
 		var bus = vertx.eventBus();
-		this.consumer = bus.consumer(Games.getMessagesFromClientAddress(userId), msg -> {
-			try {
-				handleWebSocketMessage(msg.body());
-			} catch (Throwable t) {
-				if (Throwables.getRootCause(t) instanceof InterruptedException) {
-					return;
-				}
-				LOGGER.warn("error while handling message ", t);
-			}
-		});
+		this.consumer = bus.consumer(Games.getMessagesFromClientAddress(userId), msg -> handleWebSocketMessage(msg.body()));
 		this.writer = new RetryMessageProducer<>(
 				bus.publisher(Games.getMessagesFromServerAddress(userId)), 50, 100);
 		this.turnTimer = vertx.setPeriodic(1000L, this::secondIntervalElapsed);
@@ -218,10 +209,6 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 
 	protected void handleWebSocketMessage(ClientToServerMessage message) {
 		if (inboundMessagesClosed.get()) {
-			var exceptionHandler = vertx != null ? vertx.exceptionHandler() : null;
-			if (exceptionHandler != null) {
-				exceptionHandler.handle(new IllegalStateException("inbound messaged closed"));
-			}
 			return;
 		}
 
@@ -282,11 +269,7 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 
 	@Override
 	public Behaviour clone() {
-		try {
-			return (Behaviour) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+		return this;
 	}
 
 	@Override
@@ -294,15 +277,12 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 		return "Unity client behaviour";
 	}
 
-	private <T> void submitRequest(GameplayRequest<T> request, GameContext context, boolean singleActiveRequest) {
+	private <T> void submitRequest(GameplayRequest<T> request, GameContext context) {
 		requestsLock.lock();
 		try {
 			if (isElapsed()) {
 				request.elapse(server.getRandom());
 				return;
-			}
-			if (singleActiveRequest && !requests.isEmpty()) {
-				throw new IllegalStateException("requesting action outside resume() loop");
 			}
 			requests.add(request);
 			request.send(this, context.getGameStateCopy());
@@ -321,7 +301,7 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 	@Override
 	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Consumer<List<Card>> next) {
 		var id = Integer.toString(callbackIdCounter.getAndIncrement());
-		submitRequest(new GameplayRequest.Mulligan(id, cards, next), context, false);
+		submitRequest(new GameplayRequest.Mulligan(id, cards, next), context);
 	}
 
 	public void onMulliganReceived(List<Integer> discardedCardIndices) {
@@ -346,19 +326,13 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 	@Override
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		var promise = Promise.<GameAction>promise();
-		try {
-			var id = Integer.toString(callbackIdCounter.getAndIncrement());
-			submitRequest(new GameplayRequest.Action(id, validActions, promise::tryComplete), context, true);
-			return await(promise.future());
-		} catch (Throwable t) {
-			if (t instanceof InterruptedException) {
-				LOGGER.error("requestAction interrupted, likely due to conceding or timing out");
-				throw t;
-			} else {
-				LOGGER.error("requestAction error:", t);
-			}
-			return null;
+		var id = Integer.toString(callbackIdCounter.getAndIncrement());
+		submitRequest(new GameplayRequest.Action(id, validActions, promise::tryComplete), context);
+		var action = await(promise.future());
+		if (!server.isRunning()) {
+			throw new RuntimeException(new InterruptedException("game ended"));
 		}
+		return action;
 	}
 
 	public void onActionReceived(String messageId, int actionIndex) {
@@ -377,37 +351,22 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 			}
 			if (!actionRequest.isValidIndex(actionIndex)) {
 				LOGGER.warn("ignoring out-of-bounds actionIndex={} for gameId={}, actions.size={}",
-						actionIndex, server.getGameId(), actionRequest.getActions() == null ? 0 : actionRequest.getActions().size());
+						actionIndex, server.getGameId(), actionRequest.getActions().size());
 				return;
 			}
 			requests.remove(actionRequest);
 		} finally {
 			requestsLock.unlock();
 		}
-		try {
-			actionRequest.resolveIndex(actionIndex);
-		} catch (Throwable recoverFromError) {
-			LOGGER.warn("recovering from error while processing callback, gameId={}", server.getGameId(), recoverFromError);
-			Tracing.error(recoverFromError);
-			elapseAwaitingRequests();
-		}
+		actionRequest.resolveIndex(actionIndex);
 	}
 
 	@Override
 	public void onGameOver(GameContext context, int playerId, int winningPlayerId) {
 		cancelActivity();
 		flush();
-		var state = context != null ? context.getGameStateCopy() : null;
-		var winner = context != null ? context.getWinner() : null;
-		if (state == null || lastStateSent == null) {
-			this.gameOver = GameOver.newBuilder()
-					.setLocalPlayerWon(false).build();
-			sendMessage(ServerToClientMessage.newBuilder()
-					.setMessageType(MessageType.ON_GAME_END)
-					.setGameOver(gameOver));
-			return;
-		}
-
+		var state = context.getGameStateCopy();
+		var winner = context.getWinner();
 		var gameState = getClientGameState(this.playerId, state);
 		var gameOverBuilder = GameOver.newBuilder();
 		if (winner == null) {
@@ -452,14 +411,7 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 
 	@Override
 	public void sendNotification(Notification event, GameState gameState) {
-		if (!event.isClientInterested()) {
-			return;
-		}
-
 		if (event instanceof TouchingNotification touchingNotification) {
-			if (touchingNotification.getPlayerId() == playerId) {
-				return;
-			}
 			var id = touchingNotification.getEntityReference().getId();
 			var event1 = GameEvent.newBuilder()
 					.setEventType(touchingNotification.isTouched() ? GameEventType.ENTITY_TOUCHED : GameEventType.ENTITY_UNTOUCHED);
@@ -494,7 +446,7 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 			}
 		} else if (event instanceof GameAction action) {
 			var sourceEntity = event.getSource(workingContext);
-			Entity.Builder source;
+			Entity.Builder source = null;
 
 			if (sourceEntity != null && sourceEntity.getEntityType() == EntityType.CARD) {
 				var card = (Card) sourceEntity;
@@ -508,8 +460,6 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 				}
 			} else if (sourceEntity != null) {
 				source = ModelConversions.getEntity(workingContext, sourceEntity, playerId);
-			} else {
-				source = null;
 			}
 
 			var owner = sourceEntity != null ? sourceEntity.getOwner() : gameState.getActivePlayerId();
@@ -543,10 +493,8 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 											.setTarget(ModelConversions.getEntity(workingContext, destroy.getTarget(), playerId))
 											.addAllAftermaths(destroy.getAftermaths().stream().map(aftermath -> ModelConversions.getEntity(workingContext, aftermath, playerId).build()).collect(toList())).build())
 									.collect(toList())));
-		} else if (event instanceof net.demilich.metastone.game.events.GameEvent gameEvent) {
-			messageEvent = ModelConversions.getClientEvent(workingContext, gameEvent, playerId);
 		} else {
-			throw new RuntimeException("Unsupported notification.");
+			messageEvent = ModelConversions.getClientEvent(workingContext, (net.demilich.metastone.game.events.GameEvent) event, playerId);
 		}
 
 		messageEvent.setIsPowerHistory(event.isPowerHistory());

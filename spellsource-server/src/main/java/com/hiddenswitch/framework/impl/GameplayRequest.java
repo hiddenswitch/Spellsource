@@ -49,7 +49,7 @@ public abstract class GameplayRequest<T> {
 
 		public Mulligan(String callbackId, List<Card> starterCards, Consumer<List<Card>> callback) {
 			super(callbackId, callback);
-			this.starterCards = starterCards;
+			this.starterCards = Objects.requireNonNull(starterCards, "starterCards");
 		}
 
 		public List<Card> getStarterCards() {
@@ -67,11 +67,11 @@ public abstract class GameplayRequest<T> {
 		}
 
 		public void resolveIndices(List<Integer> discardedCardIndices) {
-			List<Card> discardedCards = (discardedCardIndices == null ? Collections.<Integer>emptyList() : discardedCardIndices)
+			List<Card> discardedCards = Objects.requireNonNullElse(discardedCardIndices, Collections.<Integer>emptyList())
 					.stream()
 					.filter(Objects::nonNull)
 					.distinct()
-					.flatMap(i -> (starterCards == null || i < 0 || i >= starterCards.size())
+					.flatMap(i -> (i < 0 || i >= starterCards.size())
 							? Stream.empty()
 							: Stream.of(starterCards.get(i)))
 					.collect(toList());
@@ -87,7 +87,7 @@ public abstract class GameplayRequest<T> {
 
 		public Action(String callbackId, List<GameAction> actions, Consumer<GameAction> callback) {
 			super(callbackId, callback);
-			this.actions = actions;
+			this.actions = Objects.requireNonNull(actions, "actions");
 		}
 
 		public List<GameAction> getActions() {
@@ -109,7 +109,7 @@ public abstract class GameplayRequest<T> {
 		}
 
 		public boolean isValidIndex(int actionIndex) {
-			return actions != null && actionIndex >= 0 && actionIndex < actions.size();
+			return actionIndex >= 0 && actionIndex < actions.size();
 		}
 
 		public void resolveIndex(int actionIndex) {

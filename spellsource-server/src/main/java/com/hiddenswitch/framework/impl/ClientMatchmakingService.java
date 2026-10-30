@@ -27,7 +27,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static com.hiddenswitch.framework.Environment.withDslContext;
@@ -53,6 +53,10 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 	public ClientMatchmakingService() {
 	}
 
+	public int getActiveSessionCount() {
+		return sessions.size();
+	}
+
 	@Override
 	public void enqueue(GrpcServerRequest<Spellsource.MatchmakingQueuePutRequest, Spellsource.MatchmakingQueuePutResponse> grpcServerRequest, ReadStream<Spellsource.MatchmakingQueuePutRequest> request, WriteStream<Spellsource.MatchmakingQueuePutResponse> response) {
 		var userId = grpcServerRequest.routingContext().user().subject();
@@ -64,7 +68,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		var channels = Collections.synchronizedList(new ArrayList<MessageConsumer>());
 		var session = new Session(s -> {
 			activeSessionsByUser.remove(s.userId(), s);
-			return sessions.remove(s);
+			sessions.remove(s);
 		}, response, userId, channels, timer, new AtomicBoolean(false), grpcServerRequest.connection());
 		sessions.add(session);
 		var previousSession = activeSessionsByUser.put(userId, session);
@@ -151,7 +155,9 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 						var queueId = message.getQueueId();
 						var queueClosedChannel = eventBus.<String>consumer(MATCHMAKING_QUEUE_CLOSED + queueId);
 						queueClosedChannel.handler(v2 -> session.close());
-						session.channels.add(queueClosedChannel);
+						if (!session.registerChannel(queueClosedChannel)) {
+							return Future.succeededFuture();
+						}
 
 						var record = MATCHMAKING_TICKETS.newRecord()
 								.setUserId(userId)
@@ -188,7 +194,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 	}
 
 	public static final class Session {
-		private final Function<Session, Boolean> remover;
+		private final Consumer<Session> remover;
 		private final WriteStream<Spellsource.MatchmakingQueuePutResponse> response;
 		private final @NotNull String userId;
 		private final List<MessageConsumer> channels;
@@ -201,7 +207,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		private Future<?> ticketWrite = Future.succeededFuture();
 		private Future<Void> closeFuture;
 
-		Session(Function<Session, Boolean> remover,
+		Session(Consumer<Session> remover,
 		        WriteStream<Spellsource.MatchmakingQueuePutResponse> response,
 		        @NotNull String userId,
 		        List<MessageConsumer> channels,
@@ -222,14 +228,20 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 			return keepAliveManager;
 		}
 
+		synchronized boolean registerChannel(MessageConsumer<?> channel) {
+			if (this.cancelled.get()) {
+				channel.unregister();
+				return false;
+			}
+			this.channels.add(channel);
+			return true;
+		}
+
 		synchronized void chainInitialWrite(Future<?> prev) {
 			this.ticketWrite = this.ticketWrite.mapEmpty().otherwiseEmpty().compose(ignored -> prev);
 		}
 
 		public synchronized Future<Void> enqueueTicketWrite(Supplier<Future<?>> writeSupplier) {
-			if (this.cancelled.get() || this.matched.get()) {
-				return Future.failedFuture("session closed or matched");
-			}
 			this.ticketWrite = this.ticketWrite.mapEmpty().otherwiseEmpty()
 					.compose(ignored -> {
 						synchronized (Session.this) {
@@ -266,21 +278,10 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 			if (this.connection == null) {
 				return Future.succeededFuture();
 			}
-			Future<Buffer> pingFuture;
-			try {
-				pingFuture = this.connection.ping(Buffer.buffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8}));
-			} catch (UnsupportedOperationException e) {
-				return Future.succeededFuture();
-			} catch (Throwable t) {
-				this.close();
-				return Future.failedFuture(t);
-			}
-			pingFuture = pingFuture.recover(err -> {
-				if (err instanceof UnsupportedOperationException) {
-					return Future.succeededFuture(Buffer.buffer());
-				}
-				return Future.failedFuture(err);
-			});
+			Future<Buffer> pingFuture = this.connection.ping(Buffer.buffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8}))
+					.recover(err -> err instanceof UnsupportedOperationException
+							? Future.succeededFuture(Buffer.buffer())
+							: Future.failedFuture(err));
 			Future<Void> pingCheck = any(pingFuture.mapEmpty(), this.closePromise.future())
 					.compose(cf -> {
 						if (this.cancelled.get() || this.matched.get() || isResponseDead()) {
@@ -301,10 +302,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 				if (this.closeFuture != null) {
 					return this.closeFuture;
 				}
-				if (!this.remover.apply(this)) {
-					this.closeFuture = Future.succeededFuture();
-					return this.closeFuture;
-				}
+				this.remover.accept(this);
 				pendingTicketWrite = this.ticketWrite;
 
 				this.timer.stop();
@@ -343,40 +341,8 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 			}
 		}
 
-		public Function<Session, Boolean> remover() {
-			return remover;
-		}
-
-		public WriteStream<Spellsource.MatchmakingQueuePutResponse> response() {
-			return response;
-		}
-
 		public @NotNull String userId() {
 			return userId;
 		}
-
-		public List<MessageConsumer> channels() {
-			return channels;
-		}
-
-		public LongTaskTimer.Sample timer() {
-			return timer;
-		}
-
-		public AtomicBoolean cancelled() {
-			return cancelled;
-		}
-
-		@Override
-		public String toString() {
-			return "Session[" +
-					"remover=" + remover + ", " +
-					"response=" + response + ", " +
-					"userId=" + userId + ", " +
-					"channels=" + channels + ", " +
-					"timer=" + timer + ", " +
-					"cancelled=" + cancelled + ']';
-		}
-
 	}
 }

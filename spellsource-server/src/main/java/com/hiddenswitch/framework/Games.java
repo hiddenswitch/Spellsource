@@ -16,11 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A service that starts a game session, accepts connections from players and manages the state of the game.
  */
-public class Games {
+public final class Games {
 	public static final long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
 	public static final String GAMES = "games";
 	public static final Comparator<net.demilich.metastone.game.entities.Entity> ENTITY_NATURAL_ORDER = Comparator
@@ -35,6 +36,9 @@ public class Games {
 	public static final String GAMES_RESTORE_GAME = "games:restoreGame";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	public static final String GAMES_DEFAULT_NO_ACTIVITY_TIMEOUT = "games.defaultNoActivityTimeout";
+
+	private Games() {
+	}
 
 	@NotNull
 	public static String getMessagesFromClientAddress(String userId) {
@@ -53,32 +57,27 @@ public class Games {
 	public static void subscribeGame(String userId, GrpcServerRequest<Spellsource.ClientToServerMessage, Spellsource.ServerToClientMessage> request, WriteStream<Spellsource.ServerToClientMessage> response) {
 		var vertx = Vertx.currentContext().owner();
 		var eventBus = vertx.eventBus();
-		var keepAliveManager = Environment.keepAliveManager(request.connection(), v -> {
-			try {
-				request.end();
-			} catch (IllegalStateException ignored) {
-			}
-		}, true);
+		var keepAliveManager = Environment.keepAliveManager(request.connection(), v -> request.end(), true);
 		keepAliveManager.onTransportStarted();
 		var publisher = eventBus.<Spellsource.ClientToServerMessage>publisher(getMessagesFromClientAddress(userId));
 		var retryPublisher = new RetryMessageProducer<>(publisher, 50, 100, body -> body.getMessageType() == Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE);
 		var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(getMessagesFromServerAddress(userId));
+		var closed = new AtomicBoolean(false);
+		Runnable cleanup = () -> {
+			if (closed.compareAndSet(false, true)) {
+				keepAliveManager.onTransportTermination();
+				retryPublisher.close();
+				consumer.unregister();
+			}
+		};
 		var consumerReady = consumer.completion().otherwiseEmpty();
 		request.handler(body -> {
 			keepAliveManager.onDataReceived();
 			consumerReady.onComplete(v -> retryPublisher.write(body));
 		});
-		request.endHandler(v -> {
-			keepAliveManager.onTransportTermination();
-			retryPublisher.close();
-			consumer.unregister();
-		});
-		request.exceptionHandler(t -> {
-			keepAliveManager.onTransportTermination();
-			retryPublisher.close();
-			consumer.unregister();
-		});
-		consumer.bodyStream().pipe().endOnComplete(false).endOnFailure(false).to(response);
+		request.endHandler(v -> cleanup.run());
+		request.exceptionHandler(t -> cleanup.run());
+		consumer.bodyStream().pipe().endOnComplete(false).endOnFailure(false).to(response).onFailure(t -> cleanup.run());
 		consumerReady.onComplete(v -> request.resume());
 	}
 
@@ -130,9 +129,6 @@ public class Games {
 			@Override
 			public Future<StringValue> isInMatch(GrpcServerRequest<Empty, StringValue> grpcServerRequest, Empty request) {
 				var userId = grpcServerRequest.routingContext().user().subject();
-				if (userId == null) {
-					return Future.succeededFuture(StringValue.of(""));
-				}
 				return Games.getGameId(userId)
 						.map(res -> StringValue.newBuilder()
 								.setValue(res == null ? "" : res)

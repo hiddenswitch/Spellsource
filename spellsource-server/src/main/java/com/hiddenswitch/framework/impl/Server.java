@@ -44,4 +44,9 @@ public interface Server {
 	 * Checks if the game is over.
 	 */
 	boolean isGameOver();
+
+	/**
+	 * Checks if the server game session is currently running.
+	 */
+	boolean isRunning();
 }

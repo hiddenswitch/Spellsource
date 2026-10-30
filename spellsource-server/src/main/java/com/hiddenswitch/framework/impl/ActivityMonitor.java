@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.impl;
 
 import io.vertx.core.Vertx;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -18,21 +19,24 @@ public class ActivityMonitor {
 		if (noActivityTimeout < 0L) {
 			throw new IllegalArgumentException("noActivityTimeout must be non-negative");
 		}
-		this.vertx = vertx;
+		this.vertx = Objects.requireNonNull(vertx, "vertx");
 		this.noActivityTimeout = noActivityTimeout;
-		this.onTimeout = onTimeout;
+		this.onTimeout = Objects.requireNonNull(onTimeout, "onTimeout");
 	}
 
 	public void activity() {
-		if (noActivityTimeout == 0L || vertx == null) {
+		if (noActivityTimeout == 0L) {
 			return;
 		}
 		cancel();
-		lastTimerId = vertx.setTimer(noActivityTimeout, v -> onTimeout.accept(this));
+		lastTimerId = vertx.setTimer(noActivityTimeout, v -> {
+			lastTimerId = null;
+			onTimeout.accept(this);
+		});
 	}
 
 	public void cancel() {
-		if (lastTimerId != null && vertx != null) {
+		if (lastTimerId != null) {
 			vertx.cancelTimer(lastTimerId);
 			lastTimerId = null;
 		}

@@ -32,11 +32,14 @@ import java.util.stream.Collectors;
  * This bridge converts proto messages to GraphQL types and provides a
  * {@link Publisher} for the {@code gameMessages} subscription.
  */
-public class GraphQLGameBridge {
+public final class GraphQLGameBridge {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLGameBridge.class);
 	private static final String SUBSCRIBER_READY_ADDRESS_PREFIX = "games:graphql-subscriber:";
 	private static final long SUBSCRIBER_READY_TIMEOUT_MILLIS = Games.getDefaultConnectionTime();
 	private static final long SUBSCRIBER_READY_RETRY_MILLIS = 50L;
+
+	private GraphQLGameBridge() {
+	}
 
 	private static String subscriberAddress(String userId, String connectionId) {
 		if (connectionId != null && !connectionId.matches("[a-zA-Z0-9-]{1,64}")) {
@@ -350,6 +353,12 @@ public class GraphQLGameBridge {
 			var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(address);
 			var readinessConsumer = eventBus.<String>consumer(subscriberAddress(userId, connectionId));
 			var cancelled = new AtomicBoolean(false);
+			Runnable cleanup = () -> {
+				if (cancelled.compareAndSet(false, true)) {
+					consumer.unregister();
+					readinessConsumer.unregister();
+				}
+			};
 
 			readinessConsumer.handler(request -> consumer.completion()
 					.onSuccess(ignored -> request.reply("ready"))
@@ -358,35 +367,22 @@ public class GraphQLGameBridge {
 			subscriber.onSubscribe(new Subscription() {
 				@Override
 				public void request(long n) {
-					// Event bus is push-based; we start flowing as soon as subscribed.
-					// For backpressure, we'd need buffering, but game messages are
-					// low-frequency enough that this isn't a concern.
 				}
 
 				@Override
 				public void cancel() {
-					if (cancelled.compareAndSet(false, true)) {
-						consumer.unregister();
-						readinessConsumer.unregister();
-					}
+					cleanup.run();
 				}
 			});
 
 			consumer.handler(message -> {
 				if (cancelled.get()) return;
-				try {
-					var graphqlMsg = toGraphQL(message.body());
-					subscriber.onNext(graphqlMsg);
-				} catch (Exception e) {
-					LOGGER.error("failed to convert game message to graphql", e);
-				}
+				subscriber.onNext(toGraphQL(message.body()));
 			});
 
 			consumer.completion().onFailure(t -> {
-				if (!cancelled.get()) {
-					readinessConsumer.unregister();
-					subscriber.onError(t);
-				}
+				cleanup.run();
+				subscriber.onError(t);
 			});
 		}
 	}

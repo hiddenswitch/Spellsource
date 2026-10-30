@@ -69,12 +69,13 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 		contexts.put(gameId, context);
 	}
 
+	public int getHostedGameCount() {
+		return contexts.size();
+	}
+
 	public Future<CreateGameSessionResponse> createGameSession(ConfigurationRequest request) {
 		LOGGER.trace("createGameSession: creating game session for request {}", request);
-
-		if (request.getGameId() == null) {
-			throw new IllegalArgumentException("Cannot create a game session without specifying a gameId.");
-		}
+		Objects.requireNonNull(request.getGameId(), "Cannot create a game session without specifying a gameId.");
 
 		var playerConfigurations = new ArrayList<Future<?>>();
 		var resumable = request.getConfigurations().stream().filter(Configuration::isBot).count() == 1
@@ -138,12 +139,6 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 
 	/** Finds and reconstructs the latest checkpointed one-human/one-bot game for a returning player. */
 	private Future<String> restoreGame(String userId) {
-		var hosted = contexts.values().stream()
-				.filter(context -> context.getPlayerConfigurations().stream().anyMatch(c -> !c.isBot() && userId.equals(c.getUserId())))
-				.findFirst();
-		if (hosted.isPresent()) {
-			return Future.succeededFuture(hosted.get().updateAndGetGameOver() ? null : hosted.get().getGameId());
-		}
 		return Environment.query(dsl -> dsl.select(GAMES.ID, GAMES.TRACE, GAME_USERS.PLAYER_INDEX, GAME_USERS.DECK_ID)
 				.from(GAMES).join(GAME_USERS).on(GAME_USERS.GAME_ID.eq(GAMES.ID))
 				.where(GAME_USERS.USER_ID.eq(userId))
@@ -185,31 +180,23 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 	}
 
 	private Future<CreateGameSessionResponse> createResumedSession(String gameId, String userId, short humanIndex, String humanDeckId, Trace trace) {
-		try {
-			var configurations = new ArrayList<Configuration>();
-			for (var index = 0; index < 2; index++) {
-				var deck = new GameDeck(cardCatalogue, trace.getHeroClasses().get(index), trace.getDeckCardIds().get(index).getCardIds());
-				if (index == humanIndex) deck.setDeckId(humanDeckId);
-				configurations.add(new Configuration().setPlayerId(index)
-						.setUserId(index == humanIndex ? userId : "resumed-bot-" + gameId)
-						.setBot(index != humanIndex).setNoActivityTimeout(index == humanIndex ? 0L : Games.getDefaultNoActivityTimeout())
-						.setDeck(deck));
-			}
-			var serverGameContext = new ServerGameContext(gameId, configurations, cardCatalogue, this);
-			serverGameContext.restoreFromTrace(trace);
-			return vertx.deployVerticle(serverGameContext, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
-					.map(deploymentId -> CreateGameSessionResponse.session(deploymentID(), serverGameContext));
-		} catch (Throwable cause) {
-			LOGGER.warn("Cannot replay persisted game {}", gameId, cause);
-			return abandonUnrestorableGame(Long.parseLong(gameId), userId).compose(ignored -> Future.failedFuture(cause));
+		var configurations = new ArrayList<Configuration>();
+		for (var index = 0; index < 2; index++) {
+			var deck = new GameDeck(cardCatalogue, trace.getHeroClasses().get(index), trace.getDeckCardIds().get(index).getCardIds());
+			if (index == humanIndex) deck.setDeckId(humanDeckId);
+			configurations.add(new Configuration().setPlayerId(index)
+					.setUserId(index == humanIndex ? userId : "resumed-bot-" + gameId)
+					.setBot(index != humanIndex).setNoActivityTimeout(index == humanIndex ? 0L : Games.getDefaultNoActivityTimeout())
+					.setDeck(deck));
 		}
+		var serverGameContext = new ServerGameContext(gameId, configurations, cardCatalogue, this);
+		serverGameContext.restoreFromTrace(trace);
+		return vertx.deployVerticle(serverGameContext, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
+				.map(deploymentId -> CreateGameSessionResponse.session(deploymentID(), serverGameContext));
 	}
 
 	public void removeGameAndRecordReplay(@NotNull String gameId) {
 		Objects.requireNonNull(gameId);
-		if (!Thread.currentThread().isVirtual()) {
-			throw new UnsupportedOperationException("expected to be in virtual thread");
-		}
 
 		var gameIdLong = Long.parseLong(gameId);
 		var gameContext = contexts.remove(gameId);
