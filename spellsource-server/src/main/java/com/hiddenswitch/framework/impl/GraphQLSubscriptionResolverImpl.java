@@ -99,6 +99,7 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 		@Override
 		public void subscribe(Subscriber<? super MatchFound> subscriber) {
 			var cancelled = new AtomicBoolean(false);
+			var matched = new AtomicBoolean(false);
 			var address = Matchmaking.MATCHMAKING_ENQUEUE + userId;
 			var prepareAddress = Matchmaking.MATCHMAKING_PREPARE + userId;
 			var requeueAddress = Matchmaking.MATCHMAKING_REQUEUE + userId;
@@ -113,6 +114,11 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 					consumer.unregister();
 					prepareConsumer.unregister();
 					requeueConsumer.unregister();
+					if (!matched.get()) {
+						withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
+								.where(MATCHMAKING_TICKETS.USER_ID.eq(userId)))
+								.otherwiseEmpty();
+					}
 				}
 			};
 
@@ -156,6 +162,8 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 					message.fail(1, "subscription cancelled");
 					return;
 				}
+				matched.set(true);
+				cleanup.run();
 
 				var gameId = message.body();
 				// Reply to acknowledge receipt so the matchmaker knows the player was notified
@@ -169,6 +177,7 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 						.build();
 
 				subscriber.onNext(matchFound);
+				subscriber.onComplete();
 			});
 
 			consumer.exceptionHandler(err -> {

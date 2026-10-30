@@ -106,7 +106,8 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		// notify the user when a game has been assigned
 		var enqueueConsumer = eventBus.<String>consumer(MATCHMAKING_ENQUEUE + userId);
 		enqueueConsumer.handler(message -> {
-			if (session.cancelled.get()) {
+			if (session.cancelled.get() || session.isResponseDead()) {
+				session.close();
 				message.fail(1, "session already closed");
 				return;
 			}
@@ -153,9 +154,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 						}
 
 						var queueId = message.getQueueId();
-						var queueClosedChannel = eventBus.<String>consumer(MATCHMAKING_QUEUE_CLOSED + queueId);
-						queueClosedChannel.handler(v2 -> session.close());
-						if (!session.registerChannel(queueClosedChannel)) {
+						if (!session.registerQueueClosedChannel(eventBus, queueId)) {
 							return Future.succeededFuture();
 						}
 
@@ -206,6 +205,8 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		private final Promise<Void> closePromise = Promise.promise();
 		private Future<?> ticketWrite = Future.succeededFuture();
 		private Future<Void> closeFuture;
+		private MessageConsumer<String> queueClosedChannel;
+		private String queueClosedQueueId;
 
 		Session(Consumer<Session> remover,
 		        WriteStream<Spellsource.MatchmakingQueuePutResponse> response,
@@ -228,11 +229,21 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 			return keepAliveManager;
 		}
 
-		synchronized boolean registerChannel(MessageConsumer<?> channel) {
+		synchronized boolean registerQueueClosedChannel(io.vertx.core.eventbus.EventBus eventBus, String queueId) {
 			if (this.cancelled.get()) {
-				channel.unregister();
 				return false;
 			}
+			if (Objects.equals(this.queueClosedQueueId, queueId) && this.queueClosedChannel != null) {
+				return true;
+			}
+			if (this.queueClosedChannel != null) {
+				this.channels.remove(this.queueClosedChannel);
+				this.queueClosedChannel.unregister();
+			}
+			var channel = eventBus.<String>consumer(MATCHMAKING_QUEUE_CLOSED + queueId);
+			channel.handler(v2 -> this.close());
+			this.queueClosedChannel = channel;
+			this.queueClosedQueueId = queueId;
 			this.channels.add(channel);
 			return true;
 		}

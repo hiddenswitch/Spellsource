@@ -144,10 +144,14 @@ public class Matchmaking extends AbstractVerticle {
 	}
 
 	public static Future<Void> notifyGameReady(String userId, String gameId) {
+		return notifyGameReady(userId, gameId, true);
+	}
+
+	public static Future<Void> notifyGameReady(String userId, String gameId, boolean retryIfNoHandlers) {
 		var vertx = Vertx.currentContext().owner();
 		var serverConfiguration = Environment.getConfiguration();
 		var smallTimeout = serverConfiguration.getMatchmaking().getScanFrequencyMillis();
-		var deadline = System.currentTimeMillis() + Games.getDefaultConnectionTime();
+		var deadline = retryIfNoHandlers ? System.currentTimeMillis() + Games.getDefaultConnectionTime() : 0L;
 		return notifyGameReady(vertx, MATCHMAKING_ENQUEUE + userId, gameId, smallTimeout, deadline)
 				.onFailure(Environment.onFailure("failed to notify game ready"));
 	}
@@ -455,54 +459,73 @@ public class Matchmaking extends AbstractVerticle {
 					if (botOpponent) {
 						var notifications = new ArrayList<Future<?>>();
 						for (var ticket : thisGameTickets) {
-							notifications.add(Matchmaking.notifyGameReady(ticket.getUserId(), gameId));
+							notifications.add(Matchmaking.notifyGameReady(ticket.getUserId(), gameId, true));
 						}
-						return Future.all(notifications).mapEmpty();
+						return Future.all(notifications)
+								.<Void>mapEmpty()
+								.recover(err -> compensateAbortedGame(vertx, configuration, gameId, thisGameTickets, rescanRequested));
 					}
 					var secondChecks = new ArrayList<Future<Boolean>>(thisGameTickets.length);
 					for (var ticket : thisGameTickets) {
 						secondChecks.add(verifyTicketLive(vertx, ticket, false));
 					}
 					return Future.all(secondChecks).compose(cf -> {
-						List<MatchmakingTickets> stillLive = new ArrayList<>(thisGameTickets.length);
-						List<MatchmakingTickets> nowDead = new ArrayList<>();
 						for (int i = 0; i < thisGameTickets.length; i++) {
-							if (Boolean.TRUE.equals(cf.resultAt(i))) {
-								stillLive.add(thisGameTickets[i]);
-							} else {
-								nowDead.add(thisGameTickets[i]);
+							if (!Boolean.TRUE.equals(cf.resultAt(i))) {
+								LOGGER.debug("aborting game {} because participant(s) disconnected during game creation", gameId);
+								return compensateAbortedGame(vertx, configuration, gameId, thisGameTickets, rescanRequested);
 							}
-						}
-						if (!nowDead.isEmpty()) {
-							LOGGER.debug("aborting game {} because {} participant(s) disconnected during game creation", gameId, nowDead.size());
-							return abortCreatedGame(gameId, thisGameTickets)
-									.eventually(() -> {
-										var cleanups = new ArrayList<Future<?>>();
-										for (var dead : nowDead) {
-											cleanups.add(deleteTicketByUserId(dead.getUserId()));
-										}
-										for (var live : stillLive) {
-											rescanRequested.set(true);
-											cleanups.add(requeueLiveTicket(vertx, live));
-										}
-										return Future.all(cleanups)
-												.onComplete(ar -> {
-													if (!stillLive.isEmpty()) {
-														vertx.eventBus().publish(MATCHMAKING_WAKE, configuration.getId());
-													}
-												})
-												.mapEmpty();
-									});
 						}
 						var notifications = new ArrayList<Future<?>>();
 						for (var ticket : thisGameTickets) {
-							notifications.add(Matchmaking.notifyGameReady(ticket.getUserId(), gameId));
+							notifications.add(Matchmaking.notifyGameReady(ticket.getUserId(), gameId, false));
 						}
-						return Future.all(notifications).mapEmpty();
+						return Future.all(notifications)
+								.<Void>mapEmpty()
+								.recover(err -> {
+									LOGGER.debug("aborting game {} because participant(s) disconnected during game handoff", gameId, err);
+									return compensateAbortedGame(vertx, configuration, gameId, thisGameTickets, rescanRequested);
+								});
 					});
 				})
 				.onFailure(Environment.onFailure("could not notify users"))
 				.otherwiseEmpty();
+	}
+
+	private Future<Void> compensateAbortedGame(Vertx vertx,
+	                                           MatchmakingQueues configuration,
+	                                           String gameId,
+	                                           MatchmakingTickets[] thisGameTickets,
+	                                           AtomicBoolean rescanRequested) {
+		return abortCreatedGame(gameId, thisGameTickets)
+				.eventually(() -> {
+					var liveChecks = new ArrayList<Future<Boolean>>(thisGameTickets.length);
+					for (var ticket : thisGameTickets) {
+						liveChecks.add(verifyTicketLive(vertx, ticket.getUserId(), false, 0));
+					}
+					return Future.all(liveChecks).compose(cf -> {
+						var cleanups = new ArrayList<Future<?>>();
+						boolean anyLive = false;
+						for (int i = 0; i < thisGameTickets.length; i++) {
+							var ticket = thisGameTickets[i];
+							if (Boolean.TRUE.equals(cf.resultAt(i))) {
+								anyLive = true;
+								rescanRequested.set(true);
+								cleanups.add(requeueLiveTicket(vertx, ticket));
+							} else {
+								cleanups.add(deleteTicketByUserId(ticket.getUserId()));
+							}
+						}
+						boolean wake = anyLive;
+						return Future.all(cleanups)
+								.onComplete(ar -> {
+									if (wake) {
+										vertx.eventBus().publish(MATCHMAKING_WAKE, configuration.getId());
+									}
+								})
+								.mapEmpty();
+					});
+				});
 	}
 
 	public Future<String> createGame(MatchmakingQueues configuration, MatchmakingTickets... tickets) {

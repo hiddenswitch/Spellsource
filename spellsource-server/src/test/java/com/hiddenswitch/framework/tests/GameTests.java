@@ -1877,6 +1877,191 @@ public class GameTests extends FrameworkTestBase {
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
+	@SuppressWarnings("unchecked")
+	private static int getEventBusHandlerCount(Vertx vertx, String address) {
+		try {
+			var field = io.vertx.core.eventbus.impl.EventBusImpl.class.getDeclaredField("handlerMap");
+			field.setAccessible(true);
+			var map = (java.util.concurrent.ConcurrentMap<String, ?>) field.get(vertx.eventBus());
+			var sequence = map.get(address);
+			if (sequence == null) {
+				return 0;
+			}
+			if (sequence instanceof Iterable<?> iterable) {
+				int count = 0;
+				for (var ignored : iterable) {
+					count++;
+				}
+				return count;
+			}
+			return 1;
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Deterministic EventBus boundary fault-injection test verifying:
+	 * 1. A boundary failure / disconnect during MATCHMAKING_ENQUEUE handoff (after createGame and
+	 *    MATCHMAKING_PREPARE have already succeeded) triggers Saga compensation: the half-started
+	 *    game is aborted (ServerGameContext undeployed and GAMES/GAME_USERS rows deleted) and any
+	 *    surviving participant is requeued.
+	 * 2. Repeated MatchmakingQueuePutRequest messages on the same stream do not leak duplicate
+	 *    matchmaking:queue-closed:{queueId} consumers.
+	 */
+	@Test
+	@Timeout(value = 60, timeUnit = TimeUnit.SECONDS)
+	public void testBoundaryFaultsAndSagaCompensationAcrossEventBus(Vertx vertx, VertxTestContext testContext) {
+		var client1 = new Client(vertx);
+		var client2 = new Client(vertx);
+		var baselineDeploymentsRef = new AtomicInteger();
+		var deckIdRef = new AtomicReference<String>();
+		var clusteredGamesRef = new AtomicReference<ClusteredGames>();
+		var req1Ref = new AtomicReference<WriteStream<MatchmakingQueuePutRequest>>();
+		var req2Ref = new AtomicReference<WriteStream<MatchmakingQueuePutRequest>>();
+		var abortedGameIdRef = new AtomicReference<String>();
+		var faultInjected = new AtomicBoolean(false);
+		var queueClosedHandlersRef = new AtomicInteger();
+
+		startGateway(vertx)
+				.compose(ignored -> join(client1.createAndLogin(), client2.createAndLogin()))
+				.compose(ignored -> {
+					var cg = new ClusteredGames();
+					clusteredGamesRef.set(cg);
+					return vertx.deployVerticle(cg, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD));
+				})
+				.compose(ignored -> {
+					baselineDeploymentsRef.set(vertx.deploymentIDs().size());
+					return client1.legacy().decksGetAll(Empty.getDefaultInstance());
+				})
+				.compose(decks -> {
+					var deckId = decks.getDecks(0).getCollection().getId();
+					deckIdRef.set(deckId);
+
+					// 1. Send 3 consecutive MatchmakingQueuePutRequest updates on client1's single enqueue stream
+					client1.matchmaking().enqueue(req1 -> {
+						req1Ref.set(req1);
+						for (int i = 0; i < 3; i++) {
+							req1.write(MatchmakingQueuePutRequest.newBuilder()
+									.setQueueId("constructed")
+									.setDeckId(deckId)
+									.build());
+						}
+					});
+
+					return Environment.sleep(vertx, 150L);
+				})
+				.compose(ignored -> {
+					queueClosedHandlersRef.set(getEventBusHandlerCount(vertx,
+							com.hiddenswitch.framework.Matchmaking.MATCHMAKING_QUEUE_CLOSED + "constructed"));
+
+					// 2. Register an EventBus outbound interceptor that injects a boundary disconnect on user2's
+					// MATCHMAKING_ENQUEUE handoff (after createGame and MATCHMAKING_PREPARE have already succeeded),
+					// while holding user1's MATCHMAKING_ENQUEUE handoff so user1's session remains open for Saga requeue.
+					var user1Id = client1.getUserEntity().getId();
+					var user2Id = client2.getUserEntity().getId();
+					vertx.eventBus().addOutboundInterceptor(ctx -> {
+						var address = ctx.message().address();
+						if (!faultInjected.get() && address.equals(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_ENQUEUE + user1Id)) {
+							// Hold user1's first notification until after user2's fault triggers Saga rollback
+							return;
+						}
+						if (address.equals(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_ENQUEUE + user2Id)
+								&& faultInjected.compareAndSet(false, true)) {
+							abortedGameIdRef.set((String) ctx.body());
+							// Simulate user2 cancelling right across the network boundary between PREPARE and ENQUEUE
+							if (req2Ref.get() != null) {
+								req2Ref.get().write(MatchmakingQueuePutRequest.newBuilder().setCancel(true).build());
+								req2Ref.get().end();
+							}
+							vertx.setTimer(30L, id -> ctx.next());
+							return;
+						}
+						ctx.next();
+					});
+
+					return vertx.deployVerticle(new com.hiddenswitch.framework.Matchmaking(),
+							new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD));
+				})
+				.compose(matchmakingDeploymentId -> {
+					// Enqueue client2 to trigger match creation + mid-handoff boundary fault on user2
+					client2.matchmaking().enqueue(req2 -> {
+						req2Ref.set(req2);
+						req2.write(MatchmakingQueuePutRequest.newBuilder()
+								.setQueueId("constructed")
+								.setDeckId(deckIdRef.get())
+								.build());
+					});
+
+					// Wait for the fault to be injected and Saga compensation to settle
+					var deadline = System.currentTimeMillis() + 3000L;
+					var settled = Promise.<Void>promise();
+					Runnable[] poll = new Runnable[1];
+					poll[0] = () -> {
+						var abortedIdStr = abortedGameIdRef.get();
+						if (abortedIdStr == null || clusteredGamesRef.get().getHostedGameCount() != 0) {
+							if (System.currentTimeMillis() >= deadline) {
+								settled.tryComplete();
+							} else {
+								vertx.setTimer(50L, id -> poll[0].run());
+							}
+							return;
+						}
+						long abortedId = Long.parseLong(abortedIdStr);
+						join(
+								Environment.query(dsl -> dsl.selectCount().from(GAMES).where(GAMES.ID.eq(abortedId))),
+								Environment.query(dsl -> dsl.selectCount().from(com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS)
+										.where(com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS.USER_ID.eq(client1.getUserEntity().getId())))
+						).onComplete(ar -> {
+							boolean done = ar.succeeded()
+									&& ar.result().<io.vertx.sqlclient.RowSet<io.vertx.sqlclient.Row>>resultAt(0).iterator().next().getInteger(0) == 0
+									&& ar.result().<io.vertx.sqlclient.RowSet<io.vertx.sqlclient.Row>>resultAt(1).iterator().next().getInteger(0) == 1;
+							if (done || System.currentTimeMillis() >= deadline) {
+								settled.tryComplete();
+							} else {
+								vertx.setTimer(50L, id -> poll[0].run());
+							}
+						});
+					};
+					poll[0].run();
+					return settled.future()
+							.compose(ignored -> {
+								var abortedIdStr = abortedGameIdRef.get();
+								long abortedId = abortedIdStr != null ? Long.parseLong(abortedIdStr) : -1L;
+								return join(
+										Environment.query(dsl -> dsl.selectCount().from(GAMES).where(GAMES.ID.eq(abortedId))),
+										Environment.query(dsl -> dsl.selectCount().from(com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS)
+												.where(com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS.USER_ID.eq(client1.getUserEntity().getId())))
+								).onSuccess(cf -> testContext.verify(() -> {
+									var gamesRows = cf.<io.vertx.sqlclient.RowSet<io.vertx.sqlclient.Row>>resultAt(0);
+									var ticketRows = cf.<io.vertx.sqlclient.RowSet<io.vertx.sqlclient.Row>>resultAt(1);
+									int abortedGameRowCount = gamesRows.iterator().next().getInteger(0);
+									int survivingTicketCount = ticketRows.iterator().next().getInteger(0);
+									assertNotNull(abortedIdStr, "Interceptor must have intercepted MATCHMAKING_ENQUEUE for user2");
+									assertEquals(1, queueClosedHandlersRef.get(),
+											"Repeated MatchmakingQueuePutRequest updates on a single session must not leak duplicate queue-closed consumers");
+									assertEquals(0, clusteredGamesRef.get().getHostedGameCount(),
+											"Saga compensation must abort and undeploy the half-created ServerGameContext when MATCHMAKING_ENQUEUE fails");
+									assertEquals(0, abortedGameRowCount,
+											"Saga compensation must delete the aborted GAMES row from the database");
+									assertEquals(1, survivingTicketCount,
+											"Surviving participant user1 must be requeued in MATCHMAKING_TICKETS by Saga compensation");
+								}));
+							})
+							.eventually(() -> {
+								if (req1Ref.get() != null) {
+									req1Ref.get().write(MatchmakingQueuePutRequest.newBuilder().setCancel(true).build());
+									req1Ref.get().end();
+								}
+								return vertx.undeploy(matchmakingDeploymentId).otherwiseEmpty();
+							});
+				})
+				.compose(ignored -> awaitZeroDynamicResources(vertx, baselineDeploymentsRef.get()))
+				.eventually(client1::closeFut)
+				.eventually(client2::closeFut)
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
 	private static class ClientWithPort extends Client {
 		private final int port;
 
