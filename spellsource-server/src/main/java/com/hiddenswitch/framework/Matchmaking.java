@@ -35,57 +35,52 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.hiddenswitch.framework.Environment.withDslContext;
 import static com.hiddenswitch.framework.Environment.withExecutor;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.*;
+import static io.vertx.await.Async.await;
+import static io.vertx.await.Async.forEachParallel;
+import static io.vertx.await.Async.join;
+import static io.vertx.await.Async.mapParallel;
+import static io.vertx.await.Async.openScope;
+import static io.vertx.await.Async.virtualThreadFactory;
 
 public class Matchmaking extends AbstractVerticle {
 	public static final String MATCHMAKING_ENQUEUE = "matchmaking:enqueue:";
 	public static final String MATCHMAKING_PREPARE = "matchmaking:prepare:";
-	public static final String MATCHMAKING_REQUEUE = "matchmaking:requeue:";
 	public static final String MATCHMAKING_QUEUE_CLOSED = "matchmaking:queue-closed:";
 	public static final String MATCHMAKING_WAKE = "matchmaking:wake";
-	public static final String REINSERT_TICKET_SQL = """
-			INSERT INTO spellsource.matchmaking_tickets (ticket_id, queue_id, user_id, deck_id, bot_deck_id)
-			OVERRIDING SYSTEM VALUE
-			VALUES ($1, $2, $3, $4, $5)
-			ON CONFLICT (user_id) DO UPDATE SET
-			  queue_id = EXCLUDED.queue_id,
-			  deck_id = EXCLUDED.deck_id,
-			  bot_deck_id = EXCLUDED.bot_deck_id
-			""";
 	private static final long NOTIFY_RETRY_MILLIS = 50L;
 	private static final String CLAIM_COMPLETE_LOBBIES_SQL = """
-			WITH ready_queues AS (
-			  SELECT t.queue_id
-			  FROM spellsource.matchmaking_tickets t
-			  JOIN spellsource.matchmaking_queues q ON q.id = t.queue_id
-			  GROUP BY t.queue_id, q.lobby_size
-			  HAVING COUNT(*) >= q.lobby_size
-			),
-			locked_tickets AS (
-			  SELECT t.ticket_id, t.queue_id, t.user_id, t.deck_id, t.bot_deck_id, t.created_at
-			  FROM spellsource.matchmaking_tickets t
-			  WHERE t.queue_id IN (SELECT queue_id FROM ready_queues)
-			    AND pg_try_advisory_xact_lock(hashtext(t.queue_id))
-			  ORDER BY t.queue_id, t.ticket_id
-			  FOR UPDATE SKIP LOCKED
-			),
-			numbered AS (
-			  SELECT t.ticket_id, t.queue_id, t.user_id, t.deck_id, t.bot_deck_id, t.created_at,
-			         q.id, q.name, q.bot_opponent, q.private_lobby, q.starts_automatically,
-			         q.still_connected_timeout, q.empty_lobby_timeout, q.awaiting_lobby_timeout,
-			         q.once, q.automatically_close, q.lobby_size, q.queue_created_at,
+			WITH locked_tickets AS (
+			  SELECT t.ticket_id, t.queue_id, q.lobby_size,
 			         ROW_NUMBER() OVER (PARTITION BY t.queue_id ORDER BY t.ticket_id) AS rn,
-			         COUNT(*) OVER (PARTITION BY t.queue_id) AS cnt
-			  FROM locked_tickets t
+			         COUNT(*) OVER (PARTITION BY t.queue_id) AS total_in_queue
+			  FROM (
+			    SELECT ticket_id, queue_id
+			    FROM spellsource.matchmaking_tickets
+			    WHERE created_at <= now()
+			    ORDER BY queue_id, ticket_id
+			    FOR UPDATE SKIP LOCKED
+			  ) t
 			  JOIN spellsource.matchmaking_queues q ON q.id = t.queue_id
+			),
+			to_claim AS (
+			  SELECT ticket_id, queue_id
+			  FROM locked_tickets
+			  WHERE rn <= (total_in_queue / lobby_size) * lobby_size
 			),
 			claimed AS (
-			  DELETE FROM spellsource.matchmaking_tickets mt
-			  USING numbered n
-			  WHERE mt.user_id = n.user_id
-			    AND n.rn <= (n.cnt / n.lobby_size) * n.lobby_size
-			  RETURNING n.*
+			  UPDATE spellsource.matchmaking_tickets t
+			  SET created_at = now() + interval '1500 milliseconds'
+			  FROM to_claim c
+			  WHERE t.ticket_id = c.ticket_id
+			  RETURNING t.ticket_id, t.queue_id, t.user_id, t.deck_id, t.bot_deck_id, t.created_at
 			)
-			SELECT * FROM claimed ORDER BY queue_id, rn
+			SELECT d.ticket_id, d.queue_id, d.user_id, d.deck_id, d.bot_deck_id, d.created_at,
+			       q.id, q.name, q.bot_opponent, q.private_lobby, q.starts_automatically,
+			       q.still_connected_timeout, q.empty_lobby_timeout, q.awaiting_lobby_timeout,
+			       q.once, q.automatically_close, q.lobby_size, q.queue_created_at
+			FROM claimed d
+			JOIN spellsource.matchmaking_queues q ON q.id = d.queue_id
+			ORDER BY d.queue_id, d.ticket_id
 			""";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Matchmaking.class);
 	private final static Counter TICKETS_TAKEN = Counter
@@ -95,6 +90,7 @@ public class Matchmaking extends AbstractVerticle {
 			.register(Metrics.globalRegistry);
 	private volatile boolean stopping;
 	private MessageConsumer<Object> wakeConsumer;
+	private Long periodicTimerId;
 
 	public Matchmaking() {
 	}
@@ -108,11 +104,7 @@ public class Matchmaking extends AbstractVerticle {
 		var message = MatchmakingQueuePutResponse.newBuilder()
 				.setUnityConnection(MatchmakingQueuePutResponseUnityConnection.newBuilder()
 						.setGameId(gameId).build()).build();
-		try {
-			return response.write(message);
-		} catch (Throwable t) {
-			return Future.failedFuture(t);
-		}
+		return response.write(message);
 	}
 
 	public static Future<Void> deleteQueue(String queueId) {
@@ -135,16 +127,7 @@ public class Matchmaking extends AbstractVerticle {
 		var matchmakingQueuesDao = new MatchmakingQueuesDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 		return matchmakingQueuesDao.insert(configuration, true)
 				.onSuccess(i -> LOGGER.debug("created queue {} ({})", configuration.getId(), i == 1))
-				.compose(ignored -> Future.succeededFuture(new Closeable() {
-					@Override
-					public void close(Completable<Void> completion) {
-						Matchmaking.deleteQueue(configuration.getId()).onComplete(ar -> { if (ar.succeeded()) { completion.succeed(); } else { completion.fail(ar.cause()); } });
-					}
-				}));
-	}
-
-	public static Future<Void> notifyGameReady(String userId, String gameId) {
-		return notifyGameReady(userId, gameId, true);
+				.map(ignored -> completion -> Matchmaking.deleteQueue(configuration.getId()).onComplete(completion));
 	}
 
 	public static Future<Void> notifyGameReady(String userId, String gameId, boolean retryIfNoHandlers) {
@@ -208,65 +191,12 @@ public class Matchmaking extends AbstractVerticle {
 				.otherwiseEmpty();
 	}
 
-	public static Future<Void> executeRequeueTicket(String userId, Long ticketId, String queueId, String deckId, String botDeckId) {
-		if (ticketId != null) {
-			return Environment.sqlClient()
-					.preparedQuery(REINSERT_TICKET_SQL)
-					.execute(Tuple.of(ticketId, queueId, userId, deckId, botDeckId))
-					.mapEmpty();
-		}
-		var record = MATCHMAKING_TICKETS.newRecord()
-				.setUserId(userId)
-				.setQueueId(queueId)
-				.setDeckId(deckId)
-				.setBotDeckId(botDeckId);
-		return withDslContext(dsl -> dsl
-				.insertInto(MATCHMAKING_TICKETS)
-				.set(record)
-				.onDuplicateKeyUpdate()
-				.set(record))
-				.mapEmpty();
-	}
-
-	private static Future<Void> requeueLiveTicket(Vertx vertx, MatchmakingTickets ticket) {
-		var payload = new JsonObject()
-				.put("ticketId", ticket.getTicketId())
-				.put("queueId", ticket.getQueueId())
-				.put("deckId", ticket.getDeckId())
-				.put("botDeckId", ticket.getBotDeckId());
-		return requeueLiveTicket(vertx, ticket.getUserId(), payload, 6);
-	}
-
-	private static Future<Void> requeueLiveTicket(Vertx vertx, String userId, JsonObject payload, int retriesLeft) {
-		return vertx.eventBus().<String>request(
-						MATCHMAKING_REQUEUE + userId,
-						payload,
-						new DeliveryOptions().setSendTimeout(6000L))
+	private static Future<Void> releaseTicketByUserId(String userId) {
+		return withDslContext(dsl -> dsl.update(MATCHMAKING_TICKETS)
+				.set(MATCHMAKING_TICKETS.CREATED_AT, org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE))
+				.where(MATCHMAKING_TICKETS.USER_ID.eq(userId)))
 				.<Void>mapEmpty()
-				.recover(cause -> {
-					if (cause instanceof ReplyException reply && reply.failureType() == ReplyFailure.NO_HANDLERS && retriesLeft > 0) {
-						return Future.future(promise -> vertx.setTimer(25L, ignored ->
-								requeueLiveTicket(vertx, userId, payload, retriesLeft - 1).onComplete(promise)));
-					}
-					return Future.succeededFuture();
-				});
-	}
-
-	private static Future<Void> abortCreatedGame(String gameId, MatchmakingTickets[] tickets) {
-		var concedes = new ArrayList<Future<?>>();
-		for (var ticket : tickets) {
-			concedes.add(Games.concedeGame(ticket.getUserId()).otherwiseEmpty());
-		}
-		long numericGameId;
-		try {
-			numericGameId = Long.parseLong(gameId);
-		} catch (NumberFormatException e) {
-			return Future.all(concedes).mapEmpty();
-		}
-		return Future.all(concedes)
-				.eventually(() -> withDslContext(dsl -> dsl.deleteFrom(GAME_USERS).where(GAME_USERS.GAME_ID.eq(numericGameId))).otherwiseEmpty())
-				.eventually(() -> withDslContext(dsl -> dsl.deleteFrom(GAMES).where(GAMES.ID.eq(numericGameId))).otherwiseEmpty())
-				.mapEmpty();
+				.otherwiseEmpty();
 	}
 
 	public static MatchmakingQueuesRecord[] defaultQueues() {
@@ -311,17 +241,14 @@ public class Matchmaking extends AbstractVerticle {
 	}
 
 	@Override
-	public void stop(Promise<Void> stopPromise) throws Exception {
+	public void stop(Promise<Void> stopPromise) {
 		stopping = true;
-		if (wakeConsumer != null) {
-			wakeConsumer.unregister().onComplete(ar -> stopPromise.complete());
-		} else {
-			stopPromise.complete();
-		}
+		vertx.cancelTimer(periodicTimerId);
+		wakeConsumer.unregister().onComplete(ar -> stopPromise.complete());
 	}
 
 	@Override
-	public void start(Promise<Void> startPromise) throws Exception {
+	public void start(Promise<Void> startPromise) {
 		runServerQueue();
 		startPromise.complete();
 	}
@@ -347,15 +274,14 @@ public class Matchmaking extends AbstractVerticle {
 				return;
 			}
 
-			LOGGER.trace("started matchmaking scan");
-			Environment.sqlClient()
-					.query(CLAIM_COMPLETE_LOBBIES_SQL)
-					.execute()
-					.compose(rows -> {
-						int claimedCount = rows.size();
-						if (claimedCount == 0) {
-							return Future.succeededFuture(false);
-						}
+			virtualThreadFactory(vertx).newThread(() -> {
+				boolean claimedMore = false;
+				try {
+					LOGGER.trace("started matchmaking scan");
+					var rows = await(Environment.sqlClient().query(CLAIM_COMPLETE_LOBBIES_SQL).execute());
+					int claimedCount = rows.size();
+					if (claimedCount > 0) {
+						claimedMore = true;
 						LOGGER.trace("claimed {} tickets", claimedCount);
 						Map<String, MatchmakingQueues> queues = new LinkedHashMap<>();
 						Map<String, List<MatchmakingTickets>> groupedTickets = new LinkedHashMap<>();
@@ -365,210 +291,144 @@ public class Matchmaking extends AbstractVerticle {
 							queues.computeIfAbsent(queueId, k -> queueMapper.apply(row));
 							groupedTickets.computeIfAbsent(queueId, k -> new ArrayList<>()).add(ticket);
 						}
-
-						var queueFutures = new ArrayList<Future<?>>(groupedTickets.size());
-						for (var entry : groupedTickets.entrySet()) {
-							var queueId = entry.getKey();
-							var tickets = entry.getValue();
-							var configuration = queues.get(queueId);
-							queueFutures.add(processQueueTickets(vertx, configuration, tickets, rescanRequested));
-						}
-						return Future.all(queueFutures).map(true);
-					})
-					.onFailure(t -> LOGGER.debug("matchmaking scan error", t))
-					.onComplete(ar -> {
-						scanInProgress.set(false);
-						boolean claimedMore = ar.succeeded() && Boolean.TRUE.equals(ar.result());
-						if (!stopping && (rescanRequested.getAndSet(false) || claimedMore)) {
-							vertx.runOnContext(v -> triggerScanRef[0].run());
-						}
-					});
+						forEachParallel(groupedTickets.entrySet(), entry ->
+								processQueueTickets(vertx, queues.get(entry.getKey()), entry.getValue()));
+					}
+				} finally {
+					scanInProgress.set(false);
+					if (!stopping && (rescanRequested.getAndSet(false) || claimedMore)) {
+						vertx.runOnContext(v -> triggerScanRef[0].run());
+					}
+				}
+			}).start();
 		};
 
 		wakeConsumer = vertx.eventBus().consumer(MATCHMAKING_WAKE, msg -> triggerScanRef[0].run());
-		vertx.setPeriodic(scanFrequency, timerId -> {
-			if (stopping) {
-				vertx.cancelTimer(timerId);
-				return;
-			}
-			triggerScanRef[0].run();
-		});
+		periodicTimerId = vertx.setPeriodic(scanFrequency, timerId -> triggerScanRef[0].run());
 		vertx.runOnContext(v -> triggerScanRef[0].run());
 	}
 
-	private Future<Void> processQueueTickets(Vertx vertx,
-	                                         MatchmakingQueues configuration,
-	                                         List<MatchmakingTickets> tickets,
-	                                         AtomicBoolean rescanRequested) {
+	private void processQueueTickets(Vertx vertx,
+	                                 MatchmakingQueues configuration,
+	                                 List<MatchmakingTickets> tickets) {
 		var lobbySize = (int) configuration.getLobbySize();
-		if (tickets.size() < lobbySize) {
-			return Future.succeededFuture();
-		}
 		boolean botOpponent = Boolean.TRUE.equals(configuration.getBotOpponent());
-		var checks = new ArrayList<Future<Boolean>>(tickets.size());
-		for (var ticket : tickets) {
-			checks.add(verifyTicketLive(vertx, ticket, botOpponent));
-		}
-		return Future.all(checks).compose(cf -> {
-			List<MatchmakingTickets> liveTickets = new ArrayList<>(tickets.size());
-			List<MatchmakingTickets> deadTickets = new ArrayList<>();
+		var liveStates = mapParallel(tickets, ticket -> await(verifyTicketLive(vertx, ticket, botOpponent)));
+		List<MatchmakingTickets> liveTickets = new ArrayList<>(tickets.size());
+		int playableCount;
+		try (var scope = openScope(vertx)) {
 			for (int i = 0; i < tickets.size(); i++) {
-				if (Boolean.TRUE.equals(cf.resultAt(i))) {
-					liveTickets.add(tickets.get(i));
+				var ticket = tickets.get(i);
+				if (Boolean.TRUE.equals(liveStates.get(i))) {
+					liveTickets.add(ticket);
 				} else {
-					deadTickets.add(tickets.get(i));
+					scope.fork(() -> await(deleteTicketByUserId(ticket.getUserId())));
 				}
 			}
 
-			var settleFutures = new ArrayList<Future<?>>();
-			for (var dead : deadTickets) {
-				LOGGER.debug("discarding disconnected matchmaking ticket for userId={} in queueId={}", dead.getUserId(), dead.getQueueId());
-				settleFutures.add(deleteTicketByUserId(dead.getUserId()));
-			}
-
-			int playableCount = (liveTickets.size() / lobbySize) * lobbySize;
-			var matchedTickets = liveTickets.subList(0, playableCount);
-			var leftoverTickets = liveTickets.subList(playableCount, liveTickets.size());
-
-			for (var leftover : leftoverTickets) {
-				rescanRequested.set(true);
-				settleFutures.add(requeueLiveTicket(vertx, leftover));
-			}
-
-			int totalTaken = 0;
-			for (var i = 0; i <= matchedTickets.size() - lobbySize; i += lobbySize) {
-				var thisGameTickets = matchedTickets.subList(i, i + lobbySize).toArray(MatchmakingTickets[]::new);
-				startLobbyMatch(vertx, configuration, thisGameTickets, rescanRequested);
-				totalTaken += lobbySize;
-			}
-			if (totalTaken > 0) {
-				TICKETS_TAKEN.increment(totalTaken);
-			}
-			return Future.all(settleFutures).mapEmpty();
-		});
-	}
-
-	private Future<Void> startLobbyMatch(Vertx vertx,
-	                                     MatchmakingQueues configuration,
-	                                     MatchmakingTickets[] thisGameTickets,
-	                                     AtomicBoolean rescanRequested) {
-		boolean botOpponent = Boolean.TRUE.equals(configuration.getBotOpponent());
-		return createGame(configuration, thisGameTickets)
-				.onFailure(Environment.onFailure("could not create game"))
-				.compose(gameId -> {
-					if (botOpponent) {
-						var notifications = new ArrayList<Future<?>>();
-						for (var ticket : thisGameTickets) {
-							notifications.add(Matchmaking.notifyGameReady(ticket.getUserId(), gameId, true));
-						}
-						return Future.all(notifications)
-								.<Void>mapEmpty()
-								.recover(err -> compensateAbortedGame(vertx, configuration, gameId, thisGameTickets, rescanRequested));
-					}
-					var secondChecks = new ArrayList<Future<Boolean>>(thisGameTickets.length);
-					for (var ticket : thisGameTickets) {
-						secondChecks.add(verifyTicketLive(vertx, ticket, false));
-					}
-					return Future.all(secondChecks).compose(cf -> {
-						for (int i = 0; i < thisGameTickets.length; i++) {
-							if (!Boolean.TRUE.equals(cf.resultAt(i))) {
-								LOGGER.debug("aborting game {} because participant(s) disconnected during game creation", gameId);
-								return compensateAbortedGame(vertx, configuration, gameId, thisGameTickets, rescanRequested);
-							}
-						}
-						var notifications = new ArrayList<Future<?>>();
-						for (var ticket : thisGameTickets) {
-							notifications.add(Matchmaking.notifyGameReady(ticket.getUserId(), gameId, false));
-						}
-						return Future.all(notifications)
-								.<Void>mapEmpty()
-								.recover(err -> {
-									LOGGER.debug("aborting game {} because participant(s) disconnected during game handoff", gameId, err);
-									return compensateAbortedGame(vertx, configuration, gameId, thisGameTickets, rescanRequested);
-								});
-					});
-				})
-				.onFailure(Environment.onFailure("could not notify users"))
-				.otherwiseEmpty();
-	}
-
-	private Future<Void> compensateAbortedGame(Vertx vertx,
-	                                           MatchmakingQueues configuration,
-	                                           String gameId,
-	                                           MatchmakingTickets[] thisGameTickets,
-	                                           AtomicBoolean rescanRequested) {
-		return abortCreatedGame(gameId, thisGameTickets)
-				.eventually(() -> {
-					var liveChecks = new ArrayList<Future<Boolean>>(thisGameTickets.length);
-					for (var ticket : thisGameTickets) {
-						liveChecks.add(verifyTicketLive(vertx, ticket.getUserId(), false, 0));
-					}
-					return Future.all(liveChecks).compose(cf -> {
-						var cleanups = new ArrayList<Future<?>>();
-						boolean anyLive = false;
-						for (int i = 0; i < thisGameTickets.length; i++) {
-							var ticket = thisGameTickets[i];
-							if (Boolean.TRUE.equals(cf.resultAt(i))) {
-								anyLive = true;
-								rescanRequested.set(true);
-								cleanups.add(requeueLiveTicket(vertx, ticket));
-							} else {
-								cleanups.add(deleteTicketByUserId(ticket.getUserId()));
-							}
-						}
-						boolean wake = anyLive;
-						return Future.all(cleanups)
-								.onComplete(ar -> {
-									if (wake) {
-										vertx.eventBus().publish(MATCHMAKING_WAKE, configuration.getId());
-									}
-								})
-								.mapEmpty();
-					});
+			playableCount = (liveTickets.size() / lobbySize) * lobbySize;
+			for (var i = 0; i <= playableCount - lobbySize; i += lobbySize) {
+				var thisGameTickets = liveTickets.subList(i, i + lobbySize).toArray(MatchmakingTickets[]::new);
+				scope.fork(() -> {
+					startLobbyMatch(vertx, configuration, thisGameTickets);
+					return null;
 				});
+			}
+			for (var i = playableCount; i < liveTickets.size(); i++) {
+				var unplayableTicket = liveTickets.get(i);
+				scope.fork(() -> await(releaseTicketByUserId(unplayableTicket.getUserId())));
+			}
+			if (playableCount > 0) {
+				TICKETS_TAKEN.increment(playableCount);
+			}
+			join(scope);
+		}
+		if (playableCount < liveTickets.size()) {
+			vertx.eventBus().publish(MATCHMAKING_WAKE, "wake");
+		}
+	}
+
+	private void startLobbyMatch(Vertx vertx,
+	                             MatchmakingQueues configuration,
+	                             MatchmakingTickets[] thisGameTickets) {
+		boolean botOpponent = Boolean.TRUE.equals(configuration.getBotOpponent());
+		var gameId = await(createGame(configuration, thisGameTickets));
+		try {
+			forEachParallel(List.of(thisGameTickets), ticket -> {
+				if (!await(verifyTicketLive(vertx, ticket, botOpponent))) {
+					throw new IllegalStateException("Ticket disconnected before handoff: " + ticket.getUserId());
+				}
+			});
+			forEachParallel(List.of(thisGameTickets), ticket ->
+					await(Matchmaking.notifyGameReady(ticket.getUserId(), gameId, botOpponent)));
+			forEachParallel(List.of(thisGameTickets), ticket ->
+					await(deleteTicketByUserId(ticket.getUserId())));
+		} catch (Throwable err) {
+			compensateAbortedGame(vertx, gameId, thisGameTickets);
+		}
+	}
+
+	private void compensateAbortedGame(Vertx vertx,
+	                                   String gameId,
+	                                   MatchmakingTickets[] thisGameTickets) {
+		long numericGameId = Long.parseLong(gameId);
+		try (var scope = openScope(vertx)) {
+			scope.fork(() -> {
+				forEachParallel(List.of(thisGameTickets), ticket ->
+						await(Games.concedeGame(ticket.getUserId()).otherwiseEmpty()));
+				await(withDslContext(dsl -> dsl.deleteFrom(GAMES).where(GAMES.ID.eq(numericGameId))).otherwiseEmpty());
+				return null;
+			});
+			for (var ticket : thisGameTickets) {
+				scope.fork(() -> {
+					if (await(verifyTicketLive(vertx, ticket.getUserId(), false, 0))) {
+						await(releaseTicketByUserId(ticket.getUserId()));
+					} else {
+						await(deleteTicketByUserId(ticket.getUserId()));
+					}
+					return null;
+				});
+			}
+			join(scope);
+		}
+		vertx.eventBus().publish(MATCHMAKING_WAKE, "wake");
 	}
 
 	public Future<String> createGame(MatchmakingQueues configuration, MatchmakingTickets... tickets) {
-		// TODO: set player index
-		return withExecutor(executor -> executor.executeAny(dsl -> dsl.insertInto(GAMES).defaultValues().returning(GAMES.ID))
-				.compose(rowSet -> {
-					var gameId = Lists.newArrayList(rowSet.iterator()).get(0).getLong(GAMES.ID.getName());
-					var added = new ArrayList<Future<?>>();
-					for (var i = 0; i < tickets.length; i++) {
-						var record = GAME_USERS.newRecord().setGameId(gameId)
-								.setUserId(tickets[i].getUserId())
-								.setDeckId(tickets[i].getDeckId())
-								.setPlayerIndex((short) i);
-						added.add(executor.execute(dsl -> dsl.insertInto(GAME_USERS).set(record)));
-					}
-					return Future.all(added).map(gameId);
-				})
-				.compose(gameId -> {
-					if (configuration.getBotOpponent()) {
-						// retrieve a bot and choose a random deck for it if one is not specified by the opponent
-						return Bots.bot()
-								.compose(bot -> {
-									var botDeckIdPromise = Promise.<String>promise();
-
-									if (tickets[0].getBotDeckId() == null) {
-										var random = new Random();
-										Legacy.getAllValidDeckIds(bot.getId())
-												.map(allValidDeckIds -> allValidDeckIds.get(random.nextInt(allValidDeckIds.size())))
-												.onComplete(botDeckIdPromise);
-
-									} else {
-										botDeckIdPromise.complete(tickets[0].getBotDeckId());
-									}
-
-									return botDeckIdPromise.future()
-											.map(botDeckId -> ConfigurationRequest.botMatch(gameId.toString(), tickets[0].getUserId(), bot.getId(), tickets[0].getDeckId(), botDeckId));
-								});
-					} else {
-						return Future.succeededFuture(ConfigurationRequest.versusMatch(gameId.toString(), tickets[0].getUserId(), tickets[0].getDeckId(), tickets[1].getUserId(), tickets[1].getDeckId()));
-					}
-				}))
-				.compose(Games::createGame)
-				.map(CreateGameSessionResponse::getGameId);
+		Long gameId;
+		ConfigurationRequest request;
+		try (var scope = openScope(vertx)) {
+			var gameIdTask = scope.fork(() -> await(withExecutor(executor ->
+					executor.executeAny(dsl -> dsl.insertInto(GAMES).defaultValues().returning(GAMES.ID))
+							.map(rowSet -> rowSet.iterator().next().getLong(GAMES.ID.getName())))));
+			var configTask = scope.fork(() -> {
+				if (Boolean.TRUE.equals(configuration.getBotOpponent())) {
+					var bot = await(Bots.bot());
+					var botDeckId = tickets[0].getBotDeckId() != null
+							? tickets[0].getBotDeckId()
+							: await(Legacy.getAllValidDeckIds(bot.getId()).map(ids -> ids.get(new Random().nextInt(ids.size()))));
+					return ConfigurationRequest.botMatch(null, tickets[0].getUserId(), bot.getId(), tickets[0].getDeckId(), botDeckId);
+				}
+				return ConfigurationRequest.versusMatch(null, tickets[0].getUserId(), tickets[0].getDeckId(), tickets[1].getUserId(), tickets[1].getDeckId());
+			});
+			join(scope);
+			gameId = gameIdTask.get();
+			request = configTask.get();
+		}
+		request.setGameId(gameId.toString());
+		try (var scope = openScope(vertx)) {
+			for (var i = 0; i < tickets.length; i++) {
+				var record = GAME_USERS.newRecord()
+						.setGameId(gameId)
+						.setUserId(tickets[i].getUserId())
+						.setDeckId(tickets[i].getDeckId())
+						.setPlayerIndex((short) i);
+				scope.fork(() -> await(withDslContext(dsl -> dsl.insertInto(GAME_USERS).set(record))));
+			}
+			scope.fork(() -> await(Games.createGame(request)));
+			join(scope);
+		}
+		return Future.succeededFuture(gameId.toString());
 	}
 
 	public record Services(BindAll<VertxMatchmakingGrpcServer.MatchmakingApi> binder,

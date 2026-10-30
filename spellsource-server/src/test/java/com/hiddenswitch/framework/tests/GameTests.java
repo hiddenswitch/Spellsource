@@ -1680,6 +1680,53 @@ public class GameTests extends FrameworkTestBase {
 				assertEquals("Unity client behaviour", ucb.getName());
 				assertNotNull(ucb.clone());
 				assertTrue(ucb.toString().contains("u1"));
+				assertEquals(0, new com.hiddenswitch.framework.impl.ClientMatchmakingService().getActiveSessionCount());
+				var cmsClose = Promise.<Void>promise();
+				new com.hiddenswitch.framework.impl.ClientMatchmakingService().close(cmsClose);
+				assertTrue(cmsClose.future().succeeded());
+				new com.hiddenswitch.framework.impl.ClusteredGames().removeGameAndRecordReplay("999996");
+
+				var catalogue = net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue.INSTANCE;
+				var deck1 = new net.demilich.metastone.game.decks.GameDeck(catalogue, net.demilich.metastone.game.entities.heroes.HeroClass.BROWN, java.util.Collections.emptyList());
+				deck1.setDeckId("d1");
+				var cfg1 = new com.hiddenswitch.framework.impl.Configuration()
+						.setUserId("u1")
+						.setDeck(deck1)
+						.setPlayerId(0)
+						.setBot(false)
+						.setNoActivityTimeout(0L);
+				var cfg2 = new com.hiddenswitch.framework.impl.Configuration()
+						.setUserId("u2")
+						.setDeck(deck1)
+						.setPlayerId(1)
+						.setBot(true)
+						.setNoActivityTimeout(0L);
+				var sgc = new com.hiddenswitch.framework.impl.ServerGameContext("999999", java.util.List.of(cfg1, cfg2), catalogue, null);
+				sgc.setActivePlayerId(0);
+				sgc.getLogic().initializePlayerAndMoveMulliganToSetAside(0, true);
+				sgc.getLogic().initializePlayerAndMoveMulliganToSetAside(1, false);
+				assertTrue(sgc.toString().contains("999999"));
+				assertNull(sgc.getClient(99));
+				assertFalse(sgc.isGameOver());
+
+				var client0 = (com.hiddenswitch.framework.impl.UnityClientBehaviour) sgc.getClient(0);
+				assertNotNull(client0);
+				client0.init(vertx, vertx.getOrCreateContext());
+				client0.startVirtual();
+				client0.onMulliganReceived(java.util.List.of(0));
+				client0.onGameOver(sgc, 0, -1);
+				client0.sendEmote(0, "INVALID_EMOTE_NAME");
+				client0.closeInboundMessages();
+				client0.stopVirtual();
+				client0.setElapsed(true);
+				var elapsedMulligan = new AtomicReference<java.util.List<net.demilich.metastone.game.cards.Card>>();
+				client0.mulliganAsync(sgc, sgc.getPlayer1(), java.util.List.of(), elapsedMulligan::set);
+				assertNotNull(elapsedMulligan.get());
+				assertNotNull(client0.mulligan(sgc, sgc.getPlayer1(), java.util.List.of()));
+				sgc.onPlayerReady(client0);
+				sgc.getPlayer1().setAttribute(Attribute.CONCEDED);
+				sgc.concede(0);
+				sgc.close();
 			});
 
 			timeoutFired.future()
@@ -1705,7 +1752,6 @@ public class GameTests extends FrameworkTestBase {
 							|| key.startsWith("games:graphql-subscriber:")
 							|| key.startsWith(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_ENQUEUE)
 							|| key.startsWith(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_PREPARE)
-							|| key.startsWith(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_REQUEUE)
 							|| key.startsWith(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_QUEUE_CLOSED)) {
 						result.add(key);
 					}
@@ -1938,9 +1984,17 @@ public class GameTests extends FrameworkTestBase {
 					var deckId = decks.getDecks(0).getCollection().getId();
 					deckIdRef.set(deckId);
 
-					// 1. Send 3 consecutive MatchmakingQueuePutRequest updates on client1's single enqueue stream
+					// 1. Open an initial stream that is superseded by a second stream, then switch queues and send repeated updates
+					client1.matchmaking().enqueue(superseded -> superseded.write(MatchmakingQueuePutRequest.newBuilder()
+							.setQueueId("rogueRun")
+							.setDeckId(deckId)
+							.build()));
 					client1.matchmaking().enqueue(req1 -> {
 						req1Ref.set(req1);
+						req1.write(MatchmakingQueuePutRequest.newBuilder()
+								.setQueueId("rogueRun")
+								.setDeckId(deckId)
+								.build());
 						for (int i = 0; i < 3; i++) {
 							req1.write(MatchmakingQueuePutRequest.newBuilder()
 									.setQueueId("constructed")
@@ -1960,9 +2014,11 @@ public class GameTests extends FrameworkTestBase {
 					// while holding user1's MATCHMAKING_ENQUEUE handoff so user1's session remains open for Saga requeue.
 					var user1Id = client1.getUserEntity().getId();
 					var user2Id = client2.getUserEntity().getId();
+					var heldUser1FirstEnqueue = new AtomicBoolean(false);
 					vertx.eventBus().addOutboundInterceptor(ctx -> {
 						var address = ctx.message().address();
-						if (!faultInjected.get() && address.equals(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_ENQUEUE + user1Id)) {
+						if (address.equals(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_ENQUEUE + user1Id)
+								&& heldUser1FirstEnqueue.compareAndSet(false, true)) {
 							// Hold user1's first notification until after user2's fault triggers Saga rollback
 							return;
 						}
@@ -2054,6 +2110,169 @@ public class GameTests extends FrameworkTestBase {
 									req1Ref.get().end();
 								}
 								return vertx.undeploy(matchmakingDeploymentId).otherwiseEmpty();
+							});
+				})
+				.compose(ignored -> awaitZeroDynamicResources(vertx, baselineDeploymentsRef.get()))
+				.eventually(client1::closeFut)
+				.eventually(client2::closeFut)
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	/**
+	 * Verifies autonomous actor consensus recovery (WAIT / ABORT / RECOVER) when the Matchmaking
+	 * coordinator crashes / is ungracefully interrupted mid-transaction (after deleting tickets via
+	 * CLAIM_COMPLETE_LOBBIES_SQL and deploying ServerGameContext, but before notifyGameReady or
+	 * compensateAbortedGame can execute):
+	 * - The Game Actor (ServerGameContext / ClusteredGames) autonomously aborts and deletes its own
+	 *   AWAITING_CONNECTIONS database rows when 0 human players connect within the connection timeout.
+	 * - The Session Actor (ClientMatchmakingService.Session) autonomously recovers its ticket into
+	 *   MATCHMAKING_TICKETS when its prepare-lease expires without ENQUEUE or REQUEUE from the dead coordinator.
+	 */
+	@Test
+	@Timeout(value = 60, timeUnit = TimeUnit.SECONDS)
+	public void testAutonomousActorConsensusRecoveryOnUngracefulCoordinatorCrash(Vertx vertx, VertxTestContext testContext) {
+		System.setProperty(Games.GAMES_DEFAULT_NO_ACTIVITY_TIMEOUT, "400");
+		var client1 = new Client(vertx);
+		var client2 = new Client(vertx);
+		var baselineDeploymentsRef = new AtomicInteger();
+		var deckIdRef = new AtomicReference<String>();
+		var clusteredGamesRef = new AtomicReference<ClusteredGames>();
+		var req1Ref = new AtomicReference<WriteStream<MatchmakingQueuePutRequest>>();
+		var req2Ref = new AtomicReference<WriteStream<MatchmakingQueuePutRequest>>();
+		var orphanGameIdRef = new AtomicReference<String>();
+		var matchmakingDeploymentRef = new AtomicReference<String>();
+		var crashSimulated = new AtomicBoolean(false);
+
+		startGateway(vertx)
+				.compose(ignored -> join(client1.createAndLogin(), client2.createAndLogin()))
+				.compose(ignored -> {
+					var cg = new ClusteredGames();
+					clusteredGamesRef.set(cg);
+					return vertx.deployVerticle(cg, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD));
+				})
+				.compose(ignored -> {
+					baselineDeploymentsRef.set(vertx.deploymentIDs().size());
+					return client1.legacy().decksGetAll(Empty.getDefaultInstance());
+				})
+				.compose(decks -> {
+					var deckId = decks.getDecks(0).getCollection().getId();
+					deckIdRef.set(deckId);
+
+					client1.matchmaking().enqueue(req1 -> {
+						req1Ref.set(req1);
+						req1.write(MatchmakingQueuePutRequest.newBuilder()
+								.setQueueId("constructed")
+								.setDeckId(deckId)
+								.build());
+					});
+					client2.matchmaking().enqueue(req2 -> {
+						req2Ref.set(req2);
+						req2.write(MatchmakingQueuePutRequest.newBuilder()
+								.setQueueId("constructed")
+								.setDeckId(deckId)
+								.build());
+					});
+
+					return Environment.sleep(vertx, 150L);
+				})
+				.compose(ignored -> {
+					var user1Id = client1.getUserEntity().getId();
+					var user2Id = client2.getUserEntity().getId();
+
+					// Simulate an ungraceful coordinator crash right after createGame deploys ServerGameContext:
+					// drop all MATCHMAKING_ENQUEUE / MATCHMAKING_REQUEUE / ADDRESS_CONCEDE_GAME messages from the
+					// coordinator and undeploy Matchmaking immediately so compensateAbortedGame cannot run!
+					vertx.eventBus().addOutboundInterceptor(ctx -> {
+						var address = ctx.message().address();
+						if ((address.equals(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_ENQUEUE + user1Id)
+								|| address.equals(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_ENQUEUE + user2Id))
+								&& crashSimulated.compareAndSet(false, true)) {
+							orphanGameIdRef.set((String) ctx.body());
+							if (req2Ref.get() != null) {
+								req2Ref.get().write(MatchmakingQueuePutRequest.newBuilder().setCancel(true).build());
+								req2Ref.get().end();
+							}
+							var depId = matchmakingDeploymentRef.get();
+							if (depId != null) {
+								vertx.undeploy(depId);
+							}
+							return;
+						}
+						if (crashSimulated.get() && (address.startsWith(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_ENQUEUE)
+								|| address.startsWith(Games.ADDRESS_CONCEDE_GAME))) {
+							// Coordinator is dead; drop any in-flight coordinator compensation messages!
+							return;
+						}
+						ctx.next();
+					});
+
+					return vertx.deployVerticle(new com.hiddenswitch.framework.Matchmaking(),
+							new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD));
+				})
+				.compose(matchmakingDeploymentId -> {
+					matchmakingDeploymentRef.set(matchmakingDeploymentId);
+
+					var deadline = System.currentTimeMillis() + 3000L;
+					var settled = Promise.<Void>promise();
+					Runnable[] poll = new Runnable[1];
+					poll[0] = () -> {
+						var orphanIdStr = orphanGameIdRef.get();
+						if (orphanIdStr == null || clusteredGamesRef.get().getHostedGameCount() != 0) {
+							if (System.currentTimeMillis() >= deadline) {
+								settled.tryComplete();
+							} else {
+								vertx.setTimer(50L, id -> poll[0].run());
+							}
+							return;
+						}
+						long orphanId = Long.parseLong(orphanIdStr);
+						join(
+								Environment.query(dsl -> dsl.selectCount().from(GAMES).where(GAMES.ID.eq(orphanId))),
+								Environment.query(dsl -> dsl.selectCount().from(com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS)
+										.where(com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS.USER_ID.eq(client1.getUserEntity().getId())))
+						).onComplete(ar -> {
+							boolean done = ar.succeeded()
+									&& ar.result().<io.vertx.sqlclient.RowSet<io.vertx.sqlclient.Row>>resultAt(0).iterator().next().getInteger(0) == 0
+									&& ar.result().<io.vertx.sqlclient.RowSet<io.vertx.sqlclient.Row>>resultAt(1).iterator().next().getInteger(0) == 1;
+							if (done || System.currentTimeMillis() >= deadline) {
+								settled.tryComplete();
+							} else {
+								vertx.setTimer(50L, id -> poll[0].run());
+							}
+						});
+					};
+					poll[0].run();
+					return settled.future()
+							.compose(ignored -> {
+								var orphanIdStr = orphanGameIdRef.get();
+								long orphanId = orphanIdStr != null ? Long.parseLong(orphanIdStr) : -1L;
+								return join(
+										Environment.query(dsl -> dsl.selectCount().from(GAMES).where(GAMES.ID.eq(orphanId))),
+										Environment.query(dsl -> dsl.selectCount().from(com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS)
+												.where(com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS.USER_ID.eq(client1.getUserEntity().getId())))
+								).onSuccess(cf -> testContext.verify(() -> {
+									var gamesRows = cf.<io.vertx.sqlclient.RowSet<io.vertx.sqlclient.Row>>resultAt(0);
+									var ticketRows = cf.<io.vertx.sqlclient.RowSet<io.vertx.sqlclient.Row>>resultAt(1);
+									int orphanGameRowCount = gamesRows.iterator().next().getInteger(0);
+									int recoveredTicketCount = ticketRows.iterator().next().getInteger(0);
+									assertAll(
+											() -> assertNotNull(orphanIdStr, "Coordinator must have created the game before crashing"),
+											() -> assertEquals(0, clusteredGamesRef.get().getHostedGameCount(),
+													"Game Actor must autonomously shut down when 0 human players connect"),
+											() -> assertEquals(0, orphanGameRowCount,
+													"Game Actor must autonomously abort and delete its own AWAITING_CONNECTIONS row when 0 human players connect"),
+											() -> assertEquals(1, recoveredTicketCount,
+													"Session Actor must autonomously recover its ticket into MATCHMAKING_TICKETS when prepare-lease expires after coordinator crash")
+									);
+								}));
+							})
+							.eventually(() -> {
+								if (req1Ref.get() != null) {
+									req1Ref.get().write(MatchmakingQueuePutRequest.newBuilder().setCancel(true).build());
+									req1Ref.get().end();
+								}
+								var depId = matchmakingDeploymentRef.get();
+								return depId != null ? vertx.undeploy(depId).otherwiseEmpty() : Future.succeededFuture();
 							});
 				})
 				.compose(ignored -> awaitZeroDynamicResources(vertx, baselineDeploymentsRef.get()))

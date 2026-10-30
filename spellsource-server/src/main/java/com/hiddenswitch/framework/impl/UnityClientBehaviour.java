@@ -308,12 +308,8 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 		GameplayRequest.Mulligan mulligan = null;
 		requestsLock.lock();
 		try {
-			for (var request : requests) {
-				if (request instanceof GameplayRequest.Mulligan m) {
-					mulligan = m;
-					requests.remove(request);
-					break;
-				}
+			if (requests.peekFirst() instanceof GameplayRequest.Mulligan) {
+				mulligan = (GameplayRequest.Mulligan) requests.pollFirst();
 			}
 		} finally {
 			requestsLock.unlock();
@@ -567,12 +563,9 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 
 	@Override
 	public void sendEmote(int entityId, String emote) {
-		Emote.EmoteMessage emoteMessage;
-		try {
-			emoteMessage = emote != null ? Emote.EmoteMessage.valueOf(emote) : Emote.EmoteMessage.AMAZING;
-		} catch (IllegalArgumentException e) {
-			emoteMessage = Emote.EmoteMessage.AMAZING;
-		}
+		var emoteMessage = com.google.common.base.Enums
+				.getIfPresent(Emote.EmoteMessage.class, Objects.requireNonNullElse(emote, ""))
+				.or(Emote.EmoteMessage.AMAZING);
 		sendMessage(ServerToClientMessage.newBuilder()
 				.setMessageType(MessageType.EMOTE)
 				.setEmote(Emote.newBuilder()

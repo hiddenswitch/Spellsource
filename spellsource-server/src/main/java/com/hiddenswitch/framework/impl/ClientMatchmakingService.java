@@ -80,55 +80,24 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		LOGGER.trace("enqueue called userId={}", userId);
 
 		var prepareConsumer = eventBus.<String>consumer(MATCHMAKING_PREPARE + userId);
-		prepareConsumer.handler(message -> {
-			session.verifyAlive(vertx)
-					.onSuccess(v -> message.reply("ok"))
-					.onFailure(err -> message.fail(1, err.getMessage() != null ? err.getMessage() : "session disconnected"));
-		});
+		prepareConsumer.handler(message -> session.verifyAlive(vertx)
+				.onSuccess(v -> message.reply("ok"))
+				.onFailure(err -> message.fail(1, err.getMessage() != null ? err.getMessage() : "session disconnected")));
 		channels.add(prepareConsumer);
-
-		var requeueConsumer = eventBus.<JsonObject>consumer(MATCHMAKING_REQUEUE + userId);
-		requeueConsumer.handler(message -> {
-			var body = message.body();
-			session.requeueTicket(
-							body.getLong("ticketId"),
-							body.getString("queueId"),
-							body.getString("deckId"),
-							body.getString("botDeckId"))
-					.onSuccess(v -> {
-						eventBus.publish(MATCHMAKING_WAKE, body.getString("queueId"));
-						message.reply("ok");
-					})
-					.onFailure(err -> message.fail(1, err.getMessage() != null ? err.getMessage() : "requeue failed"));
-		});
-		channels.add(requeueConsumer);
 
 		// notify the user when a game has been assigned
 		var enqueueConsumer = eventBus.<String>consumer(MATCHMAKING_ENQUEUE + userId);
-		enqueueConsumer.handler(message -> {
-			if (session.cancelled.get() || session.isResponseDead()) {
-				session.close();
-				message.fail(1, "session already closed");
-				return;
-			}
-			var gameId = message.body();
-			session.matched.set(true);
-			writeGameId(response, gameId)
-					.onSuccess(v -> {
-						session.close();
-						message.reply("ok");
-					})
-					.onFailure(err -> {
-						session.matched.set(false);
-						session.close();
-						message.fail(1, err.getMessage() != null ? err.getMessage() : "failed to write gameId");
-					});
-		});
+		enqueueConsumer.handler(message -> writeGameId(response, message.body())
+				.compose(v -> session.close())
+				.onSuccess(v -> message.reply("ok"))
+				.onFailure(err -> {
+					session.close();
+					message.fail(1, "failed to write gameId");
+				}));
 		channels.add(enqueueConsumer);
 
 		var consumersReady = Future.all(
 				prepareConsumer.completion(),
-				requeueConsumer.completion(),
 				enqueueConsumer.completion()
 		).mapEmpty().otherwiseEmpty();
 
@@ -148,9 +117,8 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 					.compose(existingGameId -> {
 						if (session.cancelled.get()) return Future.succeededFuture();
 						if (existingGameId != null) {
-							session.matched.set(true);
 							return Matchmaking.writeGameId(response, existingGameId)
-									.eventually(() -> session.close());
+									.eventually(session::close);
 						}
 
 						var queueId = message.getQueueId();
@@ -160,17 +128,15 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 
 						var record = MATCHMAKING_TICKETS.newRecord()
 								.setUserId(userId)
+								.setQueueId(queueId)
 								.setDeckId(message.getDeckId())
-								// protobufs always give non-null empty strings but sql expects null, "" is a valid identifier
-								.setBotDeckId(message.getBotDeckId().isEmpty() ? null : message.getBotDeckId())
-								.setQueueId(queueId);
-
+								.setBotDeckId(message.getBotDeckId().isEmpty() ? null : message.getBotDeckId());
 						return consumersReady.compose(ignored -> session.enqueueTicketWrite(() -> withDslContext(dsl -> dsl
 								.insertInto(MATCHMAKING_TICKETS)
 								.set(record)
 								.onDuplicateKeyUpdate()
-								.set(record))
-								.onSuccess(v -> eventBus.publish(MATCHMAKING_WAKE, queueId))));
+								.set(record)))
+								.onSuccess(v -> eventBus.publish(MATCHMAKING_WAKE, queueId)));
 					})
 					.onFailure(t -> session.close());
 		});
@@ -199,7 +165,6 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		private final List<MessageConsumer> channels;
 		private final LongTaskTimer.Sample timer;
 		private final AtomicBoolean cancelled;
-		private final AtomicBoolean matched = new AtomicBoolean(false);
 		private final KeepAliveManager keepAliveManager;
 		private final HttpConnection connection;
 		private final Promise<Void> closePromise = Promise.promise();
@@ -256,17 +221,13 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 			this.ticketWrite = this.ticketWrite.mapEmpty().otherwiseEmpty()
 					.compose(ignored -> {
 						synchronized (Session.this) {
-							if (this.cancelled.get() || this.matched.get()) {
-								return Future.failedFuture("session closed or matched");
+							if (this.cancelled.get()) {
+								return Future.failedFuture("session closed");
 							}
 						}
 						return writeSupplier.get();
 					});
 			return this.ticketWrite.mapEmpty();
-		}
-
-		public Future<Void> requeueTicket(Long ticketId, String queueId, String deckId, String botDeckId) {
-			return enqueueTicketWrite(() -> Matchmaking.executeRequeueTicket(this.userId, ticketId, queueId, deckId, botDeckId));
 		}
 
 		private boolean isResponseDead() {
@@ -277,29 +238,14 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		}
 
 		public Future<Void> verifyAlive(Vertx vertx) {
-			synchronized (this) {
-				if (this.cancelled.get() || this.matched.get()) {
-					return Future.failedFuture("session closed or matched");
-				}
-			}
-			if (isResponseDead()) {
+			if (this.cancelled.get() || isResponseDead() || this.connection == null) {
 				this.close();
-				return Future.failedFuture("grpc response stream closed");
+				return Future.failedFuture("session closed");
 			}
-			if (this.connection == null) {
-				return Future.succeededFuture();
-			}
-			Future<Buffer> pingFuture = this.connection.ping(Buffer.buffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8}))
-					.recover(err -> err instanceof UnsupportedOperationException
-							? Future.succeededFuture(Buffer.buffer())
-							: Future.failedFuture(err));
-			Future<Void> pingCheck = any(pingFuture.mapEmpty(), this.closePromise.future())
+			Future<Void> pingCheck = any(this.connection.ping(Buffer.buffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8})).mapEmpty(), this.closePromise.future())
 					.compose(cf -> {
-						if (this.cancelled.get() || this.matched.get() || isResponseDead()) {
-							return Future.failedFuture("session closed during ping");
-						}
 						this.keepAliveManager.onDataReceived();
-						return Future.succeededFuture();
+						return this.cancelled.get() || isResponseDead() ? Future.failedFuture("session closed") : Future.succeededFuture();
 					});
 			return Environment.timeout(pingCheck, 5000L, vertx)
 					.onFailure(err -> this.close());
@@ -327,25 +273,10 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 					this.channels.clear();
 				}
 
-				// A disconnect can arrive while the database insert is in flight.
-				// Delete after that write settles so it cannot recreate a cancelled ticket,
-				// and end the response stream after the ticket is deleted so callers awaiting
-				// stream end observe the ticket already removed.
-				Future<?> cleanupTicket;
-				if (this.matched.get()) {
-					cleanupTicket = pendingTicketWrite.mapEmpty().otherwiseEmpty();
-				} else {
-					cleanupTicket = pendingTicketWrite.mapEmpty().otherwiseEmpty()
-							.compose(ignored -> withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
-									.where(MATCHMAKING_TICKETS.USER_ID.eq(this.userId))));
-				}
-				var closedResponse = cleanupTicket.eventually(() -> {
-					try {
-						return this.response.end().otherwiseEmpty();
-					} catch (IllegalStateException ignored) {
-						return Future.succeededFuture();
-					}
-				});
+				var closedResponse = pendingTicketWrite.mapEmpty().otherwiseEmpty()
+						.compose(ignored -> withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
+								.where(MATCHMAKING_TICKETS.USER_ID.eq(this.userId))))
+						.eventually(() -> this.response.end().otherwiseEmpty());
 				closedChannels.add(closedResponse);
 				this.closeFuture = Future.all(closedChannels).mapEmpty();
 				return this.closeFuture;

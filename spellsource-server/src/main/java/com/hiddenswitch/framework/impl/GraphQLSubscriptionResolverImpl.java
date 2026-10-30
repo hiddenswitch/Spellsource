@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.hiddenswitch.framework.Environment.withDslContext;
 import static com.hiddenswitch.framework.Matchmaking.MATCHMAKING_WAKE;
-import static com.hiddenswitch.framework.Matchmaking.REINSERT_TICKET_SQL;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS;
 
 /**
@@ -99,26 +98,22 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 		@Override
 		public void subscribe(Subscriber<? super MatchFound> subscriber) {
 			var cancelled = new AtomicBoolean(false);
-			var matched = new AtomicBoolean(false);
 			var address = Matchmaking.MATCHMAKING_ENQUEUE + userId;
 			var prepareAddress = Matchmaking.MATCHMAKING_PREPARE + userId;
-			var requeueAddress = Matchmaking.MATCHMAKING_REQUEUE + userId;
 			var vertx = Vertx.currentContext().owner();
 			var eventBus = vertx.eventBus();
 
 			MessageConsumer<String> consumer = eventBus.consumer(address);
 			MessageConsumer<String> prepareConsumer = eventBus.consumer(prepareAddress);
-			MessageConsumer<JsonObject> requeueConsumer = eventBus.consumer(requeueAddress);
 			Runnable cleanup = () -> {
 				if (cancelled.compareAndSet(false, true)) {
-					consumer.unregister();
-					prepareConsumer.unregister();
-					requeueConsumer.unregister();
-					if (!matched.get()) {
-						withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
-								.where(MATCHMAKING_TICKETS.USER_ID.eq(userId)))
-								.otherwiseEmpty();
-					}
+					Future.all(
+							consumer.unregister(),
+							prepareConsumer.unregister(),
+							withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
+									.where(MATCHMAKING_TICKETS.USER_ID.eq(userId)))
+									.otherwiseEmpty()
+					);
 				}
 			};
 
@@ -142,27 +137,11 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 				message.reply("ok");
 			});
 
-			requeueConsumer.handler(message -> {
-				if (cancelled.get()) {
-					message.fail(1, "subscription cancelled");
-					return;
-				}
-				var body = message.body();
-				var queueId = body.getString("queueId");
-				Matchmaking.executeRequeueTicket(userId, body.getLong("ticketId"), queueId, body.getString("deckId"), body.getString("botDeckId"))
-						.onSuccess(v -> {
-							eventBus.publish(MATCHMAKING_WAKE, queueId);
-							message.reply("ok");
-						})
-						.onFailure(err -> message.fail(1, err.getMessage() != null ? err.getMessage() : "requeue failed"));
-			});
-
 			consumer.handler(message -> {
 				if (cancelled.get()) {
 					message.fail(1, "subscription cancelled");
 					return;
 				}
-				matched.set(true);
 				cleanup.run();
 
 				var gameId = message.body();

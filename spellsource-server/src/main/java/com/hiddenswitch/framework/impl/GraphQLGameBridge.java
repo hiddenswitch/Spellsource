@@ -361,8 +361,7 @@ public final class GraphQLGameBridge {
 			};
 
 			readinessConsumer.handler(request -> consumer.completion()
-					.onSuccess(ignored -> request.reply("ready"))
-					.onFailure(cause -> request.fail(-1, cause.getMessage())));
+					.onSuccess(ignored -> request.reply("ready")));
 
 			subscriber.onSubscribe(new Subscription() {
 				@Override
@@ -379,11 +378,7 @@ public final class GraphQLGameBridge {
 				if (cancelled.get()) return;
 				subscriber.onNext(toGraphQL(message.body()));
 			});
-
-			consumer.completion().onFailure(t -> {
-				cleanup.run();
-				subscriber.onError(t);
-			});
+			consumer.exceptionHandler(subscriber::onError);
 		}
 	}
 }
