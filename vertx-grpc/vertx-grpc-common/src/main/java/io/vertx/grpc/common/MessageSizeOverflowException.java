@@ -19,6 +19,10 @@ public final class MessageSizeOverflowException extends InvalidMessageException 
 
     private final long messageSize;
 
+    public MessageSizeOverflowException() {
+        this.messageSize = -1L;
+    }
+
     public MessageSizeOverflowException(long messageSize) {
         this.messageSize = messageSize;
     }

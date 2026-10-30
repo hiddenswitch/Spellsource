@@ -19,6 +19,7 @@ import io.netty.handler.codec.compression.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.internal.buffer.BufferInternal;
 import io.vertx.grpc.common.CodecException;
+import io.vertx.grpc.common.MessageSizeOverflowException;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -27,8 +28,9 @@ import java.util.function.Function;
 
 public class Utils {
 
-  public static final Function<Buffer, Buffer> GZIP_DECODER = data -> {
-    EmbeddedChannel channel = new EmbeddedChannel(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP));
+  public static Buffer gzipDecode(Buffer data, long maxMessageSize) throws CodecException {
+    int maxAllocation = maxMessageSize > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) maxMessageSize;
+    EmbeddedChannel channel = new EmbeddedChannel(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP, maxAllocation));
     channel.config().setAllocator(BufferInternal.buffer().getByteBuf().alloc());
     try {
       ChannelFuture fut = channel.writeOneInbound(((BufferInternal)data).getByteBuf());
@@ -48,13 +50,23 @@ public class Utils {
         if (decoded == null) {
           throw new CodecException("Invalid GZIP input");
         }
+        if (decoded.length() > maxMessageSize) {
+          throw new MessageSizeOverflowException(decoded.length());
+        }
         return decoded;
       } else {
+        if (fut.cause() instanceof DecompressionException) {
+          throw new MessageSizeOverflowException();
+        }
         throw new CodecException(fut.cause());
       }
     } finally {
       channel.close();
     }
+  }
+
+  public static final Function<Buffer, Buffer> GZIP_DECODER = data -> {
+    return gzipDecode(data, Integer.MAX_VALUE);
   };
 
   public static final Function<Buffer, Buffer> GZIP_ENCODER = data -> {

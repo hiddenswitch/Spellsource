@@ -838,6 +838,7 @@ public class GameContext implements Cloneable, Inventory, EntityZoneTable, Compa
 	}
 
 	public List<GameAction> getValidActions() {
+		currentContext.set(this);
 		if (updateAndGetGameOver()) {
 			return new ArrayList<>();
 		}

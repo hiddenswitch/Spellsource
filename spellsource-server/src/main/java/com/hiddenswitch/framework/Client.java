@@ -338,8 +338,18 @@ public class Client {
 		return accessToken;
 	}
 
+	public Client setAccessToken(AccessTokenResponse accessToken) {
+		this.accessToken = accessToken;
+		return this;
+	}
+
 	public UserEntity getUserEntity() {
 		return userEntity;
+	}
+
+	public Client setUserEntity(UserEntity userEntity) {
+		this.userEntity = userEntity;
+		return this;
 	}
 
 	public GrpcClientWithOptions client() {
@@ -483,6 +493,10 @@ public class Client {
 
 	public void close(AsyncResult<?> ignored) {
 		close();
+	}
+
+	public com.hiddenswitch.framework.rpc.VertxGamesGrpcClient games() {
+		return new com.hiddenswitch.framework.rpc.VertxGamesGrpcClient(client(), address());
 	}
 
 	public VertxUnauthenticatedCardsGrpcClient unauthenticatedCards() {

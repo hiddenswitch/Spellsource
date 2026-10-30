@@ -50,27 +50,20 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 	@Override
 	public void startVirtual() throws Exception {
 		CodecRegistration.register(ServerToClientMessage.getDefaultInstance())
-				.andRegister(ClientToServerMessage.getDefaultInstance());
+				.andRegister(ClientToServerMessage.getDefaultInstance())
+				.andRegister(CreateGameSessionResponse.class)
+				.andRegister(MatchCreateResponse.class)
+				.andRegister(ConfigurationRequest.class);
 		var eb = Vertx.currentContext().owner().eventBus();
 		registration = eb.<ConfigurationRequest>consumer(Games.GAMES_CREATE_GAME_SESSION, request ->
 				createGameSession(request.body()).onSuccess(request::reply).onFailure(t -> request.fail(-1, t.getMessage())));
 		restoreRegistration = eb.<String>consumer(Games.GAMES_RESTORE_GAME, request ->
 			restoreGame(request.body()).onSuccess(request::reply).onFailure(t -> request.fail(-1, t.getMessage())));
 
-		var registrationFut = Promise.<Void>promise();
 		this.cardCatalogue = SqlCachedCardCatalogue.forVertx();
 		this.cardCatalogue.ensureInitialized();
 
-		// should we wait for registration to finish?
-		registration.completion().onComplete(v -> {
-			if (v.succeeded()) {
-				registrationFut.complete();
-			} else if (v.failed()) {
-				registrationFut.fail(v.cause());
-			}
-		});
-
-		await(registrationFut.future());
+		await(Future.all(registration.completion(), restoreRegistration.completion()));
 	}
 
 	public Future<CreateGameSessionResponse> createGameSession(ConfigurationRequest request) {
@@ -308,16 +301,25 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			}
 		}
 
-		registration.unregister();
-		restoreRegistration.unregister();
+		await(Future.all(
+				registration.unregister().otherwiseEmpty(),
+				restoreRegistration.unregister().otherwiseEmpty()));
 		try {
 			for (var gameId : keys) {
 				Objects.requireNonNull(gameId);
 				var context = contexts.get(gameId);
 				if (context != null && context.getPlayerConfigurations().stream().filter(Configuration::isBot).count() == 1) {
-					context.checkpoint();
+					try {
+						context.checkpoint();
+					} catch (Throwable t) {
+						LOGGER.warn("Could not checkpoint game {} on stop", gameId, t);
+					}
 					contexts.remove(gameId);
-					if (context.getThread() != null) context.getThread().interrupt();
+					var thread = context.getThread();
+					if (thread != null) {
+						thread.interrupt();
+					}
+					context.close();
 				} else {
 					removeGameAndRecordReplay(gameId);
 				}

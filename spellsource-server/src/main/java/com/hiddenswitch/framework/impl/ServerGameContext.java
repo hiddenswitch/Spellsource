@@ -103,6 +103,7 @@ public class ServerGameContext extends GameContext implements Server {
 	private Long timerLengthMillis;
 	private boolean interrupted;
 	private boolean restored;
+	private volatile boolean gameReady;
 
 	/**
 	 * {@inheritDoc}
@@ -239,8 +240,6 @@ public class ServerGameContext extends GameContext implements Server {
 									bus.publisher(getMessagesFromServerAddress(userId)), 50, 100);
 							// The event bus
 
-							consumer.completion().onComplete(registration);
-
 							// Create a client that handles game events and action/mulligan requests
 							this.client = new UnityClientBehaviour(serverGameContext,
 									new VertxScheduler(),
@@ -254,6 +253,8 @@ public class ServerGameContext extends GameContext implements Server {
 							setBehaviour(configuration.getPlayerId(), client);
 							// However, unlike a behaviour, there can be multiple clients per player ID. This will facilitate spectating.
 							getClients().add(client);
+
+							consumer.completion().onComplete(registration);
 						}
 
 						@Override
@@ -499,6 +500,7 @@ public class ServerGameContext extends GameContext implements Server {
 			// Send the clients the current game state
 			// This is the first time the client should be receiving data
 			updateClientsWithGameState();
+			gameReady = true;
 
 			// Simultaneous mulligans now
 			Promise<List<Card>> mulligansActive = Promise.promise();
@@ -615,8 +617,21 @@ public class ServerGameContext extends GameContext implements Server {
 					if (restored) {
 						// A resumed match has no mulligan or game-start transition.  Do not request an
 						// action until the returning client has sent FIRST_MESSAGE.
-						await(Future.all(clientsReady.values().stream().map(Promise::future).toList()));
+						var timeout = Math.min(Games.getDefaultNoActivityTimeout(), Games.getDefaultConnectionTime());
+						if (!clientsReady.values().stream().allMatch(fut -> fut.future().isComplete())) {
+							var allReady = Future.all(clientsReady.values().stream().map(Promise::future).toList());
+							var res = await(Future.any(sleep(timeout), allReady));
+							if (res.isComplete(0)) {
+								for (var entry : clientsReady.entrySet()) {
+									if (!entry.getValue().future().isComplete()) {
+										getLogic().concede(entry.getKey());
+									}
+								}
+								isRunning = false;
+							}
+						}
 						clientsReady.clear();
+						gameReady = true;
 						resume();
 					} else {
 						super.play(false);
@@ -756,12 +771,39 @@ public class ServerGameContext extends GameContext implements Server {
 			if (!isRunning()) {
 				endGame();
 			}
+			var resumeInProgressTurn = restored && getTurnState() == TurnState.TURN_IN_PROGRESS;
 			while (!updateAndGetGameOver()) {
 				span.log(ImmutableMap.of("turn", getTurn(), "activePlayerId", getActivePlayerId()));
 				if (!isRunning()) {
 					break;
 				}
-				startTurn(getActivePlayerId());
+				if (resumeInProgressTurn) {
+					resumeInProgressTurn = false;
+					lock.lock();
+					try {
+						for (var client : getClients()) {
+							client.onConnectionStarted(getActivePlayer());
+						}
+						if (getBehaviours().stream().allMatch(Behaviour::isHuman)) {
+							var client = getClient(getActivePlayerId());
+							if (client != null) {
+								timerLengthMillis = (long) getTurnTimeForPlayer(getActivePlayerId());
+								timerStartTimeMillis = System.currentTimeMillis();
+								if (timerLengthMillis > 0) {
+									turnTimerId = client.getScheduler().setTimer(timerLengthMillis, v -> client.elapseAwaitingRequests());
+								}
+							}
+						}
+						var state = new GameState(this, TurnState.TURN_IN_PROGRESS, false);
+						for (var updateClient : getClients()) {
+							updateClient.onUpdate(state);
+						}
+					} finally {
+						lock.unlock();
+					}
+				} else {
+					startTurn(getActivePlayerId());
+				}
 				while (takeActionInTurn()) {
 					span.log(ImmutableMap.of("turn", getTurn(), "activePlayerId", getActivePlayerId(), "actionsThisTurn", getActionsThisTurn()));
 					if (!isRunning()) {
@@ -877,6 +919,10 @@ public class ServerGameContext extends GameContext implements Server {
 			throw new IllegalStateException("persisted trace already represents a finished game");
 		}
 		setGameState(replayed.getGameStateCopy());
+		var clonedLogic = replayed.getLogic().clone();
+		clonedLogic.setContext(this);
+		setLogic(clonedLogic);
+		setActionsThisTurn(replayed.getActionsThisTurn());
 		setTrace(trace);
 		for (var configuration : playerConfigurations) {
 			var player = getPlayer(configuration.getPlayerId());
@@ -967,7 +1013,27 @@ public class ServerGameContext extends GameContext implements Server {
 
 			// We have to release the users before we call end game, because that way when the client receives the end game
 			// message, their model of the world is that they're no longer in a game.
-			// Actually end the game
+			var unregistrations = new ArrayList<Future<?>>();
+			for (var consumer : gameLifecycleConsumers) {
+				unregistrations.add(consumer.unregister().otherwiseEmpty());
+			}
+			for (var consumer : clientConsumers) {
+				unregistrations.add(consumer.unregister().otherwiseEmpty());
+			}
+			if (Thread.currentThread().isVirtual() && !unregistrations.isEmpty()) {
+				await(Future.all(unregistrations));
+			}
+
+			updateAndGetGameOver();
+			RogueManager.handleGameEnd(Long.parseLong(gameId), getWinner() == null ? null : getWinner().getUserId());
+
+			try {
+				this.cluster.removeGameAndRecordReplay(this.gameId);
+			} catch (Throwable t) {
+				LOGGER.warn("could not record game because", t);
+			}
+
+			// Actually end the game and send ON_GAME_END after terminal state and user release are complete
 			super.endGame();
 			LOGGER.trace("endGame {}: called super.endGame", gameId);
 
@@ -983,33 +1049,25 @@ public class ServerGameContext extends GameContext implements Server {
 				await(Future.all(flushes));
 			}
 
-			var unregistrations = new ArrayList<Future<?>>();
-			for (var consumer : gameLifecycleConsumers) {
-				unregistrations.add(consumer.unregister().otherwiseEmpty());
-			}
-			for (var consumer : clientConsumers) {
-				unregistrations.add(consumer.unregister().otherwiseEmpty());
-			}
+			var verticleUndeployments = new ArrayList<Future<?>>();
 			for (var client : getClients()) {
 				client.close(Promise.promise());
 			}
-			if (Thread.currentThread().isVirtual() && !unregistrations.isEmpty()) {
-				await(Future.all(unregistrations));
+			for (var deployFut : userVerticleDeployments) {
+				if (deployFut.succeeded() && deployFut.result() != null) {
+					verticleUndeployments.add(verticle.getVertx().undeploy(deployFut.result()).otherwiseEmpty());
+				} else {
+					deployFut.onSuccess(id -> verticle.getVertx().undeploy(id).otherwiseEmpty());
+				}
+			}
+			userVerticleDeployments.clear();
+			if (Thread.currentThread().isVirtual() && !verticleUndeployments.isEmpty()) {
+				await(Future.all(verticleUndeployments));
 			}
 
-			RogueManager.handleGameEnd(Long.parseLong(gameId), getWinner() == null ? null : getWinner().getUserId());
-
 			LOGGER.trace("endGame {}: endGameHandlers run", gameId);
-
-			try {
-				this.cluster.removeGameAndRecordReplay(this.gameId);
-			} catch (Throwable t) {
-				LOGGER.warn("could not record game because", t);
-			} finally {
-				// todo: this should really be the last end game handler
-				if (verticle.getVertx().deploymentIDs().contains(verticle.deploymentID())) {
-					verticle.getVertx().undeploy(verticle.deploymentID()).onFailure(com.hiddenswitch.framework.Environment.onFailure());
-				}
+			if (verticle.getVertx().deploymentIDs().contains(verticle.deploymentID())) {
+				verticle.getVertx().undeploy(verticle.deploymentID()).onFailure(com.hiddenswitch.framework.Environment.onFailure());
 			}
 		} finally {
 			close();
@@ -1039,7 +1097,33 @@ public class ServerGameContext extends GameContext implements Server {
 				.withTag("gameId", getGameId())
 				.start();
 		try {
-			// todo: the user verticles seem to be undeployed elsewhere
+			var unregistrations = new ArrayList<Future<?>>();
+			for (var consumer : gameLifecycleConsumers) {
+				unregistrations.add(consumer.unregister().otherwiseEmpty());
+			}
+			for (var consumer : clientConsumers) {
+				unregistrations.add(consumer.unregister().otherwiseEmpty());
+			}
+			for (var client : getClients()) {
+				client.close(Promise.promise());
+			}
+			for (var deployFut : userVerticleDeployments) {
+				if (deployFut.succeeded() && deployFut.result() != null) {
+					unregistrations.add(verticle.getVertx().undeploy(deployFut.result()).otherwiseEmpty());
+				} else {
+					deployFut.onSuccess(id -> verticle.getVertx().undeploy(id).otherwiseEmpty());
+				}
+			}
+			userVerticleDeployments.clear();
+			if (Thread.currentThread().isVirtual() && !unregistrations.isEmpty() && !Thread.currentThread().isInterrupted()) {
+				try {
+					await(Future.all(unregistrations));
+				} catch (Throwable ignored) {
+				}
+			}
+			if (verticle.getVertx().deploymentIDs().contains(verticle.deploymentID())) {
+				verticle.getVertx().undeploy(verticle.deploymentID()).otherwiseEmpty();
+			}
 			super.close();
 		} finally {
 			span.finish();
@@ -1084,7 +1168,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	public boolean isGameReady() {
-		return clientsReady.values().stream().allMatch(promise -> promise.future().succeeded());
+		return gameReady && clientsReady.values().stream().allMatch(promise -> promise.future().succeeded());
 	}
 
 	@Override
@@ -1140,15 +1224,17 @@ public class ServerGameContext extends GameContext implements Server {
 				var iteratee = listIterator.next();
 				// we're only expecting to replace the client if a new one is actually made
 				// the lifecycle of the client isn't related to the lifecycle of the network connection
-				if (iteratee.getPlayerId() == client.getPlayerId() && client != iteratee) {
-					var promise = Promise.<Void>promise();
-					iteratee.copyRequestsTo(client);
-					iteratee.close(promise);
-					await(timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
-					listIterator.set(client);
-					iteratee = client;
+				if (iteratee.getPlayerId() == client.getPlayerId()) {
+					if (client != iteratee) {
+						var promise = Promise.<Void>promise();
+						iteratee.copyRequestsTo(client);
+						iteratee.close(promise);
+						await(timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
+						listIterator.set(client);
+						iteratee = client;
+					}
+					iteratee.onConnectionStarted(getActivePlayer());
 				}
-				iteratee.onConnectionStarted(getActivePlayer());
 			}
 
 			if (client instanceof Behaviour) {

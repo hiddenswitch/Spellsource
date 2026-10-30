@@ -65,14 +65,22 @@ public class WebGrpcServerRequest<Req, Resp> extends GrpcServerRequestImpl<Req, 
         if (pending.getByte(i + 2) == (byte) '=' || pending.getByte(i + 3) == (byte) '=') {
           Buffer slice = pending.slice(start, i + 4);
           BufferInternal decoded = BufferInternal.buffer(Base64.decode(((BufferInternal) slice).getByteBuf()));
-          inner.update(decoded);
+          try {
+            inner.update(decoded);
+          } finally {
+            decoded.getByteBuf().release();
+          }
           start = i + 4;
         }
       }
       if (start < usableEnd) {
         Buffer slice = pending.slice(start, usableEnd);
         BufferInternal decoded = BufferInternal.buffer(Base64.decode(((BufferInternal) slice).getByteBuf()));
-        inner.update(decoded);
+        try {
+          inner.update(decoded);
+        } finally {
+          decoded.getByteBuf().release();
+        }
         start = usableEnd;
       }
       if (start >= totalLen) {
@@ -87,8 +95,12 @@ public class WebGrpcServerRequest<Req, Resp> extends GrpcServerRequestImpl<Req, 
       if (pending != null && pending.length() > 0) {
         BufferInternal decoded = BufferInternal.buffer(Base64.decode(((BufferInternal) pending).getByteBuf()));
         pending = null;
-        if (decoded.length() > 0) {
-          inner.update(decoded);
+        try {
+          if (decoded.length() > 0) {
+            inner.update(decoded);
+          }
+        } finally {
+          decoded.getByteBuf().release();
         }
       }
       inner.end();

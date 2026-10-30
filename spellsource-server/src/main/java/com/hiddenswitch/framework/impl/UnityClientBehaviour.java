@@ -36,6 +36,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -59,7 +60,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final String userId;
 	private final int playerId;
 	private final Scheduler scheduler;
-	private final Lock requestsLock = new NoOpLock();
+	private final Lock requestsLock = new ReentrantLock();
 	private final RetryMessageProducer<ServerToClientMessage> writer;
 	private final Server server;
 	private final Long turnTimer;
@@ -68,9 +69,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final AtomicBoolean elapsed = new AtomicBoolean(false);
 	private final AtomicBoolean conceded = new AtomicBoolean(false);
 	private volatile Future<Void> lastWriteFuture = Future.succeededFuture();
-	private GameState lastStateSent;
-	private GameOver gameOver;
-	private boolean needsPowerHistory;
+	private volatile GameState lastStateSent;
+	private volatile GameOver gameOver;
+	private volatile boolean needsPowerHistory;
 
 	public UnityClientBehaviour(Server server,
 	                            Scheduler scheduler,
@@ -183,6 +184,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 	@Override
 	public void elapseAwaitingRequests() {
+		var toElapse = new ArrayList<GameplayRequest>();
 		requestsLock.lock();
 		elapsed.set(true);
 		try {
@@ -190,18 +192,21 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			GameplayRequest request;
 			LOGGER.warn("elapsing {} requests", getRequests().size());
 			while ((request = requests.poll()) != null) {
-				if (request.getType() == GameplayRequestType.ACTION) {
-					@SuppressWarnings("unchecked")
-					var callback = (Consumer<GameAction>) request.getCallback();
-					processActionForElapsedTurn(request.getActions(), callback);
-				} else if (request.getType() == GameplayRequestType.MULLIGAN) {
-					@SuppressWarnings("unchecked")
-					var handler = (Consumer<List<Card>>) request.getCallback();
-					handler.accept(new ArrayList<>());
-				}
+				toElapse.add(request);
 			}
 		} finally {
 			requestsLock.unlock();
+		}
+		for (var request : toElapse) {
+			if (request.getType() == GameplayRequestType.ACTION) {
+				@SuppressWarnings("unchecked")
+				var callback = (Consumer<GameAction>) request.getCallback();
+				processActionForElapsedTurn(request.getActions(), callback);
+			} else if (request.getType() == GameplayRequestType.MULLIGAN) {
+				@SuppressWarnings("unchecked")
+				var handler = (Consumer<List<Card>>) request.getCallback();
+				handler.accept(new ArrayList<>());
+			}
 		}
 	}
 
@@ -288,7 +293,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				onMulliganReceived(message.getDiscardedCardIndicesList());
 				break;
 			case EMOTE:
-				server.onEmote(this, message.getEmote().getEntityId(), message.getEmote().getMessage().toString());
+				for (var activityMonitor : getActivityMonitors()) {
+					activityMonitor.activity();
+				}
+				server.onEmote(this, message.getEmote().getEntityId(), message.getEmote().getMessage().name());
 				break;
 			case TOUCH:
 				for (var activityMonitor : getActivityMonitors()) {
@@ -366,6 +374,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 
 	public void onMulliganReceived(List<Integer> discardedCardIndices) {
+		Consumer<List<Card>> callback;
+		List<Card> discardedCards;
 		requestsLock.lock();
 		try {
 			var request = getMulliganRequest();
@@ -379,11 +389,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				// the mulligan is being received twice
 				discardedCardIndices = Collections.emptyList();
 			}
-			var discardedCards = discardedCardIndices
+			discardedCards = discardedCardIndices
 					.stream()
+					.filter(Objects::nonNull)
+					.distinct()
 					.flatMap(i -> {
-						if (request.getStarterCards() == null || request.getStarterCards().size() <= i) {
-							// We already processed this card
+						if (request.getStarterCards() == null || i < 0 || request.getStarterCards().size() <= i) {
+							// Ignore invalid or out-of-bounds indices
 							return Stream.empty();
 						}
 						return Stream.of(request.getStarterCards().get(i));
@@ -391,38 +403,45 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					.collect(toList());
 
 			@SuppressWarnings("unchecked")
-			Consumer<List<Card>> callback = (Consumer<List<Card>>) request.getCallback();
-			callback.accept(discardedCards);
+			var cb = (Consumer<List<Card>>) request.getCallback();
+			callback = cb;
 		} finally {
 			requestsLock.unlock();
+		}
+		if (callback != null) {
+			callback.accept(discardedCards);
 		}
 	}
 
 	@Override
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		var promise = Promise.<GameAction>promise();
-		requestsLock.lock();
 		try {
-			var id = Integer.toString(callbackIdCounter.getAndIncrement());
-			Consumer<GameAction> completer = promise::tryComplete;
-			var request = new GameplayRequest()
-					.setCallbackId(id)
-					.setType(GameplayRequestType.ACTION)
-					.setActions(validActions)
-					.setCallback(completer);
+			requestsLock.lock();
+			try {
+				var id = Integer.toString(callbackIdCounter.getAndIncrement());
+				Consumer<GameAction> completer = promise::tryComplete;
+				var request = new GameplayRequest()
+						.setCallbackId(id)
+						.setType(GameplayRequestType.ACTION)
+						.setActions(validActions)
+						.setCallback(completer);
 
-			// The player's turn may have ended, so handle the action immediately in this case.
-			if (isElapsed()) {
-				processActionForElapsedTurn(validActions, completer);
-			} else {
-				// If there is an existing action, it's almost definitely an error, because we should only be requesting actions
-				// inside a resume() loop
-				if (!getRequests().isEmpty()) {
-					throw new RuntimeException("requesting action outside resume() loop");
+				// The player's turn may have ended, so handle the action immediately in this case.
+				if (isElapsed()) {
+					processActionForElapsedTurn(validActions, completer);
+				} else {
+					// If there is an existing action, it's almost definitely an error, because we should only be requesting actions
+					// inside a resume() loop
+					if (!getRequests().isEmpty()) {
+						throw new RuntimeException("requesting action outside resume() loop");
+					}
+					var state = context.getGameStateCopy();
+					getRequests().add(request);
+					onRequestAction(id, state, validActions);
 				}
-				var state = context.getGameStateCopy();
-				getRequests().add(request);
-				onRequestAction(id, state, validActions);
+			} finally {
+				requestsLock.unlock();
 			}
 			return await(promise.future());
 		} catch (Throwable t) {
@@ -434,8 +453,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				LOGGER.error("requestAction error:", t);
 			}
 			return null;
-		} finally {
-			requestsLock.unlock();
 		}
 	}
 
@@ -450,18 +467,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		// If the request contains an end turn action, execute it. Otherwise, choose an action
 		// at random.
 		final var action = actions.stream()
-				.filter(ga -> (ActionType) ga.getActionType() == ActionType.BATTLECRY)
-				.findFirst().orElse(getRandom(actions));
+				.filter(ga -> (ActionType) ga.getActionType() == ActionType.END_TURN)
+				.findFirst()
+				.orElseGet(() -> getRandom(actions));
 
 		if (action == null) {
 			throw new IllegalStateException("No action was returned");
 		}
 
-		if (Thread.currentThread().isVirtual()) {
-			callback.accept(action);
-		} else {
-			throw new UnsupportedOperationException("should not process elapsed turn outside of fiber");
-		}
+		callback.accept(action);
 	}
 
 	private GameAction getRandom(List<GameAction> actions) {
@@ -480,29 +494,38 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 
 	public void onActionReceived(String messageId, int actionIndex) {
-		// The action may have been removed due to the timer or because the game ended, so it's okay if it doesn't exist.
-		var request = getRequest(messageId);
-		if (request == null) {
-			LOGGER.warn("unexpectedly received a null request");
-			return;
-		}
-
+		Consumer<GameAction> callback;
+		GameAction action;
 		requestsLock.lock();
 		try {
-			var action = request.getActions().get(actionIndex);
-
+			// The action may have been removed due to the timer or because the game ended, so it's okay if it doesn't exist.
+			var request = getRequest(messageId);
+			if (request == null) {
+				LOGGER.warn("unexpectedly received a null request");
+				return;
+			}
+			if (request.getActions() == null || actionIndex < 0 || actionIndex >= request.getActions().size()) {
+				LOGGER.warn("ignoring out-of-bounds actionIndex={} for gameId={}, actions.size={}",
+						actionIndex, server.getGameId(), request.getActions() == null ? 0 : request.getActions().size());
+				return;
+			}
+			action = request.getActions().get(actionIndex);
 			@SuppressWarnings("unchecked")
-			Consumer<GameAction> callback = (Consumer<GameAction>) request.getCallback();
+			var cb = (Consumer<GameAction>) request.getCallback();
+			callback = cb;
 			getRequests().remove(request);
-			callback.accept(action);
+		} finally {
+			requestsLock.unlock();
+		}
+		try {
+			if (callback != null) {
+				callback.accept(action);
+			}
 		} catch (Throwable recoverFromError) {
 			LOGGER.warn("recovering from error while processing callback, gameId={}", server.getGameId(), recoverFromError);
 			Tracing.error(recoverFromError);
 
 			elapseAwaitingRequests();
-		} finally {
-			getRequests().remove(request);
-			requestsLock.unlock();
 		}
 	}
 
@@ -668,11 +691,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				messageEvent.setDescription(event.getDescription(workingContext, playerId));
 			}
 
-			if (powerHistory.size() > MAX_POWER_HISTORY_SIZE) {
-				powerHistory.pop();
-			}
 			var build = messageEvent.build();
-			powerHistory.add(build);
+			synchronized (powerHistory) {
+				if (powerHistory.size() > MAX_POWER_HISTORY_SIZE) {
+					powerHistory.pop();
+				}
+				powerHistory.add(build);
+			}
 		}
 
 		message.setEvent(messageEvent);
@@ -723,7 +748,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		flush();
 		var gameState = getClientGameState(playerId, state);
 		if (needsPowerHistory) {
-			gameState.addAllPowerHistory(powerHistory);
+			synchronized (powerHistory) {
+				gameState.addAllPowerHistory(powerHistory);
+			}
 			gameState.setHasPowerHistory(true);
 			needsPowerHistory = false;
 		}
@@ -774,12 +801,17 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	public void sendEmote(int entityId, String emote) {
+		Emote.EmoteMessage emoteMessage;
+		try {
+			emoteMessage = emote != null ? Emote.EmoteMessage.valueOf(emote) : Emote.EmoteMessage.AMAZING;
+		} catch (IllegalArgumentException e) {
+			emoteMessage = Emote.EmoteMessage.AMAZING;
+		}
 		sendMessage(ServerToClientMessage.newBuilder()
 				.setMessageType(MessageType.EMOTE)
 				.setEmote(Emote.newBuilder()
 						.setEntityId(entityId)
-						// TODO: bring back / fix emotes
-						.setMessage(Emote.EmoteMessage.AMAZING)));
+						.setMessage(emoteMessage)));
 	}
 
 	public MessageProducer<ServerToClientMessage> getWriter() {
@@ -863,7 +895,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		getActivityMonitors().clear();
 		requests.clear();
 		messageBuffer.clear();
-		powerHistory.clear();
+		synchronized (powerHistory) {
+			powerHistory.clear();
+		}
 		lastStateSent = null;
 		completionHandler.succeed();
 	}

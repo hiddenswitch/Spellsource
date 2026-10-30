@@ -18,6 +18,7 @@ plugins {
   id 'org.javamodularity.moduleplugin'
   id 'idea'
   id 'application'
+  id 'jacoco'
   id "io.github.kobylynskyi.graphql.codegen" version "5.9.0"
 }
 
@@ -405,6 +406,17 @@ test {
     exceptionFormat "full"
     showCauses true
     showStackTraces true
+  }
+}
+
+jacoco {
+  toolVersion = "0.8.14"
+}
+
+jacocoTestReport {
+  reports {
+    xml.required = true
+    html.required = true
   }
 }
 

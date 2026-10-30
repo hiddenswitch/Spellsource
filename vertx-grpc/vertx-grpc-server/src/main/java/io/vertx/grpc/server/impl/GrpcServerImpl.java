@@ -15,6 +15,7 @@ import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpHeaders;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.http.HttpVersion;
@@ -120,6 +121,14 @@ public class GrpcServerImpl implements GrpcServer {
       }
     } else {
       httpRequest.response().setStatusCode(415).end();
+      return;
+    }
+
+    if (details.protocol != GrpcProtocol.TRANSCODING && httpRequest.method() != HttpMethod.POST) {
+      httpRequest.response()
+        .setStatusCode(405)
+        .putHeader("Allow", "POST")
+        .end();
       return;
     }
 
@@ -284,7 +293,7 @@ public class GrpcServerImpl implements GrpcServer {
     });
   }
 
-  public GrpcServer callHandler(Handler<GrpcServerRequest<Buffer, Buffer>> handler) {
+  public synchronized GrpcServer callHandler(Handler<GrpcServerRequest<Buffer, Buffer>> handler) {
     this.requestHandler = handler;
     return this;
   }
@@ -307,7 +316,7 @@ public class GrpcServerImpl implements GrpcServer {
   }
 
   @Override
-  public <Req, Resp> GrpcServer callHandler(ServiceMethod<Req, Resp> serviceMethod, Handler<GrpcServerRequest<Req, Resp>> handler) {
+  public synchronized <Req, Resp> GrpcServer callHandler(ServiceMethod<Req, Resp> serviceMethod, Handler<GrpcServerRequest<Req, Resp>> handler) {
     if (handler != null) {
       MethodCallHandler<Req, Resp> p = new MethodCallHandler<>(serviceMethod, serviceMethod.decoder(), serviceMethod.encoder(), handler);
       if (serviceMethod instanceof MountPoint) {
@@ -332,7 +341,7 @@ public class GrpcServerImpl implements GrpcServer {
   }
 
   @Override
-  public GrpcServer addService(Service service) {
+  public synchronized GrpcServer addService(Service service) {
     for (Service s : this.services) {
       if (s.name().equals(service.name())) {
         throw new IllegalStateException("Duplicated name: " + service.name().name());

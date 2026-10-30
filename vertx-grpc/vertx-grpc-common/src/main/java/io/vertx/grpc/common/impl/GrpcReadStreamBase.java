@@ -57,10 +57,12 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
   private Handler<Void> endHandler;
   private Handler<InvalidMessageException> invalidMessageHandler;
   private final java.util.ArrayDeque<GrpcMessage> pendingMessages = new java.util.ArrayDeque<>(4);
+  private long demand = Long.MAX_VALUE;
   private boolean endReceived;
   private boolean endDispatched;
   private Throwable failureReceived;
   private GrpcMessage last;
+  private long maxMessageSize;
   private final GrpcMessageDecoder<T> messageDecoder;
   private final Promise<Void> end;
   private GrpcWriteStreamBase<?, ?> ws;
@@ -101,6 +103,7 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
 
   public void init(GrpcWriteStreamBase<?, ?> ws, long maxMessageSize) {
     this.ws = ws;
+    this.maxMessageSize = maxMessageSize;
     deframer.maxMessageSize(maxMessageSize);
     stream.handler(this);
     stream.endHandler(v -> {
@@ -128,7 +131,17 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
         // Nothing to do
         break;
       case "gzip": {
-        msg = GrpcMessage.message("identity", msg.format(), Utils.GZIP_DECODER.apply(msg.payload()));
+        Buffer decoded;
+        try {
+          decoded = Utils.gzipDecode(msg.payload(), maxMessageSize > 0 ? maxMessageSize : Integer.MAX_VALUE);
+        } catch (MessageSizeOverflowException msoe) {
+          Handler<InvalidMessageException> handler = invalidMessageHandler;
+          if (handler != null) {
+            context.dispatch(msoe, handler);
+          }
+          throw msoe;
+        }
+        msg = GrpcMessage.message("identity", msg.format(), decoded);
         break;
       }
       default:
@@ -148,6 +161,9 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
   }
 
   public final S pause() {
+    synchronized (this) {
+      demand = 0L;
+    }
     queue.pause();
     return (S) this;
   }
@@ -157,8 +173,35 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
   }
 
   public final S fetch(long amount) {
+    if (amount < 0L) {
+      throw new IllegalArgumentException();
+    }
+    synchronized (this) {
+      demand += amount;
+      if (demand < 0L) {
+        demand = Long.MAX_VALUE;
+      }
+      drainPendingMessages();
+    }
     queue.fetch(amount);
     return (S) this;
+  }
+
+  private void drainPendingMessages() {
+    Handler<GrpcMessage> handler = messageHandler;
+    if (handler != null) {
+      while (demand > 0L && !pendingMessages.isEmpty()) {
+        if (demand != Long.MAX_VALUE) {
+          demand--;
+        }
+        GrpcMessage msg = pendingMessages.pollFirst();
+        context.dispatch(msg, handler);
+      }
+      if (endReceived && pendingMessages.isEmpty() && !endDispatched && endHandler != null) {
+        endDispatched = true;
+        context.dispatch(endHandler);
+      }
+    }
   }
 
   @Override
@@ -182,16 +225,7 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
   public final S messageHandler(Handler<GrpcMessage> handler) {
     synchronized (this) {
       messageHandler = handler;
-      if (handler != null) {
-        while (!pendingMessages.isEmpty()) {
-          GrpcMessage msg = pendingMessages.pollFirst();
-          context.dispatch(msg, handler);
-        }
-        if (endReceived && !endDispatched && endHandler != null) {
-          endDispatched = true;
-          context.dispatch(endHandler);
-        }
-      }
+      drainPendingMessages();
     }
     return (S) this;
   }
@@ -271,7 +305,10 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
     synchronized (this) {
       last = msg;
       Handler<GrpcMessage> handler = messageHandler;
-      if (handler != null) {
+      if (handler != null && demand > 0L && pendingMessages.isEmpty()) {
+        if (demand != Long.MAX_VALUE) {
+          demand--;
+        }
         context.dispatch(msg, handler);
       } else {
         pendingMessages.addLast(msg);
@@ -282,7 +319,17 @@ public abstract class GrpcReadStreamBase<S extends GrpcReadStreamBase<S, T>, T> 
   @Override
   public final Future<T> last() {
     return end()
-      .map(v -> decodeMessage(last));
+      .map(v -> {
+        GrpcMessage msg;
+        synchronized (this) {
+          pendingMessages.clear();
+          msg = last;
+        }
+        if (msg == null) {
+          throw new GrpcErrorException(GrpcStatus.INTERNAL, "No message received before end of stream");
+        }
+        return decodeMessage(msg);
+      });
   }
 
   @Override

@@ -73,7 +73,11 @@ public class GrpcClientResponseImpl<Req, Resp> extends GrpcReadStreamBase<GrpcCl
         status = GrpcStatus.UNKNOWN;
       }
     }
-    super.handleEnd();
+    if (status == GrpcStatus.OK) {
+      super.handleEnd();
+    } else {
+      tryFail(new InvalidStatusException(GrpcStatus.OK, status, statusMessage()));
+    }
     if (!request.isTrailersSent()) {
       request.cancel();
     }
@@ -122,6 +126,7 @@ public class GrpcClientResponseImpl<Req, Resp> extends GrpcReadStreamBase<GrpcCl
           decoded = decodeMessage(msg);
         } catch (CodecException e) {
           request.cancel();
+          tryFail(e);
           return;
         }
         handler.handle(decoded);

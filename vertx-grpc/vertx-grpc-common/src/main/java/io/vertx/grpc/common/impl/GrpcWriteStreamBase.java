@@ -22,15 +22,15 @@ public abstract class GrpcWriteStreamBase<S extends GrpcWriteStreamBase<S, T>, T
   protected String mediaType;
   protected String encoding;
   protected WireFormat format;
-  private boolean headersSent;
-  private boolean trailersSent;
-  private GrpcError error;
+  private volatile boolean headersSent;
+  private volatile boolean trailersSent;
+  private volatile GrpcError error;
 
   private MultiMap headers;
   private MultiMap trailers;
 
-  private Handler<Throwable> exceptionHandler;
-  private Handler<GrpcError> errorHandler;
+  private volatile Handler<Throwable> exceptionHandler;
+  private volatile Handler<GrpcError> errorHandler;
 
   public GrpcWriteStreamBase(ContextInternal context, String mediaType, WriteStream<Buffer> writeStream, GrpcMessageEncoder<T> messageEncoder) {
     this.context = context;
@@ -46,8 +46,9 @@ public abstract class GrpcWriteStreamBase<S extends GrpcWriteStreamBase<S, T>, T
         GrpcError error = mapHttp2ErrorCode(reset.getCode());
         if (error != null) {
           handleError(error);
+        } else {
+          handleException(GrpcErrorException.create(reset));
         }
-        handleException(GrpcErrorException.create(reset));
       } else {
         handleException(err);
       }
@@ -64,7 +65,9 @@ public abstract class GrpcWriteStreamBase<S extends GrpcWriteStreamBase<S, T>, T
       this.error = error;
       Handler<GrpcError> handler = errorHandler;
       if (handler != null) {
-        handler.handle(error);
+        context.dispatch(error, handler);
+      } else {
+        handleException(GrpcErrorException.create(error));
       }
     }
   }
@@ -72,7 +75,7 @@ public abstract class GrpcWriteStreamBase<S extends GrpcWriteStreamBase<S, T>, T
   protected void handleException(Throwable err) {
     Handler<Throwable> handler = exceptionHandler;
     if (handler != null) {
-      handler.handle(err);
+      context.dispatch(err, handler);
     }
   }
 
@@ -218,10 +221,10 @@ public abstract class GrpcWriteStreamBase<S extends GrpcWriteStreamBase<S, T>, T
 
   protected Future<Void> writeMessage(GrpcMessage message, boolean end) {
     if (error != null) {
-      throw new IllegalStateException("The stream is failed: " + error);
+      return context.failedFuture("The stream is failed: " + error);
     }
     if (trailersSent) {
-      throw new IllegalStateException("The stream has been closed");
+      return context.failedFuture("The stream has been closed");
     }
     if (message != null) {
       if (format == null) {

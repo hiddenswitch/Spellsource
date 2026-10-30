@@ -142,6 +142,7 @@ public abstract class GrpcServerRequestImpl<Req, Resp> extends GrpcReadStreamBas
           decoded = decodeMessage(msg);
         } catch (CodecException e) {
           response.cancel();
+          tryFail(e);
           return;
         }
         try {

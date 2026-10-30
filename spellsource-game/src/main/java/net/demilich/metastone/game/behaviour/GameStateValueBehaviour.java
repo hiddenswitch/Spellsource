@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType
 import com.hiddenswitch.diagnostics.Tracing;
 import io.opentracing.util.GlobalTracer;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.GameScope;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.heuristic.FeatureVector;
@@ -1538,113 +1539,116 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 */
 	public static boolean observesLethal(GameContext context, int playerId, Actor target) {
 		try {
-			var player = context.getPlayer(playerId);
-			// If the opponent has a taunt minion, always return false.
-			var opponent = context.getOpponent(player);
-			if (target == null) {
-				target = opponent.getHero();
-			}
-			// There may be situations where the opposing hero is null, so we'll just return false here.
-			if (target == null) {
-				return false;
-			}
-			var targetIsMinion = target.getEntityType() == EntityType.MINION;
-			var targetIsHero = target.getEntityType() == EntityType.HERO;
-			for (var minion : opponent.getMinions()) {
-				if ((targetIsHero
-						|| (targetIsMinion && !target.hasAttribute(Attribute.TAUNT)))
-						&& (minion.hasAttribute(Attribute.TAUNT) || minion.hasAttribute(Attribute.AURA_TAUNT))) {
+			return GameScope.call(context, () -> {
+				var player = context.getPlayer(playerId);
+				// If the opponent has a taunt minion, always return false.
+				var opponent = context.getOpponent(player);
+				var resolvedTarget = target;
+				if (resolvedTarget == null) {
+					resolvedTarget = opponent.getHero();
+				}
+				// There may be situations where the opposing hero is null, so we'll just return false here.
+				if (resolvedTarget == null) {
 					return false;
 				}
-			}
-
-			var damage = 0;
-			for (var minion : player.getMinions()) {
-				damage += minion.canAttackThisTurn(context) ? (minion.getAttack() * (minion.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + minion.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
-			}
-			var hero = player.getHero();
-			damage += hero.canAttackThisTurn(context) ? (hero.getAttack() * (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
-
-			var cards = new Card[player.getHand().size() + 1];
-			player.getHand().toArray(cards);
-			cards[cards.length - 1] = player.getHeroPowerZone().get(0);
-
-			var maxWeaponDamage = 0;
-			var cardDamage = 0;
-			var totalManaCost = 0;
-			for (var card : cards) {
-				if (!context.getLogic().canPlayCard(player, card)) {
-					continue;
-				}
-
-				var desc = card.getDesc();
-
-				// If this is a weapon, account for it, but only if our hero still has attacks
-				if (card.getCardType() == CardType.WEAPON && (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS) > 0)) {
-					// We can only really deal damage with a weapon once.
-					maxWeaponDamage = Math.max(maxWeaponDamage, card.getDamage());
-					totalManaCost += context.getLogic().getModifiedManaCost(player, card);
-					continue;
-				}
-
-				// Determine if the card deals damage or gives the hero attack, up to a certain point.
-				if ((card.getCardType() == CardType.HERO_POWER || card.getCardType() == CardType.SPELL) && desc.getSpell() != null) {
-					// Check the first level of meta spells and nothing more
-					var spells = new SpellDesc[]{desc.getSpell()};
-					if (spells[0].getDescClass() == MetaSpell.class) {
-						spells = (SpellDesc[]) spells[0].get(SpellArg.SPELLS);
+				var targetIsMinion = resolvedTarget.getEntityType() == EntityType.MINION;
+				var targetIsHero = resolvedTarget.getEntityType() == EntityType.HERO;
+				for (var minion : opponent.getMinions()) {
+					if ((targetIsHero
+							|| (targetIsMinion && !resolvedTarget.hasAttribute(Attribute.TAUNT)))
+							&& (minion.hasAttribute(Attribute.TAUNT) || minion.hasAttribute(Attribute.AURA_TAUNT))) {
+						return false;
 					}
-					if (spells == null || spells.length == 0 || spells[0] == null) {
-						LOGGER.warn("observeLethal: {} had null spells", card);
+				}
+
+				var damage = 0;
+				for (var minion : player.getMinions()) {
+					damage += minion.canAttackThisTurn(context) ? (minion.getAttack() * (minion.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + minion.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
+				}
+				var hero = player.getHero();
+				damage += hero.canAttackThisTurn(context) ? (hero.getAttack() * (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
+
+				var cards = new Card[player.getHand().size() + 1];
+				player.getHand().toArray(cards);
+				cards[cards.length - 1] = player.getHeroPowerZone().get(0);
+
+				var maxWeaponDamage = 0;
+				var cardDamage = 0;
+				var totalManaCost = 0;
+				for (var card : cards) {
+					if (!context.getLogic().canPlayCard(player, card)) {
 						continue;
 					}
-					for (var spell : spells) {
-						// First check hero attack buff
-						if (spell.getDescClass() == BuffSpell.class
-								&& Objects.equals(spell.getTarget(), EntityReference.FRIENDLY_HERO)
-								&& spell.containsKey(SpellArg.ATTACK_BONUS)) {
-							var buff = spell.getValue(SpellArg.ATTACK_BONUS, context, player, player.getHero(), player.getHero(), 0);
-							buff *= hero.canAttackThisTurn(context) ? (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS)) : 0;
-							cardDamage += buff;
-							totalManaCost += context.getLogic().getModifiedManaCost(player, card);
+
+					var desc = card.getDesc();
+
+					// If this is a weapon, account for it, but only if our hero still has attacks
+					if (card.getCardType() == CardType.WEAPON && (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS) > 0)) {
+						// We can only really deal damage with a weapon once.
+						maxWeaponDamage = Math.max(maxWeaponDamage, card.getDamage());
+						totalManaCost += context.getLogic().getModifiedManaCost(player, card);
+						continue;
+					}
+
+					// Determine if the card deals damage or gives the hero attack, up to a certain point.
+					if ((card.getCardType() == CardType.HERO_POWER || card.getCardType() == CardType.SPELL) && desc.getSpell() != null) {
+						// Check the first level of meta spells and nothing more
+						var spells = new SpellDesc[]{desc.getSpell()};
+						if (spells[0].getDescClass() == MetaSpell.class) {
+							spells = (SpellDesc[]) spells[0].get(SpellArg.SPELLS);
 						}
-						// Then check DamageSpell
-						if (spell.getDescClass() == DamageSpell.class) {
-							var targetSelection = desc.getTargetSelection();
-							var thisSpellTarget = spell.getTarget();
-							if (Objects.equals(thisSpellTarget, EntityReference.ALL_CHARACTERS)
-									|| Objects.equals(thisSpellTarget, EntityReference.ENEMY_CHARACTERS)
-									|| (Objects.equals(thisSpellTarget, EntityReference.ENEMY_HERO) && targetIsHero)
-									|| (Objects.equals(thisSpellTarget, EntityReference.ENEMY_MINIONS) && targetIsMinion)
-									|| (Objects.equals(thisSpellTarget, EntityReference.ALL_MINIONS) && targetIsMinion)
-									|| Objects.equals(thisSpellTarget, EntityReference.ALL_OTHER_CHARACTERS)
-									|| targetSelection == TargetSelection.ANY
-									|| targetSelection == TargetSelection.ENEMY_CHARACTERS
-									|| (targetSelection == TargetSelection.ENEMY_HERO && targetIsHero)
-									|| (targetSelection == TargetSelection.ENEMY_MINIONS && targetIsMinion)
-									|| (targetSelection == TargetSelection.MINIONS && targetIsMinion)
-									|| (targetSelection == TargetSelection.HEROES && targetIsHero)) {
-								var spellDamage = spell.getValue(SpellArg.VALUE, context, player, player.getHero(), player.getHero(), 0);
-								cardDamage += context.getLogic().applySpellpower(player, card, spellDamage);
+						if (spells == null || spells.length == 0 || spells[0] == null) {
+							LOGGER.warn("observeLethal: {} had null spells", card);
+							continue;
+						}
+						for (var spell : spells) {
+							// First check hero attack buff
+							if (spell.getDescClass() == BuffSpell.class
+									&& Objects.equals(spell.getTarget(), EntityReference.FRIENDLY_HERO)
+									&& spell.containsKey(SpellArg.ATTACK_BONUS)) {
+								var buff = spell.getValue(SpellArg.ATTACK_BONUS, context, player, player.getHero(), player.getHero(), 0);
+								buff *= hero.canAttackThisTurn(context) ? (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS)) : 0;
+								cardDamage += buff;
 								totalManaCost += context.getLogic().getModifiedManaCost(player, card);
 							}
+							// Then check DamageSpell
+							if (spell.getDescClass() == DamageSpell.class) {
+								var targetSelection = desc.getTargetSelection();
+								var thisSpellTarget = spell.getTarget();
+								if (Objects.equals(thisSpellTarget, EntityReference.ALL_CHARACTERS)
+										|| Objects.equals(thisSpellTarget, EntityReference.ENEMY_CHARACTERS)
+										|| (Objects.equals(thisSpellTarget, EntityReference.ENEMY_HERO) && targetIsHero)
+										|| (Objects.equals(thisSpellTarget, EntityReference.ENEMY_MINIONS) && targetIsMinion)
+										|| (Objects.equals(thisSpellTarget, EntityReference.ALL_MINIONS) && targetIsMinion)
+										|| Objects.equals(thisSpellTarget, EntityReference.ALL_OTHER_CHARACTERS)
+										|| targetSelection == TargetSelection.ANY
+										|| targetSelection == TargetSelection.ENEMY_CHARACTERS
+										|| (targetSelection == TargetSelection.ENEMY_HERO && targetIsHero)
+										|| (targetSelection == TargetSelection.ENEMY_MINIONS && targetIsMinion)
+										|| (targetSelection == TargetSelection.MINIONS && targetIsMinion)
+										|| (targetSelection == TargetSelection.HEROES && targetIsHero)) {
+									var spellDamage = spell.getValue(SpellArg.VALUE, context, player, player.getHero(), player.getHero(), 0);
+									cardDamage += context.getLogic().applySpellpower(player, card, spellDamage);
+									totalManaCost += context.getLogic().getModifiedManaCost(player, card);
+								}
+							}
+							continue;
 						}
-						continue;
 					}
+					// TODO: Should probably include missiles spell in the narrow case that the opponent has no minions.
 				}
-				// TODO: Should probably include missiles spell in the narrow case that the opponent has no minions.
-			}
 
-			// Add the average damage our cards can deal, so that we're not evaluating as though we could play all the cards
-			if (totalManaCost > 0) {
-				float manaFraction = Math.min(1.0f, (float) player.getMana() / (float) totalManaCost);
-				damage += (int) ((cardDamage + maxWeaponDamage) * manaFraction);
-			} else {
-				damage += cardDamage + maxWeaponDamage;
-			}
+				// Add the average damage our cards can deal, so that we're not evaluating as though we could play all the cards
+				if (totalManaCost > 0) {
+					float manaFraction = Math.min(1.0f, (float) player.getMana() / (float) totalManaCost);
+					damage += (int) ((cardDamage + maxWeaponDamage) * manaFraction);
+				} else {
+					damage += cardDamage + maxWeaponDamage;
+				}
 
-			return damage >= target.getHp() + target.getArmor();
-		} catch (RuntimeException runtimeException) {
+				return damage >= resolvedTarget.getHp() + resolvedTarget.getArmor();
+			});
+		} catch (Exception runtimeException) {
 			LOGGER.error("observeLethal:\n", runtimeException);
 			return false;
 		}

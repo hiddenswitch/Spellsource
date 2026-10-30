@@ -66,8 +66,7 @@ public class ContextStorageOverride extends Context.Storage {
   }
 
   private static ContextInternal vertxContext() {
-    ContextInternal ctx = (ContextInternal) Vertx.currentContext();
-    return ctx != null && ctx.isDuplicate() ? ctx : null;
+    return (ContextInternal) Vertx.currentContext();
   }
 
   private static Context rootIfNull(Context context) {

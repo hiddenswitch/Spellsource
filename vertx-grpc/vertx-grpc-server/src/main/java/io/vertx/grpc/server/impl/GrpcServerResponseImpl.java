@@ -111,6 +111,9 @@ public abstract class GrpcServerResponseImpl<Req, Resp> extends GrpcWriteStreamB
   }
 
   public void fail(Throwable failure) {
+    if (hasError() || isTrailersSent()) {
+      return;
+    }
     if (failure instanceof StatusException) {
       StatusException se = (StatusException) failure;
       this.status = se.status();
@@ -167,6 +170,9 @@ public abstract class GrpcServerResponseImpl<Req, Resp> extends GrpcWriteStreamB
     if (trailersOnly) {
       httpTrailers = httpResponse.headers();
     } else {
+      if (!httpResponse.headWritten()) {
+        httpResponse.writeHead();
+      }
       httpTrailers = httpResponse.trailers();
     }
     encodeGrpcTrailers(grpcTrailers, httpTrailers);
@@ -253,13 +259,10 @@ public abstract class GrpcServerResponseImpl<Req, Resp> extends GrpcWriteStreamB
     }
   }
 
-  private boolean headersSent;
-
   @Override
   protected Future<Void> writeMessage(GrpcMessage message, boolean end) {
-    if (!headersSent) {
-      headersSent = true;
-      trailersOnly = status != GrpcStatus.OK && end;
+    if (!isHeadersSent()) {
+      trailersOnly = status != GrpcStatus.OK && end && message == null;
     }
     return super.writeMessage(message, end);
   }

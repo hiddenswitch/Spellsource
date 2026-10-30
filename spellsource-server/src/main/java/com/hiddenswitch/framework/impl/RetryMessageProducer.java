@@ -17,6 +17,7 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 	private final int maxRetries;
 	private final int intervalMillis;
 	private final Deque<QueueItem<T>> waiting = new ArrayDeque<>();
+	private QueueItem<T> inFlight;
 	private boolean hasInFlight;
 	private volatile boolean closed;
 	private Long retryTimerId;
@@ -43,11 +44,13 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 				if (!item.completed) {
 					item.completed = true;
 					hasInFlight = false;
+					inFlight = null;
 					item.promise.tryFail("closed");
 				}
 				return Future.failedFuture("closed");
 			}
 			hasInFlight = true;
+			inFlight = item;
 		}
 
 		return producer
@@ -90,6 +93,7 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 								item.completed = true;
 							}
 							next = closed ? null : waiting.pollFirst();
+							inFlight = next;
 							if (next == null) {
 								hasInFlight = false;
 							}
@@ -109,6 +113,7 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 							item.completed = true;
 						}
 						next = closed ? null : waiting.pollFirst();
+						inFlight = next;
 						if (next == null) {
 							hasInFlight = false;
 						}
@@ -143,6 +148,7 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 			}
 			if (!hasInFlight) {
 				hasInFlight = true;
+				inFlight = item;
 				startWrite = true;
 			} else {
 				waiting.addLast(item);
@@ -169,6 +175,10 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 			timerId = retryTimerId;
 			retryTimerId = null;
 			pending = new ArrayDeque<>(waiting);
+			if (inFlight != null) {
+				pending.addFirst(inFlight);
+				inFlight = null;
+			}
 			waiting.clear();
 			hasInFlight = false;
 		}
@@ -185,6 +195,12 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 	}
 
 	public synchronized void trim() {
+		for (var item : waiting) {
+			if (!item.completed) {
+				item.completed = true;
+				item.promise.tryFail("trimmed");
+			}
+		}
 		waiting.clear();
 	}
 

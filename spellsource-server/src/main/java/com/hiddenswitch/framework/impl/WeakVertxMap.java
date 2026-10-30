@@ -31,7 +31,18 @@ public class WeakVertxMap<T> {
 					return existing;
 				});
 			} else {
-				return map.computeIfAbsent(Vertx.currentContext().owner(), constructor);
+				return map.computeIfAbsent(Vertx.currentContext().owner(), v -> {
+					if (v instanceof io.vertx.core.internal.VertxInternal vertxInternal) {
+						var rootContext = vertxInternal.createEventLoopContext();
+						var prev = rootContext.beginDispatch();
+						try {
+							return constructor.apply(v);
+						} finally {
+							rootContext.endDispatch(prev);
+						}
+					}
+					return constructor.apply(v);
+				});
 			}
 		} finally {
 			lock.unlock();

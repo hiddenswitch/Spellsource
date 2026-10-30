@@ -30,8 +30,18 @@ public final class GrpcErrorException extends StatusRuntimeException {
     return new GrpcErrorException(error, status, sre);
   }
 
+  public static GrpcErrorException create(GrpcError error) {
+    return new GrpcErrorException(error, error.status);
+  }
+
   private final GrpcError error;
   private final GrpcStatus status;
+
+  public GrpcErrorException(GrpcStatus status, String message) {
+    super(Status.fromCodeValue(status.code).withDescription(message));
+    this.error = null;
+    this.status = status;
+  }
 
   public GrpcErrorException(GrpcError error, GrpcStatus status) {
     this(error, status, null);
