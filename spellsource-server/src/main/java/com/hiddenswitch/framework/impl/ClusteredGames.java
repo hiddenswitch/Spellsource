@@ -127,6 +127,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 				request.getConfigurations(),
 				cardCatalogue,
 				this);
+		serverGameContext.setSpanContext(request.getSpanContext());
 		await(vertx.deployVerticle(serverGameContext, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD)));
 		GAMES_CREATED.increment();
 		return CreateGameSessionResponse.session(deploymentID(), serverGameContext);

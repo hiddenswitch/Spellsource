@@ -4,7 +4,6 @@ import com.google.common.base.Throwables;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Games;
-import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
@@ -26,7 +25,6 @@ import net.demilich.metastone.game.events.DestroyWillQueue;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
-import net.demilich.metastone.game.logic.TurnState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,16 +39,18 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static io.vertx.await.Async.await;
+import static io.vertx.await.Async.awaitAll;
 import static java.util.stream.Collectors.toList;
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
 import static net.demilich.metastone.game.GameContext.PLAYER_2;
 
 /**
- * The virtual-thread player verticle that bridges a human player's EventBus channels
- * ({@code games:reader:{userId}} and {@code games:writer:{userId}}) to the {@link Behaviour}
- * and {@link Client} contracts of a {@link ServerGameContext}.
+ * Bridges a human player's EventBus channels ({@code games:reader:{userId}} and
+ * {@code games:writer:{userId}}) to the {@link Behaviour} and {@link Client} contracts of a
+ * {@link ServerGameContext}, sharing the game's lifecycle domain rather than deploying a separate
+ * per-user verticle actor.
  */
-public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implements Client {
+public class UnityClientBehaviour implements Client {
 	public static final int MAX_POWER_HISTORY_SIZE = 10;
 	private static final Logger LOGGER = LoggerFactory.getLogger(UnityClientBehaviour.class);
 	private final Queue<ServerToClientMessage.Builder> messageBuffer = new ConcurrentLinkedQueue<>();
@@ -63,9 +63,9 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 	private final Lock requestsLock = new ReentrantLock();
 	private final Server server;
 	private final Deque<GameEvent> powerHistory = new ArrayDeque<>();
-	private final AtomicBoolean inboundMessagesClosed = new AtomicBoolean(false);
 	private final AtomicBoolean elapsed = new AtomicBoolean(false);
 	private final AtomicBoolean conceded = new AtomicBoolean(false);
+	private Vertx vertx;
 	private MessageConsumer<ClientToServerMessage> consumer;
 	private RetryMessageProducer<ServerToClientMessage> writer;
 	private Long turnTimer;
@@ -89,7 +89,8 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 	}
 
 	@Override
-	public void startVirtual() {
+	public void start(Vertx vertx) {
+		this.vertx = vertx;
 		var bus = vertx.eventBus();
 		this.consumer = bus.consumer(Games.getMessagesFromClientAddress(userId), msg -> handleWebSocketMessage(msg.body()));
 		this.writer = new RetryMessageProducer<>(
@@ -97,14 +98,16 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 		this.turnTimer = vertx.setPeriodic(1000L, this::secondIntervalElapsed);
 		this.activityMonitor = new ActivityMonitor(vertx, noActivityTimeout, this::noActivity);
 		this.activityMonitor.activity();
-		await(this.consumer.completion());
+		if (Thread.currentThread().isVirtual()) {
+			await(this.consumer.completion());
+		}
 	}
 
 	@Override
-	public void stopVirtual() {
-		closeInboundMessages();
+	public void stop() {
 		if (turnTimer != null && vertx != null) {
 			vertx.cancelTimer(turnTimer);
+			turnTimer = null;
 		}
 		cancelActivity();
 		requests.clear();
@@ -113,17 +116,26 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 			powerHistory.clear();
 		}
 		lastStateSent = null;
+		var futures = new ArrayList<Future<?>>(2);
 		if (consumer != null) {
-			await(consumer.unregister().otherwiseEmpty());
+			futures.add(consumer.unregister().otherwiseEmpty());
+			consumer = null;
 		}
 		if (writer != null) {
-			await(writer.close().otherwiseEmpty());
+			futures.add(writer.close().otherwiseEmpty());
+			writer = null;
+		}
+		if (!futures.isEmpty() && Thread.currentThread().isVirtual() && !Thread.currentThread().isInterrupted()) {
+			awaitAll(futures);
 		}
 	}
 
 	@Override
 	public Future<Void> unregisterConsumer() {
-		return consumer != null ? consumer.unregister().otherwiseEmpty() : Future.succeededFuture();
+		cancelActivity();
+		var c = consumer;
+		consumer = null;
+		return c != null ? c.unregister().otherwiseEmpty() : Future.succeededFuture();
 	}
 
 	private void recordActivity() {
@@ -173,7 +185,6 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 	}
 
 	private void noActivity(ActivityMonitor monitor) {
-		elapseAwaitingRequests();
 		server.onConcede(this);
 	}
 
@@ -208,10 +219,6 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 	}
 
 	protected void handleWebSocketMessage(ClientToServerMessage message) {
-		if (inboundMessagesClosed.get()) {
-			return;
-		}
-
 		switch (message.getMessageType()) {
 			case PINGPONG:
 				recordActivity();
@@ -326,7 +333,7 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 		submitRequest(new GameplayRequest.Action(id, validActions, promise::tryComplete), context);
 		var action = await(promise.future());
 		if (!server.isRunning()) {
-			throw new RuntimeException(new InterruptedException("game ended"));
+			throw new java.util.concurrent.CancellationException("game ended");
 		}
 		return action;
 	}
@@ -586,11 +593,6 @@ public class UnityClientBehaviour extends AbstractVirtualThreadVerticle implemen
 	@Override
 	public String getUserId() {
 		return userId;
-	}
-
-	@Override
-	public void closeInboundMessages() {
-		inboundMessagesClosed.set(true);
 	}
 
 	private void flush() {

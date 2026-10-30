@@ -88,14 +88,17 @@ public class Async {
 		}
 		var vertxInternal = (VertxInternal) resolvedVertx;
 		var baseCtx = vertxInternal != null ? vertxInternal.createEventLoopContext() : null;
+		var parentSpan = io.opentracing.util.GlobalTracer.get().activeSpan();
 		return runnable -> Thread.ofVirtual().unstarted(() -> {
 			if (baseCtx == null) {
-				runnable.run();
+				try (var ignored = parentSpan != null ? io.opentracing.util.GlobalTracer.get().activateSpan(parentSpan) : null) {
+					runnable.run();
+				}
 				return;
 			}
 			var childCtx = baseCtx.duplicate();
 			var prev = childCtx.beginDispatch();
-			try {
+			try (var ignored = parentSpan != null ? io.opentracing.util.GlobalTracer.get().activateSpan(parentSpan) : null) {
 				runnable.run();
 			} finally {
 				childCtx.endDispatch(prev);

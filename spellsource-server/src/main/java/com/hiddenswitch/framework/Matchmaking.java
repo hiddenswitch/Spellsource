@@ -7,6 +7,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingQueuesRecord;
+import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponse;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponseUnityConnection;
 import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpcServer;
@@ -42,7 +43,7 @@ import static io.vertx.await.Async.mapParallel;
 import static io.vertx.await.Async.openScope;
 import static io.vertx.await.Async.virtualThreadFactory;
 
-public class Matchmaking extends AbstractVerticle {
+public class Matchmaking extends AbstractVirtualThreadVerticle {
 	public static final String MATCHMAKING_ENQUEUE = "matchmaking:enqueue:";
 	public static final String MATCHMAKING_PREPARE = "matchmaking:prepare:";
 	public static final String MATCHMAKING_QUEUE_CLOSED = "matchmaking:queue-closed:";
@@ -241,16 +242,15 @@ public class Matchmaking extends AbstractVerticle {
 	}
 
 	@Override
-	public void stop(Promise<Void> stopPromise) {
+	public void stopVirtual() {
 		stopping = true;
 		vertx.cancelTimer(periodicTimerId);
-		wakeConsumer.unregister().onComplete(ar -> stopPromise.complete());
+		await(wakeConsumer.unregister().otherwiseEmpty());
 	}
 
 	@Override
-	public void start(Promise<Void> startPromise) {
+	public void startVirtual() {
 		runServerQueue();
-		startPromise.complete();
 	}
 
 	public void runServerQueue() {
@@ -266,10 +266,7 @@ public class Matchmaking extends AbstractVerticle {
 
 		Runnable[] triggerScanRef = new Runnable[1];
 		triggerScanRef[0] = () -> {
-			if (stopping) {
-				return;
-			}
-			if (!scanInProgress.compareAndSet(false, true)) {
+			if (stopping || !scanInProgress.compareAndSet(false, true)) {
 				rescanRequested.set(true);
 				return;
 			}
@@ -354,11 +351,6 @@ public class Matchmaking extends AbstractVerticle {
 		boolean botOpponent = Boolean.TRUE.equals(configuration.getBotOpponent());
 		var gameId = await(createGame(configuration, thisGameTickets));
 		try {
-			forEachParallel(List.of(thisGameTickets), ticket -> {
-				if (!await(verifyTicketLive(vertx, ticket, botOpponent))) {
-					throw new IllegalStateException("Ticket disconnected before handoff: " + ticket.getUserId());
-				}
-			});
 			forEachParallel(List.of(thisGameTickets), ticket ->
 					await(Matchmaking.notifyGameReady(ticket.getUserId(), gameId, botOpponent)));
 			forEachParallel(List.of(thisGameTickets), ticket ->

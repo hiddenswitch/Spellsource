@@ -1711,13 +1711,11 @@ public class GameTests extends FrameworkTestBase {
 
 				var client0 = (com.hiddenswitch.framework.impl.UnityClientBehaviour) sgc.getClient(0);
 				assertNotNull(client0);
-				client0.init(vertx, vertx.getOrCreateContext());
-				client0.startVirtual();
+				client0.start(vertx);
 				client0.onMulliganReceived(java.util.List.of(0));
 				client0.onGameOver(sgc, 0, -1);
 				client0.sendEmote(0, "INVALID_EMOTE_NAME");
-				client0.closeInboundMessages();
-				client0.stopVirtual();
+				client0.stop();
 				client0.setElapsed(true);
 				var elapsedMulligan = new AtomicReference<java.util.List<net.demilich.metastone.game.cards.Card>>();
 				client0.mulliganAsync(sgc, sgc.getPlayer1(), java.util.List.of(), elapsedMulligan::set);
@@ -1727,9 +1725,50 @@ public class GameTests extends FrameworkTestBase {
 				sgc.getPlayer1().setAttribute(Attribute.CONCEDED);
 				sgc.concede(0);
 				sgc.close();
+
+				// Exercise restoreFromTrace finished-game guard
+				var finishedTrace = new net.demilich.metastone.game.logic.Trace() {
+					@Override
+					public net.demilich.metastone.game.GameContext replayContext(boolean skipLastAction, java.util.function.Consumer<net.demilich.metastone.game.GameContext> beforeRequestActionHandler, net.demilich.metastone.game.cards.CardCatalogue cardCatalogue) {
+						return new net.demilich.metastone.game.GameContext() {
+							@Override
+							public boolean updateAndGetGameOver() {
+								return true;
+							}
+						};
+					}
+				};
+				assertThrows(IllegalStateException.class, () -> sgc.restoreFromTrace(finishedTrace));
 			});
 
-			timeoutFired.future()
+			var vtDone = Promise.<Void>promise();
+			io.vertx.await.Async.virtualThreadFactory(vertx).newThread(() -> {
+				try {
+					var catalogue = net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue.INSTANCE;
+					var deck1 = new net.demilich.metastone.game.decks.GameDeck(catalogue, net.demilich.metastone.game.entities.heroes.HeroClass.BROWN, java.util.Collections.emptyList());
+					deck1.setDeckId("d1");
+					var cfg1 = new com.hiddenswitch.framework.impl.Configuration().setUserId("u1").setDeck(deck1).setPlayerId(0).setBot(false);
+					var cfg2 = new com.hiddenswitch.framework.impl.Configuration().setUserId("u2").setDeck(deck1).setPlayerId(1).setBot(true);
+					var errorSgc = new com.hiddenswitch.framework.impl.ServerGameContext("999998", java.util.List.of(cfg1, cfg2), catalogue, null) {
+						@Override
+						public void init() {
+							setActivePlayerId(0);
+							throw new IllegalStateException("Simulated gameplay error");
+						}
+					};
+					errorSgc.play();
+					testContext.verify(() -> assertTrue(errorSgc.getTrace().isTraceErrors()));
+					var sgc = new com.hiddenswitch.framework.impl.ServerGameContext("999997", java.util.List.of(cfg1, cfg2), catalogue, null);
+					sgc.getDeck(sgc.getPlayer1(), "nonexistent_deck");
+				} catch (Throwable ignored) {
+				} finally {
+					vtDone.tryComplete();
+				}
+			}).start();
+
+			com.hiddenswitch.framework.Matchmaking.deleteQueue("nonexistent_queue_id_999").otherwiseEmpty()
+					.compose(ignored -> vtDone.future())
+					.compose(ignored -> timeoutFired.future())
 					.onSuccess(ignored -> activeMonitor.cancel())
 					.onComplete(testContext.succeedingThenComplete());
 		});
@@ -1859,8 +1898,8 @@ public class GameTests extends FrameworkTestBase {
 								"Expected at least 8 dynamic EventBus consumers during 2-player game, found: " + liveConsumers);
 						assertTrue(liveProducers >= 4,
 								"Expected at least 4 active RetryMessageProducers during 2-player game, found: " + liveProducers);
-						assertEquals(baselineDeploymentsRef.get() + 3, liveDeployments,
-								"Expected +3 deployed verticles (1 ServerGameContext + 2 UnityClientBehaviour)");
+						assertEquals(baselineDeploymentsRef.get() + 1, liveDeployments,
+								"Expected +1 deployed verticle (1 ServerGameContext per game, no separate user verticle actors)");
 					});
 
 					// Simulate mid-mulligan stream end on client1 + concede from client2
@@ -2273,6 +2312,188 @@ public class GameTests extends FrameworkTestBase {
 								}
 								var depId = matchmakingDeploymentRef.get();
 								return depId != null ? vertx.undeploy(depId).otherwiseEmpty() : Future.succeededFuture();
+							});
+				})
+				.compose(ignored -> awaitZeroDynamicResources(vertx, baselineDeploymentsRef.get()))
+				.eventually(client1::closeFut)
+				.eventually(client2::closeFut)
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	/**
+	 * Verifies:
+	 * 1. Actor lifecycle consolidation: UnityClientBehaviour (Client) is part of ServerGameContext's
+	 *    lifecycle domain rather than a separate Verticle actor (1 Verticle per game, not 3).
+	 * 2. Inactivity timeout (noActivity) / concession does not race with forkPlay() to execute a
+	 *    spurious random GameAction in takeActionInTurn() before conceding.
+	 * 3. Callstack and distributed span cohesion: SpanContext propagates across Async.openScope(),
+	 *    Games.createGame -> ConfigurationRequest -> ClusteredGames -> ServerGameContext, and
+	 *    concession teardown (endGame / notifyPlayersGameOver) executes on the single
+	 *    ServerGameContext/play fiber with ServerGameContext.forkPlay in the Java callstack and
+	 *    an active OpenTracing span.
+	 */
+	@Test
+	@Timeout(value = 60, timeUnit = TimeUnit.SECONDS)
+	public void testActorLifecycleConsolidationAndCallstackSpanCohesion(Vertx vertx, VertxTestContext testContext) {
+		var client1 = new Client(vertx);
+		var client2 = new Client(vertx);
+		var baselineDeploymentsRef = new AtomicInteger();
+		var clusteredGamesRef = new AtomicReference<ClusteredGames>();
+		var sgcRef = new AtomicReference<com.hiddenswitch.framework.impl.ServerGameContext>();
+		var gameIdRef = new AtomicReference<String>();
+		var gameOverThreadRef = new AtomicReference<Thread>();
+		var gameOverStackRef = new AtomicReference<StackTraceElement[]>();
+		var gameOverActiveSpanRef = new AtomicReference<io.opentracing.Span>();
+		var childFiberSpanRef = new AtomicReference<io.opentracing.Span>();
+
+		startGateway(vertx)
+				.compose(ignored -> join(client1.createAndLogin(), client2.createAndLogin()))
+				.compose(ignored -> {
+					var cg = new ClusteredGames() {
+						@Override
+						public void registerContext(String gameId, com.hiddenswitch.framework.impl.ServerGameContext context) {
+							super.registerContext(gameId, context);
+							sgcRef.set(context);
+						}
+					};
+					clusteredGamesRef.set(cg);
+					return vertx.deployVerticle(cg, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD));
+				})
+				.compose(ignored -> {
+					baselineDeploymentsRef.set(vertx.deploymentIDs().size());
+					return client1.legacy().decksGetAll(Empty.getDefaultInstance());
+				})
+				.compose(decks -> {
+					var deckId = decks.getDecks(0).getCollection().getId();
+					return insertMultiplayerGameRecord(
+							client1.getUserEntity().getId(), deckId,
+							client2.getUserEntity().getId(), deckId)
+							.compose(gameId -> {
+								gameIdRef.set(gameId.toString());
+								return io.vertx.await.Async.vt(vertx, () -> {
+									var tracer = com.hiddenswitch.diagnostics.Tracing.tracing(vertx);
+									var rootSpan = tracer.buildSpan("testRootSpan").start();
+									try (var ignoredScope = tracer.activateSpan(rootSpan)) {
+										try (var taskScope = io.vertx.await.Async.openScope(vertx)) {
+											taskScope.fork(() -> {
+												childFiberSpanRef.set(io.opentracing.util.GlobalTracer.get().activeSpan());
+												return null;
+											});
+											io.vertx.await.Async.join(taskScope);
+										}
+										var req = multiplayerConfigurationRequest(
+												gameId.toString(),
+												client1.getUserEntity().getId(), deckId,
+												client2.getUserEntity().getId(), deckId,
+												800L);
+										return io.vertx.await.Async.await(Games.createGame(req));
+									} finally {
+										rootSpan.finish();
+									}
+								});
+							});
+				})
+				.compose(sessionResponse -> {
+					var sgc = sgcRef.get();
+					// Instrument player 0's client onGameOver to inspect the callstack, thread, and active span during endGame()
+					var originalClient0 = (com.hiddenswitch.framework.impl.UnityClientBehaviour) sgc.getClients().get(0);
+					sgc.getClients().set(0, new com.hiddenswitch.framework.impl.UnityClientBehaviour(sgc, originalClient0.getUserId(), 0, 0L) {
+						@Override public void start(Vertx v) { originalClient0.start(v); }
+						@Override public void stop() { originalClient0.stop(); }
+						@Override public boolean isElapsed() { return originalClient0.isElapsed(); }
+						@Override public com.hiddenswitch.framework.impl.UnityClientBehaviour setElapsed(boolean elapsed) { return originalClient0.setElapsed(elapsed); }
+						@Override public void elapseAwaitingRequests() { originalClient0.elapseAwaitingRequests(); }
+						@Override public void onRequestAction(String messageId, com.hiddenswitch.spellsource.common.GameState state, java.util.List<net.demilich.metastone.game.actions.GameAction> actions) { originalClient0.onRequestAction(messageId, state, actions); }
+						@Override public void onMulligan(String messageId, com.hiddenswitch.spellsource.common.GameState state, java.util.List<net.demilich.metastone.game.cards.Card> cards, int playerId) { originalClient0.onMulligan(messageId, state, cards, playerId); }
+						@Override public void sendNotification(net.demilich.metastone.game.events.Notification event, com.hiddenswitch.spellsource.common.GameState gameState) { originalClient0.sendNotification(event, gameState); }
+						@Override public void onConnectionStarted(net.demilich.metastone.game.Player activePlayer) { originalClient0.onConnectionStarted(activePlayer); }
+						@Override public void onUpdate(com.hiddenswitch.spellsource.common.GameState state) { originalClient0.onUpdate(state); }
+						@Override public void sendEmote(int entityId, String emote) { originalClient0.sendEmote(entityId, emote); }
+						@Override public void lastEvent() { originalClient0.lastEvent(); }
+						@Override public int getPlayerId() { return originalClient0.getPlayerId(); }
+						@Override public String getUserId() { return originalClient0.getUserId(); }
+						@Override public Future<Void> unregisterConsumer() { return originalClient0.unregisterConsumer(); }
+						@Override public Future<Void> lastWriteFuture() { return originalClient0.lastWriteFuture(); }
+						@Override public net.demilich.metastone.game.behaviour.Behaviour clone() { return originalClient0.clone(); }
+						@Override public String getName() { return originalClient0.getName(); }
+						@Override public java.util.List<net.demilich.metastone.game.cards.Card> mulligan(net.demilich.metastone.game.GameContext context, net.demilich.metastone.game.Player player, java.util.List<net.demilich.metastone.game.cards.Card> cards) { return originalClient0.mulligan(context, player, cards); }
+						@Override public void mulliganAsync(net.demilich.metastone.game.GameContext context, net.demilich.metastone.game.Player player, java.util.List<net.demilich.metastone.game.cards.Card> cards, java.util.function.Consumer<java.util.List<net.demilich.metastone.game.cards.Card>> handler) { originalClient0.mulliganAsync(context, player, cards, handler); }
+						@Override public net.demilich.metastone.game.actions.GameAction requestAction(net.demilich.metastone.game.GameContext context, net.demilich.metastone.game.Player player, java.util.List<net.demilich.metastone.game.actions.GameAction> validActions) { return originalClient0.requestAction(context, player, validActions); }
+						@Override public void onGameOver(net.demilich.metastone.game.GameContext context, int playerId, int winningPlayerId) {
+							gameOverThreadRef.set(Thread.currentThread());
+							gameOverStackRef.set(Thread.currentThread().getStackTrace());
+							gameOverActiveSpanRef.set(io.opentracing.util.GlobalTracer.get().activeSpan());
+							originalClient0.onGameOver(context, playerId, winningPlayerId);
+						}
+						@Override public boolean isHuman() { return originalClient0.isHuman(); }
+					});
+
+					var w1 = Promise.<WriteStream<ClientToServerMessage>>promise();
+					var w2 = Promise.<WriteStream<ClientToServerMessage>>promise();
+					var mulligan1 = Promise.<ServerToClientMessage>promise();
+					var mulligan2 = Promise.<ServerToClientMessage>promise();
+					var requestActionReceived = Promise.<Void>promise();
+					var gameEndReceived = Promise.<ServerToClientMessage>promise();
+
+					client1.legacy().subscribeGame(w1::tryComplete).onSuccess(r1 -> r1.handler(msg -> {
+						if (msg.getMessageType() == MessageType.ON_MULLIGAN) {
+							mulligan1.tryComplete(msg);
+						} else if (msg.getMessageType() == MessageType.ON_REQUEST_ACTION) {
+							requestActionReceived.tryComplete();
+						} else if (msg.getMessageType() == MessageType.ON_GAME_END) {
+							gameEndReceived.tryComplete(msg);
+						}
+					})).onFailure(testContext::failNow);
+
+					client2.legacy().subscribeGame(w2::tryComplete).onSuccess(r2 -> r2.handler(msg -> {
+						if (msg.getMessageType() == MessageType.ON_MULLIGAN) {
+							mulligan2.tryComplete(msg);
+						} else if (msg.getMessageType() == MessageType.ON_REQUEST_ACTION) {
+							requestActionReceived.tryComplete();
+						} else if (msg.getMessageType() == MessageType.ON_GAME_END) {
+							gameEndReceived.tryComplete(msg);
+						}
+					})).onFailure(testContext::failNow);
+
+					return all(
+							w1.future().compose(w -> w.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.FIRST_MESSAGE).build())),
+							w2.future().compose(w -> w.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.FIRST_MESSAGE).build()))
+					)
+							.compose(v -> all(mulligan1.future(), mulligan2.future()))
+							.compose(v -> all(
+									w1.future().result().write(ClientToServerMessage.newBuilder().setMessageType(MessageType.UPDATE_MULLIGAN).build()),
+									w2.future().result().write(ClientToServerMessage.newBuilder().setMessageType(MessageType.UPDATE_MULLIGAN).build())
+							))
+							.compose(v -> requestActionReceived.future())
+							// Now both players stop sending messages; ActivityMonitor (150ms) triggers noActivity concession!
+							.compose(v -> gameEndReceived.future())
+							.onSuccess(ignored -> testContext.verify(() -> {
+								var stackFrames = java.util.Arrays.stream(gameOverStackRef.get() != null ? gameOverStackRef.get() : new StackTraceElement[0])
+										.map( e -> e.getClassName() + "." + e.getMethodName())
+										.toList();
+								assertAll(
+										() -> assertFalse(io.vertx.core.Verticle.class.isAssignableFrom(com.hiddenswitch.framework.impl.UnityClientBehaviour.class),
+												"UnityClientBehaviour must not be a separate Verticle actor"),
+										() -> assertNotNull(childFiberSpanRef.get(),
+												"Async.openScope() child fibers must inherit the parent fiber's active OpenTracing span"),
+										() -> assertNotNull(sgc.getSpanContext(),
+												"ServerGameContext.getSpanContext() must be populated from ConfigurationRequest / ServerGameContext/play"),
+										() -> assertTrue(sgc.getTrace().getActions().isEmpty(),
+												"Inactivity timeout (noActivity) must concede immediately without executing a random GameAction! Found actions: " + sgc.getTrace().getActions()),
+										() -> assertEquals(sgc.getThread(), gameOverThreadRef.get(),
+												"Concession endGame/onGameOver must execute on the ServerGameContext/play fiber, not on a separate client actor thread"),
+										() -> assertTrue(stackFrames.stream().anyMatch(f -> f.contains("ServerGameContext.play")),
+												"Concession endGame/onGameOver Java callstack must include ServerGameContext.play! Found: " + stackFrames),
+										() -> assertTrue(stackFrames.stream().anyMatch(f -> f.contains("ServerGameContext.resume")),
+												"Concession endGame/onGameOver Java callstack must include ServerGameContext.resume! Found: " + stackFrames),
+										() -> assertNotNull(gameOverActiveSpanRef.get(),
+												"Concession endGame/onGameOver must have an active OpenTracing span on the fiber")
+								);
+							}))
+							.eventually(() -> {
+								if (w1.future().succeeded()) w1.future().result().end();
+								if (w2.future().succeeded()) w2.future().result().end();
+								return Future.succeededFuture();
 							});
 				})
 				.compose(ignored -> awaitZeroDynamicResources(vertx, baselineDeploymentsRef.get()))
