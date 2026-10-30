@@ -58,10 +58,10 @@ public class GraphQLGameBridge {
 	 */
 	public static Future<Void> sendClientMessage(String userId, Spellsource.ClientToServerMessage message) {
 		var eventBus = Vertx.currentContext().owner().eventBus();
-		var publisher = eventBus.<Spellsource.ClientToServerMessage>publisher(ServerGameContext.getMessagesFromClientAddress(userId));
+		var publisher = eventBus.<Spellsource.ClientToServerMessage>publisher(Games.getMessagesFromClientAddress(userId));
 		var retryPublisher = new RetryMessageProducer<>(publisher, 10, 1000,
 				body -> body.getMessageType() == Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE);
-		return retryPublisher.write(message);
+		return retryPublisher.write(message).eventually(retryPublisher::close);
 	}
 
 	/**
@@ -346,7 +346,7 @@ public class GraphQLGameBridge {
 		public void subscribe(Subscriber<? super ServerGameMessage> subscriber) {
 			var vertx = Vertx.currentContext().owner();
 			var eventBus = vertx.eventBus();
-			var address = ServerGameContext.getMessagesFromServerAddress(userId);
+			var address = Games.getMessagesFromServerAddress(userId);
 			var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(address);
 			var readinessConsumer = eventBus.<String>consumer(subscriberAddress(userId, connectionId));
 			var cancelled = new AtomicBoolean(false);

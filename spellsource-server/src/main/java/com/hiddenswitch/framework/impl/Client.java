@@ -1,29 +1,40 @@
 package com.hiddenswitch.framework.impl;
 
-import io.vertx.core.Closeable;
+import com.hiddenswitch.spellsource.common.GameState;
 import io.vertx.core.Future;
-import net.demilich.metastone.game.events.GameEvent;
+import io.vertx.core.Verticle;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.events.Notification;
+import net.demilich.metastone.game.logic.TurnState;
+
+import java.util.List;
 
 /**
- * An interface that specifies the boundary between a {@link net.demilich.metastone.game.GameContext} and a networking
- * channel like a websocket or a plain TCP socket.
+ * An interface that specifies the boundary between a {@link net.demilich.metastone.game.GameContext} and a
+ * networked player verticle.
  */
-public interface Client extends ActionListener, GameEventListener, HasElapsableTurns, Closeable {
+public interface Client extends Behaviour, Verticle {
+	boolean isElapsed();
 
-	/**
-	 * Send an emote to a client. By default, there's no implementation except for Unity clients.
-	 *
-	 * @param entityId The entity from which the emote should originate. Typically a hero entity.
-	 * @param emote    The emote to send
-	 */
-	@Override
+	Client setElapsed(boolean elapsed);
+
+	void elapseAwaitingRequests();
+
+	void onRequestAction(String messageId, GameState state, List<GameAction> actions);
+
+	void onMulligan(String messageId, GameState state, List<Card> cards, int playerId);
+
+	void sendNotification(Notification event, GameState gameState);
+
+	void onConnectionStarted(Player activePlayer);
+
+	void onUpdate(GameState state);
+
 	void sendEmote(int entityId, String emote);
 
-	/**
-	 * Called when the last event in a stack of {@link GameEvent} has been evaluated. Typically, a client should be
-	 * notified of an entire sequence of events, so that it has valid data at the end of each event, rather than as the
-	 * events are processed.
-	 */
 	void lastEvent();
 
 	int getPlayerId();
@@ -32,22 +43,7 @@ public interface Client extends ActionListener, GameEventListener, HasElapsableT
 
 	void closeInboundMessages();
 
-	/**
-	 * Copies all the requests to the target client.
-	 * <p>
-	 * This allows the client to resume pending requests correctly.
-	 *
-	 * @param client
-	 */
-	void copyRequestsTo(Client client);
+	Future<Void> unregisterConsumer();
 
-	/**
-	 * Gets the scheduler for this client
-	 * @return a scheduler for the client's context
-	 */
-	Scheduler getScheduler();
-
-	default Future<Void> lastWriteFuture() {
-		return Future.succeededFuture();
-	}
+	Future<Void> lastWriteFuture();
 }

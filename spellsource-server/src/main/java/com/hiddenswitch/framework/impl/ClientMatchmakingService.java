@@ -243,23 +243,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		}
 
 		public Future<Void> requeueTicket(Long ticketId, String queueId, String deckId, String botDeckId) {
-			return enqueueTicketWrite(() -> {
-				if (ticketId != null) {
-					return Environment.sqlClient()
-							.preparedQuery(REINSERT_TICKET_SQL)
-							.execute(Tuple.of(ticketId, queueId, this.userId, deckId, botDeckId));
-				}
-				var record = MATCHMAKING_TICKETS.newRecord()
-						.setUserId(this.userId)
-						.setQueueId(queueId)
-						.setDeckId(deckId)
-						.setBotDeckId(botDeckId);
-				return withDslContext(dsl -> dsl
-						.insertInto(MATCHMAKING_TICKETS)
-						.set(record)
-						.onDuplicateKeyUpdate()
-						.set(record));
-			});
+			return enqueueTicketWrite(() -> Matchmaking.executeRequeueTicket(this.userId, ticketId, queueId, deckId, botDeckId));
 		}
 
 		private boolean isResponseDead() {

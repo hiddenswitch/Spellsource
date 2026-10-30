@@ -21,6 +21,7 @@ import io.vertx.core.eventbus.ReplyFailure;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.sqlclient.Row;
+import io.vertx.sqlclient.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -201,6 +202,26 @@ public class Matchmaking extends AbstractVerticle {
 				.where(MATCHMAKING_TICKETS.USER_ID.eq(userId)))
 				.<Void>mapEmpty()
 				.otherwiseEmpty();
+	}
+
+	public static Future<Void> executeRequeueTicket(String userId, Long ticketId, String queueId, String deckId, String botDeckId) {
+		if (ticketId != null) {
+			return Environment.sqlClient()
+					.preparedQuery(REINSERT_TICKET_SQL)
+					.execute(Tuple.of(ticketId, queueId, userId, deckId, botDeckId))
+					.mapEmpty();
+		}
+		var record = MATCHMAKING_TICKETS.newRecord()
+				.setUserId(userId)
+				.setQueueId(queueId)
+				.setDeckId(deckId)
+				.setBotDeckId(botDeckId);
+		return withDslContext(dsl -> dsl
+				.insertInto(MATCHMAKING_TICKETS)
+				.set(record)
+				.onDuplicateKeyUpdate()
+				.set(record))
+				.mapEmpty();
 	}
 
 	private static Future<Void> requeueLiveTicket(Vertx vertx, MatchmakingTickets ticket) {

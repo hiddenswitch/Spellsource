@@ -1584,6 +1584,60 @@ public class GameTests extends FrameworkTestBase {
 		});
 	}
 
+	@Test
+	@Timeout(value = 15, timeUnit = TimeUnit.SECONDS)
+	public void testActivityMonitorAndGameplayRequestContract(Vertx vertx, VertxTestContext testContext) {
+		vertx.runOnContext(v -> {
+			testContext.verify(() -> {
+				assertThrows(IllegalArgumentException.class,
+						() -> new com.hiddenswitch.framework.impl.ActivityMonitor(vertx, -1L, m -> {}),
+						"Negative noActivityTimeout must be rejected");
+				var disabledMonitor = new com.hiddenswitch.framework.impl.ActivityMonitor(vertx, 0L, m -> {});
+				disabledMonitor.activity();
+				disabledMonitor.cancel();
+
+				var mulliganResult = new AtomicReference<java.util.List<net.demilich.metastone.game.cards.Card>>();
+				var mulliganReq = new com.hiddenswitch.framework.impl.GameplayRequest.Mulligan(
+						"m1", java.util.Collections.emptyList(), mulliganResult::set);
+				assertEquals("m1", mulliganReq.getCallbackId());
+				assertTrue(mulliganReq.getStarterCards().isEmpty());
+				mulliganReq.resolveIndices(java.util.Arrays.asList(-1, 5, null));
+				assertNotNull(mulliganResult.get());
+				assertTrue(mulliganResult.get().isEmpty());
+				mulliganReq.elapse(null);
+				assertTrue(mulliganResult.get().isEmpty());
+
+				var endTurn = new net.demilich.metastone.game.actions.EndTurnAction(0);
+				var chosenAction = new AtomicReference<net.demilich.metastone.game.actions.GameAction>();
+				var actionReq = new com.hiddenswitch.framework.impl.GameplayRequest.Action(
+						"a1", java.util.Collections.singletonList(endTurn), chosenAction::set);
+				assertEquals("a1", actionReq.getCallbackId());
+				assertFalse(actionReq.isValidIndex(-1));
+				assertFalse(actionReq.isValidIndex(1));
+				assertTrue(actionReq.isValidIndex(0));
+				actionReq.elapse(null);
+				assertEquals(endTurn, chosenAction.get());
+			});
+
+			var timeoutFired = Promise.<Void>promise();
+			var activeMonitor = new com.hiddenswitch.framework.impl.ActivityMonitor(
+					vertx, 40L, m -> timeoutFired.tryComplete());
+			activeMonitor.activity();
+			activeMonitor.activity(); // resets timer cleanly
+
+			var ucb = new com.hiddenswitch.framework.impl.UnityClientBehaviour(null, "u1", 0, 0L);
+			testContext.verify(() -> {
+				assertEquals("Unity client behaviour", ucb.getName());
+				assertNotNull(ucb.clone());
+				assertTrue(ucb.toString().contains("u1"));
+			});
+
+			timeoutFired.future()
+					.onSuccess(ignored -> activeMonitor.cancel())
+					.onComplete(testContext.succeedingThenComplete());
+		});
+	}
+
 	private static class ClientWithPort extends Client {
 		private final int port;
 

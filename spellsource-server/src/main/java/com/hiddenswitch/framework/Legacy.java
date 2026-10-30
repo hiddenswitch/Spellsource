@@ -86,7 +86,7 @@ public class Legacy {
 			public void subscribeGame(GrpcServerRequest<ClientToServerMessage, ServerToClientMessage> grpcServerRequest, ReadStream<ClientToServerMessage> request, WriteStream<ServerToClientMessage> response) {
 				request.pause();
 				var userId = grpcServerRequest.routingContext().user().subject();
-				ServerGameContext.subscribeGame(userId, grpcServerRequest, response);
+				Games.subscribeGame(userId, grpcServerRequest, response);
 			}
 
 			@Override

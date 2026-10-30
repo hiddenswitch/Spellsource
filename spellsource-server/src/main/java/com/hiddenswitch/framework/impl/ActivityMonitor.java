@@ -1,50 +1,40 @@
 package com.hiddenswitch.framework.impl;
 
-import java.lang.ref.WeakReference;
-import java.util.function.Consumer;;
+import io.vertx.core.Vertx;
+import java.util.function.Consumer;
 
 /**
- * A timer for keeping track of a client's activity. Uses a {@link Scheduler} (typically implemented from vertx) for
- * timers. Calls a handler after {@code noActivityTimeout} of not getting {@link #activity()} called.
+ * A timer for keeping track of a client's activity. Calls {@code onTimeout} after {@code noActivityTimeout}
+ * milliseconds without {@link #activity()} being called. When {@code noActivityTimeout} is {@code 0},
+ * monitoring is disabled and {@link #activity()} / {@link #cancel()} are no-ops.
  */
 public class ActivityMonitor {
+	private final Vertx vertx;
 	private final long noActivityTimeout;
-	private final WeakReference<Scheduler> scheduler;
-	private final String gameId;
 	private final Consumer<ActivityMonitor> onTimeout;
 	private Long lastTimerId;
 
-	public ActivityMonitor(Scheduler scheduler, long noActivityTimeout, Consumer<ActivityMonitor> onTimeout, String gameId) {
-		this.gameId = gameId;
-		this.scheduler = new WeakReference<>(scheduler);
+	public ActivityMonitor(Vertx vertx, long noActivityTimeout, Consumer<ActivityMonitor> onTimeout) {
+		if (noActivityTimeout < 0L) {
+			throw new IllegalArgumentException("noActivityTimeout must be non-negative");
+		}
+		this.vertx = vertx;
 		this.noActivityTimeout = noActivityTimeout;
 		this.onTimeout = onTimeout;
 	}
 
 	public void activity() {
-		var scheduler = this.scheduler.get();
-		if (scheduler == null) {
+		if (noActivityTimeout == 0L || vertx == null) {
 			return;
 		}
-
 		cancel();
-
-		lastTimerId = scheduler.setTimer(noActivityTimeout, v -> onTimeout.accept(this));
+		lastTimerId = vertx.setTimer(noActivityTimeout, v -> onTimeout.accept(this));
 	}
 
 	public void cancel() {
-		Scheduler scheduler = this.scheduler.get();
-
-		if (scheduler == null) {
-			return;
+		if (lastTimerId != null && vertx != null) {
+			vertx.cancelTimer(lastTimerId);
+			lastTimerId = null;
 		}
-
-		if (lastTimerId != null) {
-			scheduler.cancelTimer(lastTimerId);
-		}
-	}
-
-	public String getGameId() {
-		return gameId;
 	}
 }

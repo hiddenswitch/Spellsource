@@ -1041,7 +1041,7 @@ public class GraphQLTests extends FrameworkTestBase {
 
 			var firstMessage = Promise.<Spellsource.ClientToServerMessage>promise();
 			var gameConsumer = vertx.eventBus()
-					.<Spellsource.ClientToServerMessage>consumer(ServerGameContext.getMessagesFromClientAddress(userId));
+					.<Spellsource.ClientToServerMessage>consumer(Games.getMessagesFromClientAddress(userId));
 			gameConsumer.handler(message -> firstMessage.tryComplete(message.body()));
 			await(gameConsumer.completion());
 

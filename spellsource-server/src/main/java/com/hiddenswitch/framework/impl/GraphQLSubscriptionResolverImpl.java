@@ -1,11 +1,15 @@
 package com.hiddenswitch.framework.impl;
 
 import com.hiddenswitch.framework.Accounts;
+import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Matchmaking;
 import com.hiddenswitch.framework.graphql.*;
 import graphql.kickstart.tools.GraphQLSubscriptionResolver;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.json.JsonObject;
+import io.vertx.sqlclient.Tuple;
 import org.apache.commons.lang3.NotImplementedException;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
@@ -13,6 +17,11 @@ import org.reactivestreams.Subscription;
 
 import javax.naming.AuthenticationException;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.hiddenswitch.framework.Environment.withDslContext;
+import static com.hiddenswitch.framework.Matchmaking.MATCHMAKING_WAKE;
+import static com.hiddenswitch.framework.Matchmaking.REINSERT_TICKET_SQL;
+import static com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS;
 
 /**
  * GraphQL subscription resolver.
@@ -92,11 +101,13 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 			var cancelled = new AtomicBoolean(false);
 			var address = Matchmaking.MATCHMAKING_ENQUEUE + userId;
 			var prepareAddress = Matchmaking.MATCHMAKING_PREPARE + userId;
+			var requeueAddress = Matchmaking.MATCHMAKING_REQUEUE + userId;
 			var vertx = Vertx.currentContext().owner();
 			var eventBus = vertx.eventBus();
 
 			MessageConsumer<String> consumer = eventBus.consumer(address);
 			MessageConsumer<String> prepareConsumer = eventBus.consumer(prepareAddress);
+			MessageConsumer<JsonObject> requeueConsumer = eventBus.consumer(requeueAddress);
 
 			subscriber.onSubscribe(new Subscription() {
 				@Override
@@ -109,6 +120,7 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 					cancelled.set(true);
 					consumer.unregister();
 					prepareConsumer.unregister();
+					requeueConsumer.unregister();
 				}
 			});
 
@@ -118,6 +130,21 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 					return;
 				}
 				message.reply("ok");
+			});
+
+			requeueConsumer.handler(message -> {
+				if (cancelled.get()) {
+					message.fail(1, "subscription cancelled");
+					return;
+				}
+				var body = message.body();
+				var queueId = body.getString("queueId");
+				Matchmaking.executeRequeueTicket(userId, body.getLong("ticketId"), queueId, body.getString("deckId"), body.getString("botDeckId"))
+						.onSuccess(v -> {
+							eventBus.publish(MATCHMAKING_WAKE, queueId);
+							message.reply("ok");
+						})
+						.onFailure(err -> message.fail(1, err.getMessage() != null ? err.getMessage() : "requeue failed"));
 			});
 
 			consumer.handler(message -> {

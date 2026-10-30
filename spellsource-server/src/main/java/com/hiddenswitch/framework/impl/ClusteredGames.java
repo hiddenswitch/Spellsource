@@ -19,6 +19,7 @@ import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.logic.GameStatus;
+import net.demilich.metastone.game.logic.Trace;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import net.demilich.metastone.game.logic.Trace;
 
 import static com.hiddenswitch.framework.schema.keycloak.Keycloak.KEYCLOAK;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GAMES;
@@ -52,18 +52,21 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 		CodecRegistration.register(ServerToClientMessage.getDefaultInstance())
 				.andRegister(ClientToServerMessage.getDefaultInstance())
 				.andRegister(CreateGameSessionResponse.class)
-				.andRegister(MatchCreateResponse.class)
 				.andRegister(ConfigurationRequest.class);
 		var eb = Vertx.currentContext().owner().eventBus();
 		registration = eb.<ConfigurationRequest>consumer(Games.GAMES_CREATE_GAME_SESSION, request ->
 				createGameSession(request.body()).onSuccess(request::reply).onFailure(t -> request.fail(-1, t.getMessage())));
 		restoreRegistration = eb.<String>consumer(Games.GAMES_RESTORE_GAME, request ->
-			restoreGame(request.body()).onSuccess(request::reply).onFailure(t -> request.fail(-1, t.getMessage())));
+				restoreGame(request.body()).onSuccess(request::reply).onFailure(t -> request.fail(-1, t.getMessage())));
 
 		this.cardCatalogue = SqlCachedCardCatalogue.forVertx();
 		this.cardCatalogue.ensureInitialized();
 
 		await(Future.all(registration.completion(), restoreRegistration.completion()));
+	}
+
+	public void registerContext(@NotNull String gameId, @NotNull ServerGameContext context) {
+		contexts.put(gameId, context);
 	}
 
 	public Future<CreateGameSessionResponse> createGameSession(ConfigurationRequest request) {
@@ -73,17 +76,11 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			throw new IllegalArgumentException("Cannot create a game session without specifying a gameId.");
 		}
 
-		// Loads persistence game triggers that implement legacy functionality. In other words, ensures that game contexts
-		// will contain the event-listening enchantments that interact with network services like the database to store
-		// stuff about cards.
-		// Logic.triggers();
-		// Get the collection data from the configurations that are not yet populated with valid cards
 		var playerConfigurations = new ArrayList<Future<?>>();
 		var resumable = request.getConfigurations().stream().filter(Configuration::isBot).count() == 1
 				&& request.getConfigurations().size() == 2;
 		for (var configuration : request.getConfigurations()) {
 			if (resumable && !configuration.isBot()) {
-				// A single-player context remains hosted while its client is absent.
 				configuration.setNoActivityTimeout(0L);
 			}
 			var playerAttributes = new AttributeMap();
@@ -94,13 +91,8 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			if (configuration.getDeck() instanceof CollectionDeck) {
 				deckCollectionFut = Legacy.getDeck(cardCatalogue, deckId, userId)
 						.compose(deckCollection -> {
-							// Create the deck and assign all the appropriate IDs to the cards
 							var deck = ModelConversions.getGameDeck(userId, deckCollection, cardCatalogue);
-
 							configuration.setDeck(deck);
-
-							// Add all the attributes that were specified in the deck collection
-							// Implements Signature
 							for (var tuple : deckCollection.getCollection().getPlayerEntityAttributesList()) {
 								playerAttributes.put(Attribute.valueOf(tuple.getAttribute().name()), tuple.getStringValue());
 							}
@@ -115,59 +107,32 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 							.map(usernameRow -> usernameRow.getString(0))
 							.compose(username -> {
 								configuration.setName(username);
-								// TODO: Get more attributes from database
 								playerAttributes.put(Attribute.NAME, username);
 								playerAttributes.put(Attribute.USER_ID, userId);
 								playerAttributes.put(Attribute.DECK_ID, deckId);
-
 								configuration.setPlayerAttributes(playerAttributes);
-
 								return Future.succeededFuture(configuration);
 							}));
 
 			playerConfigurations.add(configurationFut);
-			
 			RogueManager.handleGameStart(deckId, Long.parseLong(request.getGameId()));
 		}
 
 		return Future.all(playerConfigurations)
 				.compose(_ -> {
-					LOGGER.trace("loading player configurations for request {}", request);
-					var serverContextVerticle = new AbstractVirtualThreadVerticle() {
-						private ServerGameContext serverGameContext;
-
-						@Override
-						public void startVirtual() {
-							this.serverGameContext = new ServerGameContext(
-									request.getGameId(),
-									new VertxScheduler(),
-									request.getConfigurations(),
-									cardCatalogue,
-									ClusteredGames.this,
-									this);
-
-							contexts.put(request.getGameId(), serverGameContext);
-							// Plays the game context in its own fiber
-							await(serverGameContext.handlersReady());
-							serverGameContext.play(true);
-						}
-
-						@Override
-						public void stopVirtual() {
-							var thread = serverGameContext.getThread();
-							if (thread != null && thread.isAlive() && !thread.isInterrupted()) {
-								thread.interrupt();
-							}
-						}
-					};
-					return vertx.deployVerticle(serverContextVerticle, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
-							.map(deploymentId -> CreateGameSessionResponse.session(deploymentID(), serverContextVerticle.serverGameContext));
+					var serverGameContext = new ServerGameContext(
+							request.getGameId(),
+							request.getConfigurations(),
+							cardCatalogue,
+							this);
+					return vertx.deployVerticle(serverGameContext, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
+							.map(deploymentId -> CreateGameSessionResponse.session(deploymentID(), serverGameContext));
 				})
 				.onFailure(Environment.onFailure())
-				.compose(response -> {
+				.map(response -> {
 					GAMES_CREATED.increment();
 					LOGGER.trace("handlers are ready for request {}", request);
-					return Future.succeededFuture(response);
+					return response;
 				});
 	}
 
@@ -221,7 +186,6 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 
 	private Future<CreateGameSessionResponse> createResumedSession(String gameId, String userId, short humanIndex, String humanDeckId, Trace trace) {
 		try {
-			var replayed = trace.replayContext(false, null, cardCatalogue);
 			var configurations = new ArrayList<Configuration>();
 			for (var index = 0; index < 2; index++) {
 				var deck = new GameDeck(cardCatalogue, trace.getHeroClasses().get(index), trace.getDeckCardIds().get(index).getCardIds());
@@ -231,32 +195,16 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 						.setBot(index != humanIndex).setNoActivityTimeout(index == humanIndex ? 0L : Games.getDefaultNoActivityTimeout())
 						.setDeck(deck));
 			}
-			var serverContextVerticle = new AbstractVirtualThreadVerticle() {
-				private ServerGameContext serverGameContext;
-				@Override public void startVirtual() {
-					serverGameContext = new ServerGameContext(gameId, new VertxScheduler(), configurations, cardCatalogue, ClusteredGames.this, this);
-					serverGameContext.restoreFromTrace(trace);
-					contexts.put(gameId, serverGameContext);
-					await(serverGameContext.handlersReady());
-					serverGameContext.play(true);
-				}
-				@Override public void stopVirtual() { if (serverGameContext != null && serverGameContext.getThread() != null) serverGameContext.getThread().interrupt(); }
-			};
-			return vertx.deployVerticle(serverContextVerticle, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
-					.map(deploymentId -> CreateGameSessionResponse.session(deploymentID(), serverContextVerticle.serverGameContext));
+			var serverGameContext = new ServerGameContext(gameId, configurations, cardCatalogue, this);
+			serverGameContext.restoreFromTrace(trace);
+			return vertx.deployVerticle(serverGameContext, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
+					.map(deploymentId -> CreateGameSessionResponse.session(deploymentID(), serverGameContext));
 		} catch (Throwable cause) {
 			LOGGER.warn("Cannot replay persisted game {}", gameId, cause);
 			return abandonUnrestorableGame(Long.parseLong(gameId), userId).compose(ignored -> Future.failedFuture(cause));
 		}
 	}
 
-	/**
-	 * Handles a game that ends by any means.
-	 * <p>
-	 * Records metadata, like wins and losses.
-	 *
-	 * @param gameId
-	 */
 	public void removeGameAndRecordReplay(@NotNull String gameId) {
 		Objects.requireNonNull(gameId);
 		if (!Thread.currentThread().isVirtual()) {
@@ -274,10 +222,8 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 		if (gameContext.getWinner() != null && gameContext.getWinner().getUserId() != null) {
 			winner = gameContext.getWinner().getUserId();
 		}
-		// Save the wins/losses
 		if (winner != null) {
 			var userIdLoser = gameContext.getOpponent(gameContext.getWinner()).getUserId();
-
 			var pTrace = JSONToJsonObjectConverter.getInstance().to(gameContext.getTrace().toJson());
 			var updated = await(Environment.callRoutine(Routines.clusteredGamesUpdateGameAndUsers(winner, userIdLoser, gameIdLong, pTrace)).execute());
 			if (!Boolean.TRUE.equals(updated)) {
@@ -295,38 +241,26 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 		var keys = Sets.newCopyOnWriteArraySet(contexts.keySet());
 		LOGGER.trace("stop: Stopping the ClusteredGames, hosting contexts: {}", keys.stream().map(String::toString).reduce((s1, s2) -> s1 + ", " + s2).orElseGet(() -> "none"));
 
-		for (var context : contexts.values()) {
-			if (context.isRunning()) {
-				LOGGER.warn("stop: Game gameId={} was still running when stop was called.", context.getGameId());
-			}
-		}
-
 		await(Future.all(
 				registration.unregister().otherwiseEmpty(),
 				restoreRegistration.unregister().otherwiseEmpty()));
-		try {
-			for (var gameId : keys) {
-				Objects.requireNonNull(gameId);
-				var context = contexts.get(gameId);
-				if (context != null && context.getPlayerConfigurations().stream().filter(Configuration::isBot).count() == 1) {
-					try {
-						context.checkpoint();
-					} catch (Throwable t) {
-						LOGGER.warn("Could not checkpoint game {} on stop", gameId, t);
-					}
-					contexts.remove(gameId);
-					var thread = context.getThread();
-					if (thread != null) {
-						thread.interrupt();
-					}
-					context.close();
-				} else {
-					removeGameAndRecordReplay(gameId);
+		for (var gameId : keys) {
+			Objects.requireNonNull(gameId);
+			var context = contexts.get(gameId);
+			if (context != null && context.getPlayerConfigurations().stream().filter(Configuration::isBot).count() == 1) {
+				try {
+					context.checkpoint();
+				} catch (Throwable t) {
+					LOGGER.warn("Could not checkpoint game {} on stop", gameId, t);
 				}
-			}
-		} finally {
-			if (!contexts.isEmpty()) {
-				LOGGER.warn("failed to close all contexts");
+				contexts.remove(gameId);
+				var thread = context.getThread();
+				if (thread != null) {
+					thread.interrupt();
+				}
+				context.close();
+			} else {
+				removeGameAndRecordReplay(gameId);
 			}
 		}
 		LOGGER.trace("stop: Unregistered");
