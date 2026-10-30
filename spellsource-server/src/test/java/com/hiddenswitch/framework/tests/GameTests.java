@@ -1685,6 +1685,14 @@ public class GameTests extends FrameworkTestBase {
 				new com.hiddenswitch.framework.impl.ClientMatchmakingService().close(cmsClose);
 				assertTrue(cmsClose.future().succeeded());
 				new com.hiddenswitch.framework.impl.ClusteredGames().removeGameAndRecordReplay("999996");
+				com.hiddenswitch.framework.Matchmaking.startTicketSpan("u_abort", "constructed", "d1", "");
+				com.hiddenswitch.framework.Matchmaking.finishTicketSpanAborted("u_abort", "999995");
+				assertTrue(com.hiddenswitch.diagnostics.Tracing.getRecordedSpans().stream()
+						.anyMatch(s -> "Matchmaking/enqueue".equals(s.operationName())
+								&& "u_abort".equals(s.tags().get("userId"))
+								&& "aborted".equals(s.tags().get("status"))
+								&& "999995".equals(s.tags().get("abortedGameId"))
+								&& Boolean.TRUE.equals(s.tags().get("error"))));
 
 				var catalogue = net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue.INSTANCE;
 				var deck1 = new net.demilich.metastone.game.decks.GameDeck(catalogue, net.demilich.metastone.game.entities.heroes.HeroClass.BROWN, java.util.Collections.emptyList());
@@ -2141,6 +2149,15 @@ public class GameTests extends FrameworkTestBase {
 											"Saga compensation must delete the aborted GAMES row from the database");
 									assertEquals(1, survivingTicketCount,
 											"Surviving participant user1 must be requeued in MATCHMAKING_TICKETS by Saga compensation");
+									assertTrue(com.hiddenswitch.diagnostics.Tracing.getRecordedSpans().stream()
+													.anyMatch(s -> "Matchmaking/enqueue".equals(s.operationName())
+															&& client1.getUserEntity().getId().equals(s.tags().get("userId"))
+															&& "superseded".equals(s.tags().get("status"))),
+											"Repeated MatchmakingQueuePutRequest enqueues must finish prior Matchmaking/enqueue spans with status='superseded'");
+									assertTrue(com.hiddenswitch.diagnostics.Tracing.getRecordedSpans().stream()
+													.anyMatch(s -> "Matchmaking/startLobbyMatch".equals(s.operationName())
+															&& s.references().size() >= 2),
+											"2-player Matchmaking/startLobbyMatch span must link both players' Matchmaking/enqueue spans");
 								}));
 							})
 							.eventually(() -> {

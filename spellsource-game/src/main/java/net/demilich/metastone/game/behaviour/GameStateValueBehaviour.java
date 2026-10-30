@@ -366,6 +366,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				? tracer.buildSpan("GameStateValueBehaviour/requestAction")
 					.withTag("gameId", context.getGameId())
 					.withTag("deckId", (String) player.getAttributes().get(Attribute.DECK_ID))
+					.asChildOf(context.getSpanContext())
 					.start()
 				: io.opentracing.noop.NoopSpan.INSTANCE;
 

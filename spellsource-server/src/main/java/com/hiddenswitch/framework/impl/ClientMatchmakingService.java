@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.impl;
 
 import com.google.common.base.Strings;
+import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Matchmaking;
@@ -66,6 +67,9 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		var eventBus = vertx.eventBus();
 		var timer = MATCHMAKING_TICKETS_DURATION.start();
 		var channels = Collections.synchronizedList(new ArrayList<MessageConsumer>());
+		var grpcParentSpan = grpcServerRequest.routingContext() != null && grpcServerRequest.routingContext().request() != null
+				? Tracing.extractFromHeaders(grpcServerRequest.routingContext().request().headers())
+				: null;
 		var session = new Session(s -> {
 			activeSessionsByUser.remove(s.userId(), s);
 			sessions.remove(s);
@@ -87,13 +91,17 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 
 		// notify the user when a game has been assigned
 		var enqueueConsumer = eventBus.<String>consumer(MATCHMAKING_ENQUEUE + userId);
-		enqueueConsumer.handler(message -> writeGameId(response, message.body())
-				.compose(v -> session.close())
-				.onSuccess(v -> message.reply("ok"))
-				.onFailure(err -> {
-					session.close();
-					message.fail(1, "failed to write gameId");
-				}));
+		enqueueConsumer.handler(message -> {
+			session.matched.set(true);
+			writeGameId(response, message.body())
+					.compose(v -> session.close())
+					.onSuccess(v -> message.reply("ok"))
+					.onFailure(err -> {
+						session.matched.set(false);
+						session.close();
+						message.fail(1, "failed to write gameId");
+					});
+		});
 		channels.add(enqueueConsumer);
 
 		var consumersReady = Future.all(
@@ -113,10 +121,18 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 				return;
 			}
 
+			try (var ignored = grpcParentSpan != null && Tracing.activeSpanContext() == null
+					? Tracing.enterSpan("Matchmaking/grpcEnqueue", grpcParentSpan)
+					: null) {
+				Matchmaking.startTicketSpan(userId, message.getQueueId(), message.getDeckId(), message.getBotDeckId());
+			}
+
 			Games.getGameId(userId)
 					.compose(existingGameId -> {
 						if (session.cancelled.get()) return Future.succeededFuture();
 						if (existingGameId != null) {
+							session.matched.set(true);
+							Matchmaking.finishTicketSpanMatched(userId, existingGameId, "existing_game");
 							return Matchmaking.writeGameId(response, existingGameId)
 									.eventually(session::close);
 						}
@@ -165,6 +181,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 		private final List<MessageConsumer> channels;
 		private final LongTaskTimer.Sample timer;
 		private final AtomicBoolean cancelled;
+		private final AtomicBoolean matched = new AtomicBoolean(false);
 		private final KeepAliveManager keepAliveManager;
 		private final HttpConnection connection;
 		private final Promise<Void> closePromise = Promise.promise();
@@ -260,6 +277,9 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 					return this.closeFuture;
 				}
 				this.remover.accept(this);
+				if (!this.matched.get()) {
+					Matchmaking.finishTicketSpanCancelled(this.userId, "cancelled");
+				}
 				pendingTicketWrite = this.ticketWrite;
 
 				this.timer.stop();

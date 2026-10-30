@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.impl;
 
 import com.google.common.collect.Sets;
+import com.hiddenswitch.diagnostics.Traced;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
@@ -78,6 +79,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 		return contexts.size();
 	}
 
+	@Traced
 	public CreateGameSessionResponse createGameSession(ConfigurationRequest request) {
 		LOGGER.trace("createGameSession: creating game session for request {}", request);
 		Objects.requireNonNull(request.getGameId(), "Cannot create a game session without specifying a gameId.");
@@ -127,13 +129,13 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 				request.getConfigurations(),
 				cardCatalogue,
 				this);
-		serverGameContext.setSpanContext(request.getSpanContext());
 		await(vertx.deployVerticle(serverGameContext, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD)));
 		GAMES_CREATED.increment();
 		return CreateGameSessionResponse.session(deploymentID(), serverGameContext);
 	}
 
 	/** Finds and reconstructs the latest checkpointed one-human/one-bot game for a returning player. */
+	@Traced
 	private String restoreGame(String userId) {
 		var rows = await(Environment.query(dsl -> dsl.select(GAMES.ID, GAMES.TRACE, GAME_USERS.PLAYER_INDEX, GAME_USERS.DECK_ID)
 				.from(GAMES).join(GAME_USERS).on(GAME_USERS.GAME_ID.eq(GAMES.ID))

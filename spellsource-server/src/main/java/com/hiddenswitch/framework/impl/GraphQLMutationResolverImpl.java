@@ -453,6 +453,11 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 		if (userId == null) {
 			return Future.failedFuture("must be authenticated");
 		}
+		com.hiddenswitch.framework.Matchmaking.startTicketSpan(
+				userId,
+				input.getQueueId(),
+				input.getDeckId(),
+				input.getBotDeckId());
 		return withDslContext(dsl -> dsl.insertInto(MATCHMAKING_TICKETS,
 						MATCHMAKING_TICKETS.USER_ID,
 						MATCHMAKING_TICKETS.DECK_ID,
@@ -468,6 +473,7 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 				.set(MATCHMAKING_TICKETS.QUEUE_ID, input.getQueueId())
 				.set(MATCHMAKING_TICKETS.BOT_DECK_ID, input.getBotDeckId()))
 				.onSuccess(rows -> Vertx.currentContext().owner().eventBus().publish(com.hiddenswitch.framework.Matchmaking.MATCHMAKING_WAKE, input.getQueueId()))
+				.onFailure(err -> com.hiddenswitch.framework.Matchmaking.finishTicketSpanCancelled(userId, "error"))
 				.map(rows -> true);
 	}
 
@@ -477,6 +483,7 @@ public class GraphQLMutationResolverImpl implements MutationResolver, GraphQLMut
 		if (userId == null) {
 			return Future.failedFuture("must be authenticated");
 		}
+		com.hiddenswitch.framework.Matchmaking.finishTicketSpanCancelled(userId, "cancelled");
 		return withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
 				.where(MATCHMAKING_TICKETS.USER_ID.eq(userId)))
 				.map(deleted -> deleted > 0);

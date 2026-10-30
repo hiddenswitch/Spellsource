@@ -1,5 +1,6 @@
 package com.hiddenswitch.framework.virtual;
 
+import com.hiddenswitch.diagnostics.Tracing;
 import io.vertx.core.Handler;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.web.RoutingContext;
@@ -7,6 +8,8 @@ import io.vertx.ext.web.RoutingContext;
 public class VirtualThreadRoutingContextHandler {
 	private static final InheritableThreadLocal<RoutingContext> context = new InheritableThreadLocal<>();
 	private static final InheritableThreadLocal<User> userOverride = new InheritableThreadLocal<>();
+	private static final java.util.regex.Pattern GRAPHQL_OP_PATTERN =
+			java.util.regex.Pattern.compile("^\\s*(?:mutation|query|subscription)\\s+([A-Za-z0-9_]+)");
 
 	public static Handler<RoutingContext> create(Handler<RoutingContext> toDecorate) {
 		return ctx -> {
@@ -14,7 +17,32 @@ public class VirtualThreadRoutingContextHandler {
 				throw new IllegalStateException();
 			}
 			context.set(ctx);
-			toDecorate.handle(ctx);
+			var parent = ctx.request() != null ? Tracing.extractFromHeaders(ctx.request().headers()) : null;
+			var operationName = "GraphQL/request";
+			try {
+				var bodyJson = ctx.body() != null ? ctx.body().asJsonObject() : null;
+				if (bodyJson != null) {
+					var opName = bodyJson.getString("operationName");
+					if (opName == null || opName.isBlank()) {
+						var query = bodyJson.getString("query");
+						if (query != null) {
+							var matcher = GRAPHQL_OP_PATTERN.matcher(query);
+							if (matcher.find()) {
+								opName = matcher.group(1);
+							}
+						}
+					}
+					if (opName != null && !opName.isBlank()) {
+						operationName = "GraphQL/" + opName;
+					}
+				}
+			} catch (Exception ignored) {
+			}
+			var span = Tracing.tracing().buildSpan(operationName).asChildOf(parent).start();
+			ctx.addEndHandler(v -> span.finish());
+			try (var ignored = Tracing.tracing().activateSpan(span)) {
+				toDecorate.handle(ctx);
+			}
 		};
 	}
 

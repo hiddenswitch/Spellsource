@@ -101,56 +101,91 @@ public class GraphQL extends AbstractVirtualThreadVerticle {
 				.build();
 
 		var handler = GraphQLHandler.create(gql);
+		var tracedGraphQLHandler = VirtualThreadRoutingContextHandler.create(ctx -> handler.handle(RoutingContext.newInstance(ctx)));
 
 		router.post("/graphql")
 				.handler(BodyHandler.create().setBodyLimit(10 * 1024 * 1024))
 				.handler(JWTAuthHandler.create(jwtAuth, realm.toRepresentation().getRealm()))
-				.handler(VirtualThreadRoutingContextHandler.create(ctx -> handler.handle(RoutingContext.newInstance(ctx))))
+				.handler(tracedGraphQLHandler)
 				.failureHandler(ctx -> {
 					if (ctx.failed() && ctx.failure() instanceof HttpException httpException && httpException.getMessage().contains("Unauthorized")) {
 						// Allow unauthenticated requests through to the GraphQL handler.
 						// Resolvers that require auth check Accounts.userId() and return
 						// appropriate errors. This lets createAccount, login, introspection
 						// and other public operations work without a token.
-						handler.handle(RoutingContext.newInstance(ctx));
+						tracedGraphQLHandler.handle(ctx);
 						return;
 					}
 
 					ctx.next();
 				});
 
+		io.vertx.core.Handler<io.vertx.ext.web.RoutingContext> tracesCorsHandler = ctx -> {
+			ctx.response()
+					.putHeader("Access-Control-Allow-Origin", "*")
+					.putHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept, uber-trace-id, traceparent")
+					.putHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+					.setStatusCode(204)
+					.end();
+		};
+		io.vertx.core.Handler<io.vertx.ext.web.RoutingContext> tracesIngestHandler = ctx -> {
+			ctx.response()
+					.putHeader("Access-Control-Allow-Origin", "*")
+					.putHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept, uber-trace-id, traceparent")
+					.putHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+			JsonObject body;
+			try {
+				body = ctx.body() != null ? ctx.body().asJsonObject() : null;
+			} catch (Exception e) {
+				ctx.response().setStatusCode(400)
+						.putHeader("Content-Type", "application/json")
+						.end(new JsonObject().put("error", "invalid JSON").encode());
+				return;
+			}
+			int accepted = com.hiddenswitch.diagnostics.Tracing.ingestClientSpans(body);
+			ctx.response().setStatusCode(202)
+					.putHeader("Content-Type", "application/json")
+					.end(new JsonObject().put("accepted", accepted).encode());
+		};
+		router.options("/traces").handler(tracesCorsHandler);
+		router.options("/graphql/traces").handler(tracesCorsHandler);
+		router.post("/traces")
+				.handler(BodyHandler.create().setBodyLimit(2 * 1024 * 1024))
+				.handler(tracesIngestHandler);
+		router.post("/graphql/traces")
+				.handler(BodyHandler.create().setBodyLimit(2 * 1024 * 1024))
+				.handler(tracesIngestHandler);
+
 
 		// WebSocket handler for GraphQL subscriptions (graphql-ws protocol)
 		// Authenticate via connection_init payload: { "Authorization": "Bearer <token>" }
-		router.route("/graphql")
-				.handler(GraphQLWSHandler.builder(gql)
-						.onConnectionInit(event -> {
-							var msg = event.message();
-							var payload = msg.message().getJsonObject("payload");
-							if (payload != null) {
-								var authHeader = payload.getString("Authorization");
-								if (authHeader != null && authHeader.startsWith("Bearer ")) {
-									var token = authHeader.substring(7);
-									jwtAuth.authenticate(new TokenCredentials(token))
-											.onSuccess(user -> {
-												// Store the authenticated user so beforeExecute can use it
-												event.complete(user);
-											})
-											.onFailure(t -> event.complete(null));
-									return;
-								}
-							}
-							event.complete(null);
-						})
-						.beforeExecute(handler1 -> {
-							// Set up VirtualThreadRoutingContextHandler thread-local so
-							// Accounts.userId() works inside subscription resolvers.
-							var connParams = handler1.context().connectionParams();
-							if (connParams instanceof User user) {
-								VirtualThreadRoutingContextHandler.setUser(user);
-							}
-						})
-						.build());
+		var wsHandler = GraphQLWSHandler.builder(gql)
+				.onConnectionInit(event -> {
+					var msg = event.message();
+					var payload = msg.message().getJsonObject("payload");
+					if (payload != null) {
+						var authHeader = payload.getString("Authorization");
+						if (authHeader != null && authHeader.startsWith("Bearer ")) {
+							var token = authHeader.substring(7);
+							jwtAuth.authenticate(new TokenCredentials(token))
+									.onSuccess(event::complete)
+									.onFailure(t -> event.complete(null));
+							return;
+						}
+					}
+					event.complete(null);
+				})
+				.beforeExecute(handler1 -> {
+					// Set up VirtualThreadRoutingContextHandler thread-local so
+					// Accounts.userId() works inside subscription resolvers.
+					var connParams = handler1.context().connectionParams();
+					if (connParams instanceof User user) {
+						VirtualThreadRoutingContextHandler.setUser(user);
+					}
+				})
+				.build();
+		router.route("/graphql").handler(wsHandler);
+		router.route("/subscriptions").handler(wsHandler);
 
 		router.route("/graphiql*").subRouter(GraphiQLHandler.create(vertx, new GraphiQLHandlerOptions().setEnabled(true)).router());
 		Environment.registerArtRoutes(router);

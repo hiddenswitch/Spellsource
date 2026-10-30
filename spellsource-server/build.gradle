@@ -494,6 +494,26 @@ tasks.register("generateSchema", JavaExec) {
 }
 
 // Generated API sources are checked in; order explicit regeneration before compilation.
-tasks.named("compileJava") {
+tasks.named("compileJava", JavaCompile).configure {
   mustRunAfter(tasks.named("graphqlCodegen"))
+  def launcher = javaToolchains.launcherFor(java.toolchain)
+  options.incremental = false
+  doLast {
+    def javaExe = launcher.get().executablePath.asFile.absolutePath
+    def classesDir = destinationDirectory.get().asFile.absolutePath
+    def cp = classesDir + File.pathSeparator + classpath.asPath
+    def pb = new ProcessBuilder(
+        javaExe,
+        "--enable-preview",
+        "-cp", cp,
+        "com.hiddenswitch.diagnostics.ServerClassfileWeaver",
+        classesDir
+    )
+    pb.inheritIO()
+    def proc = pb.start()
+    def exitCode = proc.waitFor()
+    if (exitCode != 0) {
+      throw new GradleException("ServerClassfileWeaver failed with exit code " + exitCode)
+    }
+  }
 }

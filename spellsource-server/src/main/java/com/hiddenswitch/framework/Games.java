@@ -89,10 +89,6 @@ public final class Games {
 	 */
 	public static Future<CreateGameSessionResponse> createGame(ConfigurationRequest request) {
 		CodecRegistration.register(CreateGameSessionResponse.class).andRegister(ConfigurationRequest.class);
-		var activeSpan = io.opentracing.util.GlobalTracer.get().activeSpan();
-		if (request.getSpanContext() == null && activeSpan != null) {
-			request.setSpanContext(activeSpan.context());
-		}
 		var eb = Vertx.currentContext().owner().eventBus();
 		return eb.<CreateGameSessionResponse>request(GAMES_CREATE_GAME_SESSION, request).map(Message::body);
 	}

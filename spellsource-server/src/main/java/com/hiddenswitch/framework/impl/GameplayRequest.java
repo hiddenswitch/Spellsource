@@ -39,7 +39,7 @@ public abstract class GameplayRequest<T> {
 
 	public abstract T defaultChoice(Random random);
 
-	public abstract void send(Client client, GameState state);
+	public abstract void send(UnityClientBehaviour client, GameState state);
 
 	/**
 	 * A prompt asking a player to select which starter cards to discard during the mulligan phase.
@@ -62,7 +62,7 @@ public abstract class GameplayRequest<T> {
 		}
 
 		@Override
-		public void send(Client client, GameState state) {
+		public void send(UnityClientBehaviour client, GameState state) {
 			client.onMulligan(getCallbackId(), state, starterCards, client.getPlayerId());
 		}
 
@@ -104,7 +104,7 @@ public abstract class GameplayRequest<T> {
 		}
 
 		@Override
-		public void send(Client client, GameState state) {
+		public void send(UnityClientBehaviour client, GameState state) {
 			client.onRequestAction(getCallbackId(), state, actions);
 		}
 

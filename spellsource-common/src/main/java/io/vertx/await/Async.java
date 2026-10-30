@@ -88,22 +88,26 @@ public class Async {
 		}
 		var vertxInternal = (VertxInternal) resolvedVertx;
 		var baseCtx = vertxInternal != null ? vertxInternal.createEventLoopContext() : null;
-		var parentSpan = io.opentracing.util.GlobalTracer.get().activeSpan();
-		return runnable -> Thread.ofVirtual().unstarted(() -> {
-			if (baseCtx == null) {
+		var factorySpan = io.opentracing.util.GlobalTracer.get().activeSpan();
+		return runnable -> {
+			var forkSpan = io.opentracing.util.GlobalTracer.get().activeSpan();
+			var parentSpan = forkSpan != null ? forkSpan : factorySpan;
+			return Thread.ofVirtual().unstarted(() -> {
+				if (baseCtx == null) {
+					try (var ignored = parentSpan != null ? io.opentracing.util.GlobalTracer.get().activateSpan(parentSpan) : null) {
+						runnable.run();
+					}
+					return;
+				}
+				var childCtx = baseCtx.duplicate();
+				var prev = childCtx.beginDispatch();
 				try (var ignored = parentSpan != null ? io.opentracing.util.GlobalTracer.get().activateSpan(parentSpan) : null) {
 					runnable.run();
+				} finally {
+					childCtx.endDispatch(prev);
 				}
-				return;
-			}
-			var childCtx = baseCtx.duplicate();
-			var prev = childCtx.beginDispatch();
-			try (var ignored = parentSpan != null ? io.opentracing.util.GlobalTracer.get().activateSpan(parentSpan) : null) {
-				runnable.run();
-			} finally {
-				childCtx.endDispatch(prev);
-			}
-		});
+			});
+		};
 	}
 
 	public static <T> StructuredTaskScope<T, Void> openScope() {
@@ -228,8 +232,9 @@ public class Async {
 			}
 		}
 
+		var parentSpan = io.opentracing.util.GlobalTracer.get().activeSpan();
 		context.runOnContext(v -> {
-			try {
+			try (var ignored = parentSpan != null ? io.opentracing.util.GlobalTracer.get().activateSpan(parentSpan) : null) {
 				promise.complete(handler.call());
 			} catch (Throwable e) {
 				promise.fail(e);

@@ -1265,4 +1265,406 @@ public class GraphQLTests extends FrameworkTestBase {
 					"failed connection must not contain a successful result");
 		});
 	}
+
+	private Future<JsonObject> graphqlTraced(WebClient webClient, String query, JsonObject variables, String token, String traceId, String spanId, String parentSpanId) {
+		var body = new JsonObject().put("query", query);
+		if (variables != null) {
+			body.put("variables", variables);
+		}
+		var request = webClient.post("/graphql");
+		if (token != null) {
+			request.putHeader("Authorization", "Bearer " + token);
+		}
+		if (traceId != null && spanId != null) {
+			request.putHeader("uber-trace-id", traceId + ":" + spanId + ":" + (parentSpanId != null ? parentSpanId : "0") + ":1");
+			request.putHeader("traceparent", "00-" + traceId + "-" + spanId + "-01");
+		}
+		return request.sendJsonObject(body).map(HttpResponse::bodyAsJsonObject);
+	}
+
+	@Test
+	@Timeout(value = 60, timeUnit = TimeUnit.SECONDS)
+	public void testOpenTracingEndToEndMatchmakingLifecycleAndClientIngressCollector(Vertx vertx, VertxTestContext testContext) {
+		testVirtual(vertx, testContext, () -> {
+			await(startAllWithMatchmaking(vertx));
+			var webClient = graphqlClient(vertx);
+
+			var accountData = await(createAccountViaGraphQL(webClient,
+					UUID.randomUUID() + "@test.com", UUID.randomUUID().toString(), "password"));
+			var token = extractToken(accountData);
+			var userId = accountData.getJsonObject("userEntity").getString("id");
+			var deckId = createDeck(webClient, token);
+
+			// ── 1. Verify Matchmaking/enqueue stays open while queued and finishes with status="cancelled" on cancelMatchmaking ──
+			var twoPlayerQueueId = UUID.randomUUID().toString();
+			await(Matchmaking.createQueue(new MatchmakingQueues()
+					.setId(twoPlayerQueueId)
+					.setAutomaticallyClose(false)
+					.setLobbySize(2)
+					.setAwaitingLobbyTimeout(0L)
+					.setBotOpponent(false)
+					.setEmptyLobbyTimeout(0L)
+					.setName("opentracing 2p cancel queue")
+					.setPrivateLobby(false)
+					.setOnce(false)
+					.setStartsAutomatically(true)
+					.setStillConnectedTimeout(0L)));
+
+			com.hiddenswitch.diagnostics.Tracing.clearRecordedSpans();
+			var cancelTraceId = "102030405060708090a0b0c0d0e0f001";
+			var cancelClientSpanId = "1111222233334444";
+
+			// Open matchFound subscription so verifyTicketLive succeeds while waiting in 2-player queue
+			var wsCancelClient = vertx.createWebSocketClient();
+			var wsCancel = await(wsCancelClient.connect(new WebSocketConnectOptions()
+					.setHost("localhost")
+					.setPort(GRAPHQL_PORT)
+					.setURI("/graphql")
+					.addSubProtocol("graphql-transport-ws")));
+			var cancelWsAck = Promise.<Void>promise();
+			wsCancel.textMessageHandler(text -> {
+				var msg = new JsonObject(text);
+				if ("connection_ack".equals(msg.getString("type"))) {
+					cancelWsAck.tryComplete();
+				}
+			});
+			wsCancel.writeTextMessage(new JsonObject()
+					.put("type", "connection_init")
+					.put("payload", new JsonObject()
+							.put("Authorization", "Bearer " + token)
+							.put("traceparent", "00-" + cancelTraceId + "-" + cancelClientSpanId + "-01"))
+					.encode());
+			await(cancelWsAck.future());
+			wsCancel.writeTextMessage(new JsonObject()
+					.put("type", "subscribe")
+					.put("id", "match-cancel-sub")
+					.put("payload", new JsonObject().put("query", "subscription { matchFound { gameId } }"))
+					.encode());
+			await(Environment.sleep(vertx, 100));
+
+			var enqueueCancelRes = await(graphqlTraced(webClient,
+					"""
+					mutation Enqueue($input: MatchmakingEnqueueInput!) {
+					  enqueueMatchmaking(input: $input)
+					}""",
+					new JsonObject().put("input", new JsonObject()
+							.put("deckId", deckId)
+							.put("queueId", twoPlayerQueueId)),
+					token, cancelTraceId, cancelClientSpanId, "0"));
+			assertNull(enqueueCancelRes.getJsonArray("errors"), "enqueueMatchmaking errors: " + enqueueCancelRes);
+
+			// Wait for at least one matchmaking scan so unplayableTicket release logs on the active span without finishing it
+			await(Environment.sleep(vertx, 300));
+			assertTrue(com.hiddenswitch.diagnostics.Tracing.getRecordedSpans().stream()
+							.noneMatch(s -> "Matchmaking/enqueue".equals(s.operationName()) && cancelTraceId.equals(s.traceId())),
+					"Matchmaking/enqueue span must remain open (unfinished) while the player is waiting in the matchmaking queue");
+
+			var cancelRes = await(graphqlTraced(webClient,
+					"mutation CancelMatchmaking { cancelMatchmaking }",
+					null, token, cancelTraceId, "1111222233335555", cancelClientSpanId));
+			assertNull(cancelRes.getJsonArray("errors"), "cancelMatchmaking errors: " + cancelRes);
+			assertTrue(cancelRes.getJsonObject("data").getBoolean("cancelMatchmaking"));
+
+			var cancelledEnqueueSpan = com.hiddenswitch.diagnostics.Tracing.getRecordedSpans().stream()
+					.filter(s -> "Matchmaking/enqueue".equals(s.operationName()) && cancelTraceId.equals(s.traceId()))
+					.findFirst()
+					.orElse(null);
+			assertNotNull(cancelledEnqueueSpan, "Matchmaking/enqueue span must be finished when cancelMatchmaking is called");
+			assertEquals("cancelled", cancelledEnqueueSpan.tags().get("status"));
+			assertEquals(Boolean.TRUE, cancelledEnqueueSpan.tags().get("cancelled"));
+			assertEquals(userId, cancelledEnqueueSpan.tags().get("userId"));
+			assertEquals(twoPlayerQueueId, cancelledEnqueueSpan.tags().get("queueId"));
+
+			await(wsCancel.close());
+			await(wsCancelClient.close());
+			await(Matchmaking.deleteQueue(twoPlayerQueueId));
+
+			// ── 2. Verify full end-to-end Matchmaking -> Game -> Client Ingress Collector trace tree ──
+			var botQueueId = await(createBotQueue());
+			com.hiddenswitch.diagnostics.Tracing.clearRecordedSpans();
+
+			var matchTraceId = "abcdef0123456789abcdef0123456789";
+			var clientMatchmakingSpanId = "2222333344445555";
+			var clientEnqueueSpanId = "3333444455556666";
+			var clientGameSessionSpanId = "4444555566667777";
+			var clientConnectSpanId = "5555666677778888";
+			var clientMulliganSpanId = "6666777788889999";
+			var clientActionSpanId = "777788889999aaaa";
+			var clientConcedeSpanId = "88889999aaaabbbb";
+
+			var wsClient = vertx.createWebSocketClient();
+			var ws = await(wsClient.connect(new WebSocketConnectOptions()
+					.setHost("localhost")
+					.setPort(GRAPHQL_PORT)
+					.setURI("/graphql")
+					.addSubProtocol("graphql-transport-ws")));
+
+			var ackPromise = Promise.<Void>promise();
+			var matchFoundPromise = Promise.<String>promise();
+			var gameOverPromise = Promise.<JsonObject>promise();
+			var actionSent = new java.util.concurrent.atomic.AtomicBoolean(false);
+
+			ws.textMessageHandler(text -> {
+				var msg = new JsonObject(text);
+				var type = msg.getString("type");
+				if ("connection_ack".equals(type)) {
+					ackPromise.tryComplete();
+					return;
+				}
+				if ("next".equals(type)) {
+					var data = msg.getJsonObject("payload").getJsonObject("data");
+					if (data.containsKey("matchFound")) {
+						matchFoundPromise.tryComplete(data.getJsonObject("matchFound").getString("gameId"));
+						return;
+					}
+					if (data.containsKey("gameMessages")) {
+						var gameMessage = data.getJsonObject("gameMessages");
+						var messageType = gameMessage.getString("messageType");
+						switch (messageType) {
+							case "ON_MULLIGAN" -> graphqlTraced(webClient,
+									"""
+									mutation SendMulligan($indices: [Int!]!, $repliesTo: String!) {
+									  sendMulligan(discardedCardIndices: $indices, repliesTo: $repliesTo)
+									}""",
+									new JsonObject()
+											.put("indices", new JsonArray().add(0))
+											.put("repliesTo", gameMessage.getString("id")),
+									token, matchTraceId, clientMulliganSpanId, clientGameSessionSpanId)
+									.onFailure(gameOverPromise::tryFail);
+							case "ON_REQUEST_ACTION" -> {
+								if (actionSent.compareAndSet(false, true)) {
+									graphqlTraced(webClient,
+											"""
+											mutation SendAction($actionIndex: Int!, $repliesTo: String!) {
+											  sendGameAction(actionIndex: $actionIndex, repliesTo: $repliesTo)
+											}""",
+											new JsonObject()
+													.put("actionIndex", 0)
+													.put("repliesTo", gameMessage.getString("id")),
+											token, matchTraceId, clientActionSpanId, clientGameSessionSpanId)
+											.compose(v -> graphqlTraced(webClient,
+													"mutation ConcedeGame { concedeGame }",
+													null, token, matchTraceId, clientConcedeSpanId, clientGameSessionSpanId))
+											.onFailure(gameOverPromise::tryFail);
+								}
+							}
+							case "ON_GAME_END" -> gameOverPromise.tryComplete(gameMessage);
+							default -> {
+							}
+						}
+					}
+				}
+			});
+
+			ws.writeTextMessage(new JsonObject()
+					.put("type", "connection_init")
+					.put("payload", new JsonObject()
+							.put("Authorization", "Bearer " + token)
+							.put("uber-trace-id", matchTraceId + ":" + clientMatchmakingSpanId + ":0:1"))
+					.encode());
+			await(ackPromise.future());
+
+			ws.writeTextMessage(new JsonObject()
+					.put("type", "subscribe")
+					.put("id", "match-found-traced")
+					.put("payload", new JsonObject().put("query", "subscription { matchFound { gameId } }"))
+					.encode());
+
+			var enqueueMatchRes = await(graphqlTraced(webClient,
+					"""
+					mutation Enqueue($input: MatchmakingEnqueueInput!) {
+					  enqueueMatchmaking(input: $input)
+					}""",
+					new JsonObject().put("input", new JsonObject()
+							.put("deckId", deckId)
+							.put("queueId", botQueueId)),
+					token, matchTraceId, clientEnqueueSpanId, clientMatchmakingSpanId));
+			assertNull(enqueueMatchRes.getJsonArray("errors"), "enqueueMatchmaking errors: " + enqueueMatchRes);
+
+			var matchedGameId = await(matchFoundPromise.future().timeout(15, TimeUnit.SECONDS));
+			assertNotNull(matchedGameId);
+
+			// Subscribe to gameMessages and connectToGame
+			ws.writeTextMessage(new JsonObject()
+					.put("type", "subscribe")
+					.put("id", "game-messages-traced")
+					.put("payload", new JsonObject().put("query", """
+							subscription {
+							  gameMessages {
+							    messageType
+							    id
+							    actions { all { action actionType } }
+							    gameOver { localPlayerWon winningPlayerId }
+							  }
+							}"""))
+					.encode());
+
+			var connectRes = await(graphqlTraced(webClient,
+					"""
+					mutation Connect($key: String!, $secret: String!) {
+					  connectToGame(playerKey: $key, playerSecret: $secret)
+					}""",
+					new JsonObject().put("key", "").put("secret", ""),
+					token, matchTraceId, clientConnectSpanId, clientGameSessionSpanId));
+			assertNull(connectRes.getJsonArray("errors"), "connectToGame errors: " + connectRes);
+
+			var gameOverMessage = await(gameOverPromise.future().timeout(30, TimeUnit.SECONDS));
+			assertNotNull(gameOverMessage);
+
+			// Wait briefly for ServerGameContext/dispose and ServerGameContext/play to finish
+			for (int i = 0; i < 20; i++) {
+				if (com.hiddenswitch.diagnostics.Tracing.getRecordedSpans().stream()
+						.anyMatch(s -> "ServerGameContext/dispose".equals(s.operationName()) && matchTraceId.equals(s.traceId()))) {
+					break;
+				}
+				await(Environment.sleep(vertx, 50));
+			}
+
+			// ── 3. Simulate Unity client UnityTracing exporting spans to the same GraphQL ingress (/graphql/traces & /traces) ──
+			var nowMicros = System.currentTimeMillis() * 1000L;
+			var clientSpansPayload = new JsonObject()
+					.put("serviceName", "spellsource-unity-client")
+					.put("spans", new JsonArray()
+							.add(new JsonObject()
+									.put("traceId", matchTraceId)
+									.put("spanId", clientMatchmakingSpanId)
+									.put("parentSpanId", "0")
+									.put("operationName", "Client/Matchmaking")
+									.put("startTimeMicros", nowMicros - 500_000L)
+									.put("durationMicros", 200_000L)
+									.put("tags", new JsonObject()
+											.put("queueId", botQueueId)
+											.put("deckId", deckId)
+											.put("gameId", matchedGameId)
+											.put("status", "matched")))
+							.add(new JsonObject()
+									.put("traceId", matchTraceId)
+									.put("spanId", clientEnqueueSpanId)
+									.put("parentSpanId", clientMatchmakingSpanId)
+									.put("operationName", "Client/EnqueueMatchmaking")
+									.put("startTimeMicros", nowMicros - 490_000L)
+									.put("durationMicros", 20_000L)
+									.put("tags", new JsonObject().put("graphql.operation", "Enqueue")))
+							.add(new JsonObject()
+									.put("traceId", matchTraceId)
+									.put("spanId", clientGameSessionSpanId)
+									.put("parentSpanId", clientMatchmakingSpanId)
+									.put("operationName", "Client/GameSession")
+									.put("startTimeMicros", nowMicros - 300_000L)
+									.put("durationMicros", 250_000L)
+									.put("tags", new JsonObject()
+											.put("gameId", matchedGameId)
+											.put("status", "finished"))
+									.put("logs", new JsonArray().add(new JsonObject()
+											.put("timestampMicros", nowMicros - 60_000L)
+											.put("fields", new JsonObject().put("event", "ON_GAME_END")))))
+							.add(new JsonObject()
+									.put("traceId", matchTraceId)
+									.put("spanId", clientConnectSpanId)
+									.put("parentSpanId", clientGameSessionSpanId)
+									.put("operationName", "Client/ConnectToGame")
+									.put("startTimeMicros", nowMicros - 290_000L)
+									.put("durationMicros", 15_000L))
+							.add(new JsonObject()
+									.put("traceId", matchTraceId)
+									.put("spanId", clientMulliganSpanId)
+									.put("parentSpanId", clientGameSessionSpanId)
+									.put("operationName", "Client/SendMulligan")
+									.put("startTimeMicros", nowMicros - 200_000L)
+									.put("durationMicros", 10_000L))
+							.add(new JsonObject()
+									.put("traceId", matchTraceId)
+									.put("spanId", clientActionSpanId)
+									.put("parentSpanId", clientGameSessionSpanId)
+									.put("operationName", "Client/SendGameAction")
+									.put("startTimeMicros", nowMicros - 120_000L)
+									.put("durationMicros", 10_000L))
+							.add(new JsonObject()
+									.put("traceId", matchTraceId)
+									.put("spanId", clientConcedeSpanId)
+									.put("parentSpanId", clientGameSessionSpanId)
+									.put("operationName", "Client/ConcedeGame")
+									.put("startTimeMicros", nowMicros - 80_000L)
+									.put("durationMicros", 10_000L)));
+
+			var optionsRes = await(webClient.request(io.vertx.core.http.HttpMethod.OPTIONS, "/graphql/traces").send());
+			assertEquals(204, optionsRes.statusCode(), "OPTIONS /graphql/traces CORS preflight should return 204");
+
+			var traceIngestRes = await(webClient.post("/graphql/traces").sendJsonObject(clientSpansPayload));
+			assertEquals(202, traceIngestRes.statusCode(), "POST /graphql/traces should return 202 Accepted");
+			assertEquals(7, traceIngestRes.bodyAsJsonObject().getInteger("accepted"));
+
+			// Verify /traces alias on the same ingress
+			var rootTraceIngestRes = await(webClient.post("/traces").sendJsonObject(new JsonObject().put("spans", new JsonArray())));
+			assertEquals(202, rootTraceIngestRes.statusCode(), "POST /traces should return 202 Accepted");
+
+			// ── 4. Verify complete parent-child hierarchy across Client -> GraphQL -> Matchmaking -> ClusteredGames -> ServerGameContext -> GameLogic ──
+			var traceSpans = com.hiddenswitch.diagnostics.Tracing.getRecordedSpans().stream()
+					.filter(s -> matchTraceId.equals(s.traceId()))
+					.toList();
+			var byOp = traceSpans.stream()
+					.collect(java.util.stream.Collectors.groupingBy(com.hiddenswitch.diagnostics.Tracing.RecordedSpan::operationName));
+
+			assertTrue(byOp.containsKey("Client/Matchmaking"), "Client/Matchmaking span should be collected");
+			assertTrue(byOp.containsKey("Client/GameSession"), "Client/GameSession span should be collected");
+			assertTrue(byOp.containsKey("GraphQL/Enqueue"), "GraphQL/Enqueue span should be recorded under client traceId");
+			assertTrue(byOp.containsKey("Matchmaking/enqueue"), "Matchmaking/enqueue span should be recorded under client traceId");
+			assertTrue(byOp.containsKey("Matchmaking/startLobbyMatch"), "Matchmaking/startLobbyMatch span should be recorded under client traceId");
+			assertTrue(byOp.containsKey("Matchmaking/createGame"), "Matchmaking/createGame span should be recorded under client traceId");
+			assertTrue(byOp.containsKey("EventBus/games:createGameSession"), "EventBus/games:createGameSession span should be recorded under client traceId");
+			assertTrue(byOp.containsKey("ClusteredGames/createGameSession"), "ClusteredGames/createGameSession span should be recorded under client traceId");
+			assertTrue(byOp.containsKey("ServerGameContext/init"), "ServerGameContext/init span should be recorded under client traceId");
+			assertTrue(byOp.containsKey("ServerGameContext/play"), "ServerGameContext/play span should be recorded under client traceId");
+			assertTrue(byOp.containsKey("ServerGameContext/resume"), "ServerGameContext/resume span should be recorded under client traceId");
+			assertTrue(byOp.containsKey("GameLogic/performGameAction"), "GameLogic/performGameAction span should be recorded under client traceId");
+			assertTrue(byOp.containsKey("ServerGameContext/dispose"), "ServerGameContext/dispose span should be recorded under client traceId");
+
+			var graphqlEnqueueSpan = byOp.get("GraphQL/Enqueue").get(0);
+			var matchmakingEnqueueSpan = byOp.get("Matchmaking/enqueue").get(0);
+			var startLobbySpan = byOp.get("Matchmaking/startLobbyMatch").get(0);
+			var createGameSpan = byOp.get("Matchmaking/createGame").get(0);
+			var ebCreateSessionSpan = byOp.get("EventBus/games:createGameSession").get(0);
+			var createSessionSpan = byOp.get("ClusteredGames/createGameSession").get(0);
+			var sgcInitSpan = byOp.get("ServerGameContext/init").get(0);
+			var sgcPlaySpan = byOp.get("ServerGameContext/play").get(0);
+
+			// Verify causal parent-child chain from Unity client span all the way to ServerGameContext/play
+			assertEquals(clientEnqueueSpanId, graphqlEnqueueSpan.parentSpanId(),
+					"GraphQL/Enqueue must be a child of Unity client's Client/EnqueueMatchmaking span");
+			assertEquals(graphqlEnqueueSpan.spanId(), matchmakingEnqueueSpan.parentSpanId(),
+					"Matchmaking/enqueue must be a child of GraphQL/Enqueue");
+			assertEquals("matched", matchmakingEnqueueSpan.tags().get("status"),
+					"Matchmaking/enqueue must finish with status='matched'");
+			assertEquals(matchedGameId, matchmakingEnqueueSpan.tags().get("gameId"),
+					"Matchmaking/enqueue must be tagged with the created gameId");
+			assertEquals(userId, matchmakingEnqueueSpan.tags().get("userId"),
+					"Matchmaking/enqueue must be tagged with userId");
+			assertEquals(botQueueId, matchmakingEnqueueSpan.tags().get("queueId"),
+					"Matchmaking/enqueue must be tagged with queueId");
+			assertEquals(matchmakingEnqueueSpan.spanId(), startLobbySpan.parentSpanId(),
+					"Matchmaking/startLobbyMatch must be linked as a child of Matchmaking/enqueue");
+			assertEquals(startLobbySpan.spanId(), createGameSpan.parentSpanId(),
+					"Matchmaking/createGame must be a child of Matchmaking/startLobbyMatch");
+			assertEquals(createGameSpan.spanId(), ebCreateSessionSpan.parentSpanId(),
+					"EventBus/games:createGameSession must be a child of Matchmaking/createGame");
+			assertEquals(ebCreateSessionSpan.spanId(), createSessionSpan.parentSpanId(),
+					"ClusteredGames/createGameSession must be a child of EventBus/games:createGameSession");
+			assertEquals(createSessionSpan.spanId(), sgcInitSpan.parentSpanId(),
+					"ServerGameContext/init must be a child of ClusteredGames/createGameSession");
+			assertEquals(sgcInitSpan.spanId(), sgcPlaySpan.parentSpanId(),
+					"ServerGameContext/play must be a child of ServerGameContext/init");
+
+			// Verify GameLogic/performGameAction is parented to a ServerGameContext/resume span
+			var resumeSpanIds = byOp.get("ServerGameContext/resume").stream()
+					.map(com.hiddenswitch.diagnostics.Tracing.RecordedSpan::spanId)
+					.collect(java.util.stream.Collectors.toSet());
+			assertTrue(byOp.get("GameLogic/performGameAction").stream()
+							.anyMatch(s -> resumeSpanIds.contains(s.parentSpanId())),
+					"GameLogic/performGameAction must be a child of ServerGameContext/resume");
+
+			await(ws.close());
+			await(wsClient.close());
+			await(Matchmaking.deleteQueue(botQueueId));
+		});
+	}
 }

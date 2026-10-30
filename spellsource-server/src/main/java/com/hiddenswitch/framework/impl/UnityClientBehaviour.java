@@ -46,11 +46,11 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
 
 /**
  * Bridges a human player's EventBus channels ({@code games:reader:{userId}} and
- * {@code games:writer:{userId}}) to the {@link Behaviour} and {@link Client} contracts of a
+ * {@code games:writer:{userId}}) to the {@link Behaviour} contract of a
  * {@link ServerGameContext}, sharing the game's lifecycle domain rather than deploying a separate
  * per-user verticle actor.
  */
-public class UnityClientBehaviour implements Client {
+public class UnityClientBehaviour implements Behaviour {
 	public static final int MAX_POWER_HISTORY_SIZE = 10;
 	private static final Logger LOGGER = LoggerFactory.getLogger(UnityClientBehaviour.class);
 	private final Queue<ServerToClientMessage.Builder> messageBuffer = new ConcurrentLinkedQueue<>();
@@ -61,7 +61,7 @@ public class UnityClientBehaviour implements Client {
 	private final int playerId;
 	private final long noActivityTimeout;
 	private final Lock requestsLock = new ReentrantLock();
-	private final Server server;
+	private final ServerGameContext server;
 	private final Deque<GameEvent> powerHistory = new ArrayDeque<>();
 	private final AtomicBoolean elapsed = new AtomicBoolean(false);
 	private final AtomicBoolean conceded = new AtomicBoolean(false);
@@ -75,7 +75,7 @@ public class UnityClientBehaviour implements Client {
 	private volatile GameOver gameOver;
 	private volatile boolean needsPowerHistory;
 
-	public UnityClientBehaviour(Server server,
+	public UnityClientBehaviour(ServerGameContext server,
 	                            String userId,
 	                            int playerId,
 	                            long noActivityTimeout) {
@@ -88,7 +88,6 @@ public class UnityClientBehaviour implements Client {
 		this.noActivityTimeout = noActivityTimeout;
 	}
 
-	@Override
 	public void start(Vertx vertx) {
 		this.vertx = vertx;
 		var bus = vertx.eventBus();
@@ -103,7 +102,6 @@ public class UnityClientBehaviour implements Client {
 		}
 	}
 
-	@Override
 	public void stop() {
 		if (turnTimer != null && vertx != null) {
 			vertx.cancelTimer(turnTimer);
@@ -130,7 +128,6 @@ public class UnityClientBehaviour implements Client {
 		}
 	}
 
-	@Override
 	public Future<Void> unregisterConsumer() {
 		cancelActivity();
 		var c = consumer;
@@ -188,18 +185,15 @@ public class UnityClientBehaviour implements Client {
 		server.onConcede(this);
 	}
 
-	@Override
 	public boolean isElapsed() {
 		return elapsed.get();
 	}
 
-	@Override
 	public UnityClientBehaviour setElapsed(boolean elapsed) {
 		this.elapsed.set(elapsed);
 		return this;
 	}
 
-	@Override
 	public void elapseAwaitingRequests() {
 		var toElapse = new ArrayList<GameplayRequest<?>>();
 		requestsLock.lock();
@@ -407,12 +401,10 @@ public class UnityClientBehaviour implements Client {
 		this.lastWriteFuture = socket.write(message.build()).onFailure(Environment.onFailure());
 	}
 
-	@Override
 	public Future<Void> lastWriteFuture() {
 		return lastWriteFuture;
 	}
 
-	@Override
 	public void sendNotification(Notification event, GameState gameState) {
 		if (event instanceof TouchingNotification touchingNotification) {
 			var id = touchingNotification.getEntityReference().getId();
@@ -519,12 +511,10 @@ public class UnityClientBehaviour implements Client {
 		messageBuffer.offer(message);
 	}
 
-	@Override
 	public void onConnectionStarted(Player activePlayer) {
 		needsPowerHistory = true;
 	}
 
-	@Override
 	public void onUpdate(GameState state) {
 		flush();
 		var gameState = getClientGameState(playerId, state);
@@ -541,7 +531,6 @@ public class UnityClientBehaviour implements Client {
 				.setGameState(gameState));
 	}
 
-	@Override
 	public void onRequestAction(String id, GameState state, List<GameAction> availableActions) {
 		flush();
 		for (var i = 0; i < availableActions.size(); i++) {
@@ -556,7 +545,6 @@ public class UnityClientBehaviour implements Client {
 				.setActions(ModelConversions.getClientActions(workingContext, availableActions, playerId)));
 	}
 
-	@Override
 	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {
 		flush();
 		var simulatedContext = GameContext.fromState(state);
@@ -568,7 +556,6 @@ public class UnityClientBehaviour implements Client {
 				.addAllStartingCards(cards.stream().map(c -> ModelConversions.getEntity(simulatedContext, c, playerId).build()).collect(Collectors.toList())));
 	}
 
-	@Override
 	public void sendEmote(int entityId, String emote) {
 		var emoteMessage = com.google.common.base.Enums
 				.getIfPresent(Emote.EmoteMessage.class, Objects.requireNonNullElse(emote, ""))
@@ -580,17 +567,14 @@ public class UnityClientBehaviour implements Client {
 						.setMessage(emoteMessage)));
 	}
 
-	@Override
 	public void lastEvent() {
 		flush();
 	}
 
-	@Override
 	public int getPlayerId() {
 		return playerId;
 	}
 
-	@Override
 	public String getUserId() {
 		return userId;
 	}

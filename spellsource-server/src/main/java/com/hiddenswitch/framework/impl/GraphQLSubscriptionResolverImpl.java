@@ -98,6 +98,7 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 		@Override
 		public void subscribe(Subscriber<? super MatchFound> subscriber) {
 			var cancelled = new AtomicBoolean(false);
+			var matched = new AtomicBoolean(false);
 			var address = Matchmaking.MATCHMAKING_ENQUEUE + userId;
 			var prepareAddress = Matchmaking.MATCHMAKING_PREPARE + userId;
 			var vertx = Vertx.currentContext().owner();
@@ -107,6 +108,9 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 			MessageConsumer<String> prepareConsumer = eventBus.consumer(prepareAddress);
 			Runnable cleanup = () -> {
 				if (cancelled.compareAndSet(false, true)) {
+					if (!matched.get()) {
+						Matchmaking.finishTicketSpanCancelled(userId, "cancelled");
+					}
 					Future.all(
 							consumer.unregister(),
 							prepareConsumer.unregister(),
@@ -142,6 +146,7 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 					message.fail(1, "subscription cancelled");
 					return;
 				}
+				matched.set(true);
 				cleanup.run();
 
 				var gameId = message.body();

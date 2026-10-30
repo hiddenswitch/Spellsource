@@ -1,6 +1,8 @@
 package com.hiddenswitch.framework;
 
 import com.google.common.collect.Lists;
+import com.hiddenswitch.diagnostics.Traced;
+import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.impl.*;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingQueuesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
@@ -14,6 +16,9 @@ import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpcServer;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
 import io.micrometer.core.instrument.binder.BaseUnits;
+import io.opentracing.Span;
+import io.opentracing.SpanContext;
+import io.opentracing.tag.Tags;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.MessageConsumer;
@@ -30,7 +35,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.hiddenswitch.framework.Environment.withDslContext;
@@ -89,9 +97,47 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 			.baseUnit(BaseUnits.ROWS)
 			.description("The number of tickets taken during this evaluation of the matchmaker.")
 			.register(Metrics.globalRegistry);
+	private static final Map<String, Span> ACTIVE_TICKET_SPANS = new ConcurrentHashMap<>();
 	private volatile boolean stopping;
 	private MessageConsumer<Object> wakeConsumer;
 	private Long periodicTimerId;
+
+	private static Span createTicketSpan(String userId, String queueId, String deckId, String botDeckId) {
+		return Tracing.tracing().buildSpan("Matchmaking/enqueue")
+				.asChildOf(Tracing.activeSpanContext())
+				.withTag("userId", userId)
+				.withTag("queueId", Objects.requireNonNullElse(queueId, ""))
+				.withTag("deckId", Objects.requireNonNullElse(deckId, ""))
+				.withTag("botDeckId", Objects.requireNonNullElse(botDeckId, ""))
+				.start();
+	}
+
+	public static Span startTicketSpan(String userId, String queueId, String deckId, String botDeckId) {
+		var span = createTicketSpan(userId, queueId, deckId, botDeckId);
+		Optional.ofNullable(ACTIVE_TICKET_SPANS.put(userId, span))
+				.ifPresent(prev -> prev.setTag("status", "superseded").setTag("cancelled", true).finish());
+		return span;
+	}
+
+	public static Span ensureTicketSpan(MatchmakingTickets ticket) {
+		return ACTIVE_TICKET_SPANS.computeIfAbsent(ticket.getUserId(),
+				userId -> createTicketSpan(userId, ticket.getQueueId(), ticket.getDeckId(), ticket.getBotDeckId()));
+	}
+
+	public static void finishTicketSpanMatched(String userId, String gameId, String status) {
+		Optional.ofNullable(ACTIVE_TICKET_SPANS.remove(userId))
+				.ifPresent(span -> span.setTag("gameId", gameId).setTag("status", status).finish());
+	}
+
+	public static void finishTicketSpanCancelled(String userId, String status) {
+		Optional.ofNullable(ACTIVE_TICKET_SPANS.remove(userId))
+				.ifPresent(span -> span.setTag("status", status).setTag("cancelled", true).finish());
+	}
+
+	public static void finishTicketSpanAborted(String userId, String abortedGameId) {
+		Optional.ofNullable(ACTIVE_TICKET_SPANS.remove(userId))
+				.ifPresent(span -> span.setTag(Tags.ERROR.getKey(), true).setTag("status", "aborted").setTag("abortedGameId", abortedGameId).finish());
+	}
 
 	public Matchmaking() {
 	}
@@ -305,9 +351,13 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 		vertx.runOnContext(v -> triggerScanRef[0].run());
 	}
 
+	@Traced
 	private void processQueueTickets(Vertx vertx,
 	                                 MatchmakingQueues configuration,
 	                                 List<MatchmakingTickets> tickets) {
+		for (var ticket : tickets) {
+			ensureTicketSpan(ticket);
+		}
 		var lobbySize = (int) configuration.getLobbySize();
 		boolean botOpponent = Boolean.TRUE.equals(configuration.getBotOpponent());
 		var liveStates = mapParallel(tickets, ticket -> await(verifyTicketLive(vertx, ticket, botOpponent)));
@@ -319,7 +369,11 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 				if (Boolean.TRUE.equals(liveStates.get(i))) {
 					liveTickets.add(ticket);
 				} else {
-					scope.fork(() -> await(deleteTicketByUserId(ticket.getUserId())));
+					scope.fork(() -> {
+						await(deleteTicketByUserId(ticket.getUserId()));
+						finishTicketSpanCancelled(ticket.getUserId(), "disconnected");
+						return null;
+					});
 				}
 			}
 
@@ -333,7 +387,11 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 			}
 			for (var i = playableCount; i < liveTickets.size(); i++) {
 				var unplayableTicket = liveTickets.get(i);
-				scope.fork(() -> await(releaseTicketByUserId(unplayableTicket.getUserId())));
+				scope.fork(() -> {
+					ensureTicketSpan(unplayableTicket).log(Map.of("event", "released", "reason", "awaiting_lobby"));
+					await(releaseTicketByUserId(unplayableTicket.getUserId()));
+					return null;
+				});
 			}
 			if (playableCount > 0) {
 				TICKETS_TAKEN.increment(playableCount);
@@ -348,18 +406,27 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 	private void startLobbyMatch(Vertx vertx,
 	                             MatchmakingQueues configuration,
 	                             MatchmakingTickets[] thisGameTickets) {
-		boolean botOpponent = Boolean.TRUE.equals(configuration.getBotOpponent());
-		var gameId = await(createGame(configuration, thisGameTickets));
-		try {
-			forEachParallel(List.of(thisGameTickets), ticket ->
-					await(Matchmaking.notifyGameReady(ticket.getUserId(), gameId, botOpponent)));
-			forEachParallel(List.of(thisGameTickets), ticket ->
-					await(deleteTicketByUserId(ticket.getUserId())));
-		} catch (Throwable err) {
-			compensateAbortedGame(vertx, gameId, thisGameTickets);
+		var ticketContexts = new ArrayList<SpanContext>(thisGameTickets.length);
+		for (var ticket : thisGameTickets) {
+			ticketContexts.add(ensureTicketSpan(ticket).context());
+		}
+		try (var ignored = Tracing.enterSpanWithLinks("Matchmaking/startLobbyMatch", ticketContexts)) {
+			boolean botOpponent = Boolean.TRUE.equals(configuration.getBotOpponent());
+			var gameId = await(createGame(configuration, thisGameTickets));
+			try {
+				forEachParallel(List.of(thisGameTickets), ticket ->
+						await(Matchmaking.notifyGameReady(ticket.getUserId(), gameId, botOpponent)));
+				forEachParallel(List.of(thisGameTickets), ticket -> {
+					await(deleteTicketByUserId(ticket.getUserId()));
+					finishTicketSpanMatched(ticket.getUserId(), gameId, "matched");
+				});
+			} catch (Throwable err) {
+				compensateAbortedGame(vertx, gameId, thisGameTickets);
+			}
 		}
 	}
 
+	@Traced
 	private void compensateAbortedGame(Vertx vertx,
 	                                   String gameId,
 	                                   MatchmakingTickets[] thisGameTickets) {
@@ -374,9 +441,13 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 			for (var ticket : thisGameTickets) {
 				scope.fork(() -> {
 					if (await(verifyTicketLive(vertx, ticket.getUserId(), false, 0))) {
+						ensureTicketSpan(ticket)
+								.setTag("compensated", true)
+								.log(Map.of("event", "compensated_requeued", "abortedGameId", gameId));
 						await(releaseTicketByUserId(ticket.getUserId()));
 					} else {
 						await(deleteTicketByUserId(ticket.getUserId()));
+						finishTicketSpanAborted(ticket.getUserId(), gameId);
 					}
 					return null;
 				});
@@ -386,6 +457,7 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 		vertx.eventBus().publish(MATCHMAKING_WAKE, "wake");
 	}
 
+	@Traced
 	public Future<String> createGame(MatchmakingQueues configuration, MatchmakingTickets... tickets) {
 		Long gameId;
 		ConfigurationRequest request;
@@ -396,9 +468,7 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 			var configTask = scope.fork(() -> {
 				if (Boolean.TRUE.equals(configuration.getBotOpponent())) {
 					var bot = await(Bots.bot());
-					var botDeckId = tickets[0].getBotDeckId() != null
-							? tickets[0].getBotDeckId()
-							: await(Legacy.getAllValidDeckIds(bot.getId()).map(ids -> ids.get(new Random().nextInt(ids.size()))));
+					var botDeckId = Objects.requireNonNullElseGet(tickets[0].getBotDeckId(), () -> await(Legacy.getAllValidDeckIds(bot.getId()).map(ids -> ids.get(new Random().nextInt(ids.size())))));
 					return ConfigurationRequest.botMatch(null, tickets[0].getUserId(), bot.getId(), tickets[0].getDeckId(), botDeckId);
 				}
 				return ConfigurationRequest.versusMatch(null, tickets[0].getUserId(), tickets[0].getDeckId(), tickets[1].getUserId(), tickets[1].getDeckId());

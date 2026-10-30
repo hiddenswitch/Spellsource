@@ -1,10 +1,7 @@
 package com.hiddenswitch.framework.impl;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
 import com.hiddenswitch.framework.Games;
-import io.opentracing.SpanContext;
 import net.demilich.metastone.game.decks.CollectionDeck;
 
 import java.io.Serializable;
@@ -20,9 +17,6 @@ public final class ConfigurationRequest implements Serializable {
 	private String gameId;
 	private List<Configuration> configurations = new ArrayList<>();
 	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
-	@JsonDeserialize(using = SpanContextDeserializer.class)
-	@JsonSerialize(using = SpanContextSerializer.class)
-	private SpanContext spanContext;
 
 	public ConfigurationRequest() {
 	}
@@ -36,13 +30,11 @@ public final class ConfigurationRequest implements Serializable {
 								.setUserId(userId)
 								.setBot(false)
 								.setDeck(new CollectionDeck(deckId)),
-//								.setPlayerAttributes(new AttributeMap()),
 						new Configuration()
 								.setPlayerId(1)
 								.setUserId(botId)
 								.setBot(true)
 								.setDeck(new CollectionDeck(botDeckId))
-//								.setPlayerAttributes(new AttributeMap())
 				));
 	}
 
@@ -55,13 +47,11 @@ public final class ConfigurationRequest implements Serializable {
 								.setUserId(userId1)
 								.setBot(false)
 								.setDeck(new CollectionDeck(deckId1)),
-//								.setPlayerAttributes(new AttributeMap()),
 						new Configuration()
 								.setPlayerId(1)
 								.setUserId(userId2)
 								.setBot(false)
 								.setDeck(new CollectionDeck(deckId2))
-//								.setPlayerAttributes(new AttributeMap())
 				));
 	}
 
@@ -89,7 +79,6 @@ public final class ConfigurationRequest implements Serializable {
 				.add("gameId", gameId)
 				.add("configurations", configurations)
 				.add("noActivityTimeout", noActivityTimeout)
-				.add("spanContext", spanContext)
 				.toString();
 	}
 
@@ -99,15 +88,6 @@ public final class ConfigurationRequest implements Serializable {
 
 	public ConfigurationRequest setNoActivityTimeout(long noActivityTimeout) {
 		this.noActivityTimeout = noActivityTimeout;
-		return this;
-	}
-
-	public SpanContext getSpanContext() {
-		return spanContext;
-	}
-
-	public ConfigurationRequest setSpanContext(SpanContext spanContext) {
-		this.spanContext = spanContext;
 		return this;
 	}
 
