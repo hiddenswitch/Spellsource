@@ -442,6 +442,10 @@ jib {
   }
 }
 
+tasks.matching { it.name.startsWith('jib') }.configureEach {
+  notCompatibleWithConfigurationCache("Jib tasks invoke Task.project at execution time")
+}
+
 tasks.register('githubDockerPush') {
   dependsOn 'jib'
 }

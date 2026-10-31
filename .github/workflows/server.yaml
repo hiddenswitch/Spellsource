@@ -55,6 +55,6 @@ jobs:
             spellsource-cards-git/build/test-results/test/
           retention-days: 14
       - name: Build and push server image
-        run: ./gradlew spellsource-server:githubDockerPush
+        run: ./gradlew --no-configuration-cache spellsource-server:githubDockerPush
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
