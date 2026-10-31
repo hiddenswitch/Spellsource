@@ -62,13 +62,10 @@ public final class Games {
 		var publisher = eventBus.<Spellsource.ClientToServerMessage>publisher(getMessagesFromClientAddress(userId));
 		var retryPublisher = new RetryMessageProducer<>(publisher, 50, 100, body -> body.getMessageType() == Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE);
 		var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(getMessagesFromServerAddress(userId));
-		var closed = new AtomicBoolean(false);
 		Runnable cleanup = () -> {
-			if (closed.compareAndSet(false, true)) {
-				keepAliveManager.onTransportTermination();
-				retryPublisher.close();
-				consumer.unregister();
-			}
+			keepAliveManager.onTransportTermination();
+			retryPublisher.close();
+			consumer.unregister();
 		};
 		var consumerReady = consumer.completion().otherwiseEmpty();
 		request.handler(body -> {
@@ -107,8 +104,7 @@ public final class Games {
 				.otherwiseEmpty()
 				.compose(res -> res != null
 						? Future.succeededFuture(res.body())
-						: eb.<String>request(GAMES_RESTORE_GAME, userId).map(Message::body).otherwiseEmpty())
-				.map(res -> res != null ? res : null);
+						: eb.<String>request(GAMES_RESTORE_GAME, userId).map(Message::body).otherwiseEmpty());
 	}
 
 	/**

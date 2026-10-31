@@ -242,4 +242,71 @@ public class RogueRunTests extends FrameworkTestBase {
 		return Future.succeededFuture();
 	}
 
+	@Test
+	public void testRoutineCallerFromEventLoopAndUpgradeAndProgressIsolation(Vertx vertx, VertxTestContext vertxTestContext) {
+		testVirtual(vertx, vertxTestContext, () -> {
+			RogueManager.initCardCatalogue();
+
+			var client = new Client(vertx);
+			await(startGateway(vertx));
+			await(client.createAndLogin());
+			var userId = client.getUserEntity().getId();
+
+			// 1. Calling RoutineCaller with userId from a real EventLoop context must not crash with "Cannot be called on a Vert.x event-loop thread"
+			var eventLoopDone = Promise.<RogueRun>promise();
+			var eventLoopCtx = ((io.vertx.core.internal.VertxInternal) vertx).createEventLoopContext();
+			eventLoopCtx.runOnContext(_ -> {
+				Environment.callRoutine(Routines.startRogueRun(HeroClass.TEST, 0L))
+						.withUserId(userId)
+						.execute(RowMappers.getRogueRunMapper())
+						.onComplete(eventLoopDone);
+			});
+			var elRun = await(eventLoopDone.future());
+			assertNotNull(elRun.getId(), "RoutineCaller with userId must succeed from EventLoop context");
+
+			// Verify RoutineCaller rolls back cleanly when SET LOCAL role fails inside transaction
+			var rollbackFuture = Environment.callRoutine(Routines.startRogueRun(HeroClass.TEST, 0L))
+					.withRole("nonexistent_role_for_rollback_test")
+					.execute(RowMappers.getRogueRunMapper());
+			assertThrows(Exception.class, () -> await(rollbackFuture));
+
+			// 2. Two Rogue runs must have isolated level_X cards when one progresses
+			var client2 = new Client(vertx);
+			await(client2.createAndLogin());
+			var userId2 = client2.getUserEntity().getId();
+
+			var run1 = await(startRogueRun(userId));
+			var run2 = await(startRogueRun(userId2));
+
+			await(RogueManager.skipBoss(run1.getId()));
+
+			var run1Cards = await(Environment.callRoutine(Routines.getCardsInDeck(run1.getDeck())).execute(row -> row.getString(0)));
+			var run2Cards = await(Environment.callRoutine(Routines.getCardsInDeck(run2.getDeck())).execute(row -> row.getString(0)));
+			assertTrue(run1Cards.contains("level_2"), "Run 1 should advance to level_2");
+			assertTrue(run2Cards.contains("level_1"), "Run 2 must still have level_1 (not overwritten by Run 1's progressRun)");
+			assertFalse(run2Cards.contains("level_2"), "Run 2 must not be corrupted with level_2");
+
+			// 3. upgradeCard must actually replace the card in run1's deck and invalidate the Legacy deck cache
+			var upgradableCard = RogueManager.cardCatalogue.getAll().stream()
+					.filter(c -> c.hasAttribute(net.demilich.metastone.game.cards.Attribute.UPGRADE))
+					.findFirst()
+					.orElseThrow();
+			var upgradedCardId = (String) upgradableCard.getAttribute(net.demilich.metastone.game.cards.Attribute.UPGRADE);
+			await(Environment.callRoutine(Routines.setCardsInDeck(run1.getDeck(), new String[]{upgradableCard.getCardId(), "level_2"}))
+					.execute(RowMappers.getCardsInDeckMapper()));
+			await(RogueManager.updateRogueRun(run1.getId(), r -> r.set(ROGUE_RUN.GOLD, 20)));
+			// Warm Legacy deck cache before upgrading
+			await(Legacy.getDeck(RogueManager.cardCatalogue, run1.getDeck(), run1.getPlayer()));
+
+			await(RogueManager.upgradeCard(run1.getId(), upgradableCard.getCardId()));
+
+			var cardsAfterUpgrade = await(Environment.callRoutine(Routines.getCardsInDeck(run1.getDeck())).execute(row -> row.getString(0)));
+			assertTrue(cardsAfterUpgrade.contains(upgradedCardId), "Deck must contain the upgraded card ID");
+			assertFalse(cardsAfterUpgrade.contains(upgradableCard.getCardId()), "Original un-upgraded card should be replaced");
+			var cachedDeckAfterUpgrade = await(Legacy.getDeck(RogueManager.cardCatalogue, run1.getDeck(), run1.getPlayer()));
+			assertTrue(cachedDeckAfterUpgrade.getCollection().getInventoryList().stream().anyMatch(c -> upgradedCardId.equals(c.getEntity().getCardId())),
+					"Legacy deck cache must be invalidated on upgradeCard");
+		});
+	}
+
 }

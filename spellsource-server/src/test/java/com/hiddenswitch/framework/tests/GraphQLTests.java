@@ -1667,4 +1667,244 @@ public class GraphQLTests extends FrameworkTestBase {
 			await(Matchmaking.deleteQueue(botQueueId));
 		});
 	}
+
+	@Test
+	@Timeout(value = 60, timeUnit = TimeUnit.SECONDS)
+	public void testSupersedingMatchFoundSubscriptionDoesNotCancelNewTicket(Vertx vertx, VertxTestContext testContext) {
+		testVirtual(vertx, testContext, () -> {
+			await(startAllWithMatchmaking(vertx));
+			var webClient = graphqlClient(vertx);
+			var accountData = await(createAccountViaGraphQL(webClient,
+					UUID.randomUUID() + "@test.com", UUID.randomUUID().toString(), "password"));
+			var token = extractToken(accountData);
+			var deckId = createDeck(webClient, token);
+			var queueId = UUID.randomUUID().toString();
+			await(Matchmaking.createQueue(new MatchmakingQueues()
+					.setId(queueId)
+					.setAutomaticallyClose(false)
+					.setLobbySize(2)
+					.setAwaitingLobbyTimeout(0L)
+					.setBotOpponent(false)
+					.setEmptyLobbyTimeout(0L)
+					.setName("supersede 2p queue")
+					.setPrivateLobby(false)
+					.setOnce(false)
+					.setStartsAutomatically(true)
+					.setStillConnectedTimeout(0L)));
+
+			var wsClient = vertx.createWebSocketClient();
+			var connectOptions = new WebSocketConnectOptions()
+					.setHost("localhost")
+					.setPort(GRAPHQL_PORT)
+					.setURI("/graphql")
+					.addSubProtocol("graphql-transport-ws");
+
+			// 1. Open stale WebSocket #1 and subscribe to matchFound
+			var ws1 = await(wsClient.connect(connectOptions));
+			var ack1 = Promise.<Void>promise();
+			ws1.textMessageHandler(text -> {
+				var msg = new JsonObject(text);
+				if ("connection_ack".equals(msg.getString("type"))) {
+					ack1.tryComplete();
+				}
+			});
+			ws1.writeTextMessage(new JsonObject()
+					.put("type", "connection_init")
+					.put("payload", new JsonObject().put("Authorization", "Bearer " + token))
+					.encode());
+			await(ack1.future());
+			ws1.writeTextMessage(new JsonObject()
+					.put("type", "subscribe")
+					.put("id", "match-stale")
+					.put("payload", new JsonObject().put("query", "subscription { matchFound { gameId } }"))
+					.encode());
+			await(Environment.sleep(vertx, 100));
+
+			// 2. Client reconnects on WebSocket #2, subscribes to matchFound, and enqueues
+			var ws2 = await(wsClient.connect(connectOptions));
+			var ack2 = Promise.<Void>promise();
+			var matchFound2 = Promise.<String>promise();
+			ws2.textMessageHandler(text -> {
+				var msg = new JsonObject(text);
+				if ("connection_ack".equals(msg.getString("type"))) {
+					ack2.tryComplete();
+				} else if ("next".equals(msg.getString("type")) && "match-live".equals(msg.getString("id"))) {
+					var mf = msg.getJsonObject("payload").getJsonObject("data").getJsonObject("matchFound");
+					if (mf != null) {
+						matchFound2.tryComplete(mf.getString("gameId"));
+					}
+				}
+			});
+			ws2.writeTextMessage(new JsonObject()
+					.put("type", "connection_init")
+					.put("payload", new JsonObject().put("Authorization", "Bearer " + token))
+					.encode());
+			await(ack2.future());
+			ws2.writeTextMessage(new JsonObject()
+					.put("type", "subscribe")
+					.put("id", "match-live")
+					.put("payload", new JsonObject().put("query", "subscription { matchFound { gameId } }"))
+					.encode());
+			await(Environment.sleep(vertx, 100));
+
+			var enqueueRes = await(graphql(webClient,
+					"""
+					mutation Enqueue($input: MatchmakingEnqueueInput!) {
+					  enqueueMatchmaking(input: $input)
+					}""",
+					new JsonObject().put("input", new JsonObject()
+							.put("queueId", queueId)
+							.put("deckId", deckId)),
+					token));
+			assertNull(enqueueRes.getJsonArray("errors"), "enqueueMatchmaking errors: " + enqueueRes);
+
+			// 3. Stale WebSocket #1 finally closes/cancels after WebSocket #2 has already enqueued
+			await(ws1.close());
+			await(Environment.sleep(vertx, 150));
+
+			// 4. Second player enqueues into the same queue -> should match with Player 1 on ws2!
+			var accountData2 = await(createAccountViaGraphQL(webClient,
+					UUID.randomUUID() + "@test.com", UUID.randomUUID().toString(), "password"));
+			var token2 = extractToken(accountData2);
+			var deckId2 = createDeck(webClient, token2);
+			var wsP2 = await(wsClient.connect(connectOptions));
+			var ackP2 = Promise.<Void>promise();
+			wsP2.textMessageHandler(text -> {
+				var msg = new JsonObject(text);
+				if ("connection_ack".equals(msg.getString("type"))) {
+					ackP2.tryComplete();
+				}
+			});
+			wsP2.writeTextMessage(new JsonObject()
+					.put("type", "connection_init")
+					.put("payload", new JsonObject().put("Authorization", "Bearer " + token2))
+					.encode());
+			await(ackP2.future());
+			wsP2.writeTextMessage(new JsonObject()
+					.put("type", "subscribe")
+					.put("id", "match-p2")
+					.put("payload", new JsonObject().put("query", "subscription { matchFound { gameId } }"))
+					.encode());
+			await(Environment.sleep(vertx, 100));
+			await(graphql(webClient,
+					"""
+					mutation Enqueue($input: MatchmakingEnqueueInput!) {
+					  enqueueMatchmaking(input: $input)
+					}""",
+					new JsonObject().put("input", new JsonObject()
+							.put("queueId", queueId)
+							.put("deckId", deckId2)),
+					token2));
+
+			var gameId = await(matchFound2.future().timeout(5, TimeUnit.SECONDS));
+			assertNotNull(gameId, "Live matchFound subscription #2 should receive gameId even after stale subscription #1 closes");
+
+			// Also verify VirtualThreadRoutingContextHandler operationName branches and non-virtual thread guard
+			var opNameRes = await(webClient.post("/graphql")
+					.putHeader("Authorization", "Bearer " + token)
+					.sendJsonObject(new JsonObject()
+							.put("operationName", "ExplicitAccountOp")
+							.put("query", "query ExplicitAccountOp { account { id } }"))
+					.map(HttpResponse::bodyAsJsonObject));
+			assertNull(opNameRes.getJsonArray("errors"));
+
+			var blankOpRes = await(webClient.post("/graphql")
+					.putHeader("Authorization", "Bearer " + token)
+					.sendJsonObject(new JsonObject()
+							.put("operationName", "")
+							.put("query", "{ account { id } }"))
+					.map(HttpResponse::bodyAsJsonObject));
+			assertNull(blankOpRes.getJsonArray("errors"));
+
+			// Also exercise VirtualThreadRoutingContextHandler with empty body and null context user()
+			await(webClient.post("/graphql")
+					.putHeader("Authorization", "Bearer " + token)
+					.send());
+			com.hiddenswitch.framework.virtual.VirtualThreadRoutingContextHandler.clearUser();
+			assertNull(com.hiddenswitch.framework.virtual.VirtualThreadRoutingContextHandler.user());
+
+			var subResolver = new com.hiddenswitch.framework.impl.GraphQLSubscriptionResolverImpl();
+			assertThrows(Exception.class, () -> subResolver.gameMessages("conn"));
+			assertThrows(Exception.class, subResolver::matchFound);
+			assertThrows(Exception.class, subResolver::friendUpdated);
+			assertThrows(Exception.class, subResolver::inviteUpdated);
+			assertThrows(Exception.class, subResolver::editableCardUpdated);
+
+			var nonVtDone = Promise.<Void>promise();
+			((io.vertx.core.internal.VertxInternal) vertx).createEventLoopContext().runOnContext(_ -> {
+				try {
+					assertThrows(IllegalStateException.class, () ->
+							com.hiddenswitch.framework.virtual.VirtualThreadRoutingContextHandler.create(rc -> {}).handle(null));
+					nonVtDone.complete();
+				} catch (Throwable t) {
+					nonVtDone.fail(t);
+				}
+			});
+			await(nonVtDone.future());
+
+			// Exercise GraphQLGameBridge.toGraphQL optional proto branches (draw GameOver, empty Changes, CardEvent without card, Art & Entity optional fields)
+			var art1 = Spellsource.Art.newBuilder();
+			art1.getBodyBuilder();
+			var art2 = Spellsource.Art.newBuilder()
+					.setHighlight(Spellsource.Color.newBuilder().setR(0.5f))
+					.setPrimary(Spellsource.Color.newBuilder().setG(0.5f))
+					.setSecondary(Spellsource.Color.newBuilder().setB(0.5f))
+					.setShadow(Spellsource.Color.newBuilder().setA(0.5f));
+			art2.getBodyBuilder().setVertex(Spellsource.Color.newBuilder().setR(1f).setG(1f).setB(1f).setA(1f));
+			art2.getLoopBuilder().setNamed("loop");
+			art2.getMissileBuilder().setNamed("missile");
+			art2.getOnCastBuilder().setNamed("onCast");
+			art2.getOnHitBuilder().setNamed("onHit");
+			art2.getSpellBuilder().setNamed("spell");
+			art2.getSpriteBuilder().setNamed("sprite");
+			art2.getSpriteShadowBuilder().setNamed("spriteShadow");
+
+			var eventBuilder = Spellsource.GameEvent.newBuilder()
+					.setEventType(Spellsource.GameEventTypeMessage.GameEventType.PERFORMED_GAME_ACTION)
+					.setEntityTouched(10)
+					.setEntityUntouched(11);
+			eventBuilder.getCardEventBuilder().setShowLocal(true);
+
+			var emptyProtoMsg = com.hiddenswitch.framework.impl.GraphQLGameBridge.toGraphQL(
+					Spellsource.ServerToClientMessage.newBuilder()
+							.setMessageType(Spellsource.MessageTypeMessage.MessageType.ON_GAME_END)
+							.setId("msg-draw")
+							.setGameOver(Spellsource.GameOver.newBuilder().setLocalPlayerWon(false))
+							.setChanges(Spellsource.EntityChangeSet.newBuilder())
+							.setEvent(eventBuilder)
+							.addStartingCards(Spellsource.Entity.newBuilder()
+									.setId(1)
+									.setCardType(Spellsource.CardTypeMessage.CardType.WEAPON)
+									.setEntityType(Spellsource.EntityTypeMessage.EntityType.CARD)
+									.setRarity(Spellsource.RarityMessage.Rarity.LEGENDARY)
+									.setArt(art1)
+									.setDurability(3)
+									.setSpellDamage(2)
+									.setOverload(1)
+									.setExtraAttack(4)
+									.setCharges(2)
+									.setCountUntilCast(3)
+									.setFires(5))
+							.addStartingCards(Spellsource.Entity.newBuilder()
+									.setId(2)
+									.setCardType(Spellsource.CardTypeMessage.CardType.HERO)
+									.setEntityType(Spellsource.EntityTypeMessage.EntityType.HERO)
+									.setRarity(Spellsource.RarityMessage.Rarity.FREE)
+									.setArt(art2))
+							.build());
+			assertNull(emptyProtoMsg.getGameOver().getWinningPlayerId());
+			assertNull(emptyProtoMsg.getChangedEntityIds());
+			assertNull(emptyProtoMsg.getEvent().getCardEvent().getCard());
+			assertEquals(Integer.valueOf(10), emptyProtoMsg.getEvent().getEntityTouched());
+			assertEquals(Integer.valueOf(11), emptyProtoMsg.getEvent().getEntityUntouched());
+			assertEquals(Integer.valueOf(3), emptyProtoMsg.getStartingCards().get(0).getDurability());
+			assertNotNull(emptyProtoMsg.getStartingCards().get(1).getArt().getBody().getVertex());
+			assertNotNull(emptyProtoMsg.getStartingCards().get(1).getArt().getSpriteShadow());
+
+			await(ws2.close());
+			await(wsP2.close());
+			await(wsClient.close());
+			await(Matchmaking.deleteQueue(queueId));
+		});
+	}
 }

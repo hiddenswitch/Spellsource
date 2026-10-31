@@ -117,13 +117,8 @@ public class Accounts {
 	 * @see #userId() when the user ID will suffice
 	 */
 	public static Future<UserEntity> user(String userId) {
-		try {
-			var dao = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
-			var record = await(dao.findOneById(userId));
-			return Future.succeededFuture(record);
-		} catch (Throwable t) {
-			return Future.failedFuture(t);
-		}
+		var dao = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+		return dao.findOneById(userId);
 	}
 
 
@@ -302,7 +297,7 @@ public class Accounts {
 			public Future<LoginOrCreateReply> changePassword(GrpcServerRequest<ChangePasswordRequest, LoginOrCreateReply> grpcServerRequest, ChangePasswordRequest request) {
 				var userId = grpcServerRequest.routingContext().user().subject();
 				// for now we don't invalidate and refresh the old token
-				var token = Accounts.token();
+				var token = Accounts.token(grpcServerRequest.routingContext());
 				if (token == null) {
 					return Future.failedFuture("must log in with old password first");
 				}
@@ -377,14 +372,22 @@ public class Accounts {
 				.setId(userEntity.getId());
 	}
 
-	private static String token() {
-		// from JwtServerInterceptor
-		var user = VirtualThreadRoutingContextHandler.current().user();
-		if (user == null) {
+	private static String token(io.vertx.ext.web.RoutingContext rc) {
+		if (rc == null) {
+			rc = VirtualThreadRoutingContextHandler.current();
+		}
+		if (rc == null) {
 			return null;
 		}
-		// from User.fromToken
-		return user.get("access_token");
+		var user = rc.user();
+		if (user != null && user.get("access_token") != null) {
+			return user.get("access_token");
+		}
+		var authHeader = rc.request() != null ? rc.request().getHeader("Authorization") : null;
+		if (authHeader != null && authHeader.regionMatches(true, 0, "Bearer ", 0, 7)) {
+			return authHeader.substring(7).trim();
+		}
+		return null;
 	}
 
 	public static Future<RealmResource> realm() {
@@ -437,9 +440,9 @@ public class Accounts {
 
 	@NotNull
 	private static CredentialRepresentation getPasswordCredential(String password) {
-		var factory = new Pbkdf2Sha512PasswordHashProviderFactory();
-		var credentialModel = factory.create(null).encodedCredential(password, -1);
-		var credential = ModelToRepresentation.toRepresentation(credentialModel);
+		var credential = new CredentialRepresentation();
+		credential.setType(CredentialRepresentation.PASSWORD);
+		credential.setValue(password);
 		credential.setTemporary(false);
 		return credential;
 	}

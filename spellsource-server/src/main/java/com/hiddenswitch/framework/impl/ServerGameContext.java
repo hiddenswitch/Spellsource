@@ -155,7 +155,7 @@ public class ServerGameContext extends GameContext implements Deployable {
 	}
 
 	public String deploymentID() {
-		return context != null ? context.deploymentID() : null;
+		return context.deploymentID();
 	}
 
 	@Override
@@ -214,21 +214,19 @@ public class ServerGameContext extends GameContext implements Deployable {
 
 	private boolean awaitClientsReady() {
 		var timeout = Math.min(Games.getDefaultNoActivityTimeout(), Games.getDefaultConnectionTime());
-		if (!clientsReady.values().stream().allMatch(fut -> fut.future().succeeded())) {
-			var allReady = Future.all(clientsReady.values().stream().map(Promise::future).toList());
-			await(Future.any(sleep(timeout), allReady.otherwiseEmpty()));
-			if (!clientsReady.values().stream().allMatch(fut -> fut.future().succeeded())) {
-				if (pendingConcedePlayerId.get() == -1 && clientsReady.values().stream().anyMatch(fut -> fut.future().succeeded())) {
-					for (var entry : clientsReady.entrySet()) {
-						if (!entry.getValue().future().succeeded()) {
-							LOGGER.error("init {}: Game prematurely ended because player id={} did not connect in {}ms", getGameId(), entry.getKey(), timeout);
-							getLogic().concede(entry.getKey());
-						}
+		var allReady = Future.all(clientsReady.values().stream().map(Promise::future).toList());
+		await(com.hiddenswitch.framework.Environment.timeout(allReady, timeout, vertx).otherwiseEmpty());
+		if (!allReady.succeeded()) {
+			if (pendingConcedePlayerId.get() == -1 && clientsReady.values().stream().anyMatch(fut -> fut.future().succeeded())) {
+				for (var entry : clientsReady.entrySet()) {
+					if (!entry.getValue().future().succeeded()) {
+						LOGGER.error("init {}: Game prematurely ended because player id={} did not connect in {}ms", getGameId(), entry.getKey(), timeout);
+						getLogic().concede(entry.getKey());
 					}
 				}
-				isRunning = false;
-				return false;
 			}
+			isRunning = false;
+			return false;
 		}
 		clientsReady.clear();
 		return true;
@@ -341,9 +339,7 @@ public class ServerGameContext extends GameContext implements Deployable {
 		try {
 			LOGGER.trace("play: Starting forked game");
 			if (restored) {
-				if (awaitClientsReady()) {
-					gameReady = true;
-				}
+				gameReady = awaitClientsReady();
 			} else {
 				init();
 			}
@@ -388,10 +384,7 @@ public class ServerGameContext extends GameContext implements Deployable {
 
 				timerLengthMillis = (long) getTurnTimeForPlayer(getActivePlayerId());
 				timerStartTimeMillis = System.currentTimeMillis();
-
-				if (timerLengthMillis > 0) {
-					turnTimerId = vertx.setTimer(timerLengthMillis, v -> client.elapseAwaitingRequests());
-				}
+				turnTimerId = vertx.setTimer(timerLengthMillis, v -> client.elapseAwaitingRequests());
 			} else {
 				timerLengthMillis = null;
 				timerStartTimeMillis = null;
@@ -509,20 +502,13 @@ public class ServerGameContext extends GameContext implements Deployable {
 		var triggerFired = new TriggerFired(this, trigger);
 		final var gameStateCopy = getGameStateCopy();
 
-		if (trigger.getHostReference() != null) {
-			var host = getEntities()
-					.filter(e -> e.getId() == trigger.getHostReference().getId())
-					.findFirst()
-					.orElse(null);
-
-			if (host != null && GameLogic.PRIVATE.contains(host.getZone()) && host.getSourceCard() != null && !host.getSourceCard().getDesc().revealsSelf()) {
-				var owner = host.getOwner();
-				var client = getClient(owner);
-				if (client != null) {
-					client.sendNotification(triggerFired, gameStateCopy);
-				}
-				return;
+		var host = trigger.getHostReference() != null ? resolveSingleTarget(trigger.getHostReference()) : null;
+		if (host != null && GameLogic.PRIVATE.contains(host.getZone()) && !host.getSourceCard().getDesc().revealsSelf()) {
+			var client = getClient(host.getOwner());
+			if (client != null) {
+				client.sendNotification(triggerFired, gameStateCopy);
 			}
+			return;
 		}
 
 		for (var client : getClients()) {
@@ -566,8 +552,7 @@ public class ServerGameContext extends GameContext implements Deployable {
 	}
 
 	private boolean isResumableBotMatch() {
-		return playerConfigurations.size() == 2
-				&& playerConfigurations.stream().filter(Configuration::isBot).count() == 1;
+		return playerConfigurations.stream().filter(Configuration::isBot).count() == 1;
 	}
 
 	/** Trace writes are intentionally synchronous with game mutation, so a shutdown cannot outrun a checkpoint. */
@@ -645,7 +630,7 @@ public class ServerGameContext extends GameContext implements Deployable {
 		try {
 			LOGGER.debug("endGame {}: calling end game", gameId);
 
-			if (turnTimerId != null && vertx != null) {
+			if (turnTimerId != null) {
 				vertx.cancelTimer(turnTimerId);
 				turnTimerId = null;
 			}
@@ -661,9 +646,7 @@ public class ServerGameContext extends GameContext implements Deployable {
 			for (var client : getClients()) {
 				unregistrations.add(client.unregisterConsumer());
 			}
-			if (Thread.currentThread().isVirtual() && !unregistrations.isEmpty()) {
-				awaitAll(unregistrations);
-			}
+			awaitAll(unregistrations);
 
 			updateAndGetGameOver();
 			RogueManager.handleGameEnd(Long.parseLong(gameId), getWinner() == null ? null : getWinner().getUserId());
@@ -688,7 +671,7 @@ public class ServerGameContext extends GameContext implements Deployable {
 				}
 				flushes.add(com.hiddenswitch.framework.Environment.timeout(client.lastWriteFuture(), 5000L, vertx).otherwiseEmpty());
 			}
-			if (Thread.currentThread().isVirtual() && !flushes.isEmpty()) {
+			if (!flushes.isEmpty()) {
 				awaitAll(flushes);
 			}
 		} finally {
@@ -715,10 +698,10 @@ public class ServerGameContext extends GameContext implements Deployable {
 		for (var consumer : gameLifecycleConsumers) {
 			unregistrations.add(consumer.unregister().otherwiseEmpty());
 		}
-		if (Vertx.currentContext() != null && Thread.currentThread().isVirtual() && !unregistrations.isEmpty() && !Thread.currentThread().isInterrupted()) {
+		if (Vertx.currentContext() != null && Thread.currentThread().isVirtual() && !Thread.currentThread().isInterrupted()) {
 			awaitAll(unregistrations);
 		}
-		if (vertx != null && deploymentID() != null && vertx.deploymentIDs().contains(deploymentID())) {
+		if (context != null && vertx.deploymentIDs().contains(deploymentID())) {
 			vertx.undeploy(deploymentID()).otherwiseEmpty();
 		}
 		super.close();
@@ -752,7 +735,7 @@ public class ServerGameContext extends GameContext implements Deployable {
 	}
 
 	public boolean isGameReady() {
-		return gameReady && clientsReady.values().stream().allMatch(promise -> promise.future().succeeded());
+		return gameReady;
 	}
 
 	public Random getRandom() {

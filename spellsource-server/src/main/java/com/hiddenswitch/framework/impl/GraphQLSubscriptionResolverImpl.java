@@ -80,6 +80,8 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 		throw new NotImplementedException();
 	}
 
+	private static final java.util.Map<String, MatchFoundSubscription> ACTIVE_SUBSCRIPTIONS = new java.util.concurrent.ConcurrentHashMap<>();
+
 	/**
 	 * A Publisher that listens on the event bus for matchmaking notifications and emits
 	 * {@link MatchFound} when the user is matched into a game.
@@ -97,60 +99,39 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 
 		@Override
 		public void subscribe(Subscriber<? super MatchFound> subscriber) {
-			var cancelled = new AtomicBoolean(false);
-			var matched = new AtomicBoolean(false);
-			var address = Matchmaking.MATCHMAKING_ENQUEUE + userId;
-			var prepareAddress = Matchmaking.MATCHMAKING_PREPARE + userId;
-			var vertx = Vertx.currentContext().owner();
-			var eventBus = vertx.eventBus();
+			var sub = new MatchFoundSubscription(userId, subscriber);
+			sub.start();
+		}
+	}
 
-			MessageConsumer<String> consumer = eventBus.consumer(address);
-			MessageConsumer<String> prepareConsumer = eventBus.consumer(prepareAddress);
-			Runnable cleanup = () -> {
-				if (cancelled.compareAndSet(false, true)) {
-					if (!matched.get()) {
-						Matchmaking.finishTicketSpanCancelled(userId, "cancelled");
-					}
-					Future.all(
-							consumer.unregister(),
-							prepareConsumer.unregister(),
-							withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
-									.where(MATCHMAKING_TICKETS.USER_ID.eq(userId)))
-									.otherwiseEmpty()
-					);
-				}
-			};
+	private static final class MatchFoundSubscription implements Subscription {
+		private final String userId;
+		private final Subscriber<? super MatchFound> subscriber;
+		private final AtomicBoolean cancelled = new AtomicBoolean(false);
+		private final AtomicBoolean matched = new AtomicBoolean(false);
+		private final MessageConsumer<String> consumer;
+		private final MessageConsumer<String> prepareConsumer;
 
-			subscriber.onSubscribe(new Subscription() {
-				@Override
-				public void request(long n) {
-					// backpressure not needed; match events are rare
-				}
+		MatchFoundSubscription(String userId, Subscriber<? super MatchFound> subscriber) {
+			this.userId = userId;
+			this.subscriber = subscriber;
+			var eventBus = Vertx.currentContext().owner().eventBus();
+			this.consumer = eventBus.consumer(Matchmaking.MATCHMAKING_ENQUEUE + userId);
+			this.prepareConsumer = eventBus.consumer(Matchmaking.MATCHMAKING_PREPARE + userId);
+		}
 
-				@Override
-				public void cancel() {
-					cleanup.run();
-				}
-			});
-
-			prepareConsumer.handler(message -> {
-				if (cancelled.get()) {
-					message.fail(1, "subscription cancelled");
-					return;
-				}
-				message.reply("ok");
-			});
-
+		void start() {
+			var previous = ACTIVE_SUBSCRIPTIONS.put(userId, this);
+			if (previous != null) {
+				previous.cleanup();
+			}
+			subscriber.onSubscribe(this);
+			prepareConsumer.handler(message -> message.reply("ok"));
 			consumer.handler(message -> {
-				if (cancelled.get()) {
-					message.fail(1, "subscription cancelled");
-					return;
-				}
 				matched.set(true);
-				cleanup.run();
+				cleanup();
 
 				var gameId = message.body();
-				// Reply to acknowledge receipt so the matchmaker knows the player was notified
 				message.reply("ok");
 
 				var matchFound = MatchFound.builder()
@@ -163,11 +144,30 @@ public class GraphQLSubscriptionResolverImpl implements SubscriptionResolver, Gr
 				subscriber.onNext(matchFound);
 				subscriber.onComplete();
 			});
+		}
 
-			consumer.exceptionHandler(err -> {
-				cleanup.run();
-				subscriber.onError(err);
-			});
+		void cleanup() {
+			if (cancelled.compareAndSet(false, true)) {
+				boolean isCurrent = ACTIVE_SUBSCRIPTIONS.remove(userId, this);
+				consumer.unregister();
+				prepareConsumer.unregister();
+				if (isCurrent && !matched.get()) {
+					Matchmaking.finishTicketSpanCancelled(userId, "cancelled");
+					withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
+							.where(MATCHMAKING_TICKETS.USER_ID.eq(userId)))
+							.otherwiseEmpty();
+				}
+			}
+		}
+
+		@Override
+		public void request(long n) {
+			// backpressure not needed; match events are rare
+		}
+
+		@Override
+		public void cancel() {
+			cleanup();
 		}
 	}
 }

@@ -259,6 +259,7 @@ public class RogueManager {
 			return Future.failedFuture("Card did not exist within deck to trash");
 		}
 
+		Legacy.invalidateDeck(rogueRun.getDeck());
 		return Future.succeededFuture(rogueRun.getId());
 	}
 
@@ -307,7 +308,7 @@ public class RogueManager {
 			}
 
 			await(Environment.withDslContext(dsl -> dsl.update(CARDS_IN_DECK).set(CARDS_IN_DECK.CARD_ID,
-				"level_" + (newBossesDefeated + 1)).where(CARDS_IN_DECK.CARD_ID.startsWith("level_"))));
+				"level_" + (newBossesDefeated + 1)).where(CARDS_IN_DECK.DECK_ID.eq(rogueRun.getDeck()).and(CARDS_IN_DECK.CARD_ID.startsWith("level_")))));
 			Legacy.invalidateDeck(rogueRun.getDeck());
 		}
 
@@ -375,9 +376,13 @@ public class RogueManager {
 			return Future.failedFuture("Not enough gold to upgrade card");
 		}
 
-		await(Environment.withDslContext(dsl -> dsl.update(CARDS_IN_DECK).set(CARDS_IN_DECK.CARD_ID,
-			upgradeCard).where(CARDS_IN_DECK.CARD_ID.eq("cardId")).limit(1)));
+		var count = await(Environment.withDslContext(dsl -> dsl.update(CARDS_IN_DECK).set(CARDS_IN_DECK.CARD_ID,
+			upgradeCard).where(CARDS_IN_DECK.DECK_ID.eq(rogueRun.getDeck()).and(CARDS_IN_DECK.CARD_ID.eq(cardId))).limit(1)));
+		if (count < 1) {
+			return Future.failedFuture("Card did not exist within deck to upgrade");
+		}
 
+		Legacy.invalidateDeck(rogueRun.getDeck());
 		await(updateRogueRun(rogueRun.getId(), r -> r.set(ROGUE_RUN.GOLD, rogueRun.getGold() - cost)));
 
 		return Future.succeededFuture(rogueId);

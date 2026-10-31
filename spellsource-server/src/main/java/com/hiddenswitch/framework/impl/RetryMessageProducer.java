@@ -42,12 +42,16 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 		return ACTIVE_PRODUCERS.get();
 	}
 
+	private boolean shouldRetry(Throwable t, int retries) {
+		return !closed && retries > 0 && t instanceof ReplyException replyException && replyException.failureType() == ReplyFailure.NO_HANDLERS;
+	}
+
 	private Future<Void> write(QueueItem<T> item, int retries) {
 		return producer
 				.write(item.message)
 				.recover(t -> {
 					synchronized (this) {
-						if (!closed && t instanceof ReplyException replyException && replyException.failureType() == ReplyFailure.NO_HANDLERS && retries > 0) {
+						if (shouldRetry(t, retries)) {
 							var promise = Promise.<Void>promise();
 							retryTimerId = vertx.setTimer(intervalMillis, v -> {
 								synchronized (RetryMessageProducer.this) {
@@ -63,29 +67,27 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 					return Future.failedFuture(t);
 				})
 				.compose(v -> {
-					var next = advanceQueue(item, null);
-					return next == null ? Future.succeededFuture() : write(next, next.initialRetries);
+					advanceQueue(item, null);
+					return Future.succeededFuture();
 				});
 	}
 
-	private QueueItem<T> advanceQueue(QueueItem<T> item, Throwable failure) {
+	private void advanceQueue(QueueItem<T> item, Throwable failure) {
 		QueueItem<T> next;
 		synchronized (this) {
-			item.completed = true;
-			next = closed ? null : waiting.pollFirst();
+			next = waiting.pollFirst();
 			inFlight = next;
 			hasInFlight = next != null;
 		}
 		if (failure != null) {
 			item.promise.tryFail(failure);
-			if (next != null) {
-				write(next, next.initialRetries)
-						.onFailure(com.hiddenswitch.framework.Environment.onFailure("write failures"));
-			}
 		} else {
 			item.promise.tryComplete();
 		}
-		return next;
+		if (next != null) {
+			write(next, next.initialRetries)
+					.onFailure(com.hiddenswitch.framework.Environment.onFailure("write failures"));
+		}
 	}
 
 	@Override
@@ -152,20 +154,14 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 			vertx.cancelTimer(timerId);
 		}
 		for (var item : pending) {
-			if (!item.completed) {
-				item.completed = true;
-				item.promise.tryFail("closed");
-			}
+			item.promise.tryFail("closed");
 		}
 		return producer.close();
 	}
 
 	public synchronized void trim() {
 		for (var item : waiting) {
-			if (!item.completed) {
-				item.completed = true;
-				item.promise.tryFail("trimmed");
-			}
+			item.promise.tryFail("trimmed");
 		}
 		waiting.clear();
 	}
@@ -174,7 +170,6 @@ public class RetryMessageProducer<T> implements MessageProducer<T> {
 		final X message;
 		final Promise<X> promise;
 		final int initialRetries;
-		boolean completed;
 
 		QueueItem(X message, Promise<X> promise, int initialRetries) {
 			this.message = message;

@@ -84,8 +84,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 		LOGGER.trace("createGameSession: creating game session for request {}", request);
 		Objects.requireNonNull(request.getGameId(), "Cannot create a game session without specifying a gameId.");
 
-		var resumable = request.getConfigurations().stream().filter(Configuration::isBot).count() == 1
-				&& request.getConfigurations().size() == 2;
+		var resumable = request.getConfigurations().stream().filter(Configuration::isBot).count() == 1;
 		var gameIdLong = Long.parseLong(request.getGameId());
 		try (var scope = openScope(vertx)) {
 			for (var configuration : request.getConfigurations()) {
@@ -99,14 +98,12 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 				playerAttributes.put(Attribute.DECK_ID, deckId);
 				configuration.setPlayerAttributes(playerAttributes);
 
-				if (configuration.getDeck() instanceof CollectionDeck) {
-					scope.fork(() -> {
-						var deckCollection = await(Legacy.getDeck(cardCatalogue, deckId, userId));
-						configuration.setDeck(ModelConversions.getGameDeck(userId, deckCollection, cardCatalogue));
-						deckCollection.getCollection().getPlayerEntityAttributesList().forEach(t -> playerAttributes.put(Attribute.valueOf(t.getAttribute().name()), t.getStringValue()));
-						return null;
-					});
-				}
+				scope.fork(() -> {
+					var deckCollection = await(Legacy.getDeck(cardCatalogue, deckId, userId));
+					configuration.setDeck(ModelConversions.getGameDeck(userId, deckCollection, cardCatalogue));
+					deckCollection.getCollection().getPlayerEntityAttributesList().forEach(t -> playerAttributes.put(Attribute.valueOf(t.getAttribute().name()), t.getStringValue()));
+					return null;
+				});
 
 				scope.fork(() -> {
 					var usernameRow = await(Environment.withExecutor(queryExecutor -> queryExecutor.findOneRow(dsl -> dsl
@@ -201,11 +198,8 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 		}
 
 		gameContext.updateAndGetGameOver();
-		String winner = null;
-		if (gameContext.getWinner() != null && gameContext.getWinner().getUserId() != null) {
-			winner = gameContext.getWinner().getUserId();
-		}
-		if (winner != null) {
+		if (gameContext.getWinner() != null) {
+			var winner = gameContext.getWinner().getUserId();
 			var userIdLoser = gameContext.getOpponent(gameContext.getWinner()).getUserId();
 			var pTrace = JSONToJsonObjectConverter.getInstance().to(gameContext.getTrace().toJson());
 			await(Environment.callRoutine(Routines.clusteredGamesUpdateGameAndUsers(winner, userIdLoser, gameIdLong, pTrace)).execute());
@@ -232,10 +226,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			} else {
 				removeGameAndRecordReplay(gameId);
 			}
-			var thread = context.getThread();
-			if (thread != null) {
-				thread.interrupt();
-			}
+			context.stopVirtual();
 			context.close();
 		}
 		LOGGER.trace("stop: Unregistered");

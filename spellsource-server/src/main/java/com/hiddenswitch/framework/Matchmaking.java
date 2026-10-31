@@ -173,8 +173,12 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 	public static Future<Closeable> createQueue(MatchmakingQueues configuration) {
 		var matchmakingQueuesDao = new MatchmakingQueuesDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 		return matchmakingQueuesDao.insert(configuration, true)
-				.onSuccess(i -> LOGGER.debug("created queue {} ({})", configuration.getId(), i == 1))
+				.onSuccess(i -> LOGGER.debug("created queue {} (rows={})", configuration.getId(), i))
 				.map(ignored -> completion -> Matchmaking.deleteQueue(configuration.getId()).onComplete(completion));
+	}
+
+	private static boolean isNoHandlers(Throwable cause) {
+		return cause instanceof ReplyException reply && reply.failureType() == ReplyFailure.NO_HANDLERS;
 	}
 
 	public static Future<Void> notifyGameReady(String userId, String gameId, boolean retryIfNoHandlers) {
@@ -198,8 +202,7 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 					// clients open their notification stream and enqueue at the same time, and a bot queue matches
 					// within one scan, so the stream may not be registered yet when the game is created. keep
 					// offering the game until the player has had the connection time to show up
-					var noHandlers = cause instanceof ReplyException reply && reply.failureType() == ReplyFailure.NO_HANDLERS;
-					if (!noHandlers || System.currentTimeMillis() >= deadline) {
+					if (!isNoHandlers(cause) || System.currentTimeMillis() >= deadline) {
 						return Future.failedFuture(cause);
 					}
 					return Future.future(promise -> vertx.setTimer(NOTIFY_RETRY_MILLIS, ignored ->
@@ -218,7 +221,7 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 						new DeliveryOptions().setSendTimeout(6000L))
 				.map(msg -> true)
 				.recover(cause -> {
-					if (cause instanceof ReplyException reply && reply.failureType() == ReplyFailure.NO_HANDLERS) {
+					if (isNoHandlers(cause)) {
 						if (botOpponent) {
 							return Future.succeededFuture(true);
 						}

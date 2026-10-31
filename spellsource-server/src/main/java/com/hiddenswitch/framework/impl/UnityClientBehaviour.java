@@ -103,7 +103,7 @@ public class UnityClientBehaviour implements Behaviour {
 	}
 
 	public void stop() {
-		if (turnTimer != null && vertx != null) {
+		if (turnTimer != null) {
 			vertx.cancelTimer(turnTimer);
 			turnTimer = null;
 		}
@@ -136,9 +136,7 @@ public class UnityClientBehaviour implements Behaviour {
 	}
 
 	private void recordActivity() {
-		if (activityMonitor != null) {
-			activityMonitor.activity();
-		}
+		activityMonitor.activity();
 	}
 
 	private void cancelActivity() {
@@ -245,7 +243,7 @@ public class UnityClientBehaviour implements Behaviour {
 				recordActivity();
 				if (message.hasEntityTouch()) {
 					server.onTouch(this, message.getEntityTouch());
-				} else if (message.hasEntityUntouch()) {
+				} else {
 					server.onUntouch(this, message.getEntityUntouch());
 				}
 				break;
@@ -434,43 +432,33 @@ public class UnityClientBehaviour implements Behaviour {
 					.setEventType(GameEventType.TRIGGER_FIRED)
 					.setTriggerFired(triggerFired);
 			var source = triggerEvent.getSource();
-			var hasSource = source != null && source.getSourceCard() != null;
-			if (hasSource && (source.isInPlay() || source.getOwner() == playerId)) {
+			if (source != null && (source.isInPlay() || source.getOwner() == playerId)) {
 				messageEvent.setSource(ModelConversions.getEntity(workingContext, source, playerId));
 				triggerFired.setTriggerSourceId(source.getId());
 			}
 		} else if (event instanceof GameAction action) {
 			var sourceEntity = event.getSource(workingContext);
-			Entity.Builder source = null;
-
-			if (sourceEntity != null && sourceEntity.getEntityType() == EntityType.CARD) {
-				var card = (Card) sourceEntity;
-				if (card.getCardType() == CardType.SPELL
-						&& card.isSecret()
-						&& card.getOwner() != playerId) {
-					String[] cardClasses = card.getHeroClasses();
-					source = ModelConversions.getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), cardClasses != null && cardClasses.length > 0 ? cardClasses : new String[]{HeroClass.ANY});
-				} else {
-					source = ModelConversions.getEntity(workingContext, card, playerId);
-				}
-			} else if (sourceEntity != null) {
+			Entity.Builder source;
+			if (sourceEntity instanceof Card card
+					&& card.getCardType() == CardType.SPELL
+					&& card.isSecret()
+					&& card.getOwner() != playerId) {
+				source = ModelConversions.getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClasses());
+			} else {
 				source = ModelConversions.getEntity(workingContext, sourceEntity, playerId);
 			}
 
-			var owner = sourceEntity != null ? sourceEntity.getOwner() : gameState.getActivePlayerId();
-			var targets = event.getTargets(workingContext, owner)
+			var targets = event.getTargets(workingContext, sourceEntity.getOwner())
 					.stream().map(e -> ModelConversions.getEntity(workingContext, e, playerId)).collect(Collectors.toList());
 			var target = !targets.isEmpty() ? targets.get(0) : null;
 			messageEvent
 					.setDescription(event.getDescription(workingContext, playerId))
-					.setIsSourcePlayerLocal(source == null ? gameState.getActivePlayerId() == playerId : source.getOwner() == playerId)
+					.setIsSourcePlayerLocal(source.getOwner() == playerId)
 					.setIsTargetPlayerLocal(target != null && target.getOwner() == playerId)
 					.setEventType(GameEventType.PERFORMED_GAME_ACTION)
 					.setPerformedGameAction(GameEvent.PerformedGameActionMessage.newBuilder()
-							.setActionType((ActionType) action.getActionType()).build());
-			if (source != null) {
-				messageEvent.setSource(source);
-			}
+							.setActionType((ActionType) action.getActionType()).build())
+					.setSource(source);
 			if (target != null) {
 				messageEvent.setTarget(target);
 			}

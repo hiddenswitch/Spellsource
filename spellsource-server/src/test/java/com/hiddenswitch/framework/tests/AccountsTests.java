@@ -261,4 +261,48 @@ public class AccountsTests extends FrameworkTestBase {
 				.compose(v -> client.closeFut())
 				.onComplete(testContext.succeedingThenComplete());
 	}
+
+	@Test
+	public void testChangePasswordAndGetAccountOnEventLoop(Vertx vertx, VertxTestContext testContext) {
+		var webClient = WebClient.create(vertx);
+		var client = new Client(vertx, webClient);
+		var username = "user_" + UUID.randomUUID().toString().substring(0, 8);
+		var email = username + "@hiddenswitch.com";
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin(username, email, "oldpassword"))
+				.compose(loginReply -> {
+					var userId = loginReply.getUserEntity().getId();
+					// 1. Accounts.user(userId) called from an EventLoop callback must not throw IllegalStateException
+					return Accounts.user(userId).compose(ue -> {
+						assertNotNull(ue);
+						assertEquals(email, ue.getEmail());
+						var stub = new VertxAccountsGrpcClient(
+								client.client().setRequestOptions(new RequestOptions().setHeaders(client.credentials())),
+								client.address());
+						var gamesStub = new com.hiddenswitch.framework.rpc.VertxGamesGrpcClient(
+								client.client().setRequestOptions(new RequestOptions().setHeaders(client.credentials())),
+								client.address());
+						// 2. getAccount, Games.isInMatch, and changePassword over gRPC
+						return gamesStub.isInMatch(Empty.getDefaultInstance())
+								.compose(inMatchReply -> {
+									assertEquals("", inMatchReply.getValue());
+									return stub.getAccount(Empty.getDefaultInstance());
+								})
+								.compose(accReply -> {
+									assertEquals(1, accReply.getUserEntitiesCount());
+									assertEquals(email, accReply.getUserEntities(0).getEmail());
+									return stub.changePassword(com.hiddenswitch.framework.rpc.Hiddenswitch.ChangePasswordRequest.newBuilder()
+											.setNewPassword("newpassword123")
+											.build());
+								})
+								.compose(changeReply -> {
+									assertEquals(userId, changeReply.getUserEntity().getId());
+									assertFalse(changeReply.getAccessTokenResponse().getToken().isEmpty());
+									return client.login(email, "newpassword123");
+								});
+					});
+				})
+				.compose(v -> client.closeFut())
+				.onComplete(testContext.succeedingThenComplete());
+	}
 }

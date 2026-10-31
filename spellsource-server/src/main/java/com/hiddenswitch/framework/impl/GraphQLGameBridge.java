@@ -84,10 +84,7 @@ public final class GraphQLGameBridge {
 						new DeliveryOptions().setSendTimeout(SUBSCRIBER_READY_RETRY_MILLIS))
 				.mapEmpty();
 		return readinessRequest.recover(cause -> {
-					var retryable = cause instanceof ReplyException reply
-							&& (reply.failureType() == ReplyFailure.NO_HANDLERS
-							|| reply.failureType() == ReplyFailure.TIMEOUT);
-					if (retryable && System.currentTimeMillis() < deadline) {
+					if (System.currentTimeMillis() < deadline) {
 						return Future.<Void>future(promise ->
 								vertx.setTimer(SUBSCRIBER_READY_RETRY_MILLIS, ignored ->
 										awaitGameMessagesSubscriber(vertx, address, deadline).onComplete(promise)));
@@ -352,14 +349,6 @@ public final class GraphQLGameBridge {
 			var address = Games.getMessagesFromServerAddress(userId);
 			var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(address);
 			var readinessConsumer = eventBus.<String>consumer(subscriberAddress(userId, connectionId));
-			var cancelled = new AtomicBoolean(false);
-			Runnable cleanup = () -> {
-				if (cancelled.compareAndSet(false, true)) {
-					consumer.unregister();
-					readinessConsumer.unregister();
-				}
-			};
-
 			readinessConsumer.handler(request -> consumer.completion()
 					.onSuccess(ignored -> request.reply("ready")));
 
@@ -370,14 +359,12 @@ public final class GraphQLGameBridge {
 
 				@Override
 				public void cancel() {
-					cleanup.run();
+					consumer.unregister();
+					readinessConsumer.unregister();
 				}
 			});
 
-			consumer.handler(message -> {
-				if (cancelled.get()) return;
-				subscriber.onNext(toGraphQL(message.body()));
-			});
+			consumer.handler(message -> subscriber.onNext(toGraphQL(message.body())));
 			consumer.exceptionHandler(subscriber::onError);
 		}
 	}

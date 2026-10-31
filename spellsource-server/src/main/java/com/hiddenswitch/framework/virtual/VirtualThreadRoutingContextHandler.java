@@ -17,33 +17,29 @@ public class VirtualThreadRoutingContextHandler {
 				throw new IllegalStateException();
 			}
 			context.set(ctx);
-			var parent = ctx.request() != null ? Tracing.extractFromHeaders(ctx.request().headers()) : null;
-			var operationName = "GraphQL/request";
-			try {
-				var bodyJson = ctx.body() != null ? ctx.body().asJsonObject() : null;
-				if (bodyJson != null) {
-					var opName = bodyJson.getString("operationName");
-					if (opName == null || opName.isBlank()) {
-						var query = bodyJson.getString("query");
-						if (query != null) {
-							var matcher = GRAPHQL_OP_PATTERN.matcher(query);
-							if (matcher.find()) {
-								opName = matcher.group(1);
-							}
-						}
-					}
-					if (opName != null && !opName.isBlank()) {
-						operationName = "GraphQL/" + opName;
-					}
-				}
-			} catch (Exception ignored) {
-			}
+			var parent = Tracing.extractFromHeaders(ctx.request().headers());
+			var operationName = extractOperationName(ctx);
 			var span = Tracing.tracing().buildSpan(operationName).asChildOf(parent).start();
 			ctx.addEndHandler(v -> span.finish());
 			try (var ignored = Tracing.tracing().activateSpan(span)) {
 				toDecorate.handle(ctx);
 			}
 		};
+	}
+
+	private static String extractOperationName(RoutingContext ctx) {
+		var bodyJson = ctx.body().asJsonObject();
+		if (bodyJson != null) {
+			var opName = bodyJson.getString("operationName");
+			if (opName != null && !opName.isBlank()) {
+				return "GraphQL/" + opName;
+			}
+			var matcher = GRAPHQL_OP_PATTERN.matcher(java.util.Objects.requireNonNullElse(bodyJson.getString("query"), ""));
+			if (matcher.find()) {
+				return "GraphQL/" + matcher.group(1);
+			}
+		}
+		return "GraphQL/request";
 	}
 
 	public static RoutingContext current() {
