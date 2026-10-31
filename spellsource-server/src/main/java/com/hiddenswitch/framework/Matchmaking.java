@@ -78,7 +78,7 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 			),
 			claimed AS (
 			  UPDATE spellsource.matchmaking_tickets t
-			  SET created_at = now() + interval '1500 milliseconds'
+			  SET created_at = now() + interval '30 seconds'
 			  FROM to_claim c
 			  WHERE t.ticket_id = c.ticket_id
 			  RETURNING t.ticket_id, t.queue_id, t.user_id, t.deck_id, t.bot_deck_id, t.created_at
@@ -211,7 +211,7 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 	}
 
 	private static Future<Boolean> verifyTicketLive(Vertx vertx, MatchmakingTickets ticket, boolean botOpponent) {
-		return verifyTicketLive(vertx, ticket.getUserId(), botOpponent, 6);
+		return verifyTicketLive(vertx, ticket.getUserId(), botOpponent, 30);
 	}
 
 	private static Future<Boolean> verifyTicketLive(Vertx vertx, String userId, boolean botOpponent, int retriesLeft) {
@@ -226,7 +226,7 @@ public class Matchmaking extends AbstractVirtualThreadVerticle {
 							return Future.succeededFuture(true);
 						}
 						if (retriesLeft > 0) {
-							return Future.future(promise -> vertx.setTimer(25L, ignored ->
+							return Future.future(promise -> vertx.setTimer(50L, ignored ->
 									verifyTicketLive(vertx, userId, false, retriesLeft - 1).onComplete(promise)));
 						}
 					}
