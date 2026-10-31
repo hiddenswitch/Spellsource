@@ -649,7 +649,11 @@ public class ServerGameContext extends GameContext implements Deployable {
 			awaitAll(unregistrations);
 
 			updateAndGetGameOver();
-			RogueManager.handleGameEnd(Long.parseLong(gameId), getWinner() == null ? null : getWinner().getUserId());
+			if (Vertx.currentContext() != null && Thread.currentThread().isVirtual() && !Thread.currentThread().isInterrupted()) {
+				await(RogueManager.handleGameEnd(Long.parseLong(gameId), getWinner() == null ? null : getWinner().getUserId()).otherwiseEmpty());
+			} else {
+				RogueManager.handleGameEnd(Long.parseLong(gameId), getWinner() == null ? null : getWinner().getUserId());
+			}
 
 			if (this.cluster != null) {
 				this.cluster.removeGameAndRecordReplay(this.gameId);

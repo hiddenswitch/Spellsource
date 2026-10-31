@@ -1907,4 +1907,144 @@ public class GraphQLTests extends FrameworkTestBase {
 			await(Matchmaking.deleteQueue(queueId));
 		});
 	}
+
+	@Test
+	public void testRogueRunGraphQLEndToEnd(Vertx vertx, VertxTestContext testContext) {
+		testVirtual(vertx, testContext, () -> {
+			RogueManager.initCardCatalogue();
+			await(startAll(vertx));
+			var webClient = graphqlClient(vertx);
+
+			var acct1 = await(createAccountViaGraphQL(webClient, UUID.randomUUID() + "@test.com", UUID.randomUUID().toString(), "password"));
+			var token1 = extractToken(acct1);
+			var acct2 = await(createAccountViaGraphQL(webClient, UUID.randomUUID() + "@test.com", UUID.randomUUID().toString(), "password"));
+			var token2 = extractToken(acct2);
+
+			// 1. Start a Rogue Run via GraphQL
+			var startRes = await(graphql(webClient,
+					"""
+					mutation StartRogue($heroClass: String!) {
+					  startRogueRun(heroClass: $heroClass) { id }
+					}""",
+					new JsonObject().put("heroClass", HeroClass.TEST),
+					token1));
+			assertNull(startRes.getJsonArray("errors"), "startRogueRun errors: " + startRes);
+			var rogueId = Long.parseLong(startRes.getJsonObject("data").getJsonObject("startRogueRun").getValue("id").toString());
+			assertNotNull(rogueId);
+
+			// 2. Query rerollCost, trashCardCost, upgradeCardCost
+			var run = await(RogueManager.getRogueRun(rogueId));
+			var deckCards = await(Environment.callRoutine(com.hiddenswitch.framework.schema.spellsource.Routines.getCardsInDeck(run.getDeck())).execute(row -> row.getString(0)));
+			var firstNormalCard = deckCards.stream().filter(c -> !c.startsWith("level_") && !c.startsWith("equipment_")).findFirst().orElseThrow();
+			var upgradableCard = RogueManager.cardCatalogue.getAll().stream()
+					.filter(c -> c.hasAttribute(net.demilich.metastone.game.cards.Attribute.UPGRADE))
+					.findFirst()
+					.orElseThrow();
+
+			var costsRes = await(graphql(webClient,
+					"""
+					query Costs($rogueId: BigInt!, $cardId: String!, $upCardId: String!) {
+					  rerollCost(rogueId: $rogueId)
+					  trashCardCost(rogueId: $rogueId, cardId: $cardId)
+					  upgradeCardCost(rogueId: $rogueId, cardId: $cardId)
+					  upCost: upgradeCardCost(rogueId: $rogueId, cardId: $upCardId)
+					}""",
+					new JsonObject()
+							.put("rogueId", rogueId)
+							.put("cardId", firstNormalCard)
+							.put("upCardId", upgradableCard.getCardId()),
+					token1));
+			assertNull(costsRes.getJsonArray("errors"), "costs query errors: " + costsRes);
+			var costsData = costsRes.getJsonObject("data");
+			assertEquals(1, costsData.getInteger("rerollCost"));
+			assertEquals(1, costsData.getInteger("trashCardCost"));
+			assertEquals(-1, costsData.getInteger("upgradeCardCost"));
+			assertEquals(2, costsData.getInteger("upCost"));
+
+			// 3. Cross-user mutations (token2 mutating user1's rogueRun) must be rejected
+			var unauthSkipRes = await(graphql(webClient,
+					"""
+					mutation Skip($rogueId: BigInt!) {
+					  skipBoss(rogueId: $rogueId) { id }
+					}""",
+					new JsonObject().put("rogueId", rogueId),
+					token2));
+			assertNotNull(unauthSkipRes.getJsonArray("errors"), "Another user must not be able to skipBoss on user1's run");
+
+			var unauthTrashRes = await(graphql(webClient,
+					"""
+					mutation Trash($rogueId: BigInt!, $cardId: String!) {
+					  trashCard(rogueId: $rogueId, cardId: $cardId) { id }
+					}""",
+					new JsonObject().put("rogueId", rogueId).put("cardId", firstNormalCard),
+					token2));
+			assertNotNull(unauthTrashRes.getJsonArray("errors"), "Another user must not be able to trashCard on user1's run");
+
+			// 4. Owner mutations: reroll, makeRogueChoice, trashCard, upgradeCard, skipBoss
+			await(RogueManager.updateRogueRun(rogueId, r -> r.set(com.hiddenswitch.framework.schema.spellsource.Tables.ROGUE_RUN.GOLD, 20)));
+
+			var choice = await(Environment.callRoutine(com.hiddenswitch.framework.schema.spellsource.Routines.currentRogueChoice(rogueId)).execute(RogueManager.rogueChoiceMapper()));
+			await(RogueManager.updateRogueChoice(choice.getId(), c -> c.set(com.hiddenswitch.framework.schema.spellsource.Tables.ROGUE_CHOICE.CAN_REROLL, true)));
+
+			var rerollRes = await(graphql(webClient,
+					"""
+					mutation Reroll($choiceId: BigInt!) {
+					  reroll(choiceId: $choiceId) { id }
+					}""",
+					new JsonObject().put("choiceId", choice.getId()),
+					token1));
+			assertNull(rerollRes.getJsonArray("errors"), "reroll errors: " + rerollRes);
+
+			var unauthChoiceRes = await(graphql(webClient,
+					"""
+					mutation MakeChoice($choiceId: BigInt!) {
+					  makeRogueChoice(choiceId: $choiceId, choices: [0]) { id }
+					}""",
+					new JsonObject().put("choiceId", choice.getId()),
+					token2));
+			assertNotNull(unauthChoiceRes.getJsonArray("errors"), "Another user must not be able to makeRogueChoice on user1's choice");
+
+			var choiceRes = await(graphql(webClient,
+					"""
+					mutation MakeChoice($choiceId: BigInt!) {
+					  makeRogueChoice(choiceId: $choiceId, choices: [0]) { id }
+					}""",
+					new JsonObject().put("choiceId", choice.getId()),
+					token1));
+			assertNull(choiceRes.getJsonArray("errors"), "makeRogueChoice errors: " + choiceRes);
+
+			var trashRes = await(graphql(webClient,
+					"""
+					mutation Trash($rogueId: BigInt!, $cardId: String!) {
+					  trashCard(rogueId: $rogueId, cardId: $cardId) { id }
+					}""",
+					new JsonObject().put("rogueId", rogueId).put("cardId", firstNormalCard),
+					token1));
+			assertNull(trashRes.getJsonArray("errors"), "trashCard errors: " + trashRes);
+
+			// Add upgradable card and upgrade it via GraphQL
+			var currentDeckCards = new ArrayList<>(await(Environment.callRoutine(com.hiddenswitch.framework.schema.spellsource.Routines.getCardsInDeck(run.getDeck())).execute(row -> row.getString(0))));
+			currentDeckCards.add(upgradableCard.getCardId());
+			await(Environment.callRoutine(com.hiddenswitch.framework.schema.spellsource.Routines.setCardsInDeck(run.getDeck(), currentDeckCards.toArray(new String[0])))
+					.execute(com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getCardsInDeckMapper()));
+
+			var upgradeRes = await(graphql(webClient,
+					"""
+					mutation Upgrade($rogueId: BigInt!, $cardId: String!) {
+					  upgradeCard(rogueId: $rogueId, cardId: $cardId) { id }
+					}""",
+					new JsonObject().put("rogueId", rogueId).put("cardId", upgradableCard.getCardId()),
+					token1));
+			assertNull(upgradeRes.getJsonArray("errors"), "upgradeCard errors: " + upgradeRes);
+
+			var skipRes = await(graphql(webClient,
+					"""
+					mutation Skip($rogueId: BigInt!) {
+					  skipBoss(rogueId: $rogueId) { id }
+					}""",
+					new JsonObject().put("rogueId", rogueId),
+					token1));
+			assertNull(skipRes.getJsonArray("errors"), "skipBoss errors: " + skipRes);
+		});
+	}
 }

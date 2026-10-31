@@ -183,7 +183,6 @@ export type Card = Node & {
   createdBy: Scalars['String']['output'];
   id: Scalars['String']['output'];
   isArchived: Scalars['Boolean']['output'];
-  isPrivate: Scalars['Boolean']['output'];
   isPublished: Scalars['Boolean']['output'];
   lastModified: Scalars['Datetime']['output'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
@@ -225,8 +224,6 @@ export type CardCondition = {
   id?: InputMaybe<Scalars['String']['input']>;
   /** Checks for equality with the object’s `isArchived` field. */
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
-  /** Checks for equality with the object’s `isPrivate` field. */
-  isPrivate?: InputMaybe<Scalars['Boolean']['input']>;
   /** Checks for equality with the object’s `isPublished` field. */
   isPublished?: InputMaybe<Scalars['Boolean']['input']>;
   /** Checks for equality with the object’s `lastModified` field. */
@@ -255,8 +252,6 @@ export type CardFilter = {
   id?: InputMaybe<StringFilter>;
   /** Filter by the object’s `isArchived` field. */
   isArchived?: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `isPrivate` field. */
-  isPrivate?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `isPublished` field. */
   isPublished?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `lastModified` field. */
@@ -283,7 +278,6 @@ export type CardInput = {
   createdBy: Scalars['String']['input'];
   id: Scalars['String']['input'];
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
-  isPrivate?: InputMaybe<Scalars['Boolean']['input']>;
   isPublished?: InputMaybe<Scalars['Boolean']['input']>;
   lastModified?: InputMaybe<Scalars['Datetime']['input']>;
   /**
@@ -302,7 +296,6 @@ export type CardPatch = {
   createdBy?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
-  isPrivate?: InputMaybe<Scalars['Boolean']['input']>;
   isPublished?: InputMaybe<Scalars['Boolean']['input']>;
   lastModified?: InputMaybe<Scalars['Datetime']['input']>;
   /**
@@ -481,8 +474,6 @@ export const CardsOrderBy = {
   IdDesc: 'ID_DESC',
   IsArchivedAsc: 'IS_ARCHIVED_ASC',
   IsArchivedDesc: 'IS_ARCHIVED_DESC',
-  IsPrivateAsc: 'IS_PRIVATE_ASC',
-  IsPrivateDesc: 'IS_PRIVATE_DESC',
   IsPublishedAsc: 'IS_PUBLISHED_ASC',
   IsPublishedDesc: 'IS_PUBLISHED_DESC',
   LastModifiedAsc: 'LAST_MODIFIED_ASC',

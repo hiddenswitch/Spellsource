@@ -120,6 +120,7 @@ begin
     set ended_at = now(),
         state    = 'FINISHED'
     where id = rogue_id
+      and (player = spellsource.get_user_id() or spellsource.get_user_id() is null)
     returning * into rogue_run;
 
     return rogue_run;
@@ -157,7 +158,7 @@ begin
         return null;
     end if;
 
-    if winning_user != rogue_run.player then
+    if winning_user is distinct from rogue_run.player then
         if rogue_run.lives = 1 then
             update spellsource.rogue_run as r
             set ended_at = now(),
@@ -215,6 +216,9 @@ $$
 select *
 from spellsource.rogue_run
 where player = spellsource.get_user_id()
+  and state != 'FINISHED'
+  and ended_at is null
+order by started_at desc, id desc
 limit 1;
 $$ language sql stable;
 grant execute on function spellsource.current_rogue_run to website;

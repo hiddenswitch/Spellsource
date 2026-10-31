@@ -94,7 +94,7 @@ tasks.named("yarnRunStrawberryShake").configure {
       if (end < 0) throw new GradleException("Unrecognized generated transport registration: ${connection}")
       end += '            });'.length()
       def original = generated.substring(start, end)
-      def replacement = """#if UNITY_WEBGL
+      def replacement = """#if UNITY_WEBGL && !UNITY_EDITOR
             global::Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<global::${connection}>(
                 services,
                 global::Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<global::${connection}>(parentServices));

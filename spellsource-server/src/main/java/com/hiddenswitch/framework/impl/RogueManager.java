@@ -246,11 +246,14 @@ public class RogueManager {
 	}
 
 	public static Future<Long> trashCard(Long rogueId, String cardId) {
-		if (cardId.startsWith("level_")) {
+		if (cardId.startsWith("level_") || cardId.startsWith("equipment_")) {
 			return Future.failedFuture("Can't trash that card");
 		}
 
 		var rogueRun = await(getRogueRun(rogueId));
+		if (rogueRun == null || (rogueRun.getState() != RogueRunState.CHOICE && rogueRun.getState() != RogueRunState.PRE_MATCH)) {
+			return Future.failedFuture("Rogue run is not in a modifiable state");
+		}
 
 		var count =
 			await(Environment.withDslContext(dsl -> dsl.deleteFrom(CARDS_IN_DECK).where(CARDS_IN_DECK.DECK_ID.eq(rogueRun.getDeck()).and(CARDS_IN_DECK.CARD_ID.eq(cardId))).limit(1)));
@@ -345,6 +348,9 @@ public class RogueManager {
 
 	public static Future<Integer> upgradeCardCost(RogueRun rogueRun, String cardId) {
 		var card = cardCatalogue.getCardById(cardId);
+		if (!card.hasAttribute(Attribute.UPGRADE)) {
+			return Future.succeededFuture(-1);
+		}
 
 		return Future.succeededFuture(switch (card.getRarity()) {
 			case LEGENDARY -> 8;
@@ -362,6 +368,9 @@ public class RogueManager {
 
 	public static Future<Long> upgradeCard(Long rogueId, String cardId) {
 		var rogueRun = await(getRogueRun(rogueId));
+		if (rogueRun == null || (rogueRun.getState() != RogueRunState.CHOICE && rogueRun.getState() != RogueRunState.PRE_MATCH)) {
+			return Future.failedFuture("Rogue run is not in a modifiable state");
+		}
 
 		var card = cardCatalogue.getCardById(cardId);
 
@@ -386,6 +395,28 @@ public class RogueManager {
 		await(updateRogueRun(rogueRun.getId(), r -> r.set(ROGUE_RUN.GOLD, rogueRun.getGold() - cost)));
 
 		return Future.succeededFuture(rogueId);
+	}
+
+	public static Future<Void> verifyRogueRunOwner(Long rogueId, @Nullable String userId) {
+		if (userId == null) {
+			return Future.failedFuture("must be authenticated");
+		}
+		var run = await(getRogueRun(rogueId));
+		if (run == null || !userId.equals(run.getPlayer())) {
+			return Future.failedFuture("not authorized to modify this rogue run");
+		}
+		return Future.succeededFuture();
+	}
+
+	public static Future<Void> verifyRogueChoiceOwner(Long choiceId, @Nullable String userId) {
+		if (userId == null) {
+			return Future.failedFuture("must be authenticated");
+		}
+		var choice = await(getRogueChoice(choiceId));
+		if (choice == null) {
+			return Future.failedFuture("rogue choice not found");
+		}
+		return verifyRogueRunOwner(choice.getRogueRun(), userId);
 	}
 
 	public static Future<RogueRun> returningRogueRun(Function<DSLContext, ResultQuery<RogueRunRecord>> handler) {

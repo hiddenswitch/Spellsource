@@ -396,6 +396,7 @@ public class Legacy {
 										// the deck is not trashed and, if there is a deck share record, the deck share's trashed
 										// value is null or false
 										DECKS.TRASHED.eq(false),
+										DECKS.DECK_TYPE.ne(InventoryCollection.InventoryCollectionDeckType.ROGUE_VALUE),
 										// the user can edit the deck
 										canEditDeckSql(userId)
 												.or(

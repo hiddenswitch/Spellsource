@@ -16,6 +16,7 @@
         },
         "cardFilter": {
           "class": "CardFilter",
+          "cardType": "MINION",
           "race": "BEAST"
         }
       },
@@ -26,6 +27,7 @@
         },
         "cardFilter": {
           "class": "CardFilter",
+          "cardType": "MINION",
           "race": "DRAGON"
         }
       },
@@ -36,6 +38,7 @@
         },
         "cardFilter": {
           "class": "CardFilter",
+          "cardType": "MINION",
           "race": "FAE"
         }
       }

@@ -34,7 +34,7 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 		setWaitStrategy(Wait
 				.forHttp("/realms/master")
 				.forPort(KEYCLOAK_PORT_HTTP)
-				.withStartupTimeout(Duration.ofSeconds(60))
+				.withStartupTimeout(Duration.ofSeconds(180))
 		);
 		/*withFileSystemBind(
                 "../spellsource-containers/src/main/resources/docker/keycloak/spellsource-keycloak-theme.jar", 

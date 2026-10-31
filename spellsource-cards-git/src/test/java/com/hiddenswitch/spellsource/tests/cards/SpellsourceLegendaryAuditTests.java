@@ -1010,6 +1010,9 @@ public class SpellsourceLegendaryAuditTests extends TestBase {
 			assertTrue(player.getHand().stream().noneMatch(c -> "token_knight".equals(c.getCardId())));
 			player.getHand().clear();
 
+			for (Minion m : player.getMinions().toArray(new Minion[0])) {
+				destroy(context, m);
+			}
 			context.endTurn();
 			Minion enemy = playMinionCard(context, opponent, "minion_neutral_test");
 			context.endTurn();

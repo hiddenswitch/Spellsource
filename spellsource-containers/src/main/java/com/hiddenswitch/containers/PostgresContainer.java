@@ -1,6 +1,9 @@
 package com.hiddenswitch.containers;
 
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
+
+import java.time.Duration;
 
 public class PostgresContainer extends GenericContainer<PostgresContainer> {
 
@@ -15,6 +18,8 @@ public class PostgresContainer extends GenericContainer<PostgresContainer> {
 		withEnv("POSTGRES_LOG_STATEMENT", "all");
 		withEnv("POSTGRES_MAX_CONNECTIONS", "24000");
 		withCommand("/bin/bash", "-c", "mkdir -pv /docker-entrypoint-initdb.d/ && echo 'create schema if not exists keycloak;' > /docker-entrypoint-initdb.d/init.sql && docker-entrypoint.sh postgres -c max_connections=24000");
+		waitingFor(Wait.forLogMessage(".*database system is ready to accept connections.*\\s", 2)
+				.withStartupTimeout(Duration.ofSeconds(120)));
 	}
 
 	public String getHostAndPort() {

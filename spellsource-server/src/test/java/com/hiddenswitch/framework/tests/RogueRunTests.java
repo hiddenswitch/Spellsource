@@ -309,4 +309,75 @@ public class RogueRunTests extends FrameworkTestBase {
 		});
 	}
 
+	@Test
+	public void testRogueRunLifecycleAndDeckIsolation(Vertx vertx, VertxTestContext vertxTestContext) {
+		testVirtual(vertx, vertxTestContext, () -> {
+			RogueManager.initCardCatalogue();
+
+			var client1 = new Client(vertx);
+			var client2 = new Client(vertx);
+			await(startGateway(vertx));
+			await(client1.createAndLogin());
+			await(client2.createAndLogin());
+			var userId1 = client1.getUserEntity().getId();
+			var userId2 = client2.getUserEntity().getId();
+
+			var run1 = await(startRogueRun(userId1));
+
+			// 1. Rogue Run deck must NOT pollute Constructed deck lists (Legacy.getAllValidDeckIds)
+			var validDecks1 = await(Legacy.getAllValidDeckIds(userId1));
+			assertFalse(validDecks1.contains(run1.getDeck()),
+					"Rogue Run deck must not be returned by Legacy.getAllValidDeckIds (Constructed deck list)");
+			// Yet Legacy.getDeck by ID must still succeed for the owner
+			var fetchedRogueDeck = await(Legacy.getDeck(RogueManager.cardCatalogue, run1.getDeck(), userId1));
+			assertEquals(run1.getDeck(), fetchedRogueDeck.getCollection().getId());
+
+			// 2. Another user (userId2) must NOT be able to end userId1's Rogue Run via end_rogue_run
+			await(Environment.callRoutine(Routines.endRogueRun(run1.getId()))
+					.withUserId(userId2)
+					.execute(RowMappers.getRogueRunMapper()));
+			var run1AfterUnauthorizedEnd = await(RogueManager.getRogueRun(run1.getId()));
+			assertNotEquals(RogueRunState.FINISHED, run1AfterUnauthorizedEnd.getState(),
+					"Another user must not be able to end userId1's Rogue Run");
+
+			// 3. When userId1 ends run1 and starts run2, current_rogue_run() must return run2 (not finished run1)
+			var endedRun1 = await(Environment.callRoutine(Routines.endRogueRun(run1.getId()))
+					.withUserId(userId1)
+					.execute(RowMappers.getRogueRunMapper()));
+			assertEquals(RogueRunState.FINISHED, endedRun1.getState());
+			assertNotNull(endedRun1.getEndedAt(), "Ended run must have endedAt set");
+
+			var run2 = await(startRogueRun(userId1));
+			var currentRun = await(Environment.callRoutine(Routines.currentRogueRun())
+					.withUserId(userId1)
+					.execute(RowMappers.getRogueRunMapper()));
+			assertNotNull(currentRun, "current_rogue_run must return active run");
+			assertEquals(run2.getId(), currentRun.getId(),
+					"current_rogue_run must return the active run2, not the finished run1");
+
+			// 4. trashCard / upgradeCard must reject FINISHED runs
+			var run1Cards = await(Environment.callRoutine(Routines.getCardsInDeck(run1.getDeck())).execute(row -> row.getString(0)));
+			assertThrows(Exception.class, () -> await(RogueManager.trashCard(run1.getId(), run1Cards.getFirst())),
+					"trashCard must not allow mutating a FINISHED run");
+
+			// 5. check_rogue_game_end with a NULL winning_user (draw/aborted game) must NOT count as defeating the boss
+			var gameId = await(Environment.withExecutor(executor -> executor.findOneRow(dsl -> dsl
+					.insertInto(com.hiddenswitch.framework.schema.spellsource.Tables.GAMES)
+					.defaultValues()
+					.returningResult(com.hiddenswitch.framework.schema.spellsource.Tables.GAMES.ID)))).getLong(0);
+			await(RogueManager.handleGameStart(run2.getDeck(), gameId));
+			var run2InMatch = await(RogueManager.getRogueRun(run2.getId()));
+			assertEquals(RogueRunState.IN_MATCH, run2InMatch.getState());
+			var livesBefore = run2InMatch.getLives();
+			var bossesBefore = run2InMatch.getBossesDefeated();
+
+			await(RogueManager.handleGameEnd(gameId, null));
+			var run2AfterDraw = await(RogueManager.getRogueRun(run2.getId()));
+			assertEquals(bossesBefore, run2AfterDraw.getBossesDefeated(),
+					"A draw/aborted game (winningUser == null) must NOT increment bossesDefeated");
+			assertEquals(livesBefore - 1, run2AfterDraw.getLives(),
+					"A non-win (winningUser == null) must decrement lives");
+		});
+	}
+
 }
