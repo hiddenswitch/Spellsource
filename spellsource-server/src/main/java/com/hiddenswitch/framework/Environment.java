@@ -107,7 +107,9 @@ public class Environment {
 		switch (redisConf.getConnectionCase()) {
 			case SENTINELSERVERS -> {
 				var sentinel = redisConf.getSentinelServers();
-				var sentinelConf = config.useSentinelServers().setMasterName(sentinel.getMasterName());
+				var sentinelConf = config.useSentinelServers()
+						.setMasterName(sentinel.getMasterName())
+						.setReadMode(org.redisson.config.ReadMode.MASTER);
 				sentinel.getSentinelAddressesList().forEach(sentinelConf::addSentinelAddress);
 			}
 			case HOSTPORTUSER -> {

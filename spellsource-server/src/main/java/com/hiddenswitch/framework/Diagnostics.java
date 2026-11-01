@@ -50,17 +50,14 @@ public class Diagnostics {
 					// EXISTS against an arbitrary key. Avoids Redisson.getRedisNodes() which is typed per
 					// topology and throws on the wrong configuration.
 					var redis = Future.fromCompletionStage(Environment.redisson().getBucket("_healthz").isExistsAsync().toCompletableFuture());
-					var pgConnectOptions = Environment.pgArgs().connectionOptions();
-					var pgClient = PgBuilder.pool().using(vertx).connectingTo(pgConnectOptions).with(new PoolOptions()).build();
-					var postgres = pgClient.query("""
+					var postgres = Environment.sqlClient().query("""
 									select success
 									     from hiddenswitch.flyway_schema_history
 									     order by installed_rank desc
 									     limit 1
 									     """)
 							.execute()
-							.compose(res -> res.size() == 0 ? Future.failedFuture("migration not complete") : Future.succeededFuture())
-							.eventually(pgClient::close);
+							.compose(res -> res.size() == 0 ? Future.failedFuture("migration not complete") : Future.succeededFuture());
 
 					Future.all(redis, protos, postgres)
 							.onSuccess(v -> routingContext.end(Buffer.buffer("OK")))

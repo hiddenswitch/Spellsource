@@ -432,7 +432,10 @@ public class GameTests extends FrameworkTestBase {
 									0L)));
 				})
 				.compose(ignored -> {
+					var initialDisconnected1 = Promise.<Void>promise();
 					toxiClient1.legacy().subscribeGame(writer1Initial::tryComplete).onSuccess(reader -> {
+						reader.endHandler(v -> initialDisconnected1.tryComplete());
+						reader.exceptionHandler(e -> initialDisconnected1.tryComplete());
 						reader.handler(msg -> {
 							if (msg.getMessageType() == MessageType.ON_MULLIGAN) {
 								firstMulligan1.tryComplete(msg);
@@ -453,9 +456,10 @@ public class GameTests extends FrameworkTestBase {
 					return all(
 							writer1Initial.future().compose(w -> w.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.FIRST_MESSAGE).build())),
 							writer2.future().compose(w -> w.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.FIRST_MESSAGE).build()))
-					).compose(v -> all(firstMulligan1.future(), firstMulligan2.future()));
+					).compose(v -> all(firstMulligan1.future(), firstMulligan2.future()))
+							.map(initialDisconnected1);
 				})
-				.compose(v -> {
+				.compose(initialDisconnected1 -> {
 					// Cut toxiClient1 via Toxiproxy BEFORE submitting UPDATE_MULLIGAN
 					try {
 						toxicGrpcProxy().toxics().resetPeer("mulligan-reset-down", ToxicDirection.DOWNSTREAM, 1);
@@ -463,7 +467,10 @@ public class GameTests extends FrameworkTestBase {
 					} catch (IOException e) {
 						return Future.failedFuture(e);
 					}
-					return Environment.sleep(vertx, 300L);
+					return writer1Initial.future()
+							.compose(w -> w.write(ClientToServerMessage.getDefaultInstance()).otherwiseEmpty())
+							.compose(ignored -> Environment.timeout(initialDisconnected1.future(), 2000L, vertx).otherwiseEmpty())
+							.compose(ignored -> Environment.sleep(vertx, 100L));
 				})
 				.compose(v -> {
 					try {
@@ -568,7 +575,10 @@ public class GameTests extends FrameworkTestBase {
 				})
 				.compose(ignored -> {
 					var turn1Ended = new AtomicBoolean(false);
+					var initialDisconnected1 = Promise.<Void>promise();
 					toxiClient1.legacy().subscribeGame(writer1::tryComplete).onSuccess(reader -> {
+						reader.endHandler(v -> initialDisconnected1.tryComplete());
+						reader.exceptionHandler(e -> initialDisconnected1.tryComplete());
 						reader.handler(msg -> {
 							var w = writer1.future().result();
 							if (msg.getMessageType() == MessageType.ON_MULLIGAN) {
@@ -617,17 +627,21 @@ public class GameTests extends FrameworkTestBase {
 					return all(
 							writer1.future().compose(w -> w.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.FIRST_MESSAGE).build())),
 							writer2.future().compose(w -> w.write(ClientToServerMessage.newBuilder().setMessageType(MessageType.FIRST_MESSAGE).build()))
-					).compose(v -> activeOnTurn2.future());
-				})
-				.compose(pendingTurn2Req -> {
-					// Sever toxiClient1 via Toxiproxy mid-turn
-					try {
-						toxicGrpcProxy().toxics().resetPeer("midturn-reset-down", ToxicDirection.DOWNSTREAM, 1);
-						toxicGrpcProxy().toxics().resetPeer("midturn-reset-up", ToxicDirection.UPSTREAM, 1);
-					} catch (IOException e) {
-						return Future.failedFuture(e);
-					}
-					return Environment.sleep(vertx, 300L).map(pendingTurn2Req);
+					).compose(v -> activeOnTurn2.future())
+							.compose(pendingTurn2Req -> {
+								// Sever toxiClient1 via Toxiproxy mid-turn
+								try {
+									toxicGrpcProxy().toxics().resetPeer("midturn-reset-down", ToxicDirection.DOWNSTREAM, 1);
+									toxicGrpcProxy().toxics().resetPeer("midturn-reset-up", ToxicDirection.UPSTREAM, 1);
+								} catch (IOException e) {
+									return Future.failedFuture(e);
+								}
+								return writer1.future()
+										.compose(w -> w.write(ClientToServerMessage.getDefaultInstance()).otherwiseEmpty())
+										.compose(v -> Environment.timeout(initialDisconnected1.future(), 2000L, vertx).otherwiseEmpty())
+										.compose(v -> Environment.sleep(vertx, 100L))
+										.map(pendingTurn2Req);
+							});
 				})
 				.compose(pendingTurn2Req -> {
 					try {
