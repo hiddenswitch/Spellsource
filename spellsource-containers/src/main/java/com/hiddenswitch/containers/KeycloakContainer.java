@@ -55,6 +55,7 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 		withEnv("KC_BOOTSTRAP_ADMIN_PASSWORD", adminPassword);
 		withEnv("KC_DB_SCHEMA", "keycloak");
 		withEnv("KC_HOSTNAME_STRICT", "false");
+		withEnv("JAVA_TOOL_OPTIONS", "-XX:-UseBASE64Intrinsics");
 		withEnv("JAVA_OPTS_APPEND", "-Dquarkus.hibernate-orm.database.version-check.enabled=false");
 
 		if (importFile != null) {

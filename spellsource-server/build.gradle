@@ -274,6 +274,7 @@ tasks.register('createKeycloakContainer', DockerCreateContainer) {
       'KC_DB_USERNAME'             : localUsername,
       'KC_DB_PASSWORD'             : localPassword,
       'KC_DB_SCHEMA'               : 'keycloak',
+      'JAVA_TOOL_OPTIONS'           : '-XX:-UseBASE64Intrinsics',
       'KC_HOSTNAME_STRICT'         : 'false',
       'JAVA_OPTS_APPEND'           : '-Dquarkus.hibernate-orm.database.version-check.enabled=false'
   ])
@@ -424,7 +425,7 @@ def spellsourceTags = project.version.toString().contains('-') ? [project.versio
 def spellsourceImage = 'ghcr.io/hiddenswitch/spellsource'
 jib {
   from {
-    image = "harbor.appmana.com/appmana-shared/java-runtime:1.0.0@sha256:6bd2c82657e8277be8ad3eecd95d17600e651c1aa437d83fa29e43ef4db4880e"
+    image = "harbor.appmana.com/appmana-shared/java-runtime:latest"
   }
   to {
     image = "${spellsourceImage}:${project.version}"
@@ -438,7 +439,8 @@ jib {
   }
   container {
     ports = ['8080']
-    jvmFlags = serverJvmArguments
+    // CVE-2026-114938 until the rebuilt shared Java runtime is published.
+    jvmFlags = serverJvmArguments + ['-XX:-UseBASE64Intrinsics']
   }
 }
 

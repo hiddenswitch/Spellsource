@@ -36,8 +36,9 @@ jobs:
         run: npm install --global corepack@0.36.0 && corepack enable
       - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
-          distribution: temurin
-          java-version: '25.0.5+8.0.LTS'
+          distribution: corretto
+          java-version: '25'
+          check-latest: true
       - name: Install workspace
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"

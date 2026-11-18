@@ -39,8 +39,13 @@ jib {
     container {
         mainClass = 'com.hiddenswitch.spellsource.trainer.TrainerMain'
         format = 'Docker'
-        jvmFlags = ['--enable-preview', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=60.0']
+        // CVE-2026-114938 until the Jib base image has a fixed JVM.
+        jvmFlags = ['-XX:-UseBASE64Intrinsics', '--enable-preview', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=60.0']
     }
+}
+
+tasks.matching { it.name.startsWith('jib') }.configureEach {
+    notCompatibleWithConfigurationCache('Jib tasks invoke Task.project at execution time')
 }
 
 // kubectl honors KUBECONFIG and the active context.
