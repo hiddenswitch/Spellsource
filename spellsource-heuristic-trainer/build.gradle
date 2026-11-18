@@ -30,7 +30,7 @@ dependencies {
 
 jib {
     from {
-        image = 'eclipse-temurin:27-jre'
+        image = 'harbor.appmana.com/appmana-shared/java27-runtime:latest'
     }
     to {
         image = 'harbor.appmana.com/appmana/spellsource-trainer'
@@ -39,7 +39,6 @@ jib {
     container {
         mainClass = 'com.hiddenswitch.spellsource.trainer.TrainerMain'
         format = 'Docker'
-        // CVE-2026-114938 until the Jib base image has a fixed JVM.
         jvmFlags = ['-XX:-UseBASE64Intrinsics', '--enable-preview', '-XX:+UseContainerSupport', '-XX:MaxRAMPercentage=60.0']
     }
 }

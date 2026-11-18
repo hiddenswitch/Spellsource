@@ -8,7 +8,7 @@ ADD https://corretto.aws/downloads/latest_sha256/amazon-corretto-27-aarch64-linu
 
 FROM jdk-${TARGETARCH} AS jdk
 
-FROM eclipse-temurin:27-jre
+FROM eclipse-temurin:27-jre AS runtime
 RUN --mount=type=bind,from=jdk,source=/jdk.tar.gz,target=/tmp/jdk.tar.gz \
     --mount=type=bind,from=jdk,source=/jdk.sha256,target=/tmp/jdk.sha256 \
     printf '%s  /tmp/jdk.tar.gz\n' "$(cat /tmp/jdk.sha256)" | sha256sum --check - \
@@ -16,6 +16,8 @@ RUN --mount=type=bind,from=jdk,source=/jdk.tar.gz,target=/tmp/jdk.tar.gz \
  && mkdir -p "$JAVA_HOME" \
  && tar -xzf /tmp/jdk.tar.gz -C "$JAVA_HOME" --strip-components=1
 ENV JAVA_VERSION=27
+
+FROM runtime
 ENV MLFLOW_OIDC_ISSUER_URL=https://login.appmana.com/realms/appmana \
     MLFLOW_OIDC_CLIENT_ID=spellsource-mlflow-trainer \
     MLFLOW_OIDC_CLIENT_ASSERTION_FILE=/var/run/secrets/keycloak/assertion
